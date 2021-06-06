@@ -6,7 +6,7 @@ async function main() {
   return api.genesisHash.toHex();
 }
 export default function Homepage() {
-  // main().then((hex) => console.log('hex')).catch(err => console.log(err))
+  main().then((hex) => console.log(hex)).catch(err => console.log(err))
   return (
     <div>
       <h1>Hello</h1>
