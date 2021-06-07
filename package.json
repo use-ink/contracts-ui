@@ -2,19 +2,24 @@
   "name": "ts-react-webpack",
   "version": "1.0.0",
   "description": "",
-  "private":true,
+  "private": true,
   "type": "module",
   "scripts": {
     "start": "webpack serve --open --config webpack.dev.cjs",
     "build": "webpack --config webpack.prod.cjs",
-    "test": "node --experimental-vm-modules $(yarn bin)/jest --coverage"
+    "test": "node --experimental-vm-modules $(yarn bin)/jest --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@polkadot/api": "^4.12.1",
-    "@polkadot/wasm-crypto": "^4.0.2",
+    "@polkadot/api-contract": "^4.12.1",
+    "@polkadot/extension-dapp": "^0.38.3",
+    "@polkadot/networks": "6.6.1",
+    "@polkadot/ui-keyring": "^0.78.1",
+    "@polkadot/ui-settings": "^0.78.1",
+    "@types/node": "^15.12.1",
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
     "buffer": "^6.0.3",
@@ -28,7 +33,9 @@
     "webpack-cli": "^4.7.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.1.9",
     "@types/jest": "^26.0.23",
     "jest": "^27.0.4",
     "ts-loader": "^9.2.3",
