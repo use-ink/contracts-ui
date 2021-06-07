@@ -1,4 +1,4 @@
-import { ApiPromise, Keyring, ContractPromise, Abi } from './substrate';
+import { ApiPromise, Keyring } from './substrate';
 
 export interface AppState {
   socket: string;

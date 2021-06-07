@@ -1,0 +1,65 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "env": {
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "plugins": [
+    "only-warn",
+    "import",
+    "@typescript-eslint",
+    "eslint-plugin-react",
+    "eslint-plugin-react-hooks"
+  ],
+  "overrides": [
+    {
+      "files": ["*.tsx", "*.js", "*.jsx", "*.ts"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"]
+  },
+  "rules": {
+    "import/named": "warn",
+    "import/no-unresolved": "warn",
+    "import/default": "warn",
+    "import/no-absolute-path": "error",
+    "import/no-self-import": "error",
+    "import/no-cycle": "error",
+    "import/no-useless-path-segments": "warn",
+    "import/no-named-as-default": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-deprecated": "warn",
+    "import/no-mutable-exports": "warn",
+    "import/first": "warn",
+    "import/no-duplicates": "warn",
+    "import/order": "warn",
+    "import/newline-after-import": "warn",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "react/prop-types": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/display-name": "off",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/exhaustive-deps": "off"
+  }
+}
