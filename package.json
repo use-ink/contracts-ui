@@ -5,8 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "webpack serve --open --config webpack.dev.cjs",
-    "build": "webpack --config webpack.prod.cjs",
+    "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
+    "build": "webpack --config webpack.dev.cjs",
+    "build:prod": "webpack --mode production --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --coverage --watchAll",
     "lint": "eslint --fix src/"
   },
