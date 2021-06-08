@@ -1,4 +1,4 @@
-# ts-react-webpack
+# Canvas UI V2
 
 This is a custom starter project with React, Typescript, Webpack and Jest.
 
