@@ -28,15 +28,16 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Cache Node.js modules
       uses: actions/cache@v2
+      id: yarn-cache 
       with:
-        path: ~/.npm
-        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-
-          ${{ runner.OS }}-
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
     - name: Install dependencies
       run: yarn --frozen-lockfile
     - name: Build
+      if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn build
-    - name: Run linting and all tests
+    - name: Run linting
+      run: yarn lint
+    - name: Run tests
       run: yarn test:ci
