@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Canvas UI v2 - Jest tests
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 15.x, 16.x]
+        node-version: [14.x]
 
     steps:
     - uses: actions/checkout@v2

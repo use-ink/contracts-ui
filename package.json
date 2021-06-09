@@ -1,7 +1,7 @@
 {
-  "name": "ts-react-webpack",
-  "version": "1.0.0",
-  "description": "",
+  "name": "canvas-ui",
+  "version": "2.0.0",
+  "description": "Canvas UI",
   "private": true,
   "type": "module",
   "scripts": {
