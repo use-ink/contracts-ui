@@ -9,7 +9,8 @@
     "build": "webpack --config webpack.dev.cjs",
     "build:prod": "webpack --mode production --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --coverage --watchAll",
-    "lint": "eslint --fix src/"
+    "lint": "eslint --fix src/",
+    "test:ci": "eslint --fix src/ && node --experimental-vm-modules $(yarn bin)/jest"
   },
   "keywords": [],
   "author": "",
