@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/canvasui-v2 authors & contributors
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import type { StorageKey, Option } from '@polkadot/types';
 import type { CodeHash, PrefabWasmModule } from '@polkadot/types/interfaces/contracts';

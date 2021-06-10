@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/canvasui-v2 authors & contributors
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import type { PrivateKey } from '@textile/hub';
 // import type { AnyJson } from '@polkadot/types/types';

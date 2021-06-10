@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/canvasui-v2 authors & contributors
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import * as dns from './dns.contract.json';
 import * as erc20 from './erc20.contract.json';

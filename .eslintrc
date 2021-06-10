@@ -49,7 +49,7 @@
     }
   },
   "rules": {
-    "header/header": [1, "line", " Copyright 2021 @paritytech/canvasui-v2 authors & contributors"],
+    "header/header": [1, "line", " Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors"],
     "import/named": "warn",
     "import/no-unresolved": "warn",
     "import/default": "warn",

@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/canvasui-v2 authors & contributors
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import { render, screen } from '@testing-library/react';
 import React from 'react';

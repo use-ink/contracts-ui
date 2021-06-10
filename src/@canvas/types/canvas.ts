@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/canvasui-v2 authors & contributors
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import type { ApiPromise } from '@polkadot/api';
 import type { Keyring } from '@polkadot/ui-keyring';
