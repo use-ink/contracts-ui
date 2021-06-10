@@ -948,7 +948,7 @@
     "@babel/runtime" "^7.14.0"
     rxjs "^6.6.7"
 
-"@polkadot/x-textdecoder@6.7.1":
+"@polkadot/x-textdecoder@6.7.1", "@polkadot/x-textdecoder@^6.7.1":
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/@polkadot/x-textdecoder/-/x-textdecoder-6.7.1.tgz#75d91c159a7b15687072f099c9677c955eb5e091"
   integrity sha512-9ENlIx/XLZ1znSQC3wA8KI3EbqujCa/fEVjY7wlJ60OTybqWjZYrltgZPLBDQheDsYDd2JBGK1RJjDcRsCvK8g==
@@ -956,7 +956,7 @@
     "@babel/runtime" "^7.14.0"
     "@polkadot/x-global" "6.7.1"
 
-"@polkadot/x-textencoder@6.7.1":
+"@polkadot/x-textencoder@6.7.1", "@polkadot/x-textencoder@^6.7.1":
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/@polkadot/x-textencoder/-/x-textencoder-6.7.1.tgz#fdc77abeeb8e83e6c67ffa189c4b7ff9bb69c1cb"
   integrity sha512-+M4x2bhHFvZsiXb2bnw224EE/0fXr6bG/dJclZUdvcL+JrwiE/7UMD8xUcEmdR2LfNJGDkCxKkXp3096ZavUxQ==

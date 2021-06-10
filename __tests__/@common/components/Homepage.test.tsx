@@ -1,5 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+import 'fastestsmallesttextencoderdecoder';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Homepage } from '@common';

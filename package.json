@@ -22,6 +22,8 @@
     "@polkadot/networks": "6.6.1",
     "@polkadot/ui-keyring": "^0.78.1",
     "@polkadot/ui-settings": "^0.78.1",
+    "@polkadot/x-textdecoder": "^6.7.1",
+    "@polkadot/x-textencoder": "^6.7.1",
     "@textile/crypto": "^4.1.1",
     "@textile/hub": "^6.1.2",
     "@textile/threaddb": "^0.0.6",

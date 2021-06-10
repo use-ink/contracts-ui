@@ -1,14 +1,18 @@
+/**
+ * @jest-environment ./db-test-env
+ */
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { Main } from '@common';
-import { CanvasContext } from '@canvas';
+import { CanvasContext } from '@canvas/contexts/CanvasContext';
+import { Database } from '@db/components/Database';
 
-import type { CanvasState } from '@canvas';
+import type { CanvasState } from '@canvas/types';
 
 const customRender = (ui: JSX.Element, providerProps: CanvasState) => {
-  return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
+  return render(<CanvasContext.Provider value={providerProps}><Database>{ui}</Database></CanvasContext.Provider>);
 };
 
 const mockState: CanvasState = {

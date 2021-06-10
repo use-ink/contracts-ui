@@ -23,7 +23,13 @@ module.exports = {
   module: {rules},
   resolve:{
     extensions:['.ts', '.tsx', '.js'],
-    fallback: { "crypto": require.resolve("crypto-browserify"), "stream": require.resolve("stream-browserify"), "buffer": require.resolve("buffer") },
+    fallback: {
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify"),
+      "buffer": require.resolve("buffer"),
+      "TextEncoder": require.resolve("util").TextEncoder,
+      "TextDecoder": require.resolve("util").TextDecoder,
+    },
     plugins: [new TsconfigPathsPlugin()],
   },
 }

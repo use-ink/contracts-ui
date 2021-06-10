@@ -1,18 +1,18 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 // eslint-disable
 
-import { TextDecoder, TextEncoder } from 'util';
+import { xglobal } from '@polkadot/x-global';
 import Environment from 'jest-environment-jsdom';
 
 /**
- * A custom environment to set the TextEncoder that is required by TensorFlow.js.
+ * A custom environment to set the TextEncoder that is required.
  */
 export default class CustomTestEnvironment extends Environment {
   async setup() {
     await super.setup();
     if (typeof this.global.TextEncoder === 'undefined') {
-      this.global.TextEncoder = TextEncoder;
-      this.global.TextDecoder = TextDecoder;
+      this.global.TextEncoder = xglobal.TextEncoder;
+      this.global.TextDecoder = xglobal.TextDecoder;
     }
   }
 }

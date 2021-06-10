@@ -1,7 +1,8 @@
 /**
- * @jest-environment ./__tests__/db/env
+ * @jest-environment ./db-test-env
  */
-/* eslint-disable header/header */
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+
 import { Database, PrivateKey } from '@textile/threaddb';
 import { chooseOne } from '@common/util/testing'
 import { getTestUsers, getTestCodeBundles, getTestContracts } from '@db/util/testing';

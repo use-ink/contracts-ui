@@ -1,5 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+import '@polkadot/x-textencoder';
+import '@polkadot/x-textdecoder';
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,7 +11,7 @@ import { init } from '../util';
 import type { DbProps } from '../types';
 import { useCanvas } from '@canvas/hooks';
 
-function Database({ children }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
+export function Database({ children }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
   const { endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
@@ -58,5 +60,3 @@ function Database({ children }: HTMLAttributes<HTMLDivElement>): JSX.Element | n
 
   return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
 }
-
-export default React.memo(Database);
