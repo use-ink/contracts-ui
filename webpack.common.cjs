@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const rules = [
   {
@@ -22,6 +23,7 @@ module.exports = {
   module: {rules},
   resolve:{
     extensions:['.ts', '.tsx', '.js'],
-    fallback: { "crypto": require.resolve("crypto-browserify"), "stream": require.resolve("stream-browserify"), "buffer": require.resolve("buffer") }
+    fallback: { "crypto": require.resolve("crypto-browserify"), "stream": require.resolve("stream-browserify"), "buffer": require.resolve("buffer") },
+    plugins: [new TsconfigPathsPlugin()],
   },
 }

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://paritytech.github.io/canvas-ui/codeBundle.schema.json",
+  "title": "CodeBundle",
+  "description": "An uploaded WASM code bundle",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "description": "Field to contain ulid-based instance id",
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique url id",
+      "type": "string"
+    },
+    "owner": {
+      "description": "The public key of the original uploader",
+      "type": "string"
+    },
+    "blockOneHash": {
+      "description": "The identifying block hash for the code bundle's chain (for distinguishing development/local node instances)",
+      "type": "string"
+    },
+    "codeHash": {
+      "description": "The code bundle's unique hash",
+      "type": "string"
+    },
+    "abi": {
+      "description": "The code bundle's associated ABI JSON",
+      "type": "object"
+    },
+    "name": {
+      "description": "The code bundle's display name",
+      "type": "string"
+    },
+    "tags": {
+      "description": "The code bundle's associated tags",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": ["owner", "codeHash", "name"]
+}

@@ -1,25 +1,29 @@
+// Copyright 2021 @paritytech/canvasui-v2 authors & contributors
+
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import Main from '../../src/components/Main';
-import { CanvasContext } from '../../src/api-wrapper';
-import { AppState } from '../../src/types';
+import { Main } from '@common';
+import { CanvasContext } from '@canvas';
 
-const customRender = (ui: JSX.Element, providerProps: AppState) => {
+import type { CanvasState } from '@canvas';
+
+const customRender = (ui: JSX.Element, providerProps: CanvasState) => {
   return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
 };
 
-const mockState: AppState = {
-  socket: '',
+const mockState: CanvasState = {
+  endpoint: '',
   keyring: null,
-  keyringState: null,
+  keyringStatus: null,
   api: null,
-  apiError: null,
-  apiState: null,
+  error: null,
+  status: null,
+  blockOneHash: null,
 };
 
 describe('Canvas UI app', () => {
   it('should render the homepage if the api and keyring are in a ready state', async () => {
-    customRender(<Main />, { ...mockState, keyringState: 'READY', apiState: 'READY' });
+    customRender(<Main />, { ...mockState, keyringStatus: 'READY', status: 'READY' });
     expect(screen.getByText(`Hello`)).toBeTruthy();
   });
   it('should suggest to check extension if keyring state is not ready', async () => {
@@ -29,11 +33,11 @@ describe('Canvas UI app', () => {
     ).toBeTruthy();
   });
   it('should render a message if the api is not ready but the keyring is', async () => {
-    customRender(<Main />, { ...mockState, keyringState: 'READY' });
+    customRender(<Main />, { ...mockState, keyringStatus: 'READY' });
     expect(screen.getByText(`Connecting to substrate node`)).toBeTruthy();
   });
   it('should render the error it encountered while connecting to the node', async () => {
-    customRender(<Main />, { ...mockState, apiError: 'xyz', apiState: 'ERROR' });
+    customRender(<Main />, { ...mockState, error: 'xyz', status: 'ERROR' });
     expect(screen.getByText(`Connection error xyz`)).toBeTruthy();
   });
 });
