@@ -19,6 +19,8 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+      TextDecoder: ['text-encoding', 'TextDecoder'],
+      TextEncoder: ['text-encoding', 'TextEncoder']
     })],
   module: {rules},
   resolve:{
@@ -27,8 +29,8 @@ module.exports = {
       "crypto": require.resolve("crypto-browserify"),
       "stream": require.resolve("stream-browserify"),
       "buffer": require.resolve("buffer"),
-      "TextEncoder": require.resolve("util").TextEncoder,
-      "TextDecoder": require.resolve("util").TextDecoder,
+      "TextEncoder": require.resolve("@polkadot/x-textencoder").TextEncoder,
+      "TextDecoder": require.resolve("@polkadot/x-textdecoder").TextDecoder,
     },
     plugins: [new TsconfigPathsPlugin()],
   },

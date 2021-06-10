@@ -1,7 +1,5 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import '@polkadot/x-textencoder';
-import '@polkadot/x-textdecoder';
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';

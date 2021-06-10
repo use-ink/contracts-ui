@@ -1,7 +1,7 @@
 /**
  * @jest-environment ./db-test-env
  */
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+/* eslint-disable header/header */
 
 import { render, screen } from '@testing-library/react';
 import React from 'react';

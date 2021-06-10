@@ -121,3 +121,7 @@ __sysdb__.sqlite
 .pnp.*
 
 .idea
+
+# SQL
+*.sqlite
+*.sqlite-journal
