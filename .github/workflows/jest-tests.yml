@@ -30,7 +30,7 @@ jobs:
       run: yarn --frozen-lockfile
     - name: Lint
       run: yarn lint
-    - name: Run the tests and generate coverage report
+    - name: Test
       run: yarn test:ci
     - name: Build
       run: yarn build
