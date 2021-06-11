@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import Main from '../../src/components/Main';
-import { CanvasContext } from '../../src/api-wrapper';
+import { CanvasContext } from '../../src/contexts';
 import { AppState } from '../../src/types';
 
 const customRender = (ui: JSX.Element, providerProps: AppState) => {

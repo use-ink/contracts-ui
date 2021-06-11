@@ -1,5 +1,5 @@
 import React from 'react';
-import { CanvasContext } from '../api-wrapper';
+import { CanvasContext } from '../contexts';
 import Homepage from './Homepage';
 
 export default function Main(): JSX.Element {

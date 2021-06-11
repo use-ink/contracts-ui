@@ -2,7 +2,7 @@ import React, { useReducer, useContext, Dispatch, Reducer } from 'react';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
-import { AppState, Action } from '../../types';
+import { AppState, Action } from '../types';
 
 ///
 // Initial state for `useReducer`
