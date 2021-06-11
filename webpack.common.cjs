@@ -14,9 +14,9 @@ const rules = [
     test: /\.(css)$/,
     use: [
       MiniCssExtractPlugin.loader,
-      'css-loader', 
+      'css-loader',
       {
-        loader: 'postcss-loader', 
+        loader: 'postcss-loader',
         options: {
           postcssOptions: {
             ident: 'postcss',
@@ -41,7 +41,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].bundle.css',
-      chunkFilename: '[id].css'
+      chunkFilename: '[id].css',
     }),
   ],
   module: { rules },
