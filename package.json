@@ -1,7 +1,7 @@
 {
-  "name": "ts-react-webpack",
-  "version": "1.0.0",
-  "description": "",
+  "name": "canvas-ui",
+  "version": "2.0.0",
+  "description": "Canvas UI",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "build:prod": "webpack --mode production --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --coverage --watchAll",
     "lint": "eslint --fix src/",
-    "test:ci": "eslint --fix src/ && node --experimental-vm-modules $(yarn bin)/jest"
+    "test:ci": "node --experimental-vm-modules $(yarn bin)/jest --coverage"
   },
   "keywords": [],
   "author": "",
