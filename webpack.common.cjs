@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const rules = [
   {
@@ -46,8 +47,13 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    publicPath: path.resolve(__dirname, 'dist'),
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Canvas UI',
+      template: path.resolve(__dirname, 'index.html'),
+    }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
@@ -58,7 +64,7 @@ module.exports = {
   ],
   module: { rules },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
