@@ -26,6 +26,18 @@ const rules = [
       },
     ],
   },
+  {
+    test: /\.(png|jpe?g|gif)$/i,
+    use: [
+      {
+        loader: 'file-loader',
+      },
+    ],
+  },
+  {
+    test: /\.html$/i,
+    loader: 'html-loader',
+  },
 ];
 
 module.exports = {
