@@ -43,7 +43,6 @@ module.exports = {
       filename: '[name].bundle.css',
       chunkFilename: '[id].css'
     }),
-    new webpack.HotModuleReplacementPlugin(),
   ],
   module: { rules },
   resolve: {
