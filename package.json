@@ -10,7 +10,9 @@
     "build:prod": "webpack --mode production --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --coverage --watchAll",
     "lint": "eslint --fix src/",
-    "test:ci": "node --experimental-vm-modules $(yarn bin)/jest --coverage"
+    "test:ci": "node --experimental-vm-modules $(yarn bin)/jest --coverage",
+    "clean": "rm -rf dist",
+    "deep-clean": "yarn clean && rm -rf node_modules"
   },
   "keywords": [],
   "author": "",

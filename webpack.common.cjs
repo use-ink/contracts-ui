@@ -51,7 +51,6 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Canvas UI',
       template: path.resolve(__dirname, 'index.html'),
     }),
     new webpack.ProvidePlugin({
