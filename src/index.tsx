@@ -7,17 +7,9 @@ const root = document.getElementById('app-root');
 
 ReactDOM.render(<App />, root);
 
-/* eslint @typescript-eslint/no-unsafe-member-access: "off",
-          @typescript-eslint/no-unsafe-call: "off",
-          @typescript-eslint/no-unsafe-assignment: "off",
-          @typescript-eslint/no-var-requires: "off",
-          @typescript-eslint/no-explicit-any: "off"
-*/
-//
-declare let module: { hot: any };
-
 if (module.hot) {
   module.hot.accept('./components/App', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     const NewApp = require('./components/App').default;
 
     ReactDOM.render(<NewApp />, document.getElementById('app-root'));
