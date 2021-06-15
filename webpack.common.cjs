@@ -35,10 +35,6 @@ const rules = [
       },
     ],
   },
-  {
-    test: /\.html$/i,
-    loader: 'html-loader',
-  },
 ];
 
 module.exports = {
