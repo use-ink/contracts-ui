@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const rules = [
   {
@@ -14,15 +15,23 @@ const rules = [
     test: /\.(css)$/,
     use: [
       MiniCssExtractPlugin.loader,
-      'css-loader', 
+      'css-loader',
       {
-        loader: 'postcss-loader', 
+        loader: 'postcss-loader',
         options: {
           postcssOptions: {
             ident: 'postcss',
             plugins: [tailwindcss, autoprefixer],
           },
         },
+      },
+    ],
+  },
+  {
+    test: /\.(png|jpe?g|gif)$/i,
+    use: [
+      {
+        loader: 'file-loader',
       },
     ],
   },
@@ -34,19 +43,23 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    publicPath: path.resolve(__dirname, 'dist'),
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'),
+    }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
     new MiniCssExtractPlugin({
       filename: '[name].bundle.css',
-      chunkFilename: '[id].css'
+      chunkFilename: '[id].css',
     }),
   ],
   module: { rules },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),

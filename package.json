@@ -10,7 +10,9 @@
     "build:prod": "webpack --mode production --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --coverage --watchAll",
     "lint": "eslint --fix src/",
-    "test:ci": "node --experimental-vm-modules $(yarn bin)/jest --coverage"
+    "test:ci": "node --experimental-vm-modules $(yarn bin)/jest --coverage",
+    "clean": "rm -rf dist",
+    "deep-clean": "yarn clean && rm -rf node_modules"
   },
   "keywords": [],
   "author": "",
@@ -42,6 +44,7 @@
     "@testing-library/user-event": "^13.1.9",
     "@types/jest": "^26.0.23",
     "@types/mini-css-extract-plugin": "^1.4.3",
+    "@types/webpack-env": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.6",
@@ -53,6 +56,8 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.1",
     "jest": "^27.0.4",
     "mini-css-extract-plugin": "^1.6.0",
     "postcss": "^8.3.2",
