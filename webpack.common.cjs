@@ -4,12 +4,21 @@ const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const rules = [
   {
     test: /\.tsx?/,
     exclude: /node_modules/,
     loader: 'ts-loader',
+    options: {
+      getCustomTransformers: () => ({
+        before: isDevelopment ? [ReactRefreshTypeScript()] : [],
+      }),
+    },
   },
   {
     test: /\.(css)$/,
@@ -28,12 +37,12 @@ const rules = [
     ],
   },
   {
-    test: /\.(png|jpe?g|gif)$/i,
-    use: [
-      {
-        loader: 'file-loader',
-      },
-    ],
+    test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+    type: 'asset/resource',
+  },
+  {
+    test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+    type: 'asset/inline',
   },
 ];
 
@@ -56,6 +65,8 @@ module.exports = {
       filename: '[name].bundle.css',
       chunkFilename: '[id].css',
     }),
+    isDevelopment && new webpack.HotModuleReplacementPlugin(),
+    isDevelopment && new ReactRefreshWebpackPlugin(),
   ],
   module: { rules },
   resolve: {
