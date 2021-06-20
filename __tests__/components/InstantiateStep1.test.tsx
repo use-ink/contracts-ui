@@ -3,19 +3,7 @@ import { jest } from '@jest/globals';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import InstantiateStep1 from '../../src/components/instantiate/InstantiateStep1';
-
-const keyringPairsMock = [
-  { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
-  {
-    address: '5HKbr8t4Qg5y9kZBU9nwuDkoTsPShGQHYUbvyoB4ujvfKsbL',
-    meta: { name: 'alice_stash' },
-  },
-  { address: '5DkocVtKdD6wM7qrSAVTpR4jfTAPHvQhbrDZ6ZUB39d1DWzf', meta: { name: 'bob' } },
-  {
-    address: '5DUpcTjvPXG63kt1z8iwacJv7W7m6YuxfKCd4NoJtXhaUt6h',
-    meta: { name: 'bob_stash' },
-  },
-];
+import { keyringPairsMock } from '../../test-utils/mockData';
 
 it('renders correctly with initial values', () => {
   const { getByText } = render(

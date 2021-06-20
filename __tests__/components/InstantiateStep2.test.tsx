@@ -3,33 +3,13 @@ import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import InstantiateStep2 from '../../src/components/instantiate/InstantiateStep2';
+import { flipperMock } from '../../test-utils/mockData';
 
-const flipperMock = [
-  {
-    method: 'new',
-    index: 0,
-    args: [
-      {
-        name: 'initValue',
-        type: {
-          info: 6,
-          type: 'bool',
-        },
-      },
-    ],
-    docs: ['Creates a new flipper smart contract initialized with the given value.'],
-  },
-  {
-    method: 'default',
-    index: 1,
-    args: [],
-    docs: ['Creates a new flipper smart contract initialized to `false`.'],
-  },
-];
+const { constructors } = flipperMock;
 
 it('renders correctly with initial values', () => {
   const { getByText, getByPlaceholderText } = render(
-    <InstantiateStep2 constructors={flipperMock} dispatch={jest.fn()} currentStep={2} />
+    <InstantiateStep2 constructors={constructors} dispatch={jest.fn()} currentStep={2} />
   );
   expect(getByText('new')).toBeInTheDocument();
   expect(getByPlaceholderText('initValue: <bool>')).toBeInTheDocument();
@@ -40,13 +20,13 @@ it('does not render when no constructors given', () => {
 });
 it('does not render when current step is not 2', () => {
   const { container } = render(
-    <InstantiateStep2 constructors={flipperMock} dispatch={jest.fn()} currentStep={1} />
+    <InstantiateStep2 constructors={constructors} dispatch={jest.fn()} currentStep={1} />
   );
   expect(container).toBeEmptyDOMElement();
 });
 it('accepts user input', () => {
   const { getByPlaceholderText } = render(
-    <InstantiateStep2 constructors={flipperMock} dispatch={jest.fn()} currentStep={2} />
+    <InstantiateStep2 constructors={constructors} dispatch={jest.fn()} currentStep={2} />
   );
   const input = getByPlaceholderText('initValue: <bool>');
   expect(input).toHaveAttribute('value', '');
@@ -56,7 +36,7 @@ it('accepts user input', () => {
 it('dispatches the correct values', () => {
   const dispatchMock = jest.fn();
   const { getByPlaceholderText, getByText } = render(
-    <InstantiateStep2 constructors={flipperMock} dispatch={dispatchMock} currentStep={2} />
+    <InstantiateStep2 constructors={constructors} dispatch={dispatchMock} currentStep={2} />
   );
   const input = getByPlaceholderText('initValue: <bool>');
   const button = getByText('Next');
