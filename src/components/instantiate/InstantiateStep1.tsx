@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { KeyringPair, InstantiateAction } from '../../types';
-import { createOptions, createValuesHash } from '../../canvas';
+import { createOptions } from '../../canvas';
 import useMetadataFile from '../useMetadataFile';
 import useDropdown from '../useDropdown';
 
@@ -12,16 +12,16 @@ interface Props {
 }
 
 const Step1 = ({ keyringPairs, codeHashes, dispatch, currentStep }: Props) => {
-  const [accountSelected, AccountDropdown, setAccountSelected] = useDropdown<string>();
-  const [codeHash, CodeHashDropdown, setHash] = useDropdown<string>();
+  const [accountSelected, AccountDropdown, setAccountSelected] = useDropdown();
+  const [codeHash, CodeHashDropdown, setHash] = useDropdown();
   const [metadata, MetadataFileInput] = useMetadataFile();
 
   useEffect(() => {
-    keyringPairs && setAccountSelected(createOptions(keyringPairs)[0]);
+    keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
   }, []);
 
   useEffect(() => {
-    codeHashes && setHash(createValuesHash(codeHashes)[0]);
+    codeHashes && setHash(createOptions(codeHashes)[0]);
   }, [codeHashes]);
 
   if (currentStep !== 1) return null;
@@ -29,12 +29,12 @@ const Step1 = ({ keyringPairs, codeHashes, dispatch, currentStep }: Props) => {
   return (
     <>
       <AccountDropdown
-        options={createOptions(keyringPairs)}
+        options={createOptions(keyringPairs, 'pair')}
         placeholder="No accounts found"
         className="mb-4"
       />
       <CodeHashDropdown
-        options={createValuesHash(codeHashes)}
+        options={createOptions(codeHashes)}
         placeholder="No hashes found on chain"
         className="mb-8"
       />
@@ -46,7 +46,11 @@ const Step1 = ({ keyringPairs, codeHashes, dispatch, currentStep }: Props) => {
           metadata &&
           dispatch({
             type: 'STEP_1_COMPLETE',
-            payload: { codeHash: codeHash.value, fromAddress: accountSelected.value, metadata },
+            payload: {
+              codeHash: codeHash.value.toString(),
+              fromAddress: accountSelected.value.toString(),
+              metadata,
+            },
           })
         }
         disabled={metadata ? false : true}

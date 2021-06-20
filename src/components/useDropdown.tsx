@@ -3,14 +3,14 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { DropdownOption } from '../types';
 
-interface Props<T> extends React.HTMLAttributes<HTMLDivElement> {
-  options?: DropdownOption<T>[];
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  options?: DropdownOption[];
   placeholder: string;
 }
 
-function useDropdown<T>() {
-  const [option, setOption] = useState<DropdownOption<T>>();
-  const Dropdown = ({ options, placeholder, className }: Props<T>) => {
+function useDropdown() {
+  const [option, setOption] = useState<DropdownOption>();
+  const Dropdown = ({ options, placeholder, className }: Props) => {
     return (
       options && (
         <Listbox value={option} onChange={setOption}>
@@ -66,9 +66,9 @@ function useDropdown<T>() {
     );
   };
   return [option, Dropdown, setOption] as [
-    DropdownOption<T>,
-    (props: Props<T>) => JSX.Element,
-    React.Dispatch<React.SetStateAction<DropdownOption<T>>>
+    DropdownOption,
+    (props: Props) => JSX.Element,
+    React.Dispatch<React.SetStateAction<DropdownOption>>
   ];
 }
 

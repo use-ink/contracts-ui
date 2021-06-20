@@ -19,6 +19,7 @@ export const instantiateWithHash = async (
     constructorName &&
     api &&
     fromAddress &&
+    keyring &&
     keyringState === 'READY'
   ) {
     const salt = encodeSalt();
@@ -30,24 +31,21 @@ export const instantiateWithHash = async (
       expectedArgs > 0
         ? blueprint.tx[constructorName](options, ...args)
         : blueprint.tx[constructorName](options);
-    const accountPair = keyring?.getPair(fromAddress);
-    if (accountPair) {
-      dispatch({ type: 'INSTANTIATE' });
-      const unsub = await tx.signAndSend(accountPair, ({ status, events, dispatchError }) => {
-        if (dispatchError) {
-          handleDispatchError(dispatchError, api);
-          dispatch({ type: 'INSTANTIATE_ERROR', payload: dispatchError });
+    const accountPair = keyring.getPair(fromAddress);
+    dispatch({ type: 'INSTANTIATE' });
+    const unsub = await tx.signAndSend(accountPair, ({ status, events, dispatchError }) => {
+      if (dispatchError) {
+        handleDispatchError(dispatchError, api);
+        dispatch({ type: 'INSTANTIATE_ERROR', payload: dispatchError });
+      }
+      if (status.isInBlock || status.isFinalized) {
+        const contract = getInstanceFromEvents(events, api, metadata);
+        if (contract) {
+          saveInLocalStorage(contract);
+          dispatch({ type: 'INSTANTIATE_SUCCESS', payload: contract });
         }
-        if (status.isInBlock || status.isFinalized) {
-          const contract = getInstanceFromEvents(events, api, metadata);
-          if (contract) {
-            console.log(contract);
-            saveInLocalStorage(contract);
-            dispatch({ type: 'INSTANTIATE_SUCCESS', payload: contract });
-          }
-          unsub();
-        }
-      });
-    }
+        unsub();
+      }
+    });
   }
 };

@@ -75,7 +75,6 @@ const InstantiateWizard = () => {
       </>
     );
   }
-  console.log('state', state);
 
   return keyringPairs && api?.query ? (
     <div className="pb-8 bg-white rounded-lg">

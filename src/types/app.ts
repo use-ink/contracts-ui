@@ -25,8 +25,8 @@ export interface InstantiateInput {
 
 export type ArgValues = Record<string, string | undefined>;
 
-export type DropdownOption<T> = {
-  value: T;
+export type DropdownOption = {
+  value: string | number;
   name: string;
 };
 export interface InstantiateState {

@@ -73,15 +73,19 @@ export function createEmptyValues(args?: AbiParam[]) {
   }
   return o;
 }
-export const createOptions = (keyringPairs: Partial<KeyringPair>[]): DropdownOption<string>[] =>
-  keyringPairs.map(pair => ({
-    value: pair.address || '',
-    name: (pair.meta?.name as string).toUpperCase(),
-  }));
-
-export const createValuesHash = (codeHashes: string[]): DropdownOption<string>[] => {
-  return codeHashes.map(h => ({ name: h, value: h }));
-};
-export const createOptionsConstructor = (constructors: AbiMessage[]): DropdownOption<number>[] => {
-  return constructors.map((c, index) => ({ name: c.identifier, value: index }));
-};
+export function createOptions(data?: Array<unknown>, kind?: string): DropdownOption[] | [] {
+  if (data) {
+    switch (kind) {
+      case 'message':
+        return (data as AbiMessage[]).map(c => ({ name: c.identifier, value: c.index }));
+      case 'pair':
+        return (data as Partial<KeyringPair>[]).map(pair => ({
+          value: pair.address || '',
+          name: (pair.meta?.name as string).toUpperCase(),
+        }));
+      default:
+        return (data as string[]).map(h => ({ name: h.toString(), value: h.toString() }));
+    }
+  }
+  return [];
+}
