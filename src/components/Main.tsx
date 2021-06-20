@@ -11,7 +11,7 @@ export default function Main(): JSX.Element {
             {apiState === 'READY' && keyringState === 'READY' ? (
               <Homepage />
             ) : apiState === 'ERROR' ? (
-              `Connection error ${apiError}`
+              `Connection error ${JSON.stringify(apiError)}`
             ) : keyringState !== 'READY' ? (
               "Loading accounts (please review any extension's authorization)"
             ) : (
