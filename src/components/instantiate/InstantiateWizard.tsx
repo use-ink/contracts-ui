@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, Reducer } from 'react';
-import { getCodeHashes } from '../../canvas';
+import { getCodeHashes, instantiateWithHash } from '../../canvas';
 import { useCanvas } from '../../contexts';
 import { InstantiateState, InstantiateAction } from '../../types';
 import InstantiateStep1 from './InstantiateStep1';
@@ -89,7 +89,12 @@ const InstantiateWizard = () => {
         dispatch={dispatch}
         currentStep={state.currentStep}
       />
-      <InstantiateStep3 state={state} dispatch={dispatch} currentStep={state.currentStep} />
+      <InstantiateStep3
+        state={state}
+        dispatch={dispatch}
+        currentStep={state.currentStep}
+        submitHandler={instantiateWithHash}
+      />
     </div>
   ) : null;
 };
