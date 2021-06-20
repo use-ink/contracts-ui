@@ -86,7 +86,7 @@ const InstantiateWizard = () => {
         currentStep={state.currentStep}
       />
       <InstantiateStep2
-        metadata={state.metadata}
+        constructors={state.metadata?.constructors}
         dispatch={dispatch}
         currentStep={state.currentStep}
       />

@@ -1,42 +1,40 @@
 import React, { useEffect } from 'react';
-import { Abi, InstantiateAction } from '../../types';
+import { AbiMessage, InstantiateAction } from '../../types';
 import { createEmptyValues, createOptionsConstructor } from '../../canvas';
 import useDropdown from '../useDropdown';
 import useArgumentForm from '../ArgumentForm';
 
 interface Props {
-  metadata?: Abi;
+  constructors?: AbiMessage[];
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep: number;
 }
 
-const Step2 = ({ metadata, dispatch, currentStep }: Props) => {
+const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
   const [constr, ConstructorDropdown, setConstructor] = useDropdown<number>();
   const [argValues, ArgumentForm, setArgValues] = useArgumentForm();
 
   useEffect(() => {
-    metadata && setConstructor(createOptionsConstructor(metadata.constructors)[0]);
-  }, [metadata]);
+    constructors && setConstructor(createOptionsConstructor(constructors)[0]);
+    console.log(constructors);
+  }, [constructors]);
 
   useEffect(() => {
-    constr && metadata && setArgValues(createEmptyValues(metadata.constructors[0].args));
+    constr && constructors && setArgValues(createEmptyValues(constructors[0].args));
   }, [constr]);
 
   if (currentStep !== 2) return null;
 
-  return metadata ? (
+  return constructors ? (
     <div className="w-full max-w-xl mt-8">
       <ConstructorDropdown
-        options={createOptionsConstructor(metadata.constructors)}
+        options={constructors && createOptionsConstructor(constructors)}
         placeholder="no constructors found"
         className="mb-4"
       />
       {constr && (
         <>
-          <ArgumentForm
-            key={`args-${constr.name}`}
-            message={metadata.findConstructor(constr.name)}
-          />
+          <ArgumentForm key={`args-${constr.name}`} message={constructors[constr.value]} />
           <button
             type="button"
             className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
