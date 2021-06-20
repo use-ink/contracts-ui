@@ -18,21 +18,21 @@ const mockState: AppState = {
 };
 
 describe('Canvas UI app', () => {
-  it('should render the homepage if the api and keyring are in a ready state', () => {
+  test('should render the homepage if the api and keyring are in a ready state', () => {
     customRender(<Main />, { ...mockState, keyringState: 'READY', apiState: 'READY' });
     expect(screen.getByText(`Hello`)).toBeTruthy();
   });
-  it('should suggest to check extension if keyring state is not ready', () => {
+  test('should suggest to check extension if keyring state is not ready', () => {
     customRender(<Main />, { ...mockState, apiState: 'READY' });
     expect(
       screen.getByText(`Loading accounts (please review any extension's authorization)`)
     ).toBeTruthy();
   });
-  it('should render a message if the api is not ready but the keyring is', () => {
+  test('should render a message if the api is not ready but the keyring is', () => {
     customRender(<Main />, { ...mockState, keyringState: 'READY' });
     expect(screen.getByText(`Connecting to substrate node`)).toBeTruthy();
   });
-  it('should render the error it encountered while connecting to the node', () => {
+  test('should render the error it encountered while connecting to the node', () => {
     customRender(<Main />, { ...mockState, apiError: { key: 'value' }, apiState: 'ERROR' });
     expect(screen.getByText(`Connection error {"key":"value"}`)).toBeTruthy();
   });
