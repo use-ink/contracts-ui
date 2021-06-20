@@ -1,9 +1,15 @@
-import type { ApiPromise, EventRecord } from '../../types';
+import { ContractPromise } from '@polkadot/api-contract';
+import type { ApiPromise, Abi, EventRecord } from '../../types';
 
-export const getAddressFromEvents = (api: ApiPromise | null, events: EventRecord[]) => {
-  let address: string | undefined;
+export const getInstanceFromEvents = (
+  events: EventRecord[],
+  api: ApiPromise,
+  metadata: Abi
+): ContractPromise | undefined => {
+  let address;
+  let contract: ContractPromise | undefined;
   events
-    .filter(({ event }) => api?.events.contracts.Instantiated.is(event))
+    .filter(({ event }) => api.events.contracts.Instantiated.is(event))
     .map(
       ({
         event: {
@@ -14,5 +20,8 @@ export const getAddressFromEvents = (api: ApiPromise | null, events: EventRecord
         console.log(`Instantiated: ${contract}`);
       }
     );
-  return address;
+  if (address) {
+    contract = new ContractPromise(api, metadata, address);
+  }
+  return contract;
 };

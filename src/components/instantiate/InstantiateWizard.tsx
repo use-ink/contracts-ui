@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useReducer, Reducer } from 'react';
-import {
-  getCodeHashes,
-  getAddressFromEvents,
-  createContract,
-  saveInLocalStorage,
-} from '../../canvas';
+import { getCodeHashes } from '../../canvas';
 import { useCanvas } from '../../contexts';
 import { InstantiateState, InstantiateAction } from '../../types';
 import InstantiateStep1 from './InstantiateStep1';
@@ -39,12 +34,11 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
       return { ...state, currentStep: action.payload.step };
     case 'INSTANTIATE':
       return { ...state, isLoading: true };
-    case 'INSTANTIATE_FINALIZED':
-      return { ...state, events: action.payload };
     case 'INSTANTIATE_SUCCESS':
       return { ...state, isSuccess: true, contract: action.payload, isLoading: false };
     case 'INSTANTIATE_ERROR':
-      return { ...state, isLoading: false, error: action.payload };
+      return { ...state, isLoading: false };
+
     default:
       throw new Error();
   }
@@ -54,7 +48,6 @@ const InstantiateWizard = () => {
   const { api, keyring } = useCanvas();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [codeHashes, setCodeHashes] = useState<string[]>([]);
-  const [instanceAddress, setInstanceAddress] = useState<string>();
 
   const keyringPairs = keyring?.getPairs();
 
@@ -74,20 +67,6 @@ const InstantiateWizard = () => {
     };
   }, [api]);
 
-  useEffect(() => {
-    const address = state.events && getAddressFromEvents(api, state.events);
-    if (address) setInstanceAddress(address);
-  }, [state.events]);
-
-  useEffect(() => {
-    const contract = instanceAddress && createContract(api, state.metadata, instanceAddress);
-
-    if (contract) {
-      saveInLocalStorage(contract);
-      dispatch({ type: 'INSTANTIATE_SUCCESS', payload: contract });
-    }
-  }, [instanceAddress]);
-
   if (state.isLoading) {
     return (
       <>
@@ -96,16 +75,7 @@ const InstantiateWizard = () => {
       </>
     );
   }
-
-  if (state.error && api) {
-    // const {sections, } = handleDispatchError(state.error, api);
-    return (
-      <>
-        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
-        <div>{}</div>
-      </>
-    );
-  }
+  console.log('state', state);
 
   return keyringPairs && api?.query ? (
     <div className="pb-8 bg-white rounded-lg">

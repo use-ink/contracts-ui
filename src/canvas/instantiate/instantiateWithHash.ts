@@ -1,6 +1,7 @@
 import { BlueprintPromise } from '@polkadot/api-contract';
-import { encodeSalt, createTx } from '../utils';
+import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../utils';
 import { ApiPromise, InstantiateAction, Keyring, InstantiateState } from '../../types';
+import { getInstanceFromEvents } from './getAddressFromEvents';
 
 export const instantiateWithHash = async (
   endowment: number,
@@ -11,35 +12,42 @@ export const instantiateWithHash = async (
   dispatch: (action: InstantiateAction) => void,
   { constructorName, argValues, fromAddress, codeHash, metadata }: InstantiateState
 ) => {
-  if (codeHash && metadata && constructorName && api && fromAddress && keyringState === 'READY') {
+  if (
+    argValues &&
+    codeHash &&
+    metadata &&
+    constructorName &&
+    api &&
+    fromAddress &&
+    keyringState === 'READY'
+  ) {
     const salt = encodeSalt();
     const blueprint = new BlueprintPromise(api, metadata, codeHash);
     const options = { gasLimit, salt, value: endowment };
-    const method = metadata.findConstructor(constructorName);
+    const expectedArgs = metadata.findConstructor(constructorName).args.length;
     const args = argValues ? Object.values(argValues) : [];
-    const instantiate = createTx(blueprint, method, args, options);
-    console.log(instantiate);
-
-    dispatch({ type: 'INSTANTIATE' });
+    const tx =
+      expectedArgs > 0
+        ? blueprint.tx[constructorName](options, ...args)
+        : blueprint.tx[constructorName](options);
     const accountPair = keyring?.getPair(fromAddress);
     if (accountPair) {
-      const unsub = await instantiate.signAndSend(
-        accountPair,
-        ({ status, events, dispatchError }) => {
-          console.log('status', status);
-
-          if (dispatchError) {
-            console.log('error');
-
-            dispatch({ type: 'INSTANTIATE_ERROR', payload: dispatchError });
-          }
-          if (status.isInBlock || status.isFinalized) {
-            console.log('in block');
-            dispatch({ type: 'INSTANTIATE_FINALIZED', payload: events });
-          }
+      dispatch({ type: 'INSTANTIATE' });
+      const unsub = await tx.signAndSend(accountPair, ({ status, events, dispatchError }) => {
+        if (dispatchError) {
+          handleDispatchError(dispatchError, api);
+          dispatch({ type: 'INSTANTIATE_ERROR', payload: dispatchError });
         }
-      );
-      unsub();
+        if (status.isInBlock || status.isFinalized) {
+          const contract = getInstanceFromEvents(events, api, metadata);
+          if (contract) {
+            console.log(contract);
+            saveInLocalStorage(contract);
+            dispatch({ type: 'INSTANTIATE_SUCCESS', payload: contract });
+          }
+          unsub();
+        }
+      });
     }
   }
 };

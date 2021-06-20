@@ -11,20 +11,15 @@ import {
   KeyringPair,
   AbiMessage,
   DropdownOption,
-  BlueprintPromise,
-  RegistryError,
 } from '../types';
 
 export const handleDispatchError = (dispatchError: DispatchError, api: ApiPromise) => {
-  let error: RegistryError | AnyJson | undefined;
   if (dispatchError.isModule) {
-    error = api.registry.findMetaError(dispatchError.asModule);
-    console.log('Error creating instance: ', error);
+    const decoded = api.registry.findMetaError(dispatchError.asModule);
+    console.log('Error creating instance: ', decoded);
   } else {
-    error = dispatchError.toHuman();
     console.log(`Error creating instance: ${dispatchError}`);
   }
-  return error;
 };
 
 export const saveInLocalStorage = (contract: ContractPromise) => {
@@ -32,6 +27,27 @@ export const saveInLocalStorage = (contract: ContractPromise) => {
   const st = storedInstances ? Array.from(JSON.parse(storedInstances)) : [];
   st.push(contract);
   window.localStorage.setItem('contracts', JSON.stringify(st));
+};
+
+export const getInstancesFromStorage = () => {
+  const storedInstances = localStorage.getItem('contracts');
+  return storedInstances ? (JSON.parse(storedInstances) as ContractPromise[]) : [];
+};
+
+export const getInstanceFromStorage = (
+  addr: string,
+  api: ApiPromise | null
+): ContractPromise | null => {
+  let contract: ContractPromise | null = null;
+  const stored = getInstancesFromStorage().find(({ address }) => addr === address.toString());
+  try {
+    if (stored && api) {
+      contract = new ContractPromise(api, stored.abi.json, stored.address);
+    }
+  } catch (error) {
+    throw new Error('Error creating contract promise');
+  }
+  return contract;
 };
 
 export const convertMetadata = (metadata: unknown, api: ApiPromise | null) => {
@@ -60,7 +76,7 @@ export function createEmptyValues(args?: AbiParam[]) {
 export const createOptions = (keyringPairs: Partial<KeyringPair>[]): DropdownOption<string>[] =>
   keyringPairs.map(pair => ({
     value: pair.address || '',
-    name: (pair.meta?.name as string).toUpperCase() || '',
+    name: (pair.meta?.name as string).toUpperCase(),
   }));
 
 export const createValuesHash = (codeHashes: string[]): DropdownOption<string>[] => {
@@ -69,13 +85,3 @@ export const createValuesHash = (codeHashes: string[]): DropdownOption<string>[]
 export const createOptionsConstructor = (constructors: AbiMessage[]): DropdownOption<number>[] => {
   return constructors.map((c, index) => ({ name: c.identifier, value: index }));
 };
-export function createTx(
-  namespace: ContractPromise | BlueprintPromise,
-  method: AbiMessage,
-  args: string[],
-  options: { gasLimit: number; salt?: Uint8Array; value: number }
-) {
-  return method.args.length > 0
-    ? namespace.tx[method.identifier](options, ...args)
-    : namespace.tx[method.identifier](options);
-}
