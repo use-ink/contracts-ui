@@ -57,10 +57,10 @@ export function createEmptyValues(args?: AbiParam[]) {
   }
   return o;
 }
-export const createOptions = (keyringPairs: KeyringPair[]): DropdownOption<string>[] =>
+export const createOptions = (keyringPairs: Partial<KeyringPair>[]): DropdownOption<string>[] =>
   keyringPairs.map(pair => ({
-    value: pair.address,
-    name: (pair.meta.name as string).toUpperCase(),
+    value: pair.address || '',
+    name: (pair.meta?.name as string).toUpperCase() || '',
   }));
 
 export const createValuesHash = (codeHashes: string[]): DropdownOption<string>[] => {

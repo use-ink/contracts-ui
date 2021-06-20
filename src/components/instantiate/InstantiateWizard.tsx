@@ -73,12 +73,10 @@ const InstantiateWizard = () => {
       isCancelled = true;
     };
   }, [api]);
-  console.log('state events', state.events);
 
   useEffect(() => {
     const address = state.events && getAddressFromEvents(api, state.events);
     if (address) setInstanceAddress(address);
-    console.log('addd', address);
   }, [state.events]);
 
   useEffect(() => {
