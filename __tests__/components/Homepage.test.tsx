@@ -1,8 +1,10 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Homepage from '../../src/components/Homepage';
 
-it('loads', () => {
-  render(<Homepage />);
-  expect(screen.getByRole('heading').textContent).toContain('Hello');
+describe('Homepage', () => {
+  test('it loads', () => {
+    const { getByText } = render(<Homepage />);
+    expect(getByText('Hello')).toBeTruthy();
+  });
 });
