@@ -41,9 +41,8 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.3",
-    "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.1.9",
     "@types/jest": "^26.0.23",
     "@types/mini-css-extract-plugin": "^1.4.3",
     "@types/webpack-env": "^1.16.0",

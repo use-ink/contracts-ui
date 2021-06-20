@@ -1,19 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AbiMessage, InstantiateAction } from '../../types';
 import { createEmptyValues, createOptions } from '../../canvas';
 import useDropdown from '../useDropdown';
-import useArgumentForm from '../ArgumentForm';
+import ArgumentForm from '../ArgumentForm';
 
 interface Props {
-  constructors?: AbiMessage[];
+  constructors?: Partial<AbiMessage>[];
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep: number;
 }
 
 const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
   const [constr, ConstructorDropdown, setConstructor] = useDropdown();
-  const [argValues, ArgumentForm, setArgValues] = useArgumentForm();
-
+  const [argValues, setArgValues] = useState<Record<string, string>>();
+  function handleArgValueChange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    argValues && setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() });
+  }
   useEffect(() => {
     constructors && setConstructor(createOptions(constructors, 'message')[0]);
   }, [constructors]);
@@ -27,7 +30,7 @@ const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
   return constructors ? (
     <div className="w-full max-w-xl mt-8">
       <ConstructorDropdown
-        options={constructors && createOptions(constructors, 'message')}
+        options={createOptions(constructors, 'message')}
         placeholder="no constructors found"
         className="mb-4"
       />
@@ -36,6 +39,8 @@ const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
           <ArgumentForm
             key={`args-${constr.name}`}
             message={typeof constr.value === 'number' ? constructors[constr.value] : undefined}
+            handleChange={handleArgValueChange}
+            argValues={argValues}
           />
           <button
             type="button"
@@ -54,6 +59,7 @@ const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
             className="bg-gray-500  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!constr.name || !argValues}
             onClick={() =>
+              argValues &&
               dispatch({
                 type: 'STEP_2_COMPLETE',
                 payload: { constructorName: constr.name, argValues },
