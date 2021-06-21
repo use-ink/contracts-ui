@@ -20,7 +20,6 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
         ...state,
         codeHash: action.payload.codeHash,
         metadata: action.payload.metadata,
-        fromAddress: action.payload.fromAddress,
         currentStep: 2,
       };
     case 'STEP_2_COMPLETE':
@@ -28,6 +27,7 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
         ...state,
         constructorName: action.payload.constructorName,
         argValues: action.payload.argValues,
+        fromAddress: action.payload.fromAddress,
         currentStep: 3,
       };
     case 'GO_TO':
@@ -61,12 +61,9 @@ const InstantiateWizard = () => {
 
   return keyringPairs && api?.query ? (
     <div className="pb-8 bg-white rounded-lg">
-      <InstantiateStep1
-        keyringPairs={keyringPairs}
-        dispatch={dispatch}
-        currentStep={state.currentStep}
-      />
+      <InstantiateStep1 dispatch={dispatch} currentStep={state.currentStep} />
       <InstantiateStep2
+        keyringPairs={keyringPairs}
         constructors={state.metadata?.constructors}
         dispatch={dispatch}
         currentStep={state.currentStep}

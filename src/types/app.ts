@@ -48,10 +48,10 @@ export type InstantiateAction =
   | { type: 'INSTANTIATE_FINALIZED'; payload: EventRecord[] }
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
-  | { type: 'STEP_1_COMPLETE'; payload: { fromAddress: string; codeHash: string; metadata: Abi } }
+  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi } }
   | {
       type: 'STEP_2_COMPLETE';
-      payload: { constructorName: string; argValues: Record<string, string> };
+      payload: { constructorName: string; argValues: Record<string, string>; fromAddress: string };
     }
   | {
       type: 'GO_TO';

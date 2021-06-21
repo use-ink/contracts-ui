@@ -1,34 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { KeyringPair, InstantiateAction } from '../../types';
-import { createOptions } from '../../canvas';
+import React, { useState } from 'react';
+import { InstantiateAction } from '../../types';
 import useMetadataFile from '../useMetadataFile';
-import useDropdown from '../useDropdown';
 import Input from '../Input';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
-  keyringPairs: Partial<KeyringPair>[];
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep?: number;
 }
 
-const Step1 = ({ keyringPairs, dispatch, currentStep }: Props) => {
-  const [accountSelected, AccountDropdown, setAccountSelected] = useDropdown();
+const Step1 = ({ dispatch, currentStep }: Props) => {
   const [metadata, MetadataFileInput] = useMetadataFile();
   const [hash, setHash] = useState('');
-
-  useEffect(() => {
-    keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
-  }, []);
 
   if (currentStep !== 1) return null;
 
   return (
     <>
-      <AccountDropdown
-        options={createOptions(keyringPairs, 'pair')}
-        placeholder="No accounts found"
-        className="mb-4"
-      />
       <Input
         value={hash}
         handleChange={e => setHash(e.target.value)}
@@ -44,7 +31,6 @@ const Step1 = ({ keyringPairs, dispatch, currentStep }: Props) => {
             type: 'STEP_1_COMPLETE',
             payload: {
               codeHash: hash,
-              fromAddress: accountSelected.value.toString(),
               metadata,
             },
           })

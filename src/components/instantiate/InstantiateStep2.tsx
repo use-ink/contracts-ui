@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { AbiMessage, InstantiateAction } from '../../types';
+import { AbiMessage, KeyringPair, InstantiateAction } from '../../types';
 import { createEmptyValues, createOptions } from '../../canvas';
 import useDropdown from '../useDropdown';
 import ArgumentForm from '../ArgumentForm';
 
 interface Props {
+  keyringPairs: Partial<KeyringPair>[];
   constructors?: Partial<AbiMessage>[];
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep: number;
 }
 
-const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
+const Step2 = ({ constructors, dispatch, currentStep, keyringPairs }: Props) => {
+  const [accountSelected, AccountDropdown, setAccountSelected] = useDropdown();
   const [constr, ConstructorDropdown, setConstructor] = useDropdown();
   const [argValues, setArgValues] = useState<Record<string, string>>();
   function handleArgValueChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     argValues && setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() });
   }
+  useEffect(() => {
+    keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
+  }, []);
   useEffect(() => {
     constructors && setConstructor(createOptions(constructors, 'message')[0]);
   }, [constructors]);
@@ -29,6 +34,11 @@ const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
 
   return constructors ? (
     <div className="w-full max-w-xl mt-8">
+      <AccountDropdown
+        options={createOptions(keyringPairs, 'pair')}
+        placeholder="No accounts found"
+        className="mb-4"
+      />
       <ConstructorDropdown
         options={createOptions(constructors, 'message')}
         placeholder="no constructors found"
@@ -62,7 +72,12 @@ const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
               argValues &&
               dispatch({
                 type: 'STEP_2_COMPLETE',
-                payload: { constructorName: constr.name, argValues },
+
+                payload: {
+                  constructorName: constr.name,
+                  fromAddress: accountSelected.value.toString(),
+                  argValues,
+                },
               })
             }
           >
