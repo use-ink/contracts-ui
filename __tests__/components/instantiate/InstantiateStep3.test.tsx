@@ -2,10 +2,10 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import InstantiateStep3 from '../../src/components/instantiate/InstantiateStep3';
-import { AppState } from '../../src/types';
-import { CanvasContext } from '../../src/contexts';
-import { mockInstantiateState, mockAppState } from '../../test-utils/mockData';
+import InstantiateStep3 from '../../../src/components/instantiate/InstantiateStep3';
+import { AppState } from '../../../src/types';
+import { CanvasContext } from '../../../src/contexts';
+import { mockInstantiateState, mockAppState } from '../../../test-utils/mockData';
 
 const mockSubmitHandler = jest.fn();
 
