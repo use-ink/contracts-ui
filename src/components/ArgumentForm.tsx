@@ -18,7 +18,7 @@ const ArgumentForm = ({ message, handleChange, argValues }: Props) => {
               name={`${name}`}
               id={`${name}`}
               placeholder={`${name}: <${type.type}>`}
-              value={argValues ? argValues[`${name}`] : ''}
+              value={argValues[`${name}`]}
               onChange={handleChange}
               className="w-full bg-white border-gray-300"
             />
