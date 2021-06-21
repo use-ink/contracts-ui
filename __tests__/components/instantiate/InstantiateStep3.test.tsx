@@ -1,42 +1,56 @@
 import React from 'react';
 import { jest } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import InstantiateStep3 from '../../../src/components/instantiate/InstantiateStep3';
-import { AppState } from '../../../src/types';
-import { CanvasContext } from '../../../src/contexts';
-import { mockInstantiateState, mockAppState } from '../../../test-utils/mockData';
+import { flipperMock } from '../../../test-utils/mockData';
 
-const mockSubmitHandler = jest.fn();
+const { constructors } = flipperMock;
 
-const customRender = (ui: JSX.Element, providerProps: AppState) => {
-  return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
-};
 describe('Instantiate Step 3', () => {
-  test('displays a button that calls the submit handler', () => {
-    customRender(
-      <InstantiateStep3
-        state={mockInstantiateState}
-        dispatch={jest.fn()}
-        currentStep={3}
-        submitHandler={mockSubmitHandler}
-      />,
-      { ...mockAppState }
+  test('renders correctly with initial values', () => {
+    const { getByPlaceholderText } = render(
+      <InstantiateStep3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />
     );
-    const submitBtn = screen.getByText('Instantiate');
-    expect(submitBtn).toBeInTheDocument();
-    fireEvent.click(submitBtn);
-    expect(mockSubmitHandler).toHaveBeenCalledTimes(1);
+    expect(getByPlaceholderText('initValue: <bool>')).toBeInTheDocument();
+  });
+  test('does not render when no constructors given', () => {
+    const { container } = render(<InstantiateStep3 dispatch={jest.fn()} currentStep={3} />);
+    expect(container).toBeEmptyDOMElement();
   });
   test('does not render when current step is not 3', () => {
     const { container } = render(
-      <InstantiateStep3
-        state={mockInstantiateState}
-        dispatch={jest.fn()}
-        currentStep={1}
-        submitHandler={mockSubmitHandler}
-      />
+      <InstantiateStep3 constructors={constructors} dispatch={jest.fn()} currentStep={1} />
     );
     expect(container).toBeEmptyDOMElement();
+  });
+  test('accepts user input', () => {
+    const { getByPlaceholderText } = render(
+      <InstantiateStep3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />
+    );
+    const input = getByPlaceholderText('initValue: <bool>');
+    expect(input).toHaveAttribute('value', '');
+    fireEvent.change(input, { target: { value: 'test user Input' } });
+    expect(input).toHaveAttribute('value', 'test user Input');
+  });
+  test('dispatches the correct values', () => {
+    const dispatchMock = jest.fn();
+    const { getByPlaceholderText, getByText } = render(
+      <InstantiateStep3 constructors={constructors} dispatch={dispatchMock} currentStep={3} />
+    );
+    const input = getByPlaceholderText('initValue: <bool>');
+    const button = getByText('Next');
+    fireEvent.change(input, { target: { value: 'true' } });
+    fireEvent.click(button);
+    expect(dispatchMock).toHaveBeenCalledTimes(1);
+    expect(dispatchMock).toHaveBeenCalledWith({
+      type: 'STEP_3_COMPLETE',
+      payload: {
+        constructorName: 'new',
+        argValues: {
+          initValue: 'true',
+        },
+      },
+    });
   });
 });

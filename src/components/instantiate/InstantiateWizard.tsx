@@ -5,6 +5,7 @@ import { InstantiateState, InstantiateAction } from '../../types';
 import InstantiateStep1 from './InstantiateStep1';
 import InstantiateStep2 from './InstantiateStep2';
 import InstantiateStep3 from './InstantiateStep3';
+import InstantiateStep4 from './InstantiateStep4';
 
 const initialState: InstantiateState = {
   isLoading: false,
@@ -25,10 +26,15 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
     case 'STEP_2_COMPLETE':
       return {
         ...state,
-        constructorName: action.payload.constructorName,
-        argValues: action.payload.argValues,
         fromAddress: action.payload.fromAddress,
         currentStep: 3,
+      };
+    case 'STEP_3_COMPLETE':
+      return {
+        ...state,
+        constructorName: action.payload.constructorName,
+        argValues: action.payload.argValues,
+        currentStep: 4,
       };
     case 'GO_TO':
       return { ...state, currentStep: action.payload.step };
@@ -64,11 +70,15 @@ const InstantiateWizard = () => {
       <InstantiateStep1 dispatch={dispatch} currentStep={state.currentStep} />
       <InstantiateStep2
         keyringPairs={keyringPairs}
-        constructors={state.metadata?.constructors}
         dispatch={dispatch}
         currentStep={state.currentStep}
       />
       <InstantiateStep3
+        constructors={state.metadata?.constructors}
+        dispatch={dispatch}
+        currentStep={state.currentStep}
+      />
+      <InstantiateStep4
         state={state}
         dispatch={dispatch}
         currentStep={state.currentStep}

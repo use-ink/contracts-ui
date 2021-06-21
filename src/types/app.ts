@@ -51,7 +51,11 @@ export type InstantiateAction =
   | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi } }
   | {
       type: 'STEP_2_COMPLETE';
-      payload: { constructorName: string; argValues: Record<string, string>; fromAddress: string };
+      payload: { fromAddress: string };
+    }
+  | {
+      type: 'STEP_3_COMPLETE';
+      payload: { constructorName: string; argValues: Record<string, string> };
     }
   | {
       type: 'GO_TO';
