@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useReducer, Reducer } from 'react';
-import { getCodeHashes, instantiateWithHash } from '../../canvas';
+import React, { useReducer, Reducer } from 'react';
+import { instantiateWithHash } from '../../canvas';
 import { useCanvas } from '../../contexts';
 import { InstantiateState, InstantiateAction } from '../../types';
 import InstantiateStep1 from './InstantiateStep1';
@@ -47,25 +47,8 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
 const InstantiateWizard = () => {
   const { api, keyring } = useCanvas();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [codeHashes, setCodeHashes] = useState<string[]>([]);
 
   const keyringPairs = keyring?.getPairs();
-
-  useEffect(() => {
-    let isCancelled = false;
-    if (api) {
-      getCodeHashes(api)
-        .then(codeHashes => {
-          if (!isCancelled) {
-            setCodeHashes(codeHashes);
-          }
-        })
-        .catch(err => console.log(err));
-    }
-    return () => {
-      isCancelled = true;
-    };
-  }, [api]);
 
   if (state.isLoading) {
     return (
@@ -80,7 +63,6 @@ const InstantiateWizard = () => {
     <div className="pb-8 bg-white rounded-lg">
       <InstantiateStep1
         keyringPairs={keyringPairs}
-        codeHashes={codeHashes}
         dispatch={dispatch}
         currentStep={state.currentStep}
       />

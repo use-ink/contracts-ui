@@ -1,28 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyringPair, InstantiateAction } from '../../types';
 import { createOptions } from '../../canvas';
 import useMetadataFile from '../useMetadataFile';
 import useDropdown from '../useDropdown';
+import Input from '../Input';
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLInputElement> {
   keyringPairs: Partial<KeyringPair>[];
-  codeHashes: string[];
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep?: number;
 }
 
-const Step1 = ({ keyringPairs, codeHashes, dispatch, currentStep }: Props) => {
+const Step1 = ({ keyringPairs, dispatch, currentStep }: Props) => {
   const [accountSelected, AccountDropdown, setAccountSelected] = useDropdown();
-  const [codeHash, CodeHashDropdown, setHash] = useDropdown();
   const [metadata, MetadataFileInput] = useMetadataFile();
+  const [hash, setHash] = useState('');
 
   useEffect(() => {
     keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
   }, []);
-
-  useEffect(() => {
-    codeHashes && setHash(createOptions(codeHashes)[0]);
-  }, [codeHashes]);
 
   if (currentStep !== 1) return null;
 
@@ -33,10 +29,10 @@ const Step1 = ({ keyringPairs, codeHashes, dispatch, currentStep }: Props) => {
         placeholder="No accounts found"
         className="mb-4"
       />
-      <CodeHashDropdown
-        options={createOptions(codeHashes)}
-        placeholder="No hashes found on chain"
-        className="mb-8"
+      <Input
+        value={hash}
+        handleChange={e => setHash(e.target.value)}
+        placeholder="on-chain code hash"
       />
       <MetadataFileInput />
       <button
@@ -47,7 +43,7 @@ const Step1 = ({ keyringPairs, codeHashes, dispatch, currentStep }: Props) => {
           dispatch({
             type: 'STEP_1_COMPLETE',
             payload: {
-              codeHash: codeHash.value.toString(),
+              codeHash: hash,
               fromAddress: accountSelected.value.toString(),
               metadata,
             },
