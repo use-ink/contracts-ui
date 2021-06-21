@@ -12,30 +12,31 @@ const mockSubmitHandler = jest.fn();
 const customRender = (ui: JSX.Element, providerProps: AppState) => {
   return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
 };
-
-it('displays a button that calls the submit handler', () => {
-  customRender(
-    <InstantiateStep3
-      state={mockInstantiateState}
-      dispatch={jest.fn()}
-      currentStep={3}
-      submitHandler={mockSubmitHandler}
-    />,
-    { ...mockAppState }
-  );
-  const submitBtn = screen.getByText('Instantiate');
-  expect(submitBtn).toBeInTheDocument();
-  fireEvent.click(submitBtn);
-  expect(mockSubmitHandler).toHaveBeenCalledTimes(1);
-});
-it('does not render when current step is not 3', () => {
-  const { container } = render(
-    <InstantiateStep3
-      state={mockInstantiateState}
-      dispatch={jest.fn()}
-      currentStep={1}
-      submitHandler={mockSubmitHandler}
-    />
-  );
-  expect(container).toBeEmptyDOMElement();
+describe('Instantiate Step 3', () => {
+  test('displays a button that calls the submit handler', () => {
+    customRender(
+      <InstantiateStep3
+        state={mockInstantiateState}
+        dispatch={jest.fn()}
+        currentStep={3}
+        submitHandler={mockSubmitHandler}
+      />,
+      { ...mockAppState }
+    );
+    const submitBtn = screen.getByText('Instantiate');
+    expect(submitBtn).toBeInTheDocument();
+    fireEvent.click(submitBtn);
+    expect(mockSubmitHandler).toHaveBeenCalledTimes(1);
+  });
+  test('does not render when current step is not 3', () => {
+    const { container } = render(
+      <InstantiateStep3
+        state={mockInstantiateState}
+        dispatch={jest.fn()}
+        currentStep={1}
+        submitHandler={mockSubmitHandler}
+      />
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
 });
