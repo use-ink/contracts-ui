@@ -32,7 +32,9 @@ export type DropdownOption = {
 export interface InstantiateState {
   isLoading: boolean;
   isSuccess: boolean;
+  currentStep: number;
   fromAddress?: string;
+  fromAccountName?: string;
   codeHash?: string;
   metadata?: Abi;
   constructorName?: string;
@@ -40,7 +42,7 @@ export interface InstantiateState {
   contract?: ContractPromise | null;
   events?: EventRecord[];
   error?: DispatchError;
-  currentStep: number;
+  contractName: string;
 }
 
 export type InstantiateAction =
@@ -48,10 +50,10 @@ export type InstantiateAction =
   | { type: 'INSTANTIATE_FINALIZED'; payload: EventRecord[] }
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
-  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi } }
+  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
   | {
       type: 'STEP_2_COMPLETE';
-      payload: { fromAddress: string };
+      payload: { fromAddress: string; fromAccountName: string; contractName: string };
     }
   | {
       type: 'STEP_3_COMPLETE';

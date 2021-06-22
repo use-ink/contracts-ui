@@ -28,6 +28,9 @@ const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
 
   return constructors ? (
     <>
+      <label htmlFor="constr" className="inline-block mb-2">
+        Deployment constructor
+      </label>
       <ConstructorDropdown
         options={createOptions(constructors, 'message')}
         placeholder="no constructors found"
@@ -41,21 +44,10 @@ const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
             handleChange={handleArgValueChange}
             argValues={argValues}
           />
+
           <button
             type="button"
             className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() =>
-              dispatch({
-                type: 'GO_TO',
-                payload: { step: 2 },
-              })
-            }
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            className="bg-gray-500  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!constr.name || !argValues}
             onClick={() =>
               argValues &&
@@ -69,6 +61,18 @@ const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
             }
           >
             Next
+          </button>
+          <button
+            type="button"
+            className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() =>
+              dispatch({
+                type: 'GO_TO',
+                payload: { step: 2 },
+              })
+            }
+          >
+            Go Back
           </button>
         </>
       )}

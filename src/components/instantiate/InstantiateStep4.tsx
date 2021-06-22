@@ -23,22 +23,12 @@ const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
   return (
     <CanvasContext.Consumer>
       {({ api, keyring, keyringState }) => (
-        <div className="w-full max-w-xl mt-8">
-          <p>{`Account: ${state.fromAddress}`}</p>
+        <>
+          <p>{`Account: ${state.fromAccountName}`}</p>
+          <p>{`Name: ${state.contractName}`}</p>
           <p>{`Code hash: ${state.codeHash}`}</p>
           <p className="mb-8">{`Constructor: ${state.constructorName}`}</p>
-          <button
-            type="button"
-            className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() =>
-              dispatch({
-                type: 'GO_TO',
-                payload: { step: 3 },
-              })
-            }
-          >
-            Back
-          </button>
+
           <button
             type="button"
             className="bg-gray-500 mr-4 text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -56,7 +46,19 @@ const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
           >
             Instantiate
           </button>
-        </div>
+          <button
+            type="button"
+            className="bg-gray-500  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() =>
+              dispatch({
+                type: 'GO_TO',
+                payload: { step: 3 },
+              })
+            }
+          >
+            Go Back
+          </button>
+        </>
       )}
     </CanvasContext.Consumer>
   );

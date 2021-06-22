@@ -3,8 +3,7 @@ import InstantiateWizard from './instantiate/InstantiateWizard';
 
 export default function Homepage() {
   return (
-    <div id="homepage">
-      <h1>Hello</h1>
+    <div id="homepage" className="py-10">
       <InstantiateWizard />
     </div>
   );

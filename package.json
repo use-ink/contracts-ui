@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
-    "build": "webpack --progress --config webpack.dev.cjs",
+    "build": "webpack --config webpack.dev.cjs",
     "build:prod": "webpack --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --runInBand --watchAll",
     "test:coverage": "node --experimental-vm-modules $(yarn bin)/jest --maxWorkers=50% --coverage",

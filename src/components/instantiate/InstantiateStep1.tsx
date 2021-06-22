@@ -16,15 +16,22 @@ const Step1 = ({ dispatch, currentStep }: Props) => {
 
   return (
     <>
+      <label htmlFor="hash" className="inline-block mb-2">
+        Look up Code Hash
+      </label>
       <Input
         value={hash}
         handleChange={e => setHash(e.target.value)}
         placeholder="on-chain code hash"
+        id="codeHash"
       />
+      <label htmlFor="metadata" className="inline-block mb-2">
+        Upload metadata
+      </label>
       <MetadataFileInput />
       <button
         type="button"
-        className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-gray-500 mr-4 text-white font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() =>
           metadata &&
           dispatch({
@@ -32,10 +39,11 @@ const Step1 = ({ dispatch, currentStep }: Props) => {
             payload: {
               codeHash: hash,
               metadata,
+              contractName: metadata.project.contract.name.toHuman(),
             },
           })
         }
-        disabled={metadata ? false : true}
+        disabled={metadata && hash ? false : true}
       >
         Next
       </button>

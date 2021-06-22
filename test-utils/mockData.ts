@@ -45,6 +45,7 @@ export const mockInstantiateState: InstantiateState = {
   codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
   constructorName: 'new',
   argValues: { initValue: 'true' },
+  contractName: 'flipper',
 };
 export const mockAppState: AppState = {
   socket: '',

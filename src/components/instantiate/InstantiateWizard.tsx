@@ -12,6 +12,7 @@ const initialState: InstantiateState = {
   isSuccess: false,
   contract: null,
   currentStep: 1,
+  contractName: '',
 };
 
 const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) => {
@@ -21,12 +22,15 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
         ...state,
         codeHash: action.payload.codeHash,
         metadata: action.payload.metadata,
+        contractName: action.payload.contractName,
         currentStep: 2,
       };
     case 'STEP_2_COMPLETE':
       return {
         ...state,
         fromAddress: action.payload.fromAddress,
+        fromAccountName: action.payload.fromAccountName,
+        contractName: action.payload.contractName,
         currentStep: 3,
       };
     case 'STEP_3_COMPLETE':
@@ -64,6 +68,7 @@ const InstantiateWizard = () => {
       </>
     );
   }
+  console.log(state.metadata?.project.contract.name.toHuman());
 
   return keyringPairs && api?.query ? (
     <div className="pb-8 bg-white rounded-lg">
@@ -71,6 +76,7 @@ const InstantiateWizard = () => {
       <InstantiateStep2
         keyringPairs={keyringPairs}
         dispatch={dispatch}
+        contractName={state.contractName}
         currentStep={state.currentStep}
       />
       <InstantiateStep3
