@@ -9,7 +9,7 @@ const customRender = (ui: JSX.Element, providerProps: AppState) => {
 };
 
 const mockState: AppState = {
-  socket: '',
+  socket: 'test123',
   keyring: null,
   keyringState: null,
   api: null,
@@ -17,7 +17,7 @@ const mockState: AppState = {
   apiState: null,
 };
 
-describe('Canvas UI app', () => {
+describe('Canvas context', () => {
   test('should render the homepage if the api and keyring are in a ready state', () => {
     customRender(<Main />, { ...mockState, keyringState: 'READY', apiState: 'READY' });
     // expect(home).toBeTruthy();

@@ -40,7 +40,7 @@ const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
         <>
           <ArgumentForm
             key={`args-${constr.name}`}
-            message={typeof constr.value === 'number' ? constructors[constr.value] : undefined}
+            args={typeof constr.value === 'number' ? constructors[constr.value].args : undefined}
             handleChange={handleArgValueChange}
             argValues={argValues}
           />

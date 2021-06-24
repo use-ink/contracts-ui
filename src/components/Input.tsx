@@ -7,7 +7,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
   placeholder?: string;
 }
 
-const CodeHashInput = ({ value, handleChange, placeholder = '' }: Props) => {
+const Input = ({ value, handleChange, placeholder = '' }: Props) => {
   return (
     <div className="mb-4">
       <input
@@ -21,4 +21,4 @@ const CodeHashInput = ({ value, handleChange, placeholder = '' }: Props) => {
   );
 };
 
-export default CodeHashInput;
+export default Input;

@@ -1,16 +1,16 @@
 import React from 'react';
-import type { AbiMessage } from '../types';
+import type { AbiParam } from '../types';
 
 interface Props {
-  message?: Partial<AbiMessage>;
+  args?: Partial<AbiParam>[];
   argValues?: Record<string, string>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ArgumentForm = ({ message, handleChange, argValues }: Props) => {
-  return message && message.args && argValues ? (
+const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
+  return args && argValues ? (
     <>
-      {message.args.map(({ name, type }) => {
+      {args.map(({ name, type = { type: '' } }) => {
         return (
           <div className="mb-4" key={`${name}`}>
             <input

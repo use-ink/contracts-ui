@@ -68,7 +68,6 @@ const InstantiateWizard = () => {
       </>
     );
   }
-  console.log(state.metadata?.project.contract.name.toHuman());
 
   return keyringPairs && api?.query ? (
     <div className="pb-8 bg-white rounded-lg">
