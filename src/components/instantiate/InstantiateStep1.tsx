@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { InstantiateAction } from '../../types';
-import useMetadataFile from '../useMetadataFile';
+import React, { useState, ChangeEvent } from 'react';
+import { InstantiateAction, Abi, AnyJson } from '../../types';
+import { convertMetadata } from '../../canvas';
+import { useCanvas } from '../../contexts';
+import FileInput from '../FileInput';
+
 import Input from '../Input';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
@@ -9,7 +12,20 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
 }
 
 const Step1 = ({ dispatch, currentStep }: Props) => {
-  const [metadata, MetadataFileInput] = useMetadataFile();
+  const [metadata, setMetadata] = useState<Abi>();
+  const { api } = useCanvas();
+
+  function handleUploadMetadata(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.item(0);
+    const fr = new FileReader();
+
+    fr.onload = function (e) {
+      const result = JSON.parse(`${e.target?.result}`) as AnyJson;
+      const converted = convertMetadata(result, api);
+      setMetadata(converted);
+    };
+    if (file) fr.readAsText(file);
+  }
   const [hash, setHash] = useState('');
 
   if (currentStep !== 1) return null;
@@ -25,10 +41,16 @@ const Step1 = ({ dispatch, currentStep }: Props) => {
         placeholder="on-chain code hash"
         id="codeHash"
       />
-      <label htmlFor="metadata" className="inline-block mb-2">
-        Upload metadata
+      <label htmlFor="metadata" className="inline-block mb-3">
+        Add contract metadata
       </label>
-      <MetadataFileInput />
+      <FileInput
+        placeholder="Upload metadata.json"
+        changeHandler={handleUploadMetadata}
+        fileLoaded={!!metadata}
+        successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
+      />
+      
       <button
         type="button"
         className="bg-gray-500 mr-4 text-white font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
