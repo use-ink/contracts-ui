@@ -3,15 +3,10 @@ import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import InstantiateStep4 from '../../../src/components/instantiate/InstantiateStep4';
-import { AppState } from '../../../src/types';
-import { CanvasContext } from '../../../src/contexts';
-import { mockInstantiateState, mockAppState } from '../../../test-utils/mockData';
+import { mockInstantiateState, mockAppState, customRender } from '../../../test-utils';
 
 const mockSubmitHandler = jest.fn();
 
-const customRender = (ui: JSX.Element, providerProps: AppState) => {
-  return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
-};
 describe('Instantiate Step 4', () => {
   test('displays a button that calls the submit handler', () => {
     customRender(

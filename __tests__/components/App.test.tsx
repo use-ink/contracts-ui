@@ -1,12 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
 import Main from '../../src/components/Main';
-import { CanvasContext } from '../../src/contexts';
 import { AppState } from '../../src/types';
-
-const customRender = (ui: JSX.Element, providerProps: AppState) => {
-  return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
-};
+import { customRender } from '../../test-utils';
 
 const mockState: AppState = {
   socket: 'test123',
