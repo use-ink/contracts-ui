@@ -12,7 +12,7 @@
     "test:coverage": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --maxWorkers=50% --coverage",
     "pretest": "node scripts/util-crypto-fix.js",
     "lint": "eslint --fix src/",
-    "test:ci": "node --experimental-vm-modules $(yarn bin)/jest --coverage",
+    "test:ci": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --coverage",
     "clean": "rm -rf dist",
     "deep-clean": "yarn clean && rm -rf node_modules"
   },
