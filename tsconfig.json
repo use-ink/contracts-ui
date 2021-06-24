@@ -13,6 +13,11 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@canvas/*": ["./canvas/*"],
+      "@db/*": ["./db/*"],
+      "@ui/*": ["./ui/*"],
+    }
   }
 }

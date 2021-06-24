@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .react-tabs {
+    @apply bg-transparent
+  }
+
+  .react-tabs__tab-list {
+      @apply flex border-b dark:border-gray-700 mb-8
+  }
+
+  .react-tabs__tab {
+      @apply flex items-center -bottom-0 relative list-none p-4 cursor-pointer text-gray-400
+  }
+
+  .react-tabs__tab--selected {
+      @apply border-b-2 dark:border-blue-400 border-blue-500 dark:text-blue-400 text-blue-500
+  }
+
+  .react-tabs__tab--disabled {
+      @apply text-gray-600 cursor-default
+  }
+
+  .react-tabs__tab:focus {
+
+  }
+
+  .react-tabs__tab:focus:after {
+
+  }
+
+  .react-tabs__tab-panel {
+    @apply hidden
+  }
+
+  .react-tabs__tab-panel--selected {
+    @apply block
+  }
+}
