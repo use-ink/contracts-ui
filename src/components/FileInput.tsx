@@ -4,29 +4,33 @@ import { UploadIcon, DocumentIcon, XIcon } from '@heroicons/react/solid';
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
   fileLoaded?: boolean;
   changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  successText?:string
+  removeHandler: () => void;
+  successText?: string;
 }
 
 const FileInput = ({
   className = '',
   fileLoaded,
   changeHandler,
+  removeHandler,
   placeholder,
-  successText = "File uploaded!"
+  successText = 'File uploaded!',
 }: Props) => {
   return fileLoaded ? (
     <div className={`${className} flex`}>
       <div className="p-6 border border-gray-300 inline-flex items-center">
-          <DocumentIcon
-            className="w-5 h-5 mr-2 text-green-500 justify-self-start"
-            aria-hidden="true"
-          />
-          <span className="text-xs min-w-600 justify-self-start mr-20">
-            {successText}
-          </span>
-          <XIcon className="w-5 h-5 mr-2 text-green-500 justify-self-end" aria-hidden="true" />
-        </div>
+        <DocumentIcon
+          className="w-5 h-5 mr-2 text-green-500 justify-self-start"
+          aria-hidden="true"
+        />
+        <span className="text-xs min-w-600 justify-self-start mr-20">{successText}</span>
+        <XIcon
+          className="w-5 h-5 mr-2 text-green-500 justify-self-end cursor-pointer"
+          aria-hidden="true"
+          onClick={removeHandler}
+        />
       </div>
+    </div>
   ) : (
     <div className={className}>
       <label

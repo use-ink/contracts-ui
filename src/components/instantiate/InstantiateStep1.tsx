@@ -3,7 +3,6 @@ import { InstantiateAction, Abi, AnyJson } from '../../types';
 import { convertMetadata } from '../../canvas';
 import { useCanvas } from '../../contexts';
 import FileInput from '../FileInput';
-
 import Input from '../Input';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
@@ -47,10 +46,11 @@ const Step1 = ({ dispatch, currentStep }: Props) => {
       <FileInput
         placeholder="Upload metadata.json"
         changeHandler={handleUploadMetadata}
+        removeHandler={() => setMetadata(undefined)}
         fileLoaded={!!metadata}
         successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
       />
-      
+
       <button
         type="button"
         className="bg-gray-500 mr-4 text-white font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
