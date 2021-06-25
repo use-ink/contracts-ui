@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { KeyringPair, InstantiateAction } from '../../types';
+import { KeyringPair, InstantiateAction, DropdownOption } from '../../types';
 import { createOptions } from '../../canvas';
-import useDropdown from '../useDropdown';
+import Dropdown from '../Dropdown';
 import Input from '../Input';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
-  const [accountSelected, AccountDropdown, setAccountSelected] = useDropdown();
+  const [accountSelected, setAccountSelected] = useState<DropdownOption>();
   const [name, setName] = useState('');
   useEffect(() => {
     keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
@@ -28,10 +28,12 @@ const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => 
       <label htmlFor="account" className="inline-block mb-2">
         Account
       </label>
-      <AccountDropdown
+      <Dropdown
         options={createOptions(keyringPairs, 'pair')}
         placeholder="No accounts found"
         className="mb-4"
+        selectedOption={accountSelected}
+        changeHandler={(o: DropdownOption) => setAccountSelected(o)}
       />
       <label htmlFor="account" className="inline-block mb-2">
         Contract name
@@ -51,8 +53,8 @@ const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => 
           dispatch({
             type: 'STEP_2_COMPLETE',
             payload: {
-              fromAddress: accountSelected.value.toString(),
-              fromAccountName: accountSelected.name.toString(),
+              fromAddress: accountSelected?.value.toString() || '',
+              fromAccountName: accountSelected?.name.toString() || '',
               contractName: name,
             },
           })

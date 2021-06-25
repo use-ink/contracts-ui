@@ -12,6 +12,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
 
 const Step1 = ({ dispatch, currentStep }: Props) => {
   const [metadata, setMetadata] = useState<Abi>();
+  const [hash, setHash] = useState('');
   const { api } = useCanvas();
 
   function handleUploadMetadata(event: ChangeEvent<HTMLInputElement>) {
@@ -25,7 +26,6 @@ const Step1 = ({ dispatch, currentStep }: Props) => {
     };
     if (file) fr.readAsText(file);
   }
-  const [hash, setHash] = useState('');
 
   if (currentStep !== 1) return null;
 

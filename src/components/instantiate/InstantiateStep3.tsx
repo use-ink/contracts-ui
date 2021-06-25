@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ArgumentForm from '../ArgumentForm';
-import useDropdown from '../useDropdown';
-import { AbiMessage, InstantiateAction } from '../../types';
+import Dropdown from '../Dropdown';
+import { AbiMessage, InstantiateAction, DropdownOption } from '../../types';
 import { createOptions, createEmptyValues } from '../../canvas';
 
 interface Props {
@@ -10,18 +10,15 @@ interface Props {
   currentStep: number;
 }
 const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
-  const [constr, ConstructorDropdown, setConstructor] = useDropdown();
+  const [constr, setConstructor] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
-  function handleArgValueChange(e: React.ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
-    argValues && setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() });
-  }
+
   useEffect(() => {
     constructors && setConstructor(createOptions(constructors, 'message')[0]);
   }, [constructors]);
 
   useEffect(() => {
-    constr && constructors && setArgValues(createEmptyValues(constructors[0].args));
+    constructors && setArgValues(createEmptyValues(constructors[0].args));
   }, [constr]);
 
   if (currentStep !== 3) return null;
@@ -31,17 +28,21 @@ const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
       <label htmlFor="constr" className="inline-block mb-2">
         Deployment constructor
       </label>
-      <ConstructorDropdown
+      <Dropdown
         options={createOptions(constructors, 'message')}
         placeholder="no constructors found"
         className="mb-4"
+        selectedOption={constr}
+        changeHandler={(o: DropdownOption) => setConstructor(o)}
       />
       {constr && (
         <>
           <ArgumentForm
             key={`args-${constr.name}`}
             args={typeof constr.value === 'number' ? constructors[constr.value].args : undefined}
-            handleChange={handleArgValueChange}
+            handleChange={e =>
+              setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
+            }
             argValues={argValues}
           />
 
