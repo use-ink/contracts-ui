@@ -1,11 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import '../styles/main.css';
 import App from './components/App';
 
 const root = document.getElementById('app-root');
 
-ReactDOM.render(<App />, root);
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  root
+);
 
 if (module.hot) {
   module.hot.accept('./components/App', () => {
