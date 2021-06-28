@@ -3,6 +3,7 @@ import React from 'react';
 import Main from '../../src/components/Main';
 import { CanvasContext } from '../../src/contexts';
 import { AppState } from '../../src/types';
+import Homepage from '../../src/components/Homepage';
 
 const customRender = (ui: JSX.Element, providerProps: AppState) => {
   return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
@@ -20,6 +21,7 @@ const mockState: AppState = {
 describe('Canvas UI app', () => {
   test('should render the homepage if the api and keyring are in a ready state', () => {
     customRender(<Main />, { ...mockState, keyringState: 'READY', apiState: 'READY' });
+    expect(render(<Homepage />));
     expect(screen.getByText(`Hello`)).toBeTruthy();
   });
   test('should suggest to check extension if keyring state is not ready', () => {
