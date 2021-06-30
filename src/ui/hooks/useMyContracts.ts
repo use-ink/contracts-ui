@@ -1,11 +1,18 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import { useDatabase } from './useDatabase';
+import { useCallback } from 'react';
+import { useDatabase } from '../contexts';
 import { useQuery } from './useQuery';
-import type { ContractDocument, UseQuery, UserArtifacts } from '@db/types';
+import { findMyContracts } from '@db/queries';
 
-export function useMyContracts(): UseQuery<UserArtifacts<ContractDocument>> {
-  const { findMyContracts } = useDatabase();
+import type { MyContracts, UseQuery } from '@db/types';
 
-  return useQuery(findMyContracts);
+export function useMyContracts(): UseQuery<MyContracts> {
+  const { db, identity } = useDatabase();
+
+  const query = useCallback((): Promise<MyContracts | null> => {
+    return findMyContracts(db, identity);
+  }, []);
+
+  return useQuery(query);
 }

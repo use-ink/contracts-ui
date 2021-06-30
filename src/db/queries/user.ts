@@ -5,6 +5,7 @@ import type { Collection, Database, PrivateKey } from '@textile/threaddb';
 import { publicKeyHex } from '../util/identity';
 
 import type { UserDocument } from '../types';
+import { pushToRemote } from './util';
 
 export function getUserCollection(db: Database): Collection<UserDocument> {
   return db.collection('User') as Collection<UserDocument>;
@@ -70,7 +71,11 @@ export async function starContract(
         user.contractsStarred.push(address);
       }
 
-      return user.save();
+      const id = await user.save();
+
+      await pushToRemote(db, 'User');
+
+      return id;
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -94,7 +99,11 @@ export async function unstarContract(
     if (user) {
       user.contractsStarred = user.contractsStarred.filter(anAddress => address !== anAddress);
 
-      return user.save();
+      const id = await user.save();
+
+      await pushToRemote(db, 'User');
+
+      return id;
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -120,7 +129,11 @@ export async function starCodeBundle(
         user.codeBundlesStarred.push(id);
       }
 
-      return user.save();
+      const _id = await user.save();
+
+      await pushToRemote(db, 'User');
+
+      return _id;
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -144,7 +157,11 @@ export async function unstarCodeBundle(
     if (user) {
       user.codeBundlesStarred = user.codeBundlesStarred.filter(anId => id !== anId);
 
-      return user.save();
+      const _id = await user.save();
+
+      await pushToRemote(db, 'User');
+
+      return _id;
     }
 
     return Promise.reject(new Error('Invalid user'));

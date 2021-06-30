@@ -32,5 +32,4 @@ export interface DbProps {
   db: Database;
   identity: PrivateKey | null;
   isDbReady: boolean;
-  sync: () => Promise<void>;
 }

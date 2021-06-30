@@ -2,6 +2,7 @@
 
 export { useCodeBundle } from './useCodeBundle';
 export { useContract } from './useContract';
+export { useCreateContract } from './useCreateContract';
+export { useMyCodeBundles } from './useMyCodeBundles';
 export { useMyContracts } from './useMyContracts';
-export { useDatabase } from './useDatabase';
 export { useQuery } from './useQuery';

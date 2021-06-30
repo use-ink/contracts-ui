@@ -7,19 +7,24 @@ import { createPrivateKey, publicKeyHex } from '../identity';
 import type { UserDocument, CodeBundleDocument, ContractDocument } from '../../types';
 
 import * as contractFiles from './contracts';
-import { chooseMany, chooseOne } from '@ui/util/testing';
+import type { AnyJson } from '@canvas/types';
 
-const TAGS = ['alpha', 'beta', 'delta', 'gamma'];
+export const TEST_DATA: [string, number, string[]][] = [
+  ['dns', 0, ['alpha', 'beta']], 
+  ['erc20', 1, ['alpha', 'beta', 'gamma']], 
+  ['flipper', 2, ['delta']], 
+  ['incrementer', 1, ['beta', 'delta', 'gamma']], 
+];
 
 function randomHash (): string {
   return [...Array(62) as unknown[]].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 }
 
-export function getTestUsers (length: number): [UserDocument[], PrivateKey[]] {
+export function getTestUsers (): [UserDocument[], PrivateKey[]] {
   const users: UserDocument[] = [];
   const identities: PrivateKey[] = [];
 
-  Array.from({ length }, () => {
+  TEST_DATA.forEach(() => {
     const identity = createPrivateKey();
 
     identities.push(identity);
@@ -42,13 +47,15 @@ export function getTestCodeBundles (): CodeBundleDocument[] {
   const blockOneHashes = [randomHash(), randomHash()];
   const genesisHash = randomHash();
 
-  Object.entries(contractFiles).forEach(([name, abi]) => {
+  TEST_DATA.forEach(([name, , tags]) => {
+    const abi = (contractFiles as Record<string, AnyJson>)[name];
+
     codeBundles.push({
       blockOneHash: blockOneHashes[Math.round(Math.random())],
       codeHash: randomHash(),
       genesisHash,
       name,
-      tags: chooseMany<string>(TAGS),
+      tags,
       abi,
       id: getNewCodeBundleId(),
     })
@@ -60,20 +67,20 @@ export function getTestCodeBundles (): CodeBundleDocument[] {
 export function getTestContracts (codeBundles: CodeBundleDocument[]): ContractDocument[] {
   const contracts: ContractDocument[] = [];
 
-  const [{ blockOneHash, genesisHash, id }] = chooseOne(codeBundles);
+  const { blockOneHash, genesisHash, id } = codeBundles[0];
   
   // Original instantiation and 0-2 reinstantiations
-  Object.entries(contractFiles).forEach(([name, abi]) => {
-    const [count] = chooseOne([0, 1, 2]);
-
+  TEST_DATA.forEach(([name, count, tags]) => {
     for (let i = 0; i < 1 + count; i += 1) {
+      const abi = (contractFiles as Record<string, AnyJson>)[name];
+
       contracts.push({
         address: faker.random.alphaNumeric(62),
         blockOneHash,
         genesisHash,
         codeBundleId: id,
         name,
-        tags: chooseMany<string>(TAGS),
+        tags,
         abi,
       })
     }
@@ -85,7 +92,7 @@ export function getTestContracts (codeBundles: CodeBundleDocument[]): ContractDo
 export function getMockUpdates (withAbi?: boolean) {
   return {
     name: faker.name.jobTitle(),
-    tags: chooseMany<string>(TAGS),
-    ...(withAbi ? { abi: chooseOne(Object.values(contractFiles))[0] } : undefined),
+    tags: ['delta'],
+    ...(withAbi ? { abi: Object.values(contractFiles)[3] } : undefined),
   }
 }

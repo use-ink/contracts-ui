@@ -5,6 +5,7 @@ import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from '../type
 
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
+import { pushToRemote } from './util';
 
 export function getCodeBundleCollection(db: Database): Collection<CodeBundleDocument> {
   return db.collection('CodeBundle') as Collection<CodeBundleDocument>;
@@ -74,6 +75,8 @@ export async function createCodeBundle(
 
     await newCode.save();
 
+    await pushToRemote(db, 'CodeBundle');
+
     return Promise.resolve(id);
   } catch (e) {
     return Promise.reject(new Error(e));
@@ -93,7 +96,11 @@ export async function updateCodeBundle(
       if (tags) codeBundle.tags = tags;
       if (abi) codeBundle.abi = abi;
 
-      return codeBundle.save();
+      const id = await codeBundle.save();
+
+      await pushToRemote(db, 'CodeBundle');
+
+      return id;
     }
 
     return Promise.reject(new Error('Code does not exist'));
@@ -109,7 +116,9 @@ export async function removeCodeBundle(db: Database, id: string): Promise<void> 
     const existing = await findCodeBundleById(db, id);
 
     if (existing) {
-      return getCodeBundleCollection(db).delete(existing._id as string);
+      await getCodeBundleCollection(db).delete(existing._id as string);
+
+      await pushToRemote(db, 'CodeBundle');
     }
 
     return Promise.resolve();

@@ -2,7 +2,7 @@
 
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 'react';
 
 import type { DbProps } from '../types';
 import { useCanvas } from './CanvasContext';
@@ -44,15 +44,9 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const sync = useCallback(async (): Promise<void> => {
-    if (isRemote) {
-      await db.remote.push();
-    }
-  }, [isRemote, db]);
-
   const props = useMemo<DbProps>(
-    () => ({ db, identity, isDbReady, sync }),
-    [db, identity, isDbReady, sync]
+    () => ({ db, identity, isDbReady }),
+    [db, identity, isDbReady]
   );
 
   if (!db || !props.isDbReady) {
@@ -60,4 +54,8 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
   }
 
   return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
+}
+
+export function useDatabase (): DbProps {
+  return useContext(DbContext);
 }

@@ -3,14 +3,15 @@
 import { useCallback } from 'react';
 import { useDatabase } from './useDatabase';
 import { useQuery } from './useQuery';
+import { findCodeBundleById  } from '@db/queries';
 
 import type { CodeBundleDocument, UseQuery } from '@db/types';
 
 export function useCodeBundle(id: string): UseQuery<CodeBundleDocument> {
-  const { findCodeBundleById } = useDatabase();
+  const { db } = useDatabase();
 
   const findContract = useCallback((): Promise<CodeBundleDocument | null> => {
-    return findCodeBundleById(id);
+    return findCodeBundleById(db, id);
   }, [id, findCodeBundleById]);
 
   return useQuery(findContract);

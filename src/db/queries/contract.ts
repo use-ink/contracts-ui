@@ -8,6 +8,7 @@ import type { ContractDocument, MyContracts } from '../types';
 
 import { findUser } from './user';
 import { getCodeBundleCollection } from './codeBundle';
+import { pushToRemote } from './util';
 
 export function getContractCollection(db: Database): Collection<ContractDocument> {
   return db.collection('Contract') as Collection<ContractDocument>;
@@ -87,8 +88,12 @@ export async function createContract(
 
     await newContract.save();
 
+    await pushToRemote(db, 'Contract');
+
     return Promise.resolve(address);
   } catch (e) {
+    console.error(new Error(e));
+
     return Promise.reject(new Error(e));
   }
 }
@@ -105,7 +110,11 @@ export async function updateContract(
       if (name) contract.name = name;
       if (tags) contract.tags = tags;
 
-      return contract.save();
+      const id = await contract.save();
+
+      await pushToRemote(db, 'Contract');
+
+      return id;
     }
 
     return Promise.reject(new Error('Contract does not exist'));
@@ -121,7 +130,9 @@ export async function removeContract(db: Database, address: string): Promise<voi
     // keyring.forgetContract(address);
 
     if (existing) {
-      return getContractCollection(db).delete(existing._id as string);
+      await getContractCollection(db).delete(existing._id as string);
+
+      await pushToRemote(db, 'Contract');
     }
 
     return Promise.resolve();
