@@ -1,3 +1,5 @@
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+
 import React from 'react';
 
 export default function Homepage() {

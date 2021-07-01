@@ -7,10 +7,17 @@
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@canvas/*": ["./canvas/*"],
+      "@db/*": ["./db/*"],
+      "@ui/*": ["./ui/*"],
+    }
   }
 }
