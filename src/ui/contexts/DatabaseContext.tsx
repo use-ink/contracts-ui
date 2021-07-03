@@ -12,7 +12,9 @@ export const DbContext: React.Context<DbProps> = React.createContext({} as unkno
 export const DbConsumer: React.Consumer<DbProps> = DbContext.Consumer;
 export const DbProvider: React.Provider<DbProps> = DbContext.Provider;
 
-export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
+export function DatabaseContextProvider({
+  children,
+}: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
   const { endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
@@ -44,10 +46,7 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const props = useMemo<DbProps>(
-    () => ({ db, identity, isDbReady }),
-    [db, identity, isDbReady]
-  );
+  const props = useMemo<DbProps>(() => ({ db, identity, isDbReady }), [db, identity, isDbReady]);
 
   if (!db || !props.isDbReady) {
     return null;
@@ -56,6 +55,6 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
   return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
 }
 
-export function useDatabase (): DbProps {
+export function useDatabase(): DbProps {
   return useContext(DbContext);
 }

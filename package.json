@@ -34,11 +34,15 @@
     "@types/node": "^15.12.1",
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
+    "@types/react-router": "^5.1.15",
+    "@types/react-router-dom": "^5.1.7",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "nanoid": "^3.1.23",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "stream-browserify": "^3.0.0",
     "ts-jest": "^27.0.2",
     "ts-node": "^10.0.0",
@@ -46,6 +50,7 @@
     "webpack-cli": "^4.7.0"
   },
   "devDependencies": {
+    "@heroicons/react": "^1.0.1",
     "@tailwindcss/forms": "^0.3.3",
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",

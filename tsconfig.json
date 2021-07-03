@@ -15,9 +15,15 @@
     "noUnusedParameters": true,
     "baseUrl": "./src",
     "paths": {
-      "@canvas/*": ["./canvas/*"],
-      "@db/*": ["./db/*"],
-      "@ui/*": ["./ui/*"],
+      "@canvas/*": [
+        "./canvas/*"
+      ],
+      "@db/*": [
+        "./db/*"
+      ],
+      "@ui/*": [
+        "./ui/*"
+      ]
     }
   }
 }
