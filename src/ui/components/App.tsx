@@ -9,8 +9,13 @@ export default function App(): JSX.Element {
   return (
     <CanvasContextProvider>
       <DatabaseContextProvider>
-        <Sidebar />
-        <Router routes={Routes} />
+        {/* className: dark | light */}
+        <div className="dark">
+          <div className="relative md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900">
+            <Sidebar />
+            <Router routes={Routes} />
+          </div>
+        </div>
       </DatabaseContextProvider>
     </CanvasContextProvider>
   );
