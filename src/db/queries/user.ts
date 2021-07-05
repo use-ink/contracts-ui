@@ -23,9 +23,6 @@ export async function findUser(
 export async function createUser(db: Database, identity: PrivateKey | null, { name, email }: Partial<UserDocument> = {}): Promise<UserDocument> {
   const existing = await findUser(db, identity);
 
-  console.log(publicKeyHex(identity));
-  console.log(existing);
-
   if (identity && !existing) {
     const user = getUserCollection(db)
       .create({
