@@ -7,10 +7,24 @@
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "canvas": ["./src/canvas"],
+      "canvas/*": ["./src/canvas/*"],
+      "db": ["./src/db"],
+      "db/*": ["./src/db/*"],
+      "ui": ["./src/ui"],
+      "ui/*": ["./src/ui/*"],
+      "test-utils": ["./test-utils"],
+      "test-utils/*": ["./test-utils/*"],
+      "types": ["./src/types"],
+      "types/*": ["./src/types/*"],
+    }
   }
 }

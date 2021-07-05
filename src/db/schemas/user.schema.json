@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://paritytech.github.io/canvas-ui/user.schema.json",
+    "title": "User",
+    "description": "A Canvas UI user identity",
+    "type": "object",
+    "properties": {
+        "_id": {
+            "description": "Field to contain ulid-based instance id",
+            "type": "string"
+        },
+        "codeBundlesOwned": {
+            "description": "Addresses of user's uploaded code bundles",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "codeBundlesStarred": {
+            "description": "Addresses of user's starred code bundles",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "contractsOwned": {
+            "description": "Addresses of user's instantiated smart contracts",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "contractsStarred": {
+            "description": "Addresses of user's starred smart contracts",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "publicKey": {
+            "description": "The user's public key",
+            "type": "string"
+        },
+        "email": {
+            "description": "The user's email address",
+            "type": "string",
+            "format": "email"
+        },
+        "name": {
+            "description": "The user's display name",
+            "type": "string"
+        }
+    },
+    "required": [ "publicKey" ]
+}

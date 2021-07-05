@@ -85,6 +85,10 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+dist/*
+
+# IndexedDB / Dexie
+__sysdb__.sqlite
 
 # Gatsby files
 .cache/
@@ -118,3 +122,7 @@ dist
 .pnp.*
 
 .idea
+
+# SQL
+*.sqlite
+*.sqlite-journal
