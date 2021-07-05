@@ -6,7 +6,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   preset: 'ts-jest',
-  testEnvironment: 'jsdom',
+  testEnvironment: './test-env',
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   globals: {
     'ts-jest': {
