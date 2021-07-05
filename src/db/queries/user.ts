@@ -20,23 +20,32 @@ export async function findUser(
   return user || null;
 }
 
-export async function createUser(db: Database, identity: PrivateKey | null, { name, email }: Partial<UserDocument> = {}): Promise<string> {
+export async function createUser(db: Database, identity: PrivateKey | null, { name, email }: Partial<UserDocument> = {}): Promise<UserDocument> {
   const existing = await findUser(db, identity);
 
+  console.log(publicKeyHex(identity));
+  console.log(existing);
+
   if (identity && !existing) {
-    return getUserCollection(db)
+    const user = getUserCollection(db)
       .create({
         codeBundlesStarred: [],
         contractsStarred: [],
         name,
         email,
         publicKey: Buffer.from(identity.pubKey).toString('hex'),
-
       })
-      .save();
+
+    await user.save();
+
+    return user;
   }
 
-  return Promise.reject(new Error('Unable to create user'));
+  if (!existing) {
+    return Promise.reject(new Error('Unable to create user'));
+  }
+
+  return existing;
 }
 
 // export async function updateUser (db: Database, identity: PrivateKey, { codeBundlesStarred, contractsStarred }: Partial<UserDocument>): Promise<string> {

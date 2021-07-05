@@ -32,11 +32,11 @@ beforeAll(
 
 describe('DB Queries', (): void => {
   it('createUser', async () => {
-    testUserIds = await Promise.all(
+    testUserIds = (await Promise.all(
       testUsers.map((user, index) => {
         return q.createUser(db, testIdentities[index], user);
       })
-    );
+    )).map(({ _id }) => _id as string);
 
     for (let i = 0; i < testUserIds.length; i++) {
       const document = await q.getUserCollection(db).findById(testUserIds[i]);
