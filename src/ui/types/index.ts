@@ -1,5 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+import { ComponentType, ReactNode } from 'react';
 import type { ApiPromise } from '@polkadot/api';
 import type { Keyring } from '@polkadot/ui-keyring';
 import type { Database } from '@textile/threaddb';
@@ -32,4 +33,13 @@ export interface DbProps {
   db: Database;
   identity: PrivateKey | null;
   isDbReady: boolean;
+}
+
+export interface RouteInterface {
+  path: string;
+  exact: boolean;
+  fallback: NonNullable<ReactNode> | null;
+  component?: ComponentType<any>;
+  routes?: RouteInterface[];
+  redirect?: string;
 }

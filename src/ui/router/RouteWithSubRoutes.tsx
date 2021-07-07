@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import RouteInterface from './RouteInterface';
+import { RouteInterface } from '../types';
 
 const RouteWithSubRoutes = (route: RouteInterface) => {
   return (

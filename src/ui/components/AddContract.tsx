@@ -19,21 +19,16 @@ export default function AddContract() {
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="mt-4">
-                    <label htmlFor="upload_contract" className="cursor-pointer">
-                      <div className="flex justify-between items-center px-6 py-4 border dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100">
-                        <div className="flex items-center text-base text-gray-500 space-x-2">
-                          <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
-                          <span>Upload New Contract Code</span>
-                          <input
-                            id="upload_contract"
-                            name="upload_contract"
-                            type="file"
-                            className="sr-only"
-                          />
-                        </div>
-                        <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
+                    <Link
+                      to="/instantiate-with-code"
+                      className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    >
+                      <div className="flex items-center text-base text-gray-500 space-x-2">
+                        <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
+                        <span>Use Existing Contract Code</span>
                       </div>
-                    </label>
+                      <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
+                    </Link>
 
                     <p className="text-center text-sm text-gray-500 py-6">Or</p>
 
