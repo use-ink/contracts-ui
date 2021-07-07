@@ -6,22 +6,23 @@ import { Database as DB } from '@textile/threaddb';
 import type { KeyInfo } from '@textile/hub';
 import { codeBundle, contract, user } from '../schemas';
 
-import { createUser } from '../queries/user';
+import { getUser } from '../queries/user';
 import { getStoredPrivateKey } from './identity';
+import { UserDocument } from '@db/types';
 
 function isLocalNode(rpcUrl: string): boolean {
   return !rpcUrl.includes('127.0.0.1');
 }
 
-export async function init(rpcUrl: string, isRemote = false): Promise<[DB, PrivateKey | null]> {
+export async function init(rpcUrl: string, isRemote = false): Promise<[DB, UserDocument | null, PrivateKey | null]> {
   const db = await initDb(rpcUrl);
-  const identity = await initIdentity(db);
+  const [user, identity] = await initIdentity(db);
 
   if (isRemote && !isLocalNode(rpcUrl)) {
     await initRemote(db, identity, rpcUrl);
   }
 
-  return [db, identity];
+  return [db, user, identity];
 }
 
 export async function initDb(rpcUrl: string): Promise<DB> {
@@ -35,12 +36,12 @@ export async function initDb(rpcUrl: string): Promise<DB> {
   return db;
 }
 
-export async function initIdentity (db: DB): Promise<PrivateKey> {
+export async function initIdentity (db: DB): Promise<[UserDocument | null, PrivateKey]> {
   const identity = getStoredPrivateKey();
 
-  await createUser(db, identity);
+  const user = await getUser(db, identity);
 
-  return identity;
+  return [user, identity];
 }
 
 export async function initRemote (db: DB, identity: PrivateKey, rpcUrl: string) {
