@@ -4,6 +4,7 @@ import type { ApiPromise } from '@polkadot/api';
 import type { Keyring } from '@polkadot/ui-keyring';
 import type { Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
+import { UserDocument } from '@db/types';
 
 export type VoidFn = () => void;
 
@@ -30,6 +31,7 @@ export type CanvasAction =
 
 export interface DbProps {
   db: Database;
+  user: UserDocument | null;
   identity: PrivateKey | null;
   isDbReady: boolean;
 }

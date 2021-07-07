@@ -34,12 +34,12 @@ beforeAll(
 )
 
 describe('DB Queries', (): void => {
-  it('createUser', async () => {
-    testUserIds = await Promise.all(
+  it('getUser', async () => {
+    testUserIds = (await Promise.all(
       testUsers.map((user, index) => {
-        return q.createUser(db, testIdentities[index], user);
+        return q.getUser(db, testIdentities[index], user);
       })
-    );
+    )).map((user) => user?._id || '');
 
     for (let i = 0; i < testUserIds.length; i++) {
       const document = await q.getUserCollection(db).findById(testUserIds[i]);

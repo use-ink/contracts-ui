@@ -7,6 +7,7 @@ import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 
 import type { DbProps } from '../types';
 import { useCanvas } from './CanvasContext';
 import { init } from '@db/util';
+import type { UserDocument } from '@db/types';
 
 export const DbContext: React.Context<DbProps> = React.createContext({} as unknown as DbProps);
 export const DbConsumer: React.Consumer<DbProps> = DbContext.Consumer;
@@ -16,6 +17,7 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
   const { endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
+  const [user, setUser] = useState<UserDocument | null>(null);
   const [isDbReady, setIsDbReady] = useState(false);
 
   const isRemote = useMemo(
@@ -27,10 +29,11 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
   useEffect((): void => {
     async function createDb() {
       try {
-        const [db, identity] = await init(endpoint, isRemote);
+        const [db, user, identity] = await init(endpoint, isRemote);
 
         setDb(db);
         setIdentity(identity);
+        setUser(user);
         setIsDbReady(true);
       } catch (e) {
         console.error(e);
@@ -45,8 +48,8 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
   }, []);
 
   const props = useMemo<DbProps>(
-    () => ({ db, identity, isDbReady }),
-    [db, identity, isDbReady]
+    () => ({ db, identity, isDbReady, user }),
+    [db, identity, isDbReady, user]
   );
 
   if (!db || !props.isDbReady) {
