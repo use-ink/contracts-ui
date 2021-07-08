@@ -1,16 +1,16 @@
 import { screen } from '@testing-library/react';
 import React from 'react';
-import Main from '../../src/components/Main';
-import { AppState } from '../../src/types';
-import { customRender } from '../../test-utils';
+import { Main } from '@ui/components';
+import { customRender } from '../../../test-utils';
 
-const mockState: AppState = {
+const mockState = {
   socket: 'test123',
   keyring: null,
-  keyringState: null,
+  keyringStatus: null,
   api: null,
-  apiError: null,
-  apiState: null,
+  error: null,
+  status: null,
+  blockOneHash: null,
 };
 
 describe('Canvas context', () => {

@@ -4,6 +4,7 @@ const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const rules = [
   {
@@ -65,5 +66,6 @@ module.exports = {
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer'),
     },
+    plugins: [new TsconfigPathsPlugin()],
   },
 };

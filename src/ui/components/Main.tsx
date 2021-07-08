@@ -1,3 +1,5 @@
+// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+
 import React from 'react';
 import { CanvasContext } from '../contexts';
 import Homepage from './Homepage';
@@ -5,14 +7,14 @@ import Homepage from './Homepage';
 export default function Main(): JSX.Element {
   return (
     <CanvasContext.Consumer>
-      {({ apiState, keyringState, apiError }) => (
+      {({ status, keyringStatus, error }) => (
         <div className="bg-white h-full grid grid-cols-12">
           <div className="col-span-10 px-16 h-full">
-            {apiState === 'READY' && keyringState === 'READY' ? (
+            {status === 'READY' && keyringStatus === 'READY' ? (
               <Homepage />
-            ) : apiState === 'ERROR' ? (
-              `Connection error ${JSON.stringify(apiError)}`
-            ) : keyringState !== 'READY' ? (
+            ) : status === 'ERROR' ? (
+              `Connection error ${JSON.stringify(error)}`
+            ) : keyringStatus !== 'READY' ? (
               "Loading accounts (please review any extension's authorization)"
             ) : (
               'Connecting to substrate node'
