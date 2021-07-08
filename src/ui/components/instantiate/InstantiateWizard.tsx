@@ -1,5 +1,5 @@
 import React, { useReducer, Reducer } from 'react';
-import { instantiateWithHash } from '../../canvas';
+import { instantiateWithHash } from '../../../canvas';
 import { useCanvas } from '../../contexts';
 import { InstantiateState, InstantiateAction } from '../../types';
 import InstantiateStep1 from './InstantiateStep1';

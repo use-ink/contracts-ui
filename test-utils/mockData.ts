@@ -1,4 +1,4 @@
-import { AppState, InstantiateState } from '../src/types';
+import { CanvasState, InstantiateState } from '../src/ui/types';
 
 export const keyringPairsMock = [
   { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
@@ -47,11 +47,12 @@ export const mockInstantiateState: InstantiateState = {
   argValues: { initValue: 'true' },
   contractName: 'flipper',
 };
-export const mockAppState: AppState = {
-  socket: '',
+export const mockAppState: CanvasState = {
+  endpoint: '',
   keyring: null,
-  keyringState: null,
+  keyringStatus: null,
   api: null,
-  apiError: null,
-  apiState: null,
+  error: null,
+  status: null,
+  blockOneHash: '',
 };

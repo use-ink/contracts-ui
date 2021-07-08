@@ -1,5 +1,5 @@
 import { ContractPromise } from '@polkadot/api-contract';
-import type { ApiPromise, Abi, EventRecord } from '../../types';
+import type { ApiPromise, Abi, EventRecord } from '../types';
 
 export const getInstanceFromEvents = (
   events: EventRecord[],

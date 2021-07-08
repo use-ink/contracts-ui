@@ -1,5 +1,5 @@
 import React from 'react';
-import type { AbiParam } from '../types';
+import type { AbiParam } from '../../canvas/types';
 
 interface Props {
   args?: Partial<AbiParam>[];

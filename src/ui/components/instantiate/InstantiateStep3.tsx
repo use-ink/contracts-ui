@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ArgumentForm from '../ArgumentForm';
 import Dropdown from '../Dropdown';
-import { AbiMessage, InstantiateAction, DropdownOption } from '../../types';
-import { createOptions, createEmptyValues } from '../../canvas';
+import { InstantiateAction, DropdownOption } from '../../types';
+import { AbiMessage } from '../../../canvas/types';
+import { createOptions, createEmptyValues } from '../../../canvas';
 
 interface Props {
   constructors?: Partial<AbiMessage>[];

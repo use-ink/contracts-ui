@@ -1,5 +1,6 @@
 import React from 'react';
-import { InstantiateState, InstantiateAction, ApiPromise, Keyring } from '../../types';
+import { InstantiateState, InstantiateAction } from '../../types';
+import { ApiPromise, Keyring } from '../../../canvas/types';
 import { CanvasContext } from '../../contexts';
 
 interface Props {
@@ -22,7 +23,7 @@ const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
 
   return (
     <CanvasContext.Consumer>
-      {({ api, keyring, keyringState }) => (
+      {({ api, keyring, keyringStatus }) => (
         <>
           <p>{`Account: ${state.fromAccountName}`}</p>
           <p>{`Name: ${state.contractName}`}</p>
@@ -38,7 +39,7 @@ const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
                 155852802980,
                 api,
                 keyring,
-                keyringState,
+                keyringStatus,
                 dispatch,
                 state
               )

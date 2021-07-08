@@ -2,7 +2,7 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import InstantiateStep1 from '../../../src/components/instantiate/InstantiateStep1';
+import InstantiateStep1 from '../../../src/ui/components/instantiate/InstantiateStep1';
 
 describe('Instantiate Step 1', () => {
   test('renders correctly with initial values', () => {
