@@ -2,7 +2,7 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import InstantiateStep4 from '../../../src/ui/components/instantiate/InstantiateStep4';
+import InstantiateStep4 from '../../../src/ui/components/instantiate/Step4';
 import { mockInstantiateState, mockAppState, customRender } from '../../../test-utils';
 
 const mockSubmitHandler = jest.fn();

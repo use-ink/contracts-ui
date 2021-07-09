@@ -2,10 +2,10 @@ import React, { useReducer, Reducer } from 'react';
 import { instantiateWithHash } from '../../../canvas';
 import { useCanvas } from '../../contexts';
 import { InstantiateState, InstantiateAction } from '../../types';
-import InstantiateStep1 from './InstantiateStep1';
-import InstantiateStep2 from './InstantiateStep2';
-import InstantiateStep3 from './InstantiateStep3';
-import InstantiateStep4 from './InstantiateStep4';
+import InstantiateStep1 from './Step1';
+import InstantiateStep2 from './Step2';
+import InstantiateStep3 from './Step3';
+import InstantiateStep4 from './Step4';
 
 const initialState: InstantiateState = {
   isLoading: false,
