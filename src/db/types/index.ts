@@ -1,8 +1,8 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { VoidFn } from 'types';
 import type { Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
+import type { VoidFn } from 'types';
 
 interface Document {
   _id?: string;

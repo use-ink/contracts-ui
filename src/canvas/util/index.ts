@@ -83,8 +83,8 @@ export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Ui
   return salt instanceof Bytes
     ? salt
     : salt && salt.length
-    ? compactAddLength(u8aToU8a(salt))
-    : EMPTY_SALT;
+      ? compactAddLength(u8aToU8a(salt))
+      : EMPTY_SALT;
 }
 
 export function createEmptyValues(args?: AbiParam[]) {
