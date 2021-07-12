@@ -5,9 +5,7 @@ import type { PrivateKey } from '@textile/crypto';
 import { getNewCodeBundleId } from '../codeBundle';
 import { createPrivateKey, publicKeyHex } from '../identity';
 import * as contractFiles from './contracts';
-import type { UserDocument, CodeBundleDocument, ContractDocument , AnyJson } from 'types';
-
-
+import type { UserDocument, CodeBundleDocument, ContractDocument, AnyJson } from 'types';
 
 export const TEST_DATA: [string, number, string[]][] = [
   ['dns', 0, ['alpha', 'beta']],
