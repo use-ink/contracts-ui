@@ -1,5 +1,5 @@
 import { BlueprintPromise } from '@polkadot/api-contract';
-import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../utils';
+import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../util';
 import { ApiPromise, Keyring, Abi, InstantiateAction, InstantiateState } from '../../types';
 import { getInstanceFromEvents } from './getAddressFromEvents';
 

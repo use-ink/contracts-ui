@@ -3,8 +3,8 @@
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 'react';
-import { DbProps } from '@db/types';
 import { useCanvas } from './CanvasContext';
+import { DbProps } from '@db/types';
 import { init } from '@db/util';
 import type { UserDocument } from '@db/types';
 
