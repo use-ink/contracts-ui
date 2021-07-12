@@ -4,10 +4,10 @@ import faker from 'faker';
 import type { PrivateKey } from '@textile/crypto';
 import { getNewCodeBundleId } from '../codeBundle';
 import { createPrivateKey, publicKeyHex } from '../identity';
-import type { UserDocument, CodeBundleDocument, ContractDocument } from '../../types';
-
-import type { AnyJson } from '../../../types';
 import * as contractFiles from './contracts';
+import type { UserDocument, CodeBundleDocument, ContractDocument , AnyJson } from 'types';
+
+
 
 export const TEST_DATA: [string, number, string[]][] = [
   ['dns', 0, ['alpha', 'beta']],

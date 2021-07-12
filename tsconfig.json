@@ -13,11 +13,18 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@canvas/*": ["./canvas/*"],
-      "@db/*": ["./db/*"],
-      "@ui/*": ["./ui/*"]
+      "canvas": ["./src/canvas"],
+      "canvas/*": ["./src/canvas/*"],
+      "db": ["./src/db"],
+      "db/*": ["./src/db/*"],
+      "test-utils": ["./test-utils"],
+      "test-utils/*": ["./test-utils/*"],
+      "types": ["./src/types"],
+      "types/*": ["./src/types/*"],
+      "ui": ["./src/ui"],
+      "ui/*": ["./src/ui/*"]
     }
   }
 }

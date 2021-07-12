@@ -1,7 +1,7 @@
 import { BlueprintPromise } from '@polkadot/api-contract';
 import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../util';
-import { ApiPromise, Keyring, Abi, InstantiateAction, InstantiateState } from '../../types';
 import { getInstanceFromEvents } from './getAddressFromEvents';
+import { ApiPromise, Keyring, Abi, InstantiateAction, InstantiateState } from 'types';
 
 export function createBlueprintTx(
   api: ApiPromise | null,

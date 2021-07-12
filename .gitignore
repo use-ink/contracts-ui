@@ -86,9 +86,6 @@ out
 .nuxt
 dist
 
-# IndexedDB / Dexie
-__sysdb__.sqlite
-
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -125,3 +122,4 @@ __sysdb__.sqlite
 # SQL
 *.sqlite
 *.sqlite-journal
+.fuse_*

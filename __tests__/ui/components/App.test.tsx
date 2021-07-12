@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import React from 'react';
-import { customRender } from '../../../test-utils';
-import { Main } from '@ui/components/Main';
+import { customRender } from 'test-utils';
+import { Main } from 'ui/components/Main';
 
 const mockState = {
   endpoint: 'test123',

@@ -1,11 +1,11 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import type { Collection, Database, PrivateKey } from '@textile/threaddb';
-import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from '../types';
 
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
 import { pushToRemote } from './util';
+import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 
 export function getCodeBundleCollection(db: Database): Collection<CodeBundleDocument> {
   return db.collection('CodeBundle') as Collection<CodeBundleDocument>;

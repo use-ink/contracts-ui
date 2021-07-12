@@ -4,11 +4,11 @@ import { PrivateKey } from '@textile/crypto';
 import { ThreadID } from '@textile/threads-id';
 import { Database as DB } from '@textile/threaddb';
 import type { KeyInfo } from '@textile/hub';
-import { codeBundle, contract, user } from '../schemas';
 
+import { codeBundle, contract, user } from '../schemas';
 import { getUser } from '../queries/user';
 import { getStoredPrivateKey } from './identity';
-import { UserDocument } from '@db/types';
+import type { UserDocument } from 'types';
 
 function isLocalNode(rpcUrl: string): boolean {
   return !rpcUrl.includes('127.0.0.1');

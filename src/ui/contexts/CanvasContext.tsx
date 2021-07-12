@@ -6,7 +6,7 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
 
 import type { Reducer } from 'react';
-import type { CanvasAction, CanvasState } from '../../types';
+import type { CanvasAction, CanvasState } from 'types';
 
 let loadedAccounts = false;
 

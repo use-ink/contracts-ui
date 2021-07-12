@@ -2,7 +2,7 @@
 
 import type { Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
-import type { VoidFn } from 'types';
+import type { VoidFn } from './app';
 
 interface Document {
   _id?: string;

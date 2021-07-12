@@ -9,6 +9,7 @@
     "build": "webpack --progress --config webpack.dev.cjs",
     "build:prod": "webpack --config webpack.prod.cjs",
     "test": "node --experimental-vm-modules $(yarn bin)/jest --runInBand --watch",
+    "test:clear": "node --experimental-vm-modules $(yarn bin)/jest --clearCache",
     "test:coverage": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --maxWorkers=50% --coverage",
     "pretest": "node scripts/util-crypto-fix.js",
     "lint": "eslint --fix src/",

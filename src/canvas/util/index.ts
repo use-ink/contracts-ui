@@ -14,7 +14,7 @@ import {
   KeyringPair,
   AbiMessage,
   DropdownOption,
-} from '../../types';
+} from 'types';
 
 export async function getCodeHashes(api: ApiPromise): Promise<string[]> {
   let codeHashes: string[] = [];

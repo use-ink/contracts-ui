@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import React from 'react';
-import { InstantiateWizard } from '@ui/components/instantiate/';
+import { InstantiateWizard } from 'ui/components/instantiate';
 
 export function Homepage() {
   return (
