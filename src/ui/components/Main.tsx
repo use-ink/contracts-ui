@@ -13,7 +13,7 @@ export default function Main(): JSX.Element {
             {status === 'READY' && keyringStatus === 'READY' ? (
               <Homepage />
             ) : status === 'ERROR' ? (
-              `Connection error ${error}`
+              `Connection error ${JSON.stringify(error)}`
             ) : keyringStatus !== 'READY' ? (
               "Loading accounts (please review any extension's authorization)"
             ) : (
