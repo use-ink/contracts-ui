@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { CanvasContext } from '../contexts';
-import Homepage from './Homepage';
+import { Homepage } from './Homepage';
 
-export default function Main(): JSX.Element {
+export function Main(): JSX.Element {
   return (
     <CanvasContext.Consumer>
       {({ status, keyringStatus, error }) => (

@@ -2,10 +2,10 @@ import React, { useReducer, Reducer } from 'react';
 import { instantiateWithHash } from '../../../canvas';
 import { useCanvas } from '../../contexts';
 import { InstantiateState, InstantiateAction } from '../../../types';
-import InstantiateStep1 from './Step1';
-import InstantiateStep2 from './Step2';
-import InstantiateStep3 from './Step3';
-import InstantiateStep4 from './Step4';
+import { Step1 } from './Step1';
+import { Step2 } from './Step2';
+import { Step3 } from './Step3';
+import { Step4 } from './Step4';
 
 const initialState: InstantiateState = {
   isLoading: false,
@@ -54,7 +54,7 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
   }
 };
 
-const InstantiateWizard = () => {
+export const InstantiateWizard = () => {
   const { api, keyring } = useCanvas();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -71,19 +71,19 @@ const InstantiateWizard = () => {
 
   return keyringPairs && api?.query ? (
     <div className="pb-8 bg-white rounded-lg">
-      <InstantiateStep1 dispatch={dispatch} currentStep={state.currentStep} />
-      <InstantiateStep2
+      <Step1 dispatch={dispatch} currentStep={state.currentStep} />
+      <Step2
         keyringPairs={keyringPairs}
         dispatch={dispatch}
         contractName={state.contractName}
         currentStep={state.currentStep}
       />
-      <InstantiateStep3
+      <Step3
         constructors={state.metadata?.constructors}
         dispatch={dispatch}
         currentStep={state.currentStep}
       />
-      <InstantiateStep4
+      <Step4
         state={state}
         dispatch={dispatch}
         currentStep={state.currentStep}
@@ -92,5 +92,3 @@ const InstantiateWizard = () => {
     </div>
   ) : null;
 };
-
-export default InstantiateWizard;

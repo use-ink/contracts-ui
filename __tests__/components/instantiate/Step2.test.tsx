@@ -2,13 +2,13 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import InstantiateStep2 from '../../../src/ui/components/instantiate/Step2';
 import { keyringPairsMock } from '../../../test-utils/mockData';
+import { Step2 } from '@ui/components';
 
 describe('Instantiate Step 2', () => {
   test('renders correctly with initial values', () => {
     const { getByText } = render(
-      <InstantiateStep2
+      <Step2
         contractName="flipper"
         keyringPairs={keyringPairsMock}
         dispatch={jest.fn()}
@@ -19,7 +19,7 @@ describe('Instantiate Step 2', () => {
   });
   test('does not render when current step is not 2', () => {
     const { container } = render(
-      <InstantiateStep2
+      <Step2
         contractName="flipper"
         keyringPairs={keyringPairsMock}
         dispatch={jest.fn()}
@@ -31,7 +31,7 @@ describe('Instantiate Step 2', () => {
   test('dispatches the correct values', () => {
     const dispatchMock = jest.fn();
     const { getByText } = render(
-      <InstantiateStep2
+      <Step2
         contractName="flipper"
         keyringPairs={keyringPairsMock}
         dispatch={dispatchMock}

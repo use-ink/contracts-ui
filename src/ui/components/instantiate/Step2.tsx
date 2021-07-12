@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { KeyringPair, InstantiateAction, DropdownOption } from '../../../types';
 import { createOptions } from '../../../canvas';
-import Dropdown from '../Dropdown';
-import Input from '../Input';
+import { Dropdown } from '../Dropdown';
+import { Input } from '../Input';
 
 interface Props {
   keyringPairs: Partial<KeyringPair>[];
@@ -11,7 +11,7 @@ interface Props {
   currentStep: number;
 }
 
-const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
+export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
   const [accountSelected, setAccountSelected] = useState<DropdownOption>();
   const [name, setName] = useState('');
   useEffect(() => {
@@ -77,5 +77,3 @@ const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => 
     </>
   ) : null;
 };
-
-export default Step2;

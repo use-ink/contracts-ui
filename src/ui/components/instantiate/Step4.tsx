@@ -17,7 +17,7 @@ interface Props {
   ) => void;
 }
 
-const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
+export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
   if (currentStep !== 4) return null;
 
   return (
@@ -63,5 +63,3 @@ const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
     </CanvasContext.Consumer>
   );
 };
-
-export default Step4;

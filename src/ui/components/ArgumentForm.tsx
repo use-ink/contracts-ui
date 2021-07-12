@@ -7,7 +7,7 @@ interface Props {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
+export const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
   return args && argValues ? (
     <>
       {args.map(({ name, type = { type: '' } }) => {
@@ -28,5 +28,3 @@ const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
     </>
   ) : null;
 };
-
-export default ArgumentForm;

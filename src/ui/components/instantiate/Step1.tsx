@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
-import FileInput from '../FileInput';
-import Input from '../Input';
+import { FileInput } from '../FileInput';
+import { Input } from '../Input';
 import { Abi, AnyJson, InstantiateAction } from '../../../types';
 import { convertMetadata } from '@canvas/utils';
 import { useCanvas } from '@ui/contexts';
@@ -10,7 +10,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
   currentStep?: number;
 }
 
-const Step1 = ({ dispatch, currentStep }: Props) => {
+export const Step1 = ({ dispatch, currentStep }: Props) => {
   const [metadata, setMetadata] = useState<Abi>();
   const [hash, setHash] = useState('');
   const { api } = useCanvas();
@@ -72,4 +72,3 @@ const Step1 = ({ dispatch, currentStep }: Props) => {
     </>
   );
 };
-export default Step1;

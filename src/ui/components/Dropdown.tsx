@@ -10,7 +10,13 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   changeHandler: (o: DropdownOption) => void;
 }
 
-const Dropdown = ({ options, placeholder, className, changeHandler, selectedOption }: Props) => {
+export const Dropdown = ({
+  options,
+  placeholder,
+  className,
+  changeHandler,
+  selectedOption,
+}: Props) => {
   return options ? (
     <Listbox value={selectedOption} onChange={changeHandler}>
       <div className={`relative mt-1 ${className || ''}`}>
@@ -61,5 +67,3 @@ const Dropdown = ({ options, placeholder, className, changeHandler, selectedOpti
     </Listbox>
   ) : null;
 };
-
-export default Dropdown;
