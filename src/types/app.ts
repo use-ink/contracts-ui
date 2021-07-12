@@ -1,11 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { ApiPromise } from '@polkadot/api';
-import type { Keyring } from '@polkadot/ui-keyring';
-import type { Database } from '@textile/threaddb';
-import type { PrivateKey } from '@textile/crypto';
-import { ContractPromise, Abi, EventRecord, DispatchError } from '../../canvas/types';
-import { UserDocument } from '@db/types';
+import { ContractPromise, Abi, EventRecord, DispatchError, ApiPromise, Keyring } from './substrate';
 
 export type VoidFn = () => void;
 
@@ -30,12 +25,6 @@ export type CanvasAction =
   | { type: 'SET_KEYRING'; payload: Keyring }
   | { type: 'KEYRING_ERROR' };
 
-export interface DbProps {
-  db: Database;
-  user: UserDocument | null;
-  identity: PrivateKey | null;
-  isDbReady: boolean;
-}
 export type DropdownOption = {
   value: string | number;
   name: string;

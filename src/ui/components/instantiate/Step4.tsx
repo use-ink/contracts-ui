@@ -1,7 +1,6 @@
 import React from 'react';
-import { InstantiateState, InstantiateAction } from '../../types';
-import { ApiPromise, Keyring } from '../../../canvas/types';
-import { CanvasContext } from '../../contexts';
+import { ApiPromise, Keyring, InstantiateState, InstantiateAction } from '../../../types';
+import { CanvasContext } from '@ui/contexts';
 
 interface Props {
   state: InstantiateState;
@@ -18,7 +17,7 @@ interface Props {
   ) => void;
 }
 
-const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
+export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
   if (currentStep !== 4) return null;
 
   return (
@@ -64,5 +63,3 @@ const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
     </CanvasContext.Consumer>
   );
 };
-
-export default Step4;

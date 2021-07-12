@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import ArgumentForm from '../ArgumentForm';
-import Dropdown from '../Dropdown';
-import { InstantiateAction, DropdownOption } from '../../types';
-import { AbiMessage } from '../../../canvas/types';
-import { createOptions, createEmptyValues } from '../../../canvas';
+import { ArgumentForm } from '../ArgumentForm';
+import { Dropdown } from '../Dropdown';
+import { InstantiateAction, DropdownOption, AbiMessage } from '../../../types';
+import { createOptions, createEmptyValues } from '@canvas/util';
 
 interface Props {
   constructors?: Partial<AbiMessage>[];
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep: number;
 }
-const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
+export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
   const [constr, setConstructor] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
 
@@ -81,4 +80,3 @@ const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
     </>
   ) : null;
 };
-export default Step3;

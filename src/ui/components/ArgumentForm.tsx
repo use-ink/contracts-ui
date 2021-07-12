@@ -1,5 +1,5 @@
 import React from 'react';
-import type { AbiParam } from '../../canvas/types';
+import type { AbiParam } from '../../types';
 
 interface Props {
   args?: Partial<AbiParam>[];
@@ -7,7 +7,7 @@ interface Props {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
+export const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
   return args && argValues ? (
     <>
       {args.map(({ name, type = { type: '' } }) => {
@@ -28,5 +28,3 @@ const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
     </>
   ) : null;
 };
-
-export default ArgumentForm;

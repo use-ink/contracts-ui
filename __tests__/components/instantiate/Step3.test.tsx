@@ -2,31 +2,31 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import InstantiateStep3 from '../../../src/ui/components/instantiate/Step3';
 import { flipperMock } from '../../../test-utils/mockData';
+import { Step3 } from '@ui/components';
 
 const { constructors } = flipperMock;
 
 describe('Instantiate Step 3', () => {
   test('renders correctly with initial values', () => {
     const { getByPlaceholderText } = render(
-      <InstantiateStep3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />
+      <Step3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />
     );
     expect(getByPlaceholderText('initValue: <bool>')).toBeInTheDocument();
   });
   test('does not render when no constructors given', () => {
-    const { container } = render(<InstantiateStep3 dispatch={jest.fn()} currentStep={3} />);
+    const { container } = render(<Step3 dispatch={jest.fn()} currentStep={3} />);
     expect(container).toBeEmptyDOMElement();
   });
   test('does not render when current step is not 3', () => {
     const { container } = render(
-      <InstantiateStep3 constructors={constructors} dispatch={jest.fn()} currentStep={1} />
+      <Step3 constructors={constructors} dispatch={jest.fn()} currentStep={1} />
     );
     expect(container).toBeEmptyDOMElement();
   });
   test('accepts user input', () => {
     const { getByPlaceholderText } = render(
-      <InstantiateStep3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />
+      <Step3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />
     );
     const input = getByPlaceholderText('initValue: <bool>');
     expect(input).toHaveAttribute('value', '');
@@ -36,7 +36,7 @@ describe('Instantiate Step 3', () => {
   test('dispatches the correct values', () => {
     const dispatchMock = jest.fn();
     const { getByPlaceholderText, getByText } = render(
-      <InstantiateStep3 constructors={constructors} dispatch={dispatchMock} currentStep={3} />
+      <Step3 constructors={constructors} dispatch={dispatchMock} currentStep={3} />
     );
     const input = getByPlaceholderText('initValue: <bool>');
     const button = getByText('Next');

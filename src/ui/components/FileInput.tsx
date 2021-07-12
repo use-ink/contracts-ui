@@ -8,7 +8,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
   successText?: string;
 }
 
-const FileInput = ({
+export const FileInput = ({
   className = '',
   fileLoaded,
   changeHandler,
@@ -50,5 +50,3 @@ const FileInput = ({
     </div>
   );
 };
-
-export default FileInput;

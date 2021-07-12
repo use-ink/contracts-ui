@@ -7,7 +7,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
   placeholder?: string;
 }
 
-const Input = ({ value, handleChange, placeholder = '' }: Props) => {
+export const Input = ({ value, handleChange, placeholder = '' }: Props) => {
   return (
     <div className="mb-4">
       <input
@@ -20,5 +20,3 @@ const Input = ({ value, handleChange, placeholder = '' }: Props) => {
     </div>
   );
 };
-
-export default Input;
