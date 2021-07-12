@@ -2,15 +2,14 @@
 
 import { compactAddLength, u8aToU8a } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
-import {
+import { Abi, Bytes, ContractPromise } from 'types';
+
+import type {
   AnyJson,
   DispatchError,
-  Bytes,
   StorageEntry,
   ApiPromise,
   AbiParam,
-  Abi,
-  ContractPromise,
   KeyringPair,
   AbiMessage,
   DropdownOption,
