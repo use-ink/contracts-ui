@@ -1,6 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { DispatchError, ApiPromise, StorageEntry } from '../types';
+import type { DispatchError, ApiPromise, StorageEntry } from '../../types';
 
 export async function getCodeHashes(api: ApiPromise): Promise<string[]> {
   let codeHashes: string[] = [];

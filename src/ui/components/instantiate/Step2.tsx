@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { InstantiateAction, DropdownOption } from '../../types';
-import { KeyringPair } from '../../../canvas/types';
+import { KeyringPair, InstantiateAction, DropdownOption } from '../../../types';
 import { createOptions } from '../../../canvas';
 import Dropdown from '../Dropdown';
 import Input from '../Input';

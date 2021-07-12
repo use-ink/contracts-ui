@@ -3,8 +3,7 @@
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 'react';
-
-import type { DbProps } from '../types';
+import { DbProps } from '@db/types';
 import { useCanvas } from './CanvasContext';
 import { init } from '@db/util';
 import type { UserDocument } from '@db/types';
@@ -13,7 +12,9 @@ export const DbContext: React.Context<DbProps> = React.createContext({} as unkno
 export const DbConsumer: React.Consumer<DbProps> = DbContext.Consumer;
 export const DbProvider: React.Provider<DbProps> = DbContext.Provider;
 
-export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
+export function DatabaseContextProvider({
+  children,
+}: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
   const { endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
@@ -59,6 +60,6 @@ export function DatabaseContextProvider({ children }: HTMLAttributes<HTMLDivElem
   return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
 }
 
-export function useDatabase (): DbProps {
+export function useDatabase(): DbProps {
   return useContext(DbContext);
 }

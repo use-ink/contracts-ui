@@ -1,7 +1,7 @@
 import React, { useReducer, Reducer } from 'react';
 import { instantiateWithHash } from '../../../canvas';
 import { useCanvas } from '../../contexts';
-import { InstantiateState, InstantiateAction } from '../../types';
+import { InstantiateState, InstantiateAction } from '../../../types';
 import InstantiateStep1 from './Step1';
 import InstantiateStep2 from './Step2';
 import InstantiateStep3 from './Step3';

@@ -1,10 +1,9 @@
 import React, { useState, ChangeEvent } from 'react';
-import { InstantiateAction } from '../../types';
-import { Abi, AnyJson } from '../../../canvas/types';
-import { convertMetadata } from '../../../canvas';
-import { useCanvas } from '../../contexts';
 import FileInput from '../FileInput';
 import Input from '../Input';
+import { Abi, AnyJson, InstantiateAction } from '../../../types';
+import { convertMetadata } from '@canvas/utils';
+import { useCanvas } from '@ui/contexts';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
   dispatch: React.Dispatch<InstantiateAction>;

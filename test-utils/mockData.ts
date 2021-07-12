@@ -1,4 +1,4 @@
-import { CanvasState, InstantiateState } from '../src/ui/types';
+import { CanvasState, InstantiateState } from '../src/types';
 
 export const keyringPairsMock = [
   { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },

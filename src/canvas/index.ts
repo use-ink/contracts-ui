@@ -2,4 +2,3 @@
 
 export * from './instantiate';
 export * from './utils';
-export * from './types';

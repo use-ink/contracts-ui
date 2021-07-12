@@ -1,6 +1,5 @@
 import { compactAddLength, u8aToU8a } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
-import { DropdownOption } from '../ui/types';
 import {
   AnyJson,
   DispatchError,
@@ -11,7 +10,8 @@ import {
   ContractPromise,
   KeyringPair,
   AbiMessage,
-} from './types';
+  DropdownOption,
+} from '../types';
 
 export const handleDispatchError = (dispatchError: DispatchError, api: ApiPromise) => {
   if (dispatchError.isModule) {
