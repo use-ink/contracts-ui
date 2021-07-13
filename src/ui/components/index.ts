@@ -3,3 +3,7 @@
 export * from './App';
 export * from './Homepage';
 export * from './instantiate';
+export * from './Sidebar';
+export * from './AddContract';
+export * from './InstantiateWithHash';
+export * from './InstantiateWithCode';
