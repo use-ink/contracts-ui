@@ -1,7 +1,7 @@
 import React from 'react';
 import { AddContract, InstantiateWithHash, InstantiateWithCode, Homepage } from '@ui/components';
 
-const routes = [
+export const routes = [
   {
     path: '/add-contract',
     component: AddContract,
@@ -27,5 +27,3 @@ const routes = [
     fallback: <div> Loading... </div>,
   },
 ];
-
-export default routes;
