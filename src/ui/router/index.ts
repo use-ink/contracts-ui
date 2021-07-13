@@ -1,3 +1,3 @@
-export { default as routes } from './routes';
-export { default as Router } from './Router';
-export { default as RouteWithSubRoutes } from './RouteWithSubRoutes';
+export * from './routes';
+export * from './Router';
+export * from './RouteWithSubRoutes';

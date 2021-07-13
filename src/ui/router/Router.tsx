@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import RouteWithSubRoutes from './RouteWithSubRoutes';
+import { RouteWithSubRoutes } from './RouteWithSubRoutes';
 import { RouteInterface } from 'types';
 import { CanvasContext } from '@ui/contexts';
 
@@ -8,7 +8,7 @@ interface Props {
   routes: RouteInterface[];
 }
 
-const Router: React.FC<Props> = ({ routes }) => {
+export const Router: React.FC<Props> = ({ routes }) => {
   return (
     <CanvasContext.Consumer>
       {({ status, keyringStatus, error }) => (
@@ -32,5 +32,3 @@ const Router: React.FC<Props> = ({ routes }) => {
     </CanvasContext.Consumer>
   );
 };
-
-export default Router;

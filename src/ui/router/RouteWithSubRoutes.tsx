@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { RouteInterface } from 'types';
 
-const RouteWithSubRoutes = (route: RouteInterface) => {
+export const RouteWithSubRoutes = (route: RouteInterface) => {
   return (
     <Suspense fallback={route.fallback}>
       <Route
@@ -12,5 +12,3 @@ const RouteWithSubRoutes = (route: RouteInterface) => {
     </Suspense>
   );
 };
-
-export default RouteWithSubRoutes;
