@@ -68,6 +68,7 @@ export interface RouteInterface {
   path: string;
   exact: boolean;
   fallback: NonNullable<ReactNode> | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component?: ComponentType<any>;
   routes?: RouteInterface[];
   redirect?: string;

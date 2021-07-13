@@ -1,4 +1,5 @@
 import React from 'react';
+import { InstantiateWizard } from './instantiate';
 
 export const InstantiateWithHash = () => {
   return (
@@ -18,7 +19,7 @@ export const InstantiateWithHash = () => {
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="mt-4">
-                    <p className="text-gray-200">todo</p>
+                    <InstantiateWizard />
                   </div>
                 </div>
               </div>
