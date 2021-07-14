@@ -1,9 +1,9 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-export { default as App } from './App';
-export { default as Homepage } from './Homepage';
-export { default as Main } from './Main';
-export { default as Page } from './Page';
-export { default as Sidebar } from './Sidebar';
-export { default as AddContract } from './AddContract';
-export { default as InstantiateWithHash } from './InstantiateWithHash';
+export * from './App';
+export * from './Homepage';
+export * from './instantiate';
+export * from './Sidebar';
+export * from './AddContract';
+export * from './InstantiateWithHash';
+export * from './InstantiateWithCode';

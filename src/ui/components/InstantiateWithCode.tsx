@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function InstantiateWithCode() {
+export function InstantiateWithCode () {
   return (
     <>
       <div className="w-full mx-auto overflow-y-auto">
@@ -29,4 +29,4 @@ export default function InstantiateWithCode() {
       </div>
     </>
   );
-}
+};

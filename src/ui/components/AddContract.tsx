@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, CodeIcon, UploadIcon } from '@heroicons/react/outline';
 
-export default function AddContract() {
+export function AddContract() {
   return (
     <>
       <div className="w-full mx-auto overflow-y-auto">

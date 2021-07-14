@@ -4,23 +4,23 @@ import faker from 'faker';
 import type { PrivateKey } from '@textile/crypto';
 import { getNewCodeBundleId } from '../codeBundle';
 import { createPrivateKey, publicKeyHex } from '../identity';
-import type { UserDocument, CodeBundleDocument, ContractDocument } from '../../types';
-
 import * as contractFiles from './contracts';
-import type { AnyJson } from '@canvas/types';
+import type { UserDocument, CodeBundleDocument, ContractDocument, AnyJson } from 'types';
 
 export const TEST_DATA: [string, number, string[]][] = [
-  ['dns', 0, ['alpha', 'beta']], 
-  ['erc20', 1, ['alpha', 'beta', 'gamma']], 
-  ['flipper', 2, ['delta']], 
-  ['incrementer', 1, ['beta', 'delta', 'gamma']], 
+  ['dns', 0, ['alpha', 'beta']],
+  ['erc20', 1, ['alpha', 'beta', 'gamma']],
+  ['flipper', 2, ['delta']],
+  ['incrementer', 1, ['beta', 'delta', 'gamma']],
 ];
 
-function randomHash (): string {
-  return [...Array(62) as unknown[]].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+function randomHash(): string {
+  return [...(Array(62) as unknown[])]
+    .map(() => Math.floor(Math.random() * 16).toString(16))
+    .join('');
 }
 
-export function getTestUsers (): [UserDocument[], PrivateKey[]] {
+export function getTestUsers(): [UserDocument[], PrivateKey[]] {
   const users: UserDocument[] = [];
   const identities: PrivateKey[] = [];
 
@@ -36,12 +36,12 @@ export function getTestUsers (): [UserDocument[], PrivateKey[]] {
       contractsStarred: [],
       publicKey: publicKeyHex(identity) as string,
     });
-  })
+  });
 
   return [users, identities];
 }
 
-export function getTestCodeBundles (): CodeBundleDocument[] {
+export function getTestCodeBundles(): CodeBundleDocument[] {
   const codeBundles: CodeBundleDocument[] = [];
 
   const blockOneHashes = [randomHash(), randomHash()];
@@ -58,17 +58,17 @@ export function getTestCodeBundles (): CodeBundleDocument[] {
       tags,
       abi,
       id: getNewCodeBundleId(),
-    })
+    });
   });
 
   return codeBundles;
 }
 
-export function getTestContracts (codeBundles: CodeBundleDocument[]): ContractDocument[] {
+export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
   const contracts: ContractDocument[] = [];
 
   const { blockOneHash, genesisHash, id } = codeBundles[0];
-  
+
   // Original instantiation and 0-2 reinstantiations
   TEST_DATA.forEach(([name, count, tags]) => {
     for (let i = 0; i < 1 + count; i += 1) {
@@ -82,17 +82,17 @@ export function getTestContracts (codeBundles: CodeBundleDocument[]): ContractDo
         name,
         tags,
         abi,
-      })
+      });
     }
   });
 
   return contracts;
 }
 
-export function getMockUpdates (withAbi?: boolean) {
+export function getMockUpdates(withAbi?: boolean) {
   return {
     name: faker.name.jobTitle(),
     tags: ['delta'],
     ...(withAbi ? { abi: Object.values(contractFiles)[3] } : undefined),
-  }
+  };
 }

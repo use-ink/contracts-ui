@@ -49,7 +49,7 @@
     }
   },
   "rules": {
-    "import/named": "warn",
+    "import/named": "off",
     "import/no-unresolved": "warn",
     "import/default": "warn",
     "import/no-absolute-path": "error",
@@ -64,7 +64,7 @@
     "import/no-duplicates": "warn",
     "import/order": "warn",
     "import/newline-after-import": "warn",
-    "indent": ["error", 2, {"SwitchCase": 1 }],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "@typescript-eslint/restrict-template-expressions": "off",
     "react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "off",

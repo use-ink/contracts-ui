@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { DocumentAddIcon, ChatAltIcon, CogIcon, HomeIcon } from '@heroicons/react/outline';
 
-export default function Sidebar(): React.ReactElement {
+export function Sidebar () {
   return (
     <>
       <div className="flex">
@@ -55,4 +55,4 @@ export default function Sidebar(): React.ReactElement {
       </div>
     </>
   );
-}
+};

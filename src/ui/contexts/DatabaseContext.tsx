@@ -3,10 +3,9 @@
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 'react';
-
-import type { DbProps } from '../types';
 import { useCanvas } from './CanvasContext';
-import { init } from '@db/util';
+import { init } from 'db/util';
+import type { DbProps, UserDocument } from 'types';
 
 export const DbContext: React.Context<DbProps> = React.createContext({} as unknown as DbProps);
 export const DbConsumer: React.Consumer<DbProps> = DbContext.Consumer;
@@ -18,6 +17,7 @@ export function DatabaseContextProvider({
   const { endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
+  const [user, setUser] = useState<UserDocument | null>(null);
   const [isDbReady, setIsDbReady] = useState(false);
 
   const isRemote = useMemo(
@@ -29,10 +29,11 @@ export function DatabaseContextProvider({
   useEffect((): void => {
     async function createDb() {
       try {
-        const [db, identity] = await init(endpoint, isRemote);
+        const [db, user, identity] = await init(endpoint, isRemote);
 
         setDb(db);
         setIdentity(identity);
+        setUser(user);
         setIsDbReady(true);
       } catch (e) {
         console.error(e);
@@ -46,7 +47,10 @@ export function DatabaseContextProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const props = useMemo<DbProps>(() => ({ db, identity, isDbReady }), [db, identity, isDbReady]);
+  const props = useMemo<DbProps>(
+    () => ({ db, identity, isDbReady, user }),
+    [db, identity, isDbReady, user]
+  );
 
   if (!db || !props.isDbReady) {
     return null;

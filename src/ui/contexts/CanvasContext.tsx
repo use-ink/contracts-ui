@@ -6,7 +6,7 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
 
 import type { Reducer } from 'react';
-import type { CanvasAction, CanvasState } from '../types';
+import type { CanvasAction, CanvasState } from 'types';
 
 let loadedAccounts = false;
 
@@ -55,7 +55,6 @@ export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action)
       throw new Error(`Unknown action type`);
   }
 };
-
 
 export const CanvasContext = React.createContext(INIT_STATE);
 

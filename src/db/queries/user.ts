@@ -4,8 +4,8 @@ import type { Collection, Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util/identity';
 
-import type { UserDocument } from '../types';
 import { pushToRemote } from './util';
+import type { UserDocument } from 'types';
 
 export function getUserCollection(db: Database): Collection<UserDocument> {
   return db.collection('User') as Collection<UserDocument>;
@@ -22,11 +22,20 @@ export async function findUser(
   return user || null;
 }
 
-export async function createUser(db: Database, identity: PrivateKey | null, { name, email }: Partial<UserDocument> = {}): Promise<string> {
+export async function getUser(db: Database, identity: PrivateKey | null, { name, email }: Partial<UserDocument> = {}): Promise<UserDocument | null> {
   const existing = await findUser(db, identity);
 
+  if (!identity) {
+    // create generic user identity to authorize remote etc.
+    return null;
+  }
+
+  if (existing) {
+    return existing;
+  }
+
   if (identity && !existing) {
-    return getUserCollection(db)
+    const user = getUserCollection(db)
       .create({
         codeBundlesStarred: [],
         contractsStarred: [],
@@ -35,7 +44,9 @@ export async function createUser(db: Database, identity: PrivateKey | null, { na
         publicKey: Buffer.from(identity.pubKey).toString('hex'),
 
       })
-      .save();
+    await user.save();
+
+    return user;
   }
 
   return Promise.reject(new Error('Unable to create user'));

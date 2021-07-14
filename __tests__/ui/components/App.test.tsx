@@ -1,20 +1,11 @@
-/**
- * @jest-environment ./db-test-env
- */
-/* eslint-disable header/header */
-
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import React from 'react';
-import { Main } from '@ui/components';
-import { CanvasContext } from '@ui/contexts';
-import { CanvasState } from '@ui/types';
+import { customRender } from 'test-utils';
+import { Router } from 'ui/components/router';
+import { Homepage } from 'ui/components';
 
-const customRender = (ui: JSX.Element, providerProps: CanvasState) => {
-  return render(<CanvasContext.Provider value={providerProps}>{ui}</CanvasContext.Provider>);
-};
-
-const mockState: CanvasState = {
-  endpoint: '',
+const mockState = {
+  endpoint: 'test123',
   keyring: null,
   keyringStatus: null,
   api: null,
@@ -23,23 +14,41 @@ const mockState: CanvasState = {
   blockOneHash: null,
 };
 
-describe('Canvas UI app', () => {
-  it('should render the homepage if the api and keyring are in a ready state', async () => {
-    customRender(<Main />, { ...mockState, keyringStatus: 'READY', status: 'READY' });
-    expect(screen.getByText(`Hello`)).toBeTruthy();
+const routes = [
+  {
+    path: '/',
+    component: Homepage,
+    exact: true,
+    fallback: <div> Loading... </div>,
+  },
+];
+
+describe('Canvas context', () => {
+  test('should render the homepage if the api and keyring are in a ready state', () => {
+    customRender(<Router routes={routes} />, {
+      ...mockState,
+      keyringStatus: 'READY',
+      status: 'READY',
+    });
+    expect(screen.getByText('Homepage')).toBeTruthy();
   });
   test('should suggest to check extension if keyring state is not ready', () => {
-    customRender(<Main />, { ...mockState });
+    customRender(<Router routes={routes} />, { ...mockState, status: 'READY' });
     expect(
       screen.getByText(`Loading accounts (please review any extension's authorization)`)
     ).toBeTruthy();
   });
-  it('should render a message if the api is not ready but the keyring is', async () => {
-    customRender(<Main />, { ...mockState, keyringStatus: 'READY' });
+  test('should render a message if the api is not ready but the keyring is', () => {
+    customRender(<Router routes={routes} />, { ...mockState, keyringStatus: 'READY' });
     expect(screen.getByText(`Connecting to substrate node`)).toBeTruthy();
   });
-  it('should render the error it encountered while connecting to the node', async () => {
-    customRender(<Main />, { ...mockState, error: 'xyz', status: 'ERROR' });
-    expect(screen.getByText(`Connection error xyz`)).toBeTruthy();
+  test('should render the error it encountered while connecting to the node', () => {
+    customRender(<Router routes={routes} />, {
+      ...mockState,
+      error: { key: 'value' },
+      status: 'ERROR',
+    });
+
+    expect(screen.getByText(`Connection error [object Object]`)).toBeTruthy();
   });
 });

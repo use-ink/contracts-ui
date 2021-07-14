@@ -4,12 +4,12 @@
 /* eslint-disable header/header */
 
 import { Database, PrivateKey } from '@textile/threaddb';
-import { TEST_DATA, getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from '@db/util/testing';
-import { initDb } from '@db/util/init'
-import { publicKeyHex } from '@db/util/identity';
-import * as q from '@db/queries';
+import { TEST_DATA, getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'db/util/testing';
+import { initDb } from 'db/util/init'
+import { publicKeyHex } from 'db/util/identity';
+import * as q from 'db/queries';
 
-import type { CodeBundleDocument, ContractDocument, UserDocument } from '@db/types';
+import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
 let db: Database;
 let testIdentities: PrivateKey[];
@@ -34,12 +34,12 @@ beforeAll(
 )
 
 describe('DB Queries', (): void => {
-  it('createUser', async () => {
-    testUserIds = await Promise.all(
+  it('getUser', async () => {
+    testUserIds = (await Promise.all(
       testUsers.map((user, index) => {
-        return q.createUser(db, testIdentities[index], user);
+        return q.getUser(db, testIdentities[index], user);
       })
-    );
+    )).map((user) => user?._id || '');
 
     for (let i = 0; i < testUserIds.length; i++) {
       const document = await q.getUserCollection(db).findById(testUserIds[i]);

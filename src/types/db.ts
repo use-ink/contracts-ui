@@ -1,6 +1,8 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { VoidFn } from '@ui/types';
+import type { Database } from '@textile/threaddb';
+import type { PrivateKey } from '@textile/crypto';
+import type { VoidFn } from './app';
 
 interface Document {
   _id?: string;
@@ -57,6 +59,13 @@ export interface Starred<T> {
 export interface UserArtifacts<T> {
   owned: Array<T>;
   starred: Array<Starred<T>>;
+}
+
+export interface DbProps {
+  db: Database;
+  user: UserDocument | null;
+  identity: PrivateKey | null;
+  isDbReady: boolean;
 }
 
 export type MyCodeBundles = UserArtifacts<CodeBundleDocument>;

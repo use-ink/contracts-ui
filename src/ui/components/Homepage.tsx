@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-export default function Homepage() {
+export function Homepage() {
   return (
-    <div id="homepage">
-      <h1>Hello</h1>
+    <div id="homepage" className="py-10">
+      <p>Homepage</p>
     </div>
   );
 }
