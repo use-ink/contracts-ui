@@ -25,7 +25,7 @@ export const AddContract = () => {
                     >
                       <div className="flex items-center text-base text-gray-500 space-x-2">
                         <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
-                        <span>Use Existing Contract Code</span>
+                        <span>Upload New Contract Code</span>
                       </div>
                       <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                     </Link>
