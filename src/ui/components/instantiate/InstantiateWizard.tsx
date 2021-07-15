@@ -4,8 +4,8 @@ import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';
 import { Step4 } from './Step4';
-import { useCanvas } from '@ui/contexts';
-import { instantiateWithHash } from '@canvas/instantiate';
+import { useCanvas } from 'ui/contexts';
+import { instantiateWithHash } from 'canvas/instantiate';
 
 const initialState: InstantiateState = {
   isLoading: false,

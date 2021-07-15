@@ -4,11 +4,12 @@
 import type { Collection, Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util';
-import type { ContractDocument, MyContracts } from '../types';
 
 import { findUser } from './user';
 import { getCodeBundleCollection } from './codeBundle';
 import { pushToRemote } from './util';
+
+import type { ContractDocument, MyContracts } from 'types';
 
 export function getContractCollection(db: Database): Collection<ContractDocument> {
   return db.collection('Contract') as Collection<ContractDocument>;

@@ -2,9 +2,9 @@
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
-import { createContract } from '@db/queries';
+import { createContract } from 'db/queries';
 
-import type { ContractDocument } from '@db/types';
+import type { ContractDocument } from 'types';
 
 export function useCreateContract(): (_: Partial<ContractDocument>) => Promise<string | undefined> {
   const { db, identity } = useDatabase();

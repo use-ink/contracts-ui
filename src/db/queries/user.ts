@@ -4,8 +4,8 @@ import type { Collection, Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util/identity';
 
-import type { UserDocument } from '../types';
 import { pushToRemote } from './util';
+import type { UserDocument } from 'types';
 
 export function getUserCollection(db: Database): Collection<UserDocument> {
   return db.collection('User') as Collection<UserDocument>;

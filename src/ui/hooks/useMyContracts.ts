@@ -3,9 +3,9 @@
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { useQuery } from './useQuery';
-import { findMyContracts } from '@db/queries';
+import { findMyContracts } from 'db/queries';
 
-import type { MyContracts, UseQuery } from '@db/types';
+import type { MyContracts, UseQuery } from 'types';
 
 export function useMyContracts(): UseQuery<MyContracts> {
   const { db, identity } = useDatabase();

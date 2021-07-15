@@ -3,8 +3,8 @@
 import React from 'react';
 import { Sidebar } from './Sidebar';
 import { Router, routes } from './router';
-import { CanvasContextProvider, DatabaseContextProvider } from '@ui/contexts';
-// import { Database } from '@db';
+import { CanvasContextProvider, DatabaseContextProvider } from 'ui/contexts';
+// import { Database } from 'db';
 
 export function App(): JSX.Element {
   return (
