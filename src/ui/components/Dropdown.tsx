@@ -20,7 +20,7 @@ export const Dropdown = ({
   return options ? (
     <Listbox value={selectedOption} onChange={changeHandler}>
       <div className={`relative mt-1 ${className || ''}`}>
-        <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg border border-gray-200 cursor-default focus:outline-none">
+        <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left dark:text-gray-300 text-gray-500 dark:bg-gray-900 bg-white rounded border dark:border-gray-700 border-gray-200 cursor-default focus:outline-none">
           <span className="block truncate">
             {options.length > 0 ? selectedOption && selectedOption.name : placeholder}
           </span>
@@ -34,13 +34,13 @@ export const Dropdown = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute z-50 w-full py-1 mt-1 overflow-auto border border-gray-200 text-base bg-white rounded-md">
+          <Listbox.Options className="absolute z-50 w-full py-1 mt-1 dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-base dark:text-gray-300 text-gray-500 bg-white rounded">
             {options.map(option => (
               <Listbox.Option
                 key={option.name}
                 className={({ active }) =>
-                  `${active ? 'text-amber-900 bg-amber-100' : 'text-gray-900'}
-                          cursor-default select-none relative py-2 pl-10 pr-4`
+                  `${active ? 'text-amber-900 bg-amber-100' : 'dark:text-gray-300'}
+                          cursor-default select-none relative py-2 pl-10 pr-4 dark:hover:bg-elevation-2`
                 }
                 value={option}
               >
