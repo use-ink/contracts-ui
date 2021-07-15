@@ -20,7 +20,7 @@ export const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
               placeholder={`${name}: <${type.type}>`}
               value={argValues[`${name}`]}
               onChange={handleChange}
-              className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 rounded"
+              className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded"
             />
           </div>
         );
