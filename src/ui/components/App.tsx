@@ -10,7 +10,7 @@ export function App(): JSX.Element {
   return (
     <CanvasContextProvider>
       <DatabaseContextProvider>
-        <div className="light">
+        <div className="dark">
           <div className="relative md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900">
             <Sidebar />
             <Router routes={routes} />
