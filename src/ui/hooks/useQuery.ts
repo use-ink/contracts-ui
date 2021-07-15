@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useDatabase } from '../contexts';
-import type { UseQuery } from '@db/types';
+import type { UseQuery } from 'types';
 
 export function useQuery<T>(query: () => Promise<T | null>): UseQuery<T> {
   const { isDbReady } = useDatabase();

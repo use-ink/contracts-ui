@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { KeyringPair, InstantiateAction, DropdownOption } from '../../../types';
 import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
-import { createOptions } from '@canvas/util';
+import { createOptions } from 'canvas/util';
 
 interface Props {
   keyringPairs: Partial<KeyringPair>[];

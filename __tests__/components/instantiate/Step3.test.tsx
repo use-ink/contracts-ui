@@ -2,8 +2,8 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { flipperMock } from '../../../test-utils/mockData';
-import { Step3 } from '@ui/components';
+import { flipperMock } from 'test-utils/mockData';
+import { Step3 } from 'ui/components';
 
 const { constructors } = flipperMock;
 

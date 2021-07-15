@@ -3,9 +3,9 @@
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { useQuery } from './useQuery';
-import { findMyCodeBundles } from '@db/queries';
+import { findMyCodeBundles } from 'db/queries';
 
-import type { MyCodeBundles, UseQuery } from '@db/types';
+import type { MyCodeBundles, UseQuery } from 'types';
 
 export function useMyCodeBundles(): UseQuery<MyCodeBundles> {
   const { db, identity } = useDatabase();

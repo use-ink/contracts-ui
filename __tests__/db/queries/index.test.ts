@@ -4,12 +4,12 @@
 /* eslint-disable header/header */
 
 import { Database, PrivateKey } from '@textile/threaddb';
-import { TEST_DATA, getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from '@db/util/testing';
-import { initDb } from '@db/util/init'
-import { publicKeyHex } from '@db/util/identity';
-import * as q from '@db/queries';
+import { TEST_DATA, getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'db/util/testing';
+import { initDb } from 'db/util/init'
+import { publicKeyHex } from 'db/util/identity';
+import * as q from 'db/queries';
 
-import type { CodeBundleDocument, ContractDocument, UserDocument } from '@db/types';
+import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
 let db: Database;
 let testIdentities: PrivateKey[];

@@ -4,9 +4,9 @@ import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 'react';
 import { useCanvas } from './CanvasContext';
-import { DbProps } from '@db/types';
-import { init } from '@db/util';
-import type { UserDocument } from '@db/types';
+import { DbProps } from 'types';
+import { init } from 'db/util';
+import type { UserDocument } from 'types';
 
 export const DbContext: React.Context<DbProps> = React.createContext({} as unknown as DbProps);
 export const DbConsumer: React.Consumer<DbProps> = DbContext.Consumer;

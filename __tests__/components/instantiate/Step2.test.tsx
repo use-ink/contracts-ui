@@ -2,8 +2,8 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { keyringPairsMock } from '../../../test-utils/mockData';
-import { Step2 } from '@ui/components';
+import { keyringPairsMock } from 'test-utils/mockData';
+import { Step2 } from 'ui/components';
 
 describe('Instantiate Step 2', () => {
   test('renders correctly with initial values', () => {
