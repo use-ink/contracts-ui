@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 import { RouteInterface } from '../types';
 import RouteWithSubRoutes from './RouteWithSubRoutes';
-import { CanvasContext } from '@ui/contexts';
+import { CanvasContext } from 'ui/contexts';
 
 interface Props {
   routes: RouteInterface[];

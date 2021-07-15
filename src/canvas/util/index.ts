@@ -15,6 +15,8 @@ import type {
   DropdownOption,
 } from 'types';
 
+export * from './signers';
+
 export async function getCodeHashes(api: ApiPromise): Promise<string[]> {
   let codeHashes: string[] = [];
   try {
