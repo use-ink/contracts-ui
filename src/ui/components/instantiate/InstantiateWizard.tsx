@@ -70,7 +70,7 @@ export const InstantiateWizard = () => {
   }
 
   return keyringPairs && api?.query ? (
-    <div className="pb-8 bg-white rounded-lg">
+    <div className="">
       <Step1 dispatch={dispatch} currentStep={state.currentStep} />
       <Step2
         keyringPairs={keyringPairs}

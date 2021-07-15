@@ -31,7 +31,7 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
 
   return (
     <>
-      <label htmlFor="hash" className="inline-block mb-2">
+      <label htmlFor="hash" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Look up Code Hash
       </label>
       <Input
@@ -40,7 +40,7 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
         placeholder="on-chain code hash"
         id="codeHash"
       />
-      <label htmlFor="metadata" className="inline-block mb-3">
+      <label htmlFor="metadata" className="inline-block mb-3 dark:text-gray-300 text-gray-700">
         Add contract metadata
       </label>
       <FileInput
@@ -53,7 +53,7 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
 
       <button
         type="button"
-        className="bg-gray-500 mr-4 text-white font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() =>
           metadata &&
           dispatch({
