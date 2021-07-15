@@ -36,11 +36,11 @@ export const FileInput = ({
   ) : (
     <div className={className}>
       <label
-        className="dark:text-gray-700 text-gray-500 font-bold py-2 px-4 border dark:border-gray-700 border-gray-300 rounded flex flex-col h-36 items-center cursor-pointer justify-center"
+        className="dark:text-gray-700 text-gray-400 font-bold py-2 px-4 border dark:border-gray-700 border-gray-200 rounded flex flex-col h-36 items-center cursor-pointer justify-center"
         htmlFor="file"
       >
         <UploadIcon className="h-10 dark:text-gray-500" />
-        <span className="dark:text-gray-500">{placeholder}</span>
+        <span className="dark:text-gray-500 text-gray-400">{placeholder}</span>
       </label>
       <input
         type="file"
