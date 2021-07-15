@@ -25,7 +25,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
 
   return keyringPairs ? (
     <>
-      <label htmlFor="account" className="inline-block mb-2">
+      <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Account
       </label>
       <Dropdown
@@ -35,7 +35,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
         selectedOption={accountSelected}
         changeHandler={(o: DropdownOption) => setAccountSelected(o)}
       />
-      <label htmlFor="account" className="inline-block mb-2">
+      <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Contract name
       </label>
       <Input
@@ -47,7 +47,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
 
       <button
         type="button"
-        className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={!accountSelected}
         onClick={() =>
           dispatch({
@@ -64,7 +64,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       </button>
       <button
         type="button"
-        className="bg-gray-500 mr-4  text-white font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() =>
           dispatch({
             type: 'GO_TO',
