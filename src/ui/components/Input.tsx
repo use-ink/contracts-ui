@@ -15,7 +15,7 @@ export const Input = ({ value, handleChange, placeholder = '' }: Props) => {
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
-        className="w-full bg-white border-gray-300"
+        className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded"
       />
     </div>
   );
