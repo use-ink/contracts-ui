@@ -3,7 +3,7 @@
 import faker from 'faker';
 import type { PrivateKey } from '@textile/crypto';
 import { getNewCodeBundleId } from '../codeBundle';
-import { createPrivateKey, publicKeyHex } from '../identity';
+import { getPrivateKeyRandom, publicKeyHex } from '../identity';
 import * as contractFiles from './contracts';
 import type { UserDocument, CodeBundleDocument, ContractDocument, AnyJson } from 'types';
 
@@ -25,7 +25,7 @@ export function getTestUsers(): [UserDocument[], PrivateKey[]] {
   const identities: PrivateKey[] = [];
 
   TEST_DATA.forEach(() => {
-    const identity = createPrivateKey();
+    const identity = getPrivateKeyRandom();
 
     identities.push(identity);
 

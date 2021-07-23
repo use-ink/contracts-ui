@@ -50,11 +50,11 @@ describe('DB Queries', (): void => {
   })
 
   it('createCodeBundle', async () => {
-    testCodeBundleIds = await Promise.all(
+    testCodeBundleIds = (await Promise.all(
       testCodeBundles.map((codeBundle, index) => {
         return q.createCodeBundle(db, testIdentities[index], codeBundle);
       })
-    );
+    )).map(({ id }) => id);
 
     for (let i = 0; i < testCodeBundleIds.length; i++) {
       const document = await q.getCodeBundleCollection(db).findOne({ id: testCodeBundleIds[i] });
@@ -67,7 +67,7 @@ describe('DB Queries', (): void => {
   it('createContract', async () => {
     const owners: PrivateKey[] = [];
 
-    testContractAddresses = await Promise.all(
+    testContractAddresses = (await Promise.all(
       testContracts.map((contract, index) => {
         const identity = testIdentities[index % TEST_DATA.length]
 
@@ -75,7 +75,7 @@ describe('DB Queries', (): void => {
 
         return q.createContract(db, identity, contract);
       })
-    );
+    )).map(({ address }) => address);
 
     for (let i = 0; i < testContractAddresses.length; i++) {
       const document = await q.getContractCollection(db).findOne({ address: testContractAddresses[i] });

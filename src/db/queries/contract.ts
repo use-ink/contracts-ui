@@ -10,8 +10,6 @@ import { getCodeBundleCollection } from './codeBundle';
 import { pushToRemote } from './util';
 import type { ContractDocument, MyContracts } from 'types';
 
-import type { ContractDocument, MyContracts } from 'types';
-
 export function getContractCollection(db: Database): Collection<ContractDocument> {
   return db.collection('Contract') as Collection<ContractDocument>;
 }
@@ -54,7 +52,7 @@ export async function createContract(
   db: Database,
   owner: PrivateKey | null,
   { abi, address, blockOneHash, codeBundleId, genesisHash, name, tags = [] }: Partial<ContractDocument>
-): Promise<string> {
+): Promise<ContractDocument> {
   try {
     if (!address || !codeBundleId || !name || !genesisHash || !blockOneHash) {
       return Promise.reject(new Error('Missing address or name'));
@@ -92,7 +90,7 @@ export async function createContract(
 
     await pushToRemote(db, 'Contract');
 
-    return Promise.resolve(address);
+    return Promise.resolve(newContract);
   } catch (e) {
     console.error(new Error(e));
 

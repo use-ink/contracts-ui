@@ -4,8 +4,7 @@ import { ContractPromise, Abi, EventRecord, DispatchError, ApiPromise, Keyring }
 
 export type VoidFn = () => void;
 
-export interface CanvasState {
-  blockOneHash: string | null;
+export interface CanvasState extends ChainProperties {
   endpoint: string;
   keyring: Keyring | null;
   keyringStatus: string | null;
@@ -18,12 +17,18 @@ export type CanvasAction =
   | { type: 'CONNECT_INIT' }
   | { type: 'CONNECT'; payload: ApiPromise }
   | { type: 'CONNECT_SUCCESS' }
-  | { type: 'CONNECT_READY'; payload: string }
+  | { type: 'CONNECT_READY'; payload: ChainProperties }
   | { type: 'CONNECT_ERROR'; payload: unknown }
   | { type: 'LOAD_KEYRING' }
   | { type: 'SET_ENDPOINT'; payload: string }
   | { type: 'SET_KEYRING'; payload: Keyring }
   | { type: 'KEYRING_ERROR' };
+
+export interface ChainProperties {
+  blockOneHash: string | null;
+  systemName: string | null;
+  systemVersion: string | null;
+}
 
 export type DropdownOption = {
   value: string | number;

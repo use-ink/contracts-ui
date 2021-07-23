@@ -56,7 +56,7 @@ export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
   { abi, blockOneHash, codeHash, genesisHash, id = getNewCodeBundleId(), name, tags = [] }: Partial<CodeBundleDocument>
-): Promise<string> {
+): Promise<CodeBundleDocument> {
   try {
     if (!codeHash || !name || !genesisHash || !owner) {
       return Promise.reject(new Error('Missing codeHash or name'));
@@ -77,7 +77,7 @@ export async function createCodeBundle(
 
     await pushToRemote(db, 'CodeBundle');
 
-    return Promise.resolve(id);
+    return Promise.resolve(newCode);
   } catch (e) {
     return Promise.reject(new Error(e));
   }

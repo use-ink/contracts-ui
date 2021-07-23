@@ -20,6 +20,8 @@ const INIT_STATE: CanvasState = {
   api: null,
   error: null,
   status: null,
+  systemName: null,
+  systemVersion: null
 };
 
 export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action) => {
@@ -37,7 +39,7 @@ export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action)
       return { ...state, status: 'SUCCESS' };
 
     case 'CONNECT_READY':
-      return { ...state, blockOneHash: action.payload, status: 'READY' };
+      return { ...state, ...action.payload, status: 'READY' };
 
     case 'CONNECT_ERROR':
       return { ...state, status: 'ERROR', error: action.payload };
@@ -83,9 +85,20 @@ export const CanvasContextProvider = ({
       dispatch({ type: 'CONNECT_SUCCESS' });
     });
     _api.on('ready', async () => {
-      const blockOneHash = await _api.query.system.blockHash(1);
-
-      dispatch({ type: 'CONNECT_READY', payload: blockOneHash.toString() });
+      const [blockOneHash, systemName, systemVersion] = await Promise.all([
+        _api.query.system.blockHash(1),
+        _api.rpc.system.name(),
+        _api.rpc.system.version(),
+      ]);
+    
+      dispatch({
+        type: 'CONNECT_READY',
+        payload: {
+          blockOneHash: blockOneHash.toString(),
+          systemName: systemName.toString(),
+          systemVersion: systemVersion.toString(),
+        }
+      });
     });
     _api.on('error', err => dispatch({ type: 'CONNECT_ERROR', payload: err }));
   }, [endpoint, status]);
@@ -101,7 +114,7 @@ export const CanvasContextProvider = ({
       dispatch({ type: 'LOAD_KEYRING' });
       try {
         if (typeof window !== 'undefined') {
-          await web3Enable('canvas-testing');
+          await web3Enable('canvas-ui');
           let allAccounts = await web3Accounts();
           allAccounts = allAccounts.map(({ address, meta }) => ({
             address,

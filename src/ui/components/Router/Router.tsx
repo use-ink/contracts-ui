@@ -1,8 +1,9 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
+import { AwaitApis } from '../AwaitApis';
 import { RouteWithSubRoutes } from './RouteWithSubRoutes';
 import { RouteInterface } from 'types';
-import { CanvasContext } from 'ui/contexts';
+// import { CanvasContext, useCanvas } from 'ui/contexts';
 
 interface Props {
   routes: RouteInterface[];
@@ -10,25 +11,13 @@ interface Props {
 
 export const Router: React.FC<Props> = ({ routes }) => {
   return (
-    <CanvasContext.Consumer>
-      {({ status, keyringStatus, error }) => (
-        <>
-          {status === 'READY' && keyringStatus === 'READY' ? (
-            <Switch>
-              {routes &&
+    <AwaitApis>
+      <Switch>
+        {routes &&
                 routes.map((route: RouteInterface) => (
                   <RouteWithSubRoutes key={route.path} {...route} />
                 ))}
-            </Switch>
-          ) : status === 'ERROR' ? (
-            `Connection error ${error}`
-          ) : keyringStatus !== 'READY' ? (
-            "Loading accounts (please review any extension's authorization)"
-          ) : (
-            'Connecting to substrate node'
-          )}
-        </>
-      )}
-    </CanvasContext.Consumer>
+      </Switch>
+    </AwaitApis>
   );
 };

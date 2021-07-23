@@ -1,5 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+// import { web3FromAddress, web3FromSource } from '@polkadot/extension-dapp';
+// import { stringToHex } from '@polkadot/util';
 import { keccakAsU8a } from '@polkadot/util-crypto';
 import { PrivateKey } from '@textile/crypto';
 import { hashSync } from 'bcryptjs';
@@ -15,32 +17,32 @@ export function getPrivateKeyRandom(): PrivateKey {
   return PrivateKey.fromRandom();
 }
 
-export function getStoredPrivateKey(): PrivateKey {
-  let idStr = window?.localStorage.getItem(USER_IDENTITY_KEY);
+export function getStoredPrivateKey(): PrivateKey | null {
+  const idStr = window?.localStorage.getItem(USER_IDENTITY_KEY);
 
   if (idStr) {
     return PrivateKey.fromString(idStr);
   } else {
-    const id = getPrivateKeyRandom();
+    // const id = getPrivateKeyRandom();
 
-    idStr = id.toString();
-    window.localStorage.setItem(USER_IDENTITY_KEY, idStr);
+    // idStr = id.toString();
+    // window.localStorage.setItem(USER_IDENTITY_KEY, idStr);
 
-    return id;
+    return null;
   }
 }
 
-function generateMessageForEntropy (pair: KeyringPair, applicationName: string, secret: string): string {
+function generateMessageForEntropy (address: string, applicationName: string, secret: string): string {
   return `${'********************************************************************************'}
     ${'READ THIS MESSAGE CAREFULLY.'}
     ${'DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE'}
     ${'ACCESS TO THIS APPLICATION.'}
     ${'DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT'}
-    ${'TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION.'}
+    ${'TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING ACCOUNT.'}
     ${'********************************************************************************'}
     ${'The Polkadot address used by this application is:'}
     ${''}
-    ${pair.address}
+    ${address}
     ${''}
     ${''}
     ${''}
@@ -70,8 +72,8 @@ function generateMessageForEntropy (pair: KeyringPair, applicationName: string, 
 export function getPrivateKeyFromPair (pair: KeyringPair, secretText = 'asdf'): PrivateKey {
   // avoid sending the raw secret by hashing it first
   const secret = hashSync(secretText, 10);
-  const message = generateMessageForEntropy(pair, 'canvas-ui', secret);
-  const signedText = pair.sign(message, { signer });
+  const message = generateMessageForEntropy(pair.address, 'canvas-ui', secret);
+  const signedText = pair.sign(message);
   const hash = keccakAsU8a(signedText);
   
   if (hash === null) {

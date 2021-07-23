@@ -18,7 +18,7 @@ export async function init(rpcUrl: string, isRemote = false): Promise<[DB, UserD
   const db = await initDb(rpcUrl);
   const [user, identity] = await initIdentity(db);
 
-  if (isRemote && !isLocalNode(rpcUrl)) {
+  if (isRemote && identity && !isLocalNode(rpcUrl)) {
     await initRemote(db, identity, rpcUrl);
   }
 
@@ -36,7 +36,7 @@ export async function initDb(rpcUrl: string): Promise<DB> {
   return db;
 }
 
-export async function initIdentity (db: DB): Promise<[UserDocument | null, PrivateKey]> {
+export async function initIdentity (db: DB): Promise<[UserDocument | null, PrivateKey | null]> {
   const identity = getStoredPrivateKey();
 
   const user = await getUser(db, identity);

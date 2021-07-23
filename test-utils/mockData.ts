@@ -55,4 +55,6 @@ export const mockAppState: CanvasState = {
   error: null,
   status: null,
   blockOneHash: '',
+  systemName: 'Development',
+  systemVersion: '0'
 };

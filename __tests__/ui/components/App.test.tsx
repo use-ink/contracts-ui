@@ -12,6 +12,8 @@ const mockState = {
   error: null,
   status: null,
   blockOneHash: null,
+  systemName: 'Development',
+  systemVersion: '0'
 };
 
 const routes = [
