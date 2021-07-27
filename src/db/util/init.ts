@@ -31,7 +31,7 @@ export async function initDb(rpcUrl: string): Promise<DB> {
     { name: 'User', schema: user },
     { name: 'Contract', schema: contract },
     { name: 'CodeBundle', schema: codeBundle }
-  ).open(2);
+  ).open(3);
 
   return db;
 }

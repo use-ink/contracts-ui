@@ -40,7 +40,17 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "date": {
+      "description": "The deployment date for this code bundle",
+      "type": "string",
+      "format": "date-time"
+    },
+    "stars": {
+      "description": "The number of stars/favorites received",
+      "type": "number",
+      "minimum": 0
     }
   },
-  "required": ["owner", "codeHash", "name"]
+  "required": ["owner", "codeHash", "name", "date", "stars"]
 }

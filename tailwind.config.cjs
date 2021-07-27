@@ -7,6 +7,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        darkMode: {
+          elevation: {
+            2: '#242A2E'
+          }
+        },
         elevation: {
           0: '#1a1d20',
           1: '#202529',

@@ -1,12 +1,15 @@
 import React from 'react';
-import { Page } from 'ui/templates';
+import { Contracts } from './Contracts';
+import { HelpBox } from './HelpBox';
+import { PageHome } from 'ui/templates';
 
 export function Homepage () {
   return (
-    <Page
+    <PageHome
       header="Contracts"
     >
-      Help
-    </Page>
+      <Contracts />
+      <HelpBox />
+    </PageHome>
   );
 };

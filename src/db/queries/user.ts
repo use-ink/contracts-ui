@@ -1,15 +1,10 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { Collection, Database, PrivateKey } from '@textile/threaddb';
+import type { Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util/identity';
-
-import { pushToRemote } from './util';
-import type { UserDocument } from 'types';
-
-export function getUserCollection(db: Database): Collection<UserDocument> {
-  return db.collection('User') as Collection<UserDocument>;
-}
+import { getCodeBundleCollection, getContractCollection, getUserCollection, pushToRemote } from './util';
+import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
 export async function findUser(
   db: Database,
@@ -69,24 +64,29 @@ export async function starContract(
   db: Database,
   identity: PrivateKey | null,
   address: string
-): Promise<string> {
+): Promise<[UserDocument, ContractDocument]> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
     }
 
     const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const contract = await getContractCollection(db).findOne({ address });
 
-    if (user) {
+    if (user && contract) {
       if (!user.contractsStarred.includes(address)) {
         user.contractsStarred.push(address);
       }
 
-      const id = await user.save();
+      await user.save();
 
-      await pushToRemote(db, 'User');
+      contract.stars += 1;
 
-      return id;
+      await contract.save();
+
+      await pushToRemote(db, 'Contract', 'User');
+
+      return [user, contract];
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -99,22 +99,27 @@ export async function unstarContract(
   db: Database,
   identity: PrivateKey | null,
   address: string
-): Promise<string> {
+): Promise<[UserDocument, ContractDocument]> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
     }
 
     const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const contract = await getContractCollection(db).findOne({ address });
 
-    if (user) {
+    if (user && contract) {
       user.contractsStarred = user.contractsStarred.filter(anAddress => address !== anAddress);
 
-      const id = await user.save();
+      await user.save();
 
-      await pushToRemote(db, 'User');
+      contract.stars = Math.max(1, contract.stars - 1);
 
-      return id;
+      await contract.save();
+
+      await pushToRemote(db, 'Contract', 'User');
+
+      return [user, contract];
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -127,24 +132,28 @@ export async function starCodeBundle(
   db: Database,
   identity: PrivateKey | null,
   id: string
-): Promise<string> {
+): Promise<[UserDocument, CodeBundleDocument]> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
     }
 
     const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const codeBundle = await getCodeBundleCollection(db).findOne({ id });
 
-    if (user) {
+    if (user && codeBundle) {
       if (!user.codeBundlesStarred.includes(id)) {
         user.codeBundlesStarred.push(id);
       }
 
-      const _id = await user.save();
+      codeBundle.stars += 1;
 
-      await pushToRemote(db, 'User');
+      await user.save();
+      await codeBundle.save();
 
-      return _id;
+      await pushToRemote(db, 'User', 'CodeBundle');
+
+      return [user, codeBundle];
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -157,22 +166,26 @@ export async function unstarCodeBundle(
   db: Database,
   identity: PrivateKey | null,
   id: string
-): Promise<string> {
+): Promise<[UserDocument, CodeBundleDocument]> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
     }
 
     const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const codeBundle = await getCodeBundleCollection(db).findOne({ id });
 
-    if (user) {
+    if (user && codeBundle) {
       user.codeBundlesStarred = user.codeBundlesStarred.filter(anId => id !== anId);
 
-      const _id = await user.save();
+      codeBundle.stars = Math.max(1, codeBundle.stars - 1);
 
-      await pushToRemote(db, 'User');
+      await user.save();
+      await codeBundle.save();
 
-      return _id;
+      await pushToRemote(db, 'User', 'CodeBundle');
+
+      return [user, codeBundle];
     }
 
     return Promise.reject(new Error('Invalid user'));

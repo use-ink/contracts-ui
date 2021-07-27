@@ -1,15 +1,12 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { Collection, Database, PrivateKey } from '@textile/threaddb';
+import type { Database, PrivateKey } from '@textile/threaddb';
 
+import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
-import { pushToRemote } from './util';
+import { getCodeBundleCollection, pushToRemote } from './util';
 import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
-
-export function getCodeBundleCollection(db: Database): Collection<CodeBundleDocument> {
-  return db.collection('CodeBundle') as Collection<CodeBundleDocument>;
-}
 
 export async function findMyCodeBundles(
   db: Database,
@@ -55,7 +52,7 @@ export async function findCodeBundleById(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockOneHash, codeHash, genesisHash, id = getNewCodeBundleId(), name, tags = [] }: Partial<CodeBundleDocument>
+  { abi, blockOneHash, codeHash, genesisHash, id = getNewCodeBundleId(), name, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
     if (!codeHash || !name || !genesisHash || !owner) {
@@ -71,6 +68,8 @@ export async function createCodeBundle(
       name,
       owner: publicKeyHex(owner),
       tags,
+      date,
+      stars: 1
     });
 
     await newCode.save();

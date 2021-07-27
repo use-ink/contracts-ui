@@ -4,7 +4,7 @@
 // import { stringToHex } from '@polkadot/util';
 import { keccakAsU8a } from '@polkadot/util-crypto';
 import { PrivateKey } from '@textile/crypto';
-import { hashSync } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { KeyringPair } from 'types';
 
 const USER_IDENTITY_KEY = 'user-identity';
@@ -71,7 +71,7 @@ function generateMessageForEntropy (address: string, applicationName: string, se
 
 export function getPrivateKeyFromPair (pair: KeyringPair, secretText = 'asdf'): PrivateKey {
   // avoid sending the raw secret by hashing it first
-  const secret = hashSync(secretText, 10);
+  const secret = bcrypt.hashSync(secretText, 10);
   const message = generateMessageForEntropy(pair.address, 'canvas-ui', secret);
   const signedText = pair.sign(message);
   const hash = keccakAsU8a(signedText);

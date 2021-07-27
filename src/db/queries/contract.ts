@@ -1,17 +1,18 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 // import { keyring } from '@polkadot/ui-keyring';
-import type { Collection, Database, PrivateKey } from '@textile/threaddb';
+import type { Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util';
-
 import { findUser } from './user';
-import { getCodeBundleCollection } from './codeBundle';
-import { pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
 import type { ContractDocument, MyContracts } from 'types';
+import moment from 'moment';
 
-export function getContractCollection(db: Database): Collection<ContractDocument> {
-  return db.collection('Contract') as Collection<ContractDocument>;
+export async function findTopContracts(
+  db: Database
+): Promise<ContractDocument[]> {
+  return getContractCollection(db).find({}).toArray();
 }
 
 export async function findMyContracts(
@@ -51,7 +52,7 @@ export async function findContractByAddress(
 export async function createContract(
   db: Database,
   owner: PrivateKey | null,
-  { abi, address, blockOneHash, codeBundleId, genesisHash, name, tags = [] }: Partial<ContractDocument>
+  { abi, address, blockOneHash, codeBundleId, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>
 ): Promise<ContractDocument> {
   try {
     if (!address || !codeBundleId || !name || !genesisHash || !blockOneHash) {
@@ -75,6 +76,8 @@ export async function createContract(
       name,
       owner: publicKeyHex(owner),
       tags,
+      date,
+      stars: 1,
     });
 
     // keyring.saveContract(address, {

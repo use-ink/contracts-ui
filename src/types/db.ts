@@ -25,6 +25,8 @@ export interface CodeBundleDocument extends Document {
   name: string;
   owner?: string;
   tags?: string[];
+  date: string;
+  stars: number;
 }
 
 export interface ContractDocument extends Document {
@@ -36,6 +38,8 @@ export interface ContractDocument extends Document {
   name: string;
   owner?: string;
   tags?: string[];
+  date: string;
+  stars: number;
 }
 
 export interface UseQuery<T> {
@@ -64,6 +68,7 @@ export interface UserArtifacts<T> {
 export interface DbProps {
   db: Database;
   user: UserDocument | null;
+  refreshUser: () => void;
   identity: PrivateKey | null;
   isDbReady: boolean;
 }

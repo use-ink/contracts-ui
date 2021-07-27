@@ -2,6 +2,7 @@
 
 import faker from 'faker';
 import type { PrivateKey } from '@textile/crypto';
+import moment from 'moment';
 import { getNewCodeBundleId } from '../codeBundle';
 import { getPrivateKeyRandom, publicKeyHex } from '../identity';
 import * as contractFiles from './contracts';
@@ -13,6 +14,8 @@ export const TEST_DATA: [string, number, string[]][] = [
   ['flipper', 2, ['delta']],
   ['incrementer', 1, ['beta', 'delta', 'gamma']],
 ];
+
+export const MNEMONICS = ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve', 'Ferdie'];
 
 function randomHash(): string {
   return [...(Array(62) as unknown[])]
@@ -58,6 +61,8 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       tags,
       abi,
       id: getNewCodeBundleId(),
+      date: moment().format(),
+      stars: 1,
     });
   });
 
@@ -82,6 +87,8 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
         name,
         tags,
         abi,
+        date: moment().format(),
+        stars: 1,
       });
     }
   });
