@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
-import { call, createEmptyValues, createOptions } from 'canvas';
+import { call, createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import { ContractPromise, DropdownOption } from 'types';
 
@@ -15,8 +15,13 @@ export const Interact = ({ contract }: Props) => {
   const [argValues, setArgValues] = useState<Record<string, string>>();
   const keyringPair = keyring?.getPairs()[0];
   const message = contract ? contract.abi.findMessage(selectedMsg ? selectedMsg.value : 0) : null;
+  const messageOptions = contract?.abi.messages.map(m => ({
+    name: `${m.identifier}() ${m.returnType ? `: ${m.returnType?.type}` : ''}`,
+    value: m.index,
+  }));
+
   useEffect(() => {
-    contract && selectMsg(createOptions(contract.abi.messages, 'message')[0]);
+    messageOptions && selectMsg(messageOptions[0]);
   }, []);
 
   useEffect(() => {
@@ -31,10 +36,7 @@ export const Interact = ({ contract }: Props) => {
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="mb-4">
             <Dropdown
-              options={contract.abi.messages.map(m => ({
-                name: `${m.identifier}() ${m.returnType ? `: ${m.returnType?.type}` : ''}`,
-                value: m.index,
-              }))}
+              options={messageOptions}
               placeholder="No messages found"
               changeHandler={(o: DropdownOption) => selectMsg(o)}
               selectedOption={selectedMsg}
