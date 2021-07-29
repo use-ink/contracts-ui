@@ -40,7 +40,7 @@ export function Contracts (): React.ReactElement {
           <Link
             key={`contract-${index}`} 
             to={`/contract/${address}`}
-            className={`text-sm inline-flex cursor-pointer w-full hover:bg-gray-50 dark:hover:bg-gray-850 border p-3 border-t-0 border-r-0 border-l-0 ${index === contracts.length - 1 && 'border-b-0'} dark:text-white dark:border-gray-700 border-gray-200`}
+            className={`text-sm inline-flex cursor-pointer w-full hover:bg-gray-50 dark:hover:bg-elevation-1 border p-3 border-t-0 border-r-0 border-l-0 ${index === contracts.length - 1 && 'border-b-0'} dark:text-white dark:border-gray-700 border-gray-200`}
           >
             <Identicon size={18} value={address} className="pr-2" />
             <div className="w-36">

@@ -21,7 +21,7 @@ export async function getCodeHashes(api: ApiPromise): Promise<string[]> {
     const entries = await api.query.contracts.codeStorage.entries();
     codeHashes = extractCodeHashes(entries);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return codeHashes;
 }

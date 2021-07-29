@@ -9,8 +9,8 @@ export function Page ({ header, help, children }: PageProps): React.ReactElement
   return (
     <>
       <div className="w-full mx-auto overflow-y-auto">
-        <div className="grid lg:grid-cols-12 gap-5 px-5 py-3 m-2">
-          <main className="lg:col-span-8 p-4">
+        <div className="grid md:grid-cols-12 gap-5 px-5 py-3 m-2">
+          <main className="md:col-span-8 p-4">
             <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
               <h1 className="text-2xl dark:text-white text-gray-700">
                 {header}

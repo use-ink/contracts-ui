@@ -50,6 +50,11 @@
       "description": "The number of stars/favorites received",
       "type": "number",
       "minimum": 0
+    },
+    "instances": {
+      "description": "The number of instantiations of this code bundle",
+      "type": "number",
+      "minimum": 0
     }
   },
   "required": ["owner", "codeHash", "name", "date", "stars"]

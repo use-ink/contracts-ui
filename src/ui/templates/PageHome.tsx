@@ -9,7 +9,7 @@ export function PageHome ({ header, children: [content, ...aside] }: Props): Rea
   return (
     <>
       <div className="w-full mx-auto overflow-y-auto">
-        <div className="grid max-w-6xl lg:grid-cols-12 gap-5 px-5 py-3 m-2">
+        <div className="grid max-w-5xl lg:grid-cols-12 gap-5 px-5 py-3 m-2">
           <main className="lg:col-span-8 p-4">
             <div className="space-y-1 pb-1">
               <h1 className="text-lg pb-2 dark:text-white text-gray-700">

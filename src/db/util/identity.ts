@@ -85,8 +85,6 @@ export function getPrivateKeyFromPair (pair: KeyringPair, secretText = 'asdf'): 
   }
   const identity = PrivateKey.fromRawEd25519Seed(hash)
 
-  console.log(identity.toString())
-
   // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
   return identity
 }

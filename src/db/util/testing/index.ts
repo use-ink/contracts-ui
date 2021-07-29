@@ -63,6 +63,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       id: getNewCodeBundleId(),
       date: moment().format(),
       stars: 1,
+      instances: 0
     });
   });
 

@@ -3,11 +3,12 @@
 // import { keyring } from '@polkadot/ui-keyring';
 import type { Database, PrivateKey } from '@textile/threaddb';
 
+import moment from 'moment';
+import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
 import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
 import type { ContractDocument, MyContracts } from 'types';
-import moment from 'moment';
 
 export async function findTopContracts(
   db: Database
@@ -80,6 +81,8 @@ export async function createContract(
       stars: 1,
     });
 
+    keyring.saveContract(address, { name, tags, abi });
+
     // keyring.saveContract(address, {
     //   contract: {
     //     abi: abi || undefined,
@@ -113,6 +116,8 @@ export async function updateContract(
       if (name) contract.name = name;
       if (tags) contract.tags = tags;
 
+      keyring.saveContract(address, { ...(keyring.getContract(address)?.meta || {}), name, tags });
+
       const id = await contract.save();
 
       await pushToRemote(db, 'Contract');
@@ -134,6 +139,8 @@ export async function removeContract(db: Database, address: string): Promise<voi
 
     if (existing) {
       await getContractCollection(db).delete(existing._id as string);
+
+      keyring.forgetContract(address);
 
       await pushToRemote(db, 'Contract');
     }

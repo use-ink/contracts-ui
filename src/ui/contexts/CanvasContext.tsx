@@ -130,7 +130,7 @@ export const CanvasContextProvider = ({
     }
 
     loadedAccounts = true;
-    loadAccounts().catch(console.log);
+    loadAccounts().catch(console.error);
   }, [keyringStatus]);
 
   return <CanvasContext.Provider value={state}>{children}</CanvasContext.Provider>;
