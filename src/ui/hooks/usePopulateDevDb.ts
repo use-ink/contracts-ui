@@ -5,21 +5,11 @@ import { CodePromise } from "@polkadot/api-contract";
 import type { Keyring } from "@polkadot/ui-keyring";
 import type { Blueprint, BlueprintSubmittableResult, CodeSubmittableResult } from "@polkadot/api-contract/base";
 import type { Database, PrivateKey } from "@textile/threaddb";
-import type { CodecArg } from "@polkadot/types/types";
 import { useCanvas, useDatabase } from "ui/contexts";
 import { useIsMountedRef } from "ui/hooks/useIsMountedRef";
 import { createCodeBundle, createContract, dropExpiredDocuments, getCodeBundleCollection, getContractCollection, getPrivateKeyFromPair, getUser, getUserCollection, starCodeBundle, starContract } from "db";
 import type { AnyJson, ApiPromise, CodeBundleDocument, KeyringPair, UserDocument } from "types";
-import { capitalize } from "ui/util";
-
-const MNEMONICS = ['alice', 'bob', 'charlie', 'dave', 'eve', 'ferdie'];
-
-const MOCK_DATA: [string, number, string[], CodecArg[]][] = [
-  ['Flipper', 0, ['alpha', 'beta'], [true]],
-  ['ERC20', 1, ['alpha', 'beta', 'gamma'], [1000000000000n * 1000000n]],
-  ['DNS', 2, ['delta'], []],
-  ['Incrementer', 1, ['beta', 'delta', 'gamma'], [7]],
-];
+import { capitalize, MOCK_CONTRACT_DATA, MNEMONICS } from "ui/util";
 
 function chooseOne<T>(items: T[]): [T, number] {
   const index = Math.floor(Math.random()*items.length);
@@ -39,7 +29,7 @@ export function usePopulateDevDb (): boolean | null {
 
   const isDevelopment = systemName === 'Canvas Node' && /(127\.0\.0\.1|localhost)/.test(endpoint);
 
-  const [deploymentsLeft, setDeploymentsLeft] = useState(isDevelopment ? MOCK_DATA.length : 0);
+  const [deploymentsLeft, setDeploymentsLeft] = useState(isDevelopment ? MOCK_CONTRACT_DATA.length : 0);
   const [redeploymentsLeft, setRedeploymentsLeft] = useState(isDevelopment ? MNEMONICS.length : 0);
   const [needsMockData, setNeedsMockData] = useState<boolean | null>(null);
   const [mockCodeBundles, setMockCodeBundles] = useState<CodeBundleDocument[]>([]);
@@ -88,7 +78,8 @@ export function usePopulateDevDb (): boolean | null {
       console.log('Deploying development smart contracts...')
 
       await Promise.all(
-        MOCK_DATA.map(async ([contractName, , tags, params], i) => {
+        MOCK_CONTRACT_DATA.map(async ([contractName, , tags, params], i) => {
+          // eslint-disable-next-line
           const abiJson = require(`../../db/util/testing/contracts/${contractName?.toLowerCase()}.contract.json`) as AnyJson;
 
           const code = new CodePromise(api, abiJson, undefined);
@@ -158,14 +149,14 @@ export function usePopulateDevDb (): boolean | null {
 
   const redeployContracts = useCallback(
     async (api: ApiPromise, keyring: Keyring) => {
-      const contractCounters = MOCK_DATA.map(() => 1);
+      const contractCounters = MOCK_CONTRACT_DATA.map(() => 1);
 
       !!mockCodeBundles && await Promise.all(
         MNEMONICS.map(async (mnemonic, i) => {
           const pair = getPair(keyring, mnemonic);
 
           const [blueprint, codeIndex] = chooseOne(blueprints);
-          const [contractName, , tags, params] = MOCK_DATA[codeIndex];
+          const [contractName, , tags, params] = MOCK_CONTRACT_DATA[codeIndex];
           const { abi, id } = mockCodeBundles[codeIndex];
 
           const unsub = blueprint.tx.new({
@@ -236,7 +227,7 @@ export function usePopulateDevDb (): boolean | null {
         needsMockData === null && checkIfNeedsMockData(api, db, blockOneHash)
           .then((needsMockData) => {
             if (needsMockData) {
-              setDeploymentsLeft(MOCK_DATA.length);
+              setDeploymentsLeft(MOCK_CONTRACT_DATA.length);
               setRedeploymentsLeft(MNEMONICS.length);
               setNeedsMockData(true);
               deployContracts(api, keyring)

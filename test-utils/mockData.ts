@@ -2,21 +2,12 @@ import faker from 'faker';
 import type { PrivateKey } from '@textile/crypto';
 import moment from 'moment';
 import * as contractFiles from './contracts';
+import { createMockApi } from './utils';
 import { getNewCodeBundleId, getPrivateKeyRandom, initDb, publicKeyHex } from 'db';
 import { CanvasState, DbState, InstantiateState , UserDocument, CodeBundleDocument, ContractDocument, AnyJson } from 'types';
-import { createMockApi } from './utils';
+import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
-
-export const TEST_CONTRACT_DATA: [string, number, string[]][] = [
-  ['dns', 0, ['alpha', 'beta']],
-  ['erc20', 1, ['alpha', 'beta', 'gamma']],
-  ['flipper', 2, ['delta']],
-  ['incrementer', 1, ['beta', 'delta', 'gamma']],
-];
-
-export const MNEMONICS = ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve', 'Ferdie'];
-
 
 export const keyringPairsMock = [
   { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
@@ -92,7 +83,7 @@ export async function getMockDbState (): Promise<DbState> {
     isDbReady: true,
     identity,
     user,
-    refreshUser: () => {},
+    refreshUser: jest.fn(),
   }
 }
 
@@ -145,7 +136,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
   const blockOneHashes = [randomHash(), randomHash()];
   const genesisHash = randomHash();
 
-  TEST_CONTRACT_DATA.forEach(([name, , tags]) => {
+  MOCK_CONTRACT_DATA.forEach(([name, , tags]) => {
     const abi = (contractFiles as Record<string, AnyJson>)[name];
 
     codeBundles.push({
@@ -171,7 +162,7 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
   const { blockOneHash, genesisHash, id } = codeBundles[0];
 
   // Original instantiation and 0-2 reinstantiations
-  TEST_CONTRACT_DATA.forEach(([name, , tags]) => {
+  MOCK_CONTRACT_DATA.forEach(([name, , tags]) => {
     const abi = (contractFiles as Record<string, AnyJson>)[name];
 
     contracts.push({

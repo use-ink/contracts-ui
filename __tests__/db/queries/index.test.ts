@@ -4,10 +4,11 @@
 /* eslint-disable header/header */
 
 import { Database, PrivateKey } from '@textile/threaddb';
-import { TEST_CONTRACT_DATA, getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'test-utils';
+import { getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'test-utils';
 import { initDb } from 'db/util/init'
 import { publicKeyHex } from 'db/util/identity';
 import * as q from 'db/queries';
+import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
@@ -27,7 +28,7 @@ beforeAll(
   async (): Promise<void> => {
     db = await initDb('test-db');
 
-    testUsers = getTestUsers(TEST_CONTRACT_DATA.length);
+    testUsers = getTestUsers(MOCK_CONTRACT_DATA.length);
     testCodeBundles = getTestCodeBundles();
     testContracts = getTestContracts(testCodeBundles);
   }
@@ -69,7 +70,7 @@ describe('DB Queries', (): void => {
 
     testContractAddresses = (await Promise.all(
       testContracts.map((contract, index) => {
-        const identity = testUsers[index % TEST_CONTRACT_DATA.length][1]
+        const identity = testUsers[index % MOCK_CONTRACT_DATA.length][1]
 
         owners.push(identity);
 

@@ -14,13 +14,13 @@ export function Statistics (): React.ReactElement | null {
 
   useEffect(
     () => {
-      try {
-        async function listenToBlocks () {
-          return api?.rpc.chain.subscribeNewHeads((header) => {
-            setBlockNumber(header.number.toNumber());
-          });
-        }
+      async function listenToBlocks () {
+        return api?.rpc.chain.subscribeNewHeads((header) => {
+          setBlockNumber(header.number.toNumber());
+        });
+      }
 
+      try {
         listenToBlocks().then().catch(console.error);
       } catch (e) {
         console.error(e);

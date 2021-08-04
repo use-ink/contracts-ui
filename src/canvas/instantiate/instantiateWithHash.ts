@@ -3,7 +3,7 @@ import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../util';
 import { getInstanceFromEvents } from './getAddressFromEvents';
 import type { ApiPromise, Keyring, Abi, InstantiateAction, InstantiateState } from 'types';
 
-export function createBlueprintTx(
+function createBlueprintTx(
   api: ApiPromise | null,
   options: { gasLimit: number; salt: Uint8Array; value: number },
   metadata?: Abi,
