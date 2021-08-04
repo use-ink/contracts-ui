@@ -4,7 +4,7 @@ import type { Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util/identity';
 import { getCodeBundleCollection, getContractCollection, getUserCollection, pushToRemote } from './util';
-import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
+import type { UserDocument } from 'types';
 
 export async function findUser(
   db: Database,
@@ -36,7 +36,7 @@ export async function getUser(db: Database, identity: PrivateKey | null, { name,
         contractsStarred: [],
         name,
         email,
-        publicKey: Buffer.from(identity.pubKey).toString('hex'),
+        publicKey: publicKeyHex(identity) as string
 
       })
     await user.save();
@@ -64,7 +64,7 @@ export async function starContract(
   db: Database,
   identity: PrivateKey | null,
   address: string
-): Promise<[UserDocument, ContractDocument]> {
+): Promise<number> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
@@ -86,7 +86,7 @@ export async function starContract(
 
       await pushToRemote(db, 'Contract', 'User');
 
-      return [user, contract];
+      return contract.stars;
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -99,7 +99,7 @@ export async function unstarContract(
   db: Database,
   identity: PrivateKey | null,
   address: string
-): Promise<[UserDocument, ContractDocument]> {
+): Promise<number> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
@@ -119,7 +119,7 @@ export async function unstarContract(
 
       await pushToRemote(db, 'Contract', 'User');
 
-      return [user, contract];
+      return contract.stars;
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -132,7 +132,7 @@ export async function starCodeBundle(
   db: Database,
   identity: PrivateKey | null,
   id: string
-): Promise<[UserDocument, CodeBundleDocument]> {
+): Promise<number> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
@@ -153,7 +153,7 @@ export async function starCodeBundle(
 
       await pushToRemote(db, 'User', 'CodeBundle');
 
-      return [user, codeBundle];
+      return codeBundle.stars;
     }
 
     return Promise.reject(new Error('Invalid user'));
@@ -166,7 +166,7 @@ export async function unstarCodeBundle(
   db: Database,
   identity: PrivateKey | null,
   id: string
-): Promise<[UserDocument, CodeBundleDocument]> {
+): Promise<number> {
   try {
     if (!identity) {
       return Promise.reject(new Error('No user identity'));
@@ -185,7 +185,7 @@ export async function unstarCodeBundle(
 
       await pushToRemote(db, 'User', 'CodeBundle');
 
-      return [user, codeBundle];
+      return codeBundle.stars;
     }
 
     return Promise.reject(new Error('Invalid user'));

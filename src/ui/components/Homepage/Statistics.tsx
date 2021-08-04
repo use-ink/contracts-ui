@@ -14,13 +14,17 @@ export function Statistics (): React.ReactElement | null {
 
   useEffect(
     () => {
-      async function listenToBlocks () {
-        return api!.rpc.chain.subscribeNewHeads((header) => {
-          setBlockNumber(header.number.toNumber());
-        });
-      }
+      try {
+        async function listenToBlocks () {
+          return api?.rpc.chain.subscribeNewHeads((header) => {
+            setBlockNumber(header.number.toNumber());
+          });
+        }
 
-      listenToBlocks().then().catch(console.error);
+        listenToBlocks().then().catch(console.error);
+      } catch (e) {
+        console.error(e);
+      }
     },
     [api]
   )
@@ -40,7 +44,7 @@ export function Statistics (): React.ReactElement | null {
   const onClickStar = useCallback(
     (id: string) => () => {
       if (!user) {
-        console.log('Not signed in');
+        console.error('Not signed in');
       }
 
       console.error('Toggled code bundle star ' + id)

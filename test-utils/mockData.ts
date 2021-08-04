@@ -1,4 +1,22 @@
-import type { CanvasState, InstantiateState } from 'types';
+import faker from 'faker';
+import type { PrivateKey } from '@textile/crypto';
+import moment from 'moment';
+import * as contractFiles from './contracts';
+import { getNewCodeBundleId, getPrivateKeyRandom, initDb, publicKeyHex } from 'db';
+import { CanvasState, DbState, InstantiateState , UserDocument, CodeBundleDocument, ContractDocument, AnyJson } from 'types';
+import { createMockApi } from './utils';
+
+type TestUser = [UserDocument, PrivateKey];
+
+export const TEST_CONTRACT_DATA: [string, number, string[]][] = [
+  ['dns', 0, ['alpha', 'beta']],
+  ['erc20', 1, ['alpha', 'beta', 'gamma']],
+  ['flipper', 2, ['delta']],
+  ['incrementer', 1, ['beta', 'delta', 'gamma']],
+];
+
+export const MNEMONICS = ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve', 'Ferdie'];
+
 
 export const keyringPairsMock = [
   { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
@@ -12,6 +30,7 @@ export const keyringPairsMock = [
     meta: { name: 'bob_stash' },
   },
 ];
+
 export const flipperMock = {
   constructors: [
     {
@@ -36,25 +55,145 @@ export const flipperMock = {
     },
   ],
 };
-export const mockInstantiateState: InstantiateState = {
-  isLoading: false,
-  isSuccess: false,
-  contract: null,
-  currentStep: 1,
-  fromAddress: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-  constructorName: 'new',
-  argValues: { initValue: 'true' },
-  contractName: 'flipper',
+
+export function getMockInstantiateState (): InstantiateState {
+  return {
+    isLoading: false,
+    isSuccess: false,
+    contract: null,
+    currentStep: 1,
+    fromAddress: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
+    constructorName: 'new',
+    argValues: { initValue: 'true' },
+    contractName: 'flipper',
+  }
 };
-export const mockAppState: CanvasState = {
-  endpoint: '',
-  keyring: null,
-  keyringStatus: null,
-  api: null,
-  error: null,
-  status: null,
-  blockOneHash: '',
-  systemName: 'Development',
-  systemVersion: '0'
+
+export function getMockCanvasState (): CanvasState {
+  return {
+    endpoint: '',
+    keyring: null,
+    keyringStatus: null,
+    api: createMockApi(),
+    error: null,
+    status: null,
+    blockOneHash: '',
+    systemName: 'Development',
+    systemVersion: '0'
+  }
 };
+
+export async function getMockDbState (): Promise<DbState> {
+  const [user, identity] = getTestUser();
+
+  return {
+    db: (await initDb('test')),
+    isDbReady: true,
+    identity,
+    user,
+    refreshUser: () => {},
+  }
+}
+
+
+function randomHash(): string {
+  return [...(Array(62) as unknown[])]
+    .map(() => Math.floor(Math.random() * 16).toString(16))
+    .join('');
+}
+
+export function getTestUser (): TestUser {
+  const identity = getPrivateKeyRandom();
+
+  return [
+    {
+      email: faker.internet.email(),
+      name: faker.name.findName(),
+      codeBundlesStarred: [],
+      contractsStarred: [],
+      publicKey: publicKeyHex(identity) as string,
+    },
+    identity
+  ];
+}
+
+export function getTestUsers (count: number): TestUser[] {
+  const result: TestUser[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const identity = getPrivateKeyRandom();
+
+    result.push([
+      {
+        email: faker.internet.email(),
+        name: faker.name.findName(),
+        codeBundlesStarred: [],
+        contractsStarred: [],
+        publicKey: publicKeyHex(identity) as string,
+      },
+      identity
+    ]);
+  }
+
+  return result;
+}
+
+export function getTestCodeBundles(): CodeBundleDocument[] {
+  const codeBundles: CodeBundleDocument[] = [];
+
+  const blockOneHashes = [randomHash(), randomHash()];
+  const genesisHash = randomHash();
+
+  TEST_CONTRACT_DATA.forEach(([name, , tags]) => {
+    const abi = (contractFiles as Record<string, AnyJson>)[name];
+
+    codeBundles.push({
+      blockOneHash: blockOneHashes[Math.round(Math.random())],
+      codeHash: randomHash(),
+      genesisHash,
+      name,
+      tags,
+      abi,
+      id: getNewCodeBundleId(),
+      date: moment().format(),
+      stars: 1,
+      instances: 0
+    });
+  });
+
+  return codeBundles;
+}
+
+export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
+  const contracts: ContractDocument[] = [];
+
+  const { blockOneHash, genesisHash, id } = codeBundles[0];
+
+  // Original instantiation and 0-2 reinstantiations
+  TEST_CONTRACT_DATA.forEach(([name, , tags]) => {
+    const abi = (contractFiles as Record<string, AnyJson>)[name];
+
+    contracts.push({
+      address: faker.random.alphaNumeric(62),
+      blockOneHash,
+      genesisHash,
+      codeBundleId: id,
+      name,
+      tags,
+      abi,
+      date: moment().format(),
+      stars: 1,
+    });
+  });
+
+  return contracts;
+}
+
+export function getMockUpdates(withAbi?: boolean) {
+  return {
+    name: faker.name.jobTitle(),
+    tags: ['delta'],
+    ...(withAbi ? { abi: Object.values(contractFiles)[3] } : undefined),
+  };
+}

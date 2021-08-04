@@ -4,13 +4,11 @@ import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { starContract, unstarContract } from 'db/queries';
 
-import type { ContractDocument, UserDocument } from 'types';
-
-export function useToggleContractStar(): (_: string) => Promise<[UserDocument, ContractDocument]> {
+export function useToggleContractStar(): (_: string) => Promise<number> {
   const { db, identity, user } = useDatabase();
 
   return useCallback(
-    async (address: string): Promise<[UserDocument, ContractDocument]> => {
+    async (address: string): Promise<number> => {
       try {
         if (!user) {
           throw new Error('Invalid user');

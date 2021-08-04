@@ -68,7 +68,7 @@ export interface UserArtifacts<T> {
   starred: Array<Starred<T>>;
 }
 
-export interface DbProps {
+export interface DbState {
   db: Database;
   user: UserDocument | null;
   refreshUser: () => void;

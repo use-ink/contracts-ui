@@ -54,6 +54,7 @@
     "webpack-cli": "^4.7.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.8",
     "@heroicons/react": "^1.0.1",
     "@tailwindcss/forms": "^0.3.3",
     "@testing-library/jest-dom": "^5.14.1",
@@ -73,6 +74,7 @@
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.6",
+    "babel-jest": "^27.0.6",
     "css-loader": "^5.2.6",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
@@ -86,6 +88,7 @@
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
+    "indexeddb-export-import": "^2.1.2",
     "jest": "^27.0.4",
     "mini-css-extract-plugin": "^1.6.0",
     "postcss": "^8.3.2",

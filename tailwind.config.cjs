@@ -37,6 +37,7 @@ module.exports = {
   },
   variants: {
     extend: {
+      borderWidth: ['last'],
       scale: ['focus-within'],
     },
   },

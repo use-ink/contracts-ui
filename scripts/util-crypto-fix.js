@@ -9,7 +9,7 @@ function applyHDKDFix (libName) {
 
   fs.readFile(filePath, 'utf8', function (err,data) {
     if (err) {
-      return console.log(err);
+      return console.error(err);
     }
     var result = data.replace(
       /\n(const HDKD = compactAddLength\(stringToU8a\('.*'\)\);)\n(export function .*\(seed, chainCode\) {)\n/gm,
@@ -17,7 +17,7 @@ function applyHDKDFix (libName) {
     );
   
     fs.writeFile(filePath, result, 'utf8', function (err) {
-      if (err) return console.log(err);
+      if (err) return console.error(err);
     });
   });
 }
@@ -28,7 +28,7 @@ function applyNobodyFix () {
 
   fs.readFile(filePath, 'utf8', function (err,data) {
     if (err) {
-      return console.log(err);
+      return console.error(err);
     }
     var result = data.replace(
       /(import \{ encodeAddress \} from '@polkadot\/util-crypto';\n)((?:.+\n)+)(export function nobody\(\) \{\n)/gm,
@@ -36,7 +36,7 @@ function applyNobodyFix () {
     );
   
     fs.writeFile(filePath, result, 'utf8', function (err) {
-      if (err) return console.log(err);
+      if (err) return console.error(err);
     });
   });
 }

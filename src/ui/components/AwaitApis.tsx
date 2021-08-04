@@ -10,6 +10,10 @@ export function AwaitApis ({ children }: HTMLAttributes<HTMLDivElement>): React.
 
   const loadingText = useMemo(
     (): string | null => {
+      if (error) {
+        return `Connection error`;
+      }    
+
       if (!isDbReady) {
         return 'Initializing database...'
       }
@@ -25,10 +29,6 @@ export function AwaitApis ({ children }: HTMLAttributes<HTMLDivElement>): React.
       if (needsMockData !== false) {
         return 'Populating development database...'
       }
-    
-      if (error) {
-        return error as string;
-      }    
 
       return null
     },

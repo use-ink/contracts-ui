@@ -38,9 +38,9 @@ export function extractCodeHashes(entries: StorageEntry[]): string[] {
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
     const decoded = api.registry.findMetaError(dispatchError.asModule);
-    console.log('Error creating instance: ', decoded);
+    console.error('Error creating instance: ', decoded);
   } else {
-    console.log(`Error creating instance: ${dispatchError}`);
+    console.error(`Error creating instance: ${dispatchError}`);
   }
 }
 

@@ -53,7 +53,8 @@ export async function findContractByAddress(
 export async function createContract(
   db: Database,
   owner: PrivateKey | null,
-  { abi, address, blockOneHash, codeBundleId, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>
+  { abi, address, blockOneHash, codeBundleId, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
+  savePair = true
 ): Promise<ContractDocument> {
   try {
     if (!address || !codeBundleId || !name || !genesisHash || !blockOneHash) {
@@ -81,16 +82,7 @@ export async function createContract(
       stars: 1,
     });
 
-    keyring.saveContract(address, { name, tags, abi });
-
-    // keyring.saveContract(address, {
-    //   contract: {
-    //     abi: abi || undefined,
-    //     genesisHash,
-    //   },
-    //   name,
-    //   tags: [],
-    // });
+    savePair && keyring.saveContract(address, { name, tags, abi });
 
     await newContract.save();
 
@@ -107,7 +99,8 @@ export async function createContract(
 export async function updateContract(
   db: Database,
   address: string,
-  { name, tags }: Partial<ContractDocument>
+  { name, tags }: Partial<ContractDocument>,
+  savePair = true
 ): Promise<string> {
   try {
     const contract = await getContractCollection(db).findOne({ address });
@@ -116,7 +109,7 @@ export async function updateContract(
       if (name) contract.name = name;
       if (tags) contract.tags = tags;
 
-      keyring.saveContract(address, { ...(keyring.getContract(address)?.meta || {}), name, tags });
+      savePair && keyring.saveContract(address, { ...(keyring.getContract(address)?.meta || {}), name, tags });
 
       const id = await contract.save();
 
@@ -131,7 +124,7 @@ export async function updateContract(
   }
 }
 
-export async function removeContract(db: Database, address: string): Promise<void> {
+export async function removeContract(db: Database, address: string, savePair = true): Promise<void> {
   try {
     const existing = await findContractByAddress(db, address);
 
@@ -140,7 +133,7 @@ export async function removeContract(db: Database, address: string): Promise<voi
     if (existing) {
       await getContractCollection(db).delete(existing._id as string);
 
-      keyring.forgetContract(address);
+      savePair && keyring.forgetContract(address);
 
       await pushToRemote(db, 'Contract');
     }
