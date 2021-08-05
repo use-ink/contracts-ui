@@ -31,6 +31,7 @@ export function ContractRow ({ contract: { address, name, stars, date }, isStarr
       <div className="inline-flex cursor-pointer w-10 text-gray-500 dark:text-gray-400">
         <button
           aria-label={isStarred ? 'Remove from favorites' : 'Add to favorites'}
+          className="flex"
           onClick={onToggleStar}
         >
           <Star

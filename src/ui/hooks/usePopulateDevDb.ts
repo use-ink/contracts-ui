@@ -80,7 +80,7 @@ export function usePopulateDevDb (): boolean | null {
       await Promise.all(
         MOCK_CONTRACT_DATA.map(async ([contractName, , tags, params], i) => {
           // eslint-disable-next-line
-          const abiJson = require(`../../db/util/testing/contracts/${contractName?.toLowerCase()}.contract.json`) as AnyJson;
+          const abiJson = require(`../../../test-utils/contracts/${contractName?.toLowerCase()}.contract.json`) as AnyJson;
 
           const code = new CodePromise(api, abiJson, undefined);
 
