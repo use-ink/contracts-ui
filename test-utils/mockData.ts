@@ -83,7 +83,7 @@ export async function getMockDbState (): Promise<DbState> {
     isDbReady: true,
     identity,
     user,
-    refreshUser: jest.fn(),
+    refreshUser: () => {}
   }
 }
 
