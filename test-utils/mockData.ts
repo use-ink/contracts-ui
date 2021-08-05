@@ -159,17 +159,17 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
 export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
   const contracts: ContractDocument[] = [];
 
-  const { blockOneHash, genesisHash, id } = codeBundles[0];
+  const { blockOneHash, genesisHash } = codeBundles[0];
 
   // Original instantiation and 0-2 reinstantiations
-  MOCK_CONTRACT_DATA.forEach(([name, , tags]) => {
-    const abi = (contractFiles as Record<string, AnyJson>)[name];
+  MOCK_CONTRACT_DATA.forEach(([name, , tags], index) => {
+    const abi = (contractFiles as Record<string, AnyJson>)[name.toLowerCase()];
 
     contracts.push({
       address: faker.random.alphaNumeric(62),
       blockOneHash,
       genesisHash,
-      codeBundleId: id,
+      codeBundleId: codeBundles[index].id,
       name,
       tags,
       abi,
