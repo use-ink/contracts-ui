@@ -5,3 +5,4 @@ export * from './pages';
 export * from './instantiate';
 export * from './Sidebar';
 export * from './AddContract';
+export * from './contract';

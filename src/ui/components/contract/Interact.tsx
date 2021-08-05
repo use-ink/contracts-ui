@@ -3,19 +3,21 @@ import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { call, createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { ContractPromise, DropdownOption } from 'types';
+import { Abi, AnyJson, DropdownOption, KeyringPair } from 'types';
 
 interface Props {
-  contract: ContractPromise | null;
+  metadata: AnyJson;
+  address: string;
+  keyringPairs: Partial<KeyringPair>[] | null;
 }
 
-export const Interact = ({ contract }: Props) => {
-  const { keyring, api } = useCanvas();
+export const Interact = ({ metadata, address, keyringPairs }: Props) => {
+  const { api } = useCanvas();
   const [selectedMsg, selectMsg] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
-  const keyringPair = keyring?.getPairs()[0];
-  const message = contract ? contract.abi.findMessage(selectedMsg ? selectedMsg.value : 0) : null;
-  const messageOptions = contract?.abi.messages.map(m => ({
+  const abi = new Abi(metadata);
+  const message = abi.findMessage(selectedMsg ? selectedMsg.value : 0);
+  const messageOptions = abi.messages.map(m => ({
     name: `${m.identifier}() ${m.returnType ? `: ${m.returnType?.type}` : ''}`,
     value: m.index,
   }));
@@ -25,12 +27,11 @@ export const Interact = ({ contract }: Props) => {
   }, []);
 
   useEffect(() => {
-    contract && setArgValues(createEmptyValues(contract.abi.findMessage(0).args));
+    setArgValues(createEmptyValues(abi?.findMessage(0).args));
   }, []);
   return (
     api &&
-    keyring &&
-    contract && (
+    keyringPairs && (
       <>
         <div className="rounded-lg">
           <h2 className="mb-2 text-sm">Message to send</h2>
@@ -57,7 +58,18 @@ export const Interact = ({ contract }: Props) => {
                 <button
                   type="button"
                   className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => call(contract, 0, 155852802980, message, argValues, keyringPair)}
+                  onClick={() =>
+                    call(
+                      api,
+                      abi,
+                      address,
+                      0,
+                      155852802980,
+                      message,
+                      keyringPairs[0].address || '',
+                      argValues
+                    )
+                  }
                 >
                   Call
                 </button>

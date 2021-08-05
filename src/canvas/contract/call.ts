@@ -1,5 +1,5 @@
 import { encodeSalt } from '../util';
-import { ContractPromise, KeyringPair, AbiMessage } from 'types';
+import { ContractPromise, ApiPromise, AbiMessage, Abi } from 'types';
 
 export function createContractTx(
   contract: ContractPromise | null,
@@ -18,54 +18,50 @@ export function createContractQuery(
   args: string[],
   endowment: number,
   gasLimit: number,
-  keyringPair: KeyringPair
+  fromAddress: string
 ) {
   return message.args.length > 0
-    ? contract.query[message.identifier](
-        keyringPair.address,
-        { value: endowment, gasLimit },
-        ...args
-      )
-    : contract.query[message.identifier](keyringPair.address, { value: endowment, gasLimit });
+    ? contract.query[message.identifier](fromAddress, { value: endowment, gasLimit }, ...args)
+    : contract.query[message.identifier](fromAddress, { value: endowment, gasLimit });
 }
 
 export async function call(
-  contract: ContractPromise,
+  api: ApiPromise,
+  abi: Abi,
+  address: string,
   endowment: number,
   gasLimit: number,
   message: AbiMessage,
-  argValues?: Record<string, string>,
-  keyringPair?: KeyringPair
+  fromAddress: string,
+  argValues?: Record<string, string>
 ) {
   const args = argValues ? Object.values(argValues) : [];
+  const contract = new ContractPromise(api, abi, address);
+  const salt = encodeSalt();
+  if (message.isPayable) {
+    const transaction = createContractTx(
+      contract,
+      { value: endowment, salt, gasLimit },
+      message,
+      args
+    );
+    transaction
+      ?.signAndSend(fromAddress, result => {
+        if (result.status.isInBlock) {
+          console.log('in a block');
+        } else if (result.status.isFinalized) {
+          console.log('finalized');
+        }
+        if (result.dispatchError) {
+          console.log(result.dispatchError);
+        }
+      })
+      .catch(e => console.log('error sending transaction: ', e));
+  } else {
+    const query = createContractQuery(contract, message, args, endowment, gasLimit, fromAddress);
 
-  if (keyringPair) {
-    const salt = encodeSalt();
-    if (message.isPayable) {
-      const transaction = createContractTx(
-        contract,
-        { value: endowment, salt, gasLimit },
-        message,
-        args
-      );
-      transaction
-        ?.signAndSend(keyringPair, result => {
-          if (result.status.isInBlock) {
-            console.log('in a block');
-          } else if (result.status.isFinalized) {
-            console.log('finalized');
-          }
-          if (result.dispatchError) {
-            console.log(result.dispatchError);
-          }
-        })
-        .catch(e => console.log('error sending transaction: ', e));
-    } else {
-      const query = createContractQuery(contract, message, args, endowment, gasLimit, keyringPair);
-
-      const { gasConsumed, result } = await query;
-      console.log('gas consumed', gasConsumed);
-      console.log('result', result);
-    }
+    const { gasConsumed, result } = await query;
+    console.log('gas consumed', gasConsumed);
+    console.log('result', result);
   }
 }

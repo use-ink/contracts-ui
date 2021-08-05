@@ -7,9 +7,10 @@ import { useCanvas } from 'ui/contexts';
 type UrlParams = { addr: string };
 
 export const Contract = () => {
-  const { api } = useCanvas();
+  const { api, keyring } = useCanvas();
   const { addr } = useParams<UrlParams>();
   const contract = getInstanceFromStorage(addr.toString(), api);
+  const keyringPairs = keyring?.getPairs() || null;
 
   return (
     <>
@@ -29,7 +30,11 @@ export const Contract = () => {
                 <div className="py-2 align-middle min-w-full sm:px-6 lg:px-8 h-full">
                   <div className="mt-4">
                     <div className="text-gray-200">
-                      <Interact contract={contract} />
+                      <Interact
+                        address={addr}
+                        metadata={contract?.abi.json}
+                        keyringPairs={keyringPairs}
+                      />
                     </div>
                   </div>
                 </div>
