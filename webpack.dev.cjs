@@ -11,7 +11,7 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("development"),
-        POPULATE_DEV_DB: true
+        POPULATE_DEV_DB: process.env.POPULATE_DEV_DB || false
       }
     }),
   ],

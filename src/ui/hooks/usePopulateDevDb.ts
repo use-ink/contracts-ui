@@ -27,7 +27,10 @@ export function usePopulateDevDb (): boolean | null {
   const { db, isDbReady } = useDatabase();
   // const { allAccounts } = useAccounts();
 
-  const isDevelopment = systemName === 'Canvas Node' && /(127\.0\.0\.1|localhost)/.test(endpoint);
+  console.log(process.env.POPULATE_DEV_DB);
+
+  const isPopulateFlagSet = !!process.env.POPULATE_DEV_DB;
+  const isDevelopment = isPopulateFlagSet && systemName === 'Canvas Node' && /(127\.0\.0\.1|localhost)/.test(endpoint);
 
   const [deploymentsLeft, setDeploymentsLeft] = useState(isDevelopment ? MOCK_CONTRACT_DATA.length : 0);
   const [redeploymentsLeft, setRedeploymentsLeft] = useState(isDevelopment ? MNEMONICS.length : 0);
@@ -36,12 +39,14 @@ export function usePopulateDevDb (): boolean | null {
   const [blueprints, setBlueprints] = useState<Blueprint<'promise'>[]>([]);
   const [mockUsers, setMockUsers] = useState<[UserDocument, PrivateKey][]>([]);
 
+  // Check if local node, POPULATE_DEV_DB flag is true, and if data does not already exist in DB and on chain
   const checkIfNeedsMockData = useCallback(
     async (api: ApiPromise, db: Database, blockOneHash: string): Promise<boolean> => {
       if (!isDevelopment) {
         return false;
       }
 
+      // Drop outdated contracts/code bundles
       await dropExpiredDocuments(db, blockOneHash);
 
       const validCodeBundles = !!blockOneHash && (await getCodeBundleCollection(db).find({ blockOneHash }).toArray());
@@ -57,6 +62,7 @@ export function usePopulateDevDb (): boolean | null {
     async (api: ApiPromise, keyring: Keyring) => {
       await getUserCollection(db).clear();
 
+      // Create mock users for each test chain account
       const mockUsers = await Promise.all(
         MNEMONICS.map(
           async (mnemonic): Promise<[UserDocument, PrivateKey]> => {
@@ -77,6 +83,7 @@ export function usePopulateDevDb (): boolean | null {
 
       console.log('Deploying development smart contracts...')
 
+      // Deploy initial instantiations of each test contract
       await Promise.all(
         MOCK_CONTRACT_DATA.map(async ([contractName, , tags, params], i) => {
           // eslint-disable-next-line
@@ -91,7 +98,8 @@ export function usePopulateDevDb (): boolean | null {
             .signAndSend(getPair(keyring, MNEMONICS[i]), async ({ status, contract, blueprint }: CodeSubmittableResult<'promise'>) => {
               if ((status.isInBlock || status.isFinalized) && !!blueprint && !!contract) {
                 console.log(`Successfully deployed ${contractName}`);
-                // here we have an additional field in the result, containing the contract
+    
+                // Create code bundle and contract documents for each instantiation
                 
                 setBlueprints((blueprints) => {
                   if (blueprints) blueprints[i] = blueprint;
@@ -136,6 +144,7 @@ export function usePopulateDevDb (): boolean | null {
                   }
                 );
 
+                // Keep track of how many transactions need to complete before redeployments start
                 setDeploymentsLeft((deploymentsLeft) => deploymentsLeft - 1);
               }
             });
@@ -153,10 +162,16 @@ export function usePopulateDevDb (): boolean | null {
 
       !!mockCodeBundles && await Promise.all(
         MNEMONICS.map(async (mnemonic, i) => {
+          // For each mock user, choose a previously created blueprint to redeploy
           const pair = getPair(keyring, mnemonic);
 
           const [blueprint, codeIndex] = chooseOne(blueprints);
           const [contractName, , tags, params] = MOCK_CONTRACT_DATA[codeIndex];
+
+          if (!mockCodeBundles[codeIndex]) {
+            return Promise.resolve();
+          }
+
           const { abi, id } = mockCodeBundles[codeIndex];
 
           const unsub = blueprint.tx.new({
@@ -164,6 +179,7 @@ export function usePopulateDevDb (): boolean | null {
             value: 1000000000n * 1000000n,
           }, ...(params || []))
             .signAndSend(pair, {}, async ({ status, contract }: BlueprintSubmittableResult<'promise'>) => {
+              console.log(status);
               if ((status.isInBlock || status.isFinalized) && !!blueprint && !!contract) {
                 console.log(`Successfully redeployed ${contractName}`);
 
@@ -194,6 +210,7 @@ export function usePopulateDevDb (): boolean | null {
     [blueprints, mockCodeBundles, mockUsers]
   );
 
+  // After all transactions finalized, add some favorites to each contract/code bundle
   const finalizeSetup = useCallback(
     async (db: Database): Promise<void> => {
       for (let i = 0; i < mockUsers.length; i++) {
@@ -220,7 +237,7 @@ export function usePopulateDevDb (): boolean | null {
     [mockUsers]
   )
 
-
+  // On first load, check if we need to populate the database and then begin
   useEffect(
     (): () => void => {
       if (process.env.POPULATE_DEV_DB && mountedRef.current && !!blockOneHash && !!api && !!keyring && isDbReady && status === 'READY' && isDevelopment) {
@@ -247,6 +264,7 @@ export function usePopulateDevDb (): boolean | null {
     [api, endpoint, isDbReady, needsMockData, keyring, mountedRef, status]
   );
 
+  // After deployments finished, do redeployments
   useEffect(
     (): void => {
       if (!!api && !!keyring && deploymentsLeft === 0) {
@@ -256,6 +274,7 @@ export function usePopulateDevDb (): boolean | null {
     [api, deploymentsLeft]
   );
 
+  // After redeployments finished, wrap up
   useEffect(
     (): void => {
       if (!!db && redeploymentsLeft === 0) {
