@@ -223,7 +223,7 @@ export function usePopulateDevDb (): boolean | null {
 
   useEffect(
     (): () => void => {
-      if (mountedRef.current && !!blockOneHash && !!api && !!keyring && isDbReady && status === 'READY' && isDevelopment) {
+      if (process.env.POPULATE_DEV_DB && mountedRef.current && !!blockOneHash && !!api && !!keyring && isDbReady && status === 'READY' && isDevelopment) {
         needsMockData === null && checkIfNeedsMockData(api, db, blockOneHash)
           .then((needsMockData) => {
             if (needsMockData) {
