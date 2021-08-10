@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Interact } from '../contract/Interact';
-import { getInstanceFromStorage } from 'canvas';
+import { getInstanceFromStorage, call } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 
 type UrlParams = { addr: string };
@@ -34,6 +34,7 @@ export const Contract = () => {
                         address={addr}
                         metadata={contract?.abi.json}
                         keyringPairs={keyringPairs}
+                        callFn={call}
                       />
                     </div>
                   </div>

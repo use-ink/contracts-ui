@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
-import { call, createEmptyValues } from 'canvas';
+import { createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { Abi, AnyJson, DropdownOption, KeyringPair } from 'types';
+import { Abi, AnyJson, ApiPromise, DropdownOption, KeyringPair, AbiMessage } from 'types';
 
 interface Props {
   metadata: AnyJson;
   address: string;
   keyringPairs: Partial<KeyringPair>[] | null;
+  callFn: (
+    api: ApiPromise,
+    abi: Abi,
+    address: string,
+    endowment: number,
+    gasLimit: number,
+    message: AbiMessage,
+    fromAddress: string,
+    argValues?: Record<string, string>
+  ) => void;
 }
 
-export const Interact = ({ metadata, address, keyringPairs }: Props) => {
+export const Interact = ({ metadata, address, keyringPairs, callFn }: Props) => {
   const { api } = useCanvas();
   const [selectedMsg, selectMsg] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
@@ -59,7 +69,7 @@ export const Interact = ({ metadata, address, keyringPairs }: Props) => {
                   type="button"
                   className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() =>
-                    call(
+                    callFn(
                       api,
                       abi,
                       address,

@@ -1,4 +1,4 @@
-import { CanvasState, InstantiateState } from '../src/types';
+import { AnyJson, CanvasState, InstantiateState } from '../src/types';
 
 export const keyringPairsMock = [
   { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
@@ -57,7 +57,7 @@ export const flipperMock = {
     },
   ],
 };
-export const flipperMockJson = {
+export const flipperMockJson: AnyJson = {
   metadataVersion: '0.1.0',
   source: {
     hash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
