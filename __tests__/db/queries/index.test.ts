@@ -26,7 +26,7 @@ let testContractAddresses: string[];
 
 beforeAll(
   async (): Promise<void> => {
-    db = await initDb('test-db');
+    db = await initDb('test');
 
     testUsers = getTestUsers(MOCK_CONTRACT_DATA.length);
     testCodeBundles = getTestCodeBundles();

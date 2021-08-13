@@ -17,16 +17,19 @@ export function useQuery<T>(query: () => Promise<T | null>): UseQuery<T> {
     query()
       .then(result => {
         setData(result);
-        setData(result);
         setIsLoading(false);
         setIsValid(!!result);
         setUpdated(Date.now());
       })
-      .catch(e => console.error(e));
+      .catch(e => {
+        setIsValid(false);
+        console.error(e);
+      });
   }, [isDbReady, query]);
 
   const refresh = useCallback((): void => {
     setIsLoading(true);
+    setIsValid(true);
     fetch();
   }, [fetch]);
 

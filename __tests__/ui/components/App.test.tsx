@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 import { customRender, getMockCanvasState, getMockDbState } from 'test-utils';
 import { CanvasState, DbState } from 'types';
-import { Homepage } from 'ui/components';
+import { Homepage } from 'ui/components/pages/Homepage';
 import { Router } from 'ui/components/Router';
 
 let mockCanvasState: CanvasState;

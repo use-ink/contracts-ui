@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { keyringPairsMock } from 'test-utils/mockData';
-import { Step2 } from 'ui/components/Instantiate/Step2';
+import { Step2 } from 'ui/components/instantiate/Step2';
 import type { KeyringPair } from 'types';
 
 describe('Instantiate Step 2', () => {

@@ -1,7 +1,5 @@
 import React from 'react';
-import { Contracts } from './Contracts';
-import { HelpBox } from './HelpBox';
-import { Statistics } from './Statistics';
+import { Contracts, HelpBox, Statistics } from 'ui/components/homepage'
 
 export function Homepage () {
   return (

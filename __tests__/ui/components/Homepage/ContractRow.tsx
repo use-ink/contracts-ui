@@ -5,7 +5,7 @@ import { render, fireEvent, RenderResult } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter } from 'react-router';
 import type { VoidFn } from 'types';
-import { ContractRow } from 'ui/components/Homepage/ContractRow';
+import { ContractRow } from 'ui/components/homepage/ContractRow';
 import { getTestCodeBundles, getTestContracts } from 'test-utils';
 
 const codeBundles = getTestCodeBundles();
