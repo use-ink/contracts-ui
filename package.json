@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "yarn build && cross-env POPULATE_DEV_DB=true webpack serve --config webpack.dev.cjs --open",
+    "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "webpack --progress --config webpack.dev.cjs",
     "build:prod": "webpack --config webpack.prod.cjs",
     "test": "jest --clearCache && node --experimental-vm-modules $(yarn bin)/jest --runInBand --watch",
@@ -73,7 +73,6 @@
     "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.6",
     "babel-jest": "^27.0.6",
-    "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",

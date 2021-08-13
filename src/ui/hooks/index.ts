@@ -5,7 +5,6 @@ export { useContract } from './useContract';
 export { useCreateContract } from './useCreateContract';
 export { useMyCodeBundles } from './useMyCodeBundles';
 export { useMyContracts } from './useMyContracts';
-export { usePopulateDevDb } from './usePopulateDevDb';
 export { useStatistics } from './useStatistics';
 export { useToggleContractStar } from './useToggleContractStar';
 export { useTopContracts } from './useTopContracts';

@@ -1,12 +1,10 @@
 import React, { useMemo } from "react";
 import type { HTMLAttributes } from 'react';
 import { useCanvas, useDatabase } from "ui/contexts";
-import { usePopulateDevDb } from "ui/hooks";
 
 export function AwaitApis ({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { error, status, keyringStatus } = useCanvas();
   const { isDbReady } = useDatabase();
-  const needsMockData = usePopulateDevDb();
 
   const loadingText = useMemo(
     (): string | null => {
@@ -25,14 +23,10 @@ export function AwaitApis ({ children }: HTMLAttributes<HTMLDivElement>): React.
       if (status !== 'READY') {
         return 'Connecting...'
       }
-    
-      if (needsMockData !== false) {
-        return 'Populating development database...'
-      }
 
       return null
     },
-    [children, error, needsMockData, keyringStatus, status, isDbReady]
+    [children, error, keyringStatus, status, isDbReady]
   )
 
   return loadingText
