@@ -26,14 +26,27 @@ export async function init(rpcUrl: string, isRemote = false): Promise<[DB, UserD
 }
 
 export async function initDb(rpcUrl: string): Promise<DB> {
-  const db = await new DB(
-    rpcUrl,
-    { name: 'User', schema: user },
-    { name: 'Contract', schema: contract },
-    { name: 'CodeBundle', schema: codeBundle }
-  ).open(2);
+  let db: DB;
+  let version = 1;
+  let isReady = false;
 
-  return db;
+  while (!isReady && version <= 999) {
+    try {
+      db = await new DB(
+        rpcUrl,
+        { name: 'User', schema: user },
+        { name: 'Contract', schema: contract },
+        { name: 'CodeBundle', schema: codeBundle }
+      ).open(version);
+    
+      isReady = true;
+      return db;
+    } catch (e) {
+      version += 1;
+    }
+  }
+
+  throw new Error('Unable to initialize database');
 }
 
 export async function initIdentity (db: DB): Promise<[UserDocument | null, PrivateKey]> {
