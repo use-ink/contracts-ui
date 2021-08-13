@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstantiateWizard } from './instantiate';
+import { InstantiateWizard } from '../instantiate';
 
 export const InstantiateWithHash = () => {
   return (
