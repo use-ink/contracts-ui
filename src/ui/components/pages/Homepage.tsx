@@ -1,11 +1,19 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
-
 import React from 'react';
+// import { Contracts } from '../Contracts';
+// import { HelpBox } from '../HelpBox';
+// import { Statistics } from '../Statistics';
+import { PageHome } from 'ui/templates';
 
-export function Homepage() {
+export function Homepage () {
   return (
-    <div id="homepage" className="py-10">
-      <p>Homepage</p>
-    </div>
+    <PageHome
+      header="Contracts"
+    >
+      {/* <Contracts />
+      <HelpBox />
+      <Statistics /> */}
+      {'Homepage'}
+      {''}
+    </PageHome>
   );
-}
+}; 
