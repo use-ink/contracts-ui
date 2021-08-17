@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ContractRow } from './ContractRow';
+import { ContractRow } from '../contract/ContractRow';
 import { useDatabase } from 'ui/contexts';
 import { useToggleContractStar, useTopContracts } from 'ui/hooks';
 
