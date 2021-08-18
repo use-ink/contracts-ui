@@ -27,14 +27,12 @@ function extractValues(values: RawParam[]): CodecArg[] {
 }
 
 export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: Props) => {
-  const { endowment, metadata, gas, file, argValues } = state;
+  const { endowment, metadata, gas, file } = state;
   const [[uploadTx, error], setUploadTx] = useState<
     [SubmittableExtrinsic<'promise'> | null, string | null]
   >([null, null]);
   const [constructorIndex /*, setConstructorIndex*/] = useState<number>(0);
   const [params, setParams] = useState<RawParam[]>([]);
-
-  console.log();
 
   const code = useMemo(
     () => (api && metadata ? new CodePromise(api, metadata, file?.data) : null),
@@ -67,8 +65,6 @@ export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: 
 
     setUploadTx(() => [contract, error]);
   }, [code, metadata, constructorIndex, endowment, params, gas]);
-
-  console.log(argValues);
 
   if (currentStep !== 4) return null;
 
