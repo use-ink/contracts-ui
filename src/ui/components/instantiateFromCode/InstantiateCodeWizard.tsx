@@ -1,4 +1,5 @@
 import React, { useReducer, Reducer } from 'react';
+import { StepInfo, StepsLabels } from '../StepsLabels';
 import { CodeStep1 } from './CodeStep1';
 import { CodeStep2 } from './CodeStep2';
 import { CodeStep3 } from './CodeStep3';
@@ -34,7 +35,7 @@ const reducer: Reducer<InstantiateState, InstantiateCodeAction> = (state, action
         endowment: action.payload.endowment,
         salt: action.payload.salt,
         gas: action.payload.gas,
-        currentStep: 4,
+        currentStep: 3,
       };
     case 'GO_TO':
       return { ...state, currentStep: action.payload.step };
@@ -65,25 +66,46 @@ export const InstantiateCodeWizard = () => {
   }
 
   return keyringPairs && api?.query ? (
-    <div className="">
-      <CodeStep1
-        keyringPairs={keyringPairs}
-        dispatch={dispatch}
-        api={api}
-        currentStep={state.currentStep}
-      />
-      <CodeStep2
-        constructors={state.metadata?.constructors}
-        dispatch={dispatch}
-        currentStep={state.currentStep}
-      />
-      <CodeStep3
-        state={state}
-        dispatch={dispatch}
-        api={api}
-        currentStep={state.currentStep}
-        submitHandler={instantiateWithCode}
-      />
-    </div>
+    <>
+      <main className="md:col-span-9 p-4">
+        <CodeStep1
+          keyringPairs={keyringPairs}
+          dispatch={dispatch}
+          api={api}
+          currentStep={state.currentStep}
+        />
+        <CodeStep2
+          constructors={state.metadata?.constructors}
+          dispatch={dispatch}
+          currentStep={state.currentStep}
+        />
+        <CodeStep3
+          state={state}
+          dispatch={dispatch}
+          api={api}
+          currentStep={state.currentStep}
+          submitHandler={instantiateWithCode}
+        />
+      </main>
+
+      <aside className="md:col-span-3 md:pt-0 p-4">
+        <StepsLabels currentStep={state.currentStep} stepsInfo={stepsInfo} />
+      </aside>
+    </>
   ) : null;
 };
+
+const stepsInfo: StepInfo[] = [
+  {
+    label: 'Contract Name',
+    step: 1,
+  },
+  {
+    label: 'Deployment Info',
+    step: 2,
+  },
+  {
+    label: 'Confirmation',
+    step: 3,
+  },
+];

@@ -66,7 +66,7 @@ export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: 
     setUploadTx(() => [contract, error]);
   }, [code, metadata, constructorIndex, endowment, params, gas]);
 
-  if (currentStep !== 4) return null;
+  if (currentStep !== 3) return null;
 
   return (
     <CanvasContext.Consumer>
