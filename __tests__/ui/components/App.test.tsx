@@ -1,9 +1,14 @@
 import { screen } from '@testing-library/react';
+import { jest } from '@jest/globals';
 import React from 'react';
 import { customRender, getMockCanvasState, getMockDbState } from 'test-utils';
 import { CanvasState, DbState } from 'types';
 import { Homepage } from 'ui/components/pages/Homepage';
 import { Router } from 'ui/components/Router';
+
+jest.mock('@polkadot/api', () => ({
+  ApiPromise: jest.fn(),
+}))
 
 let mockCanvasState: CanvasState;
 let mockDbState: DbState;

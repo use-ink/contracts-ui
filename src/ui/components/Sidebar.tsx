@@ -7,7 +7,7 @@ import { DocumentAddIcon, ChatAltIcon, CogIcon, HomeIcon } from '@heroicons/reac
 export function Sidebar () {
   return (
     <>
-      <div className="flex">
+      <div className="flex sidebar">
         <div className="flex flex-col w-72">
           <div className="flex flex-col h-0 flex-1 border-r dark:border-gray-stroke border-gray-200 dark:bg-elevation-1 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">

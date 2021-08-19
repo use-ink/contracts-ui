@@ -43,7 +43,7 @@ export function ContractRow ({ contract: { address, name, stars, date }, isStarr
         </button>
       </div>
       <div
-        className="w-10 text-gray-500 dark:text-gray-400"
+        className="w-14 text-gray-500 dark:text-gray-400"
       >
         {moment(date).format('MMM d')}
       </div>

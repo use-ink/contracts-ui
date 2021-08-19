@@ -12,6 +12,10 @@ jest.mock('@polkadot/api', () => ({
   ApiPromise: jest.fn(),
 }));
 
+jest.mock('@textile/threaddb', () => ({
+  Database: jest.fn(),
+}))
+
 const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
 
 const mockCall = jest.fn();
