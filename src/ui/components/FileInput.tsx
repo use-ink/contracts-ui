@@ -1,11 +1,13 @@
 import React from 'react';
-import { UploadIcon, DocumentIcon, XIcon } from '@heroicons/react/solid';
+import { UploadIcon, XIcon } from '@heroicons/react/solid';
+import { DocumentTextIcon } from '@heroicons/react/outline';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
   fileLoaded?: boolean;
   changeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   removeHandler: () => void;
   successText?: string;
+  acceptAllFiles?: boolean;
 }
 
 export const FileInput = ({
@@ -15,19 +17,20 @@ export const FileInput = ({
   removeHandler,
   placeholder,
   successText = 'File uploaded!',
+  acceptAllFiles = true,
 }: Props) => {
   return fileLoaded ? (
     <div className={`${className} flex`}>
-      <div className="p-6 border dark:border-gray-700 border-gray-300 inline-flex items-center rounded">
-        <DocumentIcon
-          className="w-5 h-5 mr-2 text-green-500 justify-self-start"
+      <div className="p-6 border dark:bg-elevation-1 dark:border-gray-700 border-gray-300 inline-flex items-center rounded shadow">
+        <DocumentTextIcon
+          className="w-7 h-7 mr-2 text-gray-500 justify-self-start"
           aria-hidden="true"
         />
         <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
           {successText}
         </span>
         <XIcon
-          className="w-5 h-5 mr-2 text-green-500 justify-self-end cursor-pointer"
+          className="w-5 h-5 mr-2 text-gray-500 justify-self-end cursor-pointer"
           aria-hidden="true"
           onClick={removeHandler}
         />
@@ -47,7 +50,7 @@ export const FileInput = ({
         id="file"
         style={{ display: 'none' }}
         onChange={changeHandler}
-        accept="application/JSON"
+        accept={acceptAllFiles ? '*/*' : 'application/json'}
       />
     </div>
   );

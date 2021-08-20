@@ -12,7 +12,7 @@ export const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
     <>
       {args.map(({ name, type = { type: '' } }) => {
         return (
-          <div className="mb-4" key={`${name}`}>
+          <div className="ml-6 mt-2 mb-4" key={`${name}`}>
             <input
               type="text"
               name={`${name}`}

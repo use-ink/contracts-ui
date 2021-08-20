@@ -48,13 +48,24 @@ export interface InstantiateState {
   events?: EventRecord[];
   error?: DispatchError;
   contractName: string;
+  endowment?: number;
+  gas?: number;
+  file?: FileState;
+  salt?: string;
+  api?: ApiPromise | null;
 }
 
-export type InstantiateAction =
+export type BaseInstantiateAction =
   | { type: 'INSTANTIATE' }
   | { type: 'INSTANTIATE_FINALIZED'; payload: EventRecord[] }
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
+  | {
+    type: 'GO_TO';
+    payload: { step: number };
+  };
+
+export type InstantiateAction = BaseInstantiateAction
   | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
   | {
     type: 'STEP_2_COMPLETE';
@@ -63,11 +74,31 @@ export type InstantiateAction =
   | {
     type: 'STEP_3_COMPLETE';
     payload: { constructorName: string; argValues: Record<string, string> };
+  };
+
+export type InstantiateCodeAction = BaseInstantiateAction
+  | {
+    type: 'STEP_1_COMPLETE'; payload: {
+      fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
+    }
   }
   | {
-    type: 'GO_TO';
-    payload: { step: number };
+    type: 'STEP_2_COMPLETE';
+    payload: {
+      constructorName: string;
+      argValues: Record<string, string>;
+      endowment: number;
+      salt: string;
+      gas: number;
+    };
   };
+
+export interface FileState {
+  data: Uint8Array;
+  name: string;
+  size: number;
+}
+
 
 export interface RouteInterface {
   path: string;
@@ -77,4 +108,14 @@ export interface RouteInterface {
   component?: ComponentType<any>;
   routes?: RouteInterface[];
   redirect?: string;
+}
+
+export type StringOrNull = string | null;
+
+export type RawParamValue = unknown | undefined;
+export type RawParamValueArray = (RawParamValue | RawParamValue[])[];
+export type RawParamValues = RawParamValue | RawParamValueArray;
+export interface RawParam {
+  isValid: boolean;
+  value: RawParamValues;
 }

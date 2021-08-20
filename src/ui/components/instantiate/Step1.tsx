@@ -31,7 +31,7 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
 
   return (
     <>
-      <label htmlFor="hash" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label htmlFor="hash" className="inline-block mb-4 dark:text-gray-300 text-gray-700">
         Look up Code Hash
       </label>
       <Input
@@ -48,6 +48,7 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
         changeHandler={handleUploadMetadata}
         removeHandler={() => setMetadata(undefined)}
         fileLoaded={!!metadata}
+        acceptAllFiles={false}
         successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
       />
 

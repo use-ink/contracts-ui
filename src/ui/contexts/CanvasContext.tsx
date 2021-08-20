@@ -10,7 +10,7 @@ import type { CanvasAction, CanvasState } from 'types';
 
 let loadedAccounts = false;
 
-const LOCAL_NODE = 'ws://127.0.0.1:9944';
+const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
 
 const INIT_STATE: CanvasState = {
   blockOneHash: null,

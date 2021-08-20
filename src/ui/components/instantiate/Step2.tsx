@@ -33,6 +33,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
         placeholder="No accounts found"
         className="mb-4"
         selectedOption={accountSelected}
+        withValueShown={true}
         changeHandler={(o: DropdownOption) => setAccountSelected(o)}
       />
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">

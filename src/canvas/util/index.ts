@@ -1,6 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import { compactAddLength, u8aToU8a } from '@polkadot/util';
+import { compactAddLength, u8aToU8a, hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import { Abi, Bytes, ContractPromise } from 'types';
 
@@ -110,4 +110,46 @@ export function createOptions(data?: Array<unknown>, kind?: string): DropdownOpt
     }
   }
   return [];
+}
+
+// convert a long string to ellipsis (i.e. Qavw...Abcd)
+export function withEllipsis(str: string): string {
+  if (str.length > 12) {
+    return str.substr(0, 4) + '...' + str.substr(str.length - 4, str.length);
+  }
+  return str;
+}
+
+// convert ArrayBuffer to Uint8Array
+export function convertToUint8Array(result: ArrayBuffer): Uint8Array {
+  const data = new Uint8Array(result);
+  if (data[0] === '0'.charCodeAt(0) && data[1] === 'x'.charCodeAt(0)) {
+    let hex = u8aToString(data);
+
+    while (hex[hex.length - 1] === '\n') {
+      hex = hex.substr(0, hex.length - 1);
+    }
+
+    if (isHex(hex)) {
+      return hexToU8a(hex);
+    }
+  }
+
+  return data;
+}
+
+export const NOOP = (): void => undefined;
+
+export function unitOptions() {
+  return [
+    { name: 'Unit', value: '-' },
+    { name: 'Kilo', value: 'k' },
+    { name: 'Mill', value: 'M' },
+    { name: 'Bill', value: 'B' },
+    { name: 'Tril', value: 'T' },
+    { name: 'Peta', value: 'P' },
+    { name: 'Exa', value: 'E' },
+    { name: 'Zeta', value: 'Z' },
+    { name: 'Yotta', value: 'Y' },
+  ];
 }

@@ -41,39 +41,47 @@ body {
 
 
 @layer components {
+  /* React Tabs */
   .react-tabs {
-    @apply bg-transparent
+    @apply bg-transparent;
   }
 
   .react-tabs__tab-list {
-      @apply flex border-b dark:border-gray-700 mb-8
+    @apply flex border-b dark:border-gray-700 mb-8;
   }
 
   .react-tabs__tab {
-      @apply flex items-center -bottom-0 relative list-none p-4 cursor-pointer text-gray-400
+    @apply flex items-center -bottom-0 relative list-none p-4 cursor-pointer text-gray-400;
   }
 
   .react-tabs__tab--selected {
-      @apply border-b-2 dark:border-blue-400 border-blue-500 dark:text-blue-400 text-blue-500
+    @apply border-b-2 dark:border-blue-400 border-blue-500 dark:text-blue-400 text-blue-500;
   }
 
   .react-tabs__tab--disabled {
-      @apply text-gray-600 cursor-default
+    @apply text-gray-600 cursor-default;
   }
 
   .react-tabs__tab:focus {
-
   }
 
   .react-tabs__tab:focus:after {
-
   }
 
   .react-tabs__tab-panel {
-    @apply hidden
+    @apply hidden;
   }
 
   .react-tabs__tab-panel--selected {
-    @apply block
+    @apply block;
+  }
+
+  /* SIDEBAR */
+  .sidebar-link-item {
+    @apply dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-base font-medium rounded-md;
+  }
+
+  .sidebar-link-icon {
+    @apply mr-3 h-6 w-6 dark:text-gray-500 dark:group-hover:text-gray-300 group-hover:text-gray-500;
   }
 }

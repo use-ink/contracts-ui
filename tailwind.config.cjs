@@ -33,6 +33,11 @@ module.exports = {
           900: '#1A1D1F',
         },
       },
+      spacing: {
+        8.5: '2.125rem',
+        9.5: '2.375rem',
+        18: '4.625rem',
+      },
     },
   },
   variants: {
