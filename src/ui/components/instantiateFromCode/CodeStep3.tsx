@@ -1,7 +1,6 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { CodePromise } from '@polkadot/api-contract';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { CodecArg } from '@polkadot/types/types';
 import { ApiPromise, Keyring, InstantiateState, InstantiateCodeAction, RawParam } from 'types';
 import { CanvasContext } from 'ui/contexts';
 import { withEllipsis } from 'canvas/util';
@@ -22,8 +21,8 @@ interface Props {
   ) => void;
 }
 
-function extractValues(values: RawParam[]): CodecArg[] {
-  return values.map(({ value }) => value as CodecArg);
+function extractValues(values: RawParam[]) {
+  return values.map(({ value }) => value);
 }
 
 export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: Props) => {
