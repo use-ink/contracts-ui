@@ -11,13 +11,13 @@ interface Props {
   stepsInfo: StepInfo[];
 }
 
-export const StepsLabels = ({ currentStep, stepsInfo }: Props) => {
+export const StepsLabels = React.memo(({ currentStep, stepsInfo }: Props) => {
   return stepsInfo.length > 0 ? (
     <>
       {stepsInfo.map((stepInfo, index) => {
         return (
-          <>
-            <div className="flex space-x-4 items-center" key={index}>
+          <div key={`${stepInfo.label}`}>
+            <div className="flex space-x-4 items-center">
               {stepInfo.step <= currentStep - 1 ? (
                 <CheckIcon className="bg-indigo-500 text-white rounded-md w-8 h-8 p-1" />
               ) : (
@@ -52,9 +52,9 @@ export const StepsLabels = ({ currentStep, stepsInfo }: Props) => {
                 ></span>
               </div>
             ) : null}
-          </>
+          </div>
         );
       })}
     </>
   ) : null;
-};
+});

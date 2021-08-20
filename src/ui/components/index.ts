@@ -9,3 +9,4 @@ export * from './Sidebar';
 export * from './AddContract';
 export * from './InputDropdown';
 export * from './AccountSelector'
+export * from './StepsLabels'
