@@ -54,13 +54,13 @@ export function Statistics (): React.ReactElement | null {
   
   return (
     <>
-      <div className="flex flex-wrap w-full mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
-        <div className="text-sm mb-4 flex-grow w-full">
+      <div className="grid grid-cols-4 xl:grid-cols-2 w-full mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
+        <div className="text-sm mb-4 col-span-4 xl:col-span-2 w-full">
           Canvas Metrics
         </div>
         {Object.entries(entries).map(([label, value], i) => {
           return (
-            <div key={`entry-${i}`} className="w-1/2 mb-4">
+            <div key={`entry-${i}`} className="mb-4">
               <div className="text-xs mb-1">
                 {label}
               </div>
@@ -71,8 +71,8 @@ export function Statistics (): React.ReactElement | null {
           )
         })}
       </div>
-      <div className="flex flex-wrap w-full">
-        <div className="text-sm mb-4 flex-grow w-full">
+      <div className="grid grid-cols-4 xl:grid-cols-2 w-full">
+        <div className="text-sm mb-4 col-span-4 xl:col-span-4">
           Popular Contract Code
         </div>
         {statistics?.mostPopularCodeBundles.map(({ id, name, instances, stars }, i) => {
@@ -81,7 +81,7 @@ export function Statistics (): React.ReactElement | null {
           const Star = isStarred ? StarIconFill : StarIconOutline;
           
           return (
-            <div key={`code-bundle-${i}`} className="w-1/2 mb-4">
+            <div key={`code-bundle-${i}`} className="mb-4 col-span-2 xs:col-span-1 md:col-span-1 xl:col-span-1">
               <div className="text-xs mb-1">
                 {name}
               </div>
