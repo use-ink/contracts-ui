@@ -2,15 +2,15 @@
 
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
-import React, { HTMLAttributes, useContext, useEffect, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useCanvas } from './CanvasContext';
-import { DbProps } from 'types';
 import { init } from 'db/util';
-import type { UserDocument } from 'types';
+import type { DbState, UserDocument } from 'types';
+import { getUser } from 'db';
 
-export const DbContext: React.Context<DbProps> = React.createContext({} as unknown as DbProps);
-export const DbConsumer: React.Consumer<DbProps> = DbContext.Consumer;
-export const DbProvider: React.Provider<DbProps> = DbContext.Provider;
+export const DbContext: React.Context<DbState> = React.createContext({} as unknown as DbState);
+export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
+export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 
 export function DatabaseContextProvider({
   children,
@@ -48,8 +48,17 @@ export function DatabaseContextProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const props = useMemo<DbProps>(
-    () => ({ db, identity, isDbReady, user }),
+  const refreshUser = useCallback(
+    async (): Promise<void> => {
+      const user = await getUser(db, identity);
+
+      setUser(user);
+    },
+    [db, identity]
+  );
+
+  const props = useMemo<DbState>(
+    () => ({ db, identity, isDbReady, refreshUser, user }),
     [db, identity, isDbReady, user]
   );
 
@@ -60,6 +69,6 @@ export function DatabaseContextProvider({
   return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
 }
 
-export function useDatabase(): DbProps {
+export function useDatabase(): DbState {
   return useContext(DbContext);
 }

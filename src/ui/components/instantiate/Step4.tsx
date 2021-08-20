@@ -1,6 +1,6 @@
 import React from 'react';
-import { ApiPromise, Keyring, InstantiateState, InstantiateAction } from '../../../types';
 import { CanvasContext } from 'ui/contexts';
+import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
 
 interface Props {
   state: InstantiateState;

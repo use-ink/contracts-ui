@@ -57,9 +57,15 @@ module.exports = {
       filename: '[name].bundle.css',
       chunkFilename: '[id].css',
     }),
+    new webpack.DefinePlugin({
+      'process.env.WS_URL': 'undefined'
+    })
   ],
   module: { rules },
   resolve: {
+    alias: {
+      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
+    },
     extensions: ['.ts', '.tsx', '.js', '.json'],
     fallback: {
       crypto: require.resolve('crypto-browserify'),

@@ -1,8 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import { Database } from '@textile/threaddb';
-import { getCodeBundleCollection } from './codeBundle';
-import { getContractCollection } from './contract';
+import { getCodeBundleCollection, getContractCollection } from './util';
 
 export async function checkForExpiredDocuments(
   db: Database,
@@ -37,4 +36,6 @@ export async function dropExpiredDocuments(db: Database, blockOneHash: string): 
 
 export * from './codeBundle';
 export * from './contract';
+export * from './derive';
 export * from './user';
+export * from './util';

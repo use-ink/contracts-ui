@@ -3,14 +3,15 @@ import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { keyringPairsMock } from 'test-utils/mockData';
-import { Step2 } from 'ui/components';
+import { Step2 } from 'ui/components/instantiate/Step2';
+import type { KeyringPair } from 'types';
 
 describe('Instantiate Step 2', () => {
   test('renders correctly with initial values', () => {
     const { getByText } = render(
       <Step2
         contractName="flipper"
-        keyringPairs={keyringPairsMock}
+        keyringPairs={keyringPairsMock as Partial<KeyringPair>[]}
         dispatch={jest.fn()}
         currentStep={2}
       />
@@ -21,7 +22,7 @@ describe('Instantiate Step 2', () => {
     const { container } = render(
       <Step2
         contractName="flipper"
-        keyringPairs={keyringPairsMock}
+        keyringPairs={keyringPairsMock as Partial<KeyringPair>[]}
         dispatch={jest.fn()}
         currentStep={1}
       />
@@ -33,7 +34,7 @@ describe('Instantiate Step 2', () => {
     const { getByText } = render(
       <Step2
         contractName="flipper"
-        keyringPairs={keyringPairsMock}
+        keyringPairs={keyringPairsMock as Partial<KeyringPair>[]}
         dispatch={dispatchMock}
         currentStep={2}
       />
