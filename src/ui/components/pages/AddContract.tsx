@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, CodeIcon, UploadIcon } from '@heroicons/react/outline';
 
-import { Page } from '../templates';
+import { Page } from 'ui/templates';
  
 export function AddContract() {
   return (

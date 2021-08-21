@@ -6,4 +6,3 @@ export * from './instantiate';
 
 export * from './App';
 export * from './Sidebar';
-export * from './AddContract';
