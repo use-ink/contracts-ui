@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: system;
+  font-style: normal;
+  font-weight: 300;
+  src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
+
+body {
+  font-family: "system";
+}
+
+.sidebar {
+  width: 18rem;
+}
+
+.content {
+  width: calc(100vw - 18rem);
+}
+
+.content main {
+  width: 100%;
+}
+
+.content aside {
+  width: 100%;
+}
+
+@screen xl {
+  .content main {
+    width: calc(100% - 24rem);
+  }
+
+  .content aside {
+    width: 24rem;
+  }
+}
+
+
 @layer components {
   .react-tabs {
     @apply bg-transparent

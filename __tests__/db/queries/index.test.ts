@@ -4,17 +4,18 @@
 /* eslint-disable header/header */
 
 import { Database, PrivateKey } from '@textile/threaddb';
-import { TEST_DATA, getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'db/util/testing';
+import { getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'test-utils';
 import { initDb } from 'db/util/init'
 import { publicKeyHex } from 'db/util/identity';
 import * as q from 'db/queries';
+import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
 let db: Database;
-let testIdentities: PrivateKey[];
+// let testIdentities: PrivateKey[];
 
-let testUsers: UserDocument[];
+let testUsers: [UserDocument, PrivateKey][];
 let testUserIds: string[];
 
 let testCodeBundles: CodeBundleDocument[];
@@ -25,9 +26,9 @@ let testContractAddresses: string[];
 
 beforeAll(
   async (): Promise<void> => {
-    db = await initDb('test-db');
+    db = await initDb('test');
 
-    [testUsers, testIdentities] = getTestUsers();
+    testUsers = getTestUsers(MOCK_CONTRACT_DATA.length);
     testCodeBundles = getTestCodeBundles();
     testContracts = getTestContracts(testCodeBundles);
   }
@@ -36,8 +37,8 @@ beforeAll(
 describe('DB Queries', (): void => {
   it('getUser', async () => {
     testUserIds = (await Promise.all(
-      testUsers.map((user, index) => {
-        return q.getUser(db, testIdentities[index], user);
+      testUsers.map(([user, identity]) => {
+        return q.getUser(db, identity, user);
       })
     )).map((user) => user?._id || '');
 
@@ -45,37 +46,37 @@ describe('DB Queries', (): void => {
       const document = await q.getUserCollection(db).findById(testUserIds[i]);
 
       expect(document).toBeTruthy();
-      expect(document?.toJSON()).toEqual({ _id: testUserIds[i], ...testUsers[i] });
+      expect(document?.toJSON()).toEqual({ _id: testUserIds[i], ...testUsers[i][0] });
     }
   })
 
   it('createCodeBundle', async () => {
-    testCodeBundleIds = await Promise.all(
+    testCodeBundleIds = (await Promise.all(
       testCodeBundles.map((codeBundle, index) => {
-        return q.createCodeBundle(db, testIdentities[index], codeBundle);
+        return q.createCodeBundle(db, testUsers[index][1], codeBundle);
       })
-    );
+    )).map(({ id }) => id);
 
     for (let i = 0; i < testCodeBundleIds.length; i++) {
       const document = await q.getCodeBundleCollection(db).findOne({ id: testCodeBundleIds[i] });
 
       expect(document).toBeTruthy();
-      expect(document).toMatchObject({ owner: publicKeyHex(testIdentities[i]), ...testCodeBundles[i] });
+      expect(document).toMatchObject({ owner: publicKeyHex(testUsers[i][1]), ...testCodeBundles[i] });
     }
   });
 
   it('createContract', async () => {
     const owners: PrivateKey[] = [];
 
-    testContractAddresses = await Promise.all(
+    testContractAddresses = (await Promise.all(
       testContracts.map((contract, index) => {
-        const identity = testIdentities[index % TEST_DATA.length]
+        const identity = testUsers[index % MOCK_CONTRACT_DATA.length][1]
 
         owners.push(identity);
 
-        return q.createContract(db, identity, contract);
+        return q.createContract(db, identity, contract, false);
       })
-    );
+    )).map(({ address }) => address);
 
     for (let i = 0; i < testContractAddresses.length; i++) {
       const document = await q.getContractCollection(db).findOne({ address: testContractAddresses[i] });
@@ -109,10 +110,10 @@ describe('DB Queries', (): void => {
   })
 
   it('findUser', async () => {
-    const document = await q.findUser(db, testIdentities[0]);
+    const document = await q.findUser(db, testUsers[0][1]);
 
     expect(document).toBeTruthy();
-    expect(document).toEqual({ _id: testUserIds[0], ...testUsers[0] });
+    expect(document).toEqual({ _id: testUserIds[0], ...testUsers[0][0] });
   })
 
   it('updateCodebundle', async () => {
@@ -135,7 +136,7 @@ describe('DB Queries', (): void => {
 
     // const originalDocument = await q.findCodeBundleById(db, codeBundle.id);
 
-    await q.updateContract(db, testContracts[0].address, updates);
+    await q.updateContract(db, testContracts[0].address, updates, false);
 
     const updatedDocument = await q.findContractByAddress(db, testContracts[0].address);
 
@@ -147,17 +148,17 @@ describe('DB Queries', (): void => {
   it('starCodeBundle & unstarCodeBundle', async () => {
     let user: UserDocument | null;
 
-    const codeBundle = await q.getCodeBundleCollection(db).findOne({ owner: { $ne: publicKeyHex(testIdentities[0]) }}) as CodeBundleDocument;
+    const codeBundle = await q.getCodeBundleCollection(db).findOne({ owner: { $ne: publicKeyHex(testUsers[0][1]) }}) as CodeBundleDocument;
 
-    await q.starCodeBundle(db, testIdentities[0], codeBundle.id);
+    await q.starCodeBundle(db, testUsers[0][1], codeBundle.id);
 
-    user = await q.findUser(db, testIdentities[0]);
+    user = await q.findUser(db, testUsers[0][1]);
     
     expect(user?.codeBundlesStarred).toContain(codeBundle.id);
 
-    await q.unstarCodeBundle(db, testIdentities[0], codeBundle.id);
+    await q.unstarCodeBundle(db, testUsers[0][1], codeBundle.id);
 
-    user = await q.findUser(db, testIdentities[0]);
+    user = await q.findUser(db, testUsers[0][1]);
 
     expect(user?.codeBundlesStarred).not.toContain(codeBundle.id);
   })
@@ -165,59 +166,59 @@ describe('DB Queries', (): void => {
   it('starContract & unstarContract', async () => {
     let user;
 
-    const contract = await q.getContractCollection(db).findOne({ owner: { $ne: publicKeyHex(testIdentities[0]) }}) as ContractDocument;
+    const contract = await q.getContractCollection(db).findOne({ owner: { $ne: publicKeyHex(testUsers[0][1]) }}) as ContractDocument;
 
-    await q.starContract(db, testIdentities[0], contract.address);
+    await q.starContract(db, testUsers[0][1], contract.address);
 
-    user = await q.findUser(db, testIdentities[0]);
+    user = await q.findUser(db, testUsers[0][1]);
     
     expect(user?.contractsStarred).toContain(contract.address);
 
-    await q.unstarContract(db, testIdentities[0], contract.address);
+    await q.unstarContract(db, testUsers[0][1], contract.address);
 
-    user = await q.findUser(db, testIdentities[0]);
+    user = await q.findUser(db, testUsers[0][1]);
 
     expect(user?.contractsStarred).not.toContain(contract.address);
   })
 
   it('findMyCodeBundles', async () => {
-    const ownedCodeBundles = await q.getCodeBundleCollection(db).find({ owner: publicKeyHex(testIdentities[0]) }).toArray();
+    const ownedCodeBundles = await q.getCodeBundleCollection(db).find({ owner: publicKeyHex(testUsers[0][1]) }).toArray();
     const starredCodeBundles = (await q.getCodeBundleCollection(db)
-      .find({ owner: { $ne: publicKeyHex(testIdentities[0]) } })
+      .find({ owner: { $ne: publicKeyHex(testUsers[0][1]) } })
       .toArray())
       .map((document) => ({ isExistent: true, value: document }));
 
     for (let i = 0; i < starredCodeBundles.length; i += 1) {
-      await q.starCodeBundle(db, testIdentities[0], starredCodeBundles[i].value.id);
+      starredCodeBundles[i].value.stars = await q.starCodeBundle(db, testUsers[0][1], starredCodeBundles[i].value.id);
     }
 
-    const myCodeBundles = await q.findMyCodeBundles(db, testIdentities[0]);
+    const myCodeBundles = await q.findMyCodeBundles(db, testUsers[0][1]);
 
     expect(myCodeBundles).toBeTruthy();
     expect(myCodeBundles).toMatchObject({ owned: ownedCodeBundles, starred: starredCodeBundles });
   })
 
   it('findMyContracts', async () => {
-    const ownedContracts = await q.getContractCollection(db).find({ owner: publicKeyHex(testIdentities[0]) }).toArray();
+    const ownedContracts = await q.getContractCollection(db).find({ owner: publicKeyHex(testUsers[0][1]) }).toArray();
     const starredContracts = (await q.getContractCollection(db)
-      .find({ owner: { $ne: publicKeyHex(testIdentities[0]) } })
+      .find({ owner: { $ne: publicKeyHex(testUsers[0][1]) } })
       .toArray())
       .map((document) => ({ isExistent: true, value: document }));
 
     for (let i = 0; i < starredContracts.length; i += 1) {
-      await q.starContract(db, testIdentities[0], starredContracts[i].value.address);
+      starredContracts[i].value.stars = await q.starContract(db, testUsers[0][1], starredContracts[i].value.address);
     }
 
-    const myCodeBundles = await q.findMyContracts(db, testIdentities[0]);
+    const myCodeBundles = await q.findMyContracts(db, testUsers[0][1]);
 
     expect(myCodeBundles).toBeTruthy();
     expect(myCodeBundles).toMatchObject({ owned: ownedContracts, starred: starredContracts });
   })
 
   it('removeCodeBundle', async() => {
-    const codeBundle = (await q.getCodeBundleCollection(db).findOne({ owner: { $ne: publicKeyHex(testIdentities[0]) }})) as CodeBundleDocument;
+    const codeBundle = (await q.getCodeBundleCollection(db).findOne({ owner: { $ne: publicKeyHex(testUsers[0][1]) }})) as CodeBundleDocument;
 
-    await q.starCodeBundle(db, testIdentities[0], codeBundle.id);
+    await q.starCodeBundle(db, testUsers[0][1], codeBundle.id);
 
     await q.removeCodeBundle(db, codeBundle.id);
 
@@ -225,35 +226,35 @@ describe('DB Queries', (): void => {
 
     expect(missingDocument).not.toBeTruthy();
 
-    const user = await q.findUser(db, testIdentities[0]);
+    const user = await q.findUser(db, testUsers[0][1]);
     
     const starredIndex = user?.codeBundlesStarred.findIndex((id) => id === codeBundle.id);
 
     expect(starredIndex).toBeGreaterThanOrEqual(0);
   
-    const myCodeBundles = await q.findMyCodeBundles(db, testIdentities[0]);
+    const myCodeBundles = await q.findMyCodeBundles(db, testUsers[0][1]);
 
     expect(myCodeBundles.starred[starredIndex as number]).toEqual({ isExistent: false, value: { identifier: codeBundle.id } });
   })
 
   it('removeContract', async() => {
-    const contract = (await q.getContractCollection(db).findOne({ owner: { $ne: publicKeyHex(testIdentities[0]) }})) as ContractDocument;
+    const contract = (await q.getContractCollection(db).findOne({ owner: { $ne: publicKeyHex(testUsers[0][1]) }})) as ContractDocument;
 
-    await q.starContract(db, testIdentities[0], contract.address);
+    await q.starContract(db, testUsers[0][1], contract.address);
 
-    await q.removeContract(db, contract.address);
+    await q.removeContract(db, contract.address, false);
 
     const missingDocument = await q.findContractByAddress(db, contract.address);
 
     expect(missingDocument).not.toBeTruthy();
 
-    const user = await q.findUser(db, testIdentities[0]);
+    const user = await q.findUser(db, testUsers[0][1]);
     
     const starredIndex = user?.contractsStarred.findIndex((address) => address === contract.address);
 
     expect(starredIndex).toBeGreaterThanOrEqual(0);
   
-    const myContracts = await q.findMyContracts(db, testIdentities[0]);
+    const myContracts = await q.findMyContracts(db, testUsers[0][1]);
 
     expect(myContracts.starred[starredIndex as number]).toEqual({ isExistent: false, value: { identifier: contract.address } });
   })

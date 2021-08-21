@@ -14,6 +14,7 @@ module.exports = {
     },
   },
   moduleNameMapper: {
+    'styled-components': resolve(__dirname, './node_modules/styled-components/dist/styled-components'),
     '^canvas$': resolve(__dirname, './src/canvas'),
     '^canvas/(.*)$': resolve(__dirname, './src/canvas/$1'),
     '^ui$': resolve(__dirname, './src/ui'),

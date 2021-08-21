@@ -1,18 +1,19 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 // import { keyring } from '@polkadot/ui-keyring';
-import type { Collection, Database, PrivateKey } from '@textile/threaddb';
+import type { Database, PrivateKey } from '@textile/threaddb';
 
+import moment from 'moment';
+import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
-
 import { findUser } from './user';
-import { getCodeBundleCollection } from './codeBundle';
-import { pushToRemote } from './util';
-
+import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
 import type { ContractDocument, MyContracts } from 'types';
 
-export function getContractCollection(db: Database): Collection<ContractDocument> {
-  return db.collection('Contract') as Collection<ContractDocument>;
+export async function findTopContracts(
+  db: Database
+): Promise<ContractDocument[]> {
+  return getContractCollection(db).find({}).toArray();
 }
 
 export async function findMyContracts(
@@ -52,8 +53,9 @@ export async function findContractByAddress(
 export async function createContract(
   db: Database,
   owner: PrivateKey | null,
-  { abi, address, blockOneHash, codeBundleId, genesisHash, name, tags = [] }: Partial<ContractDocument>
-): Promise<string> {
+  { abi, address, blockOneHash, codeBundleId, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
+  savePair = true
+): Promise<ContractDocument> {
   try {
     if (!address || !codeBundleId || !name || !genesisHash || !blockOneHash) {
       return Promise.reject(new Error('Missing address or name'));
@@ -76,22 +78,17 @@ export async function createContract(
       name,
       owner: publicKeyHex(owner),
       tags,
+      date,
+      stars: 1,
     });
 
-    // keyring.saveContract(address, {
-    //   contract: {
-    //     abi: abi || undefined,
-    //     genesisHash,
-    //   },
-    //   name,
-    //   tags: [],
-    // });
+    savePair && keyring.saveContract(address, { name, tags, abi });
 
     await newContract.save();
 
     await pushToRemote(db, 'Contract');
 
-    return Promise.resolve(address);
+    return Promise.resolve(newContract);
   } catch (e) {
     console.error(new Error(e));
 
@@ -102,7 +99,8 @@ export async function createContract(
 export async function updateContract(
   db: Database,
   address: string,
-  { name, tags }: Partial<ContractDocument>
+  { name, tags }: Partial<ContractDocument>,
+  savePair = true
 ): Promise<string> {
   try {
     const contract = await getContractCollection(db).findOne({ address });
@@ -110,6 +108,8 @@ export async function updateContract(
     if (contract) {
       if (name) contract.name = name;
       if (tags) contract.tags = tags;
+
+      savePair && keyring.saveContract(address, { ...(keyring.getContract(address)?.meta || {}), name, tags });
 
       const id = await contract.save();
 
@@ -124,7 +124,7 @@ export async function updateContract(
   }
 }
 
-export async function removeContract(db: Database, address: string): Promise<void> {
+export async function removeContract(db: Database, address: string, savePair = true): Promise<void> {
   try {
     const existing = await findContractByAddress(db, address);
 
@@ -132,6 +132,8 @@ export async function removeContract(db: Database, address: string): Promise<voi
 
     if (existing) {
       await getContractCollection(db).delete(existing._id as string);
+
+      savePair && keyring.forgetContract(address);
 
       await pushToRemote(db, 'Contract');
     }

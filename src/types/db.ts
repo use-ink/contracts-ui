@@ -1,8 +1,10 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { Database } from '@textile/threaddb';
+import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './app';
+
+export type { Collection, Database, PrivateKey }
 
 interface Document {
   _id?: string;
@@ -25,6 +27,9 @@ export interface CodeBundleDocument extends Document {
   name: string;
   owner?: string;
   tags?: string[];
+  date: string;
+  stars: number;
+  instances: number;
 }
 
 export interface ContractDocument extends Document {
@@ -36,6 +41,8 @@ export interface ContractDocument extends Document {
   name: string;
   owner?: string;
   tags?: string[];
+  date: string;
+  stars: number;
 }
 
 export interface UseQuery<T> {
@@ -61,11 +68,18 @@ export interface UserArtifacts<T> {
   starred: Array<Starred<T>>;
 }
 
-export interface DbProps {
+export interface DbState {
   db: Database;
   user: UserDocument | null;
+  refreshUser: () => void;
   identity: PrivateKey | null;
   isDbReady: boolean;
+}
+
+export interface DbStatistics {
+  codeBundlesCount: number;
+  contractsCount: number;
+  mostPopularCodeBundles: CodeBundleDocument[];
 }
 
 export type MyCodeBundles = UserArtifacts<CodeBundleDocument>;

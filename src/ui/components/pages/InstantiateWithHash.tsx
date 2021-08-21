@@ -1,6 +1,6 @@
 import React from 'react';
-import { Page } from 'ui/templates';
 import { InstantiateWizard } from '../instantiate';
+import { Page } from 'ui/templates';
 
 export function InstantiateWithHash () {
   return (
@@ -11,4 +11,4 @@ export function InstantiateWithHash () {
       <InstantiateWizard />
     </Page>
   );
-};
+}

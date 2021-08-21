@@ -1,14 +1,28 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import type { Collection, Database, PrivateKey } from '@textile/threaddb';
+import type { Database, PrivateKey } from '@textile/threaddb';
 
+import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
-import { pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
 import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 
-export function getCodeBundleCollection(db: Database): Collection<CodeBundleDocument> {
-  return db.collection('CodeBundle') as Collection<CodeBundleDocument>;
+export async function findTopCodeBundles(
+  db: Database
+): Promise<(CodeBundleDocument & { instances: number })[]> {
+  const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
+
+  return Promise.all(
+    codeBundles.map(async (codeBundle) => {
+      const instances = (await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()).length;
+      
+      return {
+        ...(codeBundle as CodeBundleDocument),
+        instances
+      };
+    })
+  )
 }
 
 export async function findMyCodeBundles(
@@ -55,8 +69,8 @@ export async function findCodeBundleById(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockOneHash, codeHash, genesisHash, id = getNewCodeBundleId(), name, tags = [] }: Partial<CodeBundleDocument>
-): Promise<string> {
+  { abi, blockOneHash, codeHash, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
+): Promise<CodeBundleDocument> {
   try {
     if (!codeHash || !name || !genesisHash || !owner) {
       return Promise.reject(new Error('Missing codeHash or name'));
@@ -71,13 +85,16 @@ export async function createCodeBundle(
       name,
       owner: publicKeyHex(owner),
       tags,
+      date,
+      stars,
+      instances
     });
 
     await newCode.save();
 
     await pushToRemote(db, 'CodeBundle');
 
-    return Promise.resolve(id);
+    return Promise.resolve(newCode);
   } catch (e) {
     return Promise.reject(new Error(e));
   }

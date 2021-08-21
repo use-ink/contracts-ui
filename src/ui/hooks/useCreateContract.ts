@@ -6,11 +6,11 @@ import { createContract } from 'db/queries';
 
 import type { ContractDocument } from 'types';
 
-export function useCreateContract(): (_: Partial<ContractDocument>) => Promise<string | undefined> {
+export function useCreateContract(): (_: Partial<ContractDocument>) => Promise<ContractDocument | undefined> {
   const { db, identity } = useDatabase();
 
   return useCallback(
-    async (data: Partial<ContractDocument>): Promise<string | undefined> => {
+    async (data: Partial<ContractDocument>): Promise<ContractDocument | undefined> => {
       try {
         return createContract(db, identity, data);
       } catch (e) {

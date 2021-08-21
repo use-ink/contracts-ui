@@ -1,7 +1,5 @@
 import React from 'react';
-// import { Contracts } from '../Contracts';
-// import { HelpBox } from '../HelpBox';
-// import { Statistics } from '../Statistics';
+import { Contracts, HelpBox, Statistics } from '../homepage';
 import { PageHome } from 'ui/templates';
 
 export function Homepage () {
@@ -9,11 +7,9 @@ export function Homepage () {
     <PageHome
       header="Contracts"
     >
-      {/* <Contracts />
+      <Contracts />
       <HelpBox />
-      <Statistics /> */}
-      {'Homepage'}
-      {''}
+      <Statistics />
     </PageHome>
   );
 }; 
