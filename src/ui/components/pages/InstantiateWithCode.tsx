@@ -4,7 +4,7 @@ import { InstantiateCodeWizard } from '../instantiateFromCode';
 export const InstantiateWithCode = () => {
   return (
     <>
-      <div className="w-full max-w-6xl overflow-y-auto px-5 py-3 m-2">
+      <div className="w-full max-w-7xl overflow-y-auto px-5 py-3 m-2">
         <div className="grid md:grid-cols-12 gap-5">
           <div className="md:col-span-9 py-3 px-4">
             <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
