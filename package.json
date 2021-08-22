@@ -10,7 +10,6 @@
     "build:prod": "webpack --config webpack.prod.cjs",
     "test": "jest --clearCache && node --experimental-vm-modules $(yarn bin)/jest --runInBand --watchAll",
     "test:coverage": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --maxWorkers=50% --coverage",
-    "pretest": "node scripts/util-crypto-fix.js",
     "lint": "eslint --fix src/",
     "test:ci": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --coverage",
     "clean": "rm -rf dist",

@@ -1,13 +1,16 @@
+import crypto from 'crypto';
 import faker from 'faker';
-import type { PrivateKey } from '@textile/crypto';
+import { Keyring } from '@polkadot/api';
 import moment from 'moment';
 import * as contractFiles from './contracts';
 import { createMockApi } from './utils';
-import { getNewCodeBundleId, getPrivateKeyRandom, initDb, publicKeyHex } from 'db';
-import { CanvasState, DbState, InstantiateState, UserDocument, CodeBundleDocument, ContractDocument, AnyJson } from 'types';
+import { getNewCodeBundleId, getPrivateKeyFromPair, initDb, publicKeyHex } from 'db';
+import type { CanvasState, DbState, InstantiateState, UserDocument, CodeBundleDocument, ContractDocument, AnyJson, KeyringPair, PrivateKey } from 'types';
 import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
+
+const keyring = new Keyring();
 
 export const keyringPairsMock = [
   { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
@@ -152,6 +155,14 @@ export const flipperMockJson: AnyJson = {
   ],
 };
 
+export function getKeyringPairRandom (): KeyringPair {
+  return keyring.createFromUri(faker.name.firstName());
+}
+
+export function getSecretRandom (): string {
+  return crypto.randomBytes(8).toString('hex');
+}
+
 export function getMockInstantiateState (): InstantiateState {
   return {
     isLoading: false,
@@ -200,13 +211,16 @@ function randomHash(): string {
 }
 
 export function getTestUser (): TestUser {
-  const identity = getPrivateKeyRandom();
+  const pair = getKeyringPairRandom();
+  const secret = getSecretRandom();
+  const identity = getPrivateKeyFromPair(pair, secret);
 
   return [
     {
       email: faker.internet.email(),
       name: faker.name.findName(),
       codeBundlesStarred: [],
+      creator: pair.address,
       contractsStarred: [],
       publicKey: publicKeyHex(identity) as string,
     },
@@ -218,18 +232,7 @@ export function getTestUsers (count: number): TestUser[] {
   const result: TestUser[] = [];
 
   for (let i = 0; i < count; i++) {
-    const identity = getPrivateKeyRandom();
-
-    result.push([
-      {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        codeBundlesStarred: [],
-        contractsStarred: [],
-        publicKey: publicKeyHex(identity) as string,
-      },
-      identity
-    ]);
+    result.push(getTestUser());
   }
 
   return result;
@@ -247,6 +250,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
     codeBundles.push({
       blockOneHash: blockOneHashes[Math.round(Math.random())],
       codeHash: randomHash(),
+      creator: getKeyringPairRandom().address,
       genesisHash,
       name,
       tags,
@@ -264,7 +268,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
 export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
   const contracts: ContractDocument[] = [];
 
-  const { blockOneHash, genesisHash } = codeBundles[0];
+  const { blockOneHash, creator, genesisHash } = codeBundles[0];
 
   // Original instantiation and 0-2 reinstantiations
   MOCK_CONTRACT_DATA.forEach(([name, , tags], index) => {
@@ -273,6 +277,7 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
     contracts.push({
       address: faker.random.alphaNumeric(62),
       blockOneHash,
+      creator,
       genesisHash,
       codeBundleId: codeBundles[index].id,
       name,

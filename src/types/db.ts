@@ -13,23 +13,25 @@ interface Document {
 export interface UserDocument extends Document {
   codeBundlesStarred: string[];
   contractsStarred: string[];
+  creator: string;
   publicKey: string;
   email?: string;
-  name?: string;
+  name: string;
 }
 
 export interface CodeBundleDocument extends Document {
+  abi?: unknown | null;
   blockOneHash?: string;
   codeHash: string;
+  creator: string;
+  date: string;
   genesisHash: string;
-  abi?: unknown | null;
   id: string;
+  instances: number;
   name: string;
   owner?: string;
-  tags?: string[];
-  date: string;
   stars: number;
-  instances: number;
+  tags?: string[];
 }
 
 export interface ContractDocument extends Document {
@@ -37,12 +39,13 @@ export interface ContractDocument extends Document {
   address: string;
   blockOneHash?: string;
   codeBundleId: string;
+  creator: string;
+  date: string;
   genesisHash: string;
   name: string;
   owner?: string;
-  tags?: string[];
-  date: string;
   stars: number;
+  tags?: string[];
 }
 
 export interface UseQuery<T> {

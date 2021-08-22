@@ -17,7 +17,7 @@ export async function findUser(
   return user || null;
 }
 
-export async function getUser(db: Database, identity: PrivateKey | null, { name, email }: Partial<UserDocument> = {}): Promise<UserDocument | null> {
+export async function getUser(db: Database, identity: PrivateKey | null, { creator, name, email }: Partial<UserDocument> = {}): Promise<UserDocument | null> {
   const existing = await findUser(db, identity);
 
   if (!identity) {
@@ -29,11 +29,20 @@ export async function getUser(db: Database, identity: PrivateKey | null, { name,
     return existing;
   }
 
+  if (!creator) {
+    return Promise.reject(new Error('No creator account provided'));
+  }
+
+  if (!name) {
+    return Promise.reject(new Error('No display name provided'));
+  }
+
   if (identity && !existing) {
     const user = getUserCollection(db)
       .create({
         codeBundlesStarred: [],
         contractsStarred: [],
+        creator,
         name,
         email,
         publicKey: publicKeyHex(identity) as string

@@ -12,8 +12,10 @@ module.exports = {
     'ts-jest': {
       useESM: true,
     },
+    Uint8Array: Uint8Array,
   },
   moduleNameMapper: {
+    '@polkadot/util-crypto': resolve(__dirname, './node_modules/@polkadot/util-crypto'),
     'styled-components': resolve(__dirname, './node_modules/styled-components/dist/styled-components'),
     '^canvas$': resolve(__dirname, './src/canvas'),
     '^canvas/(.*)$': resolve(__dirname, './src/canvas/$1'),

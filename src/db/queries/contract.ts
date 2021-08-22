@@ -53,12 +53,12 @@ export async function findContractByAddress(
 export async function createContract(
   db: Database,
   owner: PrivateKey | null,
-  { abi, address, blockOneHash, codeBundleId, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
+  { abi, address, blockOneHash, codeBundleId, creator, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
   savePair = true
 ): Promise<ContractDocument> {
   try {
-    if (!address || !codeBundleId || !name || !genesisHash || !blockOneHash) {
-      return Promise.reject(new Error('Missing address or name'));
+    if (!address || !codeBundleId || !creator || !name || !genesisHash || !blockOneHash) {
+      return Promise.reject(new Error('Missing required fields'));
     }
 
     if (!(await getCodeBundleCollection(db).findOne({ id: codeBundleId }))) {
@@ -74,6 +74,7 @@ export async function createContract(
       address,
       blockOneHash,
       codeBundleId,
+      creator,
       genesisHash,
       name,
       owner: publicKeyHex(owner),
