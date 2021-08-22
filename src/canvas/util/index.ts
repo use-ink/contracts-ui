@@ -82,8 +82,8 @@ export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Ui
   return salt instanceof Bytes
     ? salt
     : salt && salt.length
-    ? compactAddLength(u8aToU8a(salt))
-    : EMPTY_SALT;
+      ? compactAddLength(u8aToU8a(salt))
+      : EMPTY_SALT;
 }
 
 export function createEmptyValues(args?: AbiParam[]) {
@@ -115,7 +115,7 @@ export function createOptions(data?: Array<unknown>, kind?: string): DropdownOpt
 // convert a long string to ellipsis (i.e. Qavw...Abcd)
 export function withEllipsis(str: string): string {
   if (str.length > 12) {
-    return str.substr(0, 4) + '...' + str.substr(str.length - 4, str.length);
+    return str.slice(0, 4) + '...' + str.slice(-4)
   }
   return str;
 }
