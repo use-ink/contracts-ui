@@ -15,18 +15,18 @@ export function Sidebar() {
                 <div className="px-6">
                   <Link
                     to="/"
-                    className="dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                    className="dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                   >
-                    <HomeIcon className="mr-3 h-6 w-6 dark:text-gray-500 dark:group-hover:text-gray-300 group-hover:text-gray-500" />
+                    <HomeIcon className="mr-3 h-5 w-5 dark:text-gray-500 dark:group-hover:text-gray-300 group-hover:text-gray-500" />
                     Home
                   </Link>
                 </div>
                 <div className="px-6">
                   <Link
                     to="/instantiate"
-                    className="dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                    className="dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                   >
-                    <DocumentAddIcon className="mr-3 h-6 w-6 dark:text-gray-500 dark:group-hover:text-gray-300 group-hover:text-gray-500" />
+                    <DocumentAddIcon className="mr-3 h-5 w-5 dark:text-gray-500 dark:group-hover:text-gray-300 group-hover:text-gray-500" />
                     Add New Contract
                   </Link>
                 </div>
