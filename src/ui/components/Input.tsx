@@ -24,7 +24,7 @@ export const Input = ({
         value={value}
         onChange={handleChange}
         disabled={disabled}
-        className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded"
+        className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm"
       />
     </div>
   );

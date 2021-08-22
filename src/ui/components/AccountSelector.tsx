@@ -20,7 +20,10 @@ export const AccountSelector = ({
 }: Props) => {
   return (
     <>
-      <label htmlFor="selectAccount" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label
+        htmlFor="selectAccount"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
+      >
         Account
       </label>
 

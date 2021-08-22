@@ -19,14 +19,14 @@ export const StepsLabels = React.memo(({ currentStep, stepsInfo }: Props) => {
           <div key={`${stepInfo.label}`}>
             <div className="flex space-x-4 items-center">
               {stepInfo.step <= currentStep - 1 ? (
-                <CheckIcon className="bg-indigo-500 text-white rounded-md w-8 h-8 p-1" />
+                <CheckIcon className="bg-indigo-500 text-white rounded-md w-7 p-1" />
               ) : (
                 <p
                   className={`${
                     currentStep == stepInfo.step || currentStep > index
                       ? 'bg-indigo-500'
                       : 'bg-elevation-2'
-                  } bg-indigo-500 text-white rounded-md w-8 h-8 p-1 text-center`}
+                  } text-sm bg-indigo-500 text-white rounded-md w-7 p-1 text-center`}
                 >
                   {stepInfo.step}
                 </p>
@@ -34,7 +34,7 @@ export const StepsLabels = React.memo(({ currentStep, stepsInfo }: Props) => {
 
               <span
                 className={`${
-                  currentStep == stepInfo.step || currentStep > index
+                  currentStep == stepInfo.step && currentStep > index
                     ? 'text-gray-200'
                     : 'text-gray-500'
                 } text-sm`}

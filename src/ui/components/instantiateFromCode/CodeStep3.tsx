@@ -73,7 +73,7 @@ export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: 
         <>
           <div className="dark:text-gray-300 text-gray-700 dark:bg-elevation-1 bg-white p-8 space-y-7 border dark:border-gray-700 border-gray-200 rounded-md">
             <div>
-              <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Account</p>
+              <p className="text-sm dark:text-gray-300 text-gray-700 font-semibold mb-2">Account</p>
               <div className="flex w-1/2 items-center dark:bg-elevation-1 bg-gray-50 border dark:border-gray-700 border-gray-200 p-3 rounded-md">
                 <div>
                   <svg
@@ -153,25 +153,25 @@ export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: 
                 </div>
 
                 <div className="mx-4">
-                  <p className="dark:text-gray-300 text-gray-700 font-semibold">
+                  <p className="text-sm dark:text-gray-300 text-gray-700 font-semibold">
                     {state.fromAccountName}
                   </p>
-                  <p className="text-gray-500">{withEllipsis(state.fromAddress || '')}</p>
+                  <p className="text-xs text-gray-500">{withEllipsis(state.fromAddress || '')}</p>
                 </div>
               </div>
             </div>
 
-            <div>
+            <div className="text-sm">
               <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Name</p>
               <p className="text-gray-500">{state.contractName}</p>
             </div>
 
-            <div>
+            <div className="text-sm">
               <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Endowment</p>
               <p className="text-gray-500">{state.endowment}</p>
             </div>
 
-            <div>
+            <div className="text-sm">
               <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Weight</p>
               <p className="text-gray-500">{state.gas}</p>
             </div>
@@ -179,7 +179,7 @@ export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: 
 
           <button
             type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-xs bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() =>
               submitHandler(api, keyring, keyringStatus, dispatch, uploadTx, error, state)
             }
@@ -188,7 +188,7 @@ export const CodeStep3 = ({ state, dispatch, api, currentStep, submitHandler }: 
           </button>
           <button
             type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-xs hover:underline text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() =>
               dispatch({
                 type: 'GO_TO',

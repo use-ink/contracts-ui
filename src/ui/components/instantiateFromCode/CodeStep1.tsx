@@ -61,7 +61,10 @@ export const CodeStep1 = ({ keyringPairs, dispatch, api, currentStep }: Props) =
         changeHandler={(o: DropdownOption) => setAccountSelected(o)}
       />
 
-      <label htmlFor="contractName" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label
+        htmlFor="contractName"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
+      >
         Contract Name
       </label>
       <Input
@@ -71,7 +74,10 @@ export const CodeStep1 = ({ keyringPairs, dispatch, api, currentStep }: Props) =
         id="contractName"
       />
 
-      <label htmlFor="metadata" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label
+        htmlFor="metadata"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
+      >
         Upload Contract Bundle
       </label>
       <FileInput
@@ -85,7 +91,7 @@ export const CodeStep1 = ({ keyringPairs, dispatch, api, currentStep }: Props) =
 
       <button
         type="button"
-        className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="text-xs bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => {
           metadata &&
             dispatch({

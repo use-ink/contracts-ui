@@ -9,8 +9,8 @@ module.exports = {
       colors: {
         darkMode: {
           elevation: {
-            2: '#242A2E'
-          }
+            2: '#242A2E',
+          },
         },
         elevation: {
           0: '#1a1d20',
@@ -37,6 +37,9 @@ module.exports = {
         8.5: '2.125rem',
         9.5: '2.375rem',
         18: '4.625rem',
+      },
+      fontSize: {
+        '2.5xl': '1.75rem',
       },
     },
   },
