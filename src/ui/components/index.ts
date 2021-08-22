@@ -6,7 +6,6 @@ export * from './instantiate';
 export * from './App';
 export * from './instantiateFromCode';
 export * from './Sidebar';
-export * from './AddContract';
 export * from './InputDropdown';
 export * from './AccountSelector'
 export * from './StepsLabels'

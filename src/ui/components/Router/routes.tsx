@@ -1,6 +1,11 @@
 import React from 'react';
-import { AddContract } from '../AddContract';
-import { Homepage, Contract, InstantiateWithCode, InstantiateWithHash } from '../pages';
+import {
+  Homepage,
+  Contract,
+  InstantiateWithCode,
+  InstantiateWithHash,
+  Instantiate,
+} from '../pages';
 
 export const routes = [
   {
@@ -10,21 +15,21 @@ export const routes = [
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/add-contract',
-    component: AddContract,
-    exact: false,
+    path: '/instantiate',
+    component: Instantiate,
+    exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate-with-hash',
-    component: InstantiateWithHash,
-    exact: false,
-    fallback: <div> Loading... </div>,
-  },
-  {
-    path: '/instantiate-with-code',
+    path: '/instantiate/code',
     component: InstantiateWithCode,
-    exact: false,
+    exact: true,
+    fallback: <div> Loading... </div>,
+  },
+  {
+    path: '/instantiate/hash',
+    component: InstantiateWithHash,
+    exact: true,
     fallback: <div> Loading... </div>,
   },
   {
