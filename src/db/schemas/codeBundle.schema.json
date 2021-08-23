@@ -14,7 +14,11 @@
       "type": "string"
     },
     "owner": {
-      "description": "The public key of the original uploader",
+      "description": "The public key of the Canvas identity that owns this code bundle",
+      "type": "string"
+    },
+    "creator": {
+      "description": "The Polkadot address that uploaded this code bundle",
       "type": "string"
     },
     "blockOneHash": {
@@ -57,5 +61,5 @@
       "minimum": 0
     }
   },
-  "required": ["owner", "codeHash", "name", "date", "stars"]
+  "required": ["creator", "codeHash", "name", "date", "stars"]
 }

@@ -12,6 +12,7 @@ module.exports = {
     'ts-jest': {
       useESM: true,
     },
+    Uint8Array: Uint8Array,
   },
   moduleNameMapper: {
     'styled-components': resolve(__dirname, './node_modules/styled-components/dist/styled-components'),

@@ -69,10 +69,18 @@ export async function findCodeBundleById(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockOneHash, codeHash, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
+  { abi, blockOneHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
-    if (!codeHash || !name || !genesisHash || !owner) {
+    if (!creator) {
+      return Promise.reject(new Error('Missing creator address'));
+    }
+
+    if (!genesisHash) {
+      return Promise.reject(new Error('Missing block genesis hash'));
+    }
+
+    if (!codeHash || !name || !genesisHash) {
       return Promise.reject(new Error('Missing codeHash or name'));
     }
 
@@ -80,6 +88,7 @@ export async function createCodeBundle(
       abi,
       blockOneHash,
       codeHash,
+      creator,
       genesisHash,
       id,
       name,

@@ -37,8 +37,12 @@
                 "type": "string"
             }
         },
+        "creator": {
+            "description": "The Polkadot account used to create this user",
+            "type": "string"
+        },
         "publicKey": {
-            "description": "The user's public key",
+            "description": "The user's generated Canvas identity public key",
             "type": "string"
         },
         "email": {
@@ -51,5 +55,5 @@
             "type": "string"
         }
     },
-    "required": [ "publicKey" ]
+    "required": [ "creator", "name", "publicKey" ]
 }
