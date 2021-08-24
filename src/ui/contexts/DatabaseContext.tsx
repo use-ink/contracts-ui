@@ -6,7 +6,7 @@ import React, { HTMLAttributes, useCallback, useContext, useEffect, useMemo, use
 import { useCanvas } from './CanvasContext';
 import { init } from 'db/util';
 import type { DbState, UserDocument } from 'types';
-import { getUser } from 'db';
+import { dropExpiredDocuments, getUser } from 'db';
 
 export const DbContext: React.Context<DbState> = React.createContext({} as unknown as DbState);
 export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
@@ -15,7 +15,7 @@ export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 export function DatabaseContextProvider({
   children,
 }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { endpoint } = useCanvas();
+  const { blockOneHash, endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
   const [user, setUser] = useState<UserDocument | null>(null);
@@ -29,16 +29,22 @@ export function DatabaseContextProvider({
   // initial initialization
   useEffect((): void => {
     async function createDb() {
-      try {
-        const [db, user, identity] = await init(endpoint, isRemote);
+      if (blockOneHash) {
+        try {
+          const [db, user, identity] = await init(endpoint, isRemote);
 
-        setDb(db);
-        setIdentity(identity);
-        setUser(user);
-        setIsDbReady(true);
-      } catch (e) {
-        console.error(e);
-        setDb(new DB(''));
+          if (!isRemote) {
+            await dropExpiredDocuments(db, blockOneHash);
+          }
+
+          setDb(db);
+          setIdentity(identity);
+          setUser(user);
+          setIsDbReady(true);
+        } catch (e) {
+          console.error(e);
+          setDb(new DB(''));
+        }
       }
     }
 
@@ -46,7 +52,7 @@ export function DatabaseContextProvider({
       .then()
       .catch(e => console.error(e));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [blockOneHash]);
 
   const refreshUser = useCallback(
     async (): Promise<void> => {
