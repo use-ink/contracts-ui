@@ -10,6 +10,8 @@ import { getUser } from '../queries/user';
 import { getStoredPrivateKey } from './identity';
 import type { UserDocument } from 'types';
 
+const DB_VERSION_KEY = 'canvas:db-version';
+
 function isLocalNode(rpcUrl: string): boolean {
   return !rpcUrl.includes('127.0.0.1');
 }
@@ -27,7 +29,7 @@ export async function init(rpcUrl: string, isRemote = false): Promise<[DB, UserD
 
 export async function initDb(rpcUrl: string): Promise<DB> {
   let db: DB;
-  let version = 1;
+  let version = parseInt(window.localStorage.getItem(DB_VERSION_KEY) || '1', 10) || 1;
   let isReady = false;
 
   while (!isReady && version <= 999) {
@@ -39,10 +41,10 @@ export async function initDb(rpcUrl: string): Promise<DB> {
         { name: 'CodeBundle', schema: codeBundle }
       ).open(version);
     
+      window.localStorage.setItem(DB_VERSION_KEY, version.toString());
       isReady = true;
       return db;
     } catch (e) {
-      console.error(e);
       version += 1;
     }
   }
