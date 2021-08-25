@@ -14,11 +14,11 @@ body {
 }
 
 .sidebar {
-  width: 18rem;
+  width: 14rem;
 }
 
 .content {
-  width: calc(100vw - 18rem);
+  width: calc(100vw - 14rem);
 }
 
 .content main {
