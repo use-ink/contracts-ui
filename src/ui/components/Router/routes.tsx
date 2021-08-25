@@ -1,6 +1,5 @@
 import React from 'react';
-import { AddContract } from '../AddContract';
-import { Homepage, Contract, InstantiateWithCode, InstantiateWithHash } from '../pages';
+import { AddContract, Homepage, Contract, InstantiateWithCode, InstantiateWithHash } from '../pages';
 
 export const routes = [
   {
