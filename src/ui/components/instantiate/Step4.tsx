@@ -33,7 +33,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
 
           <button
             type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-xs bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() =>
               submitHandler(
                 1300889614901161,
@@ -50,7 +50,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
           </button>
           <button
             type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-xs hover:underline text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() =>
               dispatch({
                 type: 'GO_TO',
