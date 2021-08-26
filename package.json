@@ -9,9 +9,9 @@
     "build": "webpack --progress --config webpack.dev.cjs",
     "build:prod": "webpack --config webpack.prod.cjs",
     "test": "jest --clearCache && node --experimental-vm-modules $(yarn bin)/jest --runInBand --watchAll",
-    "test:coverage": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --maxWorkers=50% --coverage",
+    "test:coverage": "jest --clearCache && node --experimental-vm-modules $(yarn bin)/jest --maxWorkers=50% --coverage",
     "lint": "eslint --fix src/",
-    "test:ci": "npm run pretest; node --experimental-vm-modules $(yarn bin)/jest --coverage",
+    "test:ci": "jest --clearCache && node --experimental-vm-modules $(yarn bin)/jest --coverage",
     "clean": "rm -rf dist",
     "deep-clean": "yarn clean && rm -rf node_modules"
   },
