@@ -2,14 +2,14 @@ import { encodeSalt } from '../util';
 import { ContractPromise, ApiPromise, AbiMessage, Abi } from 'types';
 
 export function createContractTx(
-  contract: ContractPromise | null,
+  contract: ContractPromise,
   options: { gasLimit: number; salt: Uint8Array; value: number },
   message: AbiMessage,
   args: string[]
 ) {
   return message.args.length > 0
-    ? contract?.tx[message.index](options, ...args)
-    : contract?.tx[message.index](options);
+    ? contract.tx[message.index](options, ...args)
+    : contract.tx[message.index](options);
 }
 
 export function createContractQuery(
@@ -47,10 +47,8 @@ export async function call(
     );
     transaction
       ?.signAndSend(fromAddress, result => {
-        if (result.status.isInBlock) {
-          console.log('in a block');
-        } else if (result.status.isFinalized) {
-          console.log('finalized');
+        if (result.status.isFinalized) {
+          console.log(result);
         }
         if (result.dispatchError) {
           console.log(result.dispatchError);
@@ -58,10 +56,19 @@ export async function call(
       })
       .catch(e => console.log('error sending transaction: ', e));
   } else {
-    const query = createContractQuery(contract, message, args, endowment, gasLimit, fromAddress);
-
-    const { gasConsumed, result } = await query;
-    console.log('gas consumed', gasConsumed);
-    console.log('result', result);
+    try {
+      const { gasConsumed, result } = await createContractQuery(
+        contract,
+        message,
+        args,
+        endowment,
+        gasLimit,
+        fromAddress
+      );
+      console.log('gas consumed', gasConsumed);
+      console.log('result', result);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

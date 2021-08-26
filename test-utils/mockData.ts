@@ -5,7 +5,17 @@ import moment from 'moment';
 import * as contractFiles from './contracts';
 import { createMockApi } from './utils';
 import { getNewCodeBundleId, getPrivateKeyFromPair, initDb, publicKeyHex } from 'db';
-import type { CanvasState, DbState, InstantiateState, UserDocument, CodeBundleDocument, ContractDocument, AnyJson, KeyringPair, PrivateKey } from 'types';
+import type {
+  CanvasState,
+  DbState,
+  InstantiateState,
+  UserDocument,
+  CodeBundleDocument,
+  ContractDocument,
+  AnyJson,
+  KeyringPair,
+  PrivateKey,
+} from 'types';
 import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
@@ -155,15 +165,15 @@ export const flipperMockJson: AnyJson = {
   ],
 };
 
-export function getKeyringPairRandom (): KeyringPair {
+export function getKeyringPairRandom(): KeyringPair {
   return keyring.createFromUri(faker.name.firstName());
 }
 
-export function getSecretRandom (): string {
+export function getSecretRandom(): string {
   return crypto.randomBytes(8).toString('hex');
 }
 
-export function getMockInstantiateState (): InstantiateState {
+export function getMockInstantiateState(): InstantiateState {
   return {
     isLoading: false,
     isSuccess: false,
@@ -174,35 +184,34 @@ export function getMockInstantiateState (): InstantiateState {
     constructorName: 'new',
     argValues: { initValue: 'true' },
     contractName: 'flipper',
-  }
-};
+  };
+}
 
-export function getMockCanvasState (): CanvasState {
+export async function getMockCanvasState(): Promise<CanvasState> {
   return {
     endpoint: '',
     keyring: null,
     keyringStatus: null,
-    api: createMockApi(),
+    api: await createMockApi(),
     error: null,
     status: null,
     blockOneHash: '',
     systemName: 'Development',
-    systemVersion: '0'
-  }
-};
+    systemVersion: '0',
+  };
+}
 
-export async function getMockDbState (): Promise<DbState> {
+export async function getMockDbState(): Promise<DbState> {
   const [user, identity] = getTestUser();
 
   return {
-    db: (await initDb('test')),
+    db: await initDb('test'),
     isDbReady: true,
     identity,
     user,
-    refreshUser: () => {}
-  }
+    refreshUser: () => {},
+  };
 }
-
 
 function randomHash(): string {
   return [...(Array(62) as unknown[])]
@@ -210,7 +219,7 @@ function randomHash(): string {
     .join('');
 }
 
-export function getTestUser (): TestUser {
+export function getTestUser(): TestUser {
   const pair = getKeyringPairRandom();
   const secret = getSecretRandom();
   const identity = getPrivateKeyFromPair(pair, secret);
@@ -224,11 +233,11 @@ export function getTestUser (): TestUser {
       contractsStarred: [],
       publicKey: publicKeyHex(identity) as string,
     },
-    identity
+    identity,
   ];
 }
 
-export function getTestUsers (count: number): TestUser[] {
+export function getTestUsers(count: number): TestUser[] {
   const result: TestUser[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -258,7 +267,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       id: getNewCodeBundleId(),
       date: moment().format(),
       stars: 1,
-      instances: 0
+      instances: 0,
     });
   });
 
