@@ -1,6 +1,14 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 import { ReactNode, ComponentType } from 'react';
-import { ContractPromise, Abi, EventRecord, DispatchError, ApiPromise, Keyring } from './substrate';
+import {
+  ContractPromise,
+  Abi,
+  EventRecord,
+  DispatchError,
+  ApiPromise,
+  Keyring,
+  AbiMessage,
+} from './substrate';
 
 export type VoidFn = () => void;
 
@@ -57,17 +65,17 @@ export type InstantiateAction =
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
   | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
   | {
-    type: 'STEP_2_COMPLETE';
-    payload: { fromAddress: string; fromAccountName: string; contractName: string };
-  }
+      type: 'STEP_2_COMPLETE';
+      payload: { fromAddress: string; fromAccountName: string; contractName: string };
+    }
   | {
-    type: 'STEP_3_COMPLETE';
-    payload: { constructorName: string; argValues: Record<string, string> };
-  }
+      type: 'STEP_3_COMPLETE';
+      payload: { constructorName: string; argValues: Record<string, string> };
+    }
   | {
-    type: 'GO_TO';
-    payload: { step: number };
-  };
+      type: 'GO_TO';
+      payload: { step: number };
+    };
 
 export interface RouteInterface {
   path: string;
@@ -77,4 +85,15 @@ export interface RouteInterface {
   component?: ComponentType<any>;
   routes?: RouteInterface[];
   redirect?: string;
+}
+
+export interface ContractCallParams {
+  api: ApiPromise;
+  abi: Abi;
+  contractAddress: string;
+  message: AbiMessage;
+  endowment: number;
+  gasLimit: number;
+  fromAddress: string;
+  argValues?: Record<string, string>;
 }

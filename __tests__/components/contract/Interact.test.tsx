@@ -38,7 +38,7 @@ describe('Contract Interact', () => {
     const { getByText } = customRender(
       <Interact
         metadata={flipperMockJson}
-        address={mockAddr}
+        contractAddress={mockAddr}
         keyringPairs={keyringPairsMock}
         callFn={mockCall}
       />,
@@ -57,7 +57,7 @@ describe('Contract Interact', () => {
     const { getByText } = customRender(
       <Interact
         metadata={flipperMockJson}
-        address={mockAddr}
+        contractAddress={mockAddr}
         keyringPairs={keyringPairsMock}
         callFn={mockCall}
       />,

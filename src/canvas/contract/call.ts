@@ -1,74 +1,76 @@
 import { encodeSalt } from '../util';
-import { ContractPromise, ApiPromise, AbiMessage, Abi } from 'types';
+import {
+  ContractPromise,
+  ContractQuery,
+  ContractTx,
+  SubmittableExtrinsic,
+  ISubmittableResult,
+  ContractCallParams,
+} from 'types';
 
-export function createContractTx(
-  contract: ContractPromise,
+export function prepareContractTx(
+  tx: ContractTx<'promise'>,
   options: { gasLimit: number; salt: Uint8Array; value: number },
-  message: AbiMessage,
-  args: string[]
+  args?: string[]
 ) {
-  return message.args.length > 0
-    ? contract.tx[message.index](options, ...args)
-    : contract.tx[message.index](options);
+  return args ? tx(options, ...args) : tx(options);
 }
-
-export function createContractQuery(
-  contract: ContractPromise,
-  message: AbiMessage,
-  args: string[],
-  endowment: number,
-  gasLimit: number,
+export async function executeTx(
+  tx: SubmittableExtrinsic<'promise', ISubmittableResult>,
   fromAddress: string
+): Promise<ISubmittableResult | null> {
+  let txResult: ISubmittableResult | null = null;
+  try {
+    await tx.signAndSend(fromAddress, result => {
+      txResult = result;
+    });
+  } catch (error) {
+    console.error('error sending transaction: ', error);
+  }
+
+  return txResult;
+}
+export function sendContractQuery(
+  options: { endowment: number; gasLimit: number },
+  fromAddress: string,
+  query: ContractQuery<'promise'>,
+  args?: string[]
 ) {
-  return message.args.length > 0
-    ? contract.query[message.identifier](fromAddress, { value: endowment, gasLimit }, ...args)
-    : contract.query[message.identifier](fromAddress, { value: endowment, gasLimit });
+  return args ? query(fromAddress, options, ...args) : query(fromAddress, options);
 }
 
-export async function call(
-  api: ApiPromise,
-  abi: Abi,
-  address: string,
-  endowment: number,
-  gasLimit: number,
-  message: AbiMessage,
-  fromAddress: string,
-  argValues?: Record<string, string>
-) {
-  const args = argValues ? Object.values(argValues) : [];
-  const contract = new ContractPromise(api, abi, address);
+export async function call({
+  api,
+  abi,
+  contractAddress,
+  message,
+  endowment,
+  gasLimit,
+  fromAddress,
+  argValues,
+}: ContractCallParams) {
+  const expectsArgs = message.args.length > 0;
+
+  const args = expectsArgs ? (argValues ? Object.values(argValues) : []) : undefined;
+
+  const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
-  if (message.isPayable) {
-    const transaction = createContractTx(
-      contract,
-      { value: endowment, salt, gasLimit },
-      message,
+
+  if (message.isMutating || message.isPayable) {
+    const tx = prepareContractTx(
+      contract.tx[message.identifier],
+      { gasLimit, value: endowment, salt },
       args
     );
-    transaction
-      ?.signAndSend(fromAddress, result => {
-        if (result.status.isFinalized) {
-          console.log(result);
-        }
-        if (result.dispatchError) {
-          console.log(result.dispatchError);
-        }
-      })
-      .catch(e => console.log('error sending transaction: ', e));
+    const res = executeTx(tx, fromAddress);
+    console.log(res);
   } else {
-    try {
-      const { gasConsumed, result } = await createContractQuery(
-        contract,
-        message,
-        args,
-        endowment,
-        gasLimit,
-        fromAddress
-      );
-      console.log('gas consumed', gasConsumed);
-      console.log('result', result);
-    } catch (error) {
-      console.log(error);
-    }
+    const { result, gasConsumed } = await sendContractQuery(
+      { gasLimit, endowment },
+      fromAddress,
+      contract.query[message.identifier],
+      args
+    );
+    console.log(result, gasConsumed);
   }
 }

@@ -3,25 +3,25 @@ import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { Abi, AnyJson, ApiPromise, DropdownOption, KeyringPair, AbiMessage } from 'types';
+import { Abi, AnyJson, DropdownOption, KeyringPair, ContractCallParams } from 'types';
 
 interface Props {
   metadata: AnyJson;
-  address: string;
+  contractAddress: string;
   keyringPairs: Partial<KeyringPair>[] | null;
-  callFn: (
-    api: ApiPromise,
-    abi: Abi,
-    address: string,
-    endowment: number,
-    gasLimit: number,
-    message: AbiMessage,
-    fromAddress: string,
-    argValues?: Record<string, string>
-  ) => void;
+  callFn: ({
+    api,
+    abi,
+    contractAddress,
+    message,
+    endowment,
+    gasLimit,
+    fromAddress,
+    argValues,
+  }: ContractCallParams) => void;
 }
 
-export const Interact = ({ metadata, address, keyringPairs, callFn }: Props) => {
+export const Interact = ({ metadata, contractAddress, keyringPairs, callFn }: Props) => {
   const { api } = useCanvas();
   const [selectedMsg, selectMsg] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
@@ -69,16 +69,16 @@ export const Interact = ({ metadata, address, keyringPairs, callFn }: Props) => 
                   type="button"
                   className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() =>
-                    callFn(
+                    callFn({
                       api,
                       abi,
-                      address,
-                      0,
-                      155852802980,
+                      contractAddress,
+                      endowment: 0,
+                      gasLimit: 155852802980,
+                      fromAddress: keyringPairs[0].address || '',
+                      argValues,
                       message,
-                      keyringPairs[0].address || '',
-                      argValues
-                    )
+                    })
                   }
                 >
                   Call

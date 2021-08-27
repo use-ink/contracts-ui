@@ -14,11 +14,9 @@ export const Contract = () => {
   const keyringPairs = keyring?.getPairs() || null;
 
   return (
-    <Page
-      header={contract?.abi.project.contract.name}
-    >
+    <Page header={contract?.abi.project.contract.name}>
       <Interact
-        address={addr}
+        contractAddress={addr}
         metadata={contract?.abi.json}
         keyringPairs={keyringPairs}
         callFn={call}
