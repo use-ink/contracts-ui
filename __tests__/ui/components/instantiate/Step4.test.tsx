@@ -2,20 +2,25 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { getMockInstantiateState, getMockCanvasState, getMockDbState, customRender } from 'test-utils';
+import {
+  getMockInstantiateState,
+  getMockCanvasState,
+  getMockDbState,
+  customRender,
+} from 'test-utils';
 import { Step4 } from 'ui/components/instantiate/Step4';
-import { DbState } from 'types';
+import { DbState, CanvasState } from 'types';
 
 const mockSubmitHandler = jest.fn();
 
 let mockDbState: DbState;
+let mockCanvasState: CanvasState;
 
 describe('Instantiate Step 4', () => {
-  beforeAll(
-    async (): Promise<void> => {
-      mockDbState = await getMockDbState();
-    }
-  )
+  beforeAll(async () => {
+    mockDbState = await getMockDbState();
+    mockCanvasState = await getMockCanvasState();
+  });
   test('displays a button that calls the submit handler', () => {
     customRender(
       <Step4
@@ -24,7 +29,7 @@ describe('Instantiate Step 4', () => {
         currentStep={4}
         submitHandler={mockSubmitHandler}
       />,
-      { ...getMockCanvasState() },
+      { ...mockCanvasState },
       { ...mockDbState }
     );
     const submitBtn = screen.getByText('Instantiate');
