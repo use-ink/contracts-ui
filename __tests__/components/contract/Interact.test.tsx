@@ -4,9 +4,15 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { flipperMockJson, customRender, getMockCanvasState, keyringPairsMock, getMockDbState } from 'test-utils';
+import {
+  flipperMockJson,
+  customRender,
+  getMockCanvasState,
+  keyringPairsMock,
+  getMockDbState,
+} from 'test-utils';
 import { Interact } from 'ui/components';
-import type { DbState } from 'types';
+import type { CanvasState, DbState } from 'types';
 
 jest.mock('@polkadot/api', () => ({
   ApiPromise: jest.fn(),
@@ -14,20 +20,20 @@ jest.mock('@polkadot/api', () => ({
 
 jest.mock('@textile/threaddb', () => ({
   Database: jest.fn(),
-}))
+}));
 
 const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
 
 const mockCall = jest.fn();
 
 let mockDbState: DbState;
+let mockCanvasState: CanvasState;
 
 describe('Contract Interact', () => {
-  beforeAll(
-    async () => {
-      mockDbState = await getMockDbState();
-    }
-  )
+  beforeAll(async () => {
+    mockDbState = await getMockDbState();
+    mockCanvasState = await getMockCanvasState();
+  });
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(
       <Interact
@@ -37,7 +43,7 @@ describe('Contract Interact', () => {
         callFn={mockCall}
       />,
       {
-        ...getMockCanvasState(),
+        ...mockCanvasState,
         keyringStatus: 'READY',
         status: 'READY',
       },
@@ -56,7 +62,7 @@ describe('Contract Interact', () => {
         callFn={mockCall}
       />,
       {
-        ...getMockCanvasState(),
+        ...mockCanvasState,
         keyringStatus: 'READY',
         status: 'READY',
       },
