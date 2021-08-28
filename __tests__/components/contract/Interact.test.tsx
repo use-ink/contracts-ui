@@ -31,7 +31,7 @@ describe('Contract Interact', () => {
       mockDbState
     );
     expect(getByText('Message to send')).toBeInTheDocument();
-    expect(getByText('flip()')).toBeInTheDocument();
+    expect(getByText('flip')).toBeInTheDocument();
     expect(getByText('Call')).not.toBeDisabled();
   });
   test('call button executes ', () => {
