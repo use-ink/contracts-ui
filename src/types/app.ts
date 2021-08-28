@@ -94,6 +94,5 @@ export interface ContractCallParams {
   message: AbiMessage;
   endowment: number;
   gasLimit: number;
-  fromAddress: string;
   argValues?: Record<string, string>;
 }

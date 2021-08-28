@@ -3,12 +3,11 @@ import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { Abi, AnyJson, DropdownOption, KeyringPair, ContractCallParams } from 'types';
+import { Abi, AnyJson, DropdownOption, ContractCallParams } from 'types';
 
 interface Props {
   metadata: AnyJson;
   contractAddress: string;
-  keyringPairs: Partial<KeyringPair>[] | null;
   callFn: ({
     api,
     abi,
@@ -16,12 +15,11 @@ interface Props {
     message,
     endowment,
     gasLimit,
-    fromAddress,
     argValues,
   }: ContractCallParams) => void;
 }
 
-export const Interact = ({ metadata, contractAddress, keyringPairs, callFn }: Props) => {
+export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
   const { api } = useCanvas();
   const [selectedMsg, selectMsg] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
@@ -40,8 +38,7 @@ export const Interact = ({ metadata, contractAddress, keyringPairs, callFn }: Pr
     setArgValues(createEmptyValues(abi?.findMessage(0).args));
   }, []);
   return (
-    api &&
-    keyringPairs && (
+    api && (
       <>
         <div className="rounded-lg">
           <h2 className="mb-2 text-sm">Message to send</h2>
@@ -75,7 +72,6 @@ export const Interact = ({ metadata, contractAddress, keyringPairs, callFn }: Pr
                       contractAddress,
                       endowment: 0,
                       gasLimit: 155852802980,
-                      fromAddress: keyringPairs[0].address || '',
                       argValues,
                       message,
                     })

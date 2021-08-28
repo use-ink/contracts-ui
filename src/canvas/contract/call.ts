@@ -6,6 +6,8 @@ import {
   SubmittableExtrinsic,
   ISubmittableResult,
   ContractCallParams,
+  Keyring,
+  KeyringPair,
 } from 'types';
 
 export function prepareContractTx(
@@ -17,11 +19,11 @@ export function prepareContractTx(
 }
 export async function executeTx(
   tx: SubmittableExtrinsic<'promise', ISubmittableResult>,
-  fromAddress: string
+  pair: KeyringPair
 ): Promise<ISubmittableResult | null> {
   let txResult: ISubmittableResult | null = null;
   try {
-    await tx.signAndSend(fromAddress, result => {
+    await tx.signAndSend(pair, result => {
       txResult = result;
     });
   } catch (error) {
@@ -46,7 +48,6 @@ export async function call({
   message,
   endowment,
   gasLimit,
-  fromAddress,
   argValues,
 }: ContractCallParams) {
   const expectsArgs = message.args.length > 0;
@@ -56,18 +57,20 @@ export async function call({
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
 
+  const keyringPair = new Keyring().createFromUri('alice');
+
   if (message.isMutating || message.isPayable) {
     const tx = prepareContractTx(
       contract.tx[message.identifier],
       { gasLimit, value: endowment, salt },
       args
     );
-    const res = executeTx(tx, fromAddress);
+    const res = executeTx(tx, keyringPair);
     console.log(res);
   } else {
     const { result, gasConsumed } = await sendContractQuery(
       { gasLimit, endowment },
-      fromAddress,
+      keyringPair.address,
       contract.query[message.identifier],
       args
     );
