@@ -6,7 +6,6 @@ import {
   SubmittableExtrinsic,
   ISubmittableResult,
   ContractCallParams,
-  Keyring,
   KeyringPair,
 } from 'types';
 
@@ -48,6 +47,7 @@ export async function call({
   message,
   endowment,
   gasLimit,
+  keyringPair,
   argValues,
 }: ContractCallParams) {
   const expectsArgs = message.args.length > 0;
@@ -57,23 +57,25 @@ export async function call({
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
 
-  const keyringPair = new Keyring().createFromUri('alice');
-
-  if (message.isMutating || message.isPayable) {
-    const tx = prepareContractTx(
-      contract.tx[message.identifier],
-      { gasLimit, value: endowment, salt },
-      args
-    );
-    const res = executeTx(tx, keyringPair);
-    console.log(res);
+  if (keyringPair) {
+    if (message.isMutating || message.isPayable) {
+      const tx = prepareContractTx(
+        contract.tx[message.method],
+        { gasLimit, value: endowment, salt },
+        args
+      );
+      const res = executeTx(tx, keyringPair);
+      console.log(res);
+    } else {
+      const { result, gasConsumed } = await sendContractQuery(
+        { gasLimit, endowment },
+        keyringPair.address,
+        contract.query[message.method],
+        args
+      );
+      console.log(result, gasConsumed);
+    }
   } else {
-    const { result, gasConsumed } = await sendContractQuery(
-      { gasLimit, endowment },
-      keyringPair.address,
-      contract.query[message.identifier],
-      args
-    );
-    console.log(result, gasConsumed);
+    console.error('Kering pair not found');
   }
 }

@@ -8,6 +8,7 @@ import {
   ApiPromise,
   Keyring,
   AbiMessage,
+  KeyringPair,
 } from './substrate';
 
 export type VoidFn = () => void;
@@ -94,5 +95,6 @@ export interface ContractCallParams {
   message: AbiMessage;
   endowment: number;
   gasLimit: number;
+  keyringPair?: KeyringPair;
   argValues?: Record<string, string>;
 }

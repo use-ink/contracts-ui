@@ -16,11 +16,12 @@ interface Props {
     endowment,
     gasLimit,
     argValues,
+    keyringPair,
   }: ContractCallParams) => void;
 }
 
 export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
-  const { api } = useCanvas();
+  const { api, keyring } = useCanvas();
   const [selectedMsg, selectMsg] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
   const abi = new Abi(metadata);
@@ -74,6 +75,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
                       gasLimit: 155852802980,
                       argValues,
                       message,
+                keyringPair: keyring?.getPair('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
                     })
                   }
                 >
