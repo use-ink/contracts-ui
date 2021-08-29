@@ -71,7 +71,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
                 api,
                 abi,
                 contractAddress,
-                endowment: 0,
+                endowment: 1,
                 gasLimit: 155852802980,
                 argValues,
                 message,

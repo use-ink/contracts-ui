@@ -2,9 +2,15 @@
 
 import { compactAddLength, u8aToU8a } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
-import { Abi, Bytes, ContractPromise } from 'types';
-
-import type {
+import { createTypeUnsafe } from '@polkadot/types/create';
+import {
+  Abi,
+  Bytes,
+  ContractPromise,
+  Registry,
+  Raw,
+  TypeDef,
+  Codec,
   AnyJson,
   DispatchError,
   StorageEntry,
@@ -110,4 +116,8 @@ export function createOptions(data?: Array<unknown>, kind?: string): DropdownOpt
     }
   }
   return [];
+}
+
+export function formatData(registry: Registry, data: Raw, { type }: TypeDef): Codec {
+  return createTypeUnsafe(registry, type, [data], { isPedantic: true });
 }

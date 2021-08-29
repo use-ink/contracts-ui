@@ -1,4 +1,4 @@
-import { encodeSalt } from '../util';
+import { encodeSalt, formatData } from 'canvas/util';
 import {
   ContractPromise,
   ContractQuery,
@@ -16,6 +16,7 @@ export function prepareContractTx(
 ) {
   return args ? tx(options, ...args) : tx(options);
 }
+
 export async function executeTx(
   tx: SubmittableExtrinsic<'promise', ISubmittableResult>,
   pair: KeyringPair
@@ -31,6 +32,7 @@ export async function executeTx(
 
   return txResult;
 }
+
 export function sendContractQuery(
   options: { endowment: number; gasLimit: number },
   fromAddress: string,
@@ -51,9 +53,7 @@ export async function call({
   argValues,
 }: ContractCallParams) {
   const expectsArgs = message.args.length > 0;
-
   const args = expectsArgs ? (argValues ? Object.values(argValues) : []) : undefined;
-
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
 
@@ -67,13 +67,25 @@ export async function call({
       const res = executeTx(tx, keyringPair);
       console.log(res);
     } else {
-      const { result, gasConsumed } = await sendContractQuery(
+      const { result } = await sendContractQuery(
         { gasLimit, endowment },
         keyringPair.address,
         contract.query[message.method],
         args
       );
-      console.log(result, gasConsumed);
+      if (message.returnType && result.isOk) {
+        const output = formatData(api.registry, result.asOk.data, message.returnType);
+        console.log(output);
+      }
+      if (result.isErr) {
+        const error = result.asErr;
+        if (error.isModule) {
+          const decoded = api.registry.findMetaError(error.asModule);
+          console.error('Error calling contract: ', decoded);
+        } else {
+          console.error(`Error calling contract: ${error}`);
+        }
+      }
     }
   } else {
     console.error('Kering pair not found');
