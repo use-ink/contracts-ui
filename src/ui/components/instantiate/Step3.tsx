@@ -18,7 +18,8 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
   }, [constructors]);
 
   useEffect(() => {
-    constructors && setArgValues(createEmptyValues(constructors[0].args));
+    constructors &&
+      setArgValues(createEmptyValues(constructors[(constr?.value as number) || 0].args));
   }, [constr]);
 
   if (currentStep !== 3) return null;
