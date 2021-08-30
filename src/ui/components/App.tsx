@@ -1,12 +1,12 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import { Sidebar } from './Sidebar';
 import { Router, routes } from './Router';
 import { CanvasContextProvider, DatabaseContextProvider } from 'ui/contexts';
-// import { Database } from '@db';
 
-export function App(): JSX.Element {
+const App = (): JSX.Element => {
   return (
     <CanvasContextProvider>
       <DatabaseContextProvider>
@@ -19,4 +19,6 @@ export function App(): JSX.Element {
       </DatabaseContextProvider>
     </CanvasContextProvider>
   );
-}
+};
+
+export default hot(module)(App);
