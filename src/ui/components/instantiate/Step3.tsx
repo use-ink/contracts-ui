@@ -32,8 +32,8 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
         options={createOptions(constructors, 'message')}
         placeholder="no constructors found"
         className="mb-4"
-        selectedOption={constr}
-        changeHandler={(o: DropdownOption) => setConstructor(o)}
+        value={constr}
+        onChange={(o) => setConstructor(o)}
       />
       {constr && (
         <>

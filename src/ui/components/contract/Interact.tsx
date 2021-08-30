@@ -49,8 +49,8 @@ export const Interact = ({ metadata, address, keyringPairs, callFn }: Props) => 
             <Dropdown
               options={messageOptions}
               placeholder="No messages found"
-              changeHandler={(o: DropdownOption) => selectMsg(o)}
-              selectedOption={selectedMsg}
+              onChange={(o: DropdownOption) => selectMsg(o)}
+              value={selectedMsg}
             />
           </div>
           {message && (

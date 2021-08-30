@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { DocumentAddIcon, ChatAltIcon, CogIcon, HomeIcon } from '@heroicons/react/outline';
+import { Chain } from './Chain';
 
 export function Sidebar () {
   return (
@@ -10,9 +11,10 @@ export function Sidebar () {
       <div className="flex sidebar">
         <div className="flex flex-col w-72">
           <div className="flex flex-col h-0 flex-1 border-r dark:border-gray-stroke border-gray-200 dark:bg-elevation-1 bg-white">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+            <div className="flex-1 flex flex-col pt-3 pb-4 overflow-y-auto">
               <nav className="flex-1 space-y-4" aria-label="Sidebar">
-                <div className="px-6">
+                <div className="px-3">
+                  <Chain />
                   <Link
                     to="/"
                     className="dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-base font-medium rounded-md"

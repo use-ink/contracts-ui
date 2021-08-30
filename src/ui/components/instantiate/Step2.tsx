@@ -12,11 +12,12 @@ interface Props {
 }
 
 export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
-  const [accountSelected, setAccountSelected] = useState<DropdownOption>();
+  const options = createOptions(keyringPairs, 'pair');
+  const [account, setAccount] = useState<DropdownOption>(options[0]);
   const [name, setName] = useState('');
-  useEffect(() => {
-    keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
-  }, []);
+  // useEffect(() => {
+  //   keyringPairs && setAccount(createOptions(keyringPairs, 'pair')[0]);
+  // }, []);
   useEffect(() => {
     setName(contractName);
   }, [contractName]);
@@ -29,11 +30,11 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
         Account
       </label>
       <Dropdown
-        options={createOptions(keyringPairs, 'pair')}
+        options={options}
         placeholder="No accounts found"
         className="mb-4"
-        selectedOption={accountSelected}
-        changeHandler={(o: DropdownOption) => setAccountSelected(o)}
+        value={account}
+        onChange={setAccount}
       />
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Contract name
@@ -48,13 +49,13 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       <button
         type="button"
         className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={!accountSelected}
+        disabled={!account}
         onClick={() =>
           dispatch({
             type: 'STEP_2_COMPLETE',
             payload: {
-              fromAddress: accountSelected?.value.toString() || '',
-              fromAccountName: accountSelected?.name.toString() || '',
+              fromAddress: account?.value.toString() || '',
+              fromAccountName: account?.name.toString() || '',
               contractName: name,
             },
           })

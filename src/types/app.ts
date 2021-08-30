@@ -1,5 +1,5 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
-import { ReactNode, ComponentType } from 'react';
+import React, { ReactNode, ComponentType } from 'react';
 import { ContractPromise, Abi, EventRecord, DispatchError, ApiPromise, Keyring } from './substrate';
 
 export type VoidFn = () => void;
@@ -30,10 +30,15 @@ export interface ChainProperties {
   systemVersion: string | null;
 }
 
-export type DropdownOption = {
+export interface DropdownOption {
   value: string | number;
   name: string;
 };
+
+export interface OptionProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: DropdownOption;
+}
+
 export interface InstantiateState {
   isLoading: boolean;
   isSuccess: boolean;

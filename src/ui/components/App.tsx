@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import React from 'react';
-import { Sidebar } from './Sidebar';
+import { Sidebar } from './sidebar';
 import { Router, routes } from './Router';
 import { CanvasContextProvider, DatabaseContextProvider } from 'ui/contexts';
 // import { Database } from '@db';
