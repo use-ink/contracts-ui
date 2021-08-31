@@ -18,7 +18,7 @@ let mockCanvasState: CanvasState;
 describe('Contract Interact', () => {
   beforeAll(async () => {
     mockDbState = await getMockDbState();
-    mockCanvasState = await getMockCanvasState();
+    mockCanvasState = getMockCanvasState();
   });
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(

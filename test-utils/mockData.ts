@@ -2,10 +2,19 @@ import crypto from 'crypto';
 import faker from 'faker';
 import { Keyring } from '@polkadot/api';
 import moment from 'moment';
+import { Database } from '@textile/threaddb';
 import * as contractFiles from './contracts';
 import { createMockApi } from './utils';
-import { getNewCodeBundleId, getPrivateKeyFromPair, initDb, publicKeyHex } from 'db';
-import type {
+import {
+  getNewCodeBundleId,
+  getPrivateKeyFromPair,
+  publicKeyHex,
+  codeBundle,
+  contract,
+  user,
+} from 'db';
+
+import {
   CanvasState,
   DbState,
   InstantiateState,
@@ -187,12 +196,12 @@ export function getMockInstantiateState(): InstantiateState {
   };
 }
 
-export async function getMockCanvasState(): Promise<CanvasState> {
+export function getMockCanvasState(): CanvasState {
   return {
     endpoint: '',
     keyring: null,
     keyringStatus: null,
-    api: await createMockApi(),
+    api: createMockApi(),
     error: null,
     status: null,
     blockOneHash: '',
@@ -201,11 +210,29 @@ export async function getMockCanvasState(): Promise<CanvasState> {
   };
 }
 
+async function createMockDb() {
+  const db = await new Database(
+    'test',
+    { name: 'User', schema: user },
+    { name: 'Contract', schema: contract },
+    { name: 'CodeBundle', schema: codeBundle }
+  ).open(1);
+  return db;
+}
+
 export async function getMockDbState(): Promise<DbState> {
-  const [user, identity] = getTestUser();
+  const user = {
+    email: 'name@email.com',
+    name: 'Jane Doe',
+    codeBundlesStarred: [],
+    creator: 'test',
+    contractsStarred: [],
+    publicKey: 'test',
+  };
+  const identity = {} as PrivateKey;
 
   return {
-    db: await initDb('test'),
+    db: await createMockDb(),
     isDbReady: true,
     identity,
     user,

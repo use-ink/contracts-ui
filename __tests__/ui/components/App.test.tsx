@@ -9,7 +9,7 @@ let mockDbState: DbState;
 
 describe('Canvas context', () => {
   beforeAll(async (): Promise<void> => {
-    [mockCanvasState, mockDbState] = [await getMockCanvasState(), await getMockDbState()];
+    [mockCanvasState, mockDbState] = [getMockCanvasState(), await getMockDbState()];
   });
   test('should render the homepage if the api and database are in a ready state', () => {
     customRender(

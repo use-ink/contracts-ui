@@ -19,7 +19,7 @@ let mockCanvasState: CanvasState;
 describe('Instantiate Step 4', () => {
   beforeAll(async () => {
     mockDbState = await getMockDbState();
-    mockCanvasState = await getMockCanvasState();
+    mockCanvasState = getMockCanvasState();
   });
   test('displays a button that calls the submit handler', () => {
     customRender(
