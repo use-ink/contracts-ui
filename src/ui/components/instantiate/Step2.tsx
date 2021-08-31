@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
+import { Button } from '../Button';
+import { Buttons } from '../Buttons';
 import { createOptions } from 'canvas/util';
 import type { KeyringPair, InstantiateAction, DropdownOption } from 'types';
 
@@ -12,7 +14,10 @@ interface Props {
 }
 
 export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
-  const options = createOptions(keyringPairs, 'pair');
+  const options = useMemo(
+    (): DropdownOption[] => createOptions(keyringPairs, 'pair'),
+    []
+  );
   const [account, setAccount] = useState<DropdownOption>(options[0]);
   const [name, setName] = useState('');
   // useEffect(() => {
@@ -45,36 +50,34 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
         placeholder="contract name"
         id={name}
       />
-
-      <button
-        type="button"
-        className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={!account}
-        onClick={() =>
-          dispatch({
-            type: 'STEP_2_COMPLETE',
-            payload: {
-              fromAddress: account?.value.toString() || '',
-              fromAccountName: account?.name.toString() || '',
-              contractName: name,
-            },
-          })
-        }
-      >
-        Next
-      </button>
-      <button
-        type="button"
-        className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-        onClick={() =>
-          dispatch({
-            type: 'GO_TO',
-            payload: { step: 1 },
-          })
-        }
-      >
-        Go Back
-      </button>
+      <Buttons>
+        <Button
+          isDisabled={!account}
+          onClick={() =>
+            dispatch({
+              type: 'STEP_2_COMPLETE',
+              payload: {
+                fromAddress: account?.value.toString() || '',
+                fromAccountName: account?.name.toString() || '',
+                contractName: name,
+              },
+            })
+          }
+          variant='primary'
+        >
+          Next
+        </Button>
+        <Button
+          onClick={() =>
+            dispatch({
+              type: 'GO_TO',
+              payload: { step: 1 },
+            })
+          }
+        >
+          Go Back
+        </Button>
+      </Buttons>
     </>
   ) : null;
 };

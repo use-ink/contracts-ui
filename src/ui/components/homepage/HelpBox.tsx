@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-import { useLocalStorage } from 'ui/hooks/useLocalStorage';
+import { Button } from '../Button';
+import { useLocalStorage } from 'ui/hooks';
 
 export function HelpBox (): React.ReactElement | null {
   const [closedHelpBox, setClosedHelpBox] = useLocalStorage('closedHelpBox', false);
@@ -37,9 +38,12 @@ export function HelpBox (): React.ReactElement | null {
         </div>
         <div>
           <Link to="/">
-            <button className="text-xs border-2 py-1.5 px-3 rounded dark:bg-elevation-2 border-gray-200 dark:border-gray-700">
-            Explore Examples
-            </button>
+            <Button
+              className="border-2 py-1.5 px-3"
+              variant='default'
+            >
+              Explore Examples
+            </Button>
           </Link>
         </div>
       </div>

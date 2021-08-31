@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const postcssImport = require('postcss-import');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -22,7 +23,7 @@ const rules = [
         options: {
           postcssOptions: {
             ident: 'postcss',
-            plugins: [tailwindcss, autoprefixer],
+            plugins: [postcssImport, tailwindcss, autoprefixer],
           },
         },
       },

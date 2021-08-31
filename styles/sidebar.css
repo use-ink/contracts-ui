@@ -1,0 +1,54 @@
+.sidebar {
+  @apply flex;
+  width: 14rem;
+  min-width: 14rem;
+}
+
+.sidebar > div {
+  @apply flex min-h-full flex-col h-0 flex-1 border-r dark:border-gray-stroke border-gray-200 dark:bg-elevation-1 bg-white
+}
+
+.sidebar > div > div {
+  @apply flex-1 flex flex-col pt-3 pb-4 overflow-y-auto
+}
+
+.sidebar > div > div > nav {
+  max-width: 14rem;
+  @apply space-y-5
+}
+
+.sidebar > div > div > nav > div {
+  @apply px-3
+}
+
+.sidebar .network-selection {
+  @apply space-y-2
+}
+
+.sidebar > div > div > nav .connect-account {
+  @apply font-extrabold w-full text-center justify-center mt-1
+}
+
+.sidebar .navigation {
+  @apply space-y-2
+}
+
+.sidebar .quick-links {
+  @apply space-y-2
+}
+
+.sidebar .section .header {
+  @apply text-gray-400 text-xs py-1
+}
+
+.sidebar .section .none-yet {
+  @apply text-gray-200 text-xs pl-2
+}
+
+.sidebar footer {
+  @apply flex-shrink-0 flex p-6
+}
+
+.sidebar footer > div {
+  @apply flex justify-between flex-shrink-0 w-full group
+}

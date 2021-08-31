@@ -1,0 +1,23 @@
+.btn {
+  @apply flex font-semibold text-xs disabled:opacity-60 disabled:cursor-not-allowed
+}
+
+.btn:not(.plain) {
+  @apply py-2 px-4 rounded
+}
+
+.btn.default {
+  @apply border dark:text-gray-300 bg-elevation-2 border-gray-200 dark:border-gray-700
+}
+
+.btn.default:hover:not(:disabled) {
+  @apply bg-elevation-3
+}
+
+.btn.primary {
+  @apply bg-indigo-600 text-gray-100
+}
+
+.btn.primary:hover:not(:disabled) {
+  @apply bg-indigo-500
+}

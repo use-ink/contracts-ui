@@ -4,6 +4,8 @@ import { ArgumentForm } from '../ArgumentForm';
 import { createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import { Abi, AnyJson, ApiPromise, DropdownOption, KeyringPair, AbiMessage } from 'types';
+import { Button } from '../Button';
+import { Buttons } from '../Buttons';
 
 interface Props {
   metadata: AnyJson;
@@ -65,24 +67,25 @@ export const Interact = ({ metadata, address, keyringPairs, callFn }: Props) => 
                     }
                   />
                 )}
-                <button
-                  type="button"
-                  className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() =>
-                    callFn(
-                      api,
-                      abi,
-                      address,
-                      0,
-                      155852802980,
-                      message,
-                      keyringPairs[0].address || '',
-                      argValues
-                    )
-                  }
-                >
-                  Call
-                </button>
+                <Buttons>
+                  <Button
+                      onClick={() =>
+                      callFn(
+                        api,
+                        abi,
+                        address,
+                        0,
+                        155852802980,
+                        message,
+                        keyringPairs[0].address || '',
+                        argValues
+                      )
+                    }
+                    variant='primary'
+                  >
+                    Call
+                  </Button>
+                </Buttons>
               </>
             </div>
           )}

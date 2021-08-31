@@ -3,6 +3,8 @@ import { ArgumentForm } from '../ArgumentForm';
 import { Dropdown } from '../Dropdown';
 import { createOptions, createEmptyValues } from 'canvas/util';
 import type { InstantiateAction, DropdownOption, AbiMessage } from 'types';
+import { Button } from '../Button';
+import { Buttons } from '../Buttons';
 
 interface Props {
   constructors?: Partial<AbiMessage>[];
@@ -45,36 +47,35 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
             }
             argValues={argValues}
           />
-
-          <button
-            type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!constr.name || !argValues}
-            onClick={() =>
-              argValues &&
-              dispatch({
-                type: 'STEP_3_COMPLETE',
-                payload: {
-                  constructorName: constr.name,
-                  argValues,
-                },
-              })
-            }
-          >
-            Next
-          </button>
-          <button
-            type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() =>
-              dispatch({
-                type: 'GO_TO',
-                payload: { step: 2 },
-              })
-            }
-          >
-            Go Back
-          </button>
+          <Buttons>
+            <Button
+              className="mr-4"
+              isDisabled={!constr.name || !argValues}
+              onClick={() =>
+                argValues &&
+                dispatch({
+                  type: 'STEP_3_COMPLETE',
+                  payload: {
+                    constructorName: constr.name,
+                    argValues,
+                  },
+                })
+              }
+              variant='primary'
+            >
+              Next
+            </Button>
+            <Button
+              onClick={() =>
+                dispatch({
+                  type: 'GO_TO',
+                  payload: { step: 2 },
+                })
+              }
+            >
+              Go Back
+            </Button>
+          </Buttons>
         </>
       )}
     </>
