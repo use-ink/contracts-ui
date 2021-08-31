@@ -3,7 +3,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { Identicon } from '@polkadot/react-identicon';
 import { DropdownOption, KeyringPair } from '../../types';
-import { withEllipsis, createOptions } from 'canvas/util';
+import { createOptions } from 'canvas/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   selectedOption?: DropdownOption;
@@ -24,13 +24,6 @@ export const AccountSelector = ({
 
   return options ? (
     <>
-      <label
-        htmlFor="selectAccount"
-        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
-      >
-        Account
-      </label>
-
       <Listbox value={selectedOption} onChange={changeHandler}>
         <div className={`relative mt-1 ${className || ''}`}>
           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left dark:text-gray-300 text-gray-500 dark:bg-gray-900 bg-white rounded border dark:border-gray-700 border-gray-200 cursor-default focus:outline-none">
@@ -41,7 +34,9 @@ export const AccountSelector = ({
                   {options.length > 0 ? selectedOption && selectedOption.name : placeholder}
                 </span>
                 <p className="text-gray-500 text-xs">
-                  {withEllipsis(String(selectedOption?.value))}
+                  {String(selectedOption?.value).slice(0, 4) +
+                    '...' +
+                    String(selectedOption?.value).slice(-4)}
                 </p>
               </div>
             </div>
@@ -75,7 +70,9 @@ export const AccountSelector = ({
                             {option.name}
                           </span>
                           <p className="text-gray-500 text-xs">
-                            {withEllipsis(String(option?.value))}
+                            {String(option?.value).slice(0, 4) +
+                              '...' +
+                              String(option?.value).slice(-4)}
                           </p>
                         </div>
                       </div>

@@ -112,14 +112,6 @@ export function createOptions(data?: Array<unknown>, kind?: string): DropdownOpt
   return [];
 }
 
-// convert a long string to ellipsis (i.e. Qavw...Abcd)
-export function withEllipsis(str: string): string {
-  if (str.length > 12) {
-    return str.slice(0, 4) + '...' + str.slice(-4)
-  }
-  return str;
-}
-
 // convert ArrayBuffer to Uint8Array
 export function convertToUint8Array(result: ArrayBuffer): Uint8Array {
   const data = new Uint8Array(result);

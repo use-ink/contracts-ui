@@ -1,12 +1,12 @@
 import React, { useState, ChangeEvent } from 'react';
-import { Input } from '../Input';
-import { FileInput } from '../FileInput';
+import { Input } from '../../Input';
+import { FileInput } from '../../FileInput';
 import { convertMetadata } from 'canvas/util';
 import { useCanvas } from 'ui/contexts';
-import type { Abi, AnyJson, InstantiateAction } from 'types';
+import type { Abi, AnyJson, InstantiateHashAction } from 'types';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
-  dispatch: React.Dispatch<InstantiateAction>;
+  dispatch: React.Dispatch<InstantiateHashAction>;
   currentStep?: number;
 }
 
@@ -40,6 +40,7 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
         placeholder="on-chain code hash"
         id="codeHash"
       />
+
       <label
         htmlFor="metadata"
         className="text-sm inline-block mb-2 dark:text-gray-300 text-gray-700"

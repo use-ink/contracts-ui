@@ -1,5 +1,5 @@
 export * from './Contract';
 export * from './Homepage';
-export * from './Instantiate';
+export * from './AddContract';
 export * from './InstantiateWithCode';
 export * from './InstantiateWithHash';

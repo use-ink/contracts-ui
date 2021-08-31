@@ -1,10 +1,10 @@
 import React from 'react';
 import { CanvasContext } from 'ui/contexts';
-import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
+import type { ApiPromise, Keyring, InstantiateState, InstantiateHashAction } from 'types';
 
 interface Props {
   state: InstantiateState;
-  dispatch: React.Dispatch<InstantiateAction>;
+  dispatch: React.Dispatch<InstantiateHashAction>;
   currentStep: number;
   submitHandler: (
     endowment: number,
@@ -12,7 +12,7 @@ interface Props {
     api: ApiPromise | null,
     keyring: Keyring | null,
     keyringState: string | null,
-    dispatch: (action: InstantiateAction) => void,
+    dispatch: (action: InstantiateHashAction) => void,
     { constructorName, argValues, fromAddress, codeHash, metadata }: InstantiateState
   ) => void;
 }
@@ -33,7 +33,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
 
           <button
             type="button"
-            className="text-xs bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary"
             onClick={() =>
               submitHandler(
                 1300889614901161,
@@ -50,11 +50,11 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
           </button>
           <button
             type="button"
-            className="text-xs hover:underline text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-secondary"
             onClick={() =>
               dispatch({
                 type: 'GO_TO',
-                payload: { step: 3 },
+                payload: { step: currentStep - 1 },
               })
             }
           >

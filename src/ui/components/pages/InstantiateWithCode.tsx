@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { InstantiateCodeWizard } from '../instantiateFromCode';
+import { Wizard } from '../instantiate';
 
 export const InstantiateWithCode = () => {
   return (
@@ -23,7 +23,7 @@ export const InstantiateWithCode = () => {
           </div>
         </div>
         <div className="grid md:grid-cols-12 gap-5 m-1">
-          <InstantiateCodeWizard />
+          <Wizard instatiationType="code" />
         </div>
       </div>
     </>

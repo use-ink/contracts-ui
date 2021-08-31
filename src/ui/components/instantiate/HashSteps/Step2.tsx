@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown } from '../Dropdown';
-import { Input } from '../Input';
+import { Input } from '../../Input';
 import { createOptions } from 'canvas/util';
-import type { KeyringPair, InstantiateAction, DropdownOption } from 'types';
+import type { KeyringPair, InstantiateHashAction, DropdownOption } from 'types';
+import { AccountSelector } from 'ui/components/AccountSelector';
 
 interface Props {
   keyringPairs: Partial<KeyringPair>[];
-  dispatch: React.Dispatch<InstantiateAction>;
+  dispatch: React.Dispatch<InstantiateHashAction>;
   contractName: string;
   currentStep: number;
 }
@@ -26,18 +26,16 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
   return keyringPairs ? (
     <>
       <label
-        htmlFor="account"
-        className="text-sm inline-block mb-2 dark:text-gray-300 text-gray-700"
+        htmlFor="selectAccount"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
       >
         Account
       </label>
-      <Dropdown
-        options={createOptions(keyringPairs, 'pair')}
-        placeholder="No accounts found"
-        className="mb-4"
+      <AccountSelector
+        keyringPairs={keyringPairs}
         selectedOption={accountSelected}
-        withValueShown={true}
         changeHandler={(o: DropdownOption) => setAccountSelected(o)}
+        className="mb-2"
       />
       <label
         htmlFor="account"
@@ -51,7 +49,6 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
         placeholder="contract name"
         id={name}
       />
-
       <button
         type="button"
         className="text-xs bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -69,13 +66,14 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       >
         Next
       </button>
+
       <button
         type="button"
-        className="text-xs hover:underline text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="btn-secondary"
         onClick={() =>
           dispatch({
             type: 'GO_TO',
-            payload: { step: 1 },
+            payload: { step: currentStep - 1 },
           })
         }
       >

@@ -4,7 +4,7 @@ import {
   Contract,
   InstantiateWithCode,
   InstantiateWithHash,
-  Instantiate,
+  AddContract,
 } from '../pages';
 
 export const routes = [
@@ -16,7 +16,7 @@ export const routes = [
   },
   {
     path: '/instantiate',
-    component: Instantiate,
+    component: AddContract,
     exact: true,
     fallback: <div> Loading... </div>,
   },

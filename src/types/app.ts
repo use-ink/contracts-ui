@@ -61,36 +61,31 @@ export type BaseInstantiateAction =
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
   | {
-    type: 'GO_TO';
-    payload: { step: number };
-  };
-
-export type InstantiateAction = BaseInstantiateAction
-  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
-  | {
-    type: 'STEP_2_COMPLETE';
-    payload: { fromAddress: string; fromAccountName: string; contractName: string };
-  }
-  | {
-    type: 'STEP_3_COMPLETE';
-    payload: { constructorName: string; argValues: Record<string, string> };
-  };
-
-export type InstantiateCodeAction = BaseInstantiateAction
-  | {
-    type: 'STEP_1_COMPLETE'; payload: {
-      fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
-    }
-  }
-  | {
-    type: 'STEP_2_COMPLETE';
-    payload: {
+    type: 'DEPLOYMENT_INFO'; payload: {
       constructorName: string;
       argValues: Record<string, string>;
       endowment: number;
       salt: string;
       gas: number;
     };
+  }
+  | {
+    type: 'GO_TO';
+    payload: { step: number };
+  };
+
+export type InstantiateHashAction = BaseInstantiateAction
+  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
+  | {
+    type: 'STEP_2_COMPLETE';
+    payload: { fromAddress: string; fromAccountName: string; contractName: string };
+  };
+
+export type InstantiateCodeAction = BaseInstantiateAction
+  | {
+    type: 'UPLOAD_CONTRACT'; payload: {
+      fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
+    }
   };
 
 export interface FileState {
@@ -118,4 +113,9 @@ export type RawParamValues = RawParamValue | RawParamValueArray;
 export interface RawParam {
   isValid: boolean;
   value: RawParamValues;
+}
+
+export enum InstantiationTypeEnum {
+  CODE = 'code',
+  HASH = 'hash',
 }

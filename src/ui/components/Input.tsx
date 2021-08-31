@@ -1,6 +1,5 @@
 import React from 'react';
 
-//to do: input validation - check if hash exists
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
   value: string | number;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
