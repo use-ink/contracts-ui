@@ -8,17 +8,19 @@ import { flipperMockJson, customRender, getMockCanvasState, getMockDbState } fro
 import { Interact } from 'ui/components';
 import { CanvasState, DbState } from 'types';
 
-const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
-
-const mockCall = jest.fn();
-
-let mockDbState: DbState;
-let mockCanvasState: CanvasState;
-
 describe('Contract Interact', () => {
+  const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
+
+  const mockCall = jest.fn();
+
+  let mockDbState: DbState;
+  let mockCanvasState: CanvasState;
   beforeAll(async () => {
     mockDbState = await getMockDbState();
     mockCanvasState = getMockCanvasState();
+  });
+  afterAll(async () => {
+    await mockDbState.db.delete();
   });
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(

@@ -1,18 +1,16 @@
-import { screen } from '@testing-library/react';
 import React from 'react';
 import { customRender, getMockCanvasState, getMockDbState } from 'test-utils';
 import { CanvasState, DbState } from 'types';
 import { Router, routes } from 'ui/components/Router';
 
-let mockCanvasState: CanvasState;
-let mockDbState: DbState;
-
 describe('Canvas context', () => {
+  let mockCanvasState: CanvasState;
+  let mockDbState: DbState;
   beforeAll(async (): Promise<void> => {
     [mockCanvasState, mockDbState] = [getMockCanvasState(), await getMockDbState()];
   });
   test('should render the homepage if the api and database are in a ready state', () => {
-    customRender(
+    const { getByText } = customRender(
       <Router routes={routes} />,
       {
         ...mockCanvasState,
@@ -21,22 +19,26 @@ describe('Canvas context', () => {
       },
       mockDbState
     );
-    expect(screen.getByText('Contracts')).toBeTruthy();
+    expect(getByText('Contracts')).toBeTruthy();
   });
   test('should suggest to check extension if keyring state is not ready', () => {
-    customRender(<Router routes={routes} />, { ...mockCanvasState, status: 'READY' }, mockDbState);
-    expect(screen.getByText(`Loading accounts...`)).toBeTruthy();
+    const { getByText } = customRender(
+      <Router routes={routes} />,
+      { ...mockCanvasState, status: 'READY' },
+      mockDbState
+    );
+    expect(getByText(`Loading accounts...`)).toBeTruthy();
   });
   test('should render a message if the api is not ready but the keyring is', () => {
-    customRender(
+    const { getByText } = customRender(
       <Router routes={routes} />,
       { ...mockCanvasState, keyringStatus: 'READY' },
       mockDbState
     );
-    expect(screen.getByText(`Connecting...`)).toBeTruthy();
+    expect(getByText(`Connecting...`)).toBeTruthy();
   });
   test('should render the error it encountered while connecting to the node', () => {
-    customRender(
+    const { getByText } = customRender(
       <Router routes={routes} />,
       {
         ...mockCanvasState,
@@ -46,6 +48,6 @@ describe('Canvas context', () => {
       mockDbState
     );
 
-    expect(screen.getByText(`Connection error`)).toBeTruthy();
+    expect(getByText(`Connection error`)).toBeTruthy();
   });
 });
