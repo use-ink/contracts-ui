@@ -8,21 +8,13 @@ import { Page } from 'ui/templates';
 type UrlParams = { addr: string };
 
 export const Contract = () => {
-  const { api, keyring } = useCanvas();
+  const { api } = useCanvas();
   const { addr } = useParams<UrlParams>();
-  const contract = getInstanceFromStorage(addr.toString(), api);
-  const keyringPairs = keyring?.getPairs() || null;
+  const contract = getInstanceFromStorage(addr, api);
 
   return (
-    <Page
-      header={contract?.abi.project.contract.name}
-    >
-      <Interact
-        address={addr}
-        metadata={contract?.abi.json}
-        keyringPairs={keyringPairs}
-        callFn={call}
-      />
+    <Page header={contract?.abi.project.contract.name}>
+      <Interact contractAddress={addr} metadata={contract?.abi.json} callFn={call} />
     </Page>
   );
 };
