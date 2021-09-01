@@ -3,7 +3,7 @@ import faker from 'faker';
 import { Keyring } from '@polkadot/api';
 import moment from 'moment';
 import { Database } from '@textile/threaddb';
-import * as contractFiles from './contracts';
+import { contractFiles } from './contracts';
 import { createMockApi } from './utils';
 import {
   getNewCodeBundleId,
