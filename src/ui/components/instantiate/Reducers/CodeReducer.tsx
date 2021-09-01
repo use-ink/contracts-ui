@@ -1,20 +1,20 @@
 import { Reducer } from 'react';
-import { InstantiateCodeAction, InstantiateState } from 'types';
+import { InstantiateAction, InstantiateState } from 'types';
 
-export const CodeReducer: Reducer<InstantiateState, InstantiateCodeAction> = (state, action) => {
+export const CodeReducer: Reducer<InstantiateState, InstantiateAction> = (state, action) => {
   switch (action.type) {
-    case 'UPLOAD_CONTRACT': // previously called STEP_1_COMPLETE
+    case 'UPLOAD_CONTRACT':
       return {
         ...state,
-        fromAccountName: action.payload.fromAccountName,
-        fromAddress: action.payload.fromAddress,
+        file: action.payload.file,
         metadata: action.payload.metadata,
         contractName: action.payload.contractName,
-        file: action.payload.file,
+        fromAddress: action.payload.fromAddress,
+        fromAccountName: action.payload.fromAccountName,
         currentStep: 2,
       };
 
-    case 'DEPLOYMENT_INFO': // previously called STEP_2_COMPLETE
+    case 'DEPLOYMENT_INFO':
       return {
         ...state,
         constructorName: action.payload.constructorName,

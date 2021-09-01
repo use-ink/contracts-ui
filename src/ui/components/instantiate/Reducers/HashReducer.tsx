@@ -1,25 +1,19 @@
 import { Reducer } from 'react';
-import { InstantiateHashAction, InstantiateState } from 'types';
+import { InstantiateAction, InstantiateState } from 'types';
 
-export const HashReducer: Reducer<InstantiateState, InstantiateHashAction> = (state, action) => {
+export const HashReducer: Reducer<InstantiateState, InstantiateAction> = (state, action) => {
   switch (action.type) {
-    case 'STEP_1_COMPLETE':
+    case 'UPLOAD_METADATA':
       return {
         ...state,
         codeHash: action.payload.codeHash,
         metadata: action.payload.metadata,
         contractName: action.payload.contractName,
-        currentStep: 2,
-      };
-    case 'STEP_2_COMPLETE':
-      return {
-        ...state,
         fromAddress: action.payload.fromAddress,
         fromAccountName: action.payload.fromAccountName,
-        contractName: action.payload.contractName,
-        currentStep: 3,
+        currentStep: 2,
       };
-    case 'DEPLOYMENT_INFO': // previously called STEP_3_COMPLETE
+    case 'DEPLOYMENT_INFO':
       return {
         ...state,
         constructorName: action.payload.constructorName,
@@ -27,7 +21,7 @@ export const HashReducer: Reducer<InstantiateState, InstantiateHashAction> = (st
         endowment: action.payload.endowment,
         salt: action.payload.salt,
         gas: action.payload.gas,
-        currentStep: 4,
+        currentStep: 3,
       };
     case 'GO_TO':
       return { ...state, currentStep: action.payload.step };

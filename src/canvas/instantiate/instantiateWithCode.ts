@@ -2,13 +2,13 @@
 import { SubmittableExtrinsic } from "@polkadot/api/types";
 import { getInstanceFromEvents } from './getAddressFromEvents';
 import { handleDispatchError, saveInLocalStorage } from 'canvas/util';
-import { ApiPromise, InstantiateCodeAction, InstantiateState, Keyring } from "types";
+import { ApiPromise, InstantiateAction, InstantiateState, Keyring } from "types";
 
 export const instantiateWithCode = async (
     api: ApiPromise | null,
     keyring: Keyring | null,
     keyringState: string | null,
-    dispatch: (action: InstantiateCodeAction) => void,
+    dispatch: (action: InstantiateAction) => void,
     uploadTransaction: SubmittableExtrinsic<'promise'> | null,
     uploadTransactionError: string | null,
     { fromAddress, metadata }: InstantiateState,

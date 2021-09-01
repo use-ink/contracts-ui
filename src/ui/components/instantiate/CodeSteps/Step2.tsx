@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Switch } from '@headlessui/react';
 import { randomAsHex } from '@polkadot/util-crypto';
-import { InstantiateCodeAction, DropdownOption, AbiMessage } from 'types';
+import { InstantiateAction, DropdownOption, AbiMessage } from 'types';
 import { ArgumentForm } from 'ui/components/ArgumentForm';
 import { Dropdown } from 'ui/components/Dropdown';
 import { InputDropdown } from 'ui/components/InputDropdown';
@@ -10,7 +10,7 @@ import { createOptions, createEmptyValues, unitOptions } from 'canvas/util';
 
 interface Props {
   constructors?: Partial<AbiMessage>[];
-  dispatch: React.Dispatch<InstantiateCodeAction>;
+  dispatch: React.Dispatch<InstantiateAction>;
   currentStep: number;
 }
 

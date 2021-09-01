@@ -55,11 +55,21 @@ export interface InstantiateState {
   api?: ApiPromise | null;
 }
 
-export type BaseInstantiateAction =
+export type InstantiateAction =
   | { type: 'INSTANTIATE' }
   | { type: 'INSTANTIATE_FINALIZED'; payload: EventRecord[] }
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
+  | {
+    type: 'UPLOAD_METADATA'; payload: {
+      codeHash: string; metadata: Abi; contractName: string, fromAddress: string; fromAccountName: string;
+    }
+  }
+  | {
+    type: 'UPLOAD_CONTRACT'; payload: {
+      fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
+    }
+  }
   | {
     type: 'DEPLOYMENT_INFO'; payload: {
       constructorName: string;
@@ -72,20 +82,6 @@ export type BaseInstantiateAction =
   | {
     type: 'GO_TO';
     payload: { step: number };
-  };
-
-export type InstantiateHashAction = BaseInstantiateAction
-  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
-  | {
-    type: 'STEP_2_COMPLETE';
-    payload: { fromAddress: string; fromAccountName: string; contractName: string };
-  };
-
-export type InstantiateCodeAction = BaseInstantiateAction
-  | {
-    type: 'UPLOAD_CONTRACT'; payload: {
-      fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
-    }
   };
 
 export interface FileState {

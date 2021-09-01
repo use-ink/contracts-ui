@@ -1,7 +1,7 @@
 import { BlueprintPromise } from '@polkadot/api-contract';
 import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../util';
 import { getInstanceFromEvents } from './getAddressFromEvents';
-import type { ApiPromise, Keyring, Abi, InstantiateHashAction, InstantiateState } from 'types';
+import type { ApiPromise, Keyring, Abi, InstantiateAction, InstantiateState } from 'types';
 
 function createBlueprintTx(
   api: ApiPromise | null,
@@ -28,7 +28,7 @@ export const instantiateWithHash = async (
   api: ApiPromise | null,
   keyring: Keyring | null,
   keyringState: string | null,
-  dispatch: (action: InstantiateHashAction) => void,
+  dispatch: (action: InstantiateAction) => void,
   { constructorName, argValues, fromAddress, codeHash, metadata }: InstantiateState
 ) => {
   const salt = encodeSalt();

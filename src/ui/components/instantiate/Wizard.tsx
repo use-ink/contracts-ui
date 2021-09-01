@@ -1,12 +1,7 @@
 import React, { useReducer } from 'react';
 import { StepInfo, StepsLabels } from '../StepsLabels';
 import { resolveReducer } from './Reducers';
-import {
-  Step1 as HashStep1,
-  Step2 as HashStep2,
-  Step3 as HashStep3,
-  Step4 as HashStep4,
-} from './HashSteps';
+import { Step1 as HashStep1, Step2 as HashStep2, Step3 as HashStep3 } from './HashSteps';
 import { Step1 as CodeStep1, Step2 as CodeStep2, Step3 as CodeStep3 } from './CodeSteps';
 import { instantiateWithCode, instantiateWithHash } from 'canvas';
 import { useCanvas } from 'ui/contexts';
@@ -55,32 +50,29 @@ export const Wizard = ({ instatiationType }: Props) => {
 
   return keyringPairs && api?.query ? (
     <>
-      {instatiationType === InstantiationTypeEnum.HASH ? (
-        <>
-          <main className="md:col-span-9 p-4">
-            <HashStep1 dispatch={dispatch} currentStep={state.currentStep} />
-            <HashStep2
-              keyringPairs={keyringPairs}
+      <main className="md:col-span-9 p-4">
+        {instatiationType === InstantiationTypeEnum.HASH ? (
+          <>
+            <HashStep1
               dispatch={dispatch}
-              contractName={state.contractName}
               currentStep={state.currentStep}
+              keyringPairs={keyringPairs}
+              api={api}
             />
-            <HashStep3
+            <HashStep2
               constructors={state.metadata?.constructors}
               dispatch={dispatch}
               currentStep={state.currentStep}
             />
-            <HashStep4
+            <HashStep3
               state={state}
               dispatch={dispatch}
               currentStep={state.currentStep}
               submitHandler={instantiateWithHash}
             />
-          </main>
-        </>
-      ) : (
-        <>
-          <main className="md:col-span-9 p-4">
+          </>
+        ) : (
+          <>
             <CodeStep1
               keyringPairs={keyringPairs}
               dispatch={dispatch}
@@ -99,13 +91,12 @@ export const Wizard = ({ instatiationType }: Props) => {
               currentStep={state.currentStep}
               submitHandler={instantiateWithCode}
             />
-          </main>
-
-          <aside className="md:col-span-3 md:pt-0 p-4">
-            <StepsLabels currentStep={state.currentStep} stepsInfo={stepsInfo} />
-          </aside>
-        </>
-      )}
+          </>
+        )}
+      </main>
+      <aside className="md:col-span-3 md:pt-0 p-4">
+        <StepsLabels currentStep={state.currentStep} stepsInfo={stepsInfo} />
+      </aside>
     </>
   ) : null;
 };

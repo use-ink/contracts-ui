@@ -9,14 +9,14 @@ import {
   ApiPromise,
   DropdownOption,
   FileState,
-  InstantiateCodeAction,
+  InstantiateAction,
   KeyringPair,
 } from 'types';
 import { convertMetadata, convertToUint8Array, createOptions, NOOP } from 'canvas/util';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
   keyringPairs: Partial<KeyringPair>[];
-  dispatch: React.Dispatch<InstantiateCodeAction>;
+  dispatch: React.Dispatch<InstantiateAction>;
   api: ApiPromise;
   currentStep?: number;
 }
@@ -48,7 +48,7 @@ export const Step1 = ({ keyringPairs, dispatch, api, currentStep }: Props) => {
   }
 
   useEffect(() => {
-    setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
+    keyringPairs && setAccountSelected(createOptions(keyringPairs, 'pair')[0]);
   }, []);
 
   if (currentStep !== 1) return null;
@@ -106,11 +106,11 @@ export const Step1 = ({ keyringPairs, dispatch, api, currentStep }: Props) => {
             dispatch({
               type: 'UPLOAD_CONTRACT',
               payload: {
+                file: file as FileState,
                 metadata,
                 fromAccountName: accountSelected?.name.toString() || '',
                 fromAddress: accountSelected?.value.toString() || '',
                 contractName: metadata.project.contract.name.toHuman(),
-                file: file as FileState,
               },
             });
         }}

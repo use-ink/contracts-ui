@@ -2,19 +2,19 @@ import React, { useMemo, useEffect, useState } from 'react';
 import { CodePromise } from '@polkadot/api-contract';
 import { Identicon } from '@polkadot/react-identicon';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { ApiPromise, Keyring, InstantiateState, InstantiateCodeAction, RawParam } from 'types';
+import { ApiPromise, Keyring, InstantiateState, InstantiateAction, RawParam } from 'types';
 import { CanvasContext } from 'ui/contexts';
 
 interface Props {
   state: InstantiateState;
-  dispatch: React.Dispatch<InstantiateCodeAction>;
+  dispatch: React.Dispatch<InstantiateAction>;
   api: ApiPromise;
   currentStep: number;
   submitHandler: (
     api: ApiPromise | null,
     keyring: Keyring | null,
     keyringState: string | null,
-    dispatch: (action: InstantiateCodeAction) => void,
+    dispatch: (action: InstantiateAction) => void,
     uploadTx: SubmittableExtrinsic<'promise'> | null,
     error: string | null,
     { fromAddress, metadata }: InstantiateState
