@@ -5,27 +5,27 @@ import type { DropdownOption } from 'types';
 import { classes } from 'ui/util';
 
 interface Props {
+  children?: React.HTMLAttributes<HTMLDivElement>['children'];
   className?: React.HTMLAttributes<HTMLDivElement>['className'];
-  onChange: (o: DropdownOption) => void;
+  onChange: (_: DropdownOption) => void;
   options?: DropdownOption[];
-  placeholder?: React.ReactNode;
   value?: DropdownOption;
 }
 
 export const Dropdown = ({
   options,
-  placeholder,
+  children: placeholder,
   className = '',
   onChange,
   value,
 }: Props) => {
-  return options ? (
+  return (
     <Listbox value={value} onChange={onChange}>
       {(({ open }) => ((
       <div className={classes('dropdown', className)}>
         <Listbox.Button className={classes('dropdown-btn option', open ? ' rounded-b-none' : '')}>
           <span>
-            {options.length > 0
+            {options && options.length > 0
               ? value?.name
               : placeholder
             }
@@ -39,7 +39,7 @@ export const Dropdown = ({
           leaveTo="opacity-0"
         >
           <Listbox.Options className="options">
-            {options.map(option => (
+            {options?.map(option => (
               <Listbox.Option
                 key={option.value.toString()}
                 className={({ active, selected }) => classes('option', active ? 'active' : '', selected ? 'selected' : '')}
@@ -60,5 +60,5 @@ export const Dropdown = ({
       </div>
       )))}
     </Listbox>
-  ) : null;
+  );
 };

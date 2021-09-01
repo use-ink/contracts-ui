@@ -36,11 +36,12 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       </label>
       <Dropdown
         options={options}
-        placeholder="No accounts found"
         className="mb-4"
         value={account}
         onChange={setAccount}
-      />
+      >
+        No accounts found
+      </Dropdown>
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Contract name
       </label>

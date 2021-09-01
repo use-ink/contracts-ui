@@ -33,11 +33,12 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
       </label>
       <Dropdown
         options={createOptions(constructors, 'message')}
-        placeholder="no constructors found"
         className="mb-4"
         value={constr}
         onChange={(o) => setConstructor(o)}
-      />
+      >
+        No constructors found
+      </Dropdown>
       {constr && (
         <>
           <ArgumentForm

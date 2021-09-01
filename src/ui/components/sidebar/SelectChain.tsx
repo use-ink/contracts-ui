@@ -17,7 +17,6 @@ export function SelectChain () {
   return (
     <Dropdown
       className="chain"
-      // onChange={({ value: { value } }) => setEndpoint(value)}
       onChange={() => {}}
       options={options}
       value={value}

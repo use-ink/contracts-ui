@@ -13,7 +13,7 @@ export function Button({ children, className = '', isDisabled = false, variant =
     <button
       type="button"
       className={classes('btn', variant, className)}
-      {...isDisabled ? { disabled: true }: {}}
+      {...isDisabled ? { disabled: true } : {}}
       {...props}
     >
       {children}

@@ -47,10 +47,11 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
           <div className="mb-4">
             <Dropdown
               options={options}
-              placeholder="No messages found"
               onChange={(o: DropdownOption) => selectMsg(o)}
               value={selectedMsg}
-            />
+            >
+              No messages found
+            </Dropdown>
           </div>
           {argValues && (
             <div className="text-sm mb-4">
