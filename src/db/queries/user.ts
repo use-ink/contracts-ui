@@ -79,7 +79,7 @@ export async function starContract(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
     const contract = await getContractCollection(db).findOne({ address });
 
     if (user && contract) {
@@ -100,7 +100,9 @@ export async function starContract(
 
     return Promise.reject(new Error('Invalid user'));
   } catch (e) {
-    return Promise.reject(new Error(e));
+    console.error(e);
+
+    return Promise.reject(e);
   }
 }
 
@@ -114,7 +116,7 @@ export async function unstarContract(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
     const contract = await getContractCollection(db).findOne({ address });
 
     if (user && contract) {
@@ -133,7 +135,9 @@ export async function unstarContract(
 
     return Promise.reject(new Error('Invalid user'));
   } catch (e) {
-    return Promise.reject(new Error(e));
+    console.error(e);
+
+    return Promise.reject(e);
   }
 }
 
@@ -147,7 +151,7 @@ export async function starCodeBundle(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
     const codeBundle = await getCodeBundleCollection(db).findOne({ id });
 
     if (user && codeBundle) {
@@ -167,7 +171,9 @@ export async function starCodeBundle(
 
     return Promise.reject(new Error('Invalid user'));
   } catch (e) {
-    return Promise.reject(new Error(e));
+    console.error(e);
+
+    return Promise.reject(e);
   }
 }
 
@@ -181,7 +187,7 @@ export async function unstarCodeBundle(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
+    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
     const codeBundle = await getCodeBundleCollection(db).findOne({ id });
 
     if (user && codeBundle) {
@@ -201,6 +207,6 @@ export async function unstarCodeBundle(
   } catch (e) {
     console.error(e);
 
-    return Promise.reject(new Error(e));
+    return Promise.reject(e);
   }
 }

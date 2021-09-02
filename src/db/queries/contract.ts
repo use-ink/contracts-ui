@@ -57,7 +57,7 @@ export async function createContract(
   savePair = true
 ): Promise<ContractDocument> {
   try {
-    if (!address || !codeBundleId || !creator || !name || !genesisHash || !blockOneHash) {
+    if (!abi || !address || !codeBundleId || !creator || !name || !genesisHash || !blockOneHash) {
       return Promise.reject(new Error('Missing required fields'));
     }
 
@@ -91,9 +91,9 @@ export async function createContract(
 
     return Promise.resolve(newContract);
   } catch (e) {
-    console.error(new Error(e));
+    console.error(e);
 
-    return Promise.reject(new Error(e));
+    return Promise.reject(e);
   }
 }
 
@@ -121,7 +121,9 @@ export async function updateContract(
 
     return Promise.reject(new Error('Contract does not exist'));
   } catch (e) {
-    return Promise.reject(new Error(e));
+    console.error(e)
+
+    return Promise.reject(e);
   }
 }
 
@@ -141,6 +143,6 @@ export async function removeContract(db: Database, address: string, savePair = t
 
     return Promise.resolve();
   } catch (e) {
-    return Promise.reject(new Error(e));
+    return Promise.reject(e);
   }
 }
