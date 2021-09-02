@@ -14,7 +14,9 @@ export function useCreateContract(): (_: Partial<ContractDocument>) => Promise<C
       try {
         return createContract(db, identity, data);
       } catch (e) {
-        console.error(new Error(e));
+        console.error(e);
+
+        throw e;
       }
     },
     []

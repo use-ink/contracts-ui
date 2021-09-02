@@ -281,7 +281,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
   const genesisHash = randomHash();
 
   MOCK_CONTRACT_DATA.forEach(([name, , tags]) => {
-    const abi = (contractFiles as Record<string, AnyJson>)[name];
+    const abi = (contractFiles as Record<string, Record<string, unknown>>)[name];
 
     codeBundles.push({
       blockOneHash: blockOneHashes[Math.round(Math.random())],
@@ -308,7 +308,7 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
 
   // Original instantiation and 0-2 reinstantiations
   MOCK_CONTRACT_DATA.forEach(([name, , tags], index) => {
-    const abi = (contractFiles as Record<string, AnyJson>)[name.toLowerCase()];
+    const abi = (contractFiles as Record<string, Record<string, unknown>>)[name.toLowerCase()];
 
     contracts.push({
       address: faker.random.alphaNumeric(62),

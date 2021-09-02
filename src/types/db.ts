@@ -20,7 +20,7 @@ export interface UserDocument extends Document {
 }
 
 export interface CodeBundleDocument extends Document {
-  abi?: unknown | null;
+  abi?: Record<string, unknown>;
   blockOneHash?: string;
   codeHash: string;
   creator: string;
@@ -35,7 +35,7 @@ export interface CodeBundleDocument extends Document {
 }
 
 export interface ContractDocument extends Document {
-  abi: unknown;
+  abi: Record<string, unknown>;
   address: string;
   blockOneHash?: string;
   codeBundleId: string;

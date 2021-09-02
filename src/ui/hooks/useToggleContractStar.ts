@@ -22,7 +22,7 @@ export function useToggleContractStar(): (_: string) => Promise<number> {
         
         return starContract(db, identity, address);
       } catch (e) {
-        console.error(new Error(e));
+        console.error(e);
 
         throw e;
       }
