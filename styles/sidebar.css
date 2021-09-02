@@ -4,20 +4,20 @@
   min-width: 14rem;
 }
 
-.sidebar > div {
+.sidebar .sidebar-inner {
   @apply flex min-h-full flex-col h-0 flex-1 border-r dark:border-gray-stroke border-gray-200 dark:bg-elevation-1 bg-white
 }
 
-.sidebar > div > div {
+.sidebar .sidebar-inner .upper {
   @apply flex-1 flex flex-col pt-3 pb-4 overflow-y-auto
 }
 
-.sidebar > div > div > nav {
+.sidebar .sidebar-inner .upper nav {
   max-width: 14rem;
   @apply space-y-5
 }
 
-.sidebar > div > div > nav > div {
+.sidebar .sidebar-inner .upper nav > * {
   @apply px-3
 }
 
@@ -25,7 +25,7 @@
   @apply space-y-2
 }
 
-.sidebar > div > div > nav .connect-account {
+.sidebar .connect-account {
   @apply font-extrabold w-full text-center justify-center mt-1
 }
 
@@ -45,10 +45,10 @@
   @apply text-gray-200 text-xs pl-2
 }
 
-.sidebar footer {
+.sidebar .footer {
   @apply flex-shrink-0 flex p-6
 }
 
-.sidebar footer > div {
+.sidebar .footer > div {
   @apply flex justify-between flex-shrink-0 w-full group
 }

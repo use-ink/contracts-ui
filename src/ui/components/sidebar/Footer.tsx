@@ -3,7 +3,7 @@ import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
 
 export function Footer () {
   return (
-    <footer>
+    <footer className="footer">
       <div>
         <a
           href="#"

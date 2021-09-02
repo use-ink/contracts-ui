@@ -9,8 +9,8 @@ import { QuickLinks } from './QuickLinks';
 export function Sidebar () {
   return (
     <div className="sidebar">
-      <div>
-        <div>
+      <div className="sidebar-inner">
+        <div className="upper">
           <nav aria-label="Sidebar">
             <NetworkAndUser />
             <Navigation />
