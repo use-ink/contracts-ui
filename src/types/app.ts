@@ -44,10 +44,6 @@ export interface DropdownOption {
   name: string;
 };
 
-export interface OptionProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: DropdownOption;
-}
-
 export interface InstantiateState {
   isLoading: boolean;
   isSuccess: boolean;
