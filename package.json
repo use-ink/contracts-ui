@@ -9,13 +9,14 @@
     "build": "webpack --progress --config webpack.dev.cjs",
     "build:prod": "webpack --config webpack.prod.cjs",
     "test:all": "jest --clearCache && node --expose-gc --experimental-vm-modules $(yarn bin)/jest --runInBand",
-    "test": "yarn test:all -- --testPathIgnorePatterns ./__tests__/db/**",
-    "test:watch": "yarn test -- --watch",
-    "test:coverage": "yarn test -- --collectCoverage -- --coveragePathIgnorePatterns ./src/db/**",
+    "test": "yarn test:all --testPathIgnorePatterns ./__tests__/db/**",
+    "test:watch": "yarn test --watch",
+    "test:coverage": "yarn test --collectCoverage --coveragePathIgnorePatterns ./src/db/**",
     "test:ci": "yarn test:all",
     "lint": "eslint --fix src/",
     "clean": "rm -rf dist",
-    "deep-clean": "yarn clean && rm -rf node_modules"
+    "deep-clean": "yarn clean && rm -rf node_modules",
+    "regenerate": "yarn deep-clean && yarn && yarn start"
   },
   "keywords": [],
   "author": "",
