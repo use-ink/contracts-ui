@@ -1,9 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { jest } from '@jest/globals';
 import { MemoryRouter } from 'react-router';
 import { CanvasContext, DbContext } from '../src/ui/contexts';
-import { CanvasState, DbState, ApiPromise } from '../src/types';
+import { CanvasState, DbState } from '../src/types';
 
 export const customRender = (ui: JSX.Element, canvasState: CanvasState, dbState: DbState) => {
   return render(
@@ -14,10 +13,3 @@ export const customRender = (ui: JSX.Element, canvasState: CanvasState, dbState:
     </CanvasContext.Provider>
   );
 };
-
-export function createMockApi() {
-  const api = {
-    rpc: { chain: { subscribeNewHeads: jest.fn() } },
-  };
-  return api as unknown as ApiPromise;
-}

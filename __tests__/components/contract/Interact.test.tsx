@@ -4,7 +4,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { flipperMockJson, customRender, getMockCanvasState, getMockDbState } from 'test-utils';
+import { contractFiles, customRender, getMockCanvasState, getMockDbState } from 'test-utils';
 import { Interact } from 'ui/components';
 import { CanvasState, DbState } from 'types';
 
@@ -24,7 +24,7 @@ describe('Contract Interact', () => {
   });
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(
-      <Interact metadata={flipperMockJson} contractAddress={mockAddr} callFn={mockCall} />,
+      <Interact metadata={contractFiles.flipper} contractAddress={mockAddr} callFn={mockCall} />,
       {
         ...mockCanvasState,
         keyringStatus: 'READY',
@@ -38,7 +38,7 @@ describe('Contract Interact', () => {
   });
   test('call button executes ', () => {
     const { getByText } = customRender(
-      <Interact metadata={flipperMockJson} contractAddress={mockAddr} callFn={mockCall} />,
+      <Interact metadata={contractFiles.flipper} contractAddress={mockAddr} callFn={mockCall} />,
       {
         ...mockCanvasState,
         keyringStatus: 'READY',
