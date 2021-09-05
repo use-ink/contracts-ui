@@ -3,7 +3,6 @@ const { resolve } = require('path');
 module.exports = {
   verbose: true,
   clearMocks: true,
-  collectCoverage: true,
   coverageDirectory: 'coverage',
   preset: 'ts-jest',
   testEnvironment: './db-test-env',
@@ -15,7 +14,10 @@ module.exports = {
     Uint8Array: Uint8Array,
   },
   moduleNameMapper: {
-    'styled-components': resolve(__dirname, './node_modules/styled-components/dist/styled-components'),
+    'styled-components': resolve(
+      __dirname,
+      './node_modules/styled-components/dist/styled-components'
+    ),
     '^canvas$': resolve(__dirname, './src/canvas'),
     '^canvas/(.*)$': resolve(__dirname, './src/canvas/$1'),
     '^ui$': resolve(__dirname, './src/ui'),
