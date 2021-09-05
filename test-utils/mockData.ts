@@ -9,7 +9,6 @@ import {
   UserDocument,
   CodeBundleDocument,
   ContractDocument,
-  AnyJson,
   KeyringPair,
   PrivateKey,
 } from 'types';
