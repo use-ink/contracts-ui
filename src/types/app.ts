@@ -1,6 +1,15 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 import { ReactNode, ComponentType } from 'react';
-import { ContractPromise, Abi, EventRecord, DispatchError, ApiPromise, Keyring } from './substrate';
+import {
+  ContractPromise,
+  Abi,
+  EventRecord,
+  DispatchError,
+  ApiPromise,
+  Keyring,
+  AbiMessage,
+  KeyringPair,
+} from './substrate';
 
 export type VoidFn = () => void;
 
@@ -101,6 +110,7 @@ export interface RouteInterface {
   redirect?: string;
 }
 
+
 export type StringOrNull = string | null;
 
 export type RawParamValue = unknown | undefined;
@@ -114,4 +124,15 @@ export interface RawParam {
 export enum InstantiationTypeEnum {
   CODE = 'code',
   HASH = 'hash',
+}
+
+export interface ContractCallParams {
+  api: ApiPromise;
+  abi: Abi;
+  contractAddress: string;
+  message: AbiMessage;
+  endowment: number;
+  gasLimit: number;
+  keyringPair?: KeyringPair;
+  argValues?: Record<string, string>;
 }

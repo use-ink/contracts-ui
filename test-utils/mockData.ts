@@ -2,10 +2,17 @@ import crypto from 'crypto';
 import faker from 'faker';
 import { Keyring } from '@polkadot/api';
 import moment from 'moment';
-import * as contractFiles from './contracts';
-import { createMockApi } from './utils';
-import { getNewCodeBundleId, getPrivateKeyFromPair, initDb, publicKeyHex } from 'db';
-import type { CanvasState, DbState, InstantiateState, UserDocument, CodeBundleDocument, ContractDocument, AnyJson, KeyringPair, PrivateKey } from 'types';
+import { contractFiles } from './contracts';
+import { getNewCodeBundleId, getPrivateKeyFromPair, publicKeyHex } from 'db';
+
+import {
+  UserDocument,
+  CodeBundleDocument,
+  ContractDocument,
+  AnyJson,
+  KeyringPair,
+  PrivateKey,
+} from 'types';
 import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
@@ -70,139 +77,14 @@ export const flipperMock = {
     },
   ],
 };
-export const flipperMockJson: AnyJson = {
-  metadataVersion: '0.1.0',
-  source: {
-    hash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-    language: 'ink! 3.0.0-rc3',
-    compiler: 'rustc 1.53.0-nightly',
-  },
-  contract: {
-    name: 'flipper',
-    version: '3.0.0-rc3',
-    authors: ['Parity Technologies <admin@parity.io>'],
-  },
-  spec: {
-    constructors: [
-      {
-        args: [
-          {
-            name: 'init_value',
-            type: {
-              displayName: ['bool'],
-              type: 1,
-            },
-          },
-        ],
-        docs: ['Creates a new flipper smart contract initialized with the given value.'],
-        name: ['new'],
-        selector: '0x9bae9d5e',
-      },
-      {
-        args: [],
-        docs: ['Creates a new flipper smart contract initialized to `false`.'],
-        name: ['default'],
-        selector: '0xed4b9d1b',
-      },
-    ],
-    docs: [],
-    events: [],
-    messages: [
-      {
-        args: [],
-        docs: [" Flips the current value of the Flipper's bool."],
-        mutates: true,
-        name: ['flip'],
-        payable: false,
-        returnType: null,
-        selector: '0x633aa551',
-      },
-      {
-        args: [],
-        docs: [" Returns the current value of the Flipper's bool."],
-        mutates: false,
-        name: ['get'],
-        payable: false,
-        returnType: {
-          displayName: ['bool'],
-          type: 1,
-        },
-        selector: '0x2f865bd9',
-      },
-    ],
-  },
-  storage: {
-    struct: {
-      fields: [
-        {
-          layout: {
-            cell: {
-              key: '0x0000000000000000000000000000000000000000000000000000000000000000',
-              ty: 1,
-            },
-          },
-          name: 'value',
-        },
-      ],
-    },
-  },
-  types: [
-    {
-      def: {
-        primitive: 'bool',
-      },
-    },
-  ],
-};
 
-export function getKeyringPairRandom (): KeyringPair {
+export function getKeyringPairRandom(): KeyringPair {
   return keyring.createFromUri(faker.name.firstName());
 }
 
-export function getSecretRandom (): string {
+export function getSecretRandom(): string {
   return crypto.randomBytes(8).toString('hex');
 }
-
-export function getMockInstantiateState (): InstantiateState {
-  return {
-    isLoading: false,
-    isSuccess: false,
-    contract: null,
-    currentStep: 1,
-    fromAddress: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-    constructorName: 'new',
-    argValues: { initValue: 'true' },
-    contractName: 'flipper',
-  }
-};
-
-export function getMockCanvasState (): CanvasState {
-  return {
-    endpoint: '',
-    keyring: null,
-    keyringStatus: null,
-    api: createMockApi(),
-    error: null,
-    status: null,
-    blockOneHash: '',
-    systemName: 'Development',
-    systemVersion: '0'
-  }
-};
-
-export async function getMockDbState (): Promise<DbState> {
-  const [user, identity] = getTestUser();
-
-  return {
-    db: (await initDb('test')),
-    isDbReady: true,
-    identity,
-    user,
-    refreshUser: () => {}
-  }
-}
-
 
 function randomHash(): string {
   return [...(Array(62) as unknown[])]
@@ -210,7 +92,7 @@ function randomHash(): string {
     .join('');
 }
 
-export function getTestUser (): TestUser {
+export function getTestUser(): TestUser {
   const pair = getKeyringPairRandom();
   const secret = getSecretRandom();
   const identity = getPrivateKeyFromPair(pair, secret);
@@ -224,11 +106,11 @@ export function getTestUser (): TestUser {
       contractsStarred: [],
       publicKey: publicKeyHex(identity) as string,
     },
-    identity
+    identity,
   ];
 }
 
-export function getTestUsers (count: number): TestUser[] {
+export function getTestUsers(count: number): TestUser[] {
   const result: TestUser[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -258,7 +140,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       id: getNewCodeBundleId(),
       date: moment().format(),
       stars: 1,
-      instances: 0
+      instances: 0,
     });
   });
 

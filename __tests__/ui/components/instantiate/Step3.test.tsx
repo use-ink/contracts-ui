@@ -5,9 +5,9 @@ import '@testing-library/jest-dom/extend-expect';
 import { flipperMock } from 'test-utils/mockData';
 import { Step3 } from 'ui/components/instantiate/HashSteps';
 
-const { constructors } = flipperMock;
-
 describe('Instantiate Step 3', () => {
+  const { constructors } = flipperMock;
+
   test('renders correctly with initial values', () => {
     const { getByPlaceholderText } = render(
       <Step3 constructors={constructors} dispatch={jest.fn()} currentStep={3} />

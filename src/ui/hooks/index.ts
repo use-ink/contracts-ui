@@ -3,6 +3,7 @@
 export { useCodeBundle } from './useCodeBundle';
 export { useContract } from './useContract';
 export { useCreateContract } from './useCreateContract';
+export * from './useLocalStorage';
 export { useMyCodeBundles } from './useMyCodeBundles';
 export { useMyContracts } from './useMyContracts';
 export { useStatistics } from './useStatistics';

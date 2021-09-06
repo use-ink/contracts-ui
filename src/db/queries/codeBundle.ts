@@ -11,45 +11,57 @@ import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 export async function findTopCodeBundles(
   db: Database
 ): Promise<(CodeBundleDocument & { instances: number })[]> {
-  const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
+  try {
+    const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
 
-  return Promise.all(
-    codeBundles.map(async (codeBundle) => {
-      const instances = (await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()).length;
-      
-      return {
-        ...(codeBundle as CodeBundleDocument),
-        instances
-      };
-    })
-  )
+    return Promise.all(
+      codeBundles.map(async (codeBundle) => {
+        const instances = (await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()).length;
+        
+        return {
+          ...(codeBundle as CodeBundleDocument),
+          instances
+        };
+      })
+    )
+  } catch (e) {
+    console.error(e);
+
+    return Promise.reject(e);
+  }
 }
 
 export async function findMyCodeBundles(
   db: Database,
   identity: PrivateKey | null
 ): Promise<MyCodeBundles> {
-  const user = await findUser(db, identity);
+  try {
+    const user = await findUser(db, identity);
 
-  if (!user) {
-    return { owned: [], starred: [] };
+    if (!user) {
+      return { owned: [], starred: [] };
+    }
+
+    const owned = await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray();
+    const existingStarred = await getCodeBundleCollection(db)
+      .find({ id: { $in: user.codeBundlesStarred } })
+      .toArray();
+
+    const starred = user.codeBundlesStarred.map((starredId: string) => {
+      const match = existingStarred.find(({ id }) => starredId === id);
+
+      return {
+        isExistent: !!match,
+        value: match || { identifier: starredId },
+      };
+    });
+
+    return { owned, starred };
+  } catch (e) {
+    console.error(e);
+
+    return Promise.reject(e);
   }
-
-  const owned = await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray();
-  const existingStarred = await getCodeBundleCollection(db)
-    .find({ id: { $in: user.codeBundlesStarred } })
-    .toArray();
-
-  const starred = user.codeBundlesStarred.map((starredId: string) => {
-    const match = existingStarred.find(({ id }) => starredId === id);
-
-    return {
-      isExistent: !!match,
-      value: match || { identifier: starredId },
-    };
-  });
-
-  return { owned, starred };
 }
 
 export async function findCodeBundleByHash(
@@ -105,7 +117,9 @@ export async function createCodeBundle(
 
     return Promise.resolve(newCode);
   } catch (e) {
-    return Promise.reject(new Error(e));
+    console.error(e);
+
+    return Promise.reject(e);
   }
 }
 
@@ -133,7 +147,7 @@ export async function updateCodeBundle(
   } catch (e) {
     console.error(e);
 
-    return Promise.reject(new Error(e));
+    return Promise.reject(e);
   }
 }
 
@@ -151,6 +165,6 @@ export async function removeCodeBundle(db: Database, id: string): Promise<void> 
   } catch (e) {
     console.error(e);
 
-    return Promise.reject(new Error(e));
+    return Promise.reject(e);
   }
 }
