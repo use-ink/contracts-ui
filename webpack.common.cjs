@@ -45,7 +45,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -59,8 +58,8 @@ module.exports = {
       chunkFilename: '[id].css',
     }),
     new webpack.DefinePlugin({
-      'process.env.WS_URL': 'undefined'
-    })
+      'process.env.WS_URL': 'undefined',
+    }),
   ],
   module: { rules },
   resolve: {
