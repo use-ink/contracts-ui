@@ -5,7 +5,7 @@ import '../styles/main.css';
 import { App } from 'ui/components';
 
 const root = document.getElementById('app-root');
-
+console.log('node env: ', process.env.NODE_ENV);
 ReactDOM.render(
   <BrowserRouter>
     <App />
