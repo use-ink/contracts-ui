@@ -6,6 +6,7 @@ import { StarIcon as StarIconFill } from '@heroicons/react/solid';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { ContractDocument } from "types";
+import { Button } from '../Button';
 
 interface Props {
   contract: ContractDocument;
@@ -29,10 +30,10 @@ export function ContractRow ({ contract: { address, name, stars, date }, isStarr
         {address.slice(0, 4)}...{address.slice(-4)}
       </div>
       <div className="inline-flex cursor-pointer w-10 text-gray-500 dark:text-gray-400">
-        <button
+        <Button
           aria-label={isStarred ? 'Remove from favorites' : 'Add to favorites'}
-          className="flex"
           onClick={onToggleStar}
+          variant='plain'
         >
           <Star
             className="w-4 mr-1 justify-self-end "
@@ -40,7 +41,7 @@ export function ContractRow ({ contract: { address, name, stars, date }, isStarr
             fontSize="1.5rem"
           />
           {stars}
-        </button>
+        </Button>
       </div>
       <div
         className="w-14 text-gray-500 dark:text-gray-400"

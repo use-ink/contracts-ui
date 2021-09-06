@@ -1,6 +1,8 @@
 import React from 'react';
 import { CanvasContext } from 'ui/contexts';
 import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
+import { Button } from '../Button';
+import { Buttons } from '../Buttons';
 
 interface Props {
   state: InstantiateState;
@@ -31,35 +33,35 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
             <p className="mb-8">{`Constructor: ${state.constructorName}`}</p>
           </div>
 
-          <button
-            type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() =>
-              submitHandler(
-                1300889614901161,
-                155852802980,
-                api,
-                keyring,
-                keyringStatus,
-                dispatch,
-                state
-              )
-            }
-          >
-            Instantiate
-          </button>
-          <button
-            type="button"
-            className="bg-indigo-500 hover:bg-indigo-600 text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() =>
-              dispatch({
-                type: 'GO_TO',
-                payload: { step: 3 },
-              })
-            }
-          >
-            Go Back
-          </button>
+          <Buttons>
+            <Button
+              className="mr-4"
+              onClick={() =>
+                submitHandler(
+                  1300889614901161,
+                  155852802980,
+                  api,
+                  keyring,
+                  keyringStatus,
+                  dispatch,
+                  state
+                )
+              }
+              variant='primary'
+            >
+              Instantiate
+            </Button>
+            <Button
+              onClick={() =>
+                dispatch({
+                  type: 'GO_TO',
+                  payload: { step: 3 },
+                })
+              }
+            >
+              Go Back
+            </Button>
+          </Buttons>
         </>
       )}
     </CanvasContext.Consumer>

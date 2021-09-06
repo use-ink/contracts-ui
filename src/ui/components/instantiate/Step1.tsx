@@ -1,4 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
+import { Button } from '../Button';
+import { Buttons } from '../Buttons';
 import { Input } from '../Input';
 import { FileInput } from '../FileInput';
 import { convertMetadata } from 'canvas/util';
@@ -10,7 +12,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
   currentStep?: number;
 }
 
-export const Step1 = ({ dispatch, currentStep }: Props) => {
+export const Step1 = ({ currentStep, dispatch }: Props) => {
   const [metadata, setMetadata] = useState<Abi>();
   const [hash, setHash] = useState('');
   const { api } = useCanvas();
@@ -50,25 +52,25 @@ export const Step1 = ({ dispatch, currentStep }: Props) => {
         fileLoaded={!!metadata}
         successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
       />
-
-      <button
-        type="button"
-        className="bg-indigo-500 hover:bg-indigo-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-16 disabled:opacity-50 disabled:cursor-not-allowed"
-        onClick={() =>
-          metadata &&
-          dispatch({
-            type: 'STEP_1_COMPLETE',
-            payload: {
-              codeHash: hash,
-              metadata,
-              contractName: metadata.project.contract.name.toHuman(),
-            },
-          })
-        }
-        disabled={metadata && hash ? false : true}
-      >
-        Next
-      </button>
+      <Buttons>
+        <Button
+          className="mt-16"
+          onClick={() => {
+              metadata && dispatch({
+                type: 'STEP_1_COMPLETE',
+                payload: {
+                  codeHash: hash,
+                  metadata,
+                  contractName: metadata.project.contract.name.toHuman(),
+                },
+              })
+          }}
+          isDisabled={!metadata || !hash}
+          variant='primary'
+        >
+          Next
+        </Button>
+      </Buttons>
     </>
   );
 };

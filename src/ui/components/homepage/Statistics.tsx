@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';
+import { Button } from '../Button';
 import { useCanvas, useDatabase } from 'ui/contexts';
 import { useStatistics } from 'ui/hooks';
 
@@ -86,9 +87,10 @@ export function Statistics (): React.ReactElement | null {
                 <div className="text-xs mb-1">
                   {name}
                 </div>
-                <button
+                <Button
                   className="flex text-xs dark:text-gray-400"
                   onClick={onClickStar(id)}
+                  variant='plain'
                 >
                   {stars}
                   <Star
@@ -97,7 +99,7 @@ export function Statistics (): React.ReactElement | null {
                     fontSize="1.5rem"
                   />
                   {instances} instances
-                </button>
+                </Button>
               </div>
             )
           })}

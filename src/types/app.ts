@@ -39,10 +39,11 @@ export interface ChainProperties {
   systemVersion: string | null;
 }
 
-export type DropdownOption = {
+export interface DropdownOption {
   value: string | number;
   name: string;
 };
+
 export interface InstantiateState {
   isLoading: boolean;
   isSuccess: boolean;
