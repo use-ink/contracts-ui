@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 
 export const classes = twMerge;
 
-export function capitalize (aString: string): string {
+export function capitalize(aString: string): string {
   return `${aString[0].toUpperCase()}${aString.slice(1)}`;
 }
 
@@ -14,3 +14,5 @@ export const MOCK_CONTRACT_DATA: [string, number, string[], unknown[]][] = [
   ['DNS', 2, ['delta'], []],
   ['Incrementer', 1, ['beta', 'delta', 'gamma'], [7]],
 ];
+
+export const publicUrl = process.env.PUBLIC_URL || '';

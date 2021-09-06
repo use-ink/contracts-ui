@@ -1,33 +1,41 @@
 import React from 'react';
-import { AddContract, Homepage, Contract, InstantiateWithCode, InstantiateWithHash } from '../pages';
+import {
+  AddContract,
+  Homepage,
+  Contract,
+  InstantiateWithCode,
+  InstantiateWithHash,
+} from '../pages';
+
+import { publicUrl } from '../../util';
 
 export const routes = [
   {
-    path: '/contract/:addr',
+    path: `${publicUrl}/contract/:addr`,
     component: Contract,
     exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/add-contract',
+    path: `${publicUrl}/add-contract`,
     component: AddContract,
     exact: false,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate-with-hash',
+    path: `${publicUrl}/instantiate-with-hash`,
     component: InstantiateWithHash,
     exact: false,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate-with-code',
+    path: `${publicUrl}/instantiate-with-code`,
     component: InstantiateWithCode,
     exact: false,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/',
+    path: `${publicUrl}/`,
     component: Homepage,
     exact: true,
     fallback: <div> Loading... </div>,
