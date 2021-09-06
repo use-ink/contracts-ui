@@ -4,6 +4,7 @@
   "description": "Canvas UI",
   "private": true,
   "type": "module",
+  "homepage": "https://paritytech.github.io/canvas-ui-v2",
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "webpack --progress --config webpack.dev.cjs",
