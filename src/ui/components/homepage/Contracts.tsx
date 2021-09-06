@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { ContractRow } from '../contract/ContractRow';
 import { useDatabase } from 'ui/contexts';
 import { useToggleContractStar, useTopContracts } from 'ui/hooks';
-import { publicUrl } from 'ui/util';
 
 export function Contracts(): React.ReactElement {
   const { refreshUser, user } = useDatabase();
@@ -35,7 +34,7 @@ export function Contracts(): React.ReactElement {
       <div className="flex flex-col items-center space-y-2 text-sm border dark:text-gray-500 dark:border-gray-700  rounded py-7 px-5">
         <FolderOpenIcon className="w-8 h-8" />
         <div>No contracts found on this chain.</div>
-        <Link to={`${publicUrl}/add-contract`}>Upload a new contract</Link>
+        <Link to={`/add-contract`}>Upload a new contract</Link>
       </div>
     );
   }

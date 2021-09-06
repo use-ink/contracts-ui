@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import '../styles/main.css';
 import { App } from 'ui/components';
+import { publicUrl } from 'ui/util';
+console.log(process.env.PUBLIC_URL);
 
 const root = document.getElementById('app-root');
-console.log('node env: ', process.env.NODE_ENV);
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename={publicUrl}>
     <App />
   </BrowserRouter>,
   root

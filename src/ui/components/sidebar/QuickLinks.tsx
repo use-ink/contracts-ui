@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { NavLink } from './NavLink';
 import { useMyContracts } from 'ui/hooks';
 import type { ContractDocument } from 'types';
-import { publicUrl } from 'ui/util';
 
 export function QuickLinks() {
   const { data: myContracts } = useMyContracts();
@@ -18,7 +17,7 @@ export function QuickLinks() {
         {myContracts?.owned && myContracts?.owned.length > 0 ? (
           myContracts?.owned?.map(({ name, address }) => {
             return (
-              <NavLink icon={DocumentIcon} key={address} to={`${publicUrl}/contract/${address}`}>
+              <NavLink icon={DocumentIcon} key={address} to={`/contract/${address}`}>
                 {name}
               </NavLink>
             );
@@ -27,7 +26,7 @@ export function QuickLinks() {
           <div className="none-yet">
             None yet
             {' ˑ '}
-            <Link to={`${publicUrl}/add-contract`}>Upload one</Link>
+            <Link to={`/add-contract`}>Upload one</Link>
           </div>
         )}
       </div>
@@ -42,7 +41,7 @@ export function QuickLinks() {
             const { name, address } = value as ContractDocument;
 
             return (
-              <NavLink icon={DocumentIcon} key={address} to={`${publicUrl}/contract/${address}`}>
+              <NavLink icon={DocumentIcon} key={address} to={`/contract/${address}`}>
                 {name}
               </NavLink>
             );

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, CodeIcon, UploadIcon } from '@heroicons/react/outline';
-import { publicUrl } from 'ui/util';
 import { Page } from 'ui/templates';
 
 export function AddContract() {
@@ -22,7 +21,7 @@ export function AddContract() {
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="mt-4">
                   <Link
-                    to={`${publicUrl}/instantiate-with-code`}
+                    to={`/instantiate-with-code`}
                     className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
                     <div className="flex items-center text-base text-gray-500 space-x-2">
@@ -33,7 +32,7 @@ export function AddContract() {
                   </Link>
                   <p className="text-center text-sm text-gray-500 py-6">Or</p>
                   <Link
-                    to={`${publicUrl}/instantiate-with-hash`}
+                    to={`/instantiate-with-hash`}
                     className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
                     <div className="flex items-center text-base text-gray-500 space-x-2">

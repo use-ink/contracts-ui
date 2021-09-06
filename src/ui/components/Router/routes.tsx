@@ -7,35 +7,33 @@ import {
   InstantiateWithHash,
 } from '../pages';
 
-import { publicUrl } from '../../util';
-
 export const routes = [
   {
-    path: `${publicUrl}/contract/:addr`,
+    path: `/contract/:addr`,
     component: Contract,
     exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `${publicUrl}/add-contract`,
+    path: `/add-contract`,
     component: AddContract,
     exact: false,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `${publicUrl}/instantiate-with-hash`,
+    path: `/instantiate-with-hash`,
     component: InstantiateWithHash,
     exact: false,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `${publicUrl}/instantiate-with-code`,
+    path: `/instantiate-with-code`,
     component: InstantiateWithCode,
     exact: false,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `${publicUrl}/`,
+    path: `/`,
     component: Homepage,
     exact: true,
     fallback: <div> Loading... </div>,

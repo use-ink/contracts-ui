@@ -7,7 +7,6 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Button } from '../Button';
 import { ContractDocument } from 'types';
-import { publicUrl } from 'ui/util';
 
 interface Props {
   contract: ContractDocument;
@@ -24,7 +23,7 @@ export function ContractRow({
 
   return (
     <Link
-      to={`${publicUrl}/contract/${address}`}
+      to={`/contract/${address}`}
       className={`text-sm inline-flex cursor-pointer w-full hover:bg-gray-50 dark:hover:bg-elevation-1 border p-3 border-t-0 border-r-0 border-l-0 last:border-b-0 dark:text-white dark:border-gray-700 border-gray-200`}
     >
       <Identicon size={18} value={address} className="pr-2" />
