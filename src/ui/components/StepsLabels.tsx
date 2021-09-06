@@ -43,7 +43,7 @@ export const StepsLabels = React.memo(({ currentStep, stepsInfo }: Props) => {
               </span>
             </div>
             {stepsInfo.length !== index + 1 ? (
-              <div className="flex justify-center w-8 py-4">
+              <div className="flex justify-center w-7 py-4">
                 <span
                   className={`h-8 ${
                     currentStep > stepInfo.step ? 'bg-indigo-500' : 'bg-elevation-2'
