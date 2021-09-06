@@ -2,7 +2,7 @@ name: Deploy to GH Pages
 
 on:
   push:
-    branches: [setup-gh-pages-deployment, master]
+    branches: [master]
 
 jobs:
   build:
