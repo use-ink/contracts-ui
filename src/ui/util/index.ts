@@ -15,4 +15,5 @@ export const MOCK_CONTRACT_DATA: [string, number, string[], unknown[]][] = [
   ['Incrementer', 1, ['beta', 'delta', 'gamma'], [7]],
 ];
 
-export const publicUrl = process.env.PUBLIC_URL || '';
+// used process.env.NODE_ENV because process.env.PUBLIC_URL is undefined
+export const publicUrl = process.env.NODE_ENV === 'production' ? '/canvas-ui-v2' : '';
