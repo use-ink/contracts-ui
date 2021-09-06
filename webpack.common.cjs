@@ -58,11 +58,6 @@ module.exports = {
       filename: '[name].bundle.css',
       chunkFilename: '[id].css',
     }),
-    new webpack.DefinePlugin({
-      'process.env.WS_URL': 'undefined',
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.PUBLIC_URL': JSON.stringify(process.env.PUBLIC_URL),
-    }),
   ],
   module: { rules },
   resolve: {
