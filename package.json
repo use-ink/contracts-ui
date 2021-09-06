@@ -8,7 +8,7 @@
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "webpack --progress --config webpack.dev.cjs",
-    "build:prod": "webpack --config webpack.prod.cjs",
+    "build:prod": "NODE_ENV=production webpack --config webpack.prod.cjs",
     "test:all": "jest --clearCache && node --expose-gc --experimental-vm-modules $(yarn bin)/jest --runInBand",
     "test": "yarn test:all --testPathIgnorePatterns ./__tests__/db/**",
     "test:watch": "yarn test --watch",
