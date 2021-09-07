@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import '../styles/main.css';
 import { App } from 'ui/components';
 import { publicUrl } from 'ui/util';
 
 const root = document.getElementById('app-root');
 ReactDOM.render(
-  <BrowserRouter basename={publicUrl}>
+  <HashRouter basename={publicUrl}>
     <App />
-  </BrowserRouter>,
+  </HashRouter>,
   root
 );
 
