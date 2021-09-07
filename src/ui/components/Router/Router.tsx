@@ -14,9 +14,7 @@ export const Router: React.FC<Props> = ({ routes }) => {
     <AwaitApis>
       <Switch>
         {routes &&
-                routes.map((route: RouteInterface) => (
-                  <RouteWithSubRoutes key={route.path} {...route} />
-                ))}
+          routes.map((route: RouteInterface) => <RouteWithSubRoutes key={route.path} {...route} />)}
       </Switch>
     </AwaitApis>
   );

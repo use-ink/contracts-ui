@@ -1,8 +1,8 @@
 import React from 'react';
-import { CanvasContext } from 'ui/contexts';
-import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
+import { CanvasContext } from 'ui/contexts';
+import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
 
 interface Props {
   state: InstantiateState;
