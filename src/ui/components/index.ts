@@ -6,5 +6,4 @@ export * from './instantiate';
 export * from './Sidebar';
 export * from './InputDropdown';
 export * from './AccountSelector'
-export * from './StepsLabels'
 

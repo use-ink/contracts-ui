@@ -11,7 +11,7 @@ interface Props {
   stepsInfo: StepInfo[];
 }
 
-export const StepsLabels = React.memo(({ currentStep, stepsInfo }: Props) => {
+export const StepsProgress = React.memo(({ currentStep, stepsInfo }: Props) => {
   return stepsInfo.length > 0 ? (
     <>
       {stepsInfo.map((stepInfo, index) => {
