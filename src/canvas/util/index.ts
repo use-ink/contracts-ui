@@ -8,33 +8,12 @@ import {
   ContractPromise,
   AnyJson,
   DispatchError,
-  StorageEntry,
   ApiPromise,
   AbiParam,
   KeyringPair,
   AbiMessage,
   DropdownOption,
 } from 'types';
-
-export async function getCodeHashes(api: ApiPromise): Promise<string[]> {
-  let codeHashes: string[] = [];
-  try {
-    const entries = await api.query.contracts.codeStorage.entries();
-    codeHashes = extractCodeHashes(entries);
-  } catch (error) {
-    console.error(error);
-  }
-  return codeHashes;
-}
-
-export function extractCodeHashes(entries: StorageEntry[]): string[] {
-  return (
-    entries
-      ?.filter(entry => entry[1].isSome === true)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .map(validEntry => validEntry[0].toHuman()!.toString())
-  );
-}
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
