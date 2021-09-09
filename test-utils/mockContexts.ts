@@ -32,7 +32,7 @@ export function getMockCanvasState(): CanvasState {
     keyringStatus: null,
     api: createMockApi(),
     error: null,
-    status: null,
+    status: 'CONNECT_INIT',
     blockOneHash: '',
     systemName: 'Development',
     systemVersion: '0',

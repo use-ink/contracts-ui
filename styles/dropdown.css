@@ -40,7 +40,19 @@
 
 .dropdown.chain .dropdown-btn:before {
   content: '';
-  @apply block rounded-full w-1.5 h-1.5 mr-1 bg-green-400
+  @apply block rounded-full w-1.5 h-1.5 mr-1
+}
+
+.dropdown.chain.isConnected .dropdown-btn:before {
+  @apply bg-green-400
+}
+
+.dropdown.chain.isConnecting .dropdown-btn:before {
+  @apply bg-yellow-300
+}
+
+.dropdown.chain.isError .dropdown-btn:before {
+  @apply bg-red-400
 }
 
 .dropdown.chain .options .option {
