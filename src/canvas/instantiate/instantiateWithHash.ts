@@ -1,5 +1,5 @@
 import { BlueprintPromise } from '@polkadot/api-contract';
-import { handleDispatchError, saveInLocalStorage, encodeSalt } from '../util';
+import { handleDispatchError, saveInLocalStorage, encodeSalt, transformUserInput } from '../util';
 import { getInstanceFromEvents } from './getAddressFromEvents';
 import type { ApiPromise, Keyring, Abi, InstantiateAction, InstantiateState } from 'types';
 
@@ -13,11 +13,12 @@ function createBlueprintTx(
 ) {
   if (api && codeHash && constructorName && metadata && argValues) {
     const blueprint = new BlueprintPromise(api, metadata, codeHash);
-    const expectedArgs = metadata.findConstructor(constructorName).args.length;
-    const args = argValues ? Object.values(argValues) : [];
+    const args = metadata.findConstructor(constructorName).args;
+    const userInput = argValues ? Object.values(argValues) : [];
+    const transformed = transformUserInput(args, userInput);
 
-    return expectedArgs > 0
-      ? blueprint.tx[constructorName](options, ...args)
+    return args.length > 0
+      ? blueprint.tx[constructorName](options, ...transformed)
       : blueprint.tx[constructorName](options);
   }
 }

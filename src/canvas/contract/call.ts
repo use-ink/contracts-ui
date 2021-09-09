@@ -1,4 +1,4 @@
-import { encodeSalt, formatData } from 'canvas/util';
+import { encodeSalt, handleDispatchError, transformUserInput } from 'canvas/util';
 import {
   ContractPromise,
   ContractQuery,
@@ -7,75 +7,94 @@ import {
   ISubmittableResult,
   ContractCallParams,
   KeyringPair,
+  ApiPromise,
 } from 'types';
 
 export function prepareContractTx(
   tx: ContractTx<'promise'>,
   options: { gasLimit: number; salt: Uint8Array; value: number },
-  args?: string[]
+  args: unknown[]
 ) {
-  return args ? tx(options, ...args) : tx(options);
+  return args.length > 0 ? tx(options, ...args) : tx(options);
 }
 
 export async function executeTx(
+  api: ApiPromise,
   tx: SubmittableExtrinsic<'promise', ISubmittableResult>,
   pair: KeyringPair
-): Promise<ISubmittableResult | null> {
-  let txResult: ISubmittableResult | null = null;
-  try {
-    await tx.signAndSend(pair, result => {
-      txResult = result;
-    });
-  } catch (error) {
-    console.error('error sending transaction: ', error);
-  }
+) {
+  const unsub = await tx.signAndSend(pair, result => {
+    const { status, events, dispatchError, dispatchInfo } = result;
+    console.log('sending transaction...');
 
-  return txResult;
+    if (status.isFinalized) {
+      console.log(`Transaction included at blockHash ${status.asFinalized}`);
+
+      events.forEach(
+        ({
+          phase,
+          event: {
+            data,
+            method,
+            section,
+            meta: { docs },
+          },
+        }) => {
+          console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          console.log(`\t\t${docs.toString()}`);
+        }
+      );
+      if (dispatchError) {
+        handleDispatchError(dispatchError, api);
+      }
+      console.log(dispatchInfo?.toHuman());
+
+      unsub();
+    }
+  });
 }
 
 export function sendContractQuery(
   options: { endowment: number; gasLimit: number },
   fromAddress: string,
   query: ContractQuery<'promise'>,
-  args?: string[]
+  args: unknown[]
 ) {
-  return args ? query(fromAddress, options, ...args) : query(fromAddress, options);
+  return args?.length > 0 ? query(fromAddress, options, ...args) : query(fromAddress, options);
 }
 
 export async function call({
   api,
   abi,
   contractAddress,
-  message,
+  message: { args, isMutating, isPayable, method },
   endowment,
   gasLimit,
   keyringPair,
   argValues,
 }: ContractCallParams) {
-  const expectsArgs = message.args.length > 0;
-  const args = expectsArgs ? (argValues ? Object.values(argValues) : []) : undefined;
+  const userInput = argValues ? Object.values(argValues) : [];
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
-
+  const transformed = transformUserInput(args, userInput);
   if (keyringPair) {
-    if (message.isMutating || message.isPayable) {
+    if (isMutating || isPayable) {
       const tx = prepareContractTx(
-        contract.tx[message.method],
+        contract.tx[method],
         { gasLimit, value: endowment, salt },
-        args
+        transformed
       );
-      const res = executeTx(tx, keyringPair);
-      console.log(res);
+
+      await executeTx(api, tx, keyringPair);
     } else {
-      const { result } = await sendContractQuery(
+      const { result, output } = await sendContractQuery(
         { gasLimit, endowment },
         keyringPair.address,
-        contract.query[message.method],
-        args
+        contract.query[method],
+        transformed
       );
-      if (message.returnType && result.isOk) {
-        const output = formatData(api.registry, result.asOk.data, message.returnType);
-        console.log(output);
+      if (result.isOk) {
+        console.log(output?.toHuman());
       }
       if (result.isErr) {
         const error = result.asErr;

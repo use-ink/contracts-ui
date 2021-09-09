@@ -2,15 +2,10 @@
 
 import { compactAddLength, u8aToU8a } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
-import { createTypeUnsafe } from '@polkadot/types/create';
 import {
   Abi,
   Bytes,
   ContractPromise,
-  Registry,
-  Raw,
-  TypeDef,
-  Codec,
   AnyJson,
   DispatchError,
   StorageEntry,
@@ -44,9 +39,9 @@ export function extractCodeHashes(entries: StorageEntry[]): string[] {
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
     const decoded = api.registry.findMetaError(dispatchError.asModule);
-    console.error('Error creating instance: ', decoded);
+    console.error('Error sending transaction: ', decoded);
   } else {
-    console.error(`Error creating instance: ${dispatchError}`);
+    console.error(`Error sending transaction: ${dispatchError}`);
   }
 }
 
@@ -118,6 +113,42 @@ export function createOptions(data?: Array<unknown>, kind?: string): DropdownOpt
   return [];
 }
 
-export function formatData(registry: Registry, data: Raw, { type }: TypeDef): Codec {
-  return createTypeUnsafe(registry, type, [data], { isPedantic: true });
+export function isNumeric(type: string) {
+  const numTypes = [
+    'Compact<Balance>',
+    'BalanceOf',
+    'u8',
+    'u16',
+    'u32',
+    'u64',
+    'u128',
+    'i8',
+    'i16',
+    'i32',
+    'i64',
+    'i128',
+  ];
+  return numTypes.find(t => type.includes(t)) ? true : false;
+}
+
+export function transformUserInput(messageArgs: AbiParam[], userInput: string[]) {
+  return messageArgs.map(({ type: { type } }, index) => {
+    const value = userInput[index];
+    if (type === 'bool') {
+      return value === 'true';
+    }
+    if (type.startsWith('Vec')) {
+      return value.split(',').map(subStr => {
+        const v = subStr.trim();
+        if (isNumeric(type)) {
+          return v.includes('.') ? parseFloat(v) : parseInt(v);
+        }
+        return v;
+      });
+    }
+    if (isNumeric(type)) {
+      return value.includes('.') ? parseFloat(value) : parseInt(value);
+    }
+    return value;
+  });
 }
