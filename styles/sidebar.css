@@ -5,62 +5,50 @@
 }
 
 .sidebar .sidebar-inner {
-  @apply flex min-h-full flex-col h-0 flex-1 border-r dark:border-gray-stroke border-gray-200 dark:bg-elevation-1 bg-white
+  @apply flex min-h-full flex-col h-0 flex-1 border-r dark:border-gray-stroke border-gray-200 dark:bg-elevation-1 bg-white;
 }
 
 .sidebar .sidebar-inner .upper {
-  @apply flex-1 flex flex-col pt-3 pb-4 overflow-y-auto
+  @apply flex-1 flex flex-col pt-3 pb-4 overflow-y-auto;
 }
 
 .sidebar .sidebar-inner .upper nav {
   max-width: 14rem;
-  @apply space-y-5
+  @apply space-y-5;
 }
 
 .sidebar .sidebar-inner .upper nav > * {
-  @apply px-3
-}
-
-.sidebar .nav-link {
-  @apply dark:text-gray-300 text-gray-600 border border-transparent dark:hover:text-white flex items-center px-2 py-1 text-sm font-medium rounded-md
-}
-
-.sidebar .nav-link.active {
-  @apply dark:bg-elevation-2 dark:border-gray-stroke border-gray-200
-}
-
-.sidebar .nav-link svg {
-  @apply mr-1.5 h-5 w-5 dark:text-gray-500
+  @apply px-3;
 }
 
 .sidebar .network-selection {
-  @apply space-y-2
+  @apply space-y-2;
 }
 
 .sidebar .connect-account {
-  @apply font-extrabold w-full text-center justify-center mt-1
+  @apply font-extrabold w-full text-center justify-center mt-1;
 }
 
 .sidebar .navigation {
-  @apply space-y-2
+  @apply space-y-2;
 }
 
 .sidebar .quick-links {
-  @apply space-y-2
+  @apply space-y-2;
 }
 
 .sidebar .section .header {
-  @apply text-gray-400 text-xs py-1
+  @apply text-gray-400 text-xs py-1;
 }
 
 .sidebar .section .none-yet {
-  @apply text-gray-200 text-xs pl-2
+  @apply text-gray-200 text-xs pl-2;
 }
 
 .sidebar .footer {
-  @apply flex-shrink-0 flex p-6
+  @apply flex-shrink-0 flex p-6;
 }
 
 .sidebar .footer > div {
-  @apply flex justify-between flex-shrink-0 w-full group
+  @apply flex justify-between flex-shrink-0 w-full group;
 }

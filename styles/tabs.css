@@ -1,0 +1,9 @@
+.routed-tabs {
+  @apply flex border-b dark:border-gray-800 border-gray-200 text-xs pb-2 mb-6 dark:text-white;
+}
+.routed-tabs .nav-link {
+  @apply text-xs p-2 border-0;
+}
+.routed-tabs .nav-link svg {
+  @apply h-4 w-4;
+}
