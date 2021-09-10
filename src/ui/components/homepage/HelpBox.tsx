@@ -1,18 +1,14 @@
 import React, { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
-import { Link } from 'react-router-dom';
 import { Button } from '../Button';
 import { useLocalStorage } from 'ui/hooks';
 
-export function HelpBox (): React.ReactElement | null {
+export function HelpBox(): React.ReactElement | null {
   const [closedHelpBox, setClosedHelpBox] = useLocalStorage('closedHelpBox', false);
-  
-  const onClose = useCallback(
-    () => {
-      setClosedHelpBox(true);
-    },
-    []
-  )
+
+  const onClose = useCallback(() => {
+    setClosedHelpBox(true);
+  }, []);
 
   if (closedHelpBox) {
     return null;
@@ -27,24 +23,31 @@ export function HelpBox (): React.ReactElement | null {
           onClick={onClose}
         />
         <div className="text-sm font-semibold text-blue-500 pb-1">
-        Get started writing smart contracts
+          Get started writing smart contracts
         </div>
         <div className="text-xs text-gray-500 dark:text-gray-400 pb-2">
-        The Canvas Playground lets you explore and prototype smart contracts written in ink! - a smart contract language based on Rust!
-          {' '}
-          <Link to='/'>
-          Learn more
-          </Link>
+          Canvas UI lets you explore and interact with smart contracts written in ink! - a smart
+          contract language based on Rust!
+          <br />
+          <a
+            href="https://paritytech.github.io/ink-docs/"
+            target="_blank"
+            rel="noreferrer"
+            className="my-2 inline-block"
+          >
+            Learn more
+          </a>
         </div>
         <div>
-          <Link to="/">
-            <Button
-              className="border-2 py-1.5 px-3"
-              variant='default'
-            >
+          <a
+            href="https://github.com/paritytech/ink/tree/master/examples"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button className="border-2 py-1.5 px-3" variant="default">
               Explore Examples
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </div>

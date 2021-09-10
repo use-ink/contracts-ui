@@ -73,14 +73,14 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
                   api,
                   abi,
                   contractAddress,
-                  endowment: 1,
+                  endowment: 0,
                   gasLimit: 155852802980,
                   argValues,
                   message,
                   keyringPair: keyring?.getPair('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
                 })
               }
-              variant='primary'
+              variant="primary"
             >
               Call
             </Button>

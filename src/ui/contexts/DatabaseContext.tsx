@@ -31,8 +31,6 @@ export function DatabaseContextProvider({
       if (!!blockOneHash && !isRemote) {
         try {
           await dropExpiredDocuments(db, blockOneHash);
-        } catch (e) {
-          console.error(e);
         } finally {
           setIsDbReady(true);
         }
