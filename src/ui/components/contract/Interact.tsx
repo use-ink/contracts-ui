@@ -3,6 +3,7 @@ import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
+import { ResultsOutput } from './ResultsOutput';
 import { createEmptyValues, createOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import { Abi, AnyJson, DropdownOption, ContractCallParams, AbiMessage } from 'types';
@@ -41,8 +42,8 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
   }, [message]);
   return (
     api && (
-      <>
-        <div className="rounded-lg">
+      <div className="grid grid-cols-12 w-full">
+        <div className="col-span-8 rounded-lg w-full">
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="mb-4">
             <Dropdown
@@ -86,7 +87,10 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
             </Button>
           </Buttons>
         </div>
-      </>
+        <div className="col-span-4 pl-20 w-full">
+          <ResultsOutput />
+        </div>
+      </div>
     )
   );
 };
