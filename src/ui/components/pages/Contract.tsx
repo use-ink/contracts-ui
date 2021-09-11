@@ -22,7 +22,7 @@ export const Contract = () => {
     >
       <>
         <div className="grid grid-cols-12 w-full">
-          <ul className="routed-tabs col-span-8">
+          <ul className="routed-tabs col-span-8 md:col-span-7">
             <li className="mr-4 ">
               <NavLink to={`${basePath}/metadata`} icon={BookOpenIcon}>
                 Metadata

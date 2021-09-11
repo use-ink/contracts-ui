@@ -52,6 +52,8 @@ const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) 
             method: action.payload.method,
             returnType: action.payload.returnType,
             time: action.payload.time,
+            isMutating: action.payload.isMutating,
+            isPayable: action.payload.isPayable,
           },
         ],
         isLoading: false,
@@ -99,7 +101,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
   return (
     api && (
       <div className="grid grid-cols-12 w-full">
-        <div className="col-span-8 rounded-lg w-full">
+        <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="mb-4">
             <Dropdown
@@ -144,7 +146,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
             </Button>
           </Buttons>
         </div>
-        <div className="col-span-4 pl-20 w-full">
+        <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
           <ResultsOutput results={state.results} />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { encodeSalt, transformUserInput } from 'canvas/util';
 
-import { ContractPromise, ContractQuery, ContractTx, ContractCallParams } from 'types';
+import { ContractPromise, ContractQuery, ContractTx, ContractCallParams, CallResult } from 'types';
 
 export function prepareContractTx(
   tx: ContractTx<'promise'>,
@@ -53,21 +53,23 @@ export async function call({
           const log = events.map(
             ({
               event: {
-                data,
+                section,
                 method,
                 meta: { docs },
               },
             }) => {
-              return `${method}:: ${data} 
-                ${docs.toString()}`;
+              return `${section.toUpperCase()}::${method}
+                ${docs.toHuman()}`;
             }
           );
 
-          const callResult = {
-            data: JSON.stringify(log),
+          const callResult: CallResult = {
+            data: log,
             method: method,
             returnType: returnType?.displayName || '',
             time: Date.now(),
+            isMutating: isMutating ? true : false,
+            isPayable: isPayable ? true : false,
           };
           dispatch({
             type: 'CALL_SUCCESS',
@@ -93,8 +95,10 @@ export async function call({
         const callResult = {
           data: output?.toHuman(),
           method: method,
-          returnType: returnType?.displayName || '',
+          returnType: returnType?.displayName || returnType?.type || '',
           time: Date.now(),
+          isMutating: false,
+          isPayable: false,
         };
 
         dispatch({

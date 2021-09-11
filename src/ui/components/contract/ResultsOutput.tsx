@@ -1,4 +1,5 @@
 import React from 'react';
+import { DatabaseIcon, CashIcon } from '@heroicons/react/solid';
 import { CallResult } from 'types';
 
 interface Props {
@@ -6,14 +7,47 @@ interface Props {
 }
 export const ResultsOutput = ({ results }: Props) => {
   return (
-    <div className="mb-8 border rounded-t-md border-gray-200 dark:border-gray-700">
+    <div className="mb-8 border rounded-md border-gray-200 dark:border-gray-700">
       <div className="text-sm rounded-t-md border-b text-gray-300 border-gray-200 dark:border-gray-700 bg-elevation-1 p-4">
         Call Results
       </div>
-      <div className="p-4">
-        {results.map(({ time, data }) => {
-          return <div key={`${time}`} className="text-xs text-gray-300 break-all">{`${data}`}</div>;
-        })}
+      <div>
+        {results
+          .map(({ time, data, method, returnType, isMutating, isPayable }) => {
+            const date = new Date(time).toLocaleString();
+            return isMutating || isPayable ? (
+              <div
+                key={`${time}`}
+                className="text-xs text-gray-400 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+              >
+                <div className="mb-2">{date}</div>
+                <div className="flex-col">
+                  <div className="text-mono flex mb-2">
+                    <span className="text-yellow-300">{method}</span>
+                    <span>{`()`}</span>
+                    {isMutating && <DatabaseIcon className="w-4 h-4 ml-2" />}
+                    {isPayable && <CashIcon className="w-4 h-4 ml-2" />}
+                  </div>
+                  <div className="text-mono">{`${data}`}</div>
+                </div>
+              </div>
+            ) : (
+              <div
+                key={`${time}`}
+                className="text-xs text-gray-400 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+              >
+                <div className="mb-2">{date}</div>
+                <div className="flex items-center">
+                  <div className="text-mono flex-1">
+                    <span className="text-yellow-300">{method}</span>
+                    <span>{`(): ${returnType}`}</span>
+                  </div>
+                  <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono">{`${data}`}</div>
+                </div>
+              </div>
+            );
+          })
+          .reverse()}
       </div>
     </div>
   );

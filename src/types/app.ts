@@ -109,6 +109,8 @@ export interface CallResult {
   method: string;
   returnType: string;
   time: number;
+  isMutating: boolean;
+  isPayable: boolean;
 }
 export interface ContractCallState {
   isLoading: boolean;
