@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, Reducer } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
@@ -6,7 +6,15 @@ import { Buttons } from '../Buttons';
 import { ResultsOutput } from './ResultsOutput';
 import { createEmptyValues, createOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { Abi, AnyJson, DropdownOption, ContractCallParams, AbiMessage } from 'types';
+import {
+  Abi,
+  AnyJson,
+  DropdownOption,
+  ContractCallParams,
+  AbiMessage,
+  ContractCallState,
+  ContractCallAction,
+} from 'types';
 
 interface Props {
   metadata: AnyJson;
@@ -23,6 +31,39 @@ interface Props {
   }: ContractCallParams) => void;
 }
 
+const initialState: ContractCallState = {
+  isLoading: false,
+  isSuccess: false,
+  results: [],
+};
+
+const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) => {
+  switch (action.type) {
+    case 'CALL_INIT':
+      return { ...state, isLoading: true };
+    case 'CALL_SUCCESS':
+      return {
+        ...state,
+        isSuccess: true,
+        results: [
+          ...state.results,
+          {
+            data: action.payload.data,
+            method: action.payload.method,
+            returnType: action.payload.returnType,
+            time: action.payload.time,
+          },
+        ],
+        isLoading: false,
+      };
+    case 'CALL_ERROR':
+      return { ...state, error: action.payload, isLoading: false };
+
+    default:
+      throw new Error();
+  }
+};
+
 export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
   const { api, keyring } = useCanvas();
   const [abi] = useState<Abi>(new Abi(metadata));
@@ -30,6 +71,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
   const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
   const [argValues, setArgValues] = useState<Record<string, string>>();
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     setMessage(abi.findMessage(selectedMsg.value));
@@ -40,6 +82,15 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
       setArgValues(createEmptyValues(message.args));
     }
   }, [message]);
+
+  if (state.isLoading) {
+    return (
+      <>
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+        <div> Calling instance...</div>
+      </>
+    );
+  }
   return (
     api && (
       <div className="grid grid-cols-12 w-full">
@@ -79,6 +130,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
                   argValues,
                   message,
                   keyringPair: keyring?.getPair('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+                  dispatch,
                 })
               }
               variant="primary"
@@ -88,7 +140,7 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
           </Buttons>
         </div>
         <div className="col-span-4 pl-20 w-full">
-          <ResultsOutput />
+          <ResultsOutput results={state.results} />
         </div>
       </div>
     )
