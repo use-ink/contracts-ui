@@ -54,6 +54,8 @@ const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) 
             time: action.payload.time,
             isMutating: action.payload.isMutating,
             isPayable: action.payload.isPayable,
+            blockHash: action.payload.blockHash,
+            info: action.payload.info,
           },
         ],
         isLoading: false,

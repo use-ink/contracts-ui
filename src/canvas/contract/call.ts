@@ -34,6 +34,7 @@ export async function call({
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
   const transformed = transformUserInput(args, userInput);
+
   if (keyringPair) {
     dispatch({ type: 'CALL_INIT' });
     if (isMutating || isPayable) {
@@ -45,23 +46,12 @@ export async function call({
 
       const unsub = await tx.signAndSend(keyringPair, result => {
         const { status, events, dispatchError, dispatchInfo } = result;
-        console.log('sending transaction...');
 
         if (status.isFinalized) {
-          console.log(`Transaction included at blockHash ${status.asFinalized}`);
-
-          const log = events.map(
-            ({
-              event: {
-                section,
-                method,
-                meta: { docs },
-              },
-            }) => {
-              return `${section.toUpperCase()}::${method}
-                ${docs.toHuman()}`;
-            }
-          );
+          const log = events.map(({ event: { section, method } }) => {
+            return `${section.toUpperCase()}::${method}
+               `;
+          });
 
           const callResult: CallResult = {
             data: log,
@@ -70,6 +60,8 @@ export async function call({
             time: Date.now(),
             isMutating: isMutating ? true : false,
             isPayable: isPayable ? true : false,
+            blockHash: status.asFinalized.toString(),
+            info: dispatchInfo?.toHuman(),
           };
           dispatch({
             type: 'CALL_SUCCESS',
@@ -80,7 +72,6 @@ export async function call({
             const decoded = api.registry.findMetaError(dispatchError.asModule);
             dispatch({ type: 'CALL_ERROR', payload: decoded });
           }
-          console.log(dispatchInfo?.toHuman());
           unsub();
         }
       });
@@ -92,13 +83,11 @@ export async function call({
         transformed
       );
       if (result.isOk) {
-        const callResult = {
+        const callResult: CallResult = {
           data: output?.toHuman(),
           method: method,
           returnType: returnType?.displayName || returnType?.type || '',
           time: Date.now(),
-          isMutating: false,
-          isPayable: false,
         };
 
         dispatch({

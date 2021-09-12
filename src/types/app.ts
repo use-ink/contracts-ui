@@ -109,8 +109,10 @@ export interface CallResult {
   method: string;
   returnType: string;
   time: number;
-  isMutating: boolean;
-  isPayable: boolean;
+  isMutating?: boolean;
+  isPayable?: boolean;
+  blockHash?: string;
+  info?: Record<string, AnyJson>;
 }
 export interface ContractCallState {
   isLoading: boolean;
