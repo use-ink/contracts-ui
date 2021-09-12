@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from 'ui/components/Button';
+import { Buttons } from 'ui/components/Buttons';
 import { CanvasContext } from 'ui/contexts';
 import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
 
@@ -31,35 +33,35 @@ export const Step3 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
             <p className="mb-8">{`Constructor: ${state.constructorName}`}</p>
           </div>
 
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() =>
-              submitHandler(
-                1300889614901161,
-                155852802980,
-                api,
-                keyring,
-                keyringStatus,
-                dispatch,
-                state
-              )
-            }
-          >
-            Instantiate
-          </button>
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() =>
-              dispatch({
-                type: 'GO_TO',
-                payload: { step: currentStep - 1 },
-              })
-            }
-          >
-            Go Back
-          </button>
+          <Buttons>
+            <Button
+              className="mr-4"
+              onClick={() =>
+                submitHandler(
+                  1300889614901161,
+                  155852802980,
+                  api,
+                  keyring,
+                  keyringStatus,
+                  dispatch,
+                  state
+                )
+              }
+              variant='primary'
+            >
+              Instantiate
+            </Button>
+            <Button
+              onClick={() =>
+                dispatch({
+                  type: 'GO_TO',
+                  payload: { step: currentStep - 1 },
+                })
+              }
+            >
+              Go Back
+            </Button>
+          </Buttons>
         </>
       )}
     </CanvasContext.Consumer>

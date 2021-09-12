@@ -1,4 +1,8 @@
-@tailwind base;
+@import './base.css';
+@import './button.css';
+@import './dropdown.css';
+@import './sidebar.css';
+
 @tailwind components;
 @tailwind utilities;
 

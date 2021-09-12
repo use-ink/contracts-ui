@@ -13,20 +13,21 @@ import {
 
 export type VoidFn = () => void;
 
+type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
+
 export interface CanvasState extends ChainProperties {
   endpoint: string;
   keyring: Keyring | null;
   keyringStatus: string | null;
   api: ApiPromise | null;
   error: unknown | null;
-  status: string | null;
+  status: Status
 }
 
 export type CanvasAction =
   | { type: 'CONNECT_INIT' }
   | { type: 'CONNECT'; payload: ApiPromise }
-  | { type: 'CONNECT_SUCCESS' }
-  | { type: 'CONNECT_READY'; payload: ChainProperties }
+  | { type: 'CONNECT_READY'; payload: Partial<ChainProperties> }
   | { type: 'CONNECT_ERROR'; payload: unknown }
   | { type: 'LOAD_KEYRING' }
   | { type: 'SET_ENDPOINT'; payload: string }
@@ -39,10 +40,11 @@ export interface ChainProperties {
   systemVersion: string | null;
 }
 
-export type DropdownOption = {
+export interface DropdownOption {
   value: string | number;
   name: string;
 };
+
 export interface InstantiateState {
   isLoading: boolean;
   isSuccess: boolean;

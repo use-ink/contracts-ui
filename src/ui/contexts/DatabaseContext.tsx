@@ -15,7 +15,7 @@ export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 export function DatabaseContextProvider({
   children,
 }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { blockOneHash, endpoint } = useCanvas();
+  const { status, blockOneHash, endpoint } = useCanvas();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
   const [user, setUser] = useState<UserDocument | null>(null);
@@ -26,33 +26,42 @@ export function DatabaseContextProvider({
     []
   );
 
+  const resetLocalDb = useCallback(
+    async (): Promise<void> => {
+      if (!!blockOneHash && !isRemote) {
+        try {
+          await dropExpiredDocuments(db, blockOneHash);
+        } finally {
+          setIsDbReady(true);
+        }
+      }
+    },
+    [blockOneHash, isRemote]
+  )
+
   // initial initialization
   useEffect((): void => {
     async function createDb() {
-      if (blockOneHash) {
-        try {
-          const [db, user, identity] = await init(endpoint, isRemote);
+      try {
+        const [db, user, identity] = await init(endpoint, isRemote);
 
-          if (!isRemote) {
-            await dropExpiredDocuments(db, blockOneHash);
-          }
+        setDb(db);
+        setIdentity(identity);
+        setUser(user);
 
-          setDb(db);
-          setIdentity(identity);
-          setUser(user);
+        if (isRemote) {
           setIsDbReady(true);
-        } catch (e) {
-          console.error(e);
-          setDb(new DB(''));
         }
+      } catch (e) {
+        console.error(e);
       }
     }
 
     createDb()
-      .then()
-      .catch(e => console.error(e));
+      .then(resetLocalDb)
+      .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockOneHash]);
+  }, [endpoint, status]);
 
   const refreshUser = useCallback(
     async (): Promise<void> => {
@@ -68,11 +77,11 @@ export function DatabaseContextProvider({
     [db, identity, isDbReady, user]
   );
 
-  if (!db || !props.isDbReady) {
-    return null;
-  }
-
-  return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
+  return (
+    <DbContext.Provider value={props}>
+      {children}
+    </DbContext.Provider>
+  );
 }
 
 export function useDatabase(): DbState {

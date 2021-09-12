@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const postcssImport = require('postcss-import');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -22,7 +23,7 @@ const rules = [
         options: {
           postcssOptions: {
             ident: 'postcss',
-            plugins: [tailwindcss, autoprefixer],
+            plugins: [postcssImport, tailwindcss, autoprefixer],
           },
         },
       },
@@ -44,7 +45,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -57,9 +58,6 @@ module.exports = {
       filename: '[name].bundle.css',
       chunkFilename: '[id].css',
     }),
-    new webpack.DefinePlugin({
-      'process.env.WS_URL': 'undefined'
-    })
   ],
   module: { rules },
   resolve: {

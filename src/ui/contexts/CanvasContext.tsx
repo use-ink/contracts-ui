@@ -6,43 +6,58 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
 
 import type { Reducer } from 'react';
-import type { CanvasAction, CanvasState } from 'types';
+import type { CanvasAction, CanvasState, ChainProperties } from 'types';
 
 let loadedAccounts = false;
 
 const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
 
-const INIT_STATE: CanvasState = {
+const NULL_CHAIN_PROPERTIES = {
   blockOneHash: null,
+  systemName: null,
+  systemVersion: null
+}
+
+const INIT_STATE: CanvasState = {
+  ...NULL_CHAIN_PROPERTIES,
   endpoint: LOCAL_NODE,
   keyring: null,
   keyringStatus: null,
   api: null,
   error: null,
-  status: null,
-  systemName: null,
-  systemVersion: null
+  status: 'CONNECT_INIT',
 };
+
+async function getChainProperties (api: ApiPromise): Promise<ChainProperties> {
+  const [blockOneHash, systemName, systemVersion] = await Promise.all([
+    api.query.system.blockHash(1),
+    api.rpc.system.name(),
+    api.rpc.system.version(),
+  ]);
+  
+  return {
+    blockOneHash: blockOneHash.toString(),
+    systemName: systemName.toString(),
+    systemVersion: systemVersion.toString(),
+  };
+}
 
 export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action) => {
   switch (action.type) {
     case 'SET_ENDPOINT':
-      return { ...INIT_STATE, endpoint: action.payload };
+      return { ...INIT_STATE, status: 'CONNECT_INIT', endpoint: action.payload };
 
     case 'CONNECT_INIT':
       return { ...state, status: 'CONNECT_INIT' };
 
     case 'CONNECT':
-      return { ...state, api: action.payload, status: 'CONNECTING' };
-
-    case 'CONNECT_SUCCESS':
-      return { ...state, status: 'SUCCESS' };
+      return { ...state, api: action.payload, error: null, status: 'CONNECTING' };
 
     case 'CONNECT_READY':
-      return { ...state, ...action.payload, status: 'READY' };
+      return { ...state, ...action.payload, error: null, status: 'READY' };
 
     case 'CONNECT_ERROR':
-      return { ...state, status: 'ERROR', error: action.payload };
+      return { ...state, ...NULL_CHAIN_PROPERTIES, status: 'ERROR', error: action.payload };
 
     case 'LOAD_KEYRING':
       return { ...state, keyringStatus: 'LOADING' };
@@ -65,12 +80,9 @@ export const CanvasContextProvider = ({
 }: React.PropsWithChildren<Partial<CanvasState>>) => {
   const [state, dispatch] = useReducer(canvasReducer, INIT_STATE);
 
-  const { endpoint, keyringStatus, status } = state;
+  const { endpoint, keyringStatus } = state;
 
   useEffect((): void => {
-    // We only want this function to be performed once
-    if (status) return;
-
     dispatch({ type: 'CONNECT_INIT' });
 
     const provider = new WsProvider(endpoint);
@@ -82,26 +94,21 @@ export const CanvasContextProvider = ({
       // `ready` event is not emitted upon reconnection and is checked explicitly here.
       await _api.isReady;
 
-      dispatch({ type: 'CONNECT_SUCCESS' });
-    });
-    _api.on('ready', async () => {
-      const [blockOneHash, systemName, systemVersion] = await Promise.all([
-        _api.query.system.blockHash(1),
-        _api.rpc.system.name(),
-        _api.rpc.system.version(),
-      ]);
-    
       dispatch({
         type: 'CONNECT_READY',
-        payload: {
-          blockOneHash: blockOneHash.toString(),
-          systemName: systemName.toString(),
-          systemVersion: systemVersion.toString(),
-        }
+        payload: await getChainProperties(_api)
       });
     });
+
+    _api.on('ready', async () => {      
+      dispatch({
+        type: 'CONNECT_READY',
+        payload: await getChainProperties(_api)
+      });
+    });
+
     _api.on('error', err => dispatch({ type: 'CONNECT_ERROR', payload: err }));
-  }, [endpoint, status]);
+  }, [endpoint]);
 
   useEffect((): void => {
     if (keyringStatus) return;

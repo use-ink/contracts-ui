@@ -1,8 +1,6 @@
-export function capitalize (aString: string): string {
-  return `${aString[0].toUpperCase()}${aString.slice(1)}`;
-}
+import { twMerge } from 'tailwind-merge';
 
-export const MNEMONICS = ['alice', 'bob', 'charlie', 'dave', 'eve', 'ferdie'];
+export const classes = twMerge;
 
 export const MOCK_CONTRACT_DATA: [string, number, string[], unknown[]][] = [
   ['Flipper', 0, ['alpha', 'beta'], [true]],

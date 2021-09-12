@@ -3,8 +3,12 @@
 export * from './contract';
 export * from './pages';
 export * from './instantiate';
-export * from './Sidebar';
+export * from './sidebar';
+
+export * from './App';
+export * from './Button';
+export * from './Buttons';
+export * from './Dropdown';
 export * from './InputDropdown';
 export * from './AccountSelector'
 export * from './StepsLabels'
-

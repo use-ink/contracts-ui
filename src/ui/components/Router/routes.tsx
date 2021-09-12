@@ -9,7 +9,7 @@ import {
 
 export const routes = [
   {
-    path: '/contract/:addr',
+    path: `/contract/:addr`,
     component: Contract,
     exact: true,
     fallback: <div> Loading... </div>,
@@ -33,7 +33,7 @@ export const routes = [
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/',
+    path: `/`,
     component: Homepage,
     exact: true,
     fallback: <div> Loading... </div>,
