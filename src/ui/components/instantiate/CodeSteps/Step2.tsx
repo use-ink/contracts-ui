@@ -1,66 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import { Switch } from '@headlessui/react';
 import { randomAsHex } from '@polkadot/util-crypto';
-import { InstantiateAction, DropdownOption, AbiMessage } from 'types';
+import { InstantiateAction, DropdownOption, Abi } from 'types';
 import { ArgumentForm } from 'ui/components/ArgumentForm';
 import { Dropdown } from 'ui/components/Dropdown';
 import { InputDropdown } from 'ui/components/InputDropdown';
 import { Input } from 'ui/components/Input';
 import { createOptions, createEmptyValues, unitOptions } from 'canvas/util';
+import { useWeight } from 'ui/hooks';
 
 interface Props {
-  constructors?: Partial<AbiMessage>[];
+  metadata: Abi;
   dispatch: React.Dispatch<InstantiateAction>;
   currentStep: number;
 }
 
-export const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
-  const [constr, setConstructor] = useState<DropdownOption>();
+export const Step2 = ({ metadata, dispatch, currentStep }: Props) => {
+  const [constructor, setConstructor] = useState<DropdownOption>();
   const [argValues, setArgValues] = useState<Record<string, string>>();
-  const [endowment, setEndowment] = useState(0);
+  const [endowment, setEndowment] = useState(1000);
   const [salt, setSalt] = useState(randomAsHex());
   const [isSaltEnabled, setIsSaltEnabled] = useState(false);
   const [maxGas, setMaxGas] = useState<number>(0);
+  const { megaGas, percentage, executionTime } = useWeight();
+
+  const abiConstructors = metadata?.constructors;
+
+  // console.log('constructor: ', constructor);
+  // console.log('metadata: ', metadata);
+  // console.log('argValues: ', argValues);
+  // console.log('weight: ', weight);
+  // console.log('megaGas: ', megaGas.toNumber());
+  // console.log('constructor: ', constructor);
 
   useEffect(() => {
-    constructors && setConstructor(createOptions(constructors, 'message')[0]);
-  }, [constructors]);
+    abiConstructors && setConstructor(createOptions(abiConstructors, 'message')[0]);
+  }, [abiConstructors]);
 
   useEffect(() => {
-    constructors && setArgValues(createEmptyValues(constructors[0].args));
-  }, [constr]);
+    abiConstructors && setArgValues(createEmptyValues(abiConstructors[0].args));
+  }, [constructor]);
 
-  useEffect(() => {
-    // TODO Gas and Endowment values should be retrieved differently.
-    setMaxGas(155852802980);
-    setEndowment(1300889614901161);
-  }, [maxGas, endowment]);
+  // useEffect(() => {
+  // setMaxGas(155852802980);
+  // setEndowment(1300889614901161);
+  // }, [maxGas, endowment]);
 
   if (currentStep !== 2) return null;
 
-  return constructors ? (
+  return abiConstructors ? (
     <>
-      <label htmlFor="constr" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label htmlFor="constructor" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Deployment constructor
       </label>
       <Dropdown
-        options={createOptions(constructors, 'message')}
-        placeholder="no constructors found"
+        options={createOptions(abiConstructors, 'message')}
+        placeholder="No constructors found"
         className="mb-4"
-        selectedOption={constr}
-        changeHandler={(o: DropdownOption) => setConstructor(o)}
+        selectedOption={constructor}
+        changeHandler={(option: DropdownOption) => setConstructor(option)}
       />
-      {constr && (
+
+      {constructor && (
         <>
+          {/* TODO Create dynamic params: bool, vector... */}
           <ArgumentForm
-            key={`args-${constr.name}`}
-            args={typeof constr.value === 'number' ? constructors[constr.value].args : undefined}
+            key={`args-${constructor.name}`}
+            args={
+              typeof constructor.value === 'number'
+                ? abiConstructors[constructor.value].args
+                : undefined
+            }
             handleChange={e =>
               setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
             }
             argValues={argValues}
           />
 
+          {/* Endowment */}
           <div className="my-6">
             <label
               htmlFor="endowment"
@@ -70,7 +87,7 @@ export const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
             </label>
             <InputDropdown
               inputValue={endowment}
-              handleSelectChange={(): void => undefined} // TODO
+              handleSelectChange={(): void => undefined}
               handleInputChange={e => {
                 setEndowment(Number(e.target.value));
               }}
@@ -78,6 +95,7 @@ export const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
             />
           </div>
 
+          {/* Deployment Salt */}
           <div className="flex items-center my-6">
             <div className="flex-1">
               <label
@@ -110,6 +128,7 @@ export const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
             </div>
           </div>
 
+          {/* Max Gas Allowed */}
           <div className="my-6">
             <label
               htmlFor="max_gas"
@@ -118,25 +137,39 @@ export const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
               Max Gas Allowed
             </label>
             <Input
-              value={maxGas}
+              value={megaGas.toNumber()}
               handleChange={e => setMaxGas(Number(e.target.value))}
               placeholder="1,000"
             />
           </div>
+          <div className="relative">
+            <p className="text-gray-500 text-xs pb-2">
+              {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
+              {percentage}% of block time)
+            </p>
+            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-700">
+              <div
+                style={{ width: `${percentage}%` }}
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"
+              ></div>
+            </div>
+          </div>
+
           <button
             type="button"
             className="btn-primary"
-            disabled={!constr.name || !argValues}
+            disabled={!constructor.name || !argValues}
             onClick={() => {
               argValues &&
                 dispatch({
                   type: 'DEPLOYMENT_INFO',
                   payload: {
-                    constructorName: constr.name,
+                    constructorName: constructor.name,
+                    constructorIndex: constructor.value as number,
                     argValues,
                     endowment: endowment,
                     salt: salt,
-                    gas: maxGas,
+                    gas: maxGas != 0 ? maxGas : megaGas.toNumber(),
                   },
                 });
             }}

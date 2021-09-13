@@ -52,6 +52,7 @@ export interface InstantiateState {
   codeHash?: string;
   metadata?: Abi;
   constructorName?: string;
+  constructorIndex?: number;
   argValues?: Record<string, string>;
   contract?: ContractPromise | null;
   events?: EventRecord[];
@@ -76,12 +77,13 @@ export type InstantiateAction =
   }
   | {
     type: 'UPLOAD_CONTRACT'; payload: {
-      fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
+      codeHash: string; fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
     }
   }
   | {
     type: 'DEPLOYMENT_INFO'; payload: {
       constructorName: string;
+      constructorIndex: number;
       argValues: Record<string, string>;
       endowment: number;
       salt: string;

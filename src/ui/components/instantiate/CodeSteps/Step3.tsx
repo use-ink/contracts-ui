@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from 'react';
 import { CodePromise } from '@polkadot/api-contract';
 import { Identicon } from '@polkadot/react-identicon';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { ApiPromise, Keyring, InstantiateState, InstantiateAction, RawParam } from 'types';
+import { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
 import { CanvasContext } from 'ui/contexts';
 
 interface Props {
@@ -21,22 +21,20 @@ interface Props {
   ) => void;
 }
 
-function extractValues(values: RawParam[]) {
-  return values.map(({ value }) => value);
-}
-
 export const Step3 = ({ state, dispatch, api, currentStep, submitHandler }: Props) => {
   const { endowment, metadata, gas, file } = state;
+  const [params, setParams] = useState<unknown[]>([]);
   const [[uploadTx, error], setUploadTx] = useState<
     [SubmittableExtrinsic<'promise'> | null, string | null]
   >([null, null]);
-  const [constructorIndex /*, setConstructorIndex*/] = useState<number>(0);
-  const [params, setParams] = useState<RawParam[]>([]);
+  const constructorIndex = state.constructorIndex || 0;
 
   const code = useMemo(
     () => (api && metadata ? new CodePromise(api, metadata, file?.data) : null),
     [api, metadata]
   );
+
+  console.log('Step 3 - params: ', metadata?.constructors[constructorIndex].args);
 
   useEffect(() => {
     if (metadata) {
@@ -52,11 +50,8 @@ export const Step3 = ({ state, dispatch, api, currentStep, submitHandler }: Prop
       contract =
         code && metadata?.constructors[constructorIndex]?.method && endowment
           ? code.tx[metadata.constructors[constructorIndex].method](
-              {
-                gasLimit: 155852802980, // gas,
-                value: 1300889614901161, // endowment,
-              },
-              ...extractValues(params)
+              { gasLimit: gas, value: endowment },
+              ...params
             )
           : null;
     } catch (e) {
@@ -64,7 +59,7 @@ export const Step3 = ({ state, dispatch, api, currentStep, submitHandler }: Prop
     }
 
     setUploadTx(() => [contract, error]);
-  }, [code, metadata, constructorIndex, endowment, params, gas]);
+  }, [code, metadata, constructorIndex, params, endowment, gas]);
 
   if (currentStep !== 3) return null;
 
@@ -77,7 +72,7 @@ export const Step3 = ({ state, dispatch, api, currentStep, submitHandler }: Prop
               <p className="text-sm dark:text-gray-300 text-gray-700 font-semibold mb-2">Account</p>
               <div className="flex w-1/2 items-center dark:bg-elevation-1 bg-gray-50 border dark:border-gray-700 border-gray-200 p-3 rounded-md">
                 <div>
-                  <Identicon size={38} value={state.fromAddress as string} className="" />
+                  <Identicon size={38} value={state.fromAddress as string} />
                 </div>
                 <div className="mx-4">
                   <p className="text-sm dark:text-gray-300 text-gray-700 font-semibold">
@@ -105,6 +100,13 @@ export const Step3 = ({ state, dispatch, api, currentStep, submitHandler }: Prop
             <div className="text-sm">
               <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Weight</p>
               <p className="text-gray-500">{state.gas}</p>
+            </div>
+
+            <div className="text-sm">
+              <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Code Hash</p>
+              <p className="text-gray-500">
+                {String(state.codeHash).slice(0, 6) + '...' + String(state.codeHash).slice(-6)}
+              </p>
             </div>
           </div>
           <button
