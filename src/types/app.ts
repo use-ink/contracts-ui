@@ -125,3 +125,5 @@ export type ContractCallAction =
   | { type: 'TRANSACTION_FINALIZED'; payload: EventRecord[] }
   | { type: 'CALL_SUCCESS'; payload: CallResult }
   | { type: 'CALL_ERROR'; payload: RegistryError };
+
+export type UrlParams = { addr: string; activeTab: string };

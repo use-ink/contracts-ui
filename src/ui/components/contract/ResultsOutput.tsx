@@ -24,6 +24,7 @@ export const ResultsOutput = ({ results }: Props) => {
             );
           })
           .reverse()}
+        {results.length === 0 && <p className="p-4 text-gray-400 text-xs">No results yet.</p>}
       </div>
     </div>
   );

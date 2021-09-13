@@ -1,9 +1,13 @@
 .routed-tabs {
   @apply flex border-b dark:border-gray-800 border-gray-200 text-xs pb-2 mb-6 dark:text-white;
 }
-.routed-tabs .nav-link {
-  @apply text-xs p-2 border-0;
+.routed-tabs .tab {
+  @apply text-xs py-2 px-4 border-0  dark:text-gray-300 text-gray-600 border-transparent dark:hover:text-white flex items-center px-2 py-1  font-medium rounded-md;
 }
-.routed-tabs .nav-link svg {
-  @apply h-4 w-4;
+.routed-tabs .tab svg {
+  @apply h-4 w-4 mr-1;
+}
+
+.routed-tabs .tab.active {
+  @apply dark:bg-elevation-2 dark:border-gray-stroke border-gray-200;
 }

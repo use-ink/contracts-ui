@@ -19,6 +19,7 @@ import {
 interface Props {
   metadata: AnyJson;
   contractAddress: string;
+  isActive: boolean;
   callFn: ({
     api,
     abi,
@@ -68,7 +69,7 @@ const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) 
   }
 };
 
-export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
+export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Props) => {
   const { api, keyring } = useCanvas();
   const [abi] = useState<Abi>(new Abi(metadata));
   const options = createOptions(abi.messages, 'message');
@@ -86,6 +87,8 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
       setArgValues(createEmptyValues(message.args));
     }
   }, [message]);
+
+  if (!isActive) return null;
 
   if (state.isLoading) {
     return (
