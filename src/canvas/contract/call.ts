@@ -49,8 +49,7 @@ export async function call({
 
         if (status.isFinalized) {
           const log = events.map(({ event: { section, method } }) => {
-            return `${section.toUpperCase()}::${method}
-               `;
+            return `${section.toUpperCase()}::${method}`;
           });
 
           const callResult: CallResult = {

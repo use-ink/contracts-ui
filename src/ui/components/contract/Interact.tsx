@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useReducer, Reducer } from 'react';
+import React, { useState, useEffect, useReducer, Reducer, useMemo } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
+import { Input } from '../Input';
 import { ResultsOutput } from './ResultsOutput';
-import { createEmptyValues, createOptions } from 'canvas';
+import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import {
   Abi,
@@ -77,6 +78,10 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
   const [argValues, setArgValues] = useState<Record<string, string>>();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [endowment, setEndowment] = useState('');
+  const keyringPairs = keyring?.getPairs();
+  const accountsOptions = useMemo((): DropdownOption[] => createOptions(keyringPairs, 'pair'), []);
+  const [account, setAccount] = useState<DropdownOption>(accountsOptions[0]);
 
   useEffect(() => {
     setMessage(abi.findMessage(selectedMsg.value));
@@ -107,6 +112,15 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
     api && (
       <div className="grid grid-cols-12 w-full">
         <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
+          <h2 className="mb-2 text-sm">Call from account</h2>
+          <Dropdown
+            options={accountsOptions}
+            className="mb-4"
+            value={account}
+            onChange={setAccount}
+          >
+            No accounts found
+          </Dropdown>
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="mb-4">
             <Dropdown
@@ -129,6 +143,16 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
               />
             </div>
           )}
+          {message.isPayable && (
+            <>
+              <h2 className="mb-2 text-sm">Payment</h2>
+              <Input
+                value={endowment}
+                handleChange={e => setEndowment(e.target.value)}
+                placeholder="Endowment"
+              />
+            </>
+          )}
           <Buttons>
             <Button
               onClick={() =>
@@ -137,11 +161,11 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
                   api,
                   abi,
                   contractAddress,
-                  endowment: 0,
+                  endowment: convertToNumber(endowment.trim()),
                   gasLimit: 155852802980,
                   argValues,
                   message,
-                  keyringPair: keyring?.getPair('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+                  keyringPair: keyring?.getPair(account.value.toString()),
                   dispatch,
                 })
               }
