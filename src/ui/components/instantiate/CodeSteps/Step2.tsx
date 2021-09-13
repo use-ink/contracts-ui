@@ -26,13 +26,6 @@ export const Step2 = ({ metadata, dispatch, currentStep }: Props) => {
 
   const abiConstructors = metadata?.constructors;
 
-  // console.log('constructor: ', constructor);
-  // console.log('metadata: ', metadata);
-  // console.log('argValues: ', argValues);
-  // console.log('weight: ', weight);
-  // console.log('megaGas: ', megaGas.toNumber());
-  // console.log('constructor: ', constructor);
-
   useEffect(() => {
     abiConstructors && setConstructor(createOptions(abiConstructors, 'message')[0]);
   }, [abiConstructors]);
@@ -40,11 +33,6 @@ export const Step2 = ({ metadata, dispatch, currentStep }: Props) => {
   useEffect(() => {
     abiConstructors && setArgValues(createEmptyValues(abiConstructors[0].args));
   }, [constructor]);
-
-  // useEffect(() => {
-  // setMaxGas(155852802980);
-  // setEndowment(1300889614901161);
-  // }, [maxGas, endowment]);
 
   if (currentStep !== 2) return null;
 
