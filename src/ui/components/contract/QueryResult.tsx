@@ -13,7 +13,7 @@ export const QueryResult = ({ result: { time, data, method, returnType }, date }
     >
       <div className="mb-2">{date}</div>
       <div className="flex items-center">
-        <div className="text-mono flex-1">
+        <div className="text-mono flex-1 leading-relaxed" style={{ wordBreak: 'break-word' }}>
           <span className="text-yellow-300">{method}</span>
           <span>{`(): ${returnType}`}</span>
         </div>
