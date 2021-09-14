@@ -9,6 +9,8 @@ import {
   Keyring,
   AbiMessage,
   KeyringPair,
+  AnyJson,
+  RegistryError,
 } from './substrate';
 
 export type VoidFn = () => void;
@@ -43,7 +45,7 @@ export interface ChainProperties {
 export interface DropdownOption {
   value: string | number;
   name: string;
-};
+}
 
 export interface InstantiateState {
   isLoading: boolean;
@@ -99,4 +101,29 @@ export interface ContractCallParams {
   gasLimit: number;
   keyringPair?: KeyringPair;
   argValues?: Record<string, string>;
+  dispatch: (action: ContractCallAction) => void;
 }
+
+export interface CallResult {
+  data: AnyJson;
+  method: string;
+  returnType: string;
+  time: number;
+  isMutating?: boolean;
+  isPayable?: boolean;
+  blockHash?: string;
+  info?: Record<string, AnyJson>;
+}
+export interface ContractCallState {
+  isLoading: boolean;
+  isSuccess: boolean;
+  results: CallResult[];
+  error?: RegistryError;
+}
+export type ContractCallAction =
+  | { type: 'CALL_INIT' }
+  | { type: 'TRANSACTION_FINALIZED'; payload: EventRecord[] }
+  | { type: 'CALL_SUCCESS'; payload: CallResult }
+  | { type: 'CALL_ERROR'; payload: RegistryError };
+
+export type UrlParams = { addr: string; activeTab: string };

@@ -110,6 +110,10 @@ export function isNumeric(type: string) {
   return numTypes.find(t => type.includes(t)) ? true : false;
 }
 
+export function convertToNumber(value: string) {
+  return value.includes('.') ? parseFloat(value) : parseInt(value);
+}
+
 export function transformUserInput(messageArgs: AbiParam[], userInput: string[]) {
   return messageArgs.map(({ type: { type } }, index) => {
     const value = userInput[index];
@@ -120,13 +124,13 @@ export function transformUserInput(messageArgs: AbiParam[], userInput: string[])
       return value.split(',').map(subStr => {
         const v = subStr.trim();
         if (isNumeric(type)) {
-          return v.includes('.') ? parseFloat(v) : parseInt(v);
+          return convertToNumber(v);
         }
         return v;
       });
     }
     if (isNumeric(type)) {
-      return value.includes('.') ? parseFloat(value) : parseInt(value);
+      return convertToNumber(value);
     }
     return value;
   });
