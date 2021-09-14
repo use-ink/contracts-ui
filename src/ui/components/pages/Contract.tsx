@@ -17,13 +17,13 @@ export const Contract = () => {
 
   return contract ? (
     <PageFull
-      header={`${contract.abi.project.contract.name} Contract`}
+      header={`${contract.abi.project.contract.name}`}
       help={`X instantiated this contract from CodeBundle on 31 Dec`}
     >
       <>
         <div className="grid grid-cols-12 w-full">
           <ul className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8">
-            <li className="mr-4 ">
+            <li className="mr-1">
               <button
                 onClick={() => setActive('metadata')}
                 className={classes('tab', active === 'metadata' ? 'active' : '')}

@@ -4,6 +4,7 @@
 @import './sidebar.css';
 @import './link.css';
 @import './tabs.css';
+@import './collapsible.css';
 
 @tailwind components;
 @tailwind utilities;

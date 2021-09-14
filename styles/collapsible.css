@@ -1,0 +1,19 @@
+.collapsible-panel {
+  @apply text-gray-300 border border-gray-700 rounded-md text-sm mb-4;
+}
+.collapsible-panel h1,
+.collapsible-panel h2,
+.collapsible-panel h3,
+.collapsible-panel h4,
+.collapsible-panel h5,
+.collapsible-panel h6,
+.collapsible-panel p,
+.collapsible-panel ul {
+  @apply mb-4;
+}
+.collapsible-panel h1 {
+  @apply font-bold;
+}
+.collapsible-panel .panel-body :last-child {
+  @apply mb-0;
+}

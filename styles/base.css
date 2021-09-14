@@ -37,3 +37,7 @@ a {
     width: 24rem;
   }
 }
+
+.markdown code {
+  @apply py-1 px-2 bg-elevation-2 text-xs rounded-sm;
+}
