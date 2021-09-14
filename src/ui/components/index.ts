@@ -10,5 +10,4 @@ export * from './Button';
 export * from './Buttons';
 export * from './Dropdown';
 export * from './InputDropdown';
-export * from './AccountSelector'
-export * from './StepsLabels'
+export * from './AccountSelector';

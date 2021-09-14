@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
-import { u8aToString } from '@polkadot/util';
+import { stringify, u8aToString } from '@polkadot/util';
 import { FileInput } from 'ui/components/FileInput';
 import { Input } from 'ui/components/Input';
 import { AccountSelector } from 'ui/components/AccountSelector';
@@ -22,10 +22,11 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
 }
 
 export const Step1 = ({ keyringPairs, dispatch, api, currentStep }: Props) => {
-  const [metadata, setMetadata] = useState<Abi>();
-  const [file, setFile] = useState<FileState | null>();
   const [accountSelected, setAccountSelected] = useState<DropdownOption>();
   const [contractName, setContractName] = useState('');
+  const [file, setFile] = useState<FileState | null>();
+  const [metadata, setMetadata] = useState<Abi>();
+  const [codeHash, setCodeHash] = useState<string>();
 
   function handleUploadContract(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.item(0);
@@ -34,13 +35,20 @@ export const Step1 = ({ keyringPairs, dispatch, api, currentStep }: Props) => {
     reader.onabort = NOOP;
     reader.onerror = NOOP;
 
+    setContractName(name.replace('.contract', '').replace('.json', '').replace('_', ' '));
+
     reader.onload = ({ target }: ProgressEvent<FileReader>): void => {
       if (target && target.result) {
         const data = convertToUint8Array(target?.result as ArrayBuffer);
-        const metadata = convertMetadata(u8aToString(data) as AnyJson, api);
-        setMetadata(metadata);
+        const abi = convertMetadata(u8aToString(data) as AnyJson, api);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const codeHash = JSON.parse(stringify(abi?.json));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        setCodeHash(codeHash?.source?.hash);
+
+        setMetadata(abi);
         setFile({ data, name: name, size: data.length } as FileState);
-        setContractName(`${metadata?.project.contract.name}.contract`);
       }
     };
 
@@ -106,11 +114,12 @@ export const Step1 = ({ keyringPairs, dispatch, api, currentStep }: Props) => {
             dispatch({
               type: 'UPLOAD_CONTRACT',
               payload: {
+                codeHash: codeHash as string,
                 file: file as FileState,
                 metadata,
                 fromAccountName: accountSelected?.name.toString() || '',
                 fromAddress: accountSelected?.value.toString() || '',
-                contractName: metadata.project.contract.name.toHuman(),
+                contractName: contractName,
               },
             });
         }}

@@ -6,6 +6,7 @@ export const CodeReducer: Reducer<InstantiateState, InstantiateAction> = (state,
     case 'UPLOAD_CONTRACT':
       return {
         ...state,
+        codeHash: action.payload.codeHash,
         file: action.payload.file,
         metadata: action.payload.metadata,
         contractName: action.payload.contractName,
@@ -18,6 +19,7 @@ export const CodeReducer: Reducer<InstantiateState, InstantiateAction> = (state,
       return {
         ...state,
         constructorName: action.payload.constructorName,
+        constructorIndex: action.payload.constructorIndex,
         argValues: action.payload.argValues,
         endowment: action.payload.endowment,
         salt: action.payload.salt,

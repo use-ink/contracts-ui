@@ -130,6 +130,7 @@ export const Step2 = ({ constructors, dispatch, currentStep }: Props) => {
                 type: 'DEPLOYMENT_INFO',
                 payload: {
                   constructorName: constr.name,
+                  constructorIndex: constr.value as number,
                   argValues,
                   endowment: endowment,
                   salt: salt,

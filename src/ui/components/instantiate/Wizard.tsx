@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
-import { StepInfo, StepsLabels } from '../StepsLabels';
+import { StepInfo, StepsProgress } from './StepsProgress';
 import { resolveReducer } from './Reducers';
 import { Step1 as HashStep1, Step2 as HashStep2, Step3 as HashStep3 } from './HashSteps';
 import { Step1 as CodeStep1, Step2 as CodeStep2, Step3 as CodeStep3 } from './CodeSteps';
 import { instantiateWithCode, instantiateWithHash } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { InstantiateState, InstantiationTypeEnum } from 'types';
+import { Abi, InstantiateState, InstantiationTypeEnum } from 'types';
 
 const initialState: InstantiateState = {
   isLoading: false,
@@ -80,7 +80,7 @@ export const Wizard = ({ instatiationType }: Props) => {
               currentStep={state.currentStep}
             />
             <CodeStep2
-              constructors={state.metadata?.constructors}
+              metadata={state.metadata as Abi}
               dispatch={dispatch}
               currentStep={state.currentStep}
             />
@@ -95,7 +95,7 @@ export const Wizard = ({ instatiationType }: Props) => {
         )}
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
-        <StepsLabels currentStep={state.currentStep} stepsInfo={stepsInfo} />
+        <StepsProgress currentStep={state.currentStep} stepsInfo={stepsInfo} />
       </aside>
     </>
   ) : null;

@@ -10,3 +10,5 @@ export { useStatistics } from './useStatistics';
 export { useToggleContractStar } from './useToggleContractStar';
 export { useTopContracts } from './useTopContracts';
 export { useQuery } from './useQuery';
+export { useWeight } from './useWeight';
+export { useBlockTime } from './useBlockTime';
