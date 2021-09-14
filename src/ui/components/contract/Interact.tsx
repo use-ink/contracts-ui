@@ -3,6 +3,7 @@ import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
+import { OverlayLoader } from '../OverlayLoader';
 import { Input } from '../Input';
 import { ResultsOutput } from './ResultsOutput';
 import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
@@ -94,17 +95,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
   if (!isActive) return null;
 
   if (state.isLoading) {
-    return (
-      <div className="w-full h-full fixed flex top-0 left-0 bg-gray-900 opacity-75 z-50">
-        <div className="m-auto flex flex-col justify-center items-center">
-          <div
-            style={{ borderTopColor: 'transparent' }}
-            className="w-16 h-16 border-4 border-blue-400 border-solid rounded-full animate-spin mb-4"
-          ></div>
-          <div> Calling instance...</div>
-        </div>
-      </div>
-    );
+    return <OverlayLoader message="Calling instance..." />;
   }
   return (
     api && (
@@ -121,11 +112,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
           </Dropdown>
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="mb-4">
-            <Dropdown
-              options={options}
-              onChange={(o: DropdownOption) => selectMsg(o)}
-              value={selectedMsg}
-            >
+            <Dropdown options={options} onChange={selectMsg} value={selectedMsg}>
               No messages found
             </Dropdown>
           </div>
