@@ -9,7 +9,6 @@ import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import {
   Abi,
-  AnyJson,
   DropdownOption,
   ContractCallParams,
   AbiMessage,
@@ -18,7 +17,7 @@ import {
 } from 'types';
 
 interface Props {
-  metadata: AnyJson;
+  abi: Abi;
   contractAddress: string;
   isActive: boolean;
   callFn: ({
@@ -70,9 +69,8 @@ const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) 
   }
 };
 
-export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Props) => {
+export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
   const { api, keyring } = useCanvas();
-  const [abi] = useState<Abi>(new Abi(metadata));
   const options = createOptions(abi.messages, 'message');
   const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);

@@ -2,15 +2,39 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { contractFiles, customRender, getMockCanvasState, getMockDbState } from 'test-utils';
+import { customRender, getMockCanvasState, getMockDbState } from 'test-utils';
 import { InteractTab } from 'ui/components';
-import { CanvasState, DbState } from 'types';
+import { CanvasState, DbState, Abi } from 'types';
 
 describe('Contract Interact Tab', () => {
   const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
 
   const mockCall = jest.fn();
-
+  const mockAbi = {
+    messages: [
+      {
+        method: 'flip',
+        index: 1,
+        args: [],
+        isPayable: false,
+        isMutating: true,
+      },
+      {
+        method: 'get',
+        index: 0,
+        args: [],
+        isPayable: false,
+        isMutating: false,
+      },
+    ],
+    findMessage: jest.fn().mockReturnValue({
+      method: 'flip',
+      index: 1,
+      args: [],
+      isPayable: false,
+      isMutating: true,
+    }),
+  } as unknown as Abi;
   let mockDbState: DbState;
   let mockCanvasState: CanvasState;
   beforeAll(async () => {
@@ -22,12 +46,7 @@ describe('Contract Interact Tab', () => {
   });
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(
-      <InteractTab
-        metadata={contractFiles.flipper}
-        contractAddress={mockAddr}
-        callFn={mockCall}
-        isActive={true}
-      />,
+      <InteractTab abi={mockAbi} contractAddress={mockAddr} callFn={mockCall} isActive={true} />,
       {
         ...mockCanvasState,
         keyringStatus: 'READY',
@@ -41,12 +60,7 @@ describe('Contract Interact Tab', () => {
   });
   test('call button executes ', () => {
     const { getByText } = customRender(
-      <InteractTab
-        metadata={contractFiles.flipper}
-        contractAddress={mockAddr}
-        callFn={mockCall}
-        isActive={true}
-      />,
+      <InteractTab abi={mockAbi} contractAddress={mockAddr} callFn={mockCall} isActive={true} />,
       {
         ...mockCanvasState,
         keyringStatus: 'READY',
