@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, Reducer, useMemo } from 'react';
+import React, { useState, useEffect, useReducer, useMemo } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
@@ -8,14 +8,8 @@ import { Input } from '../Input';
 import { ResultsOutput } from './ResultsOutput';
 import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import {
-  Abi,
-  DropdownOption,
-  ContractCallParams,
-  AbiMessage,
-  ContractCallState,
-  ContractCallAction,
-} from 'types';
+import { contractCallReducer } from 'ui/reducers';
+import { Abi, DropdownOption, ContractCallParams, AbiMessage, ContractCallState } from 'types';
 
 interface Props {
   abi: Abi;
@@ -39,43 +33,13 @@ const initialState: ContractCallState = {
   results: [],
 };
 
-const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) => {
-  switch (action.type) {
-    case 'CALL_INIT':
-      return { ...state, isLoading: true };
-    case 'CALL_FINALISED':
-      return {
-        ...state,
-        isSuccess: true,
-        results: [
-          ...state.results,
-          {
-            data: action.payload.data,
-            method: action.payload.method,
-            returnType: action.payload.returnType,
-            time: action.payload.time,
-            isMutating: action.payload.isMutating,
-            isPayable: action.payload.isPayable,
-            blockHash: action.payload.blockHash,
-            info: action.payload.info,
-            error: action.payload.error,
-          },
-        ],
-        isLoading: false,
-      };
-
-    default:
-      throw new Error();
-  }
-};
-
 export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
   const { api, keyring } = useCanvas();
   const options = createOptions(abi.messages, 'message');
   const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
   const [argValues, setArgValues] = useState<Record<string, string>>();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
   const keyringPairs = keyring?.getPairs();
   const accountsOptions = useMemo((): DropdownOption[] => createOptions(keyringPairs, 'pair'), []);
