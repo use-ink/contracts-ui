@@ -110,23 +110,26 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
             No accounts found
           </Dropdown>
           <h2 className="mb-2 text-sm">Message to send</h2>
-          <div className="mb-4">
-            <Dropdown options={options} onChange={selectMsg} value={selectedMsg}>
-              No messages found
-            </Dropdown>
-          </div>
-          {argValues && (
-            <div className="text-sm mb-4">
-              <ArgumentForm
-                key={`args-${message?.identifier}`}
-                args={message?.args}
-                argValues={argValues}
-                handleChange={e =>
-                  setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
-                }
-              />
+          <div className="flex">
+            <div className="mb-4 flex-1">
+              <Dropdown options={options} onChange={selectMsg} value={selectedMsg}>
+                No messages found
+              </Dropdown>
             </div>
-          )}
+            {argValues && (
+              <div className="text-sm mb-4 flex-1 ml-2">
+                <ArgumentForm
+                  key={`args-${message?.identifier}`}
+                  args={message?.args}
+                  argValues={argValues}
+                  handleChange={e =>
+                    setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
+                  }
+                />
+              </div>
+            )}
+          </div>
+
           {message.isPayable && (
             <>
               <h2 className="mb-2 text-sm">Payment</h2>

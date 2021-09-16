@@ -1,60 +1,60 @@
 .dropdown {
-  @apply relative
+  @apply relative;
 }
 
 .dropdown .dropdown-btn {
-  @apply relative flex w-full py-1.5 px-2 text-left dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none
+  @apply relative flex w-full p-2 text-left dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
 }
 
 .dropdown .dropdown-btn > span {
-  @apply flex-1 min-w-0 block truncate
+  @apply flex-1 min-w-0 block truncate;
 }
 
 .dropdown .dropdown-btn > svg {
-  @apply w-4 h-4 text-gray-400
+  @apply w-4 h-4 text-gray-400;
 }
 
 .dropdown .options {
-  @apply absolute z-50 w-full dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-base dark:text-gray-300 text-gray-500 bg-white rounded-b
+  @apply absolute z-50 w-full dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-base dark:text-gray-300 text-gray-500 bg-white rounded-b;
 }
 
 .dropdown .options .option {
-  @apply flex items-center cursor-pointer select-none relative py-2 px-3 dark:hover:bg-elevation-2 dark:text-gray-300
+  @apply flex items-center cursor-pointer select-none relative py-2 px-3 dark:hover:bg-elevation-2 dark:text-gray-300;
 }
 
 .dropdown .options .option > span {
-  @apply flex-grow block truncate
+  @apply flex-grow block truncate;
 }
 
 .dropdown .options .option > svg {
-  @apply w-3.5 h-3.5
+  @apply w-3.5 h-3.5;
 }
 
 .dropdown .options .option.selected {
-  @apply font-bold bg-elevation-1
+  @apply font-bold bg-elevation-1;
 }
 
 .dropdown.chain .dropdown-btn {
-  @apply flex items-center text-xs bg-elevation-1 hover:bg-elevation-3
+  @apply flex items-center text-xs bg-elevation-1 hover:bg-elevation-3;
 }
 
 .dropdown.chain .dropdown-btn:before {
   content: '';
-  @apply block rounded-full w-1.5 h-1.5 mr-1
+  @apply block rounded-full w-1.5 h-1.5 mr-1;
 }
 
 .dropdown.chain.isConnected .dropdown-btn:before {
-  @apply bg-green-400
+  @apply bg-green-400;
 }
 
 .dropdown.chain.isConnecting .dropdown-btn:before {
-  @apply bg-yellow-300
+  @apply bg-yellow-300;
 }
 
 .dropdown.chain.isError .dropdown-btn:before {
-  @apply bg-red-400
+  @apply bg-red-400;
 }
 
 .dropdown.chain .options .option {
-  @apply text-xs
+  @apply text-xs;
 }
