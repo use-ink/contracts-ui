@@ -34,7 +34,6 @@ const CollapsiblePanel = ({ title, content, args, isConstructor }: Props2) => {
 };
 export const MetadataTab = ({ isActive, abi: { constructors, messages } }: Props) => {
   if (!isActive) return null;
-  console.log(constructors, messages);
 
   return (
     <div className="grid grid-cols-12 w-full">

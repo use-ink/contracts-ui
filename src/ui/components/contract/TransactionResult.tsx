@@ -7,7 +7,7 @@ interface Props {
   date: string;
 }
 export const TransactionResult = ({
-  result: { time, data, method, isMutating, isPayable, blockHash, info },
+  result: { time, data, method, isMutating, isPayable, blockHash, info, error },
   date,
 }: Props) => {
   return (
@@ -28,6 +28,13 @@ export const TransactionResult = ({
           {`Included at block# ${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
         </div>
         <div className="text-mono mb-2">{`Weight: ${info?.weight}`}</div>
+        {error && (
+          <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono">
+            {error.docs.map((doc, index) => (
+              <p key={index}>{doc}</p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

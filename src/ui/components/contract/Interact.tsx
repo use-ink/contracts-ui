@@ -43,7 +43,7 @@ const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) 
   switch (action.type) {
     case 'CALL_INIT':
       return { ...state, isLoading: true };
-    case 'CALL_SUCCESS':
+    case 'CALL_FINALISED':
       return {
         ...state,
         isSuccess: true,
@@ -58,12 +58,11 @@ const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) 
             isPayable: action.payload.isPayable,
             blockHash: action.payload.blockHash,
             info: action.payload.info,
+            error: action.payload.error,
           },
         ],
         isLoading: false,
       };
-    case 'CALL_ERROR':
-      return { ...state, error: action.payload, isLoading: false };
 
     default:
       throw new Error();
