@@ -106,6 +106,7 @@ export interface ContractCallParams {
 
 export interface CallResult {
   data: AnyJson;
+  log: string[];
   method: string;
   returnType: string;
   time: number;

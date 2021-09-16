@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { CallResult } from 'types';
 
 interface Props {
@@ -18,14 +20,15 @@ export const QueryResult = ({ result: { time, data, method, returnType, error },
           <span className="mr-2">{`(): ${returnType}`}</span>
         </div>
         <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono">{`${data}`}</div>
-        {error && (
-          <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono">
-            {error.docs.map((doc, index) => (
-              <p key={index}>{doc}</p>
-            ))}
-          </div>
-        )}
       </div>
+      {error && (
+        <ReactMarkdown
+          // eslint-disable-next-line react/no-children-prop
+          children={error.docs.join('\r\n')}
+          remarkPlugins={[remarkGfm]}
+          className="markdown mt-4"
+        />
+      )}
     </div>
   );
 };

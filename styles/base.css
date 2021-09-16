@@ -37,7 +37,27 @@ a {
     width: 24rem;
   }
 }
-
+.markdown {
+  @apply leading-relaxed;
+}
 .markdown code {
-  @apply py-1 px-2 bg-elevation-2 text-xs rounded-sm;
+  @apply bg-elevation-2 text-xs rounded-sm;
+  padding: 2px 4px;
+}
+.markdown :last-child {
+  @apply mb-0;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6,
+.markdown p,
+.markdown ul {
+  @apply mb-2;
+}
+
+.markdown h1 {
+  @apply font-bold;
 }

@@ -5,6 +5,7 @@
 @import './link.css';
 @import './tabs.css';
 @import './collapsible.css';
+@import './call-results.css';
 
 @tailwind components;
 @tailwind utilities;

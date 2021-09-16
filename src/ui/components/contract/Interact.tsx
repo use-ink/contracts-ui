@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useMemo } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
@@ -42,7 +42,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
   const keyringPairs = keyring?.getPairs();
-  const accountsOptions = useMemo((): DropdownOption[] => createOptions(keyringPairs, 'pair'), []);
+  const accountsOptions = createOptions(keyringPairs, 'pair');
   const [account, setAccount] = useState<DropdownOption>(accountsOptions[0]);
 
   useEffect(() => {

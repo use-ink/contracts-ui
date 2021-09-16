@@ -44,6 +44,7 @@ export async function call({
 
   const callResult: CallResult = {
     data: '',
+    log: [],
     method: method,
     returnType: returnType?.displayName || returnType?.type || '',
     time: Date.now(),
@@ -78,7 +79,7 @@ export async function call({
             type: 'CALL_FINALISED',
             payload: {
               ...callResult,
-              data: log,
+              log: log,
               error,
               blockHash: status.asFinalized.toString(),
               info: dispatchInfo?.toHuman(),

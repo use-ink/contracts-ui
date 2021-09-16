@@ -24,6 +24,7 @@ export const contractCallReducer: Reducer<ContractCallState, ContractCallAction>
             blockHash: action.payload.blockHash,
             info: action.payload.info,
             error: action.payload.error,
+            log: action.payload.log,
           },
         ],
         isLoading: false,

@@ -1,41 +1,71 @@
 import React from 'react';
-import { DatabaseIcon, CashIcon } from '@heroicons/react/solid';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { DatabaseIcon, CashIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import { Disclosure } from '@headlessui/react';
 import { CallResult } from 'types';
 
 interface Props {
   result: CallResult;
   date: string;
 }
+
 export const TransactionResult = ({
-  result: { time, data, method, isMutating, isPayable, blockHash, info, error },
+  result: { time, method, isMutating, isPayable, blockHash, info, error, log },
   date,
 }: Props) => {
   return (
-    <div
-      key={`${time}`}
-      className="text-xs text-gray-400 break-all p-4 border-b border-gray-200 dark:border-gray-700"
-    >
-      <div className="mb-2">{date}</div>
-      <div className="flex-col">
-        <div className="text-mono flex mb-4">
-          <span className="text-yellow-300">{method}</span>
-          <span>{`()`}</span>
-          {isMutating && <DatabaseIcon className="w-4 h-4 ml-2" />}
-          {isPayable && <CashIcon className="w-4 h-4 ml-2" />}
-        </div>
-        <div className="text-mono mb-2">{`${data}`}</div>
-        <div className="text-mono mb-2">
-          {`Included at block# ${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
-        </div>
-        <div className="text-mono mb-2">{`Weight: ${info?.weight}`}</div>
-        {error && (
-          <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono">
-            {error.docs.map((doc, index) => (
-              <p key={index}>{doc}</p>
-            ))}
+    <Disclosure>
+      {({ open }) => (
+        <div
+          key={`${time}`}
+          className="text-xs text-gray-400 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div className="flex-col">
+            <div className="mb-2">{date}</div>
+            <div className="text-mono flex mb-2">
+              <span className="text-yellow-300">{method}</span>
+              <span>{`()`}</span>
+              {isMutating && <DatabaseIcon className="w-4 h-4 ml-2" />}
+              {isPayable && <CashIcon className="w-4 h-4 ml-2" />}
+            </div>
+            <Disclosure.Button className="flex items-center w-full text-left">
+              <div className="flex-col items-start">
+                <div className="event-log">
+                  {log.map((line, index) => (
+                    <p key={index} className="mb-2">
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <ChevronUpIcon
+                className={`${open ? 'transform rotate-180' : ''} w-4 h-4 ml-auto border-gray-500 `}
+              />
+            </Disclosure.Button>
+            <Disclosure.Panel>
+              {error && (
+                <ReactMarkdown
+                  // eslint-disable-next-line react/no-children-prop
+                  children={error.docs.join('\r\n')}
+                  remarkPlugins={[remarkGfm]}
+                  className="markdown mt-4 mb-4"
+                />
+              )}
+              <div className="pt-4 mb-4">
+                <span className="mr-2">Included at #</span>
+                <span className="text-mono p-1 bg-elevation-1">
+                  {`${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
+                </span>
+              </div>
+              <div>
+                <span className="mr-2">Weight</span>
+                <span className="text-mono p-1 bg-elevation-1">{`${info?.weight}`}</span>
+              </div>
+            </Disclosure.Panel>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </Disclosure>
   );
 };
