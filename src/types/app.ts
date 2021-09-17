@@ -108,8 +108,8 @@ export interface CallResult {
   data: AnyJson;
   log: string[];
   method: string;
-  returnType: string;
   time: number;
+  returnType?: string;
   isMutating?: boolean;
   isPayable?: boolean;
   blockHash?: string;

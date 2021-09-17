@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { DatabaseIcon, CashIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import { ChevronUpIcon } from '@heroicons/react/solid';
 import { Disclosure } from '@headlessui/react';
+import { MessageSignature } from '../MessageSignature';
 import { CallResult } from 'types';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export const TransactionResult = ({
-  result: { time, method, isMutating, isPayable, blockHash, info, error, log },
+  result: { time, method, isMutating, isPayable, blockHash, info, error, log, returnType },
   date,
 }: Props) => {
   return (
@@ -23,13 +24,13 @@ export const TransactionResult = ({
         >
           <div className="flex-col">
             <div className="mb-2">{date}</div>
-            <div className="text-mono flex mb-2">
-              <span className="text-yellow-300">{method}</span>
-              <span>{`()`}</span>
-              {isMutating && <DatabaseIcon className="w-4 h-4 ml-2" />}
-              {isPayable && <CashIcon className="w-4 h-4 ml-2" />}
-            </div>
-            <Disclosure.Button className="flex items-center w-full text-left">
+            <MessageSignature
+              method={method}
+              isMutating={isMutating}
+              isPayable={isPayable}
+              returnType={returnType}
+            />
+            <Disclosure.Button className="flex items-center w-full text-left pt-2">
               <div className="flex-col items-start">
                 <div className="event-log">
                   {log.map((line, index) => (
