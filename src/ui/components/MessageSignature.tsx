@@ -20,8 +20,8 @@ export const MessageSignature = ({ isPayable, isMutating, method, returnType }: 
       ) : (
         <span>()</span>
       )}
-      {isMutating && <DatabaseIcon className="w-4 h-4 ml-2" id="mutating-icon" />}
-      {isPayable && <CashIcon className="w-4 h-4 ml-2" id="payable-icon" />}
+      {isMutating && <DatabaseIcon className="w-4 h-4 ml-2 icon-mutating" />}
+      {isPayable && <CashIcon className="w-4 h-4 ml-2 icon-payable" />}
     </div>
   );
 };

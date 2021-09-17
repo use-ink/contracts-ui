@@ -25,54 +25,6 @@ export const keyringPairsMock = [
   },
 ];
 
-export const flipperMock = {
-  constructors: [
-    {
-      method: 'new',
-      identifier: 'new',
-      index: 0,
-      args: [
-        {
-          name: 'initValue',
-          type: {
-            info: 6,
-            type: 'bool',
-          },
-        },
-      ],
-      docs: ['Creates a new flipper smart contract initialized with the given value.'],
-    },
-    {
-      method: 'default',
-      identifier: 'default',
-      index: 1,
-      args: [],
-      docs: ['Creates a new flipper smart contract initialized to `false`.'],
-    },
-  ],
-  messages: [
-    {
-      args: [],
-      docs: [" Flips the current value of the Flipper's bool."],
-      identifier: 'flip',
-      index: 0,
-      isMutating: true,
-      isPayable: false,
-      method: 'flip',
-      returnType: null,
-    },
-    {
-      args: [],
-      docs: [" Returns the current value of the Flipper's bool."],
-      identifier: 'get',
-      index: 1,
-      isMutating: false,
-      isPayable: false,
-      method: 'get',
-    },
-  ],
-};
-
 export function getKeyringPairRandom(): KeyringPair {
   return keyring.createFromUri(faker.name.firstName());
 }

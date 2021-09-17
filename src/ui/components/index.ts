@@ -8,3 +8,4 @@ export * from './sidebar';
 export * from './App';
 export * from './Button';
 export * from './Dropdown';
+export * from './MessageSignature';
