@@ -5,13 +5,7 @@ import moment from 'moment';
 import { contractFiles } from './contracts';
 import { getNewCodeBundleId, getPrivateKeyFromPair, publicKeyHex } from 'db';
 
-import {
-  UserDocument,
-  CodeBundleDocument,
-  ContractDocument,
-  KeyringPair,
-  PrivateKey,
-} from 'types';
+import { UserDocument, CodeBundleDocument, ContractDocument, KeyringPair, PrivateKey } from 'types';
 import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
@@ -35,6 +29,7 @@ export const flipperMock = {
   constructors: [
     {
       method: 'new',
+      identifier: 'new',
       index: 0,
       args: [
         {
@@ -49,6 +44,7 @@ export const flipperMock = {
     },
     {
       method: 'default',
+      identifier: 'default',
       index: 1,
       args: [],
       docs: ['Creates a new flipper smart contract initialized to `false`.'],

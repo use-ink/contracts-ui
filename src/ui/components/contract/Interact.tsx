@@ -107,7 +107,6 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
           <Buttons>
             <Button
               onClick={() =>
-                message &&
                 callFn({
                   api,
                   abi,

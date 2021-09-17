@@ -13,14 +13,14 @@ describe('Contract Interact Tab', () => {
   const mockAbi = {
     messages: [
       {
-        method: 'flip',
+        identifier: 'flip',
         index: 1,
         args: [],
         isPayable: false,
         isMutating: true,
       },
       {
-        method: 'get',
+        identifier: 'get',
         index: 0,
         args: [],
         isPayable: false,
@@ -28,15 +28,17 @@ describe('Contract Interact Tab', () => {
       },
     ],
     findMessage: jest.fn().mockReturnValue({
-      method: 'flip',
+      identifier: 'flip',
       index: 1,
       args: [],
       isPayable: false,
       isMutating: true,
     }),
   } as unknown as Abi;
+
   let mockDbState: DbState;
   let mockCanvasState: CanvasState;
+
   beforeAll(async () => {
     mockDbState = await getMockDbState();
     mockCanvasState = getMockCanvasState();
