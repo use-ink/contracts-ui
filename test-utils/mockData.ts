@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import faker from 'faker';
 import { Keyring } from '@polkadot/api';
-import moment from 'moment';
 import { contractFiles } from './contracts';
 import { getNewCodeBundleId, getPrivateKeyFromPair, publicKeyHex } from 'db';
 
@@ -85,7 +84,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       tags,
       abi,
       id: getNewCodeBundleId(),
-      date: moment().format(),
+      date: new Date().toLocaleString(),
       stars: 1,
       instances: 0,
     });
@@ -112,7 +111,7 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
       name,
       tags,
       abi,
-      date: moment().format(),
+      date: new Date().toLocaleString(),
       stars: 1,
     });
   });

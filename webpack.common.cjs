@@ -41,10 +41,33 @@ const rules = [
 
 module.exports = {
   target: 'web',
-  entry: path.resolve(__dirname, 'src', 'index.tsx'),
+  entry: {
+    buffer: path.resolve(__dirname, 'node_modules', 'buffer'),
+    canvas: {
+      import: path.resolve(__dirname, 'src', 'canvas', 'index.ts'),
+      dependOn: ['polkadotjs', 'elliptic', 'buffer'],
+    },
+    db: {
+      import: path.resolve(__dirname, 'src', 'db', 'index.ts'),
+      dependOn: ['elliptic', 'buffer'],
+    },
+    elliptic: path.resolve(__dirname, 'node_modules', 'elliptic'),
+    polkadotjs: {
+      import: path.resolve(__dirname, 'node_modules', '@polkadot', 'api'),
+    },
+    types: {
+      import: path.resolve(__dirname, 'src', 'types', 'index.ts'),
+      dependOn: ['polkadotjs', 'db'],
+    },
+    ui: {
+      import: path.resolve(__dirname, 'src', 'ui', 'index.tsx'),
+      dependOn: ['canvas', 'db', 'types'],
+    },
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
+    chunkFilename: '[id].js',
     publicPath: '/',
   },
   plugins: [
@@ -72,5 +95,9 @@ module.exports = {
       assert: require.resolve('assert'),
     },
     plugins: [new TsconfigPathsPlugin()],
+  },
+  optimization: {
+    runtimeChunk: 'single',
+    concatenateModules: true,
   },
 };

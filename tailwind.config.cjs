@@ -2,6 +2,7 @@ const colors = require('tailwindcss/colors');
 const process = require('process');
 
 module.exports = {
+  mode: 'jit',
   purge: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
@@ -17,15 +18,15 @@ module.exports = {
           600: '#4959EB',
           700: '#4338CA',
           800: '#313DA3',
-          900: '#2F3782'
+          900: '#2F3782',
         },
         darkMode: {
           elevation: {
             0: '#1A1D1F',
             1: '#202529',
             2: '#242A2E',
-            3: '#2F373D'
-          }
+            3: '#2F373D',
+          },
         },
         elevation: {
           0: '#1a1d20',
@@ -57,7 +58,7 @@ module.exports = {
           600: '#059669',
           700: '#047857',
           800: '#065F46',
-          900: '#064E3B'
+          900: '#064E3B',
         },
         orange: {
           50: '#FFF7ED',
@@ -69,7 +70,7 @@ module.exports = {
           600: '#EA580C',
           700: '#C2410C',
           800: '#9A3412',
-          900: '#7C2D12'
+          900: '#7C2D12',
         },
         red: {
           50: '#FEF2F2',
@@ -81,7 +82,7 @@ module.exports = {
           600: '#DC2626',
           700: '#B91C1C',
           800: '#991B1B',
-          900: '#7F1D1D'
+          900: '#7F1D1D',
         },
         yellow: {
           50: '#FFFBEB',
@@ -93,8 +94,8 @@ module.exports = {
           600: '#D97706',
           700: '#B45309',
           800: '#92400E',
-          900: '#78350F'
-        }
+          900: '#78350F',
+        },
       },
     },
   },
@@ -104,7 +105,7 @@ module.exports = {
       opacity: ['disabled'],
       cursor: ['disabled'],
       scale: ['focus-within'],
-      stroke: ['hover', 'group-hover']
+      stroke: ['hover', 'group-hover'],
     },
   },
   plugins: [require('@tailwindcss/forms')],

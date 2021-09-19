@@ -1,8 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import type { Database, PrivateKey } from '@textile/threaddb';
-
-import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
 import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
@@ -15,15 +13,17 @@ export async function findTopCodeBundles(
     const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
 
     return Promise.all(
-      codeBundles.map(async (codeBundle) => {
-        const instances = (await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()).length;
-        
+      codeBundles.map(async codeBundle => {
+        const instances = (
+          await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()
+        ).length;
+
         return {
           ...(codeBundle as CodeBundleDocument),
-          instances
+          instances,
         };
       })
-    )
+    );
   } catch (e) {
     console.error(e);
 
@@ -81,7 +81,19 @@ export async function findCodeBundleById(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockOneHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
+  {
+    abi,
+    blockOneHash,
+    codeHash,
+    creator,
+    genesisHash,
+    id = getNewCodeBundleId(),
+    instances = 1,
+    name,
+    stars = 1,
+    tags = [],
+    date = new Date().toLocaleString(),
+  }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
     if (!creator) {
@@ -108,7 +120,7 @@ export async function createCodeBundle(
       tags,
       date,
       stars,
-      instances
+      instances,
     });
 
     await newCode.save();
