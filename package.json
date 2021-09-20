@@ -17,7 +17,8 @@
     "lint": "eslint --fix src/",
     "clean": "rm -rf dist",
     "deep-clean": "yarn clean && rm -rf node_modules",
-    "regenerate": "yarn deep-clean && yarn && yarn start"
+    "regenerate": "yarn deep-clean && yarn && yarn start",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -91,8 +92,10 @@
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
+    "husky": ">=6",
     "indexeddb-export-import": "^2.1.2",
     "jest": "^27.0.4",
+    "lint-staged": ">=10",
     "mini-css-extract-plugin": "^1.6.0",
     "postcss": "^8.3.2",
     "postcss-import": "^14.0.2",
@@ -109,5 +112,9 @@
   },
   "browserslist": [
     "last 2 Chrome versions"
-  ]
+  ],
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
 }
