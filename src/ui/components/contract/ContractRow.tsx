@@ -3,6 +3,7 @@ import 'styled-components';
 import { Identicon } from '@polkadot/react-identicon';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Button } from '../Button';
 import { ContractDocument } from 'types';
@@ -19,10 +20,7 @@ export function ContractRow({
   onToggleStar,
 }: Props) {
   const Star = isStarred ? StarIconFill : StarIconOutline;
-  const formattedDate = new Date(date).toLocaleDateString('en-EN', {
-    month: 'long',
-    day: 'numeric',
-  });
+
   return (
     <Link
       to={`/contract/${address}`}
@@ -43,7 +41,7 @@ export function ContractRow({
           {stars}
         </Button>
       </div>
-      <div className="w-14 text-gray-500 dark:text-gray-400">{formattedDate}</div>
+      <div className="w-14 text-gray-500 dark:text-gray-400">{moment(date).format('MMM d')}</div>
     </Link>
   );
 }

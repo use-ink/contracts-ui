@@ -2,6 +2,7 @@
 
 // import { keyring } from '@polkadot/ui-keyring';
 import type { Database, PrivateKey } from '@textile/threaddb';
+import moment from 'moment';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
@@ -55,7 +56,7 @@ export async function createContract(
     blockOneHash,
     codeBundleId,
     creator,
-    date = new Date().toLocaleString(),
+    date = moment().format(),
     genesisHash,
     name,
     tags = [],

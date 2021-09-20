@@ -1,6 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import type { Database, PrivateKey } from '@textile/threaddb';
+import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
 import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
@@ -92,7 +93,7 @@ export async function createCodeBundle(
     name,
     stars = 1,
     tags = [],
-    date = new Date().toLocaleString(),
+    date = moment().format(),
   }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {

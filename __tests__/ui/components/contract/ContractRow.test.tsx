@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent, RenderResult } from '@testing-library/react';
@@ -15,10 +16,6 @@ describe('Homepage: ContractRow', () => {
   let favoriteButton: HTMLButtonElement;
   let onToggleStar: VoidFn;
 
-  const date = new Date(contract.date).toLocaleDateString('en-EN', {
-    month: 'long',
-    day: 'numeric',
-  });
   beforeEach(() => {
     onToggleStar = jest.fn();
 
@@ -38,7 +35,7 @@ describe('Homepage: ContractRow', () => {
       getByText(`${contract.address.slice(0, 4)}...${contract.address.slice(-4)}`)
     ).toBeInTheDocument();
     expect(favoriteButton).toBeInTheDocument();
-    expect(getByText(date)).toBeInTheDocument();
+    expect(getByText(moment(contract.date).format('MMM d'))).toBeInTheDocument();
   });
 
   test('toggles user favorite', () => {
