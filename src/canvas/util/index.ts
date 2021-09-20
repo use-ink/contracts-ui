@@ -79,7 +79,7 @@ export function createOptions(data?: Array<unknown>, kind?: string): DropdownOpt
   if (data) {
     switch (kind) {
       case 'message':
-        return (data as AbiMessage[]).map(c => ({ name: c.method, value: c.index }));
+        return (data as AbiMessage[]).map(c => ({ name: c.identifier, value: c.index }));
       case 'pair':
         return (data as Partial<KeyringPair>[]).map(pair => ({
           value: pair.address || '',

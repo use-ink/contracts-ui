@@ -1,6 +1,13 @@
 import { encodeSalt, transformUserInput } from 'canvas/util';
 
-import { ContractPromise, ContractQuery, ContractTx, ContractCallParams, CallResult } from 'types';
+import {
+  ContractPromise,
+  ContractQuery,
+  ContractTx,
+  ContractCallParams,
+  CallResult,
+  RegistryError,
+} from 'types';
 
 export function prepareContractTx(
   tx: ContractTx<'promise'>,
@@ -35,6 +42,16 @@ export async function call({
   const salt = encodeSalt();
   const transformed = transformUserInput(args, userInput);
 
+  const callResult: CallResult = {
+    data: '',
+    log: [],
+    method: method,
+    returnType: returnType?.displayName || returnType?.type || '',
+    time: Date.now(),
+    isMutating: isMutating ? true : false,
+    isPayable: isPayable ? true : false,
+  };
+
   if (keyringPair) {
     dispatch({ type: 'CALL_INIT' });
     if (isMutating || isPayable) {
@@ -47,30 +64,28 @@ export async function call({
       const unsub = await tx.signAndSend(keyringPair, result => {
         const { status, events, dispatchError, dispatchInfo } = result;
 
+        const log = events.map(({ event }) => {
+          return `${event.section}:${event.method}`;
+        });
+
+        let error: RegistryError | undefined;
+
         if (status.isFinalized) {
-          const log = events.map(({ event: { section, method } }) => {
-            return `${section.toUpperCase()}::${method}`;
-          });
-
-          const callResult: CallResult = {
-            data: log,
-            method: method,
-            returnType: returnType?.displayName || '',
-            time: Date.now(),
-            isMutating: isMutating ? true : false,
-            isPayable: isPayable ? true : false,
-            blockHash: status.asFinalized.toString(),
-            info: dispatchInfo?.toHuman(),
-          };
-          dispatch({
-            type: 'CALL_SUCCESS',
-            payload: callResult,
-          });
-
           if (dispatchError) {
-            const decoded = api.registry.findMetaError(dispatchError.asModule);
-            dispatch({ type: 'CALL_ERROR', payload: decoded });
+            error = api.registry.findMetaError(dispatchError.asModule);
           }
+
+          dispatch({
+            type: 'CALL_FINALISED',
+            payload: {
+              ...callResult,
+              log: log,
+              error,
+              blockHash: status.asFinalized.toString(),
+              info: dispatchInfo?.toHuman(),
+            },
+          });
+
           unsub();
         }
       });
@@ -81,28 +96,17 @@ export async function call({
         contract.query[method],
         transformed
       );
-      if (result.isOk) {
-        const callResult: CallResult = {
-          data: output?.toHuman(),
-          method: method,
-          returnType: returnType?.displayName || returnType?.type || '',
-          time: Date.now(),
-        };
 
-        dispatch({
-          type: 'CALL_SUCCESS',
-          payload: callResult,
-        });
+      let error: RegistryError | undefined;
+
+      if (result.isErr && result.asErr.isModule) {
+        error = api.registry.findMetaError(result.asErr.asModule);
       }
-      if (result.isErr) {
-        const error = result.asErr;
-        if (error.isModule) {
-          const decoded = api.registry.findMetaError(error.asModule);
-          dispatch({ type: 'CALL_ERROR', payload: decoded });
-        } else {
-          console.error(`Error calling contract: ${error}`);
-        }
-      }
+
+      dispatch({
+        type: 'CALL_FINALISED',
+        payload: { ...callResult, data: output?.toHuman(), error },
+      });
     }
   } else {
     console.error('Kering pair not found');

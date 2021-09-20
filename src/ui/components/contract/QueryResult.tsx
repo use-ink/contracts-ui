@@ -1,11 +1,17 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { MessageSignature } from '../MessageSignature';
 import { CallResult } from 'types';
 
 interface Props {
   result: CallResult;
   date: string;
 }
-export const QueryResult = ({ result: { time, data, method, returnType }, date }: Props) => {
+export const QueryResult = ({
+  result: { time, data, method, returnType, error, isMutating, isPayable },
+  date,
+}: Props) => {
   return (
     <div
       key={`${time}`}
@@ -13,12 +19,24 @@ export const QueryResult = ({ result: { time, data, method, returnType }, date }
     >
       <div className="mb-2">{date}</div>
       <div className="flex items-center">
-        <div className="text-mono flex-1 leading-relaxed" style={{ wordBreak: 'break-word' }}>
-          <span className="text-yellow-300">{method}</span>
-          <span>{`(): ${returnType}`}</span>
+        <div className="flex-1">
+          <MessageSignature
+            method={method}
+            isMutating={isMutating}
+            isPayable={isPayable}
+            returnType={returnType}
+          />
         </div>
-        <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono">{`${data}`}</div>
+        <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono ml-4">{`${data}`}</div>
       </div>
+      {error && (
+        <ReactMarkdown
+          // eslint-disable-next-line react/no-children-prop
+          children={error.docs.join('\r\n')}
+          remarkPlugins={[remarkGfm]}
+          className="markdown mt-4"
+        />
+      )}
     </div>
   );
 };

@@ -23,7 +23,7 @@ export interface CanvasState extends ChainProperties {
   keyringStatus: string | null;
   api: ApiPromise | null;
   error: unknown | null;
-  status: Status
+  status: Status;
 }
 
 export type CanvasAction =
@@ -106,13 +106,15 @@ export interface ContractCallParams {
 
 export interface CallResult {
   data: AnyJson;
+  log: string[];
   method: string;
-  returnType: string;
   time: number;
+  returnType?: string;
   isMutating?: boolean;
   isPayable?: boolean;
   blockHash?: string;
   info?: Record<string, AnyJson>;
+  error?: RegistryError;
 }
 export interface ContractCallState {
   isLoading: boolean;
@@ -122,8 +124,6 @@ export interface ContractCallState {
 }
 export type ContractCallAction =
   | { type: 'CALL_INIT' }
-  | { type: 'TRANSACTION_FINALIZED'; payload: EventRecord[] }
-  | { type: 'CALL_SUCCESS'; payload: CallResult }
-  | { type: 'CALL_ERROR'; payload: RegistryError };
+  | { type: 'CALL_FINALISED'; payload: CallResult };
 
 export type UrlParams = { addr: string; activeTab: string };

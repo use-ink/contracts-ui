@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { contractFiles, customRender, getMockCanvasState, getMockDbState } from 'test-utils';
+import { customRender, getMockCanvasState, getMockDbState, mockAbiFlipper } from 'test-utils';
 import { InteractTab } from 'ui/components';
 import { CanvasState, DbState } from 'types';
 
@@ -13,6 +13,7 @@ describe('Contract Interact Tab', () => {
 
   let mockDbState: DbState;
   let mockCanvasState: CanvasState;
+
   beforeAll(async () => {
     mockDbState = await getMockDbState();
     mockCanvasState = getMockCanvasState();
@@ -23,7 +24,7 @@ describe('Contract Interact Tab', () => {
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(
       <InteractTab
-        metadata={contractFiles.flipper}
+        abi={mockAbiFlipper}
         contractAddress={mockAddr}
         callFn={mockCall}
         isActive={true}
@@ -42,7 +43,7 @@ describe('Contract Interact Tab', () => {
   test('call button executes ', () => {
     const { getByText } = customRender(
       <InteractTab
-        metadata={contractFiles.flipper}
+        abi={mockAbiFlipper}
         contractAddress={mockAddr}
         callFn={mockCall}
         isActive={true}

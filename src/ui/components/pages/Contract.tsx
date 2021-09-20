@@ -15,15 +15,15 @@ export const Contract = () => {
   const contract = getInstanceFromStorage(addr, api);
   const [active, setActive] = useState(activeTab || 'interact');
 
-  return (
+  return contract ? (
     <PageFull
-      header={`${contract?.abi.project.contract.name} Contract`}
+      header={`${contract.abi.project.contract.name}`}
       help={`X instantiated this contract from CodeBundle on 31 Dec`}
     >
       <>
         <div className="grid grid-cols-12 w-full">
           <ul className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8">
-            <li className="mr-4 ">
+            <li className="mr-1">
               <button
                 onClick={() => setActive('metadata')}
                 className={classes('tab', active === 'metadata' ? 'active' : '')}
@@ -43,14 +43,14 @@ export const Contract = () => {
             </li>
           </ul>
         </div>
-        <MetadataTab isActive={active === 'metadata'} />
+        <MetadataTab isActive={active === 'metadata'} abi={contract.abi} />
         <InteractTab
           contractAddress={addr}
-          metadata={contract?.abi.json}
+          abi={contract.abi}
           callFn={call}
           isActive={active === 'interact'}
         />
       </>
     </PageFull>
-  );
+  ) : null;
 };

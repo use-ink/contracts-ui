@@ -1,24 +1,18 @@
-import React, { useState, useEffect, useReducer, Reducer, useMemo } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
+import { OverlayLoader } from '../OverlayLoader';
 import { Input } from '../Input';
 import { ResultsOutput } from './ResultsOutput';
 import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import {
-  Abi,
-  AnyJson,
-  DropdownOption,
-  ContractCallParams,
-  AbiMessage,
-  ContractCallState,
-  ContractCallAction,
-} from 'types';
+import { contractCallReducer } from 'ui/reducers';
+import { Abi, DropdownOption, ContractCallParams, AbiMessage, ContractCallState } from 'types';
 
 interface Props {
-  metadata: AnyJson;
+  abi: Abi;
   contractAddress: string;
   isActive: boolean;
   callFn: ({
@@ -39,48 +33,16 @@ const initialState: ContractCallState = {
   results: [],
 };
 
-const reducer: Reducer<ContractCallState, ContractCallAction> = (state, action) => {
-  switch (action.type) {
-    case 'CALL_INIT':
-      return { ...state, isLoading: true };
-    case 'CALL_SUCCESS':
-      return {
-        ...state,
-        isSuccess: true,
-        results: [
-          ...state.results,
-          {
-            data: action.payload.data,
-            method: action.payload.method,
-            returnType: action.payload.returnType,
-            time: action.payload.time,
-            isMutating: action.payload.isMutating,
-            isPayable: action.payload.isPayable,
-            blockHash: action.payload.blockHash,
-            info: action.payload.info,
-          },
-        ],
-        isLoading: false,
-      };
-    case 'CALL_ERROR':
-      return { ...state, error: action.payload, isLoading: false };
-
-    default:
-      throw new Error();
-  }
-};
-
-export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Props) => {
+export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
   const { api, keyring } = useCanvas();
-  const [abi] = useState<Abi>(new Abi(metadata));
   const options = createOptions(abi.messages, 'message');
   const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
   const [argValues, setArgValues] = useState<Record<string, string>>();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
   const keyringPairs = keyring?.getPairs();
-  const accountsOptions = useMemo((): DropdownOption[] => createOptions(keyringPairs, 'pair'), []);
+  const accountsOptions = createOptions(keyringPairs, 'pair');
   const [account, setAccount] = useState<DropdownOption>(accountsOptions[0]);
 
   useEffect(() => {
@@ -96,17 +58,7 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
   if (!isActive) return null;
 
   if (state.isLoading) {
-    return (
-      <div className="w-full h-full fixed flex top-0 left-0 bg-gray-900 opacity-75 z-50">
-        <div className="m-auto flex flex-col justify-center items-center">
-          <div
-            style={{ borderTopColor: 'transparent' }}
-            className="w-16 h-16 border-4 border-blue-400 border-solid rounded-full animate-spin mb-4"
-          ></div>
-          <div> Calling instance...</div>
-        </div>
-      </div>
-    );
+    return <OverlayLoader message="Calling instance..." />;
   }
   return (
     api && (
@@ -122,27 +74,26 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
             No accounts found
           </Dropdown>
           <h2 className="mb-2 text-sm">Message to send</h2>
-          <div className="mb-4">
-            <Dropdown
-              options={options}
-              onChange={(o: DropdownOption) => selectMsg(o)}
-              value={selectedMsg}
-            >
-              No messages found
-            </Dropdown>
-          </div>
-          {argValues && (
-            <div className="text-sm mb-4">
-              <ArgumentForm
-                key={`args-${message?.identifier}`}
-                args={message?.args}
-                argValues={argValues}
-                handleChange={e =>
-                  setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
-                }
-              />
+          <div className="flex">
+            <div className="mb-4 flex-1">
+              <Dropdown options={options} onChange={selectMsg} value={selectedMsg}>
+                No messages found
+              </Dropdown>
             </div>
-          )}
+            {argValues && (
+              <div className="text-sm mb-4 flex-1 ml-2">
+                <ArgumentForm
+                  key={`args-${message?.identifier}`}
+                  args={message?.args}
+                  argValues={argValues}
+                  handleChange={e =>
+                    setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
+                  }
+                />
+              </div>
+            )}
+          </div>
+
           {message.isPayable && (
             <>
               <h2 className="mb-2 text-sm">Payment</h2>
@@ -156,7 +107,6 @@ export const InteractTab = ({ metadata, contractAddress, callFn, isActive }: Pro
           <Buttons>
             <Button
               onClick={() =>
-                message &&
                 callFn({
                   api,
                   abi,
