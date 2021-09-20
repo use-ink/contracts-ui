@@ -9,7 +9,7 @@ import { SelectCodeHash } from '../pages/SelectCodeHash';
 
 export const routes = [
   {
-    path: `/contract/:addr`,
+    path: `/contract/:addr/:activeTab?`,
     component: Contract,
     exact: true,
     fallback: <div> Loading... </div>,

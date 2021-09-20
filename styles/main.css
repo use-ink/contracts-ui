@@ -2,6 +2,10 @@
 @import './button.css';
 @import './dropdown.css';
 @import './sidebar.css';
+@import './link.css';
+@import './tabs.css';
+@import './collapsible.css';
+@import './call-results.css';
 
 @tailwind components;
 @tailwind utilities;

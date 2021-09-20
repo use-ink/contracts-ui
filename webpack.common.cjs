@@ -69,6 +69,7 @@ module.exports = {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer'),
+      assert: require.resolve('assert'),
     },
     plugins: [new TsconfigPathsPlugin()],
   },

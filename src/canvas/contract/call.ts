@@ -1,13 +1,12 @@
-import { encodeSalt, handleDispatchError, transformUserInput } from 'canvas/util';
+import { encodeSalt, transformUserInput } from 'canvas/util';
+
 import {
   ContractPromise,
   ContractQuery,
   ContractTx,
-  SubmittableExtrinsic,
-  ISubmittableResult,
   ContractCallParams,
-  KeyringPair,
-  ApiPromise,
+  CallResult,
+  RegistryError,
 } from 'types';
 
 export function prepareContractTx(
@@ -16,42 +15,6 @@ export function prepareContractTx(
   args: unknown[]
 ) {
   return args.length > 0 ? tx(options, ...args) : tx(options);
-}
-
-export async function executeTx(
-  api: ApiPromise,
-  tx: SubmittableExtrinsic<'promise', ISubmittableResult>,
-  pair: KeyringPair
-) {
-  const unsub = await tx.signAndSend(pair, result => {
-    const { status, events, dispatchError, dispatchInfo } = result;
-    console.log('sending transaction...');
-
-    if (status.isFinalized) {
-      console.log(`Transaction included at blockHash ${status.asFinalized}`);
-
-      events.forEach(
-        ({
-          phase,
-          event: {
-            data,
-            method,
-            section,
-            meta: { docs },
-          },
-        }) => {
-          console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          console.log(`\t\t${docs.toString()}`);
-        }
-      );
-      if (dispatchError) {
-        handleDispatchError(dispatchError, api);
-      }
-      console.log(dispatchInfo?.toHuman());
-
-      unsub();
-    }
-  });
 }
 
 export function sendContractQuery(
@@ -67,17 +30,30 @@ export async function call({
   api,
   abi,
   contractAddress,
-  message: { args, isMutating, isPayable, method },
+  message: { args, isMutating, isPayable, method, returnType },
   endowment,
   gasLimit,
   keyringPair,
   argValues,
+  dispatch,
 }: ContractCallParams) {
   const userInput = argValues ? Object.values(argValues) : [];
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
   const transformed = transformUserInput(args, userInput);
+
+  const callResult: CallResult = {
+    data: '',
+    log: [],
+    method: method,
+    returnType: returnType?.displayName || returnType?.type || '',
+    time: Date.now(),
+    isMutating: isMutating ? true : false,
+    isPayable: isPayable ? true : false,
+  };
+
   if (keyringPair) {
+    dispatch({ type: 'CALL_INIT' });
     if (isMutating || isPayable) {
       const tx = prepareContractTx(
         contract.tx[method],
@@ -85,7 +61,34 @@ export async function call({
         transformed
       );
 
-      await executeTx(api, tx, keyringPair);
+      const unsub = await tx.signAndSend(keyringPair, result => {
+        const { status, events, dispatchError, dispatchInfo } = result;
+
+        const log = events.map(({ event }) => {
+          return `${event.section}:${event.method}`;
+        });
+
+        let error: RegistryError | undefined;
+
+        if (status.isFinalized) {
+          if (dispatchError) {
+            error = api.registry.findMetaError(dispatchError.asModule);
+          }
+
+          dispatch({
+            type: 'CALL_FINALISED',
+            payload: {
+              ...callResult,
+              log: log,
+              error,
+              blockHash: status.asFinalized.toString(),
+              info: dispatchInfo?.toHuman(),
+            },
+          });
+
+          unsub();
+        }
+      });
     } else {
       const { result, output } = await sendContractQuery(
         { gasLimit, endowment },
@@ -93,18 +96,17 @@ export async function call({
         contract.query[method],
         transformed
       );
-      if (result.isOk) {
-        console.log(output?.toHuman());
+
+      let error: RegistryError | undefined;
+
+      if (result.isErr && result.asErr.isModule) {
+        error = api.registry.findMetaError(result.asErr.asModule);
       }
-      if (result.isErr) {
-        const error = result.asErr;
-        if (error.isModule) {
-          const decoded = api.registry.findMetaError(error.asModule);
-          console.error('Error calling contract: ', decoded);
-        } else {
-          console.error(`Error calling contract: ${error}`);
-        }
-      }
+
+      dispatch({
+        type: 'CALL_FINALISED',
+        payload: { ...callResult, data: output?.toHuman(), error },
+      });
     }
   } else {
     console.error('Kering pair not found');

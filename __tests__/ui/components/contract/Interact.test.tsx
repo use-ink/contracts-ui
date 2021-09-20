@@ -1,20 +1,19 @@
-/* eslint-disable import/order */
-/* eslint-disable import/first */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { contractFiles, customRender, getMockCanvasState, getMockDbState } from 'test-utils';
-import { Interact } from 'ui/components';
+import { customRender, getMockCanvasState, getMockDbState, mockAbiFlipper } from 'test-utils';
+import { InteractTab } from 'ui/components';
 import { CanvasState, DbState } from 'types';
 
-describe('Contract Interact', () => {
+describe('Contract Interact Tab', () => {
   const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
 
   const mockCall = jest.fn();
 
   let mockDbState: DbState;
   let mockCanvasState: CanvasState;
+
   beforeAll(async () => {
     mockDbState = await getMockDbState();
     mockCanvasState = getMockCanvasState();
@@ -24,7 +23,12 @@ describe('Contract Interact', () => {
   });
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(
-      <Interact metadata={contractFiles.flipper} contractAddress={mockAddr} callFn={mockCall} />,
+      <InteractTab
+        abi={mockAbiFlipper}
+        contractAddress={mockAddr}
+        callFn={mockCall}
+        isActive={true}
+      />,
       {
         ...mockCanvasState,
         keyringStatus: 'READY',
@@ -38,7 +42,12 @@ describe('Contract Interact', () => {
   });
   test('call button executes ', () => {
     const { getByText } = customRender(
-      <Interact metadata={contractFiles.flipper} contractAddress={mockAddr} callFn={mockCall} />,
+      <InteractTab
+        abi={mockAbiFlipper}
+        contractAddress={mockAddr}
+        callFn={mockCall}
+        isActive={true}
+      />,
       {
         ...mockCanvasState,
         keyringStatus: 'READY',

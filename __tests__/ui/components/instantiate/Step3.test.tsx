@@ -2,11 +2,11 @@
 // import { jest } from '@jest/globals';
 // import { render, fireEvent } from '@testing-library/react';
 // import '@testing-library/jest-dom/extend-expect';
-// import { flipperMock } from 'test-utils/mockData';
+// import { mockAbiFlipper } from 'test-utils';
 // import { Step3 } from 'ui/components/instantiate/Step3';
 
 // describe('Instantiate Step 3', () => {
-//   const { constructors } = flipperMock;
+//   const { constructors } = mockAbiFlipper;
 
 //   test('renders correctly with initial values', () => {
 //     const { getByPlaceholderText } = render(

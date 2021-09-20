@@ -12,6 +12,8 @@ import {
   Keyring,
   AbiMessage,
   KeyringPair,
+  AnyJson,
+  RegistryError,
 } from './substrate';
 import { FormField } from 'ui/hooks/useFormField';
 import { Toggle } from 'ui/hooks/useToggle';
@@ -32,7 +34,7 @@ export interface CanvasState extends ChainProperties {
   keyringStatus: string | null;
   api: ApiPromise | null;
   error: unknown | null;
-  status: Status
+  status: Status;
 }
 
 export type CanvasAction =
@@ -54,7 +56,7 @@ export interface ChainProperties {
 export interface DropdownOption<T> {
   value: T;
   name: string;
-};
+}
 
 // interface CustomProps<T> {
 //   button?: React.ComponentType<OptionProps<T>>,
@@ -236,4 +238,29 @@ export interface ContractCallParams {
   gasLimit: number;
   keyringPair?: KeyringPair;
   argValues?: Record<string, string>;
+  dispatch: (action: ContractCallAction) => void;
 }
+
+export interface CallResult {
+  data: AnyJson;
+  log: string[];
+  method: string;
+  time: number;
+  returnType?: string;
+  isMutating?: boolean;
+  isPayable?: boolean;
+  blockHash?: string;
+  info?: Record<string, AnyJson>;
+  error?: RegistryError;
+}
+export interface ContractCallState {
+  isLoading: boolean;
+  isSuccess: boolean;
+  results: CallResult[];
+  error?: RegistryError;
+}
+export type ContractCallAction =
+  | { type: 'CALL_INIT' }
+  | { type: 'CALL_FINALISED'; payload: CallResult };
+
+export type UrlParams = { addr: string; activeTab: string };
