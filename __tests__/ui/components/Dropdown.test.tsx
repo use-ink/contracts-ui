@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { Dropdown } from 'ui/components';
 import { DropdownOption } from 'types';
 
-const options: DropdownOption[] = [
+const options: DropdownOption<string>[] = [
   { name: 'foo', value: 'fooValue' },
   { name: 'bar', value: 'barValue' }
 ];
@@ -19,7 +19,7 @@ describe('Dropdown', () => {
         className='foo'
         options={options}
         onChange={onChange}
-        value={options[0]}
+        value={options[0].value}
        >
         No options found
       </Dropdown>
@@ -40,6 +40,7 @@ describe('Dropdown', () => {
       <Dropdown
         className='foo'
         onChange={onChange}
+        options={[]}
        >
          No options found
       </Dropdown>
@@ -57,7 +58,7 @@ describe('Dropdown', () => {
         className='foo'
         options={options}
         onChange={onChange}
-        value={options[0]}
+        value={options[0].value}
        >
          No options found
         </Dropdown>

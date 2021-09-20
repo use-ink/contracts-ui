@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import { useCallback } from 'react';
-import { useDatabase } from '../contexts';
+import { useDatabase } from '../contexts/DatabaseContext';
 import { useQuery } from './useQuery';
 import { findContractByAddress  } from 'db/queries';
 

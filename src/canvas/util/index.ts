@@ -19,6 +19,7 @@ import {
   Raw,
   TypeDef,
 } from 'types';
+import { AbiConstructor } from '@polkadot/api-contract/types';
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
@@ -80,21 +81,21 @@ export function createEmptyValues(args?: AbiParam[]) {
   }
   return o;
 }
-export function createOptions(data?: Array<unknown>, kind?: string): DropdownOption[] | [] {
-  if (data) {
-    switch (kind) {
-      case 'message':
-        return (data as AbiMessage[]).map(c => ({ name: c.method, value: c.index }));
-      case 'pair':
-        return (data as Partial<KeyringPair>[]).map(pair => ({
-          value: pair.address || '',
-          name: (pair.meta?.name as string).toUpperCase(),
-        }));
-      default:
-        return (data as string[]).map(h => ({ name: h.toString(), value: h.toString() }));
-    }
-  }
-  return [];
+
+export function createConstructorOptions(data: AbiConstructor[]): DropdownOption<number>[] {
+  return data.map((constructor, index) => ({ name: constructor.method, value: index }));
+}
+
+
+export function createMessageOptions(data: AbiMessage[]): DropdownOption<AbiMessage>[] {
+  return data.map(c => ({ name: c.method, value: c }));
+}
+
+export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOption<string>[] {
+  return data.map(pair => ({
+    value: pair.address || '',
+    name: (pair.meta?.name as string).toUpperCase(),
+  }));
 }
 
 // convert ArrayBuffer to Uint8Array

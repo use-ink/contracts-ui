@@ -1,35 +1,53 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import type { DropdownOption } from 'types';
+import type { DropdownOption, DropdownProps as Props } from 'types';
 import { classes } from 'ui/util';
 
-interface Props {
-  children?: React.HTMLAttributes<HTMLDivElement>['children'];
-  className?: React.HTMLAttributes<HTMLDivElement>['className'];
-  onChange: (_: DropdownOption) => void;
-  options?: DropdownOption[];
-  value?: DropdownOption;
-}
 
-export const Dropdown = ({
-  options,
+export function Dropdown<T>({
+  button: Button,
+  option: Option,
+  options = [],
   children: placeholder,
   className = '',
+  isDisabled = false,
+  isError = false,
   onChange,
   value,
-}: Props) => {
+}: Props<T>) {
+  const selected = useMemo(
+    (): DropdownOption<T> => options.find((option) => value === option.value) || options[0],
+    [options, value]
+  );
+
+  const _onChange = useCallback(
+    (option: DropdownOption<T>) => {
+      onChange(option.value);
+    },
+    [onChange]
+  );
+
   return (
-    <Listbox value={value} onChange={onChange}>
+    <Listbox value={selected} onChange={_onChange}>
       {(({ open }) => ((
-      <div className={classes('dropdown', className)}>
-        <Listbox.Button className={classes('dropdown-btn option', open ? ' rounded-b-none' : '')}>
-          <span>
-            {options && options.length > 0
-              ? value?.name
-              : placeholder
-            }
-          </span>
+      <div className={classes('dropdown', isError ? 'isError' : '', className)}>
+        <Listbox.Button
+          className={classes('dropdown-btn option', open ? ' rounded-b-none' : '')}
+          disabled={isDisabled ? true : undefined}
+        >
+          {Button
+            ? (
+              <Button option={selected} isPlaceholder={options.length === 0} />
+            )
+            : (
+              <span>
+                {options.length > 0
+                  ? selected?.name
+                  : placeholder
+                }
+              </span>
+              )}
           <ChevronDownIcon aria-hidden="true" />
         </Listbox.Button>
         <Transition
@@ -39,19 +57,23 @@ export const Dropdown = ({
           leaveTo="opacity-0"
         >
           <Listbox.Options className="options">
-            {options?.map(option => (
+            {options?.map((option, index) => (
               <Listbox.Option
-                key={option.value.toString()}
+                key={index}
                 className={({ active, selected }) => classes('option', active ? 'active' : '', selected ? 'selected' : '')}
                 value={option}
               >
                 {({ selected }) => {
-                  return (
-                  <>
-                    <span>{option.name}</span>
-                    {selected && <CheckIcon aria-hidden="true" />}
-                  </>
-                )
+
+                  return Option
+                    ? (
+                      <Option option={option} isSelected={selected} />
+                    ) :(
+                      <>
+                        <span>{option.name}</span>
+                        {selected && <CheckIcon aria-hidden="true" />}
+                      </>
+                    );
                 }}
               </Listbox.Option>
             ))}

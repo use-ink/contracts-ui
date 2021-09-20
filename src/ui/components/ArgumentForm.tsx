@@ -4,10 +4,10 @@ import type { AbiParam } from 'types';
 interface Props {
   args?: Partial<AbiParam>[];
   argValues?: Record<string, string>;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
+export const ArgumentForm = ({ args, onChange, argValues }: Props) => {
   return args && argValues ? (
     <>
       {args.map(({ name, type = { type: '' } }) => {
@@ -19,7 +19,7 @@ export const ArgumentForm = ({ args, handleChange, argValues }: Props) => {
               id={`${name}`}
               placeholder={`${name}: <${type.type}>`}
               value={argValues[`${name}`]}
-              onChange={handleChange}
+              onChange={onChange}
               className="w-full text-xs dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded"
             />
           </div>

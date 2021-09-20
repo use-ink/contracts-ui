@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import { useCallback, useEffect, useState } from 'react';
-import { useDatabase } from '../contexts';
+import { useDatabase } from '../contexts/DatabaseContext';
 import type { UseQuery } from 'types';
 
 export function useQuery<T>(query: () => Promise<T | null>): UseQuery<T> {

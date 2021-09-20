@@ -20,7 +20,7 @@ export interface UserDocument extends Document {
 }
 
 export interface CodeBundleDocument extends Document {
-  abi?: Record<string, unknown>;
+  abi?: Record<string, unknown> | null;
   blockOneHash?: string;
   codeHash: string;
   creator: string;
@@ -58,7 +58,7 @@ export interface UseQuery<T> {
 
 export interface CodeBundleQuery {
   codeHash: string;
-  blockOneHash?: string;
+  blockOneHash?: string | null;
 }
 
 export interface Starred<T> {

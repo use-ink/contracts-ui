@@ -6,19 +6,9 @@ import type { Weight } from '@polkadot/types/interfaces';
 
 import { useCallback, useMemo, useState } from 'react';
 import { BN_MILLION, BN_TEN, BN_ZERO } from '@polkadot/util';
-import { useBlockTime } from 'ui/hooks';
-import { useCanvas } from 'ui/contexts';
-
-interface UseWeight {
-    executionTime: number;
-    isEmpty: boolean;
-    isValid: boolean;
-    megaGas: BN;
-    percentage: number;
-    setIsEmpty: React.Dispatch<boolean>
-    setMegaGas: React.Dispatch<BN | undefined>;
-    weight: BN;
-}
+import { useBlockTime } from './useBlockTime';
+import { useCanvas } from 'ui/contexts/CanvasContext';
+import type { UseWeight } from 'types';
 
 export const useWeight = (): UseWeight => {
     const { api } = useCanvas();

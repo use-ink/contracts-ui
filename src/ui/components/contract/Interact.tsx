@@ -3,9 +3,9 @@ import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { createEmptyValues, createOptions } from 'canvas';
+import { createEmptyValues, createMessageOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { Abi, AnyJson, DropdownOption, ContractCallParams, AbiMessage } from 'types';
+import { Abi, AnyJson, ContractCallParams, AbiMessage } from 'types';
 
 interface Props {
   metadata: AnyJson;
@@ -25,14 +25,9 @@ interface Props {
 export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
   const { api, keyring } = useCanvas();
   const [abi] = useState<Abi>(new Abi(metadata));
-  const options = createOptions(abi.messages, 'message');
-  const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
+  const options = createMessageOptions(abi.messages);
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
   const [argValues, setArgValues] = useState<Record<string, string>>();
-
-  useEffect(() => {
-    setMessage(abi.findMessage(selectedMsg.value));
-  }, [selectedMsg, abi]);
 
   useEffect(() => {
     if (message && message.args.length > 0) {
@@ -47,8 +42,8 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
           <div className="mb-4">
             <Dropdown
               options={options}
-              onChange={(o: DropdownOption) => selectMsg(o)}
-              value={selectedMsg}
+              onChange={setMessage}
+              value={message}
             >
               No messages found
             </Dropdown>
@@ -56,10 +51,10 @@ export const Interact = ({ metadata, contractAddress, callFn }: Props) => {
           {argValues && (
             <div className="text-sm mb-4">
               <ArgumentForm
-                key={`args-${message?.identifier}`}
+                key={`args-${message?.method}`}
                 args={message?.args}
                 argValues={argValues}
-                handleChange={e =>
+                onChange={e =>
                   setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
                 }
               />

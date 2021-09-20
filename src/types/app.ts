@@ -1,8 +1,11 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
-import { ReactNode, ComponentType } from 'react';
+import BN from 'bn.js';
+import React, { ReactNode, ComponentType } from 'react';
 import {
+  BlueprintPromise,
   ContractPromise,
   Abi,
+  AnyJson,
   EventRecord,
   DispatchError,
   ApiPromise,
@@ -10,10 +13,18 @@ import {
   AbiMessage,
   KeyringPair,
 } from './substrate';
+import { FormField } from 'ui/hooks/useFormField';
+import { Toggle } from 'ui/hooks/useToggle';
+
+export type { BN };
+
+export type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 
 export type VoidFn = () => void;
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
+
+export type UseState<T> = [T, React.Dispatch<T>];
 
 export interface CanvasState extends ChainProperties {
   endpoint: string;
@@ -40,12 +51,39 @@ export interface ChainProperties {
   systemVersion: string | null;
 }
 
-export interface DropdownOption {
-  value: string | number;
+export interface DropdownOption<T> {
+  value: T;
   name: string;
 };
 
-export interface InstantiateState {
+// interface CustomProps<T> {
+//   button?: React.ComponentType<OptionProps<T>>,
+//   option?: React.ComponentType<OptionProps<T>>,
+//   onChange: (_: T) => void;
+//   options: DropdownOption<T>[];
+//   value?: T | null;
+// }
+
+export type DropdownProps<T> = SimpleSpread<
+  React.HTMLAttributes<HTMLDivElement>,
+  {
+    button?: React.ComponentType<OptionProps<T>>,
+    isDisabled?: boolean;
+    isError?: boolean;
+    option?: React.ComponentType<OptionProps<T>>,
+    onChange: (_: T) => void;
+    options?: DropdownOption<T>[];
+    value?: T | null;
+  }
+>
+
+export interface OptionProps<T> {
+  option: DropdownOption<T>;
+  isPlaceholder?: boolean;
+  isSelected?: boolean;
+}
+
+export interface InstantiateState2 {
   isLoading: boolean;
   isSuccess: boolean;
   currentStep: number;
@@ -65,6 +103,53 @@ export interface InstantiateState {
   file?: FileState;
   salt?: string;
   api?: ApiPromise | null;
+}
+
+export interface MetadataState {
+  source: AnyJson | null;
+  name: string | null;
+  value: Abi | null;
+  errorText: string | null;
+  isError: boolean;
+  isValid: boolean;
+  isSupplied: boolean;
+}
+
+export interface UseMetadata extends MetadataState {
+  onChange: (_: FileState) => void;
+  onRemove: () => void;
+}
+
+export interface UseWeight {
+  executionTime: number;
+  isEmpty: boolean;
+  isValid: boolean;
+  megaGas: BN;
+  percentage: number;
+  setIsEmpty: React.Dispatch<boolean>
+  setMegaGas: React.Dispatch<BN | undefined>;
+  weight: BN;
+}
+
+export interface InstantiateState {
+  accountId: FormField<string | null>;
+  argValues: UseState<Record<string, string>>;
+  codeHash?: string | null;
+  constructorIndex: FormField<number>;
+  contract: UseState<ContractPromise | null>;
+  endowment: FormField<BN>;
+  events: UseState<EventRecord[]>;
+  isLoading: Toggle;
+  isSuccess: Toggle;
+  isUsingSalt: Toggle;
+  isUsingStoredMetadata: Toggle;
+  metadata: UseMetadata;
+  metadataFile: UseState<FileState | undefined>;
+  name: FormField<string>;
+  onInstantiate: ([_, __]: [ContractPromise, BlueprintPromise | undefined]) => void;
+  salt: FormField<string>;
+  step: UseState<number>;
+  weight: UseWeight;
 }
 
 export type InstantiateAction =
@@ -103,6 +188,19 @@ export interface FileState {
   size: number;
 }
 
+export type InputFileProps = SimpleSpread<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  {
+    errorMessage?: React.ReactNode;
+    isDisabled?: boolean;
+    isSupplied?: boolean;
+    isError?: boolean;
+    onChange: (_: FileState) => void;
+    onRemove: () => void;
+    successMessage?: React.ReactNode;
+    value?: FileState;
+  }
+>
 
 export interface RouteInterface {
   path: string;
@@ -113,7 +211,6 @@ export interface RouteInterface {
   routes?: RouteInterface[];
   redirect?: string;
 }
-
 
 export type StringOrNull = string | null;
 

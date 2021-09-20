@@ -2,10 +2,10 @@ import React from 'react';
 import {
   Homepage,
   Contract,
-  InstantiateWithCode,
-  InstantiateWithHash,
+  Instantiate,
   AddContract,
 } from '../pages';
+import { SelectCodeHash } from '../pages/SelectCodeHash';
 
 export const routes = [
   {
@@ -21,15 +21,21 @@ export const routes = [
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate/code',
-    component: InstantiateWithCode,
+    path: '/instantiate/new',
+    component: Instantiate,
     exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate/hash',
-    component: InstantiateWithHash,
+    path: '/instantiate/codes',
+    component: SelectCodeHash,
     exact: true,
+    fallback: <div> Loading... </div>,
+  },
+  {
+    path: '/instantiate/:codeHash',
+    component: Instantiate,
+    exact: false,
     fallback: <div> Loading... </div>,
   },
   {

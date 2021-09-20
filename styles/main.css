@@ -19,12 +19,8 @@ body {
   font-family: 'system';
 }
 
-.sidebar {
-  width: 18rem;
-}
-
 .content {
-  width: calc(100vw - 18rem);
+  width: calc(100vw - 14rem);
 }
 
 .content main {

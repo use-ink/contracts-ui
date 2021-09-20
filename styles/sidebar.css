@@ -62,5 +62,5 @@
 }
 
 .sidebar .footer > div {
-  @apply flex justify-between flex-shrink-0 w-full group
+  @apply flex justify-between flex-shrink-0 w-full
 }

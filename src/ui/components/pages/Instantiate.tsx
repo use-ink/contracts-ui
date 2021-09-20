@@ -1,17 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Wizard } from '../instantiate';
+import { InstantiateContextProvider } from 'ui/contexts';
 
-export const InstantiateWithHash = () => {
+export const Instantiate = () => {
+  // const { pathname } = useLocation();
+  // const pathEnd = pathname.split('/').pop();
+
+  // let codeHash;
+  // if (!!pathEnd && pathEnd !== 'new') {
+  //   codeHash = pathEnd;
+  // }
+
   return (
     <div className="w-full max-w-6xl overflow-y-auto px-5 py-3 m-2">
       <div className="grid md:grid-cols-12 gap-5">
         <div className="md:col-span-9 py-3 px-4">
           <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
-            <h1 className="text-2.5xl dark:text-white text-gray-700">Instantiate from Code Hash</h1>
+            <h1 className="text-2.5xl dark:text-white text-gray-700">
+              Upload and Instantiate Contract
+            </h1>
             <p className="dark:text-gray-400 text-gray-500 text-sm">
               You can instantiate a new contract from an existing code bundle{' '}
-              <Link to="/instantiate/code" className="text-blue-500">
+              <Link to="/instantiate/hash" className="text-blue-500">
                 here
               </Link>
               .
@@ -20,7 +31,9 @@ export const InstantiateWithHash = () => {
         </div>
       </div>
       <div className="grid md:grid-cols-12 gap-5 m-1">
-        <Wizard instatiationType="hash" />
+        <InstantiateContextProvider>
+          <Wizard />
+        </InstantiateContextProvider>
       </div>
     </div>
   );

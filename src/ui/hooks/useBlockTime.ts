@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 
 import { BN, BN_ONE, BN_THOUSAND, BN_TWO, bnToBn, extractTime } from '@polkadot/util';
 
-import { useCanvas } from 'ui/contexts';
+import { useCanvas } from 'ui/contexts/CanvasContext';
 
 
 type Result = [number, string, Time];

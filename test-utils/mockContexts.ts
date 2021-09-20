@@ -1,5 +1,6 @@
 import { Database } from '@textile/threaddb';
 import { jest } from '@jest/globals';
+import BN from 'bn.js';
 import { codeBundle, contract, user } from 'db';
 
 import { CanvasState, DbState, InstantiateState, PrivateKey, ApiPromise } from 'types';
@@ -13,15 +14,43 @@ export function createMockApi() {
 
 export function getMockInstantiateState(): InstantiateState {
   return {
-    isLoading: false,
-    isSuccess: false,
-    contract: null,
-    currentStep: 1,
-    fromAddress: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    accountId: ['5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', jest.fn(), true, false],
+    argValues: [{ initValue: 'true'}, jest.fn()],
+    contract: [null, jest.fn()],
     codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-    constructorName: 'new',
-    argValues: { initValue: 'true' },
-    contractName: 'flipper',
+    constructorIndex: [0, jest.fn(), false, false],
+    endowment: [new BN(0), jest.fn(), false, false],
+    events: [[], jest.fn()],
+    isLoading: [false, jest.fn(), jest.fn()],
+    isSuccess: [false, jest.fn(), jest.fn()],
+    isUsingSalt: [false, jest.fn(), jest.fn()],
+    isUsingStoredMetadata: [false, jest.fn(), jest.fn()],
+    metadata: {
+      errorText: null,
+      isError: false,
+      isSupplied: false,
+      isValid: false,
+      name: '',
+      source: null,
+      value: null,
+      onChange: jest.fn(),
+      onRemove: jest.fn(),
+    },
+    metadataFile: [undefined, jest.fn()],
+    name: ['flipper', jest.fn(), true, false],
+    onInstantiate: jest.fn(),
+    salt: ['', jest.fn(), false, false],
+    step: [0, jest.fn()],
+    weight: {
+      executionTime: 0,
+      isEmpty: false,
+      isValid: true,
+      megaGas: new BN(0),
+      percentage: 0,
+      setIsEmpty: jest.fn(),
+      setMegaGas: jest.fn(),
+      weight: new BN(0),
+    },
   };
 }
 

@@ -26,7 +26,7 @@ export function QuickLinks() {
           <div className="none-yet">
             None yet
             {' ˑ '}
-            <Link to={`/add-contract`}>Upload one</Link>
+            <Link to={`/instantiate`}>Upload one</Link>
           </div>
         )}
       </div>

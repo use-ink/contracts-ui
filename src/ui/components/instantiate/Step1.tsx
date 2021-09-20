@@ -1,71 +1,124 @@
-import React, { useState, ChangeEvent } from 'react';
+import React from 'react';
+// import { stringify, u8aToString } from '@polkadot/util';
+import { AccountSelect } from '../AccountSelect';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { Input } from '../Input';
-import { FileInput } from '../FileInput';
-import { convertMetadata } from 'canvas/util';
-import { useCanvas } from 'ui/contexts';
-import type { Abi, AnyJson, InstantiateAction } from 'types';
+import { InputFile } from 'ui/components/InputFile';
+import { Input } from 'ui/components/Input';
+// import {
+//   FileState,
+// } from 'types';
+// import { convertToUint8Array, NOOP } from 'canvas/util';
+import { useInstantiate } from 'ui/contexts';
 
-interface Props extends React.HTMLAttributes<HTMLInputElement> {
-  dispatch: React.Dispatch<InstantiateAction>;
-  currentStep?: number;
-}
 
-export const Step1 = ({ currentStep, dispatch }: Props) => {
-  const [metadata, setMetadata] = useState<Abi>();
-  const [hash, setHash] = useState('');
-  const { api } = useCanvas();
+// interface Props extends React.HTMLAttributes<HTMLInputElement> {
+//   keyringPairs: Partial<KeyringPair>[];
+//   dispatch: React.Dispatch<InstantiateAction>;
+//   api: ApiPromise;
+//   currentStep?: number;
+// }
 
-  function handleUploadMetadata(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.item(0);
-    const fr = new FileReader();
+export function Step1 () {
+  const {
+    accountId: [accountId, setAccountId, isAccountIdValid, isAccountIdError],
+    name: [name, setName, isNameValid, isNameError],
+    metadata: {
+      isError: isMetadataError,
+      value: metadata,
+      onChange: onMetadataChange,
+      onRemove: onMetadataRemove,
+    },
+    metadataFile: [metadataFile],
+    step: [step, setStep]
+  } = useInstantiate();
 
-    fr.onload = function (e) {
-      const result = JSON.parse(`${e.target?.result}`) as AnyJson;
-      const converted = convertMetadata(result, api);
-      setMetadata(converted);
-    };
-    if (file) fr.readAsText(file);
+  // const onChange = useCallback(
+  //   (data: Uint8Array, newName: string) => {
+  //     metadata.onChange(data, newName);
+  //     if (metadata.name && (!name || name === '')) {
+  //       setName(metadata.name);
+  //     }
+  //   },
+  //   [metadata.onChange, name]
+  // );
+
+  // function handleUploadContract(event: ChangeEvent<HTMLInputElement>) {
+  //   const file = event.target.files?.item(0);
+  //   const reader = new FileReader();
+  //   reader.onabort = NOOP;
+  //   reader.onerror = NOOP;
+
+  //   setName(file?.name ? file.name.replace('.contract', '').replace('.json', '').replace('_', ' ') : 'New Contract');
+
+  //   reader.onload = ({ target }: ProgressEvent<FileReader>): void => {
+  //     if (target && target.result) {
+  //       const data = convertToUint8Array(target?.result as ArrayBuffer);
+  //       // const abi = convertMetadata(u8aToString(data) as AnyJson, api);
+
+  //       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //       // const codeHash = JSON.parse(stringify(abi?.json));
+  //       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  //       // setCodeHash(codeHash?.source?.hash);
+
+  //       metadata.onChange(data, name);
+  //       setFile({ data, name: name, size: data.length } as FileState);
+  //     }
+  //   };
+
+  //   if (file) reader.readAsArrayBuffer(file);
+  // }
+
+  function goForward () {
+    setStep(step + 1);
   }
-
-  if (currentStep !== 1) return null;
 
   return (
     <>
-      <label htmlFor="hash" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
-        Look up Code Hash
+      <label
+        htmlFor="selectAccount"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
+      >
+        Account
+      </label>
+      <AccountSelect
+        isError={isAccountIdError}
+        value={accountId}
+        onChange={setAccountId}
+        className="mb-2"
+      />
+      <label
+        htmlFor="contractName"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
+      >
+        Contract Name
       </label>
       <Input
-        value={hash}
-        handleChange={e => setHash(e.target.value)}
-        placeholder="on-chain code hash"
-        id="codeHash"
+        isError={isNameError}
+        value={name}
+        onChange={setName}
+        placeholder="Give your contract a descriptive name"
+        id="contractName"
       />
-      <label htmlFor="metadata" className="inline-block mb-3 dark:text-gray-300 text-gray-700">
-        Add contract metadata
+
+      <label
+        htmlFor="metadata"
+        className="inline-block mb-2 dark:text-gray-300 text-gray-700 text-sm"
+      >
+        Upload Contract Bundle
       </label>
-      <FileInput
-        placeholder="Upload metadata.json"
-        changeHandler={handleUploadMetadata}
-        removeHandler={() => setMetadata(undefined)}
-        fileLoaded={!!metadata}
-        successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
+      <InputFile
+        placeholder="Click to select or drag & drop to upload file."
+        onChange={onMetadataChange}
+        onRemove={onMetadataRemove}
+        isError={isMetadataError}
+        successMessage={metadataFile?.name}
+        value={metadataFile}
       />
       <Buttons>
         <Button
-          className="mt-16"
-          onClick={() => {
-              metadata && dispatch({
-                type: 'STEP_1_COMPLETE',
-                payload: {
-                  codeHash: hash,
-                  metadata,
-                  contractName: metadata.project.contract.name.toHuman(),
-                },
-              })
-          }}
-          isDisabled={!metadata || !hash}
+          isDisabled={!metadata || !isAccountIdValid || !isNameValid || isMetadataError}
+          onClick={goForward}
           variant='primary'
         >
           Next

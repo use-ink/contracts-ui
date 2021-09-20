@@ -1,3 +1,2 @@
-export * from './instantiateWithHash';
-export * from './instantiateWithCode';
+export * from './instantiate';
 export * from './getAddressFromEvents';

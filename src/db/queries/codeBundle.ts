@@ -68,7 +68,7 @@ export async function findCodeBundleByHash(
   db: Database,
   { codeHash, blockOneHash }: CodeBundleQuery
 ): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ blockOneHash, codeHash })) || null;
+  return (await getCodeBundleCollection(db).findOne({ blockOneHash: blockOneHash || undefined, codeHash })) || null;
 }
 
 export async function findCodeBundleById(
@@ -76,6 +76,23 @@ export async function findCodeBundleById(
   id: string
 ): Promise<CodeBundleDocument | null> {
   return (await getCodeBundleCollection(db).findOne({ id })) || null;
+}
+
+export async function searchForCodeBundle(
+  db: Database,
+  fragment: string
+): Promise<CodeBundleDocument[] | null> {
+  if (!fragment || fragment === '') {
+    return null;
+  }
+
+  const matches = await db.dexie.table<CodeBundleDocument>('codeBundle').filter(({ name, codeHash }) => {
+    const regex = new RegExp(fragment);
+
+    return regex.test(name) || regex.test(codeHash);
+  }).limit(10).toArray();
+
+  return matches;
 }
 
 export async function createCodeBundle(
