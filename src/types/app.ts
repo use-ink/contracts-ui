@@ -59,7 +59,7 @@ export interface ChainProperties {
 
 export interface DropdownOption<T> {
   value: T;
-  name: string;
+  name: React.ReactNode;
 }
 
 // interface CustomProps<T> {
@@ -243,11 +243,8 @@ export interface ContractCallParams {
 export interface CallResult {
   data: AnyJson;
   log: string[];
-  method: string;
+  message: AbiMessage;
   time: number;
-  returnType?: string;
-  isMutating?: boolean;
-  isPayable?: boolean;
   blockHash?: string;
   info?: Record<string, AnyJson>;
   error?: RegistryError;

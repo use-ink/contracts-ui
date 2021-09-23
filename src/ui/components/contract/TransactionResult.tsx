@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const TransactionResult = ({
-  result: { time, method, isMutating, isPayable, blockHash, info, error, log, returnType },
+  result: { time, message, blockHash, info, error, log },
   date,
 }: Props) => {
   return (
@@ -25,10 +25,7 @@ export const TransactionResult = ({
           <div className="flex-col">
             <div className="mb-2">{date}</div>
             <MessageSignature
-              method={method}
-              isMutating={isMutating}
-              isPayable={isPayable}
-              returnType={returnType}
+              message={message}
             />
             <Disclosure.Button className="flex items-center w-full text-left pt-2">
               <div className="flex-col items-start">

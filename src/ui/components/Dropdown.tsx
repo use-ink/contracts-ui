@@ -4,7 +4,6 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import type { DropdownOption, DropdownProps as Props } from 'types';
 import { classes } from 'ui/util';
 
-
 export function Dropdown<T>({
   button: Button,
   option: Option,
@@ -33,6 +32,7 @@ export function Dropdown<T>({
       {(({ open }) => ((
       <div className={classes('dropdown', isError ? 'isError' : '', className)}>
         <Listbox.Button
+          data-testid="dropdown-btn"
           className={classes('dropdown-btn option', open ? ' rounded-b-none' : '')}
           disabled={isDisabled ? true : undefined}
         >
@@ -59,6 +59,7 @@ export function Dropdown<T>({
           <Listbox.Options className="options">
             {options?.map((option, index) => (
               <Listbox.Option
+                data-testid={`dropdown-option-${index}`}
                 key={index}
                 className={({ active, selected }) => classes('option', active && 'active', selected && 'selected')}
                 value={option}

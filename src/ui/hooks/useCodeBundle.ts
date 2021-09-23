@@ -8,16 +8,31 @@ import { findCodeBundleByHash  } from 'db/queries';
 
 import type { CodeBundleDocument, UseQuery } from 'types';
 
-export function useCodeBundle(codeHash?: string): UseQuery<CodeBundleDocument> {
-  const { blockOneHash } = useCanvas();
+type ReturnType = [boolean, CodeBundleDocument | null];
+
+export function useCodeBundle(codeHash?: string): UseQuery<[boolean, CodeBundleDocument | null]> {
+  const { api, blockOneHash } = useCanvas();
   const { db } = useDatabase();
 
-  const query = useCallback((): Promise<CodeBundleDocument | null> => {
-    if (!codeHash) {
-      return Promise.resolve(null);
-    }
-    return findCodeBundleByHash(db, { blockOneHash, codeHash });
-  }, [codeHash, findCodeBundleByHash]);
+  const query = useCallback(
+    async (): Promise<ReturnType> => {
+      if (!codeHash) {
+        return Promise.resolve([false, null]);
+      }
+
+      const isOnChain = (await api!.query.contracts.codeStorage(codeHash)).isSome;
+
+
+      if (!isOnChain) {
+        return [false, null];
+      }
+
+      const document = await findCodeBundleByHash(db, { blockOneHash, codeHash });
+
+      return [true, document];
+    },
+    [codeHash, findCodeBundleByHash]
+  );
 
   return useQuery(query);
 }

@@ -7,7 +7,7 @@ import { DropdownOption } from 'types';
 
 const options: DropdownOption<string>[] = [
   { name: 'foo', value: 'fooValue' },
-  { name: 'bar', value: 'barValue' }
+  { name: <span>bar</span>, value: 'barValue' }
 ];
 
 describe('Dropdown', () => {
@@ -25,14 +25,10 @@ describe('Dropdown', () => {
       </Dropdown>
     )
     
-    const dropdown = rendered.getByText(options[0].name).parentElement as HTMLButtonElement;
+    const dropdown = rendered.getByTestId('dropdown-btn') as HTMLButtonElement;
 
     expect(dropdown).toBeInTheDocument();
     expect(dropdown.parentElement).toHaveClass('foo');
-
-    fireEvent.click(dropdown);
-
-    expect(rendered.getByText(options[1].name)).toBeInTheDocument();
   });
 
   test('correctly renders without options', () => {
@@ -64,11 +60,11 @@ describe('Dropdown', () => {
         </Dropdown>
     )
 
-    const dropdown = rendered.getByText(options[0].name);
+    const dropdown = rendered.getByTestId('dropdown-btn');
 
     fireEvent.click(dropdown);
 
-    fireEvent.click(rendered.getByText(options[1].name));
+    fireEvent.click(rendered.getByTestId('dropdown-option-1'));
 
     expect(onChange).toHaveBeenCalledWith(options[1]);
   });

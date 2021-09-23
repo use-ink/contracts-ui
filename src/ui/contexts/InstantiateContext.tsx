@@ -1,6 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import React, { useState, useContext, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useContext, useCallback, useMemo } from 'react';
 import BN from 'bn.js';
 import { useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
@@ -16,7 +16,6 @@ import { useToggle } from 'ui/hooks/useToggle';
 import { useStepper } from 'ui/hooks/useStepper';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useBalance } from 'ui/hooks/useBalance';
-import { createEmptyValues } from 'canvas';
 import { useArgValues } from 'ui/hooks/useArgValues';
 
 export const InstantiateContext = React.createContext({} as unknown as InstantiateState);
@@ -27,7 +26,9 @@ export function toBalance(value: number | BN | string, decimals: number): BN {
 
 export function InstantiateContextProvider ({ children }: React.PropsWithChildren<Partial<InstantiateState>>) {
   const { codeHash } = useParams<{codeHash: string}>();
-  const { data: codeBundle } = useCodeBundle(codeHash || undefined);
+  const codeBundleQuery = useCodeBundle(codeHash || undefined);
+
+  const [, codeBundle] = codeBundleQuery.data || [false, null];
 
   const step = useStepper();
   const isLoading = useToggle(true);

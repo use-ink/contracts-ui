@@ -1,5 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+import React from 'react';
 import { compactAddLength, u8aToU8a, hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { createTypeUnsafe } from '@polkadot/types';
 import { randomAsU8a } from '@polkadot/util-crypto';
@@ -20,6 +21,7 @@ import {
   TypeDef,
 } from 'types';
 import { AbiConstructor } from '@polkadot/api-contract/types';
+import { MessageSignature } from 'ui/components';
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
@@ -83,7 +85,13 @@ export function createEmptyValues(args?: AbiParam[]) {
 }
 
 export function createConstructorOptions(data: AbiConstructor[]): DropdownOption<number>[] {
-  return data.map((constructor, index) => ({ name: constructor.method, value: index }));
+  return data.map((constructor, index) => ({
+    name: (
+      <MessageSignature
+        message={constructor}
+      />
+    ),
+    value: index }));
 }
 
 

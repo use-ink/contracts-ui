@@ -9,7 +9,7 @@ interface Props {
   date: string;
 }
 export const QueryResult = ({
-  result: { time, data, method, returnType, error, isMutating, isPayable },
+  result: { time, data, message, error },
   date,
 }: Props) => {
   return (
@@ -21,10 +21,7 @@ export const QueryResult = ({
       <div className="flex items-center">
         <div className="flex-1">
           <MessageSignature
-            method={method}
-            isMutating={isMutating}
-            isPayable={isPayable}
-            returnType={returnType}
+            message={message}
           />
         </div>
         <div className="bg-elevation-1 p-2 flex-1 rounded-sm text-mono ml-4">{`${data}`}</div>

@@ -16,11 +16,8 @@ export const contractCallReducer: Reducer<ContractCallState, ContractCallAction>
           ...state.results,
           {
             data: action.payload.data,
-            method: action.payload.method,
-            returnType: action.payload.returnType,
+            message: action.payload.message,
             time: action.payload.time,
-            isMutating: action.payload.isMutating,
-            isPayable: action.payload.isPayable,
             blockHash: action.payload.blockHash,
             info: action.payload.info,
             error: action.payload.error,
