@@ -1,6 +1,7 @@
-import { UseFormField, useFormField, Validation } from './useFormField';
+import { useFormField } from './useFormField';
+import type { UseFormField, Validation } from 'types';
 
-function isValid (value?: string | null): Validation {
+function validate (value?: string | null): Validation {
   if (!value || value.length === 0 ) {
     return { isValid: false, validation: 'Value cannot be empty' };
   }
@@ -9,5 +10,5 @@ function isValid (value?: string | null): Validation {
 }
 
 export function useNonEmptyString (initialValue = ''): UseFormField<string> {
-  return useFormField(initialValue, isValid);
+  return useFormField(initialValue, validate);
 }

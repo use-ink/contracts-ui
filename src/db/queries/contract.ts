@@ -21,7 +21,7 @@ export async function findMyContracts(
   identity: PrivateKey | null
 ): Promise<MyContracts> {
   const user = await findUser(db, identity);
-
+  console.log(user);
   if (!user) {
     return { owned: [], starred: [] };
   }

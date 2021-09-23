@@ -20,6 +20,8 @@ export async function findUser(
 export async function getUser(db: Database, identity: PrivateKey | null, { creator, name, email }: Partial<UserDocument> = {}): Promise<UserDocument | null> {
   const existing = await findUser(db, identity);
 
+  console.log(existing, identity);
+
   if (!identity) {
     // create generic user identity to authorize remote etc.
     return null;
@@ -27,14 +29,6 @@ export async function getUser(db: Database, identity: PrivateKey | null, { creat
 
   if (existing) {
     return existing;
-  }
-
-  if (!creator) {
-    return Promise.reject(new Error('No creator account provided'));
-  }
-
-  if (!name) {
-    return Promise.reject(new Error('No display name provided'));
   }
 
   if (identity && !existing) {

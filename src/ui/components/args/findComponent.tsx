@@ -1,8 +1,8 @@
 import { Input } from '../Input';
-import { Bool } from './inputs/Bool';
-import type { TypeDef } from 'types';
 import { InputBalance } from '../InputBalance';
 import { InputNumber } from '../InputNumber';
+import { Bool } from './inputs/Bool';
+import type { TypeDef } from 'types';
 
 export function findComponent (type: TypeDef): React.ComponentType<any> {
   switch (type.type) {

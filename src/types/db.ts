@@ -13,10 +13,10 @@ interface Document {
 export interface UserDocument extends Document {
   codeBundlesStarred: string[];
   contractsStarred: string[];
-  creator: string;
+  creator?: string;
   publicKey: string;
   email?: string;
-  name: string;
+  name?: string;
 }
 
 export interface CodeBundleDocument extends Document {

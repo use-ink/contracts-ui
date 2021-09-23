@@ -11,7 +11,7 @@ import { ContractDocument } from 'types';
 interface Props {
   contract: ContractDocument;
   isStarred: boolean;
-  onToggleStar: () => void;
+  onToggleStar?: () => void;
 }
 
 export function ContractRow({

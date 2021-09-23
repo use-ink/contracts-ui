@@ -1,8 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import type { VoidFn } from '@polkadot/api/types';
-
-export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>]
+import type { UseStepper } from 'types';
 
 export function useStepper (initialValue = 0, maxValue = 2): UseStepper {
   const [value, setValue] = useState(Math.min(initialValue, maxValue));

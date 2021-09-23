@@ -1,8 +1,8 @@
 import React from 'react';
-import type { AbiParam } from 'types';
 import { ArgSignature } from '../ArgSignature';
 import { FormField } from '../FormField';
 import { findComponent } from './findComponent';
+import type { AbiParam } from 'types';
 
 interface Props {
   args: AbiParam[];

@@ -12,7 +12,7 @@ export function Dropdown<T>({
   className = '',
   isDisabled = false,
   isError = false,
-  onChange,
+  onChange: _onChange,
   value,
 }: Props<T>) {
   const selected = useMemo(
@@ -20,15 +20,15 @@ export function Dropdown<T>({
     [options, value]
   );
 
-  const _onChange = useCallback(
+  const onChange = useCallback(
     (option: DropdownOption<T>) => {
-      onChange(option.value);
+      _onChange(option.value);
     },
-    [onChange]
+    [_onChange]
   );
 
   return (
-    <Listbox value={selected} onChange={_onChange}>
+    <Listbox value={selected} onChange={onChange}>
       {(({ open }) => ((
       <div className={classes('dropdown', isError ? 'isError' : '', className)}>
         <Listbox.Button

@@ -1,8 +1,8 @@
 import BN from 'bn.js';
 import React, { useCallback } from 'react';
+import { BN_ZERO } from '@polkadot/util';
 import { Input } from './Input';
 import { SimpleSpread } from 'types';
-import { BN_ZERO } from '@polkadot/util';
 
 type Props =  SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,

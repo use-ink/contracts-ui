@@ -1,10 +1,7 @@
-import type BN from 'bn.js';
-
 import { useMemo } from 'react';
-
 import { BN_ZERO, bnToBn } from '@polkadot/util';
-
-import { UseFormField, useFormField, Validation } from './useFormField';
+import { useFormField } from './useFormField';
+import type { BN, UseFormField, Validation } from 'types'
 
 function isValid (value?: BN | null): Validation {
   if (!value || value?.isZero()) {

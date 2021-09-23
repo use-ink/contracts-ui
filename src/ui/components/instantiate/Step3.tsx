@@ -3,7 +3,6 @@ import { useCanvas, useDatabase, useInstantiate } from 'ui/contexts';
 import { instantiate } from 'canvas';
 import { Account } from '../Account';
 import { formatBalance } from '@polkadot/util';
-import { jsonDecrypt } from '@polkadot/util-crypto';
 // import keyring from '@polkadot/ui-keyring';
 
 function truncate (value: string | undefined): string {
@@ -120,7 +119,7 @@ export const Step3 = () => {
         type="button"
         className="btn-primary"
         onClick={() =>
-          instantiate(canvasState, dbState, instantiateState, () => {})
+          instantiate(canvasState, dbState, instantiateState)
         }
       >
         Upload and Instantiate

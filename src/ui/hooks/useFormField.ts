@@ -1,22 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { isNull, isUndefined } from '@polkadot/util';
-
-export interface UseFormField<T> extends Validation {
-  value?: T;
-  onChange: (_: T) => void;
-};
-
-export interface Validation {
-  isError?: boolean;
-  isSuccess?: boolean;
-  isTouched?: boolean;
-  isValid?: boolean;
-  isWarning?: boolean;
-  validation?: React.ReactNode;
-};
-
-type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>
+import type { UseFormField, ValidateFn, Validation } from 'types';
 
 export function useFormField<T> (defaultValue: T, validate: ValidateFn<T> = (value) => ({ isValid: !isNull(value), validation: null })): UseFormField<T> {
   const [value, setValue] = useState<T>(defaultValue);

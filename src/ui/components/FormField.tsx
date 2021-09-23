@@ -1,11 +1,11 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
-import React, { HTMLAttributes, useMemo } from 'react';
-import { Validation } from 'ui/hooks/useFormField';
+import React, { useMemo } from 'react';
+import type { Validation } from 'types';
 import { classes } from 'ui/util';
 
 type ValidationState = 'error' | 'success' | 'warning' | null;
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode;
   help?: React.ReactNode;
   validation?: React.ReactNode;
@@ -54,11 +54,3 @@ export function FormField ({ children, className, id, isError, isSuccess, isWarn
     </div>
   )
 }
-
-// export function Form ({ children, className }: HTMLAttributes<HTMLDivElement>) {
-//   return (
-//     <div className={classes('last:mb-0', className)}>
-//       {children}
-//     </div>
-//   )
-// }

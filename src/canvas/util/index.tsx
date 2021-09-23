@@ -1,11 +1,13 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import React from 'react';
+import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { createTypeUnsafe } from '@polkadot/types';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import {
   Abi,
+  AbiConstructor,
   Bytes,
   Codec,
   ContractPromise,
@@ -20,8 +22,8 @@ import {
   Raw,
   TypeDef,
 } from 'types';
-import { AbiConstructor } from '@polkadot/api-contract/types';
-import { MessageSignature } from 'ui/components';
+import { MessageSignature } from 'ui/components/MessageSignature';
+import { toSats } from 'ui/hooks/useBalance';
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
@@ -87,9 +89,7 @@ export function createEmptyValues(args?: AbiParam[]) {
 export function createConstructorOptions(data: AbiConstructor[]): DropdownOption<number>[] {
   return data.map((constructor, index) => ({
     name: (
-      <MessageSignature
-        message={constructor}
-      />
+      <MessageSignature message={constructor} />
     ),
     value: index }));
 }
@@ -165,24 +165,38 @@ export function convertToNumber(value: string) {
   return value.includes('.') ? parseFloat(value) : parseInt(value);
 }
 
-export function transformUserInput(messageArgs: AbiParam[], userInput: string[]) {
-  return messageArgs.map(({ type: { type } }, index) => {
-    const value = userInput[index];
-    if (type === 'bool') {
-      return value === 'true';
+export function transformUserInput(api: ApiPromise, messageArgs: AbiParam[], values?: Record<string, unknown>) {
+  return messageArgs.map(({ name, type: { type } }) => {
+    const value = values ? values[name] : null;
+    console.log(values);
+    console.log(value);
+
+    if (type === 'Balance') {
+      return toSats(api, value as BN);
     }
-    if (type.startsWith('Vec')) {
-      return value.split(',').map(subStr => {
-        const v = subStr.trim();
-        if (isNumeric(type)) {
-          return convertToNumber(v);
-        }
-        return v;
-      });
-    }
-    if (isNumeric(type)) {
-      return convertToNumber(value);
-    }
-    return value;
+
+    return value || null;
   });
+
+  // return messageArgs.map(({ type: { type } }, index) => {
+  //   const value = userInput[index];
+
+  //   if (type === 'bool') {
+  //     return value === 'true';
+  //   }
+  
+  //   if (type.startsWith('Vec')) {
+  //     return value.split(',').map(subStr => {
+  //       const v = subStr.trim();
+  //       if (isNumeric(type)) {
+  //         return convertToNumber(v);
+  //       }
+  //       return v;
+  //     });
+  //   }
+  //   if (isNumeric(type)) {
+  //     return convertToNumber(value);
+  //   }
+  //   return value;
+  // });
 }

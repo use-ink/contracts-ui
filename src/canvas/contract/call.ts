@@ -37,10 +37,9 @@ export async function call({
   argValues,
   dispatch,
 }: ContractCallParams) {
-  const userInput = argValues ? Object.values(argValues) : [];
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
-  const transformed = transformUserInput(message.args, userInput as string[]);
+  const transformed = transformUserInput(api, message.args, argValues);
 
   const callResult: CallResult = {
     data: '',

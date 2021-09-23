@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AbiParam, ApiPromise } from 'types';
-import { useCanvas } from 'ui/contexts';
+import { useCanvas } from 'ui/contexts/CanvasContext';
 import { getInitValue } from 'ui/util';
 
 type ArgValues = Record<string, unknown>;
@@ -19,13 +19,6 @@ export function useArgValues (args: AbiParam[]): [ArgValues, React.Dispatch<ArgV
   const { api } = useCanvas();
 
   const [value, setValue] = useState(fromArgs(args, api!));
-
-  // useEffect(
-  //   (): void => {
-  //     setValue(fromArgs(args, api!))
-  //   },
-  //   [args]
-  // )
 
   return [value, setValue];
 }

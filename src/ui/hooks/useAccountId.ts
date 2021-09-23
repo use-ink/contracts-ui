@@ -1,8 +1,6 @@
-// Copyright 2017-2021 @polkadot/react-hooks authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useCallback } from 'react';
-import { useFormField, UseFormField, Validation } from './useFormField';
+import { useFormField } from './useFormField';
+import type { UseFormField, Validation } from 'types';
 import { useCanvas } from 'ui/contexts/CanvasContext';
 
 export function useAccountId (initialValue: string | null = null): UseFormField<string | null> {
@@ -19,5 +17,8 @@ export function useAccountId (initialValue: string | null = null): UseFormField<
     [keyring?.accounts]
   )
 
-  return useFormField<string | null>(initialValue || keyring?.getAccounts()[0].address || null, validate);
+  return useFormField<string | null>(
+    initialValue || keyring?.getAccounts()[0].address || null,
+    validate
+  );
 }

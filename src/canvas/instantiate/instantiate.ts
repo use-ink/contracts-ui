@@ -1,10 +1,11 @@
 import { BlueprintPromise, CodePromise, ContractPromise } from '@polkadot/api-contract';
 import BN from 'bn.js';
-import { BN_TEN, isNumber } from '@polkadot/util';
+import { isNumber } from '@polkadot/util';
 import type { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
 import { handleDispatchError, encodeSalt, transformUserInput } from '../util';
 import type { ApiPromise, Abi, InstantiateState, CanvasState, DbState } from 'types';
 import { createCodeBundle, createContract, findCodeBundleByHash } from 'db';
+import { toSats } from 'ui/hooks/useBalance';
 
 function createUploadTx(
   api: ApiPromise | null,
@@ -19,7 +20,8 @@ function createUploadTx(
     const code = new CodePromise(api, metadata, wasm.toU8a());
     const constructor = metadata.findConstructor(constructorIndex);
   
-    const transformed = transformUserInput(constructor.args, Object.values(argValues) as any);
+    const transformed = transformUserInput(api, constructor.args, argValues);
+    // const transformed = [new BN(100000)]
 
     return constructor.args.length > 0
       ? code.tx[constructor.method](options, ...transformed)
@@ -39,7 +41,8 @@ function createBlueprintTx(
     const blueprint = new BlueprintPromise(api, metadata, codeHash);
     const constructor = metadata.findConstructor(constructorIndex);
   
-    const transformed = transformUserInput(constructor.args, Object.values(argValues) as any);
+    const transformed = transformUserInput(api, constructor.args, argValues);
+    // const transformed = [new BN(1000).mul(BN_TEN.pow(new BN(12)))]
 
     return constructor.args.length > 0
       ? blueprint.tx[constructor.method](options, ...transformed)
@@ -59,6 +62,7 @@ export async function instantiate (
     endowment,
     metadata,
     name,
+    onInstantiate,
     salt
   }: InstantiateState,
   onSuccess?: (_: ContractPromise, __?: BlueprintPromise) => void
@@ -68,11 +72,13 @@ export async function instantiate (
   const options = {
     gasLimit,
     salt: saltu8a,
-    value: endowment.value ? endowment.value.mul(BN_TEN.pow(new BN(12))) : undefined
+    value: endowment.value ? toSats(api!, endowment.value) : undefined
   };
   const tx = isFromHash
     ? createBlueprintTx(api, options, metadata.value as Abi, codeHash, constructorIndex.value, argValues)
     : createUploadTx(api, options, metadata.value as Abi, constructorIndex.value, argValues)
+
+  console.log(tx);
 
   if (api && metadata && tx && accountId.value && keyring) {
     const account = keyring.getPair(accountId.value);
@@ -81,7 +87,7 @@ export async function instantiate (
       account,
       {},
       isFromHash
-        ? async ({ contract, dispatchError, status }: BlueprintSubmittableResult<'promise'>) => {
+        ? async ({ contract, dispatchError, status }: BlueprintSubmittableResult<'promise'>) => {          
           if (dispatchError) {
             handleDispatchError(dispatchError, api);
           }
@@ -108,7 +114,11 @@ export async function instantiate (
           }
         }
         
-        : async ({ blueprint, contract, dispatchError, status }: CodeSubmittableResult<'promise'>) => {
+        : async (result: CodeSubmittableResult<'promise'>) => {
+          console.log(result);
+          const { blueprint, contract, dispatchError, status } = result;
+          console.log(blueprint, contract);
+          
           if (dispatchError) {
             handleDispatchError(dispatchError, api);
           }
@@ -143,7 +153,7 @@ export async function instantiate (
               }
             )
             // const contract = getInstanceFromEvents(events, api, metadata.value as Abi);
-            onSuccess && onSuccess(contract, blueprint);
+            onInstantiate && onInstantiate(contract, blueprint);
             
             unsub();
           }

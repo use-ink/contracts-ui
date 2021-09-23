@@ -2,7 +2,7 @@
 
 import React, { useState, useContext, useCallback, useMemo } from 'react';
 import BN from 'bn.js';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { AbiConstructor } from '@polkadot/api-contract/types';
 import { isNumber, u8aToHex } from '@polkadot/util';
@@ -25,6 +25,7 @@ export function toBalance(value: number | BN | string, decimals: number): BN {
 }
 
 export function InstantiateContextProvider ({ children }: React.PropsWithChildren<Partial<InstantiateState>>) {
+  const history = useHistory();
   const { codeHash } = useParams<{codeHash: string}>();
   const codeBundleQuery = useCodeBundle(codeHash || undefined);
 
@@ -116,8 +117,8 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const contract = useState<ContractPromise | null>(null);
 
   const onInstantiate = useCallback(
-    ([_, __]: [ContractPromise, BlueprintPromise | undefined]) => {
-      // todo
+    (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
+      history.push(`/contract/${contract.address}`);
     },
     []
   );

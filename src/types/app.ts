@@ -5,6 +5,7 @@ import {
   BlueprintPromise,
   ContractPromise,
   Abi,
+  AbiConstructor,
   AnyJson,
   EventRecord,
   DispatchError,
@@ -14,11 +15,7 @@ import {
   KeyringPair,
   RegistryError,
 } from './substrate';
-import { UseFormField, Validation } from 'ui/hooks/useFormField';
-import { Toggle } from 'ui/hooks/useToggle';
-import { UseStepper } from 'ui/hooks/useStepper';
-import { UseBalance } from 'ui/hooks/useBalance';
-import { AbiConstructor } from '@polkadot/api-contract/types';
+// import { UseFormField, Validation } from 'ui/hooks/useFormField';
 
 export type { BN };
 
@@ -108,6 +105,10 @@ export interface InstantiateState2 {
   api?: ApiPromise | null;
 }
 
+export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>]
+
+export type UseToggle = [boolean, () => void, (value: boolean) => void];
+
 export interface MetadataState extends Validation {
   source: AnyJson | null;
   name: string | null;
@@ -131,6 +132,24 @@ export interface UseWeight {
   weight: BN;
 }
 
+export interface UseFormField<T> extends Validation {
+  value?: T;
+  onChange: (_: T) => void;
+};
+
+export type UseBalance = UseFormField<BN | null | undefined>;
+
+export interface Validation {
+  isError?: boolean;
+  isSuccess?: boolean;
+  isTouched?: boolean;
+  isValid?: boolean;
+  isWarning?: boolean;
+  validation?: React.ReactNode;
+};
+
+export type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>
+
 export interface InstantiateState {
   accountId: UseFormField<string | null>;
   argValues: UseState<Record<string, unknown>>;
@@ -141,14 +160,14 @@ export interface InstantiateState {
   contract: UseState<ContractPromise | null>;
   endowment: UseBalance;
   events: UseState<EventRecord[]>;
-  isLoading: Toggle;
-  isSuccess: Toggle;
-  isUsingSalt: Toggle;
-  isUsingStoredMetadata: Toggle;
+  isLoading: UseToggle;
+  isSuccess: UseToggle;
+  isUsingSalt: UseToggle;
+  isUsingStoredMetadata: UseToggle;
   metadata: UseMetadata;
   metadataFile: UseState<FileState | undefined>;
   name: UseFormField<string>;
-  onInstantiate: ([_, __]: [ContractPromise, BlueprintPromise | undefined]) => void;
+  onInstantiate: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   salt: UseFormField<string>;
   step: UseStepper;
   weight: UseWeight;

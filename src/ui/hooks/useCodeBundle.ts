@@ -1,5 +1,3 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
-
 import { useCallback } from 'react';
 import { useCanvas } from '../contexts/CanvasContext';
 import { useDatabase } from '../contexts/DatabaseContext';
@@ -21,7 +19,6 @@ export function useCodeBundle(codeHash?: string): UseQuery<[boolean, CodeBundleD
       }
 
       const isOnChain = (await api!.query.contracts.codeStorage(codeHash)).isSome;
-
 
       if (!isOnChain) {
         return [false, null];

@@ -1,8 +1,7 @@
 import { isWasm, u8aToString } from '@polkadot/util';
 import { useCallback, useEffect, useState } from 'react';
-import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, VoidFn } from 'types';
+import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
 import { useCanvas } from 'ui/contexts/CanvasContext';
-import { Validation } from './useFormField';
 
 type OnChange = (_: FileState, __?: AnyJson) => void;
 type OnRemove = VoidFn;

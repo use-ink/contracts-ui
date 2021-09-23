@@ -11,6 +11,7 @@ export function useMyContracts(): UseQuery<MyContracts> {
   const { db, identity } = useDatabase();
 
   const query = useCallback((): Promise<MyContracts | null> => {
+    console.log('asdf');
     return findMyContracts(db, identity);
   }, []);
 

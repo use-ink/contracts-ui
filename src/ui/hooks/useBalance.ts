@@ -1,12 +1,9 @@
 import { BN_ONE, BN_TEN, BN_TWO, BN_ZERO, isBn, isNumber } from "@polkadot/util";
 import BN from "bn.js";
 import React from "react";
-import { useFormField, UseFormField, Validation } from "./useFormField";
-// import { useCanvas } from "ui/contexts";
-import { ApiPromise } from "types";
-import { useCanvas } from "ui/contexts";
-
-export type UseBalance = UseFormField<BN | null | undefined>;
+import { useFormField } from "./useFormField";
+import type { ApiPromise, UseBalance, Validation } from "types";
+import { useCanvas } from "ui/contexts/CanvasContext";
 
 export function fromBalance (value: BN | null): string {
   if (!value) {
@@ -34,7 +31,13 @@ export function toBalance (value: string | number, api: ApiPromise): BN {
   }
 }
 
-// type Value = [string | number, BN]
+export function toSats (api: ApiPromise, balance: BN): BN {
+  return balance.mul(BN_TEN.pow(new BN(api.registry.chainDecimals)));
+}
+
+export function fromSats (api: ApiPromise, sats: BN): BN {
+  return sats.div(BN_TEN.pow(new BN(api.registry.chainDecimals)));
+}
 
 type BitLength = 8 | 16 | 32 | 64 | 128 | 256;
 
@@ -94,36 +97,11 @@ function validate (value: BN | null | undefined, { bitLength = DEFAULT_BITLENGTH
 }
 
 export function useBalance (initialValue: BN | string | number = 0, isZeroable = false, maxValue?: BN ): UseBalance {
-  // const canvas = useCanvas();
-  // const tokenDecimals = new BN(canvas.tokenDecimals);
-
   const { api } = useCanvas();
   const balance = useFormField<BN | null | undefined>(
     isBn(initialValue) ? initialValue : toBalance(initialValue, api!),
     (value) => validate(value, { isZeroable, maxValue })
   );
-
-  // const setString = useCallback(
-  //   (newString: string) => {
-  //     try {
-  //       const newBn = toBalance(newString, tokenDecimals, canvas.api!);
-
-  //       balance.onChange([newString, newBn]);
-  //     } finally {
-
-  //     }
-  //   },
-  //   []
-  // )
-
-  // const [asString, setString] = useState(fromBalance(balance.value as BN, tokenDecimals));
-
-  // useEffect(
-  //   (): void => {
-  //     balance.onChange(toBalance(asString, tokenDecimals))
-  //   },
-  //   [asString]
-  // )
 
   return balance;
 }
