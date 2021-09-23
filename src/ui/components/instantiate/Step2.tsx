@@ -2,7 +2,7 @@ import React from 'react';
 import type { AbiConstructor } from '@polkadot/api-contract/types';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { FormField } from '../FormField';
+import { FormField, getValidation } from '../FormField';
 import { InputNumber } from '../InputNumber';
 // import { InputBalance } from '../InputBalance';
 import { InputBalance } from '../InputBalance';
@@ -19,7 +19,7 @@ export function Step2 () {
     constructorIndex,
     deployConstructor,
     endowment,
-    isUsingSalt: [isUsingSalt],
+    isUsingSalt: [isUsingSalt, toggleIsUsingSalt],
     metadata,
     salt,
     step: [, stepForward, stepBack],
@@ -37,6 +37,7 @@ export function Step2 () {
       <FormField
         id="constructor"
         label="Deployment Constructor"
+        {...getValidation(constructorIndex)}
       >
         <Dropdown
           id="constructor"
@@ -58,6 +59,7 @@ export function Step2 () {
       <FormField
         id="endowment"
         label="Endowment"
+        {...getValidation(endowment)}
       >
         <InputBalance
           id="endowment"
@@ -67,12 +69,19 @@ export function Step2 () {
       <FormField
         id="salt"
         label="Deployment Salt"
+        {...getValidation(salt)}
       >
-        <InputSalt />
+        <InputSalt
+          isActive={isUsingSalt}
+          toggleIsActive={toggleIsUsingSalt}
+          {...salt}
+        />
       </FormField>
       <FormField
         id="maxGas"
         label="Max Gas Allowed"
+        isError={!isWeightValid}
+        validation={!isWeightValid ? 'Invalid gas limit' : null}
       >
         <InputNumber
           value={megaGas}

@@ -1,34 +1,32 @@
 import React from 'react';
 import { Switch } from '../Switch';
 import { Input } from '../Input';
-import { useInstantiate } from 'ui/contexts';
+import { SimpleSpread, UseFormField } from 'types';
 
-// interface Props {
-//   onChange: (_: string) => void;
-//   value: string;
-// }
+type Props = SimpleSpread<
+  React.HTMLAttributes<HTMLDivElement>,
+  UseFormField<string> & {
+    isActive?: boolean;
+    toggleIsActive: () => void;
+  }
+>
 
-export function InputSalt () {
-  const {
-    isUsingSalt: [isUsingSalt, toggleIsUsingSalt],
-    salt,
-  } = useInstantiate();
-
+export function InputSalt ({ isError, onChange, value, isActive = false, toggleIsActive }: Props) {
   return (
     <div className="flex items-center">
       <Input
         className="flex-1"
         id="salt"
-        isDisabled={!isUsingSalt}
-        isError={salt.isError}
-        value={isUsingSalt ? salt.value : ''}
-        onChange={salt.onChange}
-        placeholder={isUsingSalt ? "0x" : 'Do not use'}
+        isDisabled={!isActive}
+        isError={isError}
+        value={isActive ? value : ''}
+        onChange={onChange}
+        placeholder={isActive ? "0x" : 'Do not use'}
       />
       <div className="flex justify-center items-center w-18">
         <Switch
-          value={isUsingSalt}
-          onChange={toggleIsUsingSalt}
+          value={isActive}
+          onChange={toggleIsActive}
         />
       </div>
     </div>

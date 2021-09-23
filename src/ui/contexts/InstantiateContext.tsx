@@ -5,7 +5,7 @@ import BN from 'bn.js';
 import { useHistory, useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { AbiConstructor } from '@polkadot/api-contract/types';
-import { isNumber, u8aToHex } from '@polkadot/util';
+import { isHex, isNumber, u8aToHex } from '@polkadot/util';
 import { AnyJson, BlueprintPromise, ContractPromise, EventRecord, FileState, InstantiateState } from 'types';
 import { useCodeBundle } from 'ui/hooks/useCodeBundle';
 import { useWeight } from 'ui/hooks/useWeight';
@@ -76,7 +76,16 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const endowment = useBalance(1000);
   const weight = useWeight();
   const isUsingSalt = useToggle();
-  const salt = useNonEmptyString(randomAsHex());
+  const salt = useFormField<string>(
+    randomAsHex(),
+    (value) => {
+      if (!!value && isHex(value) && value.length === 66) {
+        return { isValid: true }
+      }
+
+      return { isValid: false, isError: true, validation: 'Invalid hex string' }
+    }
+  );
 
   const deployConstructor = useMemo(
     (): AbiConstructor | null => isNumber(constructorIndex.value) ? (metadata.value?.constructors[constructorIndex.value] || null) : null,
