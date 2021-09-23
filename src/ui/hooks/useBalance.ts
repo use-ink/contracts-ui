@@ -8,15 +8,15 @@ import { useCanvas } from "ui/contexts";
 
 export type UseBalance = UseFormField<BN | null | undefined>;
 
-export function fromBalance (value: BN | null, decimals: BN): string {
+export function fromBalance (value: BN | null): string {
   if (!value) {
     return '';
   }
 
-  return value.div(BN_TEN.pow(decimals)).toString();
+  return value.toString();
 }
 
-export function toBalance (value: string | number, tokenDecimals: BN, api: ApiPromise): BN {
+export function toBalance (value: string | number, api: ApiPromise): BN {
   const asString = isNumber(value) ? value.toString() : value;
 
   const isDecimalValue = /^(\d+)\.(\d+)$/.exec(asString);
@@ -28,11 +28,9 @@ export function toBalance (value: string | number, tokenDecimals: BN, api: ApiPr
     const mod = new BN(modString);
 
     return div
-      .mul(BN_TEN.pow(tokenDecimals))
-      .add(mod.mul(BN_TEN.pow(tokenDecimals.subn(modString.length))));
+      .add(mod.mul(BN_TEN.pow(BN_ZERO.subn(modString.length))));
   } else {
-    return new BN(asString.replace(/[^\d]/g, ''))
-      .mul(BN_TEN.pow(tokenDecimals));
+    return new BN(asString.replace(/[^\d]/g, ''));
   }
 }
 
@@ -99,9 +97,9 @@ export function useBalance (initialValue: BN | string | number = 0, isZeroable =
   // const canvas = useCanvas();
   // const tokenDecimals = new BN(canvas.tokenDecimals);
 
-  const { api, tokenDecimals } = useCanvas();
+  const { api } = useCanvas();
   const balance = useFormField<BN | null | undefined>(
-    isBn(initialValue) ? initialValue : toBalance(initialValue, new BN(tokenDecimals), api!),
+    isBn(initialValue) ? initialValue : toBalance(initialValue, api!),
     (value) => validate(value, { isZeroable, maxValue })
   );
 

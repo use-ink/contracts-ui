@@ -5,7 +5,7 @@ import BN from 'bn.js';
 import { useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { AbiConstructor } from '@polkadot/api-contract/types';
-import { isNumber } from '@polkadot/util';
+import { isNumber, u8aToHex } from '@polkadot/util';
 import { AnyJson, BlueprintPromise, ContractPromise, EventRecord, FileState, InstantiateState } from 'types';
 import { useCodeBundle } from 'ui/hooks/useCodeBundle';
 import { useWeight } from 'ui/hooks/useWeight';
@@ -81,8 +81,27 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
     (): AbiConstructor | null => isNumber(constructorIndex.value) ? (metadata.value?.constructors[constructorIndex.value] || null) : null,
     [metadata.value, constructorIndex.value]
   );
-
   const argValues = useArgValues(deployConstructor?.args || []);
+
+  const data = useMemo(
+    (): string | null => {
+      if (deployConstructor) {
+        try {
+          const data = deployConstructor.toU8a(
+            deployConstructor.args.map(({ name }) => {
+              return argValues[0][name];
+            })
+          );
+
+          return u8aToHex(data.slice(1));
+        } catch (e) {
+          return null;
+        }
+      }
+      return null;
+    },
+    [deployConstructor, argValues]
+  )
 
   // const [, setArgValues] = argValues;
 
@@ -107,6 +126,7 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
     accountId,
     codeHash,
     constructorIndex,
+    data,
     deployConstructor,
     contract,
     argValues,

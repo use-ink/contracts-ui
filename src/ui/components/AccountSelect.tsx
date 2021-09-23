@@ -1,6 +1,6 @@
 import React from 'react';
-import { Identicon } from '@polkadot/react-identicon';
 import { Dropdown } from './Dropdown';
+import { Account } from './Account';
 import type { DropdownProps, KeyringPair, OptionProps } from 'types';
 import { createAccountOptions } from 'canvas/util';
 import { useCanvas } from 'ui/contexts';
@@ -21,21 +21,9 @@ import { UseFormField } from 'ui/hooks/useFormField';
 
 type Props = UseFormField<string | null> & Omit<DropdownProps<string | null>, 'options'>;
 
-function Account ({ option: { name, value } }: OptionProps<string | null>) {
+function Option ({ option: { name, value } }: OptionProps<string | null>) {
   return (
-    <div className="p-1.5 flex items-center w-full">
-      <Identicon size={32} value={value} className="pr-2" />
-      <div className="flex-1 block truncate">
-        <span className="flex font-semibold text-base dark:text-gray-300 text-gray-700">
-          {name}
-        </span>
-        <p className="text-gray-500 text-xs">
-          {String(value).slice(0, 4) +
-            '...' +
-            String(value).slice(-4)}
-        </p>
-      </div>
-    </div>
+    <Account name={name} value={value} />
   )
 }
 
@@ -52,11 +40,11 @@ export function AccountSelect ({
 
   return (
     <Dropdown
-      button={Account}
+      button={Option}
       className={className}
       isDisabled={isDisabled}
       isError={isError}
-      option={Account}
+      option={Option}
       onChange={onChange}
       options={options}
       value={value}

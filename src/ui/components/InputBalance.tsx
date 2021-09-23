@@ -15,11 +15,11 @@ type Props =  SimpleSpread<
 >;
 
 function InputBalanceBase ({ children, value = BN_ZERO, onChange: _onChange, ...props }: Props) {
-  const { api, tokenDecimals, tokenSymbol } = useCanvas();
+  const { api, tokenSymbol } = useCanvas();
 
   const onChange = useCallback(
     (value: string): void => {
-      _onChange(toBalance(value, new BN(tokenDecimals), api!))
+      _onChange(toBalance(value, api!))
     },
     []
   )
@@ -30,7 +30,7 @@ function InputBalanceBase ({ children, value = BN_ZERO, onChange: _onChange, ...
         <Input
           onChange={onChange}
           pattern="^\d*\.?\d*?$"
-          value={fromBalance(value, new BN(tokenDecimals))}
+          value={fromBalance(value)}
           {...props}
         >
           <div className="absolute inset-y-0 right-0 flex items-center">

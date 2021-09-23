@@ -135,6 +135,7 @@ export interface InstantiateState {
   accountId: UseFormField<string | null>;
   argValues: UseState<Record<string, unknown>>;
   codeHash?: string | null;
+  data: string | null;
   constructorIndex: UseFormField<number>;
   deployConstructor: AbiConstructor | null;
   contract: UseState<ContractPromise | null>;

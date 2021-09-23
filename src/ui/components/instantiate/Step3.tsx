@@ -1,8 +1,14 @@
 import React from 'react';
-import { Identicon } from '@polkadot/react-identicon';
 import { useCanvas, useDatabase, useInstantiate } from 'ui/contexts';
 import { instantiate } from 'canvas';
+import { Account } from '../Account';
+import { formatBalance } from '@polkadot/util';
+import { jsonDecrypt } from '@polkadot/util-crypto';
 // import keyring from '@polkadot/ui-keyring';
+
+function truncate (value: string | undefined): string {
+  return value ? `${value.substring(0, 6)}...${value.substring(value.length - 6)}` : '';
+}
 
 export const Step3 = () => {
   const canvasState = useCanvas();
@@ -12,11 +18,15 @@ export const Step3 = () => {
   const {
     accountId,
     codeHash,
+    data,
     endowment,
+    metadata,
     weight,
     name,
     step: [, , stepBack]
   } = instantiateState;
+
+  const displayHash = codeHash || metadata.value?.project.source.wasmHash.toHex() || null;
 
   // const account = accountId && keyring.getAccount(accountId);
   // const { endowment, metadata, gas, file } = state;
@@ -59,46 +69,49 @@ export const Step3 = () => {
 
   return (
     <>
-      <div className="dark:text-gray-300 text-gray-700 dark:bg-elevation-1 bg-white p-8 space-y-7 border dark:border-gray-700 border-gray-200 rounded-md">
-        <div>
+      <div className="flex flex-wrap dark:text-gray-300 text-gray-700 dark:bg-elevation-1 bg-white p-8 space-y-7 border dark:border-gray-700 border-gray-200 rounded-md">
+        <div className='w-full'>
           <p className="text-sm dark:text-gray-300 text-gray-700 font-semibold mb-2">Account</p>
-          <div className="flex w-1/2 items-center dark:bg-elevation-1 bg-gray-50 border dark:border-gray-700 border-gray-200 p-3 rounded-md">
-            <div>
-              <Identicon size={38} value={accountId.value} />
-            </div>
-            <div className="mx-4">
-              <p className="text-sm dark:text-gray-300 text-gray-700 font-semibold">
-                {canvasState.keyring!.getAccount(accountId.value!)?.meta.name}
-              </p>
-              <p className="text-xs text-gray-500">
-                {String(accountId).slice(0, 4) +
-                  '...' +
-                  String(accountId).slice(-4)}
-              </p>
-            </div>
+          <div className="flex w-1/2 dark:bg-elevation-1 bg-gray-50 border dark:border-gray-700 border-gray-200 p-3 rounded-md">
+            <Account className="p-0" value={accountId.value} />
           </div>
         </div>
 
-        <div className="text-sm">
+        <div className="w-full text-sm">
           <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Name</p>
           <p className="text-gray-500">{name.value}</p>
         </div>
 
-        <div className="text-sm">
+        <div className="w-1/2 text-sm">
           <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Endowment</p>
-          <p className="text-gray-500">{endowment.value?.toString()}</p>
+          <p className="text-gray-500">
+            {formatBalance(endowment?.value || undefined, { forceUnit: '-' })}
+          </p>
         </div>
 
-        <div className="text-sm">
+        <div className="w-1/2 text-sm">
           <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Weight</p>
-          <p className="text-gray-500">{weight.weight.toString()}</p>
+          <p className="text-gray-500">
+            {weight.weight.toString()}
+          </p>
         </div>
 
-        {codeHash && (
-          <div className="text-sm">
-            <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Code Hash</p>
+        {
+          displayHash && (
+            <div className="w-1/2 text-sm">
+              <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Code Hash</p>
+              <p className="text-gray-500">
+                {truncate(displayHash)}
+              </p>
+            </div>
+          )
+        }
+
+        {data && (
+          <div className="w-1/2 text-sm">
+            <p className="dark:text-gray-300 text-gray-700 font-semibold mb-2">Data</p>
             <p className="text-gray-500">
-              {String(codeHash).slice(0, 6) + '...' + String(codeHash).slice(-6)}
+              {data.toString()}
             </p>
           </div>
         )}

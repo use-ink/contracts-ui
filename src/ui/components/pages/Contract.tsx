@@ -3,16 +3,17 @@ import { useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import { InteractTab } from '../contract/Interact';
 import { MetadataTab } from '../contract/Metadata';
-import { getInstanceFromStorage, call } from 'canvas';
+import { call } from 'canvas';
 import { UrlParams } from 'types';
-import { useCanvas } from 'ui/contexts';
 import { PageFull } from 'ui/templates';
 import { classes } from 'ui/util';
+import { useContract } from 'ui/hooks';
 
 export const Contract = () => {
-  const { api } = useCanvas();
   const { addr, activeTab } = useParams<UrlParams>();
-  const contract = getInstanceFromStorage(addr, api);
+
+  const { data: contract } = useContract(addr);
+
   const [active, setActive] = useState(activeTab || 'interact');
 
   return contract ? (

@@ -1,8 +1,9 @@
 import { BlueprintPromise, CodePromise, ContractPromise } from '@polkadot/api-contract';
-import { isNumber } from '@polkadot/util';
+import BN from 'bn.js';
+import { BN_TEN, isNumber } from '@polkadot/util';
 import type { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
 import { handleDispatchError, encodeSalt, transformUserInput } from '../util';
-import type { ApiPromise, Abi, BN, InstantiateState, CanvasState, DbState } from 'types';
+import type { ApiPromise, Abi, InstantiateState, CanvasState, DbState } from 'types';
 import { createCodeBundle, createContract, findCodeBundleByHash } from 'db';
 
 function createUploadTx(
@@ -67,7 +68,7 @@ export async function instantiate (
   const options = {
     gasLimit,
     salt: saltu8a,
-    value: endowment.value || undefined
+    value: endowment.value ? endowment.value.mul(BN_TEN.pow(new BN(12))) : undefined
   };
   const tx = isFromHash
     ? createBlueprintTx(api, options, metadata.value as Abi, codeHash, constructorIndex.value, argValues)
@@ -120,6 +121,7 @@ export async function instantiate (
                 abi: blueprint.abi.json as Record<string, unknown>,
                 blockOneHash: blockOneHash || undefined,
                 codeHash: blueprint.codeHash.toHex(),
+                creator: account.address,
                 genesisHash: api.genesisHash.toHex(),
                 name: blueprint.abi.project.contract.name.toString(),
                 tags: []
@@ -133,6 +135,7 @@ export async function instantiate (
                 abi: contract.abi.json as Record<string, unknown>,
                 address: contract.address.toString(),
                 blockOneHash: blockOneHash || undefined,
+                creator: account.address,
                 codeBundleId,
                 genesisHash: api?.genesisHash.toString(),
                 name: name.value,
