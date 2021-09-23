@@ -73,7 +73,6 @@ export function InputFile ({
   // isSupplied,
   onChange,
   placeholder,
-  successMessage = 'File uploaded!',
   ...props
 }: Props) {
   const ref = createRef<DropzoneRef>();
@@ -81,10 +80,7 @@ export function InputFile ({
 
   const onDrop = useCallback(
     (files: File[]): void => {
-      console.log(files);
-
       files.forEach((file): void => {
-        console.log(file);
         const reader = new FileReader();
 
         reader.onabort = NOOP;
@@ -135,13 +131,8 @@ export function InputFile ({
           aria-hidden="true"
         />
         <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
-          {file.name} ({file.size}kb)
+          {file.name} ({(file.size / 1000).toFixed(2)}kb)
         </span>
-        {successMessage && !isError && (
-          <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
-            {successMessage}
-          </span>
-        )}
         {errorMessage && isError  && (
           <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
             {errorMessage}
@@ -161,7 +152,6 @@ export function InputFile ({
       ref={ref}
     >
       {({ getInputProps, getRootProps }) => {
-        console.log(getRootProps());
         return (
           <div className={className} {...getRootProps()}>
             <label

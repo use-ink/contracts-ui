@@ -1,39 +1,58 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { isUndefined } from '@polkadot/util';
+import { isNull, isUndefined } from '@polkadot/util';
 
-export type FormField<T> = [
-  T,
-  (_?: T) => void,
-  boolean,
-  boolean
-];
+export interface UseFormField<T> extends Validation {
+  value?: T;
+  onChange: (_: T) => void;
+};
 
-type ValidateFn<T> = (_: T) => boolean;
+export interface Validation {
+  isError?: boolean;
+  isSuccess?: boolean;
+  isTouched?: boolean;
+  isValid?: boolean;
+  isWarning?: boolean;
+  validation?: React.ReactNode;
+};
 
-export function useFormField<T> (defaultValue: T, validate: ValidateFn<T> = (): boolean => true): FormField<T> {
-  const [value, _setValue] = useState<T>(defaultValue);
+type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>
+
+export function useFormField<T> (defaultValue: T, validate: ValidateFn<T> = (value) => ({ isValid: !isNull(value), validation: null })): UseFormField<T> {
+  const [value, setValue] = useState<T>(defaultValue);
+  const [validation, setValidation] = useState<Omit<Validation, 'isError'>>(validate(value));
   const isTouched = useRef(false);
 
-  const isValid = useMemo(
-    () => !!value && validate(value),
-    [validate, value]
-  );
-
   const isError = useMemo(
-    () => !isValid && isTouched.current,
-    [isValid, isTouched.current]
+    () => {
+      if (!isTouched.current) {
+        return false;
+      }
+      
+      return !validation.isValid;
+    },
+    [validation.isValid, isTouched.current]
   );
 
-  const setValue = useCallback(
+  const onChange = useCallback(
     (value?: T) => {
       if (!isUndefined(value)) {
-        _setValue(value);
-        isTouched.current = true
+        setValue(value);
+        isTouched.current = true;
       }
     },
     []
   );
 
-  return [value, setValue, isValid, isError];
+  useEffect(
+    (): void => {
+      setValidation(validate(value));
+    },
+    [value]
+  )
+
+  return useMemo(
+    () => ({ value, onChange, isValid: validation.isValid, validation: validation.validation, isError }),
+    [value, onChange, isError, validation.isValid, validation.validation]
+  );
 }

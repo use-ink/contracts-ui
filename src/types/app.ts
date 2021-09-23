@@ -12,11 +12,13 @@ import {
   Keyring,
   AbiMessage,
   KeyringPair,
-  AnyJson,
   RegistryError,
 } from './substrate';
-import { FormField } from 'ui/hooks/useFormField';
+import { UseFormField, Validation } from 'ui/hooks/useFormField';
 import { Toggle } from 'ui/hooks/useToggle';
+import { UseStepper } from 'ui/hooks/useStepper';
+import { UseBalance } from 'ui/hooks/useBalance';
+import { AbiConstructor } from '@polkadot/api-contract/types';
 
 export type { BN };
 
@@ -49,8 +51,10 @@ export type CanvasAction =
 
 export interface ChainProperties {
   blockOneHash: string | null;
+  tokenDecimals: number;
   systemName: string | null;
   systemVersion: string | null;
+  tokenSymbol: string;
 }
 
 export interface DropdownOption<T> {
@@ -68,14 +72,11 @@ export interface DropdownOption<T> {
 
 export type DropdownProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
-  {
+  UseFormField<T> & {
     button?: React.ComponentType<OptionProps<T>>,
     isDisabled?: boolean;
-    isError?: boolean;
     option?: React.ComponentType<OptionProps<T>>,
-    onChange: (_: T) => void;
     options?: DropdownOption<T>[];
-    value?: T | null;
   }
 >
 
@@ -107,13 +108,10 @@ export interface InstantiateState2 {
   api?: ApiPromise | null;
 }
 
-export interface MetadataState {
+export interface MetadataState extends Validation {
   source: AnyJson | null;
   name: string | null;
   value: Abi | null;
-  errorText: string | null;
-  isError: boolean;
-  isValid: boolean;
   isSupplied: boolean;
 }
 
@@ -134,12 +132,13 @@ export interface UseWeight {
 }
 
 export interface InstantiateState {
-  accountId: FormField<string | null>;
-  argValues: UseState<Record<string, string>>;
+  accountId: UseFormField<string | null>;
+  argValues: UseState<Record<string, unknown>>;
   codeHash?: string | null;
-  constructorIndex: FormField<number>;
+  constructorIndex: UseFormField<number>;
+  deployConstructor: AbiConstructor | null;
   contract: UseState<ContractPromise | null>;
-  endowment: FormField<BN>;
+  endowment: UseBalance;
   events: UseState<EventRecord[]>;
   isLoading: Toggle;
   isSuccess: Toggle;
@@ -147,10 +146,10 @@ export interface InstantiateState {
   isUsingStoredMetadata: Toggle;
   metadata: UseMetadata;
   metadataFile: UseState<FileState | undefined>;
-  name: FormField<string>;
+  name: UseFormField<string>;
   onInstantiate: ([_, __]: [ContractPromise, BlueprintPromise | undefined]) => void;
-  salt: FormField<string>;
-  step: UseState<number>;
+  salt: UseFormField<string>;
+  step: UseStepper;
   weight: UseWeight;
 }
 
@@ -173,7 +172,7 @@ export type InstantiateAction =
     type: 'DEPLOYMENT_INFO'; payload: {
       constructorName: string;
       constructorIndex: number;
-      argValues: Record<string, string>;
+      argValues: Record<string, unknown>;
       endowment: number;
       salt: string;
       gas: number;
@@ -237,7 +236,7 @@ export interface ContractCallParams {
   endowment: number;
   gasLimit: number;
   keyringPair?: KeyringPair;
-  argValues?: Record<string, string>;
+  argValues?: Record<string, unknown>;
   dispatch: (action: ContractCallAction) => void;
 }
 

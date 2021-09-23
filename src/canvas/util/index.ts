@@ -94,7 +94,7 @@ export function createMessageOptions(data: AbiMessage[]): DropdownOption<AbiMess
 export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOption<string>[] {
   return data.map(pair => ({
     value: pair.address || '',
-    name: (pair.meta?.name as string).toUpperCase(),
+    name: pair.meta?.name as string
   }));
 }
 

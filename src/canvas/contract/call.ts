@@ -40,7 +40,7 @@ export async function call({
   const userInput = argValues ? Object.values(argValues) : [];
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
-  const transformed = transformUserInput(args, userInput);
+  const transformed = transformUserInput(args, userInput as string[]);
 
   const callResult: CallResult = {
     data: '',

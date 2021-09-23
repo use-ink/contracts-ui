@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Dropdown } from '../Dropdown';
-import { ArgumentForm } from '../ArgumentForm';
+import { ArgumentForm } from '../args/ArgumentForm';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
 import { OverlayLoader } from '../OverlayLoader';
 import { Input } from '../Input';
 import { AccountSelect } from '../AccountSelect';
 import { ResultsOutput } from './ResultsOutput';
-import { convertToNumber, createAccountOptions, createEmptyValues, createMessageOptions } from 'canvas';
+import { convertToNumber, createEmptyValues, createMessageOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import { contractCallReducer } from 'ui/reducers';
-import { Abi, ContractCallParams, AbiMessage, ContractCallState, KeyringPair } from 'types';
+import { Abi, ContractCallParams, AbiMessage, ContractCallState } from 'types';
+import { useAccountId } from 'ui/hooks/useAccountId';
 
 interface Props {
   abi: Abi;
@@ -37,13 +38,11 @@ const initialState: ContractCallState = {
 export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
   const { api, keyring } = useCanvas();
   const options = createMessageOptions(abi.messages);
-  const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
-  const [argValues, setArgValues] = useState<Record<string, string>>();
+  const [message, setMessage] = useState<AbiMessage | null>(abi.messages[0]);
+  const [argValues, setArgValues] = useState<Record<string, unknown>>();
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
-  const keyringPairs = keyring?.getPairs();
-  const accountsOptions = createAccountOptions(keyringPairs as KeyringPair[]);
-  const [accountId, setAccountId] = useState<string>(accountsOptions[0].value);
+  const accountId = useAccountId();
 
   useEffect(() => {
     if (message && message.args.length > 0) {
@@ -63,8 +62,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
           <h2 className="mb-2 text-sm">Call from account</h2>
           <AccountSelect
             className="mb-4"
-            value={accountId}
-            onChange={setAccountId}
+            {...accountId}
           />
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="flex">
@@ -77,17 +75,15 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
               <div className="text-sm mb-4 flex-1 ml-2">
                 <ArgumentForm
                   key={`args-${message?.identifier}`}
-                  args={message?.args}
+                  args={message?.args || []}
                   argValues={argValues}
-                  onChange={e =>
-                    setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
-                  }
+                  setArgValues={setArgValues}
                 />
               </div>
             )}
           </div>
 
-          {message.isPayable && (
+          {message?.isPayable && (
             <>
               <h2 className="mb-2 text-sm">Payment</h2>
               <Input
@@ -100,7 +96,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
           <Buttons>
             <Button
               onClick={() =>
-                callFn({
+                message && callFn({
                   api,
                   abi,
                   contractAddress,
@@ -108,7 +104,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
                   gasLimit: 155852802980,
                   argValues,
                   message,
-                  keyringPair: keyring?.getPair(accountId),
+                  keyringPair: accountId.value ? keyring?.getPair(accountId.value) : undefined,
                   dispatch,
                 })
               }

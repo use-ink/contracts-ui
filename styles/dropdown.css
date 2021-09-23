@@ -3,7 +3,7 @@
 }
 
 .dropdown .dropdown-btn {
-  @apply relative flex w-full p-2 text-left dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
+  @apply relative flex items-center w-full p-2 text-left dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
 }
 
 .dropdown .dropdown-btn > span {

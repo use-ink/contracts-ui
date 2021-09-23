@@ -11,11 +11,14 @@ import type { CanvasAction, CanvasState, ChainProperties } from 'types';
 let loadedAccounts = false;
 
 const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
+const DEFAULT_DECIMALS = 12;
 
 const NULL_CHAIN_PROPERTIES = {
   blockOneHash: null,
   systemName: null,
-  systemVersion: null
+  systemVersion: null,
+  tokenDecimals: DEFAULT_DECIMALS,
+  tokenSymbol: 'Unit'
 }
 
 const INIT_STATE: CanvasState = {
@@ -29,7 +32,8 @@ const INIT_STATE: CanvasState = {
 };
 
 async function getChainProperties (api: ApiPromise): Promise<ChainProperties> {
-  const [blockOneHash, systemName, systemVersion] = await Promise.all([
+  const [chainProperties, blockOneHash, systemName, systemVersion] = await Promise.all([
+    api.rpc.system.properties(),
     api.query.system.blockHash(1),
     api.rpc.system.name(),
     api.rpc.system.version(),
@@ -39,6 +43,12 @@ async function getChainProperties (api: ApiPromise): Promise<ChainProperties> {
     blockOneHash: blockOneHash.toString(),
     systemName: systemName.toString(),
     systemVersion: systemVersion.toString(),
+    tokenDecimals: chainProperties.tokenDecimals.isSome
+      ? chainProperties.tokenDecimals.unwrap().toArray()[0].toNumber()
+      : DEFAULT_DECIMALS,
+    tokenSymbol: chainProperties.tokenSymbol.isSome
+      ? chainProperties.tokenSymbol.unwrap().toArray().map((s) => s.toString())[0]
+      : 'Unit'
   };
 }
 
@@ -139,6 +149,16 @@ export const CanvasContextProvider = ({
     loadedAccounts = true;
     loadAccounts().catch(console.error);
   }, [keyringStatus]);
+
+  // useEffect(
+  //   (): void => {
+  //     formatBalance.setDefaults({
+  //       decimals: state.tokenDecimals,
+  //       unit: state.tokenSymbol
+  //     });
+    
+  //   }
+  // )
 
   return <CanvasContext.Provider value={state}>{children}</CanvasContext.Provider>;
 };

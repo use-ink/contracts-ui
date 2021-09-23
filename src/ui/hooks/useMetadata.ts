@@ -1,7 +1,8 @@
-import { u8aToString } from '@polkadot/util';
+import { isWasm, u8aToString } from '@polkadot/util';
 import { useCallback, useEffect, useState } from 'react';
 import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, VoidFn } from 'types';
 import { useCanvas } from 'ui/contexts/CanvasContext';
+import { Validation } from './useFormField';
 
 type OnChange = (_: FileState, __?: AnyJson) => void;
 type OnRemove = VoidFn;
@@ -20,34 +21,24 @@ interface Callbacks {
   onRemove?: OnRemove;
 }
 
-function deriveFromJson (source: AnyJson = null, { isRequired, isWasmRequired, ...options }: DeriveOptions, api?: ApiPromise | null): MetadataState {
+function deriveFromJson (source: AnyJson = null, options: DeriveOptions, api?: ApiPromise | null): MetadataState {
   if (!source) {
     return EMPTY;
   }
 
-  try {
-    let isError = false;
-    let errorText = null;
+  let value: Abi | undefined = undefined;
 
-    const value = new Abi(source, api?.registry.getChainProperties());
+  try {
+    value = new Abi(source, api?.registry.getChainProperties());
 
     const name = options.name || value.project.contract.name.toString();
-
-    const isWasmEmpty = value.project.source.wasm.isEmpty;
-
-    if (isWasmRequired && isWasmEmpty) {
-      isError = true;
-      errorText = 'This metadata file has no WASM field.'
-    }
 
     return {
       source,
       name,
       value,
-      errorText,
-      isError,
       isSupplied: true,
-      isValid: (!isRequired || !!value) && !isError
+      ...validate(value, options),
     };
   } catch (e) {
     console.error(e);
@@ -56,23 +47,50 @@ function deriveFromJson (source: AnyJson = null, { isRequired, isWasmRequired, .
       source,
       name: null,
       value: null,
-      errorText: 'Invalid contract bundle format',
-      isError: true,
       isSupplied: true,
-      isValid: false
+      ...validate(value, options)
     };
   }
 }
 
 const EMPTY: MetadataState = {
-  source: null,
-  name: null,
-  value: null,
-  errorText: null,
   isError: false,
   isSupplied: false,
-  isValid: false
+  isValid: false,
+  name: null,
+  source: null,
+  value: null,
+  validation: null,
 };
+
+function validate (metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
+  if (!metadata) {
+    return {
+      isValid: false,
+      isError: true,
+      validation: 'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.'
+    };
+  }
+
+  const wasm = metadata.project.source.wasm;
+  const isWasmEmpty = wasm.isEmpty;
+  const isWasmInvalid = !isWasm(wasm.toU8a());
+
+  if (isWasmRequired && (isWasmEmpty || isWasmInvalid)) {
+    return {
+      isValid: false,
+      isError: true,
+      validation: 'This contract bundle has an empty or invalid WASM field.'
+    }
+  }
+
+  return {
+    isValid: true,
+    isError: false,
+    isSuccess: true,
+    validation: 'Valid contract bundle!'
+  };
+}
 
 export function useMetadata (initialValue: AnyJson = null, options: Options & Callbacks = {}): UseMetadata {
   const { api } = useCanvas();
@@ -103,7 +121,7 @@ export function useMetadata (initialValue: AnyJson = null, options: Options & Ca
       } catch (error) {
         console.error(error);
 
-        setState({ ...EMPTY, errorText: (error as Error).message, isError: true, isSupplied: true, isValid: false });
+        setState({ ...EMPTY, validation: 'This contract file is not in a valid format.', isError: true, isSupplied: true, isValid: false });
       }
     },
     [callbacks.onChange, isRequired, isWasmRequired]

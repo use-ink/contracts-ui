@@ -4,6 +4,8 @@ import { Dropdown } from './Dropdown';
 import type { DropdownProps, KeyringPair, OptionProps } from 'types';
 import { createAccountOptions } from 'canvas/util';
 import { useCanvas } from 'ui/contexts';
+import { UseFormField } from 'ui/hooks/useFormField';
+// import { classes } from 'ui/util';
 
 // interface AccountProps {
 //   value: KeyringPair;
@@ -17,14 +19,14 @@ import { useCanvas } from 'ui/contexts';
 //   }
 // >
 
-type Props = Omit<DropdownProps<string>, 'options'>;
+type Props = UseFormField<string | null> & Omit<DropdownProps<string | null>, 'options'>;
 
-function Account ({ option: { name, value } }: OptionProps<string>) {
+function Account ({ option: { name, value } }: OptionProps<string | null>) {
   return (
-    <div className="flex">
-      <Identicon size={38} value={value} className="pr-2" />
-      <div className="block truncate">
-        <span className="flex text-base dark:text-gray-300 text-gray-700">
+    <div className="p-1.5 flex items-center w-full">
+      <Identicon size={32} value={value} className="pr-2" />
+      <div className="flex-1 block truncate">
+        <span className="flex font-semibold text-base dark:text-gray-300 text-gray-700">
           {name}
         </span>
         <p className="text-gray-500 text-xs">

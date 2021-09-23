@@ -60,7 +60,7 @@ export function Dropdown<T>({
             {options?.map((option, index) => (
               <Listbox.Option
                 key={index}
-                className={({ active, selected }) => classes('option', active ? 'active' : '', selected ? 'selected' : '')}
+                className={({ active, selected }) => classes('option', active && 'active', selected && 'selected')}
                 value={option}
               >
                 {({ selected }) => {

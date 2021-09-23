@@ -6,7 +6,7 @@ type Props = React.HTMLAttributes<HTMLDivElement>;
 export function Buttons ({ children, className }: Props): React.ReactElement<Props> {
   return (
     <div
-      className={classes('flex space-x-2 mt-16', className)}
+      className={classes('flex space-x-2', className)}
     >
       {children}
     </div>

@@ -8,19 +8,17 @@ import { createCodeBundle, createContract, findCodeBundleByHash } from 'db';
 function createUploadTx(
   api: ApiPromise | null,
   options: { gasLimit: BN; salt: Uint8Array; value?: BN },
-  metadata: Abi,
-  constructorIndex: number,
-  argValues: Record<string, string>
+  metadata?: Abi,
+  constructorIndex?: number,
+  argValues?: Record<string, unknown>
 ) {
-  const wasm = metadata.project.source.wasm;
-
-  console.log(metadata);
+  const wasm = metadata?.project.source.wasm;
 
   if (api && !!wasm && isNumber(constructorIndex) && metadata && argValues) {
     const code = new CodePromise(api, metadata, wasm.toU8a());
     const constructor = metadata.findConstructor(constructorIndex);
   
-    const transformed = transformUserInput(constructor.args, Object.values(argValues));
+    const transformed = transformUserInput(constructor.args, Object.values(argValues) as any);
 
     return constructor.args.length > 0
       ? code.tx[constructor.method](options, ...transformed)
@@ -34,13 +32,13 @@ function createBlueprintTx(
   metadata?: Abi,
   codeHash?: string,
   constructorIndex?: number,
-  argValues?: Record<string, string>
+  argValues?: Record<string, unknown>
 ) {
   if (api && codeHash && isNumber(constructorIndex) && metadata && argValues) {
     const blueprint = new BlueprintPromise(api, metadata, codeHash);
     const constructor = metadata.findConstructor(constructorIndex);
   
-    const transformed = transformUserInput(constructor.args, Object.values(argValues));
+    const transformed = transformUserInput(constructor.args, Object.values(argValues) as any);
 
     return constructor.args.length > 0
       ? blueprint.tx[constructor.method](options, ...transformed)
@@ -52,30 +50,31 @@ export async function instantiate (
   { api, blockOneHash, keyring }: CanvasState,
   { db, identity }: DbState,
   {
-    accountId: [accountId],
+    accountId,
     argValues: [argValues],
     codeHash,
-    constructorIndex: [constructorIndex],
+    constructorIndex,
     weight: { weight: gasLimit },
-    endowment: [endowment],
+    endowment,
     metadata,
-    name: [name]
+    name,
+    salt
   }: InstantiateState,
   onSuccess?: (_: ContractPromise, __?: BlueprintPromise) => void
 ): Promise<void> {
   const isFromHash = !!codeHash;
-  const salt = encodeSalt();
+  const saltu8a = encodeSalt(salt.value);
   const options = {
     gasLimit,
-    salt,
-    value: endowment
+    salt: saltu8a,
+    value: endowment.value || undefined
   };
   const tx = isFromHash
-    ? createBlueprintTx(api, options, metadata.value as Abi, codeHash, constructorIndex, argValues)
-    : createUploadTx(api, options, metadata.value as Abi, constructorIndex, argValues)
+    ? createBlueprintTx(api, options, metadata.value as Abi, codeHash, constructorIndex.value, argValues)
+    : createUploadTx(api, options, metadata.value as Abi, constructorIndex.value, argValues)
 
-  if (api && metadata && tx && accountId && keyring) {
-    const account = keyring.getPair(accountId);
+  if (api && metadata && tx && accountId.value && keyring) {
+    const account = keyring.getPair(accountId.value);
 
     const unsub = await tx.signAndSend(
       account,
@@ -98,7 +97,7 @@ export async function instantiate (
                 blockOneHash: blockOneHash || undefined,
                 codeBundleId: codeBundle?.id,
                 genesisHash: api?.genesisHash.toString(),
-                name,
+                name: name.value,
                 tags: []
               }
             )
@@ -136,7 +135,7 @@ export async function instantiate (
                 blockOneHash: blockOneHash || undefined,
                 codeBundleId,
                 genesisHash: api?.genesisHash.toString(),
-                name,
+                name: name.value,
                 tags: []
               }
             )

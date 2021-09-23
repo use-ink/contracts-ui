@@ -3,7 +3,7 @@ import { SimpleSpread } from 'types';
 import { classes } from 'ui/util';
 
 type Props = SimpleSpread<
-  React.HTMLAttributes<HTMLInputElement>,
+  React.InputHTMLAttributes<HTMLInputElement>,
   {
     isDisabled?: boolean;
     isError?: boolean;
@@ -12,13 +12,13 @@ type Props = SimpleSpread<
   }
 >
 
-export function Input ({ className = 'mb-2', isDisabled = false, isError = false, onChange: _onChange, value, ...props }: Props) {
+export function Input ({ children, className, isDisabled = false, isError = false, onChange: _onChange, value, ...props }: Props) {
   function onChange (e: React.ChangeEvent<HTMLInputElement>): void {
     _onChange(e.target.value);
   }
 
   return (
-    <div className={classes(isError ? 'isError' : '', className)}>
+    <div className={classes(isError && 'isError', className)}>
       <input
         onChange={onChange}
         type="text"
@@ -27,6 +27,7 @@ export function Input ({ className = 'mb-2', isDisabled = false, isError = false
         {...(isDisabled ? { disabled: true } : {})}
         {...props}
       />
+      {children}
     </div>
   );
 };

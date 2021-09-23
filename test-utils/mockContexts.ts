@@ -1,9 +1,12 @@
 import { Database } from '@textile/threaddb';
 import { jest } from '@jest/globals';
-import BN from 'bn.js';
+// import BN from 'bn.js';
+// import { randomAsHex } from '@polkadot/util-crypto';
 import { codeBundle, contract, user } from 'db';
 
-import { CanvasState, DbState, InstantiateState, PrivateKey, ApiPromise } from 'types';
+import { CanvasState, DbState, PrivateKey, ApiPromise } from 'types';
+import type { UseFormField } from 'ui/hooks/useFormField';
+// import { toBalance } from 'ui/contexts';
 
 export function createMockApi() {
   const api = {
@@ -12,47 +15,56 @@ export function createMockApi() {
   return api as unknown as ApiPromise;
 }
 
-export function getMockInstantiateState(): InstantiateState {
+export function getMockFormField<T>(value: T | undefined, isValid = false): UseFormField<T> {
   return {
-    accountId: ['5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', jest.fn(), true, false],
-    argValues: [{ initValue: 'true'}, jest.fn()],
-    contract: [null, jest.fn()],
-    codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-    constructorIndex: [0, jest.fn(), false, false],
-    endowment: [new BN(0), jest.fn(), false, false],
-    events: [[], jest.fn()],
-    isLoading: [false, jest.fn(), jest.fn()],
-    isSuccess: [false, jest.fn(), jest.fn()],
-    isUsingSalt: [false, jest.fn(), jest.fn()],
-    isUsingStoredMetadata: [false, jest.fn(), jest.fn()],
-    metadata: {
-      errorText: null,
-      isError: false,
-      isSupplied: false,
-      isValid: false,
-      name: '',
-      source: null,
-      value: null,
-      onChange: jest.fn(),
-      onRemove: jest.fn(),
-    },
-    metadataFile: [undefined, jest.fn()],
-    name: ['flipper', jest.fn(), true, false],
-    onInstantiate: jest.fn(),
-    salt: ['', jest.fn(), false, false],
-    step: [0, jest.fn()],
-    weight: {
-      executionTime: 0,
-      isEmpty: false,
-      isValid: true,
-      megaGas: new BN(0),
-      percentage: 0,
-      setIsEmpty: jest.fn(),
-      setMegaGas: jest.fn(),
-      weight: new BN(0),
-    },
-  };
+    onChange: jest.fn(),
+    value,
+    isValid,
+    isError: false,
+  }
 }
+
+// export function getMockInstantiateState(): InstantiateState {
+//   return {
+//     accountId: getMockFormField<string | null>('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', true),
+//     argValues: [{ initValue: 'true'}, jest.fn()],
+//     contract: [null, jest.fn()],
+//     codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
+//     constructorIndex: getMockFormField(0),
+//     endowment: { ...getMockFormField<any>(['1000', toBalance(1000, 12)]), setString: jest.fn() },
+//     events: [[], jest.fn()],
+//     isLoading: [false, jest.fn(), jest.fn()],
+//     isSuccess: [false, jest.fn(), jest.fn()],
+//     isUsingSalt: [false, jest.fn(), jest.fn()],
+//     isUsingStoredMetadata: [false, jest.fn(), jest.fn()],
+//     metadata: {
+//       isError: false,
+//       isSupplied: false,
+//       isValid: false,
+//       validation: null,
+//       name: '',
+//       source: null,
+//       value: null,
+//       onChange: jest.fn(),
+//       onRemove: jest.fn(),
+//     },
+//     metadataFile: [undefined, jest.fn()],
+//     name: getMockFormField('flipper', true),
+//     onInstantiate: jest.fn(),
+//     salt: getMockFormField<string>(randomAsHex(), true),
+//     step: [0, jest.fn(), jest.fn(), jest.fn()],
+//     weight: {
+//       executionTime: 0,
+//       isEmpty: false,
+//       isValid: true,
+//       megaGas: new BN(0),
+//       percentage: 0,
+//       setIsEmpty: jest.fn(),
+//       setMegaGas: jest.fn(),
+//       weight: new BN(0),
+//     },
+//   };
+// }
 
 export function getMockCanvasState(): CanvasState {
   return {
@@ -65,6 +77,8 @@ export function getMockCanvasState(): CanvasState {
     blockOneHash: '',
     systemName: 'Development',
     systemVersion: '0',
+    tokenSymbol: 'Unit',
+    tokenDecimals: 12
   };
 }
 
