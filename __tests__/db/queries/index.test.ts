@@ -97,9 +97,9 @@ describe('DB Queries', (): void => {
   });
 
   it('findCodeBundleByHash', async () => {
-    const { codeHash, blockOneHash } = testCodeBundles[0];
+    const { codeHash, blockZeroHash } = testCodeBundles[0];
 
-    const result = await q.findCodeBundleByHash(db, { codeHash, blockOneHash });
+    const result = await q.findCodeBundleByHash(db, { codeHash, blockZeroHash });
 
     expect(result).toBeTruthy();
     expect(result).toMatchObject(testCodeBundles[0]);

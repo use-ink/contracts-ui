@@ -1,4 +1,5 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+import { SubmittableResult } from '@polkadot/api';
 import BN from 'bn.js';
 import React, { ReactNode, ComponentType } from 'react';
 import {
@@ -14,7 +15,12 @@ import {
   AbiMessage,
   KeyringPair,
   RegistryError,
+  SubmittableExtrinsic,
+  BlueprintSubmittableResult,
+  CodeSubmittableResult
 } from './substrate';
+// import { SubmittableExtrinsic, BlueprintSubmittableResult, CodeSubmittableResult } from 'types';
+// import { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
 // import { UseFormField, Validation } from 'ui/hooks/useFormField';
 
 export type { BN };
@@ -29,9 +35,9 @@ export type UseState<T> = [T, React.Dispatch<T>];
 
 export interface CanvasState extends ChainProperties {
   endpoint: string;
-  keyring: Keyring | null;
+  keyring: Keyring;
   keyringStatus: string | null;
-  api: ApiPromise | null;
+  api: ApiPromise;
   error: unknown | null;
   status: Status;
 }
@@ -47,11 +53,32 @@ export type CanvasAction =
   | { type: 'KEYRING_ERROR' };
 
 export interface ChainProperties {
-  blockOneHash: string | null;
+  blockZeroHash: string | null;
   tokenDecimals: number;
   systemName: string | null;
   systemVersion: string | null;
   tokenSymbol: string;
+}
+
+export interface Transaction {
+  id: number;
+  isComplete?: boolean;
+  isError?: boolean;
+  isProcessing?: boolean;
+  isSuccess?: boolean;
+  extrinsic: SubmittableExtrinsic<'promise'>;
+  accountId: string;
+  isValid: (_: SubmittableResult) => boolean;
+  onSuccess?: (_: SubmittableResult) => Promise<void>;
+  onError?: () => void;
+}
+
+export interface TransactionsState {
+  txs: Transaction[];
+  process: (_: number) => Promise<void>;
+  queue: (extrinsic: Transaction['extrinsic'], accountId: Transaction['accountId'], onSuccess: Transaction['onSuccess'], onError: Transaction['onError'], isValid: Transaction['isValid']) => number
+  unqueue: (id: number) => void;
+  dismiss: (id: number) => void;
 }
 
 export interface DropdownOption<T> {
@@ -81,28 +108,6 @@ export interface OptionProps<T> {
   option: DropdownOption<T>;
   isPlaceholder?: boolean;
   isSelected?: boolean;
-}
-
-export interface InstantiateState2 {
-  isLoading: boolean;
-  isSuccess: boolean;
-  currentStep: number;
-  fromAddress?: string;
-  fromAccountName?: string;
-  codeHash?: string;
-  metadata?: Abi;
-  constructorName?: string;
-  constructorIndex?: number;
-  argValues?: Record<string, string>;
-  contract?: ContractPromise | null;
-  events?: EventRecord[];
-  error?: DispatchError;
-  contractName: string;
-  endowment?: number;
-  gas?: number;
-  file?: FileState;
-  salt?: string;
-  api?: ApiPromise | null;
 }
 
 export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>]
@@ -150,16 +155,16 @@ export interface Validation {
 
 export type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>
 
+export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;
+export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'>) => Promise<void>;
+
 export interface InstantiateState {
   accountId: UseFormField<string | null>;
   argValues: UseState<Record<string, unknown>>;
   codeHash?: string | null;
-  data: string | null;
   constructorIndex: UseFormField<number>;
   deployConstructor: AbiConstructor | null;
-  contract: UseState<ContractPromise | null>;
   endowment: UseBalance;
-  events: UseState<EventRecord[]>;
   isLoading: UseToggle;
   isSuccess: UseToggle;
   isUsingSalt: UseToggle;
@@ -167,11 +172,23 @@ export interface InstantiateState {
   metadata: UseMetadata;
   metadataFile: UseState<FileState | undefined>;
   name: UseFormField<string>;
-  onInstantiate: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
+  onError: () => void;
+  onFinalize?: () => void;
+  onUnFinalize?: () => void;
+  onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
+  onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   salt: UseFormField<string>;
   step: UseStepper;
   weight: UseWeight;
+  tx: SubmittableExtrinsic<'promise'> | null;
+  // setTx: React.Dispatch<SubmittableExtrinsic<'promise'> | null>;
+  txError: string | null;
+  // setTxError: React.Dispatch<string | null>;
 }
+
+export type InstantiateProps = InstantiateState
+  // createTx: () => SubmittableExtrinsic<'promise'> | null;
+
 
 export type InstantiateAction =
   | { type: 'INSTANTIATE' }

@@ -6,7 +6,7 @@ import { useDatabase } from 'ui/contexts';
 import { useToggleContractStar, useTopContracts } from 'ui/hooks';
 
 export function Contracts(): React.ReactElement | null {
-  const { refreshUser, user } = useDatabase();
+  const { refreshUserData, user } = useDatabase();
   const { data: contracts, isLoading, refresh } = useTopContracts();
   const toggleContractStar = useToggleContractStar();
 
@@ -21,7 +21,7 @@ export function Contracts(): React.ReactElement | null {
         toggleContractStar(address)
           .then(() => {
             refresh();
-            refreshUser();
+            refreshUserData();
           })
           .catch(console.error);
       };

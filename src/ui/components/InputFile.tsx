@@ -118,9 +118,11 @@ export function InputFile ({
 
   useEffect(
     (): void => {
-      setFile(propsFile);
+      if (file !== propsFile) {
+        setFile(propsFile);
+      }
     },
-    [propsFile]
+    [file, propsFile]
   );
 
   return file ? (

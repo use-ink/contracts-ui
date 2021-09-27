@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { Abi } from 'types';
+import { Abi, ContractPromise } from 'types';
 
 export const mockAbiFlipper = {
   constructors: [
@@ -55,3 +55,7 @@ export const mockAbiFlipper = {
     isMutating: true,
   }),
 } as unknown as Abi;
+
+export const mockContract = {
+  abi: mockAbiFlipper
+} as ContractPromise

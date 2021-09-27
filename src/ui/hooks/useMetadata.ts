@@ -1,5 +1,5 @@
 import { isWasm, u8aToString } from '@polkadot/util';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
 import { useCanvas } from 'ui/contexts/CanvasContext';
 
@@ -97,14 +97,14 @@ export function useMetadata (initialValue: AnyJson = null, options: Options & Ca
   const { isRequired = false, isWasmRequired = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() => deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
 
-  useEffect(
-    () => setState((state) =>
-      initialValue && state.source !== initialValue
-        ? deriveFromJson(initialValue, { isRequired, isWasmRequired }, api)
-        : state
-    ),
-    [initialValue, isRequired, isWasmRequired]
-  );
+  // useEffect(
+  //   () => setState((state) =>
+  //     initialValue && state.source !== initialValue
+  //       ? deriveFromJson(initialValue, { isRequired, isWasmRequired }, api)
+  //       : state
+  //   ),
+  //   [initialValue, state.source, isRequired, isWasmRequired]
+  // );
 
   const onChange = useCallback(
     (file: FileState): void => {

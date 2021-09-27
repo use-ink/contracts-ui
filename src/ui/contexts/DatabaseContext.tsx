@@ -1,84 +1,69 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import { PrivateKey } from '@textile/crypto';
-import { Database as DB } from '@textile/threaddb';
+// import { PrivateKey } from '@textile/crypto';
+// import { Database as DB } from '@textile/threaddb';
 import React, { HTMLAttributes, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useCanvas } from './CanvasContext';
 import { init } from 'db/util';
-import type { DbState, UserDocument } from 'types';
-import { dropExpiredDocuments, getUser } from 'db';
+import type { DbState } from 'types';
+import { dropExpiredDocuments, findMyContracts, getUser } from 'db';
 
 export const DbContext: React.Context<DbState> = React.createContext({} as unknown as DbState);
 export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
 export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 
+const INITIAL = { isDbReady: false } as unknown as DbState;
+
 export function DatabaseContextProvider({
   children,
 }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { status, blockOneHash, endpoint } = useCanvas();
-  const [db, setDb] = useState<DB>(new DB(''));
-  const [identity, setIdentity] = useState<PrivateKey | null>(null);
-  const [user, setUser] = useState<UserDocument | null>(null);
-  const [isDbReady, setIsDbReady] = useState(false);
+  const { status, blockZeroHash, endpoint } = useCanvas();
+
+  const [state, setState] = useState<DbState>(INITIAL);
 
   const isRemote = useMemo(
     (): boolean => false, // !isDevelopment
     []
   );
 
-  const resetLocalDb = useCallback(
-    async (): Promise<void> => {
-      if (!!blockOneHash && !isRemote) {
-        try {
-          await dropExpiredDocuments(db, blockOneHash);
-        } finally {
-          setIsDbReady(true);
-        }
-      }
-    },
-    [blockOneHash, isRemote]
-  )
-
-  // initial initialization
   useEffect((): void => {
-    async function createDb() {
-      try {
-        const [db, user, identity] = await init(endpoint, isRemote);
+    (status === 'READY' && !!blockZeroHash) && init(endpoint, isRemote)
+      .then(
+        async ([db, user, identity]): Promise<void> => {
+          console.log('init once');
+          if (!isRemote) {
+            await dropExpiredDocuments(db, blockZeroHash);
+          }
 
-        setDb(db);
-        setIdentity(identity);
-        setUser(user);
-
-        if (isRemote) {
-          setIsDbReady(true);
+          setState({ ...state, db, user, identity, isDbReady: true })
         }
-      } catch (e) {
+      )
+      .catch((e) => {
         console.error(e);
-      }
-    }
+      });
+  }, [blockZeroHash, endpoint, isRemote, status]);
 
-    createDb()
-      .then(resetLocalDb)
-      .catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endpoint, status]);
-
-  const refreshUser = useCallback(
+  const refreshUserData = useCallback(
     async (): Promise<void> => {
-      const user = await getUser(db, identity);
+      const user = await getUser(state.db, state.identity);
+      const myContracts = await findMyContracts(state.db, state.identity)
 
-      setUser(user);
+      setState({ ...state, user, myContracts });
     },
-    [db, identity]
+    [state.db, state.identity]
   );
 
-  const props = useMemo<DbState>(
-    () => ({ db, identity, isDbReady, refreshUser, user }),
-    [db, identity, isDbReady, user]
+  useEffect(
+    (): void => {
+      if (state.isDbReady && (!state.user || !state.myContracts)) {
+        refreshUserData().then().catch(console.error);
+      }
+    },
+    [refreshUserData, state.isDbReady, state.user, state.myContracts]
   );
 
   return (
-    <DbContext.Provider value={props}>
+    <DbContext.Provider value={{ ...state, refreshUserData }}>
       {children}
     </DbContext.Provider>
   );

@@ -5,30 +5,30 @@ import { getCodeBundleCollection, getContractCollection } from './util';
 
 export async function checkForExpiredDocuments(
   db: Database,
-  blockOneHash: string
+  blockZeroHash: string
 ): Promise<boolean> {
   const expiredCodes = await getCodeBundleCollection(db)
-    .find({ blockOneHash: { $ne: blockOneHash } })
+    .find({ blockZeroHash: { $ne: blockZeroHash } })
     .toArray();
   const expiredContracts = await getContractCollection(db)
-    .find({ blockOneHash: { $ne: blockOneHash } })
+    .find({ blockZeroHash: { $ne: blockZeroHash } })
     .toArray();
 
   return expiredCodes.length > 0 || expiredContracts.length > 0;
 }
 
-export async function dropExpiredDocuments(db: Database, blockOneHash: string): Promise<void> {
+export async function dropExpiredDocuments(db: Database, blockZeroHash: string): Promise<void> {
   await Promise.all(
     (
       await getCodeBundleCollection(db)
-        .find({ blockOneHash: { $ne: blockOneHash } })
+        .find({ blockZeroHash: { $ne: blockZeroHash } })
         .toArray()
     ).map(code => code.remove())
   );
   await Promise.all(
     (
       await getContractCollection(db)
-        .find({ blockOneHash: { $ne: blockOneHash } })
+        .find({ blockZeroHash: { $ne: blockZeroHash } })
         .toArray()
     ).map(contract => contract.remove())
   );

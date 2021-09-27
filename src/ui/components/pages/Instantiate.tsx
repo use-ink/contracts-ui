@@ -3,15 +3,7 @@ import { Link } from 'react-router-dom';
 import { Wizard } from '../instantiate';
 import { InstantiateContextProvider } from 'ui/contexts';
 
-export const Instantiate = () => {
-  // const { pathname } = useLocation();
-  // const pathEnd = pathname.split('/').pop();
-
-  // let codeHash;
-  // if (!!pathEnd && pathEnd !== 'new') {
-  //   codeHash = pathEnd;
-  // }
-
+export function Instantiate () {
   return (
     <div className="w-full max-w-6xl overflow-y-auto px-5 py-3 m-2">
       <div className="grid md:grid-cols-12 gap-5">

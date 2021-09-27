@@ -16,7 +16,7 @@ export async function findTopCodeBundles(
 
     return Promise.all(
       codeBundles.map(async (codeBundle) => {
-        const instances = (await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()).length;
+        const instances = (await getContractCollection(db).find({ codeHash: codeBundle.codeHash }).toArray()).length;
         
         return {
           ...(codeBundle as CodeBundleDocument),
@@ -66,9 +66,9 @@ export async function findMyCodeBundles(
 
 export async function findCodeBundleByHash(
   db: Database,
-  { codeHash, blockOneHash }: CodeBundleQuery
+  { codeHash, blockZeroHash }: CodeBundleQuery
 ): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ blockOneHash: blockOneHash || undefined, codeHash })) || null;
+  return (await getCodeBundleCollection(db).findOne({ blockZeroHash: blockZeroHash || undefined, codeHash })) || null;
 }
 
 export async function findCodeBundleById(
@@ -98,7 +98,7 @@ export async function searchForCodeBundle(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockOneHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
+  { abi, blockZeroHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
     if (!creator) {
@@ -115,7 +115,7 @@ export async function createCodeBundle(
 
     const newCode = getCodeBundleCollection(db).create({
       abi,
-      blockOneHash,
+      blockZeroHash,
       codeHash,
       creator,
       genesisHash,

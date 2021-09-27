@@ -2,12 +2,12 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { customRender, getMockCanvasState, getMockDbState, mockAbiFlipper } from 'test-utils';
+import { customRender, getMockCanvasState, getMockDbState, mockContract } from 'test-utils';
 import { InteractTab } from 'ui/components';
 import { CanvasState, DbState } from 'types';
 
 describe('Contract Interact Tab', () => {
-  const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
+  // const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
 
   const mockCall = jest.fn();
 
@@ -24,10 +24,7 @@ describe('Contract Interact Tab', () => {
   test('renders correctly with initial values', () => {
     const { getByText } = customRender(
       <InteractTab
-        abi={mockAbiFlipper}
-        contractAddress={mockAddr}
-        callFn={mockCall}
-        isActive={true}
+        contract={mockContract}
       />,
       {
         ...mockCanvasState,
@@ -43,10 +40,7 @@ describe('Contract Interact Tab', () => {
   test('call button executes ', () => {
     const { getByText } = customRender(
       <InteractTab
-        abi={mockAbiFlipper}
-        contractAddress={mockAddr}
-        callFn={mockCall}
-        isActive={true}
+        contract={mockContract}
       />,
       {
         ...mockCanvasState,

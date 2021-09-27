@@ -35,7 +35,7 @@ export function useQuery<T>(query: () => Promise<T | null>): UseQuery<T> {
 
   useEffect((): void => {
     fetch();
-  }, []);
+  }, [fetch]);
 
   return { data, isLoading, isValid, refresh, updated };
 }

@@ -14,7 +14,7 @@ const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
 const DEFAULT_DECIMALS = 12;
 
 const NULL_CHAIN_PROPERTIES = {
-  blockOneHash: null,
+  blockZeroHash: null,
   systemName: null,
   systemVersion: null,
   tokenDecimals: DEFAULT_DECIMALS,
@@ -24,23 +24,21 @@ const NULL_CHAIN_PROPERTIES = {
 const INIT_STATE: CanvasState = {
   ...NULL_CHAIN_PROPERTIES,
   endpoint: LOCAL_NODE,
-  keyring: null,
   keyringStatus: null,
-  api: null,
   error: null,
   status: 'CONNECT_INIT',
-};
+} as unknown as CanvasState;
 
 async function getChainProperties (api: ApiPromise): Promise<ChainProperties> {
-  const [chainProperties, blockOneHash, systemName, systemVersion] = await Promise.all([
+  const [chainProperties, blockZeroHash, systemName, systemVersion] = await Promise.all([
     api.rpc.system.properties(),
-    api.query.system.blockHash(1),
+    api.query.system.blockHash(0),
     api.rpc.system.name(),
     api.rpc.system.version(),
   ]);
   
   return {
-    blockOneHash: blockOneHash.toString(),
+    blockZeroHash: blockZeroHash.toString(),
     systemName: systemName.toString(),
     systemVersion: systemVersion.toString(),
     tokenDecimals: chainProperties.tokenDecimals.isSome
@@ -76,7 +74,7 @@ export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action)
       return { ...state, keyring: action.payload, keyringStatus: 'READY' };
 
     case 'KEYRING_ERROR':
-      return { ...state, keyring: null, keyringStatus: 'ERROR' };
+      return { ...state, keyringStatus: 'ERROR' };
 
     default:
       throw new Error(`Unknown action type`);

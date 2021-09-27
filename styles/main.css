@@ -7,6 +7,7 @@
 @import './tabs.css';
 @import './collapsible.css';
 @import './call-results.css';
+@import './instantiate.css';
 
 @tailwind components;
 @tailwind utilities;

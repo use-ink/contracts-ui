@@ -1,7 +1,7 @@
 import React from 'react';
 import { encodeTypeDef } from '@polkadot/types/create';
 import { AbiParam } from "types";
-import { useCanvas } from 'ui/contexts';
+import { useCanvas } from 'ui/contexts/CanvasContext';
 import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,7 +27,7 @@ export function ArgSignature ({ arg: { name, type }, children, className, value,
         <span>
           {value
             ? <b>{truncate(value)}</b>
-            : encodeTypeDef(api!.registry, type)
+            : encodeTypeDef(api.registry, type)
           }
         </span>
         {children}

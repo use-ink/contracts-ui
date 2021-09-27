@@ -40,7 +40,7 @@ export async function initDb(rpcUrl: string): Promise<DB> {
         { name: 'Contract', schema: contract },
         { name: 'CodeBundle', schema: codeBundle }
       ).open(version);
-    
+
       window.localStorage.setItem(DB_VERSION_KEY, version.toString());
       isReady = true;
       return db;

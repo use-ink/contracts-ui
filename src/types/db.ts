@@ -21,7 +21,7 @@ export interface UserDocument extends Document {
 
 export interface CodeBundleDocument extends Document {
   abi?: Record<string, unknown> | null;
-  blockOneHash?: string;
+  blockZeroHash?: string;
   codeHash: string;
   creator: string;
   date: string;
@@ -37,8 +37,8 @@ export interface CodeBundleDocument extends Document {
 export interface ContractDocument extends Document {
   abi: Record<string, unknown>;
   address: string;
-  blockOneHash?: string;
-  codeBundleId: string;
+  blockZeroHash?: string;
+  codeHash: string;
   creator: string;
   date: string;
   genesisHash: string;
@@ -58,7 +58,7 @@ export interface UseQuery<T> {
 
 export interface CodeBundleQuery {
   codeHash: string;
-  blockOneHash?: string | null;
+  blockZeroHash?: string | null;
 }
 
 export interface Starred<T> {
@@ -74,7 +74,8 @@ export interface UserArtifacts<T> {
 export interface DbState {
   db: Database;
   user: UserDocument | null;
-  refreshUser: () => void;
+  myContracts: MyContracts | null;
+  refreshUserData: () => void;
   identity: PrivateKey | null;
   isDbReady: boolean;
 }

@@ -9,7 +9,7 @@ import type { CodeBundleDocument, UseQuery } from 'types';
 type ReturnType = [boolean, CodeBundleDocument | null];
 
 export function useCodeBundle(codeHash?: string): UseQuery<[boolean, CodeBundleDocument | null]> {
-  const { api, blockOneHash } = useCanvas();
+  const { api, blockZeroHash } = useCanvas();
   const { db } = useDatabase();
 
   const query = useCallback(
@@ -18,17 +18,17 @@ export function useCodeBundle(codeHash?: string): UseQuery<[boolean, CodeBundleD
         return Promise.resolve([false, null]);
       }
 
-      const isOnChain = (await api!.query.contracts.codeStorage(codeHash)).isSome;
+      const isOnChain = (await api.query.contracts.codeStorage(codeHash)).isSome;
 
       if (!isOnChain) {
         return [false, null];
       }
 
-      const document = await findCodeBundleByHash(db, { blockOneHash, codeHash });
+      const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
 
       return [true, document];
     },
-    [codeHash, findCodeBundleByHash]
+    [codeHash]
   );
 
   return useQuery(query);

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import BN from 'bn.js';
-import { compactAddLength, u8aToU8a, hexToU8a, isHex, u8aToString } from '@polkadot/util';
+import { compactAddLength, u8aToU8a, hexToU8a, isHex, u8aToString, isNumber, BN_TEN } from '@polkadot/util';
 import { createTypeUnsafe } from '@polkadot/types';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import {
@@ -23,7 +23,6 @@ import {
   TypeDef,
 } from 'types';
 import { MessageSignature } from 'ui/components/MessageSignature';
-import { toSats } from 'ui/hooks/useBalance';
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {
@@ -95,8 +94,13 @@ export function createConstructorOptions(data: AbiConstructor[]): DropdownOption
 }
 
 
-export function createMessageOptions(data: AbiMessage[]): DropdownOption<AbiMessage>[] {
-  return data.map(c => ({ name: c.method, value: c }));
+export function createMessageOptions(data?: AbiMessage[]): DropdownOption<AbiMessage>[] {
+  return (data || []).map((message) => ({
+    name: (
+      <MessageSignature message={message} />
+    ),
+    value: message
+  }));
 }
 
 export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOption<string>[] {
@@ -125,6 +129,43 @@ export function convertToUint8Array(result: ArrayBuffer): Uint8Array {
 }
 
 export const NOOP = (): void => undefined;
+
+export function fromBalance (value: BN | null): string {
+  if (!value) {
+    return '';
+  }
+
+  return value.toString();
+}
+
+export function toBalance (api: ApiPromise, value: string | number): BN {
+  const asString = isNumber(value) ? value.toString() : value;
+  const siPower = new BN(api.registry.chainDecimals[0]);
+
+  const isDecimalValue = /^(\d+)\.(\d+)$/.exec(asString);
+
+  if (isDecimalValue) {
+
+    const div = new BN(asString.replace(/\.\d*$/, ''));
+    const modString = asString.replace(/^\d+\./, '').substr(0, api.registry.chainDecimals[0]);
+    const mod = new BN(modString);
+
+    return div
+      .mul(BN_TEN.pow(siPower))
+      .add(mod.mul(BN_TEN.pow(new BN(siPower.subn(modString.length)))));
+  } else {
+    return new BN(asString.replace(/[^\d]/g, '')).mul(BN_TEN.pow(siPower));
+  }
+}
+
+export function toSats (api: ApiPromise, balance: BN): BN {
+  return balance.mul(BN_TEN.pow(new BN(api.registry.chainDecimals)));
+}
+
+export function fromSats (api: ApiPromise, sats: BN): BN {
+  return sats.div(BN_TEN.pow(new BN(api.registry.chainDecimals)));
+}
+
 
 export function unitOptions() {
   return [
@@ -168,11 +209,9 @@ export function convertToNumber(value: string) {
 export function transformUserInput(api: ApiPromise, messageArgs: AbiParam[], values?: Record<string, unknown>) {
   return messageArgs.map(({ name, type: { type } }) => {
     const value = values ? values[name] : null;
-    console.log(values);
-    console.log(value);
 
     if (type === 'Balance') {
-      return toSats(api, value as BN);
+      return api.registry.createType('Balance', value);
     }
 
     return value || null;

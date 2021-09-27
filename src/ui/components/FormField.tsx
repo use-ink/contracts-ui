@@ -30,7 +30,7 @@ export function FormField ({ children, className, id, isError, isSuccess, isWarn
   )
 
   return (
-    <div className={classes('form-field', 'mb-5 last-of-type:mb-0', className)}>
+    <div className={classes('form-field', className)}>
       {label && (
         <label
           className="block mb-1.5 text-sm font-semibold dark:text-white"
@@ -53,4 +53,12 @@ export function FormField ({ children, className, id, isError, isSuccess, isWarn
       )}
     </div>
   )
+}
+
+export function Form ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={classes('mb-10', className)} {...props}>
+      {children}
+    </div>
+  );
 }

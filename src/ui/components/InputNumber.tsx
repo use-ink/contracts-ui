@@ -23,8 +23,9 @@ export function InputNumber ({ children, onChange: _onChange, value = BN_ZERO, .
   return (
     <Input
       onChange={onChange}
+      onFocus={(e) => e.target.select()}
       type="number"
-      value={value.toString()}
+      value={value ? value.toString() : ''}
       {...props}
     >
       {children}

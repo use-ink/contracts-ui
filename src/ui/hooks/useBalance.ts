@@ -1,43 +1,10 @@
-import { BN_ONE, BN_TEN, BN_TWO, BN_ZERO, isBn, isNumber } from "@polkadot/util";
+import { BN_ONE, BN_TWO, BN_ZERO, isBn } from "@polkadot/util";
 import BN from "bn.js";
 import React from "react";
 import { useFormField } from "./useFormField";
-import type { ApiPromise, UseBalance, Validation } from "types";
+import type { UseBalance, Validation } from "types";
 import { useCanvas } from "ui/contexts/CanvasContext";
-
-export function fromBalance (value: BN | null): string {
-  if (!value) {
-    return '';
-  }
-
-  return value.toString();
-}
-
-export function toBalance (value: string | number, api: ApiPromise): BN {
-  const asString = isNumber(value) ? value.toString() : value;
-
-  const isDecimalValue = /^(\d+)\.(\d+)$/.exec(asString);
-
-  if (isDecimalValue) {
-
-    const div = new BN(asString.replace(/\.\d*$/, ''));
-    const modString = asString.replace(/^\d+\./, '').substr(0, api.registry.chainDecimals[0]);
-    const mod = new BN(modString);
-
-    return div
-      .add(mod.mul(BN_TEN.pow(BN_ZERO.subn(modString.length))));
-  } else {
-    return new BN(asString.replace(/[^\d]/g, ''));
-  }
-}
-
-export function toSats (api: ApiPromise, balance: BN): BN {
-  return balance.mul(BN_TEN.pow(new BN(api.registry.chainDecimals)));
-}
-
-export function fromSats (api: ApiPromise, sats: BN): BN {
-  return sats.div(BN_TEN.pow(new BN(api.registry.chainDecimals)));
-}
+import { toBalance, toSats } from "canvas/util";
 
 type BitLength = 8 | 16 | 32 | 64 | 128 | 256;
 
@@ -99,7 +66,7 @@ function validate (value: BN | null | undefined, { bitLength = DEFAULT_BITLENGTH
 export function useBalance (initialValue: BN | string | number = 0, isZeroable = false, maxValue?: BN ): UseBalance {
   const { api } = useCanvas();
   const balance = useFormField<BN | null | undefined>(
-    isBn(initialValue) ? initialValue : toBalance(initialValue, api!),
+    isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue),
     (value) => validate(value, { isZeroable, maxValue })
   );
 

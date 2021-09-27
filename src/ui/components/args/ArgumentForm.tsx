@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArgSignature } from '../ArgSignature';
-import { FormField } from '../FormField';
+import { Form, FormField } from '../FormField';
 import { findComponent } from './findComponent';
 import type { AbiParam } from 'types';
 
@@ -12,7 +12,7 @@ interface Props {
 
 export function ArgumentForm ({ args, argValues, setArgValues }: Props) {
   return (
-    <>
+    <Form>
       {args.map((arg) => {
         const Component = findComponent(arg.type);
 
@@ -40,6 +40,6 @@ export function ArgumentForm ({ args, argValues, setArgValues }: Props) {
           </FormField>
         );
       })}
-    </>
+    </Form>
   );
 };

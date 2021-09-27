@@ -6,7 +6,7 @@ import { mockAbiFlipper } from 'test-utils';
 
 describe('Contract metadata tab', () => {
   test('renders docs for each mess', () => {
-    const { container } = render(<MetadataTab isActive={true} abi={mockAbiFlipper} />);
+    const { container } = render(<MetadataTab abi={mockAbiFlipper} />);
     const { constructors, messages } = mockAbiFlipper;
     const panels = container.getElementsByClassName('collapsible-panel');
     expect(panels.length).toEqual(constructors.length + messages.length);

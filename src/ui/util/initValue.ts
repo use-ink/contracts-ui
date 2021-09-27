@@ -7,7 +7,6 @@ import { BN_ZERO, isBn } from '@polkadot/util';
 const warnList: string[] = [];
 
 export function getInitValue (registry: Registry, def: TypeDef): unknown {
-  console.log(def);
   if (def.info === TypeDefInfo.Vec) {
     return [getInitValue(registry, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.Tuple) {

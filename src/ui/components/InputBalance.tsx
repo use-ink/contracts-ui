@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import BN from 'bn.js';
 import { BN_ZERO } from '@polkadot/util';
 import { Input } from './Input';
 import { SimpleSpread } from 'types';
 import { useCanvas } from 'ui/contexts';
-import { fromBalance, toBalance } from 'ui/hooks/useBalance';
+import { fromBalance, fromSats, toBalance } from 'canvas/util';
 
 type Props =  SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -17,9 +17,15 @@ type Props =  SimpleSpread<
 function InputBalanceBase ({ children, value = BN_ZERO, onChange: _onChange, ...props }: Props) {
   const { api, tokenSymbol } = useCanvas();
 
+  const [stringValue, setStringValue] = useState(fromBalance(fromSats(api, value || BN_ZERO)));
+
   const onChange = useCallback(
     (value: string): void => {
-      _onChange(toBalance(value, api!))
+      setStringValue(value);
+
+      const bn = toBalance(api, value);
+
+      _onChange(bn)
     },
     []
   )
@@ -29,8 +35,9 @@ function InputBalanceBase ({ children, value = BN_ZERO, onChange: _onChange, ...
       <div className="relative rounded-md shadow-sm">
         <Input
           onChange={onChange}
+          onFocus={(e) => e.target.select()}
           pattern="^\d*\.?\d*?$"
-          value={fromBalance(value)}
+          value={stringValue}
           {...props}
         >
           <div className="absolute inset-y-0 right-0 flex items-center">

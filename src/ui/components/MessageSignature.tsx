@@ -3,7 +3,7 @@ import { encodeTypeDef } from '@polkadot/types/create';
 import { DatabaseIcon } from '@heroicons/react/outline';
 import { ArgSignature } from './ArgSignature';
 import type { AbiMessage } from 'types';
-import { useCanvas } from 'ui/contexts';
+import { useCanvas } from 'ui/contexts/CanvasContext';
 import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,13 +35,13 @@ export function MessageSignature ({ className, message: { args, isConstructor, i
           :
           {' '}
           <span>
-            {encodeTypeDef(api!.registry, returnType)}
+            {encodeTypeDef(api.registry, returnType)}
           </span>
         </>
       )}
       {isMutating && (
         <>
-          <DatabaseIcon className="ml-2 w-2 h-2 text-yellow-400" />
+          <DatabaseIcon className="inline-block ml-2 w-4 h-4 text-yellow-400" />
         </>
       )}
     </div>

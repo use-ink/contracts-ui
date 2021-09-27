@@ -1,12 +1,13 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import React, { useState, useContext, useCallback, useMemo } from 'react';
-import BN from 'bn.js';
 import { useHistory, useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { AbiConstructor } from '@polkadot/api-contract/types';
-import { isHex, isNumber, u8aToHex } from '@polkadot/util';
-import { AnyJson, BlueprintPromise, ContractPromise, EventRecord, FileState, InstantiateState } from 'types';
+import { isHex, isNumber } from '@polkadot/util';
+import { useCanvas } from './CanvasContext';
+import { useDatabase } from './DatabaseContext';
+import { AnyJson, BlueprintPromise, ContractPromise, FileState, InstantiateProps, InstantiateState, SubmittableExtrinsic, OnInstantiateSuccess$Code, OnInstantiateSuccess$Hash, CodeSubmittableResult, BlueprintSubmittableResult } from 'types';
 import { useCodeBundle } from 'ui/hooks/useCodeBundle';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useMetadata } from 'ui/hooks/useMetadata';
@@ -17,21 +18,29 @@ import { useStepper } from 'ui/hooks/useStepper';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
+import { createInstantiateTx, onInsantiateFromHash, onInstantiateFromCode } from 'canvas/instantiate';
 
-export const InstantiateContext = React.createContext({} as unknown as InstantiateState);
+export const InstantiateContext = React.createContext({} as unknown as InstantiateProps);
 
-export function toBalance(value: number | BN | string, decimals: number): BN {
-  return new BN(value).muln(10 ^ decimals);
+type TxState = [SubmittableExtrinsic<'promise'> | null, OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash, string | null];
+
+const NOOP = () => Promise.resolve();
+
+export function isResultValid ({ contract }: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
+  return !!contract;
 }
 
-export function InstantiateContextProvider ({ children }: React.PropsWithChildren<Partial<InstantiateState>>) {
+export function InstantiateContextProvider ({ children }: React.PropsWithChildren<Partial<InstantiateProps>>) {
   const history = useHistory();
   const { codeHash } = useParams<{codeHash: string}>();
+  const apiState = useCanvas();
+  const dbState = useDatabase();
   const codeBundleQuery = useCodeBundle(codeHash || undefined);
 
   const [, codeBundle] = codeBundleQuery.data || [false, null];
 
   const step = useStepper();
+  const [, , , setStep] = step;
   const isLoading = useToggle(true);
   const isSuccess = useToggle(false);
 
@@ -93,70 +102,67 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   );
   const argValues = useArgValues(deployConstructor?.args || []);
 
-  const data = useMemo(
-    (): string | null => {
-      if (deployConstructor) {
-        try {
-          const data = deployConstructor.toU8a(
-            deployConstructor.args.map(({ name }) => {
-              return argValues[0][name];
-            })
-          );
-
-          return u8aToHex(data.slice(1));
-        } catch (e) {
-          return null;
-        }
-      }
-      return null;
-    },
-    [deployConstructor, argValues]
-  )
-
-  // const [, setArgValues] = argValues;
-
-  // useEffect(
-  //   (): void => {
-  //     deployConstructor?.args && setArgValues(createEmptyValues(deployConstructor?.args))
-  //   },
-  //   [deployConstructor?.args]
-  // )
-
-  const events = useState<EventRecord[]>([]);
-  const contract = useState<ContractPromise | null>(null);
-
-  const onInstantiate = useCallback(
+  const onSuccess = useCallback(
     (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
       history.push(`/contract/${contract.address}`);
+
+      dbState.refreshUserData();
     },
-    []
+    [dbState.refreshUserData]
   );
+
+  const [[tx, onInstantiate, txError], setTx] = useState<TxState>([null, NOOP, null]);
 
   const state: InstantiateState = {
     accountId,
     codeHash,
     constructorIndex,
-    data,
     deployConstructor,
-    contract,
     argValues,
     endowment,
-    events,
     isLoading,
     isSuccess,
     isUsingSalt,
     isUsingStoredMetadata,
     metadata,
     metadataFile,
+    onError: NOOP,
+    onSuccess,
     name,
-    onInstantiate,
     salt,
     step,
     weight
+  } as unknown as InstantiateState;
+
+  function onFinalize () {
+    try {
+      const tx = createInstantiateTx(apiState.api, state);
+
+      const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(apiState, dbState, state);
+
+      setTx([tx, onInstantiate, null]);
+      setStep(2);
+    } catch (e){
+      setTx([null, NOOP, 'Error creating transaction']);
+    }
   }
 
+  function onUnFinalize () {
+    setTx([null, NOOP, null]);
+    setStep(1);
+  }
+
+  const value = {
+    ...state,
+    onFinalize,
+    onUnFinalize,
+    onInstantiate,
+    tx,
+    txError,
+  };
+
   return (
-    <InstantiateContext.Provider value={state}>
+    <InstantiateContext.Provider value={value}>
       {children}
     </InstantiateContext.Provider>
   );

@@ -1,19 +1,22 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import { useCallback } from 'react';
+// import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { useQuery } from './useQuery';
 import { findMyContracts } from 'db/queries';
 
 import type { MyContracts, UseQuery } from 'types';
+import { useCallback } from 'react';
 
 export function useMyContracts(): UseQuery<MyContracts> {
   const { db, identity } = useDatabase();
 
-  const query = useCallback((): Promise<MyContracts | null> => {
-    console.log('asdf');
-    return findMyContracts(db, identity);
-  }, []);
+  const query = useCallback(
+    (): Promise<MyContracts | null> => {
+      return findMyContracts(db, identity);
+    },
+    [db, identity]
+  );
 
   return useQuery(query);
 }

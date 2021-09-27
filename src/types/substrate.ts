@@ -27,6 +27,7 @@ export type { SubmittableExtrinsic } from '@polkadot/api/types';
 export { Bytes, StorageKey, Option, Raw } from '@polkadot/types';
 export { Keyring } from '@polkadot/ui-keyring';
 export { Abi, ContractPromise, BlueprintPromise } from '@polkadot/api-contract';
+export { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
 export { ApiPromise } from '@polkadot/api';
 
 export type StorageEntry = [StorageKey<[CodeHash]>, Option<PrefabWasmModule>];

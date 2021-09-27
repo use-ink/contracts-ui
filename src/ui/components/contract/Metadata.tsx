@@ -3,22 +3,19 @@ import { MessageDocs } from './MessageDocs';
 import { Abi } from 'types';
 
 interface Props {
-  isActive: boolean;
-  abi: Abi;
+  abi?: Abi;
 }
-export const MetadataTab = ({ isActive, abi: { constructors, messages } }: Props) => {
-  if (!isActive) return null;
+export const MetadataTab = ({ abi }: Props) => {
+
+  if (!abi) return null;
 
   return (
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
-        {constructors.concat(messages).map(({ identifier, docs, isConstructor, args }) => (
+        {abi.constructors.concat(abi.messages).map((message) => (
           <MessageDocs
-            key={identifier}
-            title={identifier}
-            docs={docs}
-            isConstructor={isConstructor}
-            args={args}
+            key={message.identifier}
+            message={message}
           />
         ))}
       </div>

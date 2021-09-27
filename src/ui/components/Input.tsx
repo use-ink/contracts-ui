@@ -21,6 +21,7 @@ export function Input ({ children, className, isDisabled = false, isError = fals
     <div className={classes(isError && 'isError', className)}>
       <input
         onChange={onChange}
+        onFocus={props.onFocus}
         type="text"
         value={value || ''}
         className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm"

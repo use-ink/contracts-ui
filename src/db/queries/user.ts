@@ -20,8 +20,6 @@ export async function findUser(
 export async function getUser(db: Database, identity: PrivateKey | null, { creator, name, email }: Partial<UserDocument> = {}): Promise<UserDocument | null> {
   const existing = await findUser(db, identity);
 
-  console.log(existing, identity);
-
   if (!identity) {
     // create generic user identity to authorize remote etc.
     return null;
