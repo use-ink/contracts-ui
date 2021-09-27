@@ -66,7 +66,6 @@ export const InteractTab = ({ contract }: Props) => {
             </Dropdown>
             {argValues && (
               <ArgumentForm
-                key={`args-${message.value?.method}`}
                 args={message.value?.args || []}
                 setArgValues={setArgValues}
                 argValues={argValues}

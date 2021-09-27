@@ -26,7 +26,7 @@ export function ArgumentForm ({ args, argValues, setArgValues }: Props) {
         return (
           <FormField
             className="ml-6 mt-2 mb-4"
-            key={`${name}`}
+            key={`${arg.name}`}
             label={
               <ArgSignature arg={arg} className="dark:text-gray-300" />
             }
