@@ -11,9 +11,9 @@ import {
   KeyringPair,
   AnyJson,
   RegistryError,
-} from './substrate';
+} from '../substrate';
 
-export type VoidFn = () => void;
+export * from './hooks';
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 

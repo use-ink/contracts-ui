@@ -2,7 +2,7 @@
 
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
-import type { VoidFn } from './app';
+import type { VoidFn } from './substrate';
 
 export type { Collection, Database, PrivateKey }
 

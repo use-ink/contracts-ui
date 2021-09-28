@@ -21,7 +21,7 @@ export type {
 export type { KeyringPair } from '@polkadot/keyring/types';
 export type { AbiMessage, ContractCallOutcome, AbiParam } from '@polkadot/api-contract/types';
 export type { ContractQuery, ContractTx } from '@polkadot/api-contract/base/types';
-export type { SubmittableExtrinsic } from '@polkadot/api/types';
+export type { SubmittableExtrinsic, VoidFn } from '@polkadot/api/types';
 
 // classes
 export { Bytes, StorageKey, Option, Raw } from '@polkadot/types';
