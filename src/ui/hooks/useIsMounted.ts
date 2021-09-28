@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 export function useIsMounted (): boolean {
-  const isMounted = useRef(false);
+  const isMountedRef = useRef(false);
 
   useEffect((): () => void => {
-    isMounted.current = true;
+    isMountedRef.current = true;
 
     return (): void => {
-      isMounted.current = false;
+      isMountedRef.current = false;
     };
   }, []);
 
-  return isMounted.current;
+  return isMountedRef.current;
 }
