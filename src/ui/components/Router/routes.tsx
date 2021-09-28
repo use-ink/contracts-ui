@@ -2,14 +2,23 @@ import React from 'react';
 import {
   Homepage,
   Contract,
-  Instantiate,
+  Instantiate as InstantiatePage,
   AddContract,
 } from '../pages';
 import { SelectCodeHash } from '../pages/SelectCodeHash';
+import { InstantiateContextProvider } from 'ui/contexts';
+
+function Instantiate () {
+  return (
+    <InstantiateContextProvider>
+      <InstantiatePage />
+    </InstantiateContextProvider>
+  )
+}
 
 export const routes = [
   {
-    path: `/contract/:addr/:activeTab?`,
+    path: `/contract/:address/:activeTab?`,
     component: Contract,
     exact: true,
     fallback: <div> Loading... </div>,
@@ -27,13 +36,13 @@ export const routes = [
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate/codes',
+    path: '/instantiate/hash',
     component: SelectCodeHash,
     exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: '/instantiate/:codeHash',
+    path: '/instantiate/hash/:codeHash',
     component: Instantiate,
     exact: false,
     fallback: <div> Loading... </div>,

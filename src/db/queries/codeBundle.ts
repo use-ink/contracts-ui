@@ -98,7 +98,7 @@ export async function searchForCodeBundle(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockZeroHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment().format() }: Partial<CodeBundleDocument>
+  { abi, blockZeroHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment.utc().format() }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
     if (!creator) {

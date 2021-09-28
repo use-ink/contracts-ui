@@ -1,6 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import React, { useState, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useContext, useCallback, useMemo, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { AbiConstructor } from '@polkadot/api-contract/types';
@@ -26,6 +26,10 @@ type TxState = [SubmittableExtrinsic<'promise'> | null, OnInstantiateSuccess$Cod
 
 const NOOP = () => Promise.resolve();
 
+export const CONTRACT_FILE = 0;
+export const DEPLOYMENT_INFO = 1;
+export const FINALIZE = 2;
+
 export function isResultValid ({ contract }: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
   return !!contract;
 }
@@ -35,14 +39,17 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const { codeHash } = useParams<{codeHash: string}>();
   const apiState = useCanvas();
   const dbState = useDatabase();
+
   const codeBundleQuery = useCodeBundle(codeHash || undefined);
 
   const [, codeBundle] = codeBundleQuery.data || [false, null];
+  const isLoading = useMemo(
+    () => !!codeHash && codeBundleQuery.isLoading,
+    [codeHash, codeBundleQuery.isLoading]
+  );
 
   const step = useStepper();
   const [, , , setStep] = step;
-  const isLoading = useToggle(true);
-  const isSuccess = useToggle(false);
 
   const isUsingStoredMetadata = useToggle(!!codeBundle);
 
@@ -54,35 +61,17 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const { onChange: setName } = name;
   const [, setMetadataFile] = metadataFile;
 
-  const onMetadataChange = useCallback(
-    (newFile: FileState) => {
-      setMetadataFile(newFile);
-      if (newFile.name && newFile.name.length > 0 && (!name.value || name.value === '')) {
-        setName(newFile.name.replace(/\.contract$/, ''));
-      }
-    },
-    [name.value]
-  );
-
-  const onMetadataRemove = useCallback(
-    () => {
-      setMetadataFile(undefined);
-    },
-    []
-  );
-
   const metadata = useMetadata(
     codeBundle?.abi as AnyJson || null,
     {
       isRequired: true,
       isWasmRequired: !codeBundle || !isUsingStoredMetadata,
-      onChange: onMetadataChange,
-      onRemove: onMetadataRemove
+      onChange: setMetadataFile,
     }
   );
 
   const constructorIndex = useFormField(0);
-  const endowment = useBalance(1000);
+  const endowment = useBalance(10000);
   const weight = useWeight();
   const isUsingSalt = useToggle();
   const salt = useFormField<string>(
@@ -113,6 +102,24 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
 
   const [[tx, onInstantiate, txError], setTx] = useState<TxState>([null, NOOP, null]);
 
+  useEffect(
+    (): void => {
+      if (metadata.value?.project.contract.name && (!name.value || name.value === '')) {
+        setName(metadata.value?.project.contract.name.toString());
+      }
+    },
+    [metadata.value, name.value]
+  )
+
+  useEffect(
+    (): void => {
+      if (codeHash && !codeBundleQuery.isValid) {
+        history.replace('/instantiate/hash');
+      }
+    },
+    [codeHash, codeBundleQuery.isValid]
+  )
+
   const state: InstantiateState = {
     accountId,
     codeHash,
@@ -121,7 +128,6 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
     argValues,
     endowment,
     isLoading,
-    isSuccess,
     isUsingSalt,
     isUsingStoredMetadata,
     metadata,
@@ -141,7 +147,7 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
       const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(apiState, dbState, state);
 
       setTx([tx, onInstantiate, null]);
-      setStep(2);
+      setStep(FINALIZE);
     } catch (e){
       setTx([null, NOOP, 'Error creating transaction']);
     }
@@ -149,7 +155,7 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
 
   function onUnFinalize () {
     setTx([null, NOOP, null]);
-    setStep(1);
+    setStep(DEPLOYMENT_INFO);
   }
 
   const value = {
@@ -166,7 +172,6 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
       {children}
     </InstantiateContext.Provider>
   );
-
 };
 
 export const useInstantiate = () => useContext(InstantiateContext);

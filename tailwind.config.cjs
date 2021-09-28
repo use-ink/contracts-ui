@@ -3,7 +3,14 @@ const process = require('process');
 
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.{js,ts,jsx,tsx}'],
+  purge: {
+    content: ['./src/**/*.{js,ts,jsx,tsx}'],
+    safelist: [
+      'dark:border-blue-500',
+      'border-blue-500',
+      'border-gray-600'
+    ]
+  },
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {

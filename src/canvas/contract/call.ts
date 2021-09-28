@@ -9,6 +9,8 @@ import {
   RegistryError,
 } from 'types';
 
+let nextId = 0;
+
 export function prepareContractTx(
   tx: ContractTx<'promise'>,
   options: { gasLimit: number; salt: Uint8Array; value: number },
@@ -42,6 +44,8 @@ export async function call({
   const transformed = transformUserInput(api, message.args, argValues);
 
   const callResult: CallResult = {
+    id: ++nextId,
+    isComplete: false,
     data: '',
     log: [],
     message,
@@ -49,7 +53,7 @@ export async function call({
   };
 
   if (keyringPair) {
-    dispatch({ type: 'CALL_INIT' });
+    dispatch({ type: 'CALL_INIT', payload: callResult });
     if (message.isMutating || message.isPayable) {
       const tx = prepareContractTx(
         contract.tx[message.method],

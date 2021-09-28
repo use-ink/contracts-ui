@@ -24,7 +24,9 @@ export const QueryResult = ({
             message={message}
           />
         </div>
-        <div className="bg-elevation-1 p-2 rounded-sm text-mono">{`${data}`}</div>
+        <div className="bg-elevation-1 p-2 rounded-sm text-mono">
+          {`${data}`}
+        </div>
       </div>
       {error && (
         <ReactMarkdown

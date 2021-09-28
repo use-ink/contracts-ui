@@ -4,7 +4,8 @@ import remarkGfm from 'remark-gfm';
 import { ChevronUpIcon } from '@heroicons/react/solid';
 import { Disclosure } from '@headlessui/react';
 import { MessageSignature } from '../MessageSignature';
-import { CallResult } from 'types';
+import { Spinner } from '../Spinner';
+import type { CallResult } from 'types';
 
 interface Props {
   result: CallResult;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export const TransactionResult = ({
-  result: { time, message, blockHash, info, error, log },
+  result: { isComplete, time, message, blockHash, info, error, log },
   date,
 }: Props) => {
   return (
@@ -27,40 +28,47 @@ export const TransactionResult = ({
             <MessageSignature
               message={message}
             />
-            <Disclosure.Button className="flex items-center w-full text-left pt-2">
-              <div className="flex-col items-start">
-                <div className="event-log">
-                  {log.map((line, index) => (
-                    <p key={index} className="mb-2">
-                      {line}
-                    </p>
-                  ))}
+            {!isComplete && (
+              <Spinner width={4} strokeWidth={2} color='gray-600' className='mt-2' />
+            )}
+            {isComplete && (
+              <>
+              <Disclosure.Button className="flex items-center w-full text-left pt-2">
+                <div className="flex-col items-start">
+                  <div className="event-log">
+                    {log.map((line, index) => (
+                      <p key={index} className="mb-2">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <ChevronUpIcon
-                className={`${open ? 'transform rotate-180' : ''} w-4 h-4 ml-auto border-gray-500 `}
-              />
-            </Disclosure.Button>
-            <Disclosure.Panel>
-              {error && (
-                <ReactMarkdown
-                  // eslint-disable-next-line react/no-children-prop
-                  children={error.docs.join('\r\n')}
-                  remarkPlugins={[remarkGfm]}
-                  className="markdown mt-4 mb-4"
+                <ChevronUpIcon
+                  className={`${open ? 'transform rotate-180' : ''} w-4 h-4 ml-auto border-gray-500 `}
                 />
-              )}
-              <div className="pt-4 mb-4">
-                <span className="mr-2">Included at #</span>
-                <span className="text-mono p-1 bg-elevation-1">
-                  {`${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
-                </span>
-              </div>
-              <div>
-                <span className="mr-2">Weight</span>
-                <span className="text-mono p-1 bg-elevation-1">{`${info?.weight}`}</span>
-              </div>
-            </Disclosure.Panel>
+              </Disclosure.Button>
+              <Disclosure.Panel>
+                {error && (
+                  <ReactMarkdown
+                    // eslint-disable-next-line react/no-children-prop
+                    children={error.docs.join('\r\n')}
+                    remarkPlugins={[remarkGfm]}
+                    className="markdown mt-4 mb-4"
+                  />
+                )}
+                <div className="pt-4 mb-4">
+                  <span className="mr-2">Included at #</span>
+                  <span className="text-mono p-1 bg-elevation-1">
+                    {`${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
+                  </span>
+                </div>
+                <div>
+                  <span className="mr-2">Weight</span>
+                  <span className="text-mono p-1 bg-elevation-1">{`${info?.weight}`}</span>
+                </div>
+              </Disclosure.Panel>
+            </>
+            )}
           </div>
         </div>
       )}

@@ -7,23 +7,30 @@ export const contractCallReducer: Reducer<ContractCallState, ContractCallAction>
 ) => {
   switch (action.type) {
     case 'CALL_INIT':
-      return { ...state, isLoading: true };
+      return {
+        ...state,
+        isLoading: true,
+        results: [
+          ...state.results,
+          {
+            ...action.payload,
+            isComplete: false
+          }
+        ],
+      };
+
     case 'CALL_FINALISED':
       return {
         ...state,
         isSuccess: true,
-        results: [
-          ...state.results,
-          {
-            data: action.payload.data,
-            message: action.payload.message,
-            time: action.payload.time,
-            blockHash: action.payload.blockHash,
-            info: action.payload.info,
-            error: action.payload.error,
-            log: action.payload.log,
-          },
-        ],
+        results: state.results.map((result) => action.payload.id === result.id
+          ? {
+            ...result,
+            ...action.payload,
+            isComplete: true
+          }
+          : result
+        ),
         isLoading: false,
       };
 

@@ -29,9 +29,8 @@ export function getMockInstantiateState(): InstantiateProps {
     codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
     constructorIndex: getMockFormField(0),
     deployConstructor: {} as AbiConstructor,
-    endowment: { ...getMockFormField<BN | null | undefined>(new BN(1000).mul(new BN(10e12))) },
-    isLoading: [false, jest.fn(), jest.fn()],
-    isSuccess: [false, jest.fn(), jest.fn()],
+    endowment: { ...getMockFormField<BN | null | undefined>(new BN(10000).mul(new BN(10e12))) },
+    isLoading: false,
     isUsingSalt: [false, jest.fn(), jest.fn()],
     isUsingStoredMetadata: [false, jest.fn(), jest.fn()],
     metadata: {

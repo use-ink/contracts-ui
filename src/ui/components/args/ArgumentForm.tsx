@@ -2,12 +2,12 @@ import React from 'react';
 import { ArgSignature } from '../ArgSignature';
 import { Form, FormField } from '../FormField';
 import { findComponent } from './findComponent';
-import type { AbiParam } from 'types';
+import type { AbiParam, SetState } from 'types';
 
 interface Props {
   args: AbiParam[];
   argValues: Record<string, unknown>;
-  setArgValues: (_: Record<string, unknown>) => void;
+  setArgValues: SetState<Record<string, unknown>>;
 }
 
 export function ArgumentForm ({ args, argValues, setArgValues }: Props) {
@@ -16,13 +16,15 @@ export function ArgumentForm ({ args, argValues, setArgValues }: Props) {
       {args.map((arg) => {
         const Component = findComponent(arg.type);
 
-        function onChange (value: unknown) {
-          setArgValues({
-            ...argValues,
-            [arg.name]: value
-          });
-        }
-
+        const onChange = (value: unknown) => {
+          setArgValues(
+            (prev) => ({
+              ...prev,
+              [arg.name]: value
+            })
+          );
+        };
+        
         return (
           <FormField
             className="ml-6 mt-2 mb-4"
@@ -33,7 +35,7 @@ export function ArgumentForm ({ args, argValues, setArgValues }: Props) {
           >
             <Component
               className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded"
-              id={name}
+              id={arg.name}
               value={argValues[arg.name]}
               onChange={onChange}
             />

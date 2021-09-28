@@ -25,13 +25,15 @@ import {
 
 export type { BN };
 
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+
+export type UseState<T> = [T, SetState<T>];
+
 export type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 
 export type VoidFn = () => void;
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
-
-export type UseState<T> = [T, React.Dispatch<T>];
 
 export interface CanvasState extends ChainProperties {
   endpoint: string;
@@ -73,10 +75,12 @@ export interface Transaction {
   onError?: () => void;
 }
 
+export type TransactionOptions = Pick<Transaction, 'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'>;
+
 export interface TransactionsState {
   txs: Transaction[];
   process: (_: number) => Promise<void>;
-  queue: (extrinsic: Transaction['extrinsic'], accountId: Transaction['accountId'], onSuccess: Transaction['onSuccess'], onError: Transaction['onError'], isValid: Transaction['isValid']) => number
+  queue: (_: TransactionOptions) => number
   unqueue: (id: number) => void;
   dismiss: (id: number) => void;
 }
@@ -132,7 +136,7 @@ export interface UseWeight {
   isValid: boolean;
   megaGas: BN;
   percentage: number;
-  setIsEmpty: React.Dispatch<boolean>
+  setIsEmpty: SetState<boolean>;
   setMegaGas: React.Dispatch<BN | undefined>;
   weight: BN;
 }
@@ -165,8 +169,7 @@ export interface InstantiateState {
   constructorIndex: UseFormField<number>;
   deployConstructor: AbiConstructor | null;
   endowment: UseBalance;
-  isLoading: UseToggle;
-  isSuccess: UseToggle;
+  isLoading: boolean;
   isUsingSalt: UseToggle;
   isUsingStoredMetadata: UseToggle;
   metadata: UseMetadata;
@@ -181,9 +184,7 @@ export interface InstantiateState {
   step: UseStepper;
   weight: UseWeight;
   tx: SubmittableExtrinsic<'promise'> | null;
-  // setTx: React.Dispatch<SubmittableExtrinsic<'promise'> | null>;
   txError: string | null;
-  // setTxError: React.Dispatch<string | null>;
 }
 
 export type InstantiateProps = InstantiateState
@@ -279,13 +280,16 @@ export interface ContractCallParams {
 
 export interface CallResult {
   data: AnyJson;
+  id: number;
+  isComplete: boolean;
   log: string[];
   message: AbiMessage;
-  time: number;
   blockHash?: string;
-  info?: Record<string, AnyJson>;
   error?: RegistryError;
+  info?: Record<string, AnyJson>;
+  time: number;
 }
+
 export interface ContractCallState {
   isLoading: boolean;
   isSuccess: boolean;
@@ -293,7 +297,7 @@ export interface ContractCallState {
   error?: RegistryError;
 }
 export type ContractCallAction =
-  | { type: 'CALL_INIT' }
+  | { type: 'CALL_INIT', payload: CallResult }
   | { type: 'CALL_FINALISED'; payload: CallResult };
 
-export type UrlParams = { addr: string; activeTab: string };
+export type UrlParams = { address: string; activeTab: string };

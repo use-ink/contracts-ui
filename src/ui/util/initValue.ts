@@ -3,27 +3,28 @@ import type { Registry, TypeDef } from '@polkadot/types/types';
 import { getTypeDef } from '@polkadot/types';
 import { TypeDefInfo } from '@polkadot/types/types';
 import { BN_ZERO, isBn } from '@polkadot/util';
+import { Keyring } from 'types';
 
 const warnList: string[] = [];
 
-export function getInitValue (registry: Registry, def: TypeDef): unknown {
+export function getInitValue (registry: Registry, keyring: Keyring, def: TypeDef): unknown {
   if (def.info === TypeDefInfo.Vec) {
-    return [getInitValue(registry, def.sub as TypeDef)];
+    return [getInitValue(registry, keyring, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.Tuple) {
     return Array.isArray(def.sub)
-      ? def.sub.map((def) => getInitValue(registry, def))
+      ? def.sub.map((def) => getInitValue(registry, keyring, def))
       : [];
   } else if (def.info === TypeDefInfo.Struct) {
     return Array.isArray(def.sub)
       ? def.sub.reduce((result: Record<string, unknown>, def): Record<string, unknown> => {
-        result[def.name as string] = getInitValue(registry, def);
+        result[def.name as string] = getInitValue(registry, keyring, def);
 
         return result;
       }, {})
       : {};
   } else if (def.info === TypeDefInfo.Enum) {
     return Array.isArray(def.sub)
-      ? { [def.sub[0].name as string]: getInitValue(registry, def.sub[0]) }
+      ? { [def.sub[0].name as string]: getInitValue(registry, keyring, def.sub[0]) }
       : {};
   }
 
@@ -93,6 +94,8 @@ export function getInitValue (registry: Registry, def: TypeDef): unknown {
       return '';
 
     case 'AccountId':
+      return keyring.getAccounts()[0].address;
+
     case 'AccountIdOf':
     case 'Address':
     case 'Call':
@@ -127,7 +130,7 @@ export function getInitValue (registry: Registry, def: TypeDef): unknown {
         } else if ([TypeDefInfo.Struct].includes(raw.info)) {
           return undefined;
         } else if ([TypeDefInfo.Enum, TypeDefInfo.Tuple].includes(raw.info)) {
-          return getInitValue(registry, raw);
+          return getInitValue(registry, keyring, raw);
         }
       } catch (e) {
         error = (e as Error).message;

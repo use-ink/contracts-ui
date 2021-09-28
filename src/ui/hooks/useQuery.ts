@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDatabase } from '../contexts/DatabaseContext';
 import type { UseQuery } from 'types';
 
-export function useQuery<T>(query: () => Promise<T | null>): UseQuery<T> {
+type ValidateFn<T> = (_?: T | null) => boolean;
+
+export function useQuery<T>(query: () => Promise<T | null>, validate: ValidateFn<T> = (value) => !!value): UseQuery<T> {
   const { isDbReady } = useDatabase();
   const [data, setData] = useState<T | null>(null);
   const [isValid, setIsValid] = useState(true);
@@ -18,7 +20,7 @@ export function useQuery<T>(query: () => Promise<T | null>): UseQuery<T> {
       .then(result => {
         setData(result);
         setIsLoading(false);
-        setIsValid(!!result);
+        setIsValid(validate(result));
         setUpdated(Date.now());
       })
       .catch(e => {

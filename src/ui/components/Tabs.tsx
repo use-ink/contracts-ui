@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SetState } from 'types';
 import { classes } from 'ui/util';
 
 interface Tab {
@@ -10,7 +11,7 @@ interface Tab {
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode[];
   index: number;
-  setIndex: React.Dispatch<number>;
+  setIndex: SetState<number>;
   tabs: Tab[];
 }
 

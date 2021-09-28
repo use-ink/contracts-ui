@@ -5,10 +5,7 @@ import { Button, Buttons } from '../Button';
 import { isResultValid, useCanvas, useInstantiate } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
 import { fromSats } from 'canvas';
-
-function truncate (value: string | undefined): string {
-  return value ? `${value.substring(0, 6)}...${value.substring(value.length - 6)}` : '';
-}
+import { truncate } from 'ui/util';
 
 export function Step3 () {
   const { api } = useCanvas();
@@ -27,7 +24,7 @@ export function Step3 () {
     tx
   } = instantiateState;
 
-  const [onSubmit, onCancel, isValid] = useQueueTx(
+  const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
     tx,
     accountId.value,
     onInstantiate,
@@ -104,6 +101,7 @@ export function Step3 () {
         <Button
           variant="primary"
           isDisabled={!isValid}
+          isLoading={isProcessing}
           onClick={onSubmit}
         >
           Upload and Instantiate

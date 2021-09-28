@@ -1,11 +1,22 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useCanvas } from './CanvasContext';
-import { Transaction as Tx, TransactionsState } from 'types';
+import { TransactionOptions, Transaction as Tx, TransactionsState, Transaction } from 'types';
 import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 0;
+
+export function createTx (options: TransactionOptions): Transaction {
+  return {
+    ...options,
+    id: ++nextId,
+    isComplete: false,
+    isProcessing: false,
+    isError: false,
+    isSuccess: false,
+  };
+}
 
 export const TransactionsContext = React.createContext({} as unknown as TransactionsState);
 
@@ -13,93 +24,90 @@ export function TransactionsContextProvider ({ children }: React.PropsWithChildr
   const { keyring } = useCanvas();
   const [txs, setTxs] = useState<Tx[]>([]);
 
-  const queue = useCallback(
-    (extrinsic: Tx['extrinsic'], accountId: Tx['accountId'], onSuccess: Tx['onSuccess'], onError: Tx['onError'], isValid: Tx['isValid']): number => {
-      setTxs([
-        ...txs,
-        {
-          id: ++nextId,
-          accountId,
-          extrinsic,
-          isComplete: false,
-          isProcessing: false,
-          isError: false,
-          isSuccess: false,
-          isValid,
-          onSuccess,
-          onError,
-        }
-      ]);
+  function queue (options: TransactionOptions): number {
+    setTxs(txs => [
+      ...txs.filter(({ id, isComplete, isProcessing }) => id < nextId && !isComplete && !isProcessing),
+      createTx(options)
+    ]);
 
-      return nextId;
-    },
-    [txs]
-  )
+    return nextId;
+  }
+  async function process (id: number) {
+    const tx = txs.find(tx => id === tx.id);
 
-  const process = useCallback(
-    async (id: number) => {
-      const tx = txs.find(tx => id === tx.id);
+    if (tx) {
+      const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
 
-      if (tx) {
-        const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
-
-        try {
-          setTxs([
-            ...txs.map((tx) => {
-              return tx.id === id
-                ? {
-                  ...tx,
-                  isProcessing: true
-                }
-                : tx
-            })
-          ]);
-
-          const unsub = await extrinsic.signAndSend(
-            keyring.getPair(accountId),
-            {},
-            async (result) => {
-              if ((result.isInBlock || result.isFinalized) && isValid(result)) {
-                onSuccess && await onSuccess(result);
-
-                setTxs([
-                  ...txs.map((tx) => {
-                    return tx.id === id
-                      ? {
-                        ...tx,
-                        isComplete: true,
-                        isProcessing: false,
-                        isSuccess: true
-                      }
-                      : tx
-                  })
-                ]);
-
-                unsub();
+      try {
+        setTxs(txs => [
+          ...txs.map((tx) => {
+            return tx.id === id
+              ? {
+                ...tx,
+                isProcessing: true
               }
-            }
-          )
-        } catch (e) {
-          console.error(e);
-          onError && onError();
+              : tx
+          })
+        ]);
 
-          setTxs([
-            ...txs.map((tx) => {
-              return tx.id === id
-                ? {
-                  ...tx,
-                  isComplete: true,
-                  isProcessing: false,
-                  isError: true
-                }
-                : tx
-            })
-          ]);
-        }
-      } 
-    },
-    [txs]
-  )
+        const unsub = await extrinsic.signAndSend(
+          keyring.getPair(accountId),
+          {},
+          async (result) => {
+            if ((result.isInBlock || result.isFinalized) && isValid(result)) {
+              onSuccess && await onSuccess(result);
+
+              setTxs(txs => [
+                ...txs.map((tx) => {
+                  return tx.id === id
+                    ? {
+                      ...tx,
+                      isComplete: true,
+                      isProcessing: false,
+                      isSuccess: true
+                    }
+                    : tx
+                })
+              ]);
+
+              unsub();
+            }
+          }
+        )
+      } catch (e) {
+        console.error(e);
+        onError && onError();
+
+        setTxs(txs => [
+          ...txs.map((tx) => {
+            return tx.id === id
+              ? {
+                ...tx,
+                isComplete: true,
+                isProcessing: false,
+                isError: true
+              }
+              : tx
+          })
+        ]);
+      }
+    } 
+  };
+
+  // const queueAndProcess = useCallback(
+  //   (options: TransactionOptions) => {
+  //     const tx = createTx(options);
+
+  //     setTxs(
+  //       [ ...txs, tx ],
+  //       () => {
+  //         process(tx.id);
+  //       }
+  //     );
+
+  //   },
+  //   []
+  // )
 
   function unqueue (id: number) {
     setTxs([

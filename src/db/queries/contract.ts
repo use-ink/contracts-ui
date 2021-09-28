@@ -59,7 +59,7 @@ export async function findContractByAddress(
 export async function createContract(
   db: Database,
   owner: PrivateKey | null,
-  { abi, address, blockZeroHash, codeHash, creator, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
+  { abi, address, blockZeroHash, codeHash, creator, date = moment.utc().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
   savePair = true
 ): Promise<ContractDocument> {
   try {

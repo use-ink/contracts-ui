@@ -85,7 +85,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       tags,
       abi,
       id: getNewCodeBundleId(),
-      date: moment().format(),
+      date: moment.utc().format(),
       stars: 1,
       instances: 0,
     });
@@ -112,7 +112,7 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
       name,
       tags,
       abi,
-      date: moment().format(),
+      date: moment.utc().format(),
       stars: 1,
     });
   });

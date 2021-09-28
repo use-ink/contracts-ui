@@ -5,7 +5,7 @@ import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';
 import { Stepper } from './Stepper';
-import { useInstantiate } from 'ui/contexts';
+import { CONTRACT_FILE, DEPLOYMENT_INFO, FINALIZE, useInstantiate } from 'ui/contexts';
 
 const steps = [
   'Contract Bundle',
@@ -36,9 +36,9 @@ export function Wizard () {
             />
           </FormField>
         )}
-        {step === 0 && <Step1 />}
-        {step === 1 && <Step2 />}
-        {step === 2 && <Step3 />}
+        {step === CONTRACT_FILE && <Step1 />}
+        {step === DEPLOYMENT_INFO && <Step2 />}
+        {step === FINALIZE && <Step3 />}
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
         <Stepper step={step} steps={steps} />

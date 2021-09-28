@@ -31,5 +31,5 @@ export function useCodeBundle(codeHash?: string): UseQuery<[boolean, CodeBundleD
     [codeHash]
   );
 
-  return useQuery(query);
+  return useQuery(query, (result) => !!result && result[0]);
 }

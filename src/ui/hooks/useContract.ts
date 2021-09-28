@@ -5,20 +5,25 @@ import { useDatabase } from '../contexts/DatabaseContext';
 import { useQuery } from './useQuery';
 import { findContractByAddress  } from 'db/queries';
 
-import { Abi, AnyJson, ContractPromise as Contract, UseQuery } from 'types';
+import { Abi, AnyJson, ContractDocument, ContractPromise as Contract, UseQuery } from 'types';
 import { useCanvas } from 'ui/contexts';
 
-export function useContract(address: string): UseQuery<Contract> {
+type ReturnType = [Contract | null, ContractDocument | null];
+
+export function useContract(address: string): UseQuery<ReturnType> {
   const { api } = useCanvas();
   const { db } = useDatabase();
 
-  const query = useCallback(async (): Promise<Contract | null> => {
+  const query = useCallback(async (): Promise<ReturnType> => {
     const document = await findContractByAddress(db, address);
 
     return api && document
-      ? new Contract(api, new Abi(document.abi as AnyJson), address)
-      : null;
+      ? [
+        new Contract(api, new Abi(document.abi as AnyJson), address),
+        document
+      ]
+      : [null, null];
   }, [api, address, findContractByAddress]);
 
-  return useQuery(query);
+  return useQuery(query, result => !!result && !!result[0]);
 }

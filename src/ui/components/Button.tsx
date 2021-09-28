@@ -5,6 +5,7 @@ type Variant = 'default' | 'primary' | 'plain' | 'negative';
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   isDisabled?: boolean;
+  isLoading?: boolean;
   variant?: Variant
 }
 
@@ -18,15 +19,26 @@ export function Buttons ({ children, className }: React.HTMLAttributes<HTMLButto
   )
 }
 
-export function Button ({ children, className = '', isDisabled = false, variant = 'default', ...props }: Props) {
+export function Button ({ children, className = '', isDisabled = false, isLoading, variant = 'default', ...props }: Props) {
   return (
     <button
       type="button"
-      className={classes('btn', variant, className)}
-      {...isDisabled ? { disabled: true } : {}}
+      className={classes('btn relative', variant, className)}
+      {...(isDisabled || isLoading) ? { disabled: true } : {}}
       {...props}
     >
-      {children}
+      {isLoading && (
+        <div
+          style={{
+            borderTopColor: 'transparent',
+            left: 'calc(50% - 7px)'
+          }}
+          className="w-3.5 h-3.5 absolute border dark:border-white border-solid rounded-full animate-spin"
+        />
+      )}
+      <div className={classes('flex', isLoading ? 'invisible' : '')}>
+        {children}
+      </div>
     </button>
   )
 };

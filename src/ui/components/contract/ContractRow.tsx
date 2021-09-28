@@ -41,7 +41,7 @@ export function ContractRow({
           {stars}
         </Button>
       </div>
-      <div className="w-14 text-gray-500 dark:text-gray-400">{moment(date).format('MMM d')}</div>
+      <div className="w-14 text-gray-500 dark:text-gray-400">{moment(date).format('D MMM')}</div>
     </Link>
   );
 }

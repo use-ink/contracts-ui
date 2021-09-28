@@ -1,9 +1,9 @@
 import { isWasm, u8aToString } from '@polkadot/util';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
 import { useCanvas } from 'ui/contexts/CanvasContext';
 
-type OnChange = (_: FileState, __?: AnyJson) => void;
+type OnChange = (_: FileState | undefined, __?: AnyJson) => void;
 type OnRemove = VoidFn;
 
 interface Options {
@@ -97,15 +97,6 @@ export function useMetadata (initialValue: AnyJson = null, options: Options & Ca
   const { isRequired = false, isWasmRequired = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() => deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
 
-  // useEffect(
-  //   () => setState((state) =>
-  //     initialValue && state.source !== initialValue
-  //       ? deriveFromJson(initialValue, { isRequired, isWasmRequired }, api)
-  //       : state
-  //   ),
-  //   [initialValue, state.source, isRequired, isWasmRequired]
-  // );
-
   const onChange = useCallback(
     (file: FileState): void => {
       try {
@@ -130,10 +121,18 @@ export function useMetadata (initialValue: AnyJson = null, options: Options & Ca
     (): void => {
       setState(EMPTY);
 
+      callbacks.onChange && callbacks.onChange(undefined);
       callbacks.onRemove && callbacks.onRemove();
     },
     [callbacks.onRemove]
   );
+
+  useEffect(
+    (): void => {
+      setState(deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
+    },
+    [initialValue, isRequired, isWasmRequired]
+  )
 
   return {
     ...state,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown } from './Dropdown';
 import { Account } from './Account';
-import type { DropdownProps, KeyringPair, OptionProps, UseFormField } from 'types';
+import type { DropdownProps, OptionProps, UseFormField } from 'types';
 import { createAccountOptions } from 'canvas/util';
 import { useCanvas } from 'ui/contexts';
 
@@ -22,7 +22,7 @@ export function AccountSelect ({
   className,
 }: Props) {
   const { keyring } = useCanvas();
-  const options = createAccountOptions(keyring?.getPairs() as KeyringPair[]);
+  const options = createAccountOptions(keyring.getPairs());
 
   return (
     <Dropdown
