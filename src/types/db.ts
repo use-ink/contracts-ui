@@ -2,7 +2,6 @@
 
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
-import type { VoidFn } from './substrate';
 
 export type { Collection, Database, PrivateKey }
 
@@ -46,14 +45,6 @@ export interface ContractDocument extends Document {
   owner?: string;
   stars: number;
   tags?: string[];
-}
-
-export interface UseQuery<T> {
-  data: T | null;
-  isLoading: boolean;
-  isValid: boolean;
-  refresh: VoidFn;
-  updated: number;
 }
 
 export interface CodeBundleQuery {

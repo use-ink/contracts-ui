@@ -15,6 +15,12 @@ import {
 
 export * from './hooks';
 
+export type OrFalsy<T> = T | null | undefined;
+
+export type OrNull<T> = T | null;
+
+export type OrUndef<T> = T | undefined;
+
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
 export interface CanvasState extends ChainProperties {
