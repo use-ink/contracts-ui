@@ -117,7 +117,7 @@
     "last 2 Chrome versions"
   ],
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,cjs,ts,tsx}": "eslint --cache --fix",
+    "*.{js,cjs,ts,tsx,css,md}": "prettier --write"
   }
 }
