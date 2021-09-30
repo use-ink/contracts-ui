@@ -2,7 +2,6 @@
 
 // import { keyring } from '@polkadot/ui-keyring';
 import type { Database, PrivateKey } from '@textile/threaddb';
-
 import moment from 'moment';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
@@ -10,9 +9,7 @@ import { findUser } from './user';
 import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
 import type { ContractDocument, MyContracts } from 'types';
 
-export async function findTopContracts(
-  db: Database
-): Promise<ContractDocument[]> {
+export async function findTopContracts(db: Database): Promise<ContractDocument[]> {
   return getContractCollection(db).find({}).toArray();
 }
 
@@ -53,7 +50,17 @@ export async function findContractByAddress(
 export async function createContract(
   db: Database,
   owner: PrivateKey | null,
-  { abi, address, blockOneHash, codeBundleId, creator, date = moment().format(), genesisHash, name, tags = [] }: Partial<ContractDocument>,
+  {
+    abi,
+    address,
+    blockOneHash,
+    codeBundleId,
+    creator,
+    date = moment().format(),
+    genesisHash,
+    name,
+    tags = [],
+  }: Partial<ContractDocument>,
   savePair = true
 ): Promise<ContractDocument> {
   try {
@@ -110,7 +117,12 @@ export async function updateContract(
       if (name) contract.name = name;
       if (tags) contract.tags = tags;
 
-      savePair && keyring.saveContract(address, { ...(keyring.getContract(address)?.meta || {}), name, tags });
+      savePair &&
+        keyring.saveContract(address, {
+          ...(keyring.getContract(address)?.meta || {}),
+          name,
+          tags,
+        });
 
       const id = await contract.save();
 
@@ -121,13 +133,17 @@ export async function updateContract(
 
     return Promise.reject(new Error('Contract does not exist'));
   } catch (e) {
-    console.error(e)
+    console.error(e);
 
     return Promise.reject(e);
   }
 }
 
-export async function removeContract(db: Database, address: string, savePair = true): Promise<void> {
+export async function removeContract(
+  db: Database,
+  address: string,
+  savePair = true
+): Promise<void> {
   try {
     const existing = await findContractByAddress(db, address);
 
