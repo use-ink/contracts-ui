@@ -6,21 +6,27 @@ import moment from 'moment';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
-import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
+import { getContractCollection, pushToRemote } from './util';
 import type { ContractDocument, MyContracts } from 'types';
 
 export async function findTopContracts(db: Database): Promise<ContractDocument[]> {
   return getContractCollection(db).find({}).toArray();
 }
 
+const EMPTY = { owned: [], starred: [] };
+
 export async function findMyContracts(
   db: Database,
   identity: PrivateKey | null
 ): Promise<MyContracts> {
+  if (!identity || !db) {
+    return EMPTY;
+  }
+
   const user = await findUser(db, identity);
 
   if (!user) {
-    return { owned: [], starred: [] };
+    return EMPTY;
   }
 
   const owned = await getContractCollection(db).find({ owner: user.publicKey }).toArray();
@@ -53,10 +59,10 @@ export async function createContract(
   {
     abi,
     address,
-    blockOneHash,
-    codeBundleId,
+    blockZeroHash,
+    codeHash,
     creator,
-    date = moment().format(),
+    date = moment.utc().format(),
     genesisHash,
     name,
     tags = [],
@@ -64,13 +70,13 @@ export async function createContract(
   savePair = true
 ): Promise<ContractDocument> {
   try {
-    if (!abi || !address || !codeBundleId || !creator || !name || !genesisHash || !blockOneHash) {
+    if (!abi || !address || !codeHash || !creator || !name || !genesisHash || !blockZeroHash) {
       return Promise.reject(new Error('Missing required fields'));
     }
 
-    if (!(await getCodeBundleCollection(db).findOne({ id: codeBundleId }))) {
-      return Promise.reject(new Error('Instantiation code bundle is invalid'));
-    }
+    // if (!(await getCodeBundleCollection(db).findOne({ id: codeBundleId }))) {
+    //   return Promise.reject(new Error('Instantiation code bundle is invalid'));
+    // }
 
     if (await getContractCollection(db).findOne({ address })) {
       return Promise.reject(new Error('Contract already exists'));
@@ -79,8 +85,8 @@ export async function createContract(
     const newContract = getContractCollection(db).create({
       abi,
       address,
-      blockOneHash,
-      codeBundleId,
+      blockZeroHash,
+      codeHash: codeHash,
       creator,
       genesisHash,
       name,

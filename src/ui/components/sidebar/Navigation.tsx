@@ -4,13 +4,13 @@ import type { Location } from 'history';
 import { NavLink } from './NavLink';
 
 function isAddNewContractActive(_: unknown, location: Location): boolean {
-  return /^\/(add-contract|instantiate-with-hash|instantiate-with-code)/.test(location.pathname);
+  return /^\/(instantiate|instantiate-with-hash|instantiate-with-code)/.test(location.pathname);
 }
 
 export function Navigation() {
   return (
     <div className="navigation">
-      <NavLink to={`/add-contract`} icon={DocumentAddIcon} isActive={isAddNewContractActive}>
+      <NavLink to={`/instantiate`} icon={DocumentAddIcon} isActive={isAddNewContractActive}>
         Add New Contract
       </NavLink>
       <NavLink icon={CollectionIcon} to={`/`} exact>

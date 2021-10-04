@@ -1,5 +1,5 @@
 .btn {
-  @apply flex font-semibold text-xs disabled:opacity-60 disabled:cursor-not-allowed;
+  @apply flex items-center justify-center font-semibold text-xs disabled:opacity-60 disabled:cursor-not-allowed;
 }
 
 .btn:not(.plain) {

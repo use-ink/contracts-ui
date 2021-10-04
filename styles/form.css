@@ -1,0 +1,27 @@
+.form-field {
+  @apply mb-5 peer-last-of-type:mb-8;
+}
+
+.form-field > label {
+  @apply block mb-1.5 text-sm font-semibold dark:text-white;
+}
+
+.form-field > .validation {
+  @apply mt-2 text-sm flex items-center;
+}
+
+.form-field > .validation svg {
+  @apply w-3 h-3 mr-1;
+}
+
+.form-field > .validation.warning {
+  @apply text-orange-400;
+}
+
+.form-field > .validation.error {
+  @apply text-red-400;
+}
+
+.form-field > .validation.success {
+  @apply text-green-400;
+}

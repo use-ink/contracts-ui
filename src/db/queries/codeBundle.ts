@@ -16,7 +16,7 @@ export async function findTopCodeBundles(
     return Promise.all(
       codeBundles.map(async codeBundle => {
         const instances = (
-          await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()
+          await getContractCollection(db).find({ codeHash: codeBundle.codeHash }).toArray()
         ).length;
 
         return {
@@ -67,9 +67,14 @@ export async function findMyCodeBundles(
 
 export async function findCodeBundleByHash(
   db: Database,
-  { codeHash, blockOneHash }: CodeBundleQuery
+  { codeHash, blockZeroHash }: CodeBundleQuery
 ): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ blockOneHash, codeHash })) || null;
+  return (
+    (await getCodeBundleCollection(db).findOne({
+      blockZeroHash: blockZeroHash || undefined,
+      codeHash,
+    })) || null
+  );
 }
 
 export async function findCodeBundleById(
@@ -79,12 +84,33 @@ export async function findCodeBundleById(
   return (await getCodeBundleCollection(db).findOne({ id })) || null;
 }
 
+export async function searchForCodeBundle(
+  db: Database,
+  fragment: string
+): Promise<CodeBundleDocument[] | null> {
+  if (!fragment || fragment === '') {
+    return null;
+  }
+
+  const matches = await db.dexie
+    .table<CodeBundleDocument>('codeBundle')
+    .filter(({ name, codeHash }) => {
+      const regex = new RegExp(fragment);
+
+      return regex.test(name) || regex.test(codeHash);
+    })
+    .limit(10)
+    .toArray();
+
+  return matches;
+}
+
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
   {
     abi,
-    blockOneHash,
+    blockZeroHash,
     codeHash,
     creator,
     genesisHash,
@@ -93,7 +119,7 @@ export async function createCodeBundle(
     name,
     stars = 1,
     tags = [],
-    date = moment().format(),
+    date = moment.utc().format(),
   }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
@@ -111,7 +137,7 @@ export async function createCodeBundle(
 
     const newCode = getCodeBundleCollection(db).create({
       abi,
-      blockOneHash,
+      blockZeroHash,
       codeHash,
       creator,
       genesisHash,

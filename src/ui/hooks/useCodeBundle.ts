@@ -1,18 +1,32 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
-
 import { useCallback } from 'react';
-import { useDatabase } from '../contexts';
+import { useCanvas } from '../contexts/CanvasContext';
+import { useDatabase } from '../contexts/DatabaseContext';
 import { useQuery } from './useQuery';
-import { findCodeBundleById  } from 'db/queries';
+import { findCodeBundleByHash } from 'db/queries';
 
 import type { CodeBundleDocument, UseQuery } from 'types';
 
-export function useCodeBundle(id: string): UseQuery<CodeBundleDocument> {
+type ReturnType = [boolean, CodeBundleDocument | null];
+
+export function useCodeBundle(codeHash?: string): UseQuery<[boolean, CodeBundleDocument | null]> {
+  const { api, blockZeroHash } = useCanvas();
   const { db } = useDatabase();
 
-  const query = useCallback((): Promise<CodeBundleDocument | null> => {
-    return findCodeBundleById(db, id);
-  }, [id, findCodeBundleById]);
+  const query = useCallback(async (): Promise<ReturnType> => {
+    if (!codeHash) {
+      return Promise.resolve([false, null]);
+    }
 
-  return useQuery(query);
+    const isOnChain = (await api.query.contracts.codeStorage(codeHash)).isSome;
+
+    if (!isOnChain) {
+      return [false, null];
+    }
+
+    const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
+
+    return [true, document];
+  }, [codeHash]);
+
+  return useQuery(query, result => !!result && result[0]);
 }

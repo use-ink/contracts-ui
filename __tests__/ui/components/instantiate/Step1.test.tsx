@@ -1,22 +1,14 @@
 import React from 'react';
-import { jest } from '@jest/globals';
-import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Step1 } from 'ui/components/instantiate/Step1';
+import { renderWithInstantiate as render } from 'test-utils';
 
 describe('Instantiate Step 1', () => {
-  test('renders correctly with initial values', () => {
-    const { getByText, getByPlaceholderText } = render(
-      <Step1 dispatch={jest.fn()} currentStep={1} />
-    );
-    expect(getByPlaceholderText('on-chain code hash')).toBeInTheDocument();
-    expect(getByText('Upload metadata.json')).toBeInTheDocument();
-    expect(getByText('Next')).toBeDisabled();
-  });
+  test('renders correctly with initial values', async () => {
+    const [{ getByText }] = await render(<Step1 />);
 
-  test('does not render if current step is not 1', () => {
-    const { container } = render(<Step1 dispatch={jest.fn()} currentStep={2} />);
-
-    expect(container).toBeEmptyDOMElement();
+    expect(getByText('Account')).toBeInTheDocument();
+    expect(getByText('Contract Name')).toBeInTheDocument();
+    expect(getByText('Upload Contract Bundle')).toBeInTheDocument();
   });
 });

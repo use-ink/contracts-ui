@@ -3,72 +3,82 @@ import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Dropdown } from 'ui/components';
-import { DropdownOption } from 'types';
+import { DropdownOption, DropdownProps } from 'types';
+import { getNodeText } from 'test-utils';
+// import { getNodeText } from 'test-utils';
 
-const options: DropdownOption[] = [
-  { name: 'foo', value: 'fooValue' },
-  { name: 'bar', value: 'barValue' }
+interface ReturnType {
+  foo: string;
+}
+
+const options: DropdownOption<ReturnType>[] = [
+  { name: 'bar', value: { foo: 'bar' } },
+  { name: <span>baz</span>, value: { foo: 'baz' } },
 ];
 
+function mockProps(overrides: Partial<DropdownProps<ReturnType>> = {}): DropdownProps<ReturnType> {
+  return {
+    options,
+    onChange: jest.fn(),
+    value: options[0].value,
+    ...overrides,
+  };
+}
+
 describe('Dropdown', () => {
-  const onChange = jest.fn();
-
   test('correctly renders the dropdown', () => {
-    const rendered = render(
-      <Dropdown
-        className='foo'
-        options={options}
-        onChange={onChange}
-        value={options[0]}
-       >
-        No options found
-      </Dropdown>
-    )
-    
-    const dropdown = rendered.getByText(options[0].name).parentElement as HTMLButtonElement;
+    const { getByTestId } = render(
+      <Dropdown {...mockProps({ className: 'foo' })}>No options found</Dropdown>
+    );
 
-    expect(dropdown).toBeInTheDocument();
-    expect(dropdown.parentElement).toHaveClass('foo');
+    const dropdownBtn = getByTestId('dropdown-btn') as HTMLButtonElement;
 
-    fireEvent.click(dropdown);
+    expect(dropdownBtn).toBeInTheDocument();
+    expect(dropdownBtn.parentElement).toHaveClass('foo');
 
-    expect(rendered.getByText(options[1].name)).toBeInTheDocument();
+    fireEvent.click(dropdownBtn);
+
+    options.forEach(({ name }, index) => {
+      const li = getByTestId(`dropdown-option-${index}`);
+
+      expect(li).toBeInTheDocument();
+      expect(li).toHaveTextContent(getNodeText(name));
+    });
   });
 
   test('correctly renders without options', () => {
-    const rendered = render(
-      <Dropdown
-        className='foo'
-        onChange={onChange}
-       >
-         No options found
-      </Dropdown>
-    )
-    
-    const dropdown = rendered.getByText('No options found');
+    const { getByText } = render(
+      <Dropdown onChange={jest.fn() as () => void}>No options found</Dropdown>
+    );
+
+    const dropdown = getByText('No options found');
 
     expect(dropdown).toBeInTheDocument();
   });
 
+  test('correctly renders as disabled', () => {
+    const { getByTestId } = render(
+      <Dropdown {...mockProps({ isDisabled: true })}>No options found</Dropdown>
+    );
+
+    const dropdownBtn = getByTestId('dropdown-btn') as HTMLButtonElement;
+
+    expect(dropdownBtn).toHaveAttribute('disabled');
+  });
 
   test('receives onChange event', () => {
-    const rendered = render(
-      <Dropdown
-        className='foo'
-        options={options}
-        onChange={onChange}
-        value={options[0]}
-       >
-         No options found
-        </Dropdown>
-    )
+    const onChange = jest.fn();
 
-    const dropdown = rendered.getByText(options[0].name);
+    const { getByTestId } = render(
+      <Dropdown {...mockProps({ onChange })}>No options found</Dropdown>
+    );
 
-    fireEvent.click(dropdown);
+    const dropdownBtn = getByTestId('dropdown-btn') as HTMLButtonElement;
 
-    fireEvent.click(rendered.getByText(options[1].name));
+    fireEvent.click(dropdownBtn);
 
-    expect(onChange).toHaveBeenCalledWith(options[1]);
+    fireEvent.click(getByTestId('dropdown-option-1'));
+
+    expect(onChange).toHaveBeenCalledWith(options[1].value);
   });
 });

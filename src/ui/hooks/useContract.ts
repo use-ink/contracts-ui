@@ -1,18 +1,26 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
 import { useCallback } from 'react';
-import { useDatabase } from '../contexts';
+import { useDatabase } from '../contexts/DatabaseContext';
 import { useQuery } from './useQuery';
-import { findContractByAddress  } from 'db/queries';
+import { findContractByAddress } from 'db/queries';
 
-import type { ContractDocument, UseQuery } from 'types';
+import { Abi, AnyJson, ContractDocument, ContractPromise as Contract, UseQuery } from 'types';
+import { useCanvas } from 'ui/contexts';
 
-export function useContract(address: string): UseQuery<ContractDocument> {
+type ReturnType = [Contract | null, ContractDocument | null];
+
+export function useContract(address: string): UseQuery<ReturnType> {
+  const { api } = useCanvas();
   const { db } = useDatabase();
 
-  const query = useCallback((): Promise<ContractDocument | null> => {
-    return findContractByAddress(db, address);
-  }, [address, findContractByAddress]);
+  const query = useCallback(async (): Promise<ReturnType> => {
+    const document = await findContractByAddress(db, address);
 
-  return useQuery(query);
+    return api && document
+      ? [new Contract(api, new Abi(document.abi as AnyJson), address), document]
+      : [null, null];
+  }, [api, address, findContractByAddress]);
+
+  return useQuery(query, result => !!result && !!result[0]);
 }

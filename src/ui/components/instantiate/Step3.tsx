@@ -1,85 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { ArgumentForm } from '../ArgumentForm';
-import { Dropdown } from '../Dropdown';
-import { Button } from '../Button';
-import { Buttons } from '../Buttons';
-import { createOptions, createEmptyValues } from 'canvas/util';
-import type { InstantiateAction, DropdownOption, AbiMessage } from 'types';
+import React from 'react';
+import { BN_ZERO, formatBalance, formatNumber } from '@polkadot/util';
+import { Account } from '../Account';
+import { Button, Buttons } from '../Button';
+import { isResultValid, useCanvas, useInstantiate } from 'ui/contexts';
+import { useQueueTx } from 'ui/hooks/useQueueTx';
+import { fromSats } from 'canvas';
+import { truncate } from 'ui/util';
 
-interface Props {
-  constructors?: Partial<AbiMessage>[];
-  dispatch: React.Dispatch<InstantiateAction>;
-  currentStep: number;
-}
-export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
-  const [constr, setConstructor] = useState<DropdownOption>();
-  const [argValues, setArgValues] = useState<Record<string, string>>();
+export function Step3() {
+  const { api } = useCanvas();
+  const instantiateState = useInstantiate();
 
-  useEffect(() => {
-    constructors && setConstructor(createOptions(constructors, 'message')[0]);
-  }, [constructors]);
+  const {
+    accountId,
+    codeHash,
+    endowment,
+    metadata,
+    weight,
+    name,
+    onInstantiate,
+    onError,
+    onUnFinalize,
+    tx,
+  } = instantiateState;
 
-  useEffect(() => {
-    constructors &&
-      setArgValues(createEmptyValues(constructors[(constr?.value as number) || 0].args));
-  }, [constr]);
+  const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
+    tx,
+    accountId.value,
+    onInstantiate,
+    onError,
+    isResultValid
+  );
 
-  if (currentStep !== 3) return null;
+  const displayHash = codeHash || metadata.value?.project.source.wasmHash.toHex() || null;
 
-  return constructors ? (
+  return (
     <>
-      <label htmlFor="constr" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
-        Deployment constructor
-      </label>
-      <Dropdown
-        options={createOptions(constructors, 'message')}
-        className="mb-4"
-        value={constr}
-        onChange={(o) => setConstructor(o)}
-      >
-        No constructors found
-      </Dropdown>
-      {constr && (
-        <>
-          <ArgumentForm
-            key={`args-${constr.name}`}
-            args={typeof constr.value === 'number' ? constructors[constr.value].args : undefined}
-            handleChange={e =>
-              setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
-            }
-            argValues={argValues}
-          />
-          <Buttons>
-            <Button
-              className="mr-4"
-              isDisabled={!constr.name || !argValues}
-              onClick={() =>
-                argValues &&
-                dispatch({
-                  type: 'STEP_3_COMPLETE',
-                  payload: {
-                    constructorName: constr.name,
-                    argValues,
-                  },
-                })
-              }
-              variant='primary'
-            >
-              Next
-            </Button>
-            <Button
-              onClick={() =>
-                dispatch({
-                  type: 'GO_TO',
-                  payload: { step: 2 },
-                })
-              }
-            >
-              Go Back
-            </Button>
-          </Buttons>
-        </>
-      )}
+      <div className="review">
+        <div className="field full">
+          <p className="key">Account</p>
+          <div className="value">
+            <Account className="p-0" value={accountId.value} />
+          </div>
+        </div>
+
+        <div className="field full">
+          <p className="key">Name</p>
+          <p className="value">{name.value}</p>
+        </div>
+
+        <div className="field">
+          <p className="key">Endowment</p>
+          <p className="value">
+            {formatBalance(fromSats(api, endowment?.value || BN_ZERO), { forceUnit: '-' })}
+          </p>
+        </div>
+
+        <div className="field">
+          <p className="key">Weight</p>
+          <p className="value">{formatNumber(weight.weight)}</p>
+        </div>
+
+        {displayHash && (
+          <div className="field">
+            <p className="key">Code Hash</p>
+            <p className="value">{truncate(displayHash)}</p>
+          </div>
+        )}
+
+        {tx?.args[3] && (
+          <div className="field">
+            <p className="key">Data</p>
+            <p className="value">{tx?.args[3].toHex()}</p>
+          </div>
+        )}
+      </div>
+      <Buttons>
+        <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
+          Upload and Instantiate
+        </Button>
+
+        <Button
+          onClick={(): void => {
+            onCancel();
+            onUnFinalize && onUnFinalize();
+          }}
+        >
+          Go Back
+        </Button>
+      </Buttons>
     </>
-  ) : null;
-};
+  );
+}

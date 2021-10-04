@@ -1,6 +1,8 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 // types & interfaces
-export type { AnyJson, RegistryError } from '@polkadot/types/types';
+export type { default as BN } from 'bn.js';
+
+export type { AnyJson, Codec, Registry, RegistryError, TypeDef } from '@polkadot/types/types';
 export type { DispatchError, EventRecord } from '@polkadot/types/interfaces';
 export type {
   CodeHash,
@@ -8,12 +10,18 @@ export type {
   ContractExecResultErr,
 } from '@polkadot/types/interfaces/contracts';
 export type { KeyringPair } from '@polkadot/keyring/types';
-export type { AbiMessage, AbiParam } from '@polkadot/api-contract/types';
+export type {
+  AbiConstructor,
+  AbiMessage,
+  ContractCallOutcome,
+  AbiParam,
+} from '@polkadot/api-contract/types';
 export type { ContractQuery, ContractTx } from '@polkadot/api-contract/base/types';
-export type { SubmittableExtrinsic } from '@polkadot/api/types';
+export type { SubmittableExtrinsic, VoidFn } from '@polkadot/api/types';
 
 // classes
-export { Bytes } from '@polkadot/types';
+export { Raw, Bytes } from '@polkadot/types';
 export { Keyring } from '@polkadot/ui-keyring';
 export { Abi, ContractPromise, BlueprintPromise } from '@polkadot/api-contract';
-export { ApiPromise } from '@polkadot/api';
+export { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
+export { ApiPromise, SubmittableResult } from '@polkadot/api';

@@ -1,84 +1,117 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Dropdown } from '../Dropdown';
-import { Input } from '../Input';
-import { Button } from '../Button';
-import { Buttons } from '../Buttons';
-import { createOptions } from 'canvas/util';
-import type { KeyringPair, InstantiateAction, DropdownOption } from 'types';
+import React from 'react';
+import type { AbiConstructor } from '@polkadot/api-contract/types';
+import { Button, Buttons } from '../Button';
+import { Form, FormField, getValidation } from '../FormField';
+import { InputNumber } from '../InputNumber';
+// import { InputBalance } from '../InputBalance';
+import { InputBalance } from '../InputBalance';
+import { InputSalt } from './InputSalt';
+import { ArgumentForm } from 'ui/components/args/ArgumentForm';
+import { Dropdown } from 'ui/components/Dropdown';
+import { createConstructorOptions } from 'canvas/util';
+import { useInstantiate } from 'ui/contexts';
+// import { createInstantiateTx } from 'canvas';
+// import { isNumber } from '@polkadot/util';
 
-interface Props {
-  keyringPairs: Partial<KeyringPair>[];
-  dispatch: React.Dispatch<InstantiateAction>;
-  contractName: string;
-  currentStep: number;
-}
+export function Step2() {
+  const state = useInstantiate();
 
-export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
-  const options = useMemo(
-    (): DropdownOption[] => createOptions(keyringPairs, 'pair'),
-    []
-  );
-  const [account, setAccount] = useState<DropdownOption>(options[0]);
-  const [name, setName] = useState('');
-  // useEffect(() => {
-  //   keyringPairs && setAccount(createOptions(keyringPairs, 'pair')[0]);
-  // }, []);
-  useEffect(() => {
-    setName(contractName);
-  }, [contractName]);
+  const {
+    argValues: [argValues, setArgValues],
+    constructorIndex,
+    deployConstructor,
+    endowment,
+    isUsingSalt: [isUsingSalt, toggleIsUsingSalt],
+    metadata,
+    onFinalize,
+    salt,
+    step: [, , stepBack],
+    weight: { executionTime, isValid: isWeightValid, megaGas, setMegaGas, percentage },
+  } = state;
 
-  if (currentStep !== 2) return null;
+  // const onSubmit = useCallback(
+  //   (): void => {
+  //     try {
+  //       createTx();
+  //       stepForward();
+  //     } catch (e) {
 
-  return keyringPairs ? (
+  //     }
+  //   },
+  //   [createTx, stepForward]
+  // )
+
+  return (
     <>
-      <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
-        Account
-      </label>
-      <Dropdown
-        options={options}
-        className="mb-4"
-        value={account}
-        onChange={setAccount}
-      >
-        No accounts found
-      </Dropdown>
-      <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
-        Contract name
-      </label>
-      <Input
-        value={name}
-        handleChange={e => setName(e.target.value)}
-        placeholder="contract name"
-        id={name}
-      />
+      <Form>
+        <FormField
+          id="constructor"
+          label="Deployment Constructor"
+          {...getValidation(constructorIndex)}
+        >
+          <Dropdown
+            id="constructor"
+            options={createConstructorOptions(metadata.value?.constructors as AbiConstructor[])}
+            className="mb-4"
+            {...constructorIndex}
+          >
+            No constructors found
+          </Dropdown>
+          {deployConstructor && argValues && (
+            <ArgumentForm
+              key={`args-${deployConstructor?.method}`}
+              args={deployConstructor.args}
+              setArgValues={setArgValues}
+              argValues={argValues}
+            />
+          )}
+        </FormField>
+        <FormField id="endowment" label="Endowment" {...getValidation(endowment)}>
+          <InputBalance id="endowment" {...endowment} />
+        </FormField>
+        <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
+          <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
+        </FormField>
+        <FormField
+          id="maxGas"
+          label="Max Gas Allowed"
+          isError={!isWeightValid}
+          validation={!isWeightValid ? 'Invalid gas limit' : null}
+        >
+          <InputNumber value={megaGas} onChange={setMegaGas} placeholder="200000" />
+          <div className="relative">
+            <p className="text-gray-500 text-xs pb-2">
+              {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
+              {percentage}% of block time)
+            </p>
+            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-700">
+              <div
+                style={{ width: `${percentage}%` }}
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"
+              ></div>
+            </div>
+          </div>
+        </FormField>
+      </Form>
       <Buttons>
         <Button
-          isDisabled={!account}
-          onClick={() =>
-            dispatch({
-              type: 'STEP_2_COMPLETE',
-              payload: {
-                fromAddress: account?.value.toString() || '',
-                fromAccountName: account?.name.toString() || '',
-                contractName: name,
-              },
-            })
+          isDisabled={
+            !endowment.isValid ||
+            (isUsingSalt && !salt.isValid) ||
+            !isWeightValid ||
+            !deployConstructor?.method ||
+            !argValues
           }
-          variant='primary'
+          onClick={onFinalize}
+          variant="primary"
         >
           Next
         </Button>
-        <Button
-          onClick={() =>
-            dispatch({
-              type: 'GO_TO',
-              payload: { step: 1 },
-            })
-          }
-        >
+
+        <Button onClick={stepBack} variant="default">
           Go Back
         </Button>
       </Buttons>
     </>
-  ) : null;
-};
+  );
+}
