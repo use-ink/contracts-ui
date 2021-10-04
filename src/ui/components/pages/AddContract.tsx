@@ -22,9 +22,9 @@ export function AddContract() {
                 <div className="mt-4">
                   <Link
                     to={`/instantiate-with-code`}
-                    className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="flex justify-between items-center p-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
-                    <div className="flex items-center text-base text-gray-500 space-x-2">
+                    <div className="flex items-center text-base font-medium dark:text-gray-300 text-gray-500 space-x-2">
                       <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
                       <span>Upload New Contract Code</span>
                     </div>
@@ -33,9 +33,9 @@ export function AddContract() {
                   <p className="text-center text-sm text-gray-500 py-6">Or</p>
                   <Link
                     to={`/instantiate-with-hash`}
-                    className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="flex justify-between items-center p-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
-                    <div className="flex items-center text-base text-gray-500 space-x-2">
+                    <div className="flex items-center text-base font-medium  dark:text-gray-300 text-gray-500 space-x-2">
                       <CodeIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
                       <span>Use Existing Contract Code</span>
                     </div>
