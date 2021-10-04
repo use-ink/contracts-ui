@@ -31,11 +31,11 @@
 }
 
 .dropdown .options .option.selected {
-  @apply font-bold bg-elevation-1;
+  @apply font-medium bg-elevation-1;
 }
 
 .dropdown.chain .dropdown-btn {
-  @apply flex items-center text-xs bg-elevation-1 hover:bg-elevation-3;
+  @apply flex items-center text-xs font-medium bg-elevation-1 hover:bg-elevation-3;
 }
 
 .dropdown.chain .dropdown-btn:before {
