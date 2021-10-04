@@ -3,7 +3,7 @@
 /* eslint-disable header/header */
 
 import { Database, PrivateKey } from '@textile/threaddb';
-import { getTestUsers, getTestCodeBundles, getTestContracts, getMockUpdates } from 'test-utils';
+import { getMockDbUsers, getMockCodeBundles, getMockContracts, getMockDbUpdates } from 'test-utils';
 import { initDb } from 'db/util/init';
 import { publicKeyHex } from 'db/util/identity';
 import * as q from 'db/queries';
@@ -27,9 +27,9 @@ describe('DB Queries', (): void => {
   beforeAll(async (): Promise<void> => {
     db = await initDb('test');
 
-    testUsers = getTestUsers(MOCK_CONTRACT_DATA.length);
-    testCodeBundles = getTestCodeBundles();
-    testContracts = getTestContracts(testCodeBundles);
+    testUsers = getMockDbUsers(MOCK_CONTRACT_DATA.length);
+    testCodeBundles = getMockCodeBundles();
+    testContracts = getMockContracts(testCodeBundles);
   });
   afterAll(async () => {
     await db.delete();
@@ -127,7 +127,7 @@ describe('DB Queries', (): void => {
   });
 
   it('updateCodebundle', async () => {
-    const updates = getMockUpdates(true);
+    const updates = getMockDbUpdates(true);
 
     // const originalDocument = await q.findCodeBundleById(db, codeBundle.id);
 
@@ -142,7 +142,7 @@ describe('DB Queries', (): void => {
   });
 
   it('updateContract', async () => {
-    const updates = getMockUpdates();
+    const updates = getMockDbUpdates();
 
     // const originalDocument = await q.findCodeBundleById(db, codeBundle.id);
 

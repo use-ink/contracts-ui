@@ -1,6 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "extraFileExtensions": [".cjs"],
     "project": "tsconfig.json"
   },
   "env": {
@@ -17,6 +18,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
   ],
+  "ignorePatterns": ["*.cjs"],
   "plugins": [
     "header",
     "only-warn",
