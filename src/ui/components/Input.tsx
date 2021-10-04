@@ -1,12 +1,11 @@
 import React from 'react';
-import { SimpleSpread } from 'types';
+import { IsError, SimpleSpread } from 'types';
 import { classes } from 'ui/util';
 
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
-  {
+  IsError & {
     isDisabled?: boolean;
-    isError?: boolean;
     onChange: (_: string) => void;
     value?: string | null;
   }

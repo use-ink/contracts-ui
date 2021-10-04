@@ -5,7 +5,6 @@ export * from './pages';
 export * from './instantiate';
 export * from './sidebar';
 
-export * from './App';
 export * from './Button';
 export * from './AccountSelect';
 export * from './Dropdown';

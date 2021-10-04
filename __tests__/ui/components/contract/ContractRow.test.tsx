@@ -34,7 +34,7 @@ describe('Homepage: ContractRow', () => {
     expect(getByText(contract.name)).toBeInTheDocument();
     expect(getByText(truncate(contract.address, 4))).toBeInTheDocument();
     expect(favoriteButton).toBeInTheDocument();
-    expect(getByText(moment(contract.date).format('MMM d'))).toBeInTheDocument();
+    expect(getByText(moment.utc(contract.date).format('D MMM'))).toBeInTheDocument();
   });
 
   test('toggles user favorite', () => {

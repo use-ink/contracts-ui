@@ -203,8 +203,9 @@ export async function getMockDbStateFull(): Promise<DbState> {
 //   )
 // } as unknown as Keyring;
 
-export const mockApi = {
+export const mockApi: ApiPromise = {
   rpc: { chain: { subscribeNewHeads: jest.fn() } },
+  registry: { chainDecimals: [12] },
 } as unknown as ApiPromise;
 
 export const mockCanvasState = {

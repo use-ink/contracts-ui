@@ -55,7 +55,7 @@ function validate(
   }
 
   return {
-    isValid: !!message,
+    isValid: !message,
     message,
   };
 }

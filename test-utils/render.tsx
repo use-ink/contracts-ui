@@ -1,4 +1,5 @@
 import React from 'react';
+import { jest } from '@jest/globals';
 import { render as testingLibraryRender, RenderResult } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import {
@@ -7,10 +8,14 @@ import {
   RenderHookOptions,
   RenderHookResult,
 } from '@testing-library/react-hooks';
-import { CanvasContext, DbContext, InstantiateContext } from '../src/ui/contexts';
-import { CanvasState, InstantiateState, DbState } from '../src/types';
-import { mockCanvasState, mockDbState } from './mocks';
-import { mockInstantiateState } from 'test-utils';
+import {
+  CanvasContext,
+  DbContext,
+  InstantiateContext,
+  TransactionsContext,
+} from '../src/ui/contexts';
+import { CanvasState, InstantiateState, DbState, TransactionsState } from '../src/types';
+import { mockCanvasState, mockInstantiateState, mockDbState } from './mocks';
 
 export type RenderedPlusStates<T> = [T, CanvasState, DbState];
 
@@ -23,12 +28,21 @@ export function render(
 ): RenderedPlusStates<RenderResult> {
   const canvasState = { ...mockCanvasState, ...canvas } as CanvasState;
   const dbState = { ...mockDbState, ...db };
+  const transactionsState = {
+    txs: [],
+    dismiss: jest.fn(),
+    process: jest.fn(),
+    queue: jest.fn(),
+    unqueue: jest.fn(),
+  } as TransactionsState;
 
   return [
     testingLibraryRender(
       <CanvasContext.Provider value={canvasState}>
         <DbContext.Provider value={dbState}>
-          <MemoryRouter>{ui}</MemoryRouter>
+          <TransactionsContext.Provider value={transactionsState}>
+            <MemoryRouter>{ui}</MemoryRouter>
+          </TransactionsContext.Provider>
         </DbContext.Provider>
       </CanvasContext.Provider>
     ),

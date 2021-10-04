@@ -11,9 +11,16 @@ import {
   BlueprintPromise,
   ContractPromise,
   SubmittableExtrinsic,
+  SubmittableResult,
 } from '../substrate';
 import { UseBalance, UseFormField, UseMetadata, UseStepper, UseToggle, UseWeight } from './hooks';
-import { FileState, OnInstantiateSuccess$Code, OnInstantiateSuccess$Hash, UseState } from './util';
+import {
+  FileState,
+  IsError,
+  OnInstantiateSuccess$Code,
+  OnInstantiateSuccess$Hash,
+  UseState,
+} from './util';
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
@@ -114,3 +121,28 @@ export type ContractCallAction =
   | { type: 'CALL_FINALISED'; payload: CallResult };
 
 export type UrlParams = { address: string; activeTab: string };
+
+export interface Transaction extends IsError {
+  id: number;
+  isComplete?: boolean;
+  isProcessing?: boolean;
+  isSuccess?: boolean;
+  extrinsic: SubmittableExtrinsic<'promise'>;
+  accountId: string;
+  isValid: (_: SubmittableResult) => boolean;
+  onSuccess?: (_: SubmittableResult) => Promise<void>;
+  onError?: () => void;
+}
+
+export type TransactionOptions = Pick<
+  Transaction,
+  'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'
+>;
+
+export interface TransactionsState {
+  txs: Transaction[];
+  process: (_: number) => Promise<void>;
+  queue: (_: TransactionOptions) => number;
+  unqueue: (id: number) => void;
+  dismiss: (id: number) => void;
+}

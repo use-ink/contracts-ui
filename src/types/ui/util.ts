@@ -16,6 +16,10 @@ export type StringOrNull = OrNull<string>;
 
 export type ValidateFn<T> = (_: OrFalsy<T>) => ValidateResult;
 
+export interface IsError {
+  isError?: boolean;
+}
+
 export interface ValidateResult {
   isSuccess?: boolean;
   isValid?: boolean;
@@ -23,9 +27,7 @@ export interface ValidateResult {
   message?: React.ReactNode;
 }
 
-export interface Validation extends ValidateResult {
-  isError?: boolean;
-}
+export interface Validation extends ValidateResult, IsError {}
 
 export interface FileState {
   data: Uint8Array;

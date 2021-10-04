@@ -1,6 +1,5 @@
-import { SubmittableExtrinsic, SubmittableResult } from '../substrate';
 import { UseFormField } from './hooks';
-import { FileState, SimpleSpread } from './util';
+import { FileState, IsError, SimpleSpread } from './util';
 
 export interface OptionProps<T> {
   option: DropdownOption<T>;
@@ -25,11 +24,10 @@ export type DropdownProps<T> = SimpleSpread<
 
 export type InputFileProps = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
-  {
+  IsError & {
     errorMessage?: React.ReactNode;
     isDisabled?: boolean;
     isSupplied?: boolean;
-    isError?: boolean;
     onChange: (_: FileState) => void;
     onRemove: () => void;
     successMessage?: React.ReactNode;
@@ -45,30 +43,4 @@ export interface RouteInterface {
   component?: React.ComponentType<any>;
   routes?: RouteInterface[];
   redirect?: string;
-}
-
-export interface Transaction {
-  id: number;
-  isComplete?: boolean;
-  isError?: boolean;
-  isProcessing?: boolean;
-  isSuccess?: boolean;
-  extrinsic: SubmittableExtrinsic<'promise'>;
-  accountId: string;
-  isValid: (_: SubmittableResult) => boolean;
-  onSuccess?: (_: SubmittableResult) => Promise<void>;
-  onError?: () => void;
-}
-
-export type TransactionOptions = Pick<
-  Transaction,
-  'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'
->;
-
-export interface TransactionsState {
-  txs: Transaction[];
-  process: (_: number) => Promise<void>;
-  queue: (_: TransactionOptions) => number;
-  unqueue: (id: number) => void;
-  dismiss: (id: number) => void;
 }

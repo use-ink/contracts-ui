@@ -6,6 +6,12 @@ import { render } from 'test-utils';
 import { InteractTab } from 'ui/components';
 import { ContractPromise } from 'types';
 
+jest.mock('react-hot-loader', () => {
+  return {
+    hot: () => (thing: unknown) => thing,
+  };
+});
+
 describe('Contract Interact Tab', () => {
   // const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
 
