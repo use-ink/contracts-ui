@@ -3,6 +3,7 @@ import { Button } from '../Button';
 import { Buttons } from '../Buttons';
 import { CanvasContext } from 'ui/contexts';
 import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
+import { useAccount } from 'ui/hooks/useAccount';
 
 interface Props {
   state: InstantiateState;
@@ -20,6 +21,8 @@ interface Props {
 }
 
 export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) => {
+  const account = useAccount(state.fromAddress);
+
   if (currentStep !== 4) return null;
 
   return (
@@ -27,7 +30,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
       {({ api, keyring, keyringStatus }) => (
         <>
           <div className="dark:text-gray-300 text-gray-700">
-            <p>{`Account: ${state.fromAccountName}`}</p>
+            {account && <p>{`Account: ${account?.meta.name}`}</p>}
             <p>{`Name: ${state.contractName}`}</p>
             <p>{`Code hash: ${state.codeHash}`}</p>
             <p className="mb-8">{`Constructor: ${state.constructorName}`}</p>

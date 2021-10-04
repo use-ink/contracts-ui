@@ -10,9 +10,6 @@ import {
   DispatchError,
   ApiPromise,
   AbiParam,
-  KeyringPair,
-  AbiMessage,
-  DropdownOption,
 } from 'types';
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
@@ -75,22 +72,22 @@ export function createEmptyValues(args?: AbiParam[]) {
   }
   return o;
 }
-export function createOptions(data?: Array<unknown>, kind?: string): DropdownOption[] | [] {
-  if (data) {
-    switch (kind) {
-      case 'message':
-        return (data as AbiMessage[]).map(c => ({ name: c.identifier, value: c.index }));
-      case 'pair':
-        return (data as Partial<KeyringPair>[]).map(pair => ({
-          value: pair.address || '',
-          name: (pair.meta?.name as string).toUpperCase(),
-        }));
-      default:
-        return (data as string[]).map(h => ({ name: h.toString(), value: h.toString() }));
-    }
-  }
-  return [];
-}
+// export function createOptions<T>(data?: Array<T>, kind?: string): DropdownOption<T>[] | [] {
+//   if (data) {
+//     switch (kind) {
+//       case 'message':
+//         return (data as AbiMessage[]).map(c => ({ name: c.identifier, value: c }));
+//       case 'pair':
+//         return (data as Partial<KeyringPair>[]).map(pair => ({
+//           value: pair.address || '',
+//           name: (pair.meta?.name as string).toUpperCase(),
+//         }));
+//       default:
+//         return (data as string[]).map(h => ({ name: h.toString(), value: h.toString() }));
+//     }
+//   }
+//   return [];
+// }
 
 export function isNumeric(type: string) {
   const numTypes = [

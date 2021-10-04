@@ -28,5 +28,5 @@ module.exports = {
     '^test-utils/(.*)$': resolve(__dirname, './test-utils/$1'),
     '^types$': resolve(__dirname, './src/types'),
     '^types/(.*)$': resolve(__dirname, './src/types/$1'),
-  },
+  }
 };

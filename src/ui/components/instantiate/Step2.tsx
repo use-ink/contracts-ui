@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Dropdown } from '../Dropdown';
+import React, { useEffect, useState } from 'react';
 import { Input } from '../Input';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { createOptions } from 'canvas/util';
-import type { KeyringPair, InstantiateAction, DropdownOption } from 'types';
+import { AccountSelect } from '../AccountSelect';
+import type { KeyringPair, InstantiateAction } from 'types';
+import { useAccountId } from 'ui/hooks/useAccountId';
 
 interface Props {
   keyringPairs: Partial<KeyringPair>[];
@@ -14,15 +14,9 @@ interface Props {
 }
 
 export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
-  const options = useMemo(
-    (): DropdownOption[] => createOptions(keyringPairs, 'pair'),
-    []
-  );
-  const [account, setAccount] = useState<DropdownOption>(options[0]);
+  const { value: accountId, onChange: setAccountId } = useAccountId();
   const [name, setName] = useState('');
-  // useEffect(() => {
-  //   keyringPairs && setAccount(createOptions(keyringPairs, 'pair')[0]);
-  // }, []);
+
   useEffect(() => {
     setName(contractName);
   }, [contractName]);
@@ -34,14 +28,11 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Account
       </label>
-      <Dropdown
-        options={options}
+      <AccountSelect
         className="mb-4"
-        value={account}
-        onChange={setAccount}
-      >
-        No accounts found
-      </Dropdown>
+        value={accountId}
+        onChange={setAccountId}
+      />
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Contract name
       </label>
@@ -53,13 +44,12 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       />
       <Buttons>
         <Button
-          isDisabled={!account}
+          isDisabled={!accountId}
           onClick={() =>
             dispatch({
               type: 'STEP_2_COMPLETE',
               payload: {
-                fromAddress: account?.value.toString() || '',
-                fromAccountName: account?.name.toString() || '',
+                fromAddress: accountId?.toString() || '',
                 contractName: name,
               },
             })

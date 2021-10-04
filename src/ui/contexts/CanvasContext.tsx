@@ -10,7 +10,7 @@ import type { CanvasAction, CanvasState, ChainProperties } from 'types';
 
 let loadedAccounts = false;
 
-const LOCAL_NODE = 'ws://127.0.0.1:9944';
+export const LOCAL_NODE = 'ws://127.0.0.1:9944';
 
 const NULL_CHAIN_PROPERTIES = {
   blockOneHash: null,

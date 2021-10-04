@@ -13,13 +13,9 @@ import {
   RegistryError,
 } from '../substrate';
 
+export * from './components';
 export * from './hooks';
-
-export type OrFalsy<T> = T | null | undefined;
-
-export type OrNull<T> = T | null;
-
-export type OrUndef<T> = T | undefined;
+export * from './util';
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
@@ -48,17 +44,11 @@ export interface ChainProperties {
   systemVersion: string | null;
 }
 
-export interface DropdownOption {
-  value: string | number;
-  name: string;
-}
-
 export interface InstantiateState {
   isLoading: boolean;
   isSuccess: boolean;
   currentStep: number;
   fromAddress?: string;
-  fromAccountName?: string;
   codeHash?: string;
   metadata?: Abi;
   constructorName?: string;
@@ -77,7 +67,7 @@ export type InstantiateAction =
   | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
   | {
       type: 'STEP_2_COMPLETE';
-      payload: { fromAddress: string; fromAccountName: string; contractName: string };
+      payload: { fromAddress: string; contractName: string };
     }
   | {
       type: 'STEP_3_COMPLETE';

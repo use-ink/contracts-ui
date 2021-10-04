@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Button } from '../Button';
 import { Dropdown } from '../Dropdown';
 import { useDatabase , useCanvas } from 'ui/contexts';
-import type { DropdownOption } from 'types';
 import { classes } from 'ui/util';
 
 const options = [
@@ -17,7 +16,7 @@ const options = [
 export function NetworkAndUser () {
   const { endpoint, status } = useCanvas();
   const { user } = useDatabase();
-  const [chain] = useState<DropdownOption>(options.find(({ value }) => value === endpoint) || options[0]);
+  const [chain] = useState(endpoint);
 
   return (
     <div className='network-and-user'>

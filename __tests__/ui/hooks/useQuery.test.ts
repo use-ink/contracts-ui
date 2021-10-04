@@ -1,14 +1,12 @@
-import { act, renderHook, RenderResult } from '@testing-library/react-hooks'
+import { act, RenderResult } from '@testing-library/react-hooks'
 import { jest } from '@jest/globals';
 import type { OrFalsy, OrNull, UseQuery } from 'types';
 import { useQuery } from 'ui/hooks/useQuery'
-import { hookWrapper, timeout } from 'test-utils';
+import { renderHook, timeout } from 'test-utils';
 
 interface ReturnType {
   foo: string
 };
-
-const wrapper = hookWrapper({}, { isDbReady: true });
 
 let canReturnValid = true;
 
@@ -61,7 +59,7 @@ afterEach(() => {
 })
 
 test('should initialize correctly', () => {
-  const { result } = renderHook(() => useQuery(mockQuery(0)), { wrapper });
+  const [{ result }] = renderHook(() => useQuery(mockQuery(0)), {}, { isDbReady: true });
 
   expect(extractResult(result)).toStrictEqual({ data: null, isLoading: true, isValid: true });
 
@@ -69,7 +67,7 @@ test('should initialize correctly', () => {
 })
 
 test('should fetch data after initial mount', async () => {
-  const { result, rerender, waitForValueToChange } = renderHook(() => useQuery(mockQuery(0)),  { wrapper });
+  const [{ rerender, result, waitForValueToChange }] = renderHook(() => useQuery(mockQuery(0)), {}, { isDbReady: true });
 
   // isMounted = true
   rerender();
@@ -81,7 +79,7 @@ test('should fetch data after initial mount', async () => {
 })
 
 test('should handle query errors', async () => {
-  const { result, rerender, waitForNextUpdate } = renderHook(() => useQuery(mockQuery(2)),  { wrapper });
+  const [{ result, rerender, waitForNextUpdate }] = renderHook(() => useQuery(mockQuery(2)), {}, { isDbReady: true });
 
   rerender();
 
@@ -94,7 +92,7 @@ test('should handle query errors', async () => {
 test('should refresh automatically when query is changed', async () => {
   let query = mockQuery(0);
 
-  const { result, rerender, waitForValueToChange } = renderHook(() => useQuery(query),  { wrapper });
+  const [{ result, rerender, waitForValueToChange }] = renderHook(() => useQuery(query), {}, { isDbReady: true });
 
   rerender();
 
@@ -118,7 +116,7 @@ test('should refresh automatically when query is changed', async () => {
 test('should provide working manual refresh callback', async () => {
   canReturnValid = false;
 
-  const { result, rerender, waitForNextUpdate, waitForValueToChange } = renderHook(() => useQuery(mockQuery(0)),  { wrapper });
+  const [{ result, rerender, waitForNextUpdate, waitForValueToChange }] = renderHook(() => useQuery(mockQuery(0)), {}, { isDbReady: true });
 
   rerender();
 
@@ -145,7 +143,7 @@ test('should provide working manual refresh callback', async () => {
 })
 
 test('accepts a custom validate function', async () => {
-  const { result, rerender, waitForNextUpdate } = renderHook(() => useQuery(mockQuery(0), validate),  { wrapper });
+  const [{ result, rerender, waitForNextUpdate }] = renderHook(() => useQuery(mockQuery(0), validate), {}, { isDbReady: true });
 
   rerender();
 

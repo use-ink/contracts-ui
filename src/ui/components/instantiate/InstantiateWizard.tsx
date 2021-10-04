@@ -29,7 +29,6 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
       return {
         ...state,
         fromAddress: action.payload.fromAddress,
-        fromAccountName: action.payload.fromAccountName,
         contractName: action.payload.contractName,
         currentStep: 3,
       };
@@ -78,11 +77,13 @@ export const InstantiateWizard = () => {
         contractName={state.contractName}
         currentStep={state.currentStep}
       />
-      <Step3
-        constructors={state.metadata?.constructors}
-        dispatch={dispatch}
-        currentStep={state.currentStep}
-      />
+      {state.currentStep === 3 && (
+        <Step3
+          constructors={state.metadata?.constructors || []}
+          currentStep={3}
+          dispatch={dispatch}
+        />
+      )}
       <Step4
         state={state}
         dispatch={dispatch}

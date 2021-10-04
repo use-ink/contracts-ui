@@ -2,7 +2,7 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { getMockInstantiateState } from 'test-utils';
+import { mockInstantiateState } from 'test-utils';
 import { Step4 } from 'ui/components/instantiate/Step4';
 
 describe('Instantiate Step 4', () => {
@@ -11,7 +11,7 @@ describe('Instantiate Step 4', () => {
   test('displays a button that calls the submit handler', () => {
     const { getByText } = render(
       <Step4
-        state={getMockInstantiateState()}
+        state={mockInstantiateState}
         dispatch={jest.fn()}
         currentStep={4}
         submitHandler={mockSubmitHandler}
@@ -25,7 +25,7 @@ describe('Instantiate Step 4', () => {
   test('does not render when current step is not 3', () => {
     const { container } = render(
       <Step4
-        state={getMockInstantiateState()}
+        state={mockInstantiateState}
         dispatch={jest.fn()}
         currentStep={1}
         submitHandler={mockSubmitHandler}

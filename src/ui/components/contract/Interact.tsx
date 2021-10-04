@@ -5,11 +5,13 @@ import { Button } from '../Button';
 import { Buttons } from '../Buttons';
 import { OverlayLoader } from '../OverlayLoader';
 import { Input } from '../Input';
+import { AccountSelect } from '../AccountSelect';
 import { ResultsOutput } from './ResultsOutput';
-import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
+import { convertToNumber, createEmptyValues } from 'canvas';
 import { useCanvas } from 'ui/contexts';
 import { contractCallReducer } from 'ui/reducers';
-import { Abi, DropdownOption, ContractCallParams, AbiMessage, ContractCallState } from 'types';
+import { Abi, ContractCallParams, AbiMessage, ContractCallState } from 'types';
+import { useAccountId } from 'ui/hooks/useAccountId';
 
 interface Props {
   abi: Abi;
@@ -34,20 +36,19 @@ const initialState: ContractCallState = {
 };
 
 export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
+  const options = abi.messages.map((message) => {
+    return {
+      name: message.method,
+      value: message
+    }
+  });
+
   const { api, keyring } = useCanvas();
-  const options = createOptions(abi.messages, 'message');
-  const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
-  const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
+  const { value: accountId, onChange: setAccountId } = useAccountId();
+  const [message, setMessage] = useState<AbiMessage>(options[0].value);
   const [argValues, setArgValues] = useState<Record<string, string>>();
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
-  const keyringPairs = keyring?.getPairs();
-  const accountsOptions = createOptions(keyringPairs, 'pair');
-  const [account, setAccount] = useState<DropdownOption>(accountsOptions[0]);
-
-  useEffect(() => {
-    setMessage(abi.findMessage(selectedMsg.value));
-  }, [selectedMsg, abi]);
 
   useEffect(() => {
     if (message && message.args.length > 0) {
@@ -65,18 +66,18 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
       <div className="grid grid-cols-12 w-full">
         <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
           <h2 className="mb-2 text-sm">Call from account</h2>
-          <Dropdown
-            options={accountsOptions}
-            className="mb-4"
-            value={account}
-            onChange={setAccount}
-          >
-            No accounts found
-          </Dropdown>
+          <AccountSelect
+            value={accountId}
+            onChange={setAccountId}
+          />
           <h2 className="mb-2 text-sm">Message to send</h2>
           <div className="flex">
             <div className="mb-4 flex-1">
-              <Dropdown options={options} onChange={selectMsg} value={selectedMsg}>
+              <Dropdown
+                options={options}
+                onChange={setMessage}
+                value={message}
+              >
                 No messages found
               </Dropdown>
             </div>
@@ -115,7 +116,7 @@ export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) =
                   gasLimit: 155852802980,
                   argValues,
                   message,
-                  keyringPair: keyring?.getPair(account.value.toString()),
+                  keyringPair: accountId ? keyring?.getPair(accountId) : undefined,
                   dispatch,
                 })
               }

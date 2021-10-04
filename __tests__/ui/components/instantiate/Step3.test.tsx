@@ -14,10 +14,6 @@ describe('Instantiate Step 3', () => {
     );
     expect(getByPlaceholderText('initValue: <bool>')).toBeInTheDocument();
   });
-  test('does not render when no constructors given', () => {
-    const { container } = render(<Step3 dispatch={jest.fn()} currentStep={3} />);
-    expect(container).toBeEmptyDOMElement();
-  });
   test('does not render when current step is not 3', () => {
     const { container } = render(
       <Step3 constructors={constructors} dispatch={jest.fn()} currentStep={1} />
