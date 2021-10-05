@@ -28,14 +28,17 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
 
   return constructors ? (
     <>
-      <label htmlFor="constr" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label
+        htmlFor="constr"
+        className="inline-block mb-2 text-sm font-medium dark:text-gray-300 text-gray-700"
+      >
         Deployment constructor
       </label>
       <Dropdown
         options={createOptions(constructors, 'message')}
         className="mb-4"
         value={constr}
-        onChange={(o) => setConstructor(o)}
+        onChange={o => setConstructor(o)}
       >
         No constructors found
       </Dropdown>
@@ -63,7 +66,7 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
                   },
                 })
               }
-              variant='primary'
+              variant="primary"
             >
               Next
             </Button>
