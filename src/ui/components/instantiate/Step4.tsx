@@ -35,7 +35,6 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
 
           <Buttons>
             <Button
-              className="mr-4"
               onClick={() =>
                 submitHandler(
                   1300889614901161,
@@ -47,7 +46,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
                   state
                 )
               }
-              variant='primary'
+              variant="primary"
             >
               Instantiate
             </Button>

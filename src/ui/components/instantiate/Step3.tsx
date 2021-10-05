@@ -54,7 +54,6 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
           />
           <Buttons>
             <Button
-              className="mr-4"
               isDisabled={!constr.name || !argValues}
               onClick={() =>
                 argValues &&
