@@ -33,16 +33,22 @@ export const Step1 = ({ currentStep, dispatch }: Props) => {
 
   return (
     <>
-      <label htmlFor="hash" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
+      <label
+        htmlFor="hash"
+        className="inline-block mb-2 text-sm font-medium dark:text-gray-300 text-gray-700"
+      >
         Look up Code Hash
       </label>
       <Input
         value={hash}
         handleChange={e => setHash(e.target.value)}
-        placeholder="on-chain code hash"
+        placeholder="On-chain code hash"
         id="codeHash"
       />
-      <label htmlFor="metadata" className="inline-block mb-3 dark:text-gray-300 text-gray-700">
+      <label
+        htmlFor="metadata"
+        className="inline-block mb-3 text-sm font-medium dark:text-gray-300 text-gray-700"
+      >
         Add contract metadata
       </label>
       <FileInput
@@ -56,17 +62,18 @@ export const Step1 = ({ currentStep, dispatch }: Props) => {
         <Button
           className="mt-16"
           onClick={() => {
-              metadata && dispatch({
+            metadata &&
+              dispatch({
                 type: 'STEP_1_COMPLETE',
                 payload: {
                   codeHash: hash,
                   metadata,
                   contractName: metadata.project.contract.name.toHuman(),
                 },
-              })
+              });
           }}
           isDisabled={!metadata || !hash}
-          variant='primary'
+          variant="primary"
         >
           Next
         </Button>
