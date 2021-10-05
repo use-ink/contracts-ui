@@ -3,7 +3,7 @@
 }
 
 .dropdown .dropdown-btn {
-  @apply relative flex w-full p-2 text-left dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
+  @apply relative flex w-full p-2 items-center text-left text-sm dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
 }
 
 .dropdown .dropdown-btn > span {
@@ -15,7 +15,7 @@
 }
 
 .dropdown .options {
-  @apply absolute z-50 w-full dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-base dark:text-gray-300 text-gray-500 bg-white rounded-b;
+  @apply absolute z-50 w-full dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 bg-white rounded-b;
 }
 
 .dropdown .options .option {
