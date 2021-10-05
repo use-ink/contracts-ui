@@ -26,7 +26,7 @@
 }
 
 .sidebar .connect-account {
-  @apply font-extrabold w-full text-center justify-center mt-1;
+  @apply font-semibold w-full text-center justify-center mt-1;
 }
 
 .sidebar .navigation {
@@ -38,7 +38,7 @@
 }
 
 .sidebar .section .header {
-  @apply text-gray-400 text-xs py-1;
+  @apply text-gray-400 text-xs font-medium py-1;
 }
 
 .sidebar .section .none-yet {
