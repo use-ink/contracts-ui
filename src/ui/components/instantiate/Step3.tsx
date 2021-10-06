@@ -1,9 +1,12 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useState, useEffect } from 'react';
 import { ArgumentForm } from '../ArgumentForm';
 import { Dropdown } from '../Dropdown';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { createOptions, createEmptyValues } from 'canvas/util';
+import { createOptions, createEmptyValues } from 'api/util';
 import type { InstantiateAction, DropdownOption, AbiMessage } from 'types';
 
 interface Props {
@@ -35,7 +38,7 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
         options={createOptions(constructors, 'message')}
         className="mb-4"
         value={constr}
-        onChange={(o) => setConstructor(o)}
+        onChange={o => setConstructor(o)}
       >
         No constructors found
       </Dropdown>
@@ -63,7 +66,7 @@ export const Step3 = ({ constructors, dispatch, currentStep }: Props) => {
                   },
                 })
               }
-              variant='primary'
+              variant="primary"
             >
               Next
             </Button>

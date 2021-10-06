@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useCallback } from 'react';
 import { FolderOpenIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';

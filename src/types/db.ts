@@ -1,10 +1,11 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './app';
 
-export type { Collection, Database, PrivateKey }
+export type { Collection, Database, PrivateKey };
 
 interface Document {
   _id?: string;

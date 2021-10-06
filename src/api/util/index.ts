@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import { compactAddLength, u8aToU8a } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';

@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useState, useEffect, useReducer } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../ArgumentForm';
@@ -6,8 +9,8 @@ import { Buttons } from '../Buttons';
 import { OverlayLoader } from '../OverlayLoader';
 import { Input } from '../Input';
 import { ResultsOutput } from './ResultsOutput';
-import { convertToNumber, createEmptyValues, createOptions } from 'canvas';
-import { useCanvas } from 'ui/contexts';
+import { convertToNumber, createEmptyValues, createOptions } from 'api';
+import { useApi } from 'ui/contexts';
 import { contractCallReducer } from 'ui/reducers';
 import { Abi, DropdownOption, ContractCallParams, AbiMessage, ContractCallState } from 'types';
 
@@ -34,7 +37,7 @@ const initialState: ContractCallState = {
 };
 
 export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
-  const { api, keyring } = useCanvas();
+  const { api, keyring } = useApi();
   const options = createOptions(abi.messages, 'message');
   const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
   const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);

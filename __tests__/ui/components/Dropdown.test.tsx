@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
@@ -7,7 +10,7 @@ import { DropdownOption } from 'types';
 
 const options: DropdownOption[] = [
   { name: 'foo', value: 'fooValue' },
-  { name: 'bar', value: 'barValue' }
+  { name: 'bar', value: 'barValue' },
 ];
 
 describe('Dropdown', () => {
@@ -15,16 +18,11 @@ describe('Dropdown', () => {
 
   test('correctly renders the dropdown', () => {
     const rendered = render(
-      <Dropdown
-        className='foo'
-        options={options}
-        onChange={onChange}
-        value={options[0]}
-       >
+      <Dropdown className="foo" options={options} onChange={onChange} value={options[0]}>
         No options found
       </Dropdown>
-    )
-    
+    );
+
     const dropdown = rendered.getByText(options[0].name).parentElement as HTMLButtonElement;
 
     expect(dropdown).toBeInTheDocument();
@@ -37,31 +35,22 @@ describe('Dropdown', () => {
 
   test('correctly renders without options', () => {
     const rendered = render(
-      <Dropdown
-        className='foo'
-        onChange={onChange}
-       >
-         No options found
+      <Dropdown className="foo" onChange={onChange}>
+        No options found
       </Dropdown>
-    )
-    
+    );
+
     const dropdown = rendered.getByText('No options found');
 
     expect(dropdown).toBeInTheDocument();
   });
 
-
   test('receives onChange event', () => {
     const rendered = render(
-      <Dropdown
-        className='foo'
-        options={options}
-        onChange={onChange}
-        value={options[0]}
-       >
-         No options found
-        </Dropdown>
-    )
+      <Dropdown className="foo" options={options} onChange={onChange} value={options[0]}>
+        No options found
+      </Dropdown>
+    );
 
     const dropdown = rendered.getByText(options[0].name);
 

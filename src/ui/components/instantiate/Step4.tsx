@@ -1,7 +1,10 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { CanvasContext } from 'ui/contexts';
+import { ApiContext } from 'ui/contexts';
 import type { ApiPromise, Keyring, InstantiateState, InstantiateAction } from 'types';
 
 interface Props {
@@ -23,7 +26,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
   if (currentStep !== 4) return null;
 
   return (
-    <CanvasContext.Consumer>
+    <ApiContext.Consumer>
       {({ api, keyring, keyringStatus }) => (
         <>
           <div className="dark:text-gray-300 text-gray-700">
@@ -47,7 +50,7 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
                   state
                 )
               }
-              variant='primary'
+              variant="primary"
             >
               Instantiate
             </Button>
@@ -64,6 +67,6 @@ export const Step4 = ({ state, dispatch, currentStep, submitHandler }: Props) =>
           </Buttons>
         </>
       )}
-    </CanvasContext.Consumer>
+    </ApiContext.Consumer>
   );
 };

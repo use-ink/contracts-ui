@@ -1,8 +1,11 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Database } from '@textile/threaddb';
 import { jest } from '@jest/globals';
 import { codeBundle, contract, user } from 'db';
 
-import { CanvasState, DbState, InstantiateState, PrivateKey, ApiPromise } from 'types';
+import { ApiState, DbState, InstantiateState, PrivateKey, ApiPromise } from 'types';
 
 export function createMockApi() {
   const api = {
@@ -25,7 +28,7 @@ export function getMockInstantiateState(): InstantiateState {
   };
 }
 
-export function getMockCanvasState(): CanvasState {
+export function getMockApiState(): ApiState {
   return {
     endpoint: '',
     keyring: null,

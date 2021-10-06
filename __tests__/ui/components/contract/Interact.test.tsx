@@ -1,10 +1,13 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
-import { customRender, getMockCanvasState, getMockDbState, mockAbiFlipper } from 'test-utils';
+import { customRender, getMockApiState, getMockDbState, mockAbiFlipper } from 'test-utils';
 import { InteractTab } from 'ui/components';
-import { CanvasState, DbState } from 'types';
+import { ApiState, DbState } from 'types';
 
 describe('Contract Interact Tab', () => {
   const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
@@ -12,11 +15,11 @@ describe('Contract Interact Tab', () => {
   const mockCall = jest.fn();
 
   let mockDbState: DbState;
-  let mockCanvasState: CanvasState;
+  let mockApiState: ApiState;
 
   beforeAll(async () => {
     mockDbState = await getMockDbState();
-    mockCanvasState = getMockCanvasState();
+    mockApiState = getMockApiState();
   });
   afterAll(async () => {
     await mockDbState.db.delete();
@@ -30,7 +33,7 @@ describe('Contract Interact Tab', () => {
         isActive={true}
       />,
       {
-        ...mockCanvasState,
+        ...mockApiState,
         keyringStatus: 'READY',
         status: 'READY',
       },
@@ -49,7 +52,7 @@ describe('Contract Interact Tab', () => {
         isActive={true}
       />,
       {
-        ...mockCanvasState,
+        ...mockApiState,
         keyringStatus: 'READY',
         status: 'READY',
       },

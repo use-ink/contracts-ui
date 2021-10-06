@@ -1,11 +1,14 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useReducer, Reducer } from 'react';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';
 import { Step4 } from './Step4';
 import type { InstantiateState, InstantiateAction } from 'types';
-import { instantiateWithHash } from 'canvas/instantiate';
-import { useCanvas } from 'ui/contexts';
+import { instantiateWithHash } from 'api/instantiate';
+import { useApi } from 'ui/contexts';
 
 const initialState: InstantiateState = {
   isLoading: false,
@@ -55,7 +58,7 @@ const reducer: Reducer<InstantiateState, InstantiateAction> = (state, action) =>
 };
 
 export const InstantiateWizard = () => {
-  const { api, keyring } = useCanvas();
+  const { api, keyring } = useApi();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const keyringPairs = keyring?.getPairs();

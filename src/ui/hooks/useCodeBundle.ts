@@ -1,9 +1,10 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { useQuery } from './useQuery';
-import { findCodeBundleById  } from 'db/queries';
+import { findCodeBundleById } from 'db/queries';
 
 import type { CodeBundleDocument, UseQuery } from 'types';
 

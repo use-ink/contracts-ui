@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { RouteInterface } from 'types';

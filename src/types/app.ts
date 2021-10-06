@@ -1,4 +1,6 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { ReactNode, ComponentType } from 'react';
 import {
   ContractPromise,
@@ -17,7 +19,7 @@ export type VoidFn = () => void;
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
-export interface CanvasState extends ChainProperties {
+export interface ApiState extends ChainProperties {
   endpoint: string;
   keyring: Keyring | null;
   keyringStatus: string | null;
@@ -26,7 +28,7 @@ export interface CanvasState extends ChainProperties {
   status: Status;
 }
 
-export type CanvasAction =
+export type ApiAction =
   | { type: 'CONNECT_INIT' }
   | { type: 'CONNECT'; payload: ApiPromise }
   | { type: 'CONNECT_READY'; payload: Partial<ChainProperties> }
