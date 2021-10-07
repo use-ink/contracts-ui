@@ -1,19 +1,22 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
-import { customRender, getMockCanvasState, getMockDbState } from 'test-utils';
-import { CanvasState, DbState } from 'types';
+import { customRender, getMockApiState, getMockDbState } from 'test-utils';
+import { ApiState, DbState } from 'types';
 import { Router, routes } from 'ui/components/Router';
 
-describe('Canvas context', () => {
-  let mockCanvasState: CanvasState;
+describe('ApiContext', () => {
+  let mockApiState: ApiState;
   let mockDbState: DbState;
   beforeAll(async (): Promise<void> => {
-    [mockCanvasState, mockDbState] = [getMockCanvasState(), await getMockDbState()];
+    [mockApiState, mockDbState] = [getMockApiState(), await getMockDbState()];
   });
   test('should render the homepage if the api and database are in a ready state', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
       {
-        ...mockCanvasState,
+        ...mockApiState,
         keyringStatus: 'READY',
         status: 'READY',
       },
@@ -24,7 +27,7 @@ describe('Canvas context', () => {
   test('should suggest to check extension if keyring state is not ready', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
-      { ...mockCanvasState, status: 'READY' },
+      { ...mockApiState, status: 'READY' },
       mockDbState
     );
     expect(getByText(`Loading accounts...`)).toBeTruthy();
@@ -32,7 +35,7 @@ describe('Canvas context', () => {
   test('should render a message if the api is not ready but the keyring is', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
-      { ...mockCanvasState, keyringStatus: 'READY' },
+      { ...mockApiState, keyringStatus: 'READY' },
       mockDbState
     );
     expect(getByText(`Connecting...`)).toBeTruthy();
@@ -41,7 +44,7 @@ describe('Canvas context', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
       {
-        ...mockCanvasState,
+        ...mockApiState,
         error: { key: 'value' },
         status: 'ERROR',
       },

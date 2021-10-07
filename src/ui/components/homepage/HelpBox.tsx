@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { Button } from '../Button';
@@ -26,15 +29,9 @@ export function HelpBox(): React.ReactElement | null {
           Get started writing smart contracts
         </div>
         <div className="text-xs text-gray-500 dark:text-gray-400 pb-2">
-          Canvas UI lets you explore and interact with smart contracts written in ink! - a smart
-          contract language based on Rust!
-          <br />
-          <a
-            href="https://paritytech.github.io/ink-docs/"
-            target="_blank"
-            rel="noreferrer"
-            className="my-2 inline-block"
-          >
+          Substrate Contracts Explorer lets you explore and interact with smart contracts written in
+          ink! - a smart contract language based on Rust!{' '}
+          <a href="https://paritytech.github.io/ink-docs/" target="_blank" rel="noreferrer">
             Learn more
           </a>
         </div>

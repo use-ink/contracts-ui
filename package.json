@@ -1,10 +1,10 @@
 {
-  "name": "canvas-ui",
+  "name": "substrate-contracts-explorer",
   "version": "2.0.0",
-  "description": "Canvas UI",
+  "description": "Substrate Contracts Explorer",
   "private": true,
   "type": "module",
-  "homepage": "https://paritytech.github.io/canvas-ui-v2",
+  "homepage": "https://paritytech.github.io/substrate-contracts-explorer",
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "NODE_ENV=development webpack --progress --config webpack.dev.cjs",

@@ -1,8 +1,11 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 
 import { Page } from 'ui/templates';
 
-export function InstantiateWithCode () {
+export function InstantiateWithCode() {
   return (
     <Page
       header="Upload and Instantiate Contract"
@@ -11,4 +14,4 @@ export function InstantiateWithCode () {
       <p className="text-gray-200">todo</p>
     </Page>
   );
-};
+}

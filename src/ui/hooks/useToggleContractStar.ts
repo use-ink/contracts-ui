@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
@@ -18,8 +19,8 @@ export function useToggleContractStar(): (_: string) => Promise<number> {
 
         if (isStarred) {
           return unstarContract(db, identity, address);
-        } 
-        
+        }
+
         return starContract(db, identity, address);
       } catch (e) {
         console.error(e);

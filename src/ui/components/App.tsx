@@ -1,14 +1,15 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
 import { Sidebar } from './sidebar';
 import { Router, routes } from './Router';
-import { CanvasContextProvider, DatabaseContextProvider } from 'ui/contexts';
+import { ApiContextProvider, DatabaseContextProvider } from 'ui/contexts';
 // import { Database } from '@db';
 
 export function App(): JSX.Element {
   return (
-    <CanvasContextProvider>
+    <ApiContextProvider>
       <DatabaseContextProvider>
         <div className="dark">
           <div className="relative md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900 dark:text-white text-black">
@@ -17,6 +18,6 @@ export function App(): JSX.Element {
           </div>
         </div>
       </DatabaseContextProvider>
-    </CanvasContextProvider>
+    </ApiContextProvider>
   );
 }

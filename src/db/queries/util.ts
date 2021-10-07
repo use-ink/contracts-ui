@@ -1,7 +1,10 @@
-import type { Collection, Database } from "@textile/threaddb";
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
+import type { Collection, Database } from '@textile/threaddb';
 import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
-export async function pushToRemote (db: Database, ...collections: string[]): Promise<void> {
+export async function pushToRemote(db: Database, ...collections: string[]): Promise<void> {
   if (db.remote?.id) {
     for (const collection of collections) {
       await db.remote.push(collection);

@@ -1,11 +1,14 @@
-import { useState } from "react";
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
+import { useState } from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (_: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
 
-      return item ? JSON.parse(item) as T : initialValue;
+      return item ? (JSON.parse(item) as T) : initialValue;
     } catch (error) {
       console.error(error);
       return initialValue;
@@ -14,7 +17,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (_: T) => 
 
   const setValue = (value: T) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) as T : value;
+      const valueToStore = value instanceof Function ? (value(storedValue) as T) : value;
       setStoredValue(valueToStore);
 
       window.localStorage.setItem(key, JSON.stringify(valueToStore));

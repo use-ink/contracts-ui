@@ -1,9 +1,12 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
-import { createOptions } from 'canvas/util';
+import { createOptions } from 'api/util';
 import type { KeyringPair, InstantiateAction, DropdownOption } from 'types';
 
 interface Props {
@@ -14,10 +17,7 @@ interface Props {
 }
 
 export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Props) => {
-  const options = useMemo(
-    (): DropdownOption[] => createOptions(keyringPairs, 'pair'),
-    []
-  );
+  const options = useMemo((): DropdownOption[] => createOptions(keyringPairs, 'pair'), []);
   const [account, setAccount] = useState<DropdownOption>(options[0]);
   const [name, setName] = useState('');
   // useEffect(() => {
@@ -34,12 +34,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
         Account
       </label>
-      <Dropdown
-        options={options}
-        className="mb-4"
-        value={account}
-        onChange={setAccount}
-      >
+      <Dropdown options={options} className="mb-4" value={account} onChange={setAccount}>
         No accounts found
       </Dropdown>
       <label htmlFor="account" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
@@ -64,7 +59,7 @@ export const Step2 = ({ dispatch, currentStep, keyringPairs, contractName }: Pro
               },
             })
           }
-          variant='primary'
+          variant="primary"
         >
           Next
         </Button>

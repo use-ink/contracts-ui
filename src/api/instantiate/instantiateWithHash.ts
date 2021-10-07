@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { BlueprintPromise } from '@polkadot/api-contract';
 import { handleDispatchError, saveInLocalStorage, encodeSalt, transformUserInput } from '../util';
 import { getInstanceFromEvents } from './getAddressFromEvents';

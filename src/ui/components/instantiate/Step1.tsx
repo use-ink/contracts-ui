@@ -1,10 +1,13 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useState, ChangeEvent } from 'react';
 import { Button } from '../Button';
 import { Buttons } from '../Buttons';
 import { Input } from '../Input';
 import { FileInput } from '../FileInput';
-import { convertMetadata } from 'canvas/util';
-import { useCanvas } from 'ui/contexts';
+import { convertMetadata } from 'api/util';
+import { useApi } from 'ui/contexts';
 import type { Abi, AnyJson, InstantiateAction } from 'types';
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
@@ -15,7 +18,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
 export const Step1 = ({ currentStep, dispatch }: Props) => {
   const [metadata, setMetadata] = useState<Abi>();
   const [hash, setHash] = useState('');
-  const { api } = useCanvas();
+  const { api } = useApi();
 
   function handleUploadMetadata(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.item(0);
@@ -56,17 +59,18 @@ export const Step1 = ({ currentStep, dispatch }: Props) => {
         <Button
           className="mt-16"
           onClick={() => {
-              metadata && dispatch({
+            metadata &&
+              dispatch({
                 type: 'STEP_1_COMPLETE',
                 payload: {
                   codeHash: hash,
                   metadata,
                   contractName: metadata.project.contract.name.toHuman(),
                 },
-              })
+              });
           }}
           isDisabled={!metadata || !hash}
-          variant='primary'
+          variant="primary"
         >
           Next
         </Button>

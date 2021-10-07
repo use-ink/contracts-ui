@@ -15,8 +15,8 @@
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "canvas": ["./src/canvas"],
-      "canvas/*": ["./src/canvas/*"],
+      "api": ["./src/api"],
+      "api/*": ["./src/api/*"],
       "db": ["./src/db"],
       "db/*": ["./src/db/*"],
       "test-utils": ["./test-utils"],

@@ -1,9 +1,15 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util/identity';
-import { getCodeBundleCollection, getContractCollection, getUserCollection, pushToRemote } from './util';
+import {
+  getCodeBundleCollection,
+  getContractCollection,
+  getUserCollection,
+  pushToRemote,
+} from './util';
 import type { UserDocument } from 'types';
 
 export async function findUser(
@@ -17,7 +23,11 @@ export async function findUser(
   return user || null;
 }
 
-export async function getUser(db: Database, identity: PrivateKey | null, { creator, name, email }: Partial<UserDocument> = {}): Promise<UserDocument | null> {
+export async function getUser(
+  db: Database,
+  identity: PrivateKey | null,
+  { creator, name, email }: Partial<UserDocument> = {}
+): Promise<UserDocument | null> {
   const existing = await findUser(db, identity);
 
   if (!identity) {
@@ -38,16 +48,14 @@ export async function getUser(db: Database, identity: PrivateKey | null, { creat
   }
 
   if (identity && !existing) {
-    const user = getUserCollection(db)
-      .create({
-        codeBundlesStarred: [],
-        contractsStarred: [],
-        creator,
-        name,
-        email,
-        publicKey: publicKeyHex(identity) as string
-
-      })
+    const user = getUserCollection(db).create({
+      codeBundlesStarred: [],
+      contractsStarred: [],
+      creator,
+      name,
+      email,
+      publicKey: publicKeyHex(identity) as string,
+    });
     await user.save();
 
     return user;
@@ -79,7 +87,9 @@ export async function starContract(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
+    const user = await getUserCollection(db).findOne({
+      publicKey: publicKeyHex(identity) as string,
+    });
     const contract = await getContractCollection(db).findOne({ address });
 
     if (user && contract) {
@@ -116,7 +126,9 @@ export async function unstarContract(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
+    const user = await getUserCollection(db).findOne({
+      publicKey: publicKeyHex(identity) as string,
+    });
     const contract = await getContractCollection(db).findOne({ address });
 
     if (user && contract) {
@@ -151,7 +163,9 @@ export async function starCodeBundle(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
+    const user = await getUserCollection(db).findOne({
+      publicKey: publicKeyHex(identity) as string,
+    });
     const codeBundle = await getCodeBundleCollection(db).findOne({ id });
 
     if (user && codeBundle) {
@@ -187,7 +201,9 @@ export async function unstarCodeBundle(
       return Promise.reject(new Error('No user identity'));
     }
 
-    const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) as string });
+    const user = await getUserCollection(db).findOne({
+      publicKey: publicKeyHex(identity) as string,
+    });
     const codeBundle = await getCodeBundleCollection(db).findOne({ id });
 
     if (user && codeBundle) {

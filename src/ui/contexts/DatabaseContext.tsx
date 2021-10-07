@@ -1,9 +1,17 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import { PrivateKey } from '@textile/crypto';
 import { Database as DB } from '@textile/threaddb';
-import React, { HTMLAttributes, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useCanvas } from './CanvasContext';
+import React, {
+  HTMLAttributes,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useApi } from './ApiContext';
 import { init } from 'db/util';
 import type { DbState, UserDocument } from 'types';
 import { dropExpiredDocuments, getUser } from 'db';
@@ -15,7 +23,7 @@ export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 export function DatabaseContextProvider({
   children,
 }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { status, blockOneHash, endpoint } = useCanvas();
+  const { status, blockOneHash, endpoint } = useApi();
   const [db, setDb] = useState<DB>(new DB(''));
   const [identity, setIdentity] = useState<PrivateKey | null>(null);
   const [user, setUser] = useState<UserDocument | null>(null);
@@ -26,18 +34,15 @@ export function DatabaseContextProvider({
     []
   );
 
-  const resetLocalDb = useCallback(
-    async (): Promise<void> => {
-      if (!!blockOneHash && !isRemote) {
-        try {
-          await dropExpiredDocuments(db, blockOneHash);
-        } finally {
-          setIsDbReady(true);
-        }
+  const resetLocalDb = useCallback(async (): Promise<void> => {
+    if (!!blockOneHash && !isRemote) {
+      try {
+        await dropExpiredDocuments(db, blockOneHash);
+      } finally {
+        setIsDbReady(true);
       }
-    },
-    [blockOneHash, isRemote]
-  )
+    }
+  }, [blockOneHash, isRemote]);
 
   // initial initialization
   useEffect((): void => {
@@ -57,31 +62,22 @@ export function DatabaseContextProvider({
       }
     }
 
-    createDb()
-      .then(resetLocalDb)
-      .catch(console.error);
+    createDb().then(resetLocalDb).catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, status]);
 
-  const refreshUser = useCallback(
-    async (): Promise<void> => {
-      const user = await getUser(db, identity);
+  const refreshUser = useCallback(async (): Promise<void> => {
+    const user = await getUser(db, identity);
 
-      setUser(user);
-    },
-    [db, identity]
-  );
+    setUser(user);
+  }, [db, identity]);
 
   const props = useMemo<DbState>(
     () => ({ db, identity, isDbReady, refreshUser, user }),
     [db, identity, isDbReady, user]
   );
 
-  return (
-    <DbContext.Provider value={props}>
-      {children}
-    </DbContext.Provider>
-  );
+  return <DbContext.Provider value={props}>{children}</DbContext.Provider>;
 }
 
 export function useDatabase(): DbState {
