@@ -44,7 +44,7 @@ export function Contracts(): React.ReactElement | null {
   }
 
   return (
-    <div className="border border-collapse dark:border-gray-700 border-gray-200 rounded w-auto">
+    <div className="border border-collapse overflow-hidden dark:border-gray-700 border-gray-200 rounded w-auto">
       {contracts?.map(contract => {
         const isOwned = user?.publicKey && contract.owner === user.publicKey;
         const isStarred = isOwned || user?.contractsStarred.includes(contract.address) || false;

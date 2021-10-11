@@ -1,5 +1,5 @@
 .form-field {
-  @apply mb-5 peer-last-of-type:mb-8;
+  @apply mb-6 peer-last-of-type:mb-8;
 }
 
 .form-field > label {
