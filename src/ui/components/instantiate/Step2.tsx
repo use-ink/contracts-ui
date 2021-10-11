@@ -104,7 +104,7 @@ export function Step2 () {
             onChange={setMegaGas}
             placeholder="200000"
           />
-          <div className="relative">
+          <div className="relative pt-2">
             <p className="text-gray-500 text-xs pb-2">
               {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
               {percentage}% of block time)
