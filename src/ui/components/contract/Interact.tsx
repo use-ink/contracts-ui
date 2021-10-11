@@ -59,7 +59,7 @@ export const InteractTab = ({ contract }: Props) => {
           <Dropdown
             id="message"
             options={createMessageOptions(contract.abi.messages)}
-            className="mb-4 text-sm"
+            className="mb-4"
             {...message}
           >
             No messages found
