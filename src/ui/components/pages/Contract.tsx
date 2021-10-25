@@ -20,7 +20,7 @@ export const Contract = () => {
 
   return contract ? (
     <PageFull
-      header={`${contract.abi.project.contract.name}`}
+      header={`${contract.abi.info.contract.name}`}
       help={`X instantiated this contract from CodeBundle on 31 Dec`}
     >
       <>

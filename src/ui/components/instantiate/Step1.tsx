@@ -53,7 +53,7 @@ export const Step1 = ({ currentStep, dispatch }: Props) => {
         changeHandler={handleUploadMetadata}
         removeHandler={() => setMetadata(undefined)}
         fileLoaded={!!metadata}
-        successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
+        successText={`${metadata?.info.contract.name} - v${metadata?.info.contract.version}`}
       />
       <Buttons>
         <Button
@@ -65,7 +65,7 @@ export const Step1 = ({ currentStep, dispatch }: Props) => {
                 payload: {
                   codeHash: hash,
                   metadata,
-                  contractName: metadata.project.contract.name.toHuman(),
+                  contractName: metadata.info.contract.name.toHuman(),
                 },
               });
           }}
