@@ -30,7 +30,7 @@ function deriveFromJson (source: AnyJson = null, options: DeriveOptions, api?: A
   try {
     value = new Abi(source, api?.registry.getChainProperties());
 
-    const name = options.name || value.project.contract.name.toString();
+    const name = options.name || value.info.contract.name.toString();
 
     return {
       source,
@@ -71,7 +71,7 @@ function validate (metadata: Abi | undefined, { isWasmRequired }: Options): Vali
     };
   }
 
-  const wasm = metadata.project.source.wasm;
+  const wasm = metadata.info.source.wasm;
   const isWasmEmpty = wasm.isEmpty;
   const isWasmInvalid = !isWasm(wasm.toU8a());
 

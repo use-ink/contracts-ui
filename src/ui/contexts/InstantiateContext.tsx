@@ -104,8 +104,8 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
 
   useEffect(
     (): void => {
-      if (metadata.value?.project.contract.name && (!name.value || name.value === '')) {
-        setName(metadata.value?.project.contract.name.toString());
+      if (metadata.value?.info.contract.name && (!name.value || name.value === '')) {
+        setName(metadata.value?.info.contract.name.toString());
       }
     },
     [metadata.value, name.value]

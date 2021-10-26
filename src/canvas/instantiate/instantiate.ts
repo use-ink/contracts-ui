@@ -18,6 +18,7 @@ export function createInstantiateTx (
 ): SubmittableExtrinsic<'promise'> | null {
   const isFromHash = !!codeHash;
   const saltu8a = encodeSalt(salt.value);
+  
   const options = {
     gasLimit,
     salt: saltu8a,
@@ -25,8 +26,9 @@ export function createInstantiateTx (
       ? api.registry.createType('Balance', endowment.value)
       : undefined
   };
+  console.log(options);
 
-  const wasm = metadata?.project.source.wasm;
+  const wasm = metadata?.info.source.wasm;
   const isValid = isFromHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
@@ -102,7 +104,7 @@ export function onInstantiateFromCode (
             codeHash: blueprint.codeHash.toHex(),
             creator: accountId.value,
             genesisHash: api.genesisHash.toHex(),
-            name: blueprint.abi.project.contract.name.toString(),
+            name: blueprint.abi.info.contract.name.toString(),
             tags: []
           }
         );
@@ -115,7 +117,7 @@ export function onInstantiateFromCode (
             address: contract.address.toString(),
             blockZeroHash: blockZeroHash || undefined,
             creator: accountId.value,
-            codeHash: blueprint?.codeHash.toHex() || contract.abi.project.source.wasmHash.toHex(),
+            codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
             genesisHash: api?.genesisHash.toString(),
             name: name.value,
             tags: []

@@ -54,7 +54,7 @@ export function Step1 () {
                 className="dark:bg-elevation-1 dark:border-gray-700 border p-4 rounded"
               >
                 <div className="dark:text-white mb-1">
-                  {metadata.value?.project.contract.name}
+                  {metadata.value?.info.contract.name}
                 </div>
                 {codeHash && (
                   <div className="dark:text-gray-500 text-sm">

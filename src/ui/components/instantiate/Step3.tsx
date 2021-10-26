@@ -32,7 +32,7 @@ export function Step3 () {
     isResultValid
   );
 
-  const displayHash = codeHash || metadata.value?.project.source.wasmHash.toHex() || null;
+  const displayHash = codeHash || metadata.value?.info.source.wasmHash.toHex() || null;
 
   return (
     <>

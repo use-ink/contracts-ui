@@ -53,6 +53,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser.js'
     }),
     new MiniCssExtractPlugin({
       filename: '[name].bundle.css',

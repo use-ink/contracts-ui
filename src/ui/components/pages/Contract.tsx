@@ -54,7 +54,7 @@ export function Contract () {
   }
 
   const [contract, document] = data;
-  const projectName = contract?.abi.project.contract.name;
+  const projectName = contract?.abi.info.contract.name;
 
   return (
     <Loader isLoading={!contract && isLoading}>
