@@ -41,7 +41,7 @@
     "@polkadot/x-textencoder": "^7.6.1",
     "@textile/crypto": "^4.2.1",
     "@textile/hub": "^6.3.0",
-    "@textile/threaddb": "^0.2.0",
+    "@textile/threaddb": "0.1.0",
     "assert": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "buffer": "^6.0.3",

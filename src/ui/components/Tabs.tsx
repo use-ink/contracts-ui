@@ -34,7 +34,13 @@ export function Tabs ({ children, index, setIndex, tabs }: Props) {
           })}
         </ul>
       </div>
-      {children[index] ? children[index] : null}
+      {children.map((child, i) => {
+        return (
+          <div key={`child-${i}`} className={index === i ? 'hidden' : 'block'}>
+            {child}
+          </div>
+        )
+      })}
     </>
   );
 }

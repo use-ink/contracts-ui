@@ -32,7 +32,7 @@ export function getMockInstantiateState(): InstantiateProps {
     endowment: { ...getMockFormField<BN | null | undefined>(new BN(10000).mul(new BN(10e12))) },
     isLoading: false,
     isUsingSalt: [false, jest.fn(), jest.fn()],
-    isUsingStoredMetadata: [false, jest.fn(), jest.fn()],
+    isUsingStoredMetadata: false,
     metadata: {
       isError: false,
       isSupplied: false,

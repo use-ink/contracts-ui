@@ -8,6 +8,7 @@
 @import './collapsible.css';
 @import './call-results.css';
 @import './instantiate.css';
+@import './search.css';
 
 @tailwind components;
 @tailwind utilities;

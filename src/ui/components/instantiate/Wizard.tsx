@@ -20,7 +20,7 @@ export function Wizard () {
   } = useInstantiate();
 
   return (
-    <>
+    <div className="grid md:grid-cols-12 gap-5 m-1">
       <main className="md:col-span-9 p-4">
         {step < 2 && (
           <FormField
@@ -43,6 +43,6 @@ export function Wizard () {
       <aside className="md:col-span-3 md:pt-0 p-4">
         <Stepper step={step} steps={steps} />
       </aside>
-    </>
+    </div>
   )
 };

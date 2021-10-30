@@ -5,7 +5,7 @@ export * from './useCodeBundleSearch';
 export * from './useContract';
 export * from './useCreateContract';
 export * from './useLocalStorage';
-export * from './useMyCodeBundles';
+export * from './useAvailableCodeBundles';
 export * from './useMyContracts';
 export * from './useStatistics';
 export * from './useToggleContractStar';

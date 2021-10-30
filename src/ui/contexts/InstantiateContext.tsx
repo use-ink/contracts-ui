@@ -42,7 +42,7 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
 
   const codeBundleQuery = useCodeBundle(codeHash || undefined);
 
-  const [, codeBundle] = codeBundleQuery.data || [false, null];
+  const [isOnChain, codeBundle] = codeBundleQuery.data || [false, null];
   const isLoading = useMemo(
     () => !!codeHash && codeBundleQuery.isLoading,
     [codeHash, codeBundleQuery.isLoading]
@@ -51,7 +51,7 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const step = useStepper();
   const [, , , setStep] = step;
 
-  const isUsingStoredMetadata = useToggle(!!codeBundle);
+  const isUsingStoredMetadata = useMemo((): boolean => !!codeBundle?.abi, [codeBundle?.abi]);
 
   const accountId = useAccountId();
 
@@ -61,11 +61,13 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const { onChange: setName } = name;
   const [, setMetadataFile] = metadataFile;
 
+  console.log(!codeBundle);
+
   const metadata = useMetadata(
     codeBundle?.abi as AnyJson || null,
     {
       isRequired: true,
-      isWasmRequired: !codeBundle || !isUsingStoredMetadata,
+      isWasmRequired: !isOnChain,
       onChange: setMetadataFile,
     }
   );

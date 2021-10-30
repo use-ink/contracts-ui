@@ -9,10 +9,13 @@ import { getCodeBundleCollection, getContractCollection, pushToRemote } from './
 import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 
 export async function findTopCodeBundles(
-  db: Database
+  db: Database,
+  excludeOwnedBy?: PrivateKey | null,
+  limit?: number,
 ): Promise<(CodeBundleDocument & { instances: number })[]> {
   try {
-    const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
+    const codeBundles = (await getCodeBundleCollection(db).find(excludeOwnedBy ? { owner: { $ne: publicKeyHex(excludeOwnedBy) } } : {}).toArray())
+      .slice(0, limit ? limit : undefined);
 
     return Promise.all(
       codeBundles.map(async (codeBundle) => {
@@ -31,6 +34,26 @@ export async function findTopCodeBundles(
   }
 }
 
+export async function findOwnedCodeBundles(
+  db: Database,
+  identity: PrivateKey | null,
+  limit = 2
+): Promise<CodeBundleDocument[]> {
+  try {
+    const user = await findUser(db, identity);
+
+    if (!user) {
+      return [];
+    }
+
+    return (await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray()).slice(0, limit ? limit : undefined);
+  } catch (e) {
+    console.error(e);
+
+    return Promise.reject(e);
+  }
+}
+
 export async function findMyCodeBundles(
   db: Database,
   identity: PrivateKey | null
@@ -42,7 +65,7 @@ export async function findMyCodeBundles(
       return { owned: [], starred: [] };
     }
 
-    const owned = await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray();
+    const owned = await findOwnedCodeBundles(db, identity);
     const existingStarred = await getCodeBundleCollection(db)
       .find({ id: { $in: user.codeBundlesStarred } })
       .toArray();
@@ -86,7 +109,7 @@ export async function searchForCodeBundle(
     return null;
   }
 
-  const matches = await db.dexie.table<CodeBundleDocument>('codeBundle').filter(({ name, codeHash }) => {
+  const matches = await db.dexie.table<CodeBundleDocument>('CodeBundle').filter(({ name, codeHash }) => {
     const regex = new RegExp(fragment);
 
     return regex.test(name) || regex.test(codeHash);

@@ -171,7 +171,7 @@ export interface InstantiateState {
   endowment: UseBalance;
   isLoading: boolean;
   isUsingSalt: UseToggle;
-  isUsingStoredMetadata: UseToggle;
+  isUsingStoredMetadata: boolean;
   metadata: UseMetadata;
   metadataFile: UseState<FileState | undefined>;
   name: UseFormField<string>;

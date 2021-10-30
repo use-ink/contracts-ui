@@ -7,7 +7,8 @@ import moment from 'moment';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
-import { getContractCollection, pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
+import { createCodeBundle } from './codeBundle';
 import type { ContractDocument, MyContracts } from 'types';
 
 export async function findTopContracts(
@@ -67,12 +68,33 @@ export async function createContract(
       return Promise.reject(new Error('Missing required fields'));
     }
 
-    // if (!(await getCodeBundleCollection(db).findOne({ id: codeBundleId }))) {
-    //   return Promise.reject(new Error('Instantiation code bundle is invalid'));
-    // }
-
     if (await getContractCollection(db).findOne({ address })) {
       return Promise.reject(new Error('Contract already exists'));
+    }
+
+    const exists = await getCodeBundleCollection(db).findOne({ blockZeroHash, codeHash });
+
+    if (!exists) {
+      await createCodeBundle(
+        db,
+        owner,
+        {
+          abi,
+          blockZeroHash,
+          codeHash,
+          creator,
+          genesisHash,
+          name,
+          owner: publicKeyHex(owner),
+          tags: [],
+          date,
+          instances: 1
+        }
+      );
+    } else {
+      exists.instances += 1;
+
+      await exists.save();
     }
 
     const newContract = getContractCollection(db).create({
