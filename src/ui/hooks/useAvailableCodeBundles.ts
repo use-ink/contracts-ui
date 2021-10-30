@@ -1,5 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+import moment from 'moment';
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { useQuery } from './useQuery';
@@ -9,13 +10,19 @@ import type { CodeBundleDocument, UseQuery } from 'types';
 
 type ReturnType = [CodeBundleDocument[], CodeBundleDocument[]];
 
+function byDate (a: CodeBundleDocument, b: CodeBundleDocument): number {
+  return moment(a.date).valueOf() - moment(b.date).valueOf();
+}
+
 export function useAvailableCodeBundles(limit = 2): UseQuery<ReturnType> {
   const { db, identity } = useDatabase();
 
   const query = useCallback(async (): Promise<ReturnType> => {
-    const owned = await findOwnedCodeBundles(db, identity, limit);
+    const owned = (await findOwnedCodeBundles(db, identity, limit))
+      .sort(byDate);
 
-    const popular = await findTopCodeBundles(db, identity, limit);
+    const popular = (await findTopCodeBundles(db, identity, limit))
+      .sort(byDate);
 
     return [owned, popular];
   }, []);
