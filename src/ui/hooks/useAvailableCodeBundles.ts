@@ -11,10 +11,10 @@ import type { CodeBundleDocument, UseQuery } from 'types';
 type ReturnType = [CodeBundleDocument[], CodeBundleDocument[]];
 
 function byDate (a: CodeBundleDocument, b: CodeBundleDocument): number {
-  return moment(a.date).valueOf() - moment(b.date).valueOf();
+  return moment(b.date).valueOf() - moment(a.date).valueOf();
 }
 
-export function useAvailableCodeBundles(limit = 2): UseQuery<ReturnType> {
+export function useAvailableCodeBundles(limit = 1): UseQuery<ReturnType> {
   const { db, identity } = useDatabase();
 
   const query = useCallback(async (): Promise<ReturnType> => {

@@ -46,7 +46,7 @@ export function CodeHash ({ className, codeHash, error, name, isError, isSuccess
         )}
       </div>
       {onClick && (
-        <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400 dark:group-hover:border-blue-500" />
+        <ChevronRightIcon className="h-5 w-5 dark:text-gray-500 text-gray-400 dark:group-hover:border-blue-500" />
       )}
     </div>
   );
