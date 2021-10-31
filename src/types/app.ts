@@ -298,6 +298,7 @@ export interface ContractCallState {
 }
 export type ContractCallAction =
   | { type: 'CALL_INIT', payload: CallResult }
-  | { type: 'CALL_FINALISED'; payload: CallResult };
+  | { type: 'CALL_FINALISED'; payload: CallResult }
+  | { type: 'RESET' };
 
 export type UrlParams = { address: string; activeTab: string };

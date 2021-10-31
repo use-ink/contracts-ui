@@ -1,6 +1,12 @@
 import { Reducer } from 'react';
 import { ContractCallState, ContractCallAction } from 'types';
 
+export const initialState: ContractCallState = {
+  isLoading: false,
+  isSuccess: false,
+  results: [],
+};
+
 export const contractCallReducer: Reducer<ContractCallState, ContractCallAction> = (
   state,
   action
@@ -33,6 +39,9 @@ export const contractCallReducer: Reducer<ContractCallState, ContractCallAction>
         ),
         isLoading: false,
       };
+
+    case 'RESET':
+      return initialState;
 
     default:
       throw new Error();
