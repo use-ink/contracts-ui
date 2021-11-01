@@ -15,6 +15,10 @@ export const MOCK_CONTRACT_DATA: [string, number, string[], unknown[]][] = [
   ['Incrementer', 1, ['beta', 'delta', 'gamma'], [7]],
 ];
 
+export function isValidCodeHash (value: string): boolean {
+  return /^0x[0-9a-fA-F]{64}$/.test(value);
+}
+
 export * from './initValue';
 
 

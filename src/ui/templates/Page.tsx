@@ -12,7 +12,7 @@ export function Page({ header, help, children }: PageProps): React.ReactElement<
         <div className="grid md:grid-cols-12 h-full gap-5 px-5 py-3 m-2">
           <main className="md:col-span-8 p-4">
             <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
-              <h1 className="text-2xl dark:text-white text-gray-700">{header}</h1>
+              <h1 className="text-2.5xl dark:text-white text-gray-700">{header}</h1>
               <p className="dark:text-gray-400 text-gray-500 text-sm">{help}</p>
             </div>
             <div className="flex flex-col py-4 h-full">

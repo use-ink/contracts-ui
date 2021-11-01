@@ -171,7 +171,7 @@ export interface InstantiateState {
   endowment: UseBalance;
   isLoading: boolean;
   isUsingSalt: UseToggle;
-  isUsingStoredMetadata: UseToggle;
+  isUsingStoredMetadata: boolean;
   metadata: UseMetadata;
   metadataFile: UseState<FileState | undefined>;
   name: UseFormField<string>;
@@ -298,6 +298,7 @@ export interface ContractCallState {
 }
 export type ContractCallAction =
   | { type: 'CALL_INIT', payload: CallResult }
-  | { type: 'CALL_FINALISED'; payload: CallResult };
+  | { type: 'CALL_FINALISED'; payload: CallResult }
+  | { type: 'RESET' };
 
 export type UrlParams = { address: string; activeTab: string };

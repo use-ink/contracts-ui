@@ -15,7 +15,7 @@
 }
 
 .dropdown .options {
-  @apply absolute z-50 w-full dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 bg-white rounded-b;
+  @apply absolute z-50 w-full max-h-80 overflow-y-auto dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 bg-white rounded-b;
 }
 
 .dropdown .options .option {

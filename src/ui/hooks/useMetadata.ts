@@ -1,5 +1,5 @@
 import { isWasm, u8aToString } from '@polkadot/util';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
 import { useCanvas } from 'ui/contexts/CanvasContext';
 
@@ -75,6 +75,8 @@ function validate (metadata: Abi | undefined, { isWasmRequired }: Options): Vali
   const isWasmEmpty = wasm.isEmpty;
   const isWasmInvalid = !isWasm(wasm.toU8a());
 
+  console.log(isWasmRequired);
+
   if (isWasmRequired && (isWasmEmpty || isWasmInvalid)) {
     return {
       isValid: false,
@@ -87,7 +89,7 @@ function validate (metadata: Abi | undefined, { isWasmRequired }: Options): Vali
     isValid: true,
     isError: false,
     isSuccess: true,
-    validation: 'Valid contract bundle!'
+    validation: isWasmRequired ? 'Valid contract bundle!' : 'Valid metadata file!'
   };
 }
 
@@ -97,35 +99,29 @@ export function useMetadata (initialValue: AnyJson = null, options: Options & Ca
   const { isRequired = false, isWasmRequired = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() => deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
 
-  const onChange = useCallback(
-    (file: FileState): void => {
-      try {
-        const json = JSON.parse(u8aToString(file.data)) as AnyJson;
-        const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
+  function onChange (file: FileState): void {
+    try {
+      const json = JSON.parse(u8aToString(file.data)) as AnyJson;
+      const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
 
-        const newState = deriveFromJson(json, { isRequired, isWasmRequired, name }, api);
+      const newState = deriveFromJson(json, { isRequired, isWasmRequired, name }, api);
 
-        setState(newState);
+      setState(newState);
 
-        callbacks.onChange && callbacks.onChange(file, json)
-      } catch (error) {
-        console.error(error);
+      callbacks.onChange && callbacks.onChange(file, json)
+    } catch (error) {
+      console.error(error);
 
-        setState({ ...EMPTY, validation: 'This contract file is not in a valid format.', isError: true, isSupplied: true, isValid: false });
-      }
-    },
-    [callbacks.onChange, isRequired, isWasmRequired]
-  );
+      setState({ ...EMPTY, validation: 'This contract file is not in a valid format.', isError: true, isSupplied: true, isValid: false });
+    }
+  };
 
-  const onRemove = useCallback(
-    (): void => {
-      setState(EMPTY);
+  function onRemove (): void {
+    setState(EMPTY);
 
-      callbacks.onChange && callbacks.onChange(undefined);
-      callbacks.onRemove && callbacks.onRemove();
-    },
-    [callbacks.onRemove]
-  );
+    callbacks.onChange && callbacks.onChange(undefined);
+    callbacks.onRemove && callbacks.onRemove();
+  };
 
   useEffect(
     (): void => {

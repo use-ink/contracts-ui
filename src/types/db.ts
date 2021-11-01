@@ -1,5 +1,6 @@
 // Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
 
+import React from 'react';
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './app';
@@ -50,6 +51,7 @@ export interface ContractDocument extends Document {
 
 export interface UseQuery<T> {
   data: T | null;
+  error: React.ReactNode | null;
   isLoading: boolean;
   isValid: boolean;
   refresh: VoidFn;

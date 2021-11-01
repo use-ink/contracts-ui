@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { Dropdown } from '../Dropdown';
 import { ArgumentForm } from '../args/ArgumentForm';
 import { Button, Buttons } from '../Button';
@@ -8,8 +8,8 @@ import { Form, FormField, getValidation } from '../FormField';
 import { ResultsOutput } from './ResultsOutput';
 import { call, convertToNumber, createMessageOptions } from 'canvas';
 import { useCanvas } from 'ui/contexts';
-import { contractCallReducer } from 'ui/reducers';
-import { AbiMessage, ContractCallState, ContractPromise } from 'types';
+import { contractCallReducer, initialState } from 'ui/reducers';
+import { AbiMessage, ContractPromise } from 'types';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useFormField } from 'ui/hooks/useFormField';
 import { useArgValues } from 'ui/hooks/useArgValues';
@@ -18,12 +18,6 @@ interface Props {
   contract: ContractPromise
 }
 
-const initialState: ContractCallState = {
-  isLoading: false,
-  isSuccess: false,
-  results: [],
-};
-
 export const InteractTab = ({ contract }: Props) => {
   const { api, keyring } = useCanvas();
   const message = useFormField(contract.abi.messages[0]);
@@ -31,6 +25,17 @@ export const InteractTab = ({ contract }: Props) => {
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
   const accountId = useAccountId();
+
+  useEffect(
+    () => {
+      if (state.results.length > 0) {
+        dispatch({
+          type: 'RESET'
+        });
+      }
+    },
+    [contract.address]
+  );
 
   if (!contract) return null;
 

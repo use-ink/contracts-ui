@@ -24,7 +24,7 @@ export function Input ({ children, className, isDisabled = false, isError = fals
         onFocus={props.onFocus}
         type="text"
         value={value || ''}
-        className="w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm"
+        className={classes('w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm', isDisabled && 'dark:text-gray-500')}
         {...(isDisabled ? { disabled: true } : {})}
         {...props}
       />
