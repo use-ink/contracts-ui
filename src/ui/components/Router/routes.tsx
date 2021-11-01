@@ -2,36 +2,46 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {
-  AddContract,
-  Homepage,
-  Contract,
-  InstantiateWithCode,
-  InstantiateWithHash,
-} from '../pages';
+import { Homepage, Contract, Instantiate as InstantiatePage, AddContract } from '../pages';
+import { SelectCodeHash } from '../pages/SelectCodeHash';
+import { InstantiateContextProvider } from 'ui/contexts';
+
+function Instantiate() {
+  return (
+    <InstantiateContextProvider>
+      <InstantiatePage />
+    </InstantiateContextProvider>
+  );
+}
 
 export const routes = [
   {
-    path: `/contract/:addr/:activeTab?`,
+    path: `/contract/:address/:activeTab?`,
     component: Contract,
     exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `/add-contract`,
+    path: '/instantiate',
     component: AddContract,
-    exact: false,
+    exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `/instantiate-with-hash`,
-    component: InstantiateWithHash,
-    exact: false,
+    path: '/instantiate/new',
+    component: Instantiate,
+    exact: true,
     fallback: <div> Loading... </div>,
   },
   {
-    path: `/instantiate-with-code`,
-    component: InstantiateWithCode,
+    path: '/instantiate/hash',
+    component: SelectCodeHash,
+    exact: true,
+    fallback: <div> Loading... </div>,
+  },
+  {
+    path: '/instantiate/hash/:codeHash',
+    component: Instantiate,
     exact: false,
     fallback: <div> Loading... </div>,
   },

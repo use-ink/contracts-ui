@@ -1,6 +1,7 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import React from 'react';
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './app';
@@ -14,15 +15,15 @@ interface Document {
 export interface UserDocument extends Document {
   codeBundlesStarred: string[];
   contractsStarred: string[];
-  creator: string;
+  creator?: string;
   publicKey: string;
   email?: string;
-  name: string;
+  name?: string;
 }
 
 export interface CodeBundleDocument extends Document {
-  abi?: Record<string, unknown>;
-  blockOneHash?: string;
+  abi?: Record<string, unknown> | null;
+  blockZeroHash?: string;
   codeHash: string;
   creator: string;
   date: string;
@@ -38,8 +39,8 @@ export interface CodeBundleDocument extends Document {
 export interface ContractDocument extends Document {
   abi: Record<string, unknown>;
   address: string;
-  blockOneHash?: string;
-  codeBundleId: string;
+  blockZeroHash?: string;
+  codeHash: string;
   creator: string;
   date: string;
   genesisHash: string;
@@ -51,6 +52,7 @@ export interface ContractDocument extends Document {
 
 export interface UseQuery<T> {
   data: T | null;
+  error: React.ReactNode | null;
   isLoading: boolean;
   isValid: boolean;
   refresh: VoidFn;
@@ -59,7 +61,7 @@ export interface UseQuery<T> {
 
 export interface CodeBundleQuery {
   codeHash: string;
-  blockOneHash?: string;
+  blockZeroHash?: string | null;
 }
 
 export interface Starred<T> {
@@ -75,7 +77,8 @@ export interface UserArtifacts<T> {
 export interface DbState {
   db: Database;
   user: UserDocument | null;
-  refreshUser: () => void;
+  myContracts: MyContracts | null;
+  refreshUserData: () => void;
   identity: PrivateKey | null;
   isDbReady: boolean;
 }

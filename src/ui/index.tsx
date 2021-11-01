@@ -4,10 +4,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
+import App from 'ui/components/App';
 import '../../styles/main.css';
-import { App } from './components';
 
 const root = document.getElementById('app-root');
+
 ReactDOM.render(
   <HashRouter>
     <App />
@@ -15,7 +16,7 @@ ReactDOM.render(
   root
 );
 
-if (module.hot) {
+if (module.hot && process.env.NODE_ENV === 'development') {
   module.hot.accept('./components/App', () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     const NewApp = require('./components/App');

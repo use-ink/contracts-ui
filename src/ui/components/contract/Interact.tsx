@@ -1,137 +1,102 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { Dropdown } from '../Dropdown';
-import { ArgumentForm } from '../ArgumentForm';
-import { Button } from '../Button';
-import { Buttons } from '../Buttons';
-import { OverlayLoader } from '../OverlayLoader';
+import { ArgumentForm } from '../args/ArgumentForm';
+import { Button, Buttons } from '../Button';
 import { Input } from '../Input';
+import { AccountSelect } from '../AccountSelect';
+import { Form, FormField, getValidation } from '../FormField';
 import { ResultsOutput } from './ResultsOutput';
-import { convertToNumber, createEmptyValues, createOptions } from 'api';
+import { call, convertToNumber, createMessageOptions } from 'api';
 import { useApi } from 'ui/contexts';
-import { contractCallReducer } from 'ui/reducers';
-import { Abi, DropdownOption, ContractCallParams, AbiMessage, ContractCallState } from 'types';
+import { contractCallReducer, initialState } from 'ui/reducers';
+import { AbiMessage, ContractPromise } from 'types';
+import { useAccountId } from 'ui/hooks/useAccountId';
+import { useFormField } from 'ui/hooks/useFormField';
+import { useArgValues } from 'ui/hooks/useArgValues';
 
 interface Props {
-  abi: Abi;
-  contractAddress: string;
-  isActive: boolean;
-  callFn: ({
-    api,
-    abi,
-    contractAddress,
-    message,
-    endowment,
-    gasLimit,
-    argValues,
-    keyringPair,
-  }: ContractCallParams) => void;
+  contract: ContractPromise;
 }
 
-const initialState: ContractCallState = {
-  isLoading: false,
-  isSuccess: false,
-  results: [],
-};
-
-export const InteractTab = ({ abi, contractAddress, callFn, isActive }: Props) => {
+export const InteractTab = ({ contract }: Props) => {
   const { api, keyring } = useApi();
-  const options = createOptions(abi.messages, 'message');
-  const [selectedMsg, selectMsg] = useState<DropdownOption>(options[0]);
-  const [message, setMessage] = useState<AbiMessage>(abi.messages[0]);
-  const [argValues, setArgValues] = useState<Record<string, string>>();
+  const message = useFormField(contract.abi.messages[0]);
+  const [argValues, setArgValues] = useArgValues(message.value?.args || []);
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
-  const keyringPairs = keyring?.getPairs();
-  const accountsOptions = createOptions(keyringPairs, 'pair');
-  const [account, setAccount] = useState<DropdownOption>(accountsOptions[0]);
+  const accountId = useAccountId();
 
   useEffect(() => {
-    setMessage(abi.findMessage(selectedMsg.value));
-  }, [selectedMsg, abi]);
-
-  useEffect(() => {
-    if (message && message.args.length > 0) {
-      setArgValues(createEmptyValues(message.args));
+    if (state.results.length > 0) {
+      dispatch({
+        type: 'RESET',
+      });
     }
-  }, [message]);
+  }, [contract.address]);
 
-  if (!isActive) return null;
+  if (!contract) return null;
 
-  if (state.isLoading) {
-    return <OverlayLoader message="Calling instance..." />;
-  }
   return (
-    api && (
-      <div className="grid grid-cols-12 w-full">
-        <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
-          <h2 className="mb-2 text-sm">Call from account</h2>
-          <Dropdown
-            options={accountsOptions}
-            className="mb-4"
-            value={account}
-            onChange={setAccount}
-          >
-            No accounts found
-          </Dropdown>
-          <h2 className="mb-2 text-sm">Message to send</h2>
-          <div className="flex">
-            <div className="mb-4 flex-1">
-              <Dropdown options={options} onChange={selectMsg} value={selectedMsg}>
-                No messages found
-              </Dropdown>
-            </div>
+    <div className="grid grid-cols-12 w-full">
+      <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
+        <Form>
+          <FormField className="mb-8" id="accountId" label="Account" {...getValidation(accountId)}>
+            <AccountSelect id="accountId" className="mb-2" {...accountId} />
+          </FormField>
+          <FormField id="message" label="Message to Send" {...getValidation(message)}>
+            <Dropdown
+              id="message"
+              options={createMessageOptions(contract.abi.messages)}
+              className="mb-4"
+              {...message}
+            >
+              No messages found
+            </Dropdown>
             {argValues && (
-              <div className="text-sm mb-4 flex-1 ml-2">
-                <ArgumentForm
-                  key={`args-${message?.identifier}`}
-                  args={message?.args}
-                  argValues={argValues}
-                  handleChange={e =>
-                    setArgValues({ ...argValues, [e.target.name]: e.target.value.trim() })
-                  }
-                />
-              </div>
+              <ArgumentForm
+                args={message.value?.args || []}
+                setArgValues={setArgValues}
+                argValues={argValues}
+              />
             )}
-          </div>
+          </FormField>
 
-          {message.isPayable && (
+          {message?.value?.isPayable && (
             <>
               <h2 className="mb-2 text-sm">Payment</h2>
-              <Input
-                value={endowment}
-                handleChange={e => setEndowment(e.target.value)}
-                placeholder="Endowment"
-              />
+              <Input value={endowment} onChange={setEndowment} placeholder="Endowment" />
             </>
           )}
-          <Buttons>
-            <Button
-              onClick={() =>
-                callFn({
-                  api,
-                  abi,
-                  contractAddress,
-                  endowment: convertToNumber(endowment.trim()),
-                  gasLimit: 155852802980,
-                  argValues,
-                  message,
-                  keyringPair: keyring?.getPair(account.value.toString()),
-                  dispatch,
-                })
-              }
-              variant="primary"
-            >
-              Call
-            </Button>
-          </Buttons>
-        </div>
-        <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
-          <ResultsOutput results={state.results} />
-        </div>
+        </Form>
+        <Buttons>
+          <Button
+            isLoading={state.isLoading}
+            onClick={() =>
+              message &&
+              call({
+                api,
+                abi: contract.abi,
+                contractAddress: contract.address.toString(),
+                endowment: convertToNumber(endowment.trim()),
+                gasLimit: 155852802980,
+                argValues,
+                message: message.value as AbiMessage,
+                keyringPair: accountId.value ? keyring?.getPair(accountId.value) : undefined,
+                dispatch,
+              })
+            }
+            variant="primary"
+          >
+            Call
+          </Button>
+        </Buttons>
       </div>
-    )
+      <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
+        <ResultsOutput results={state.results} />
+      </div>
+    </div>
   );
 };

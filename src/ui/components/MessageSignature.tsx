@@ -2,29 +2,53 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { DatabaseIcon, CashIcon } from '@heroicons/react/solid';
+import { encodeTypeDef } from '@polkadot/types/create';
+import { DatabaseIcon } from '@heroicons/react/outline';
+import { ArgSignature } from './ArgSignature';
+import { useApi } from 'ui/contexts/ApiContext';
+import type { AbiMessage } from 'types';
+import { classes } from 'ui/util';
 
-interface Props {
-  method: string;
-  isPayable?: boolean;
-  isMutating?: boolean;
-  returnType?: string;
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  message: Partial<AbiMessage>;
+  params?: unknown[];
 }
 
-export const MessageSignature = ({ isPayable, isMutating, method, returnType }: Props) => {
+export function MessageSignature({
+  className,
+  message: { args, isConstructor, isMutating, method, returnType },
+  params = [],
+}: Props) {
+  const { api } = useApi();
+
   return (
-    <div className="text-mono flex flex-wrap leading-relaxed">
-      <span className="text-yellow-300">{method}</span>
-      {returnType ? (
+    <div className={classes('font-mono', isConstructor && 'constructor', className)}>
+      <span className={isConstructor ? 'dark:text-blue-400' : 'dark:text-yellow-400'}>
+        {method}
+      </span>
+      (
+      {args?.map((arg, index): React.ReactNode => {
+        return (
+          <ArgSignature
+            arg={arg}
+            key={`${name}-args-${index}`}
+            value={params[index] ? (params[index] as string) : undefined}
+          >
+            {index < args.length - 1 && ', '}
+          </ArgSignature>
+        );
+      })}
+      )
+      {!isConstructor && returnType && (
         <>
-          <span className="mr-1">():</span>
-          <span>{returnType}</span>
+          : <span>{encodeTypeDef(api.registry, returnType)}</span>
         </>
-      ) : (
-        <span>()</span>
       )}
-      {isMutating && <DatabaseIcon className="w-4 h-4 ml-2 icon-mutating" />}
-      {isPayable && <CashIcon className="w-4 h-4 ml-2 icon-payable" />}
+      {isMutating && (
+        <>
+          <DatabaseIcon className="inline-block ml-2 w-4 h-4 text-yellow-400" />
+        </>
+      )}
     </div>
   );
-};
+}

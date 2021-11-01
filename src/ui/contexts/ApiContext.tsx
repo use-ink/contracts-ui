@@ -11,35 +11,46 @@ import type { ApiAction, ApiState, ChainProperties } from 'types';
 
 let loadedAccounts = false;
 
-const LOCAL_NODE = 'ws://127.0.0.1:9944';
+const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
+const DEFAULT_DECIMALS = 12;
 
 const NULL_CHAIN_PROPERTIES = {
-  blockOneHash: null,
+  blockZeroHash: null,
   systemName: null,
   systemVersion: null,
+  tokenDecimals: DEFAULT_DECIMALS,
+  tokenSymbol: 'Unit',
 };
 
 const INIT_STATE: ApiState = {
   ...NULL_CHAIN_PROPERTIES,
   endpoint: LOCAL_NODE,
-  keyring: null,
   keyringStatus: null,
-  api: null,
   error: null,
   status: 'CONNECT_INIT',
-};
+} as unknown as ApiState;
 
 async function getChainProperties(api: ApiPromise): Promise<ChainProperties> {
-  const [blockOneHash, systemName, systemVersion] = await Promise.all([
-    api.query.system.blockHash(1),
+  const [chainProperties, blockZeroHash, systemName, systemVersion] = await Promise.all([
+    api.rpc.system.properties(),
+    api.query.system.blockHash(0),
     api.rpc.system.name(),
     api.rpc.system.version(),
   ]);
 
   return {
-    blockOneHash: blockOneHash.toString(),
+    blockZeroHash: blockZeroHash.toString(),
     systemName: systemName.toString(),
     systemVersion: systemVersion.toString(),
+    tokenDecimals: chainProperties.tokenDecimals.isSome
+      ? chainProperties.tokenDecimals.unwrap().toArray()[0].toNumber()
+      : DEFAULT_DECIMALS,
+    tokenSymbol: chainProperties.tokenSymbol.isSome
+      ? chainProperties.tokenSymbol
+          .unwrap()
+          .toArray()
+          .map(s => s.toString())[0]
+      : 'Unit',
   };
 }
 
@@ -67,7 +78,7 @@ export const apiReducer: Reducer<ApiState, ApiAction> = (state, action) => {
       return { ...state, keyring: action.payload, keyringStatus: 'READY' };
 
     case 'KEYRING_ERROR':
-      return { ...state, keyring: null, keyringStatus: 'ERROR' };
+      return { ...state, keyringStatus: 'ERROR' };
 
     default:
       throw new Error(`Unknown action type`);

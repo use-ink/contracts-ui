@@ -1,59 +1,109 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
+import moment from 'moment';
 import { InteractTab } from '../contract/Interact';
 import { MetadataTab } from '../contract/Metadata';
-import { getInstanceFromStorage, call } from 'api';
-import { UrlParams } from 'types';
-import { useApi } from 'ui/contexts';
+import { Loader } from '../Loader';
+import { Tabs } from '../Tabs';
+import { HeaderButtons } from '../HeaderButtons';
+import type { UrlParams } from 'types';
 import { PageFull } from 'ui/templates';
-import { classes } from 'ui/util';
+import { useContract } from 'ui/hooks';
 
-export const Contract = () => {
-  const { api } = useApi();
-  const { addr, activeTab } = useParams<UrlParams>();
-  const contract = getInstanceFromStorage(addr, api);
-  const [active, setActive] = useState(activeTab || 'interact');
-
-  return contract ? (
-    <PageFull
-      header={`${contract.abi.project.contract.name}`}
-      help={`X instantiated this contract from CodeBundle on 31 Dec`}
-    >
+const TABS = [
+  {
+    id: 'metadata',
+    label: (
       <>
-        <div className="grid grid-cols-12 w-full">
-          <ul className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8">
-            <li className="mr-1">
-              <button
-                onClick={() => setActive('metadata')}
-                className={classes('tab', active === 'metadata' ? 'active' : '')}
-              >
-                <BookOpenIcon />
-                Metadata
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setActive('interact')}
-                className={classes('tab', active === 'interact' ? 'active' : '')}
-              >
-                <PlayIcon />
-                Interact
-              </button>
-            </li>
-          </ul>
-        </div>
-        <MetadataTab isActive={active === 'metadata'} abi={contract.abi} />
-        <InteractTab
-          contractAddress={addr}
-          abi={contract.abi}
-          callFn={call}
-          isActive={active === 'interact'}
-        />
+        <BookOpenIcon />
+        Metadata
       </>
-    </PageFull>
-  ) : null;
-};
+    ),
+  },
+  {
+    id: 'interact',
+    label: (
+      <>
+        <PlayIcon />
+        Interact
+      </>
+    ),
+  },
+];
+
+export function Contract() {
+  const history = useHistory();
+  const { address, activeTab = 'interact' } = useParams<UrlParams>();
+
+  const { data, isLoading, isValid } = useContract(address);
+
+  const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
+
+  useEffect((): void => {
+    if (!isLoading && (!isValid || !data || !data[0])) {
+      history.replace('/');
+    }
+  }, [data, isLoading, isValid]);
+
+  if (!data || !data[0] || !data[1]) {
+    return null;
+  }
+
+  const [contract, document] = data;
+  const projectName = contract?.abi.info.contract.name;
+
+  return (
+    <Loader isLoading={!contract && isLoading}>
+      <PageFull
+        accessory={<HeaderButtons contract={document} />}
+        header={document.name || projectName}
+        help={
+          <>
+            You instantiated this contract from{' '}
+            <Link
+              to={`/instantiate/hash/${document.codeHash}`}
+              className="inline-block relative dark:bg-blue-500 dark:text-blue-400 dark:bg-opacity-20 text-xs px-1.5 font-mono rounded"
+            >
+              {projectName}
+            </Link>{' '}
+            on {moment(document.date).format('D MMM')}
+          </>
+        }
+      >
+        <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
+          <MetadataTab abi={contract?.abi} />
+          <InteractTab contract={contract} />
+        </Tabs>
+        {/* {contract && (
+        <>
+          <div className="grid grid-cols-12 w-full">
+            <ul className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8">
+              <li className="mr-1">
+                <button
+                  onClick={() => setActive('metadata')}
+                  className={classes('tab', active === 'metadata' ? 'active' : '')}
+                >
+                  <BookOpenIcon />
+                  Metadata
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setActive('interact')}
+                  className={classes('tab', active === 'interact' ? 'active' : '')}
+                >
+                  <PlayIcon />
+                  Interact
+                </button>
+              </li>
+            </ul>
+          </div>
+        </> */}
+      </PageFull>
+    </Loader>
+  );
+}

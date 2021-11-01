@@ -100,19 +100,19 @@ describe('DB Queries', (): void => {
   });
 
   it('findCodeBundleByHash', async () => {
-    const { codeHash, blockOneHash } = testCodeBundles[0];
+    const { codeHash, blockZeroHash } = testCodeBundles[0];
 
-    const result = await q.findCodeBundleByHash(db, { codeHash, blockOneHash });
+    const result = await q.findCodeBundleByHash(db, { codeHash, blockZeroHash });
 
     expect(result).toBeTruthy();
-    expect(result).toMatchObject(testCodeBundles[0]);
+    expect(result).toMatchObject({ ...testCodeBundles[0], instances: 1 });
   });
 
   it('findCodeBundleById', async () => {
     const result = await q.findCodeBundleById(db, testCodeBundles[0].id);
 
     expect(result).toBeTruthy();
-    expect(result).toMatchObject(testCodeBundles[0]);
+    expect(result).toMatchObject({ ...testCodeBundles[0], instances: 1 });
   });
 
   it('findContractByAddress', async () => {

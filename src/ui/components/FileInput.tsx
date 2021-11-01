@@ -10,7 +10,6 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
   removeHandler: () => void;
   successText?: string;
 }
-
 export const FileInput = ({
   className = '',
   fileLoaded,

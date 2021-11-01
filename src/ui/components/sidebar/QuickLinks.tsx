@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { DocumentIcon } from '@heroicons/react/outline';
+import { DocumentTextIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { NavLink } from './NavLink';
-import { useMyContracts } from 'ui/hooks';
 import type { ContractDocument } from 'types';
+import { useDatabase } from 'ui/contexts';
 
 export function QuickLinks() {
-  const { data: myContracts } = useMyContracts();
+  const { myContracts } = useDatabase();
 
   return (
     <div className="quick-links">
@@ -18,7 +18,7 @@ export function QuickLinks() {
         {myContracts?.owned && myContracts?.owned.length > 0 ? (
           myContracts?.owned?.map(({ name, address }) => {
             return (
-              <NavLink icon={DocumentIcon} key={address} to={`/contract/${address}`}>
+              <NavLink icon={DocumentTextIcon} key={address} to={`/contract/${address}`}>
                 {name}
               </NavLink>
             );
@@ -26,8 +26,8 @@ export function QuickLinks() {
         ) : (
           <div className="none-yet">
             None yet
-            {' ˑ '}
-            <Link to={`/add-contract`}>Upload one</Link>
+            {' • '}
+            <Link to={`/instantiate`}>Upload one</Link>
           </div>
         )}
       </div>
@@ -42,7 +42,7 @@ export function QuickLinks() {
             const { name, address } = value as ContractDocument;
 
             return (
-              <NavLink icon={DocumentIcon} key={address} to={`/contract/${address}`}>
+              <NavLink icon={DocumentTextIcon} key={address} to={`/contract/${address}`}>
                 {name}
               </NavLink>
             );

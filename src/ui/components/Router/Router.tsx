@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { AwaitApis } from '../AwaitApis';
+import { Homepage } from '../pages';
 import { RouteWithSubRoutes } from './RouteWithSubRoutes';
 import { RouteInterface } from 'types';
 // import { ApiContext, useApi } from 'ui/contexts';
@@ -18,6 +19,7 @@ export const Router: React.FC<Props> = ({ routes }) => {
       <Switch>
         {routes &&
           routes.map((route: RouteInterface) => <RouteWithSubRoutes key={route.path} {...route} />)}
+        <Route path="*" component={Homepage} />
       </Switch>
     </AwaitApis>
   );

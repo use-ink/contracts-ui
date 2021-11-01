@@ -18,7 +18,10 @@ export const ResultsOutput = ({ results }: Props) => {
       <div>
         {results
           .map(result => {
-            const { isMutating, isPayable, time } = result;
+            const {
+              message: { isMutating, isPayable },
+              time,
+            } = result;
             const date = new Date(time).toLocaleString();
             return isMutating || isPayable ? (
               <TransactionResult key={time} result={result} date={date} />

@@ -5,9 +5,9 @@ Currently works only with smart contracts written in ink!, but should support an
 
 In order to deploy a smart contract you would have to run a local [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node).
 
-Support for Canvas Testnet and other common good contract chains comming soon.
+Support for Api Testnet and other common good contract chains comming soon.
 
-This version succeeds [Canvas UI](https://github.com/paritytech/canvas-ui), with the purpose of having a maintainable and well tested codebase, as well as some cool new features like user contract collections, favorites, statistics and more.
+This version succeeds [Api UI](https://github.com/paritytech/substrate-contracts-explorer), with the purpose of having a maintainable and well tested codebase, as well as some cool new features like user contract collections, favorites, statistics and more.
 
 ## Getting Started
 

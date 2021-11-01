@@ -1,0 +1,19 @@
+.review {
+  @apply flex flex-wrap text-sm dark:text-gray-300 text-gray-700 dark:bg-elevation-1 bg-white p-8 mb-10 space-y-7 border dark:border-gray-700 border-gray-200 rounded-md;
+}
+
+.review .field {
+  @apply w-1/2;
+}
+
+.review .field.full {
+  @apply w-full;
+}
+
+.review .field .key {
+  @apply dark:text-gray-300 text-gray-700 font-semibold mb-2;
+}
+
+.review .field .value {
+  @apply text-gray-500;
+}

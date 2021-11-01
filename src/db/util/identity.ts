@@ -19,17 +19,17 @@ export function getPrivateKeyRandom(): PrivateKey {
 }
 
 export function getStoredPrivateKey(): PrivateKey | null {
-  const idStr = window?.localStorage.getItem(USER_IDENTITY_KEY);
+  let idStr = window?.localStorage.getItem(USER_IDENTITY_KEY);
 
   if (idStr) {
     return PrivateKey.fromString(idStr);
   } else {
-    // const id = getPrivateKeyRandom();
+    const id = getPrivateKeyRandom();
 
-    // idStr = id.toString();
-    // window.localStorage.setItem(USER_IDENTITY_KEY, idStr);
+    idStr = id.toString();
+    window.localStorage.setItem(USER_IDENTITY_KEY, idStr);
 
-    return null;
+    return id;
   }
 }
 

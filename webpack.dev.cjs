@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const common = require('./webpack.common.cjs');
 
 module.exports = merge(common, {
-  mode: 'development',
+  mode: 'none',
   devtool: 'inline-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -15,11 +15,10 @@ module.exports = merge(common, {
     }),
   ],
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
-    open: true,
-    clientLogLevel: 'debug',
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
     port: 8081,
-    historyApiFallback: true,
-    hot: true,
   },
 });

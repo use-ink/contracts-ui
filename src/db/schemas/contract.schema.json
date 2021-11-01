@@ -10,14 +10,14 @@
       "type": "string"
     },
     "owner": {
-      "description": "The public key of the identity that owns this contract",
+      "description": "The public key of the Api identity that owns this contract",
       "type": "string"
     },
     "creator": {
       "description": "The Polkadot address that instantiated this contract",
       "type": "string"
     },
-    "blockOneHash": {
+    "blockZeroHash": {
       "description": "The identifying block hash for the contract's chain (for distinguishing development/local node instances)",
       "type": "string"
     },
@@ -29,8 +29,8 @@
       "description": "The contract's associated ABI JSON",
       "type": "object"
     },
-    "codeBundleId": {
-      "description": "The id of the code bundle this contract was instantiated from",
+    "codeHash": {
+      "description": "The code hash of the WASM module this contract was instantiated from",
       "type": "string"
     },
     "name": {
@@ -56,5 +56,5 @@
       "minimum": 0
     }
   },
-  "required": ["creator", "address", "abi", "name", "date", "stars"]
+  "required": ["creator", "address", "abi", "codeHash", "name", "date", "stars"]
 }

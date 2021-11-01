@@ -1,75 +1,62 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState, ChangeEvent } from 'react';
-import { Button } from '../Button';
-import { Buttons } from '../Buttons';
-import { Input } from '../Input';
-import { FileInput } from '../FileInput';
-import { convertMetadata } from 'api/util';
-import { useApi } from 'ui/contexts';
-import type { Abi, AnyJson, InstantiateAction } from 'types';
+import React from 'react';
+import { Button, Buttons } from '../Button';
+import { Form, FormField, getValidation } from '../FormField';
+import { CodeHash } from '../CodeHash';
+import { InputFile } from 'ui/components/InputFile';
+import { Input } from 'ui/components/Input';
+import { useInstantiate } from 'ui/contexts';
 
-interface Props extends React.HTMLAttributes<HTMLInputElement> {
-  dispatch: React.Dispatch<InstantiateAction>;
-  currentStep?: number;
-}
-
-export const Step1 = ({ currentStep, dispatch }: Props) => {
-  const [metadata, setMetadata] = useState<Abi>();
-  const [hash, setHash] = useState('');
-  const { api } = useApi();
-
-  function handleUploadMetadata(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.item(0);
-    const fr = new FileReader();
-
-    fr.onload = function (e) {
-      const result = JSON.parse(`${e.target?.result}`) as AnyJson;
-      const converted = convertMetadata(result, api);
-      setMetadata(converted);
-    };
-    if (file) fr.readAsText(file);
-  }
-
-  if (currentStep !== 1) return null;
+export function Step1() {
+  const {
+    codeHash,
+    name,
+    isUsingStoredMetadata,
+    metadata,
+    metadataFile: [metadataFile],
+    step: [, stepForward],
+  } = useInstantiate();
 
   return (
     <>
-      <label htmlFor="hash" className="inline-block mb-2 dark:text-gray-300 text-gray-700">
-        Look up Code Hash
-      </label>
-      <Input
-        value={hash}
-        handleChange={e => setHash(e.target.value)}
-        placeholder="on-chain code hash"
-        id="codeHash"
-      />
-      <label htmlFor="metadata" className="inline-block mb-3 dark:text-gray-300 text-gray-700">
-        Add contract metadata
-      </label>
-      <FileInput
-        placeholder="Upload metadata.json"
-        changeHandler={handleUploadMetadata}
-        removeHandler={() => setMetadata(undefined)}
-        fileLoaded={!!metadata}
-        successText={`${metadata?.project.contract.name} - v${metadata?.project.contract.version}`}
-      />
+      <Form>
+        <FormField id="name" label="Contract Name" {...getValidation(name)}>
+          <Input id="contractName" placeholder="Give your contract a descriptive name" {...name} />
+        </FormField>
+        {codeHash && (
+          <FormField id="metadata" label="On-Chain Code">
+            <CodeHash
+              codeHash={codeHash}
+              name={
+                isUsingStoredMetadata
+                  ? metadata.value?.info.contract.name.toString()
+                  : 'Unidentified Code'
+              }
+            />
+          </FormField>
+        )}
+        {(!codeHash || !isUsingStoredMetadata) && (
+          <FormField
+            id="metadata"
+            label={codeHash ? 'Upload Metadata' : 'Upload Contract Bundle'}
+            {...getValidation(metadata)}
+          >
+            <InputFile
+              placeholder="Click to select or drag & drop to upload file."
+              onChange={metadata.onChange}
+              onRemove={metadata.onRemove}
+              isError={metadata.isError}
+              value={metadataFile}
+            />
+          </FormField>
+        )}
+      </Form>
       <Buttons>
         <Button
-          className="mt-16"
-          onClick={() => {
-            metadata &&
-              dispatch({
-                type: 'STEP_1_COMPLETE',
-                payload: {
-                  codeHash: hash,
-                  metadata,
-                  contractName: metadata.project.contract.name.toHuman(),
-                },
-              });
-          }}
-          isDisabled={!metadata || !hash}
+          isDisabled={!metadata.value || !name.isValid || metadata.isError}
+          onClick={stepForward}
           variant="primary"
         >
           Next
@@ -77,4 +64,4 @@ export const Step1 = ({ currentStep, dispatch }: Props) => {
       </Buttons>
     </>
   );
-};
+}

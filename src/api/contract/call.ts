@@ -12,6 +12,8 @@ import {
   RegistryError,
 } from 'types';
 
+let nextId = 0;
+
 export function prepareContractTx(
   tx: ContractTx<'promise'>,
   options: { gasLimit: number; salt: Uint8Array; value: number },
@@ -33,33 +35,31 @@ export async function call({
   api,
   abi,
   contractAddress,
-  message: { args, isMutating, isPayable, method, returnType },
+  message,
   endowment,
   gasLimit,
   keyringPair,
   argValues,
   dispatch,
 }: ContractCallParams) {
-  const userInput = argValues ? Object.values(argValues) : [];
   const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
-  const transformed = transformUserInput(args, userInput);
+  const transformed = transformUserInput(api, message.args, argValues);
 
   const callResult: CallResult = {
+    id: ++nextId,
+    isComplete: false,
     data: '',
     log: [],
-    method: method,
-    returnType: returnType?.displayName || returnType?.type || '',
+    message,
     time: Date.now(),
-    isMutating: isMutating ? true : false,
-    isPayable: isPayable ? true : false,
   };
 
   if (keyringPair) {
-    dispatch({ type: 'CALL_INIT' });
-    if (isMutating || isPayable) {
+    dispatch({ type: 'CALL_INIT', payload: callResult });
+    if (message.isMutating || message.isPayable) {
       const tx = prepareContractTx(
-        contract.tx[method],
+        contract.tx[message.method],
         { gasLimit, value: endowment, salt },
         transformed
       );
@@ -96,7 +96,7 @@ export async function call({
       const { result, output } = await sendContractQuery(
         { gasLimit, endowment },
         keyringPair.address,
-        contract.query[method],
+        contract.query[message.method],
         transformed
       );
 

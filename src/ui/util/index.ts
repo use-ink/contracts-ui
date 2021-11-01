@@ -3,7 +3,15 @@
 
 import { twMerge } from 'tailwind-merge';
 
-export const classes = twMerge;
+export function classes(...classLists: (string | null | undefined | false)[]) {
+  return twMerge(...classLists.map(classList => (!classList ? null : classList)));
+}
+
+export function truncate(value: string | undefined, sideLength = 6): string {
+  return value
+    ? `${value.substring(0, sideLength)}...${value.substring(value.length - sideLength)}`
+    : '';
+}
 
 export const MOCK_CONTRACT_DATA: [string, number, string[], unknown[]][] = [
   ['Flipper', 0, ['alpha', 'beta'], [true]],
@@ -11,3 +19,9 @@ export const MOCK_CONTRACT_DATA: [string, number, string[], unknown[]][] = [
   ['DNS', 2, ['delta'], []],
   ['Incrementer', 1, ['beta', 'delta', 'gamma'], [7]],
 ];
+
+export function isValidCodeHash(value: string): boolean {
+  return /^0x[0-9a-fA-F]{64}$/.test(value);
+}
+
+export * from './initValue';

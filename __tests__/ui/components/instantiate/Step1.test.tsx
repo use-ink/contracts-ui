@@ -6,20 +6,41 @@ import { jest } from '@jest/globals';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Step1 } from 'ui/components/instantiate/Step1';
+import { ApiContext, DbContext, InstantiateContext } from 'ui/contexts';
+import { getMockApiState, getMockDbState, getMockInstantiateState } from 'test-utils';
+import { ApiState } from 'types';
+
+async function renderWithContexts() {
+  return render(
+    <ApiContext.Provider
+      value={{
+        ...getMockApiState(),
+        keyring: {
+          getPairs: jest.fn(() => []),
+        } as unknown as ApiState['keyring'],
+      }}
+    >
+      <DbContext.Provider value={await getMockDbState()}>
+        <InstantiateContext.Provider value={getMockInstantiateState()}>
+          <Step1 />
+        </InstantiateContext.Provider>
+      </DbContext.Provider>
+    </ApiContext.Provider>
+  );
+}
 
 describe('Instantiate Step 1', () => {
-  test('renders correctly with initial values', () => {
-    const { getByText, getByPlaceholderText } = render(
-      <Step1 dispatch={jest.fn()} currentStep={1} />
-    );
-    expect(getByPlaceholderText('on-chain code hash')).toBeInTheDocument();
-    expect(getByText('Upload metadata.json')).toBeInTheDocument();
-    expect(getByText('Next')).toBeDisabled();
+  test.skip('renders correctly with initial values', async () => {
+    const { getByText } = await renderWithContexts();
+
+    expect(getByText('Account')).toBeInTheDocument();
+    expect(getByText('Contract Name')).toBeInTheDocument();
+    expect(getByText('Upload Contract Bundle')).toBeInTheDocument();
   });
 
-  test('does not render if current step is not 1', () => {
-    const { container } = render(<Step1 dispatch={jest.fn()} currentStep={2} />);
+  // test.skip('does not render if current step is not 1', async () => {
+  //   const { container } = await renderWithContexts()
 
-    expect(container).toBeEmptyDOMElement();
-  });
+  //   expect(container).toBeEmptyDOMElement();
+  // });
 });

@@ -9,15 +9,21 @@ import { getCodeBundleCollection, getContractCollection, pushToRemote } from './
 import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 
 export async function findTopCodeBundles(
-  db: Database
+  db: Database,
+  excludeOwnedBy?: PrivateKey | null,
+  limit?: number
 ): Promise<(CodeBundleDocument & { instances: number })[]> {
   try {
-    const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
+    const codeBundles = (
+      await getCodeBundleCollection(db)
+        .find(excludeOwnedBy ? { owner: { $ne: publicKeyHex(excludeOwnedBy) } } : {})
+        .toArray()
+    ).slice(0, limit ? limit : undefined);
 
     return Promise.all(
       codeBundles.map(async codeBundle => {
         const instances = (
-          await getContractCollection(db).find({ codeBundleId: codeBundle.id }).toArray()
+          await getContractCollection(db).find({ codeHash: codeBundle.codeHash }).toArray()
         ).length;
 
         return {
@@ -25,6 +31,29 @@ export async function findTopCodeBundles(
           instances,
         };
       })
+    );
+  } catch (e) {
+    console.error(e);
+
+    return Promise.reject(e);
+  }
+}
+
+export async function findOwnedCodeBundles(
+  db: Database,
+  identity: PrivateKey | null,
+  limit = 2
+): Promise<CodeBundleDocument[]> {
+  try {
+    const user = await findUser(db, identity);
+
+    if (!user) {
+      return [];
+    }
+
+    return (await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray()).slice(
+      0,
+      limit ? limit : undefined
     );
   } catch (e) {
     console.error(e);
@@ -44,7 +73,7 @@ export async function findMyCodeBundles(
       return { owned: [], starred: [] };
     }
 
-    const owned = await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray();
+    const owned = await findOwnedCodeBundles(db, identity);
     const existingStarred = await getCodeBundleCollection(db)
       .find({ id: { $in: user.codeBundlesStarred } })
       .toArray();
@@ -68,9 +97,14 @@ export async function findMyCodeBundles(
 
 export async function findCodeBundleByHash(
   db: Database,
-  { codeHash, blockOneHash }: CodeBundleQuery
+  { codeHash, blockZeroHash }: CodeBundleQuery
 ): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ blockOneHash, codeHash })) || null;
+  return (
+    (await getCodeBundleCollection(db).findOne({
+      blockZeroHash: blockZeroHash || undefined,
+      codeHash,
+    })) || null
+  );
 }
 
 export async function findCodeBundleById(
@@ -80,12 +114,33 @@ export async function findCodeBundleById(
   return (await getCodeBundleCollection(db).findOne({ id })) || null;
 }
 
+export async function searchForCodeBundle(
+  db: Database,
+  fragment: string
+): Promise<CodeBundleDocument[] | null> {
+  if (!fragment || fragment === '') {
+    return null;
+  }
+
+  const matches = await db.dexie
+    .table<CodeBundleDocument>('CodeBundle')
+    .filter(({ name, codeHash }) => {
+      const regex = new RegExp(fragment);
+
+      return regex.test(name) || regex.test(codeHash);
+    })
+    .limit(10)
+    .toArray();
+
+  return matches;
+}
+
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
   {
     abi,
-    blockOneHash,
+    blockZeroHash,
     codeHash,
     creator,
     genesisHash,
@@ -94,7 +149,7 @@ export async function createCodeBundle(
     name,
     stars = 1,
     tags = [],
-    date = moment().format(),
+    date = moment.utc().format(),
   }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
@@ -112,7 +167,7 @@ export async function createCodeBundle(
 
     const newCode = getCodeBundleCollection(db).create({
       abi,
-      blockOneHash,
+      blockZeroHash,
       codeHash,
       creator,
       genesisHash,

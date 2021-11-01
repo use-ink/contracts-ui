@@ -10,14 +10,14 @@ export function Footer() {
       <div>
         <a
           href="#"
-          className="flex content-center text-sm font-medium dark:text-gray-500 text-gray-600 dark:hover:text-gray-300 hover:text-gray-500"
+          className="flex content-center text-xs font-medium dark:text-gray-500 text-gray-600 dark:hover:text-gray-300 hover:text-gray-500"
         >
-          <ChatAltIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+          <ChatAltIcon className="h-4 w-4 mr-1" aria-hidden="true" />
           Help &amp; Feedback
         </a>
         <a href="#">
           <CogIcon
-            className="h-5 w-5 dark:text-gray-500 dark:hover:text-gray-300 text-gray-600 hover:text-gray-500"
+            className="h-4 w-4 dark:text-gray-500 dark:hover:text-gray-300 text-gray-600 hover:text-gray-500"
             aria-hidden="true"
           />
         </a>

@@ -4,17 +4,24 @@
 import React, { HTMLAttributes } from 'react';
 
 interface PageProps extends HTMLAttributes<HTMLDivElement> {
+  accessory?: React.ReactNode;
   header: React.ReactNode;
   help?: React.ReactNode;
 }
 
-export function PageFull({ header, help, children }: PageProps): React.ReactElement<PageProps> {
+export function PageFull({
+  accessory,
+  header,
+  help,
+  children,
+}: PageProps): React.ReactElement<PageProps> {
   return (
     <>
       <div className="w-full mx-auto overflow-y-auto">
         <div className="grid md:grid-cols-12 h-full gap-5 px-5 py-3 m-2">
           <main className="md:col-span-12 p-4">
             <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
+              {accessory && <div className="float-right">{accessory}</div>}
               <h1 className="text-2xl dark:text-white text-gray-700 capitalize">{header}</h1>
               <p className="dark:text-gray-400 text-gray-500 text-sm">{help}</p>
             </div>

@@ -39,14 +39,6 @@ export async function getUser(
     return existing;
   }
 
-  if (!creator) {
-    return Promise.reject(new Error('No creator account provided'));
-  }
-
-  if (!name) {
-    return Promise.reject(new Error('No display name provided'));
-  }
-
   if (identity && !existing) {
     const user = getUserCollection(db).create({
       codeBundlesStarred: [],

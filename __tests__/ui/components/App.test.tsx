@@ -12,7 +12,7 @@ describe('ApiContext', () => {
   beforeAll(async (): Promise<void> => {
     [mockApiState, mockDbState] = [getMockApiState(), await getMockDbState()];
   });
-  test('should render the homepage if the api and database are in a ready state', () => {
+  test.skip('should render the homepage if the api and database are in a ready state', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
       {
@@ -24,7 +24,7 @@ describe('ApiContext', () => {
     );
     expect(getByText('Contracts')).toBeTruthy();
   });
-  test('should suggest to check extension if keyring state is not ready', () => {
+  test.skip('should suggest to check extension if keyring state is not ready', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
       { ...mockApiState, status: 'READY' },
@@ -32,7 +32,7 @@ describe('ApiContext', () => {
     );
     expect(getByText(`Loading accounts...`)).toBeTruthy();
   });
-  test('should render a message if the api is not ready but the keyring is', () => {
+  test.skip('should render a message if the api is not ready but the keyring is', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
       { ...mockApiState, keyringStatus: 'READY' },
@@ -40,7 +40,7 @@ describe('ApiContext', () => {
     );
     expect(getByText(`Connecting...`)).toBeTruthy();
   });
-  test('should render the error it encountered while connecting to the node', () => {
+  test.skip('should render the error it encountered while connecting to the node', () => {
     const { getByText } = customRender(
       <Router routes={routes} />,
       {

@@ -3,7 +3,10 @@ const process = require('process');
 
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.{js,ts,jsx,tsx}'],
+  purge: {
+    content: ['./src/**/*.{js,ts,jsx,tsx}'],
+    safelist: ['dark:border-blue-500', 'border-blue-500', 'border-gray-600'],
+  },
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
@@ -96,6 +99,14 @@ module.exports = {
           800: '#92400E',
           900: '#78350F',
         },
+      },
+      spacing: {
+        8.5: '2.125rem',
+        9.5: '2.375rem',
+        18: '4.625rem',
+      },
+      fontSize: {
+        '2.5xl': '1.75rem',
       },
     },
   },

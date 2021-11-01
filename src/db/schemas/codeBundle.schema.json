@@ -21,7 +21,7 @@
       "description": "The Polkadot address that uploaded this code bundle",
       "type": "string"
     },
-    "blockOneHash": {
+    "blockZeroHash": {
       "description": "The identifying block hash for the code bundle's chain (for distinguishing development/local node instances)",
       "type": "string"
     },

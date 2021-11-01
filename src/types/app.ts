@@ -1,19 +1,34 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ReactNode, ComponentType } from 'react';
+import { SubmittableResult } from '@polkadot/api';
+import BN from 'bn.js';
+import React, { ReactNode, ComponentType } from 'react';
 import {
+  BlueprintPromise,
   ContractPromise,
   Abi,
+  AbiConstructor,
+  AnyJson,
   EventRecord,
   DispatchError,
   ApiPromise,
   Keyring,
   AbiMessage,
   KeyringPair,
-  AnyJson,
   RegistryError,
+  SubmittableExtrinsic,
+  BlueprintSubmittableResult,
+  CodeSubmittableResult,
 } from './substrate';
+
+export type { BN };
+
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+
+export type UseState<T> = [T, SetState<T>];
+
+export type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 
 export type VoidFn = () => void;
 
@@ -21,9 +36,9 @@ type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
 export interface ApiState extends ChainProperties {
   endpoint: string;
-  keyring: Keyring | null;
+  keyring: Keyring;
   keyringStatus: string | null;
-  api: ApiPromise | null;
+  api: ApiPromise;
   error: unknown | null;
   status: Status;
 }
@@ -39,50 +54,197 @@ export type ApiAction =
   | { type: 'KEYRING_ERROR' };
 
 export interface ChainProperties {
-  blockOneHash: string | null;
+  blockZeroHash: string | null;
+  tokenDecimals: number;
   systemName: string | null;
   systemVersion: string | null;
+  tokenSymbol: string;
 }
 
-export interface DropdownOption {
-  value: string | number;
-  name: string;
+export interface Transaction {
+  id: number;
+  isComplete?: boolean;
+  isError?: boolean;
+  isProcessing?: boolean;
+  isSuccess?: boolean;
+  extrinsic: SubmittableExtrinsic<'promise'>;
+  accountId: string;
+  isValid: (_: SubmittableResult) => boolean;
+  onSuccess?: (_: SubmittableResult) => Promise<void>;
+  onError?: () => void;
 }
+
+export type TransactionOptions = Pick<
+  Transaction,
+  'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'
+>;
+
+export interface TransactionsState {
+  txs: Transaction[];
+  process: (_: number) => Promise<void>;
+  queue: (_: TransactionOptions) => number;
+  unqueue: (id: number) => void;
+  dismiss: (id: number) => void;
+}
+
+export interface DropdownOption<T> {
+  value: T;
+  name: React.ReactNode;
+}
+
+export type DropdownProps<T> = SimpleSpread<
+  React.HTMLAttributes<HTMLDivElement>,
+  UseFormField<T> & {
+    button?: React.ComponentType<OptionProps<T>>;
+    isDisabled?: boolean;
+    option?: React.ComponentType<OptionProps<T>>;
+    options?: DropdownOption<T>[];
+  }
+>;
+
+export interface OptionProps<T> {
+  option: DropdownOption<T>;
+  isPlaceholder?: boolean;
+  isSelected?: boolean;
+}
+
+export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>];
+
+export type UseToggle = [boolean, () => void, (value: boolean) => void];
+
+export interface MetadataState extends Validation {
+  source: AnyJson | null;
+  name: string | null;
+  value: Abi | null;
+  isSupplied: boolean;
+}
+
+export interface UseMetadata extends MetadataState {
+  onChange: (_: FileState) => void;
+  onRemove: () => void;
+}
+
+export interface UseWeight {
+  executionTime: number;
+  isEmpty: boolean;
+  isValid: boolean;
+  megaGas: BN;
+  percentage: number;
+  setIsEmpty: SetState<boolean>;
+  setMegaGas: React.Dispatch<BN | undefined>;
+  weight: BN;
+}
+
+export interface UseFormField<T> extends Validation {
+  value?: T;
+  onChange: (_: T) => void;
+}
+
+export type UseBalance = UseFormField<BN | null | undefined>;
+
+export interface Validation {
+  isError?: boolean;
+  isSuccess?: boolean;
+  isTouched?: boolean;
+  isValid?: boolean;
+  isWarning?: boolean;
+  validation?: React.ReactNode;
+}
+
+export type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>;
+
+export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;
+export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'>) => Promise<void>;
 
 export interface InstantiateState {
+  accountId: UseFormField<string | null>;
+  argValues: UseState<Record<string, unknown>>;
+  codeHash?: string | null;
+  constructorIndex: UseFormField<number>;
+  deployConstructor: AbiConstructor | null;
+  endowment: UseBalance;
   isLoading: boolean;
-  isSuccess: boolean;
-  currentStep: number;
-  fromAddress?: string;
-  fromAccountName?: string;
-  codeHash?: string;
-  metadata?: Abi;
-  constructorName?: string;
-  argValues?: Record<string, string>;
-  contract?: ContractPromise | null;
-  events?: EventRecord[];
-  error?: DispatchError;
-  contractName: string;
+  isUsingSalt: UseToggle;
+  isUsingStoredMetadata: boolean;
+  metadata: UseMetadata;
+  metadataFile: UseState<FileState | undefined>;
+  name: UseFormField<string>;
+  onError: () => void;
+  onFinalize?: () => void;
+  onUnFinalize?: () => void;
+  onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
+  onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
+  salt: UseFormField<string>;
+  step: UseStepper;
+  weight: UseWeight;
+  tx: SubmittableExtrinsic<'promise'> | null;
+  txError: string | null;
 }
+
+export type InstantiateProps = InstantiateState;
+// createTx: () => SubmittableExtrinsic<'promise'> | null;
 
 export type InstantiateAction =
   | { type: 'INSTANTIATE' }
   | { type: 'INSTANTIATE_FINALIZED'; payload: EventRecord[] }
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
-  | { type: 'STEP_1_COMPLETE'; payload: { codeHash: string; metadata: Abi; contractName: string } }
   | {
-      type: 'STEP_2_COMPLETE';
-      payload: { fromAddress: string; fromAccountName: string; contractName: string };
+      type: 'UPLOAD_METADATA';
+      payload: {
+        codeHash: string;
+        metadata: Abi;
+        contractName: string;
+        fromAddress: string;
+        fromAccountName: string;
+      };
     }
   | {
-      type: 'STEP_3_COMPLETE';
-      payload: { constructorName: string; argValues: Record<string, string> };
+      type: 'UPLOAD_CONTRACT';
+      payload: {
+        codeHash: string;
+        fromAddress: string;
+        fromAccountName: string;
+        metadata: Abi;
+        contractName: string;
+        file: FileState;
+      };
+    }
+  | {
+      type: 'DEPLOYMENT_INFO';
+      payload: {
+        constructorName: string;
+        constructorIndex: number;
+        argValues: Record<string, unknown>;
+        endowment: number;
+        salt: string;
+        gas: number;
+      };
     }
   | {
       type: 'GO_TO';
       payload: { step: number };
     };
+
+export interface FileState {
+  data: Uint8Array;
+  name: string;
+  size: number;
+}
+
+export type InputFileProps = SimpleSpread<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  {
+    errorMessage?: React.ReactNode;
+    isDisabled?: boolean;
+    isSupplied?: boolean;
+    isError?: boolean;
+    onChange: (_: FileState) => void;
+    onRemove: () => void;
+    successMessage?: React.ReactNode;
+    value?: FileState;
+  }
+>;
 
 export interface RouteInterface {
   path: string;
@@ -94,6 +256,16 @@ export interface RouteInterface {
   redirect?: string;
 }
 
+export type StringOrNull = string | null;
+
+export type RawParamValue = unknown | undefined;
+export type RawParamValueArray = (RawParamValue | RawParamValue[])[];
+export type RawParamValues = RawParamValue | RawParamValueArray;
+export interface RawParam {
+  isValid: boolean;
+  value: RawParamValues;
+}
+
 export interface ContractCallParams {
   api: ApiPromise;
   abi: Abi;
@@ -102,22 +274,22 @@ export interface ContractCallParams {
   endowment: number;
   gasLimit: number;
   keyringPair?: KeyringPair;
-  argValues?: Record<string, string>;
+  argValues?: Record<string, unknown>;
   dispatch: (action: ContractCallAction) => void;
 }
 
 export interface CallResult {
   data: AnyJson;
+  id: number;
+  isComplete: boolean;
   log: string[];
-  method: string;
-  time: number;
-  returnType?: string;
-  isMutating?: boolean;
-  isPayable?: boolean;
+  message: AbiMessage;
   blockHash?: string;
-  info?: Record<string, AnyJson>;
   error?: RegistryError;
+  info?: Record<string, AnyJson>;
+  time: number;
 }
+
 export interface ContractCallState {
   isLoading: boolean;
   isSuccess: boolean;
@@ -125,7 +297,8 @@ export interface ContractCallState {
   error?: RegistryError;
 }
 export type ContractCallAction =
-  | { type: 'CALL_INIT' }
-  | { type: 'CALL_FINALISED'; payload: CallResult };
+  | { type: 'CALL_INIT'; payload: CallResult }
+  | { type: 'CALL_FINALISED'; payload: CallResult }
+  | { type: 'RESET' };
 
-export type UrlParams = { addr: string; activeTab: string };
+export type UrlParams = { address: string; activeTab: string };
