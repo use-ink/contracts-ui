@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { createRef, useCallback, useEffect, useState } from 'react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/solid';
@@ -10,7 +13,7 @@ const BYTE_STR_X = 'x'.charCodeAt(0);
 const STR_NL = '\n';
 const NOOP = (): void => undefined;
 
-function convertResult (result: ArrayBuffer): Uint8Array {
+function convertResult(result: ArrayBuffer): Uint8Array {
   const data = new Uint8Array(result);
 
   // this converts the input (if detected as hex), via the hex conversion route
@@ -63,7 +66,7 @@ function convertResult (result: ArrayBuffer): Uint8Array {
 //   )
 // }
 
-export function InputFile ({
+export function InputFile({
   accept = '*/*',
   className = '',
   errorMessage,
@@ -92,12 +95,14 @@ export function InputFile ({
             const data = convertResult(target.result as ArrayBuffer);
             const size = data.length;
 
-            onChange && onChange({data, name, size});
-            ref && !propsFile && setFile({
-              data,
-              name,
-              size: data.length
-            });
+            onChange && onChange({ data, name, size });
+            ref &&
+              !propsFile &&
+              setFile({
+                data,
+                name,
+                size: data.length,
+              });
           }
         };
 
@@ -107,23 +112,17 @@ export function InputFile ({
     [ref, onChange, propsFile]
   );
 
-  const onRemove = useCallback(
-    (): void => {
-      props.onRemove && props.onRemove();
+  const onRemove = useCallback((): void => {
+    props.onRemove && props.onRemove();
 
-      !propsFile && setFile(undefined);
-    },
-    [props.onRemove, propsFile]
-  )
+    !propsFile && setFile(undefined);
+  }, [props.onRemove, propsFile]);
 
-  useEffect(
-    (): void => {
-      if (file !== propsFile) {
-        setFile(propsFile);
-      }
-    },
-    [file, propsFile]
-  );
+  useEffect((): void => {
+    if (file !== propsFile) {
+      setFile(propsFile);
+    }
+  }, [file, propsFile]);
 
   return file ? (
     <div className={`${className} flex`}>
@@ -135,7 +134,7 @@ export function InputFile ({
         <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
           {file.name} ({(file.size / 1000).toFixed(2)}kb)
         </span>
-        {errorMessage && isError  && (
+        {errorMessage && isError && (
           <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
             {errorMessage}
           </span>
@@ -148,11 +147,7 @@ export function InputFile ({
       </div>
     </div>
   ) : (
-    <Dropzone
-      multiple={false}
-      onDrop={onDrop}
-      ref={ref}
-    >
+    <Dropzone multiple={false} onDrop={onDrop} ref={ref}>
       {({ getInputProps, getRootProps }) => {
         return (
           <div className={className} {...getRootProps()}>
@@ -182,4 +177,4 @@ export function InputFile ({
       }}
     </Dropzone>
   );
-};
+}

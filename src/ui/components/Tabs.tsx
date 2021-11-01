@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import type { SetState } from 'types';
 import { classes } from 'ui/util';
@@ -15,7 +18,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   tabs: Tab[];
 }
 
-export function Tabs ({ children, index, setIndex, tabs }: Props) {
+export function Tabs({ children, index, setIndex, tabs }: Props) {
   return (
     <>
       <div className="grid grid-cols-12 w-full">
@@ -30,7 +33,7 @@ export function Tabs ({ children, index, setIndex, tabs }: Props) {
                   {label}
                 </button>
               </li>
-            )
+            );
           })}
         </ul>
       </div>
@@ -39,7 +42,7 @@ export function Tabs ({ children, index, setIndex, tabs }: Props) {
           <div key={`child-${i}`} className={index !== i ? 'hidden' : 'block'}>
             {child}
           </div>
-        )
+        );
       })}
     </>
   );

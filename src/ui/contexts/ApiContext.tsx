@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import React, { useReducer, useEffect, useContext } from 'react';
 import { ApiPromise, WsProvider } from '@polkadot/api';
@@ -6,7 +7,7 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
 
 import type { Reducer } from 'react';
-import type { CanvasAction, CanvasState, ChainProperties } from 'types';
+import type { ApiAction, ApiState, ChainProperties } from 'types';
 
 let loadedAccounts = false;
 
@@ -18,25 +19,25 @@ const NULL_CHAIN_PROPERTIES = {
   systemName: null,
   systemVersion: null,
   tokenDecimals: DEFAULT_DECIMALS,
-  tokenSymbol: 'Unit'
-}
+  tokenSymbol: 'Unit',
+};
 
-const INIT_STATE: CanvasState = {
+const INIT_STATE: ApiState = {
   ...NULL_CHAIN_PROPERTIES,
   endpoint: LOCAL_NODE,
   keyringStatus: null,
   error: null,
   status: 'CONNECT_INIT',
-} as unknown as CanvasState;
+} as unknown as ApiState;
 
-async function getChainProperties (api: ApiPromise): Promise<ChainProperties> {
+async function getChainProperties(api: ApiPromise): Promise<ChainProperties> {
   const [chainProperties, blockZeroHash, systemName, systemVersion] = await Promise.all([
     api.rpc.system.properties(),
     api.query.system.blockHash(0),
     api.rpc.system.name(),
     api.rpc.system.version(),
   ]);
-  
+
   return {
     blockZeroHash: blockZeroHash.toString(),
     systemName: systemName.toString(),
@@ -45,12 +46,15 @@ async function getChainProperties (api: ApiPromise): Promise<ChainProperties> {
       ? chainProperties.tokenDecimals.unwrap().toArray()[0].toNumber()
       : DEFAULT_DECIMALS,
     tokenSymbol: chainProperties.tokenSymbol.isSome
-      ? chainProperties.tokenSymbol.unwrap().toArray().map((s) => s.toString())[0]
-      : 'Unit'
+      ? chainProperties.tokenSymbol
+          .unwrap()
+          .toArray()
+          .map(s => s.toString())[0]
+      : 'Unit',
   };
 }
 
-export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action) => {
+export const apiReducer: Reducer<ApiState, ApiAction> = (state, action) => {
   switch (action.type) {
     case 'SET_ENDPOINT':
       return { ...INIT_STATE, status: 'CONNECT_INIT', endpoint: action.payload };
@@ -81,12 +85,10 @@ export const canvasReducer: Reducer<CanvasState, CanvasAction> = (state, action)
   }
 };
 
-export const CanvasContext = React.createContext(INIT_STATE);
+export const ApiContext = React.createContext(INIT_STATE);
 
-export const CanvasContextProvider = ({
-  children,
-}: React.PropsWithChildren<Partial<CanvasState>>) => {
-  const [state, dispatch] = useReducer(canvasReducer, INIT_STATE);
+export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial<ApiState>>) => {
+  const [state, dispatch] = useReducer(apiReducer, INIT_STATE);
 
   const { endpoint, keyringStatus } = state;
 
@@ -104,14 +106,14 @@ export const CanvasContextProvider = ({
 
       dispatch({
         type: 'CONNECT_READY',
-        payload: await getChainProperties(_api)
+        payload: await getChainProperties(_api),
       });
     });
 
-    _api.on('ready', async () => {      
+    _api.on('ready', async () => {
       dispatch({
         type: 'CONNECT_READY',
-        payload: await getChainProperties(_api)
+        payload: await getChainProperties(_api),
       });
     });
 
@@ -129,7 +131,7 @@ export const CanvasContextProvider = ({
       dispatch({ type: 'LOAD_KEYRING' });
       try {
         if (typeof window !== 'undefined') {
-          await web3Enable('canvas-ui');
+          await web3Enable('substrate-contracts-explorer');
           let allAccounts = await web3Accounts();
           allAccounts = allAccounts.map(({ address, meta }) => ({
             address,
@@ -148,17 +150,7 @@ export const CanvasContextProvider = ({
     loadAccounts().catch(console.error);
   }, [keyringStatus]);
 
-  // useEffect(
-  //   (): void => {
-  //     formatBalance.setDefaults({
-  //       decimals: state.tokenDecimals,
-  //       unit: state.tokenSymbol
-  //     });
-    
-  //   }
-  // )
-
-  return <CanvasContext.Provider value={state}>{children}</CanvasContext.Provider>;
+  return <ApiContext.Provider value={state}>{children}</ApiContext.Provider>;
 };
 
-export const useCanvas = () => useContext(CanvasContext);
+export const useApi = () => useContext(ApiContext);

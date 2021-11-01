@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent, RenderResult } from '@testing-library/react';
@@ -10,11 +13,7 @@ describe('Button', () => {
 
   beforeEach(() => {
     rendered = render(
-      <Button
-        className='foo'
-        onClick={onClick}
-        variant='primary'
-      >
+      <Button className="foo" onClick={onClick} variant="primary">
         Button Contents
       </Button>
     );

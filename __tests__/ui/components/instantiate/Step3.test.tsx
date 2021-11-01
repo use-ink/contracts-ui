@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
@@ -9,9 +12,7 @@ describe('Instantiate Step 3', () => {
   // const { constructors } = mockAbiFlipper;
 
   test.skip('renders correctly with initial values', () => {
-    const { getByPlaceholderText } = render(
-      <Step3 />
-    );
+    const { getByPlaceholderText } = render(<Step3 />);
     expect(getByPlaceholderText('initValue: <bool>')).toBeInTheDocument();
   });
   test.skip('does not render when no constructors given', () => {
@@ -19,15 +20,11 @@ describe('Instantiate Step 3', () => {
     expect(container).toBeEmptyDOMElement();
   });
   test.skip('does not render when current step is not 3', () => {
-    const { container } = render(
-      <Step3 />
-    );
+    const { container } = render(<Step3 />);
     expect(container).toBeEmptyDOMElement();
   });
   test.skip('accepts user input', () => {
-    const { getByPlaceholderText } = render(
-      <Step3 />
-    );
+    const { getByPlaceholderText } = render(<Step3 />);
     const input = getByPlaceholderText('initValue: <bool>');
     expect(input).toHaveAttribute('value', '');
     fireEvent.change(input, { target: { value: 'test user Input' } });
@@ -35,9 +32,7 @@ describe('Instantiate Step 3', () => {
   });
   test.skip('dispatches the correct values', () => {
     const dispatchMock = jest.fn();
-    const { getByPlaceholderText, getByText } = render(
-      <Step3 />
-    );
+    const { getByPlaceholderText, getByText } = render(<Step3 />);
     const input = getByPlaceholderText('initValue: <bool>');
     const button = getByText('Next');
     fireEvent.change(input, { target: { value: 'true' } });

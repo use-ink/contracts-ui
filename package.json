@@ -1,10 +1,10 @@
 {
-  "name": "canvas-ui",
+  "name": "substrate-contracts-explorer",
   "version": "2.0.0",
-  "description": "Canvas UI",
+  "description": "Substrate Contracts Explorer",
   "private": true,
   "type": "module",
-  "homepage": "https://paritytech.github.io/canvas-ui-v2",
+  "homepage": "https://paritytech.github.io/substrate-contracts-explorer",
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "NODE_ENV=development webpack --progress --config webpack.dev.cjs",
@@ -44,8 +44,6 @@
     "@textile/threaddb": "0.1.0",
     "assert": "^2.0.0",
     "bcryptjs": "^2.4.3",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.0",
     "moment": "^2.29.1",
     "nanoid": "^3.1.23",
     "process": "^0.11.10",
@@ -119,7 +117,7 @@
     "last 2 Chrome versions"
   ],
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,cjs,ts,tsx}": "eslint --cache --fix",
+    "*.{js,cjs,ts,tsx,css,md,json}": "prettier --write"
   }
 }

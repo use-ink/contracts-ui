@@ -1,19 +1,17 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
-import {
-  Homepage,
-  Contract,
-  Instantiate as InstantiatePage,
-  AddContract,
-} from '../pages';
+import { Homepage, Contract, Instantiate as InstantiatePage, AddContract } from '../pages';
 import { SelectCodeHash } from '../pages/SelectCodeHash';
 import { InstantiateContextProvider } from 'ui/contexts';
 
-function Instantiate () {
+function Instantiate() {
   return (
     <InstantiateContextProvider>
       <InstantiatePage />
     </InstantiateContextProvider>
-  )
+  );
 }
 
 export const routes = [

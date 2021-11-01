@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, CodeIcon, UploadIcon } from '@heroicons/react/outline';

@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
@@ -12,28 +15,18 @@ describe('Message Docs', () => {
   } as AbiMessage;
 
   test.skip('correctly renders a message', () => {
-    const { getByText } = render(
-      <MessageDocs
-        message={mockMessage}
-      />
-    );
+    const { getByText } = render(<MessageDocs message={mockMessage} />);
     const title = getByText(mockMessage.identifier);
 
     expect(title).toHaveClass('text-yellow-400');
   });
   test.skip('correctly renders a constructor', () => {
-    const { getByText } = render(
-      <MessageDocs message={{ ...mockMessage, isConstructor: true }} />
-    );
+    const { getByText } = render(<MessageDocs message={{ ...mockMessage, isConstructor: true }} />);
     const title = getByText(mockMessage.identifier);
     expect(title).toHaveClass('text-blue-400');
   });
   test.skip('renders title and documentation with markdown', () => {
-    const { getByText, container } = render(
-      <MessageDocs
-        message={mockMessage}
-      />
-    );
+    const { getByText, container } = render(<MessageDocs message={mockMessage} />);
     expect(getByText('test_message')).toBeInTheDocument();
     expect(container.getElementsByTagName('code').length).toBeGreaterThan(0);
   });

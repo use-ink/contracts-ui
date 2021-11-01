@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
@@ -6,22 +9,16 @@ import { Step2 } from 'ui/components/instantiate/Step2';
 
 describe('Instantiate Step 2', () => {
   test.skip('renders correctly with initial values', () => {
-    const { getByText } = render(
-      <Step2 />
-    );
+    const { getByText } = render(<Step2 />);
     expect(getByText('ALICE')).toBeInTheDocument();
   });
   test.skip('does not render when current step is not 2', () => {
-    const { container } = render(
-      <Step2 />
-    );
+    const { container } = render(<Step2 />);
     expect(container).toBeEmptyDOMElement();
   });
   test.skip('dispatches the correct values', () => {
     const dispatchMock = jest.fn();
-    const { getByText } = render(
-      <Step2 />
-    );
+    const { getByText } = render(<Step2 />);
     const button = getByText('Next');
     fireEvent.click(button);
     expect(dispatchMock).toHaveBeenCalledTimes(1);

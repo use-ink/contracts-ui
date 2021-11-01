@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -23,14 +26,11 @@ export const MessageDocs = ({ message, message: { docs } }: Props) => {
           </Disclosure.Button>
           <Disclosure.Panel className="panel-body p-4 markdown border-t border-gray-700">
             {/* eslint-disable-next-line react/no-children-prop */}
-            {docs.length
-              ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {docs.join('\r\n')}
-                  </ReactMarkdown>
-                )
-              : <i>No documentation provided</i>
-            }
+            {docs.length ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{docs.join('\r\n')}</ReactMarkdown>
+            ) : (
+              <i>No documentation provided</i>
+            )}
           </Disclosure.Panel>
         </div>
       )}

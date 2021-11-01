@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { QueryResult } from './QueryResult';
 import { TransactionResult } from './TransactionResult';
@@ -15,7 +18,10 @@ export const ResultsOutput = ({ results }: Props) => {
       <div>
         {results
           .map(result => {
-            const { message: { isMutating, isPayable }, time } = result;
+            const {
+              message: { isMutating, isPayable },
+              time,
+            } = result;
             const date = new Date(time).toLocaleString();
             return isMutating || isPayable ? (
               <TransactionResult key={time} result={result} date={date} />

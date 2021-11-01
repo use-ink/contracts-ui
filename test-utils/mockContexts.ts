@@ -1,10 +1,21 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Database } from '@textile/threaddb';
 import { jest } from '@jest/globals';
 import BN from 'bn.js';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { codeBundle, contract, user } from 'db';
 
-import { CanvasState, DbState, PrivateKey, UseFormField, ApiPromise, InstantiateProps, AbiConstructor } from 'types';
+import {
+  ApiState,
+  DbState,
+  PrivateKey,
+  UseFormField,
+  ApiPromise,
+  InstantiateProps,
+  AbiConstructor,
+} from 'types';
 
 export function createMockApi() {
   const api = {
@@ -19,13 +30,16 @@ export function getMockFormField<T>(value: T | undefined, isValid = false): UseF
     value,
     isValid,
     isError: false,
-  }
+  };
 }
 
 export function getMockInstantiateState(): InstantiateProps {
   return {
-    accountId: getMockFormField<string | null>('5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', true),
-    argValues: [{ initValue: 'true'}, jest.fn()],
+    accountId: getMockFormField<string | null>(
+      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      true
+    ),
+    argValues: [{ initValue: 'true' }, jest.fn()],
     codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
     constructorIndex: getMockFormField(0),
     deployConstructor: {} as AbiConstructor,
@@ -66,7 +80,7 @@ export function getMockInstantiateState(): InstantiateProps {
   };
 }
 
-export function getMockCanvasState(): CanvasState {
+export function getMockApiState(): ApiState {
   return {
     endpoint: '',
     keyringStatus: null,
@@ -77,8 +91,8 @@ export function getMockCanvasState(): CanvasState {
     systemName: 'Development',
     systemVersion: '0',
     tokenSymbol: 'Unit',
-    tokenDecimals: 12
-  } as unknown as CanvasState;
+    tokenDecimals: 12,
+  } as unknown as ApiState;
 }
 
 async function createMockDb() {

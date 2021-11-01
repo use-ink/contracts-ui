@@ -1,7 +1,7 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import type { Database, PrivateKey } from '@textile/threaddb';
-
 import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
@@ -11,22 +11,27 @@ import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 export async function findTopCodeBundles(
   db: Database,
   excludeOwnedBy?: PrivateKey | null,
-  limit?: number,
+  limit?: number
 ): Promise<(CodeBundleDocument & { instances: number })[]> {
   try {
-    const codeBundles = (await getCodeBundleCollection(db).find(excludeOwnedBy ? { owner: { $ne: publicKeyHex(excludeOwnedBy) } } : {}).toArray())
-      .slice(0, limit ? limit : undefined);
+    const codeBundles = (
+      await getCodeBundleCollection(db)
+        .find(excludeOwnedBy ? { owner: { $ne: publicKeyHex(excludeOwnedBy) } } : {})
+        .toArray()
+    ).slice(0, limit ? limit : undefined);
 
     return Promise.all(
-      codeBundles.map(async (codeBundle) => {
-        const instances = (await getContractCollection(db).find({ codeHash: codeBundle.codeHash }).toArray()).length;
-        
+      codeBundles.map(async codeBundle => {
+        const instances = (
+          await getContractCollection(db).find({ codeHash: codeBundle.codeHash }).toArray()
+        ).length;
+
         return {
           ...(codeBundle as CodeBundleDocument),
-          instances
+          instances,
         };
       })
-    )
+    );
   } catch (e) {
     console.error(e);
 
@@ -46,7 +51,10 @@ export async function findOwnedCodeBundles(
       return [];
     }
 
-    return (await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray()).slice(0, limit ? limit : undefined);
+    return (await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray()).slice(
+      0,
+      limit ? limit : undefined
+    );
   } catch (e) {
     console.error(e);
 
@@ -91,7 +99,12 @@ export async function findCodeBundleByHash(
   db: Database,
   { codeHash, blockZeroHash }: CodeBundleQuery
 ): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ blockZeroHash: blockZeroHash || undefined, codeHash })) || null;
+  return (
+    (await getCodeBundleCollection(db).findOne({
+      blockZeroHash: blockZeroHash || undefined,
+      codeHash,
+    })) || null
+  );
 }
 
 export async function findCodeBundleById(
@@ -109,11 +122,15 @@ export async function searchForCodeBundle(
     return null;
   }
 
-  const matches = await db.dexie.table<CodeBundleDocument>('CodeBundle').filter(({ name, codeHash }) => {
-    const regex = new RegExp(fragment);
+  const matches = await db.dexie
+    .table<CodeBundleDocument>('CodeBundle')
+    .filter(({ name, codeHash }) => {
+      const regex = new RegExp(fragment);
 
-    return regex.test(name) || regex.test(codeHash);
-  }).limit(10).toArray();
+      return regex.test(name) || regex.test(codeHash);
+    })
+    .limit(10)
+    .toArray();
 
   return matches;
 }
@@ -121,7 +138,19 @@ export async function searchForCodeBundle(
 export async function createCodeBundle(
   db: Database,
   owner: PrivateKey | null,
-  { abi, blockZeroHash, codeHash, creator, genesisHash, id = getNewCodeBundleId(), instances = 1, name, stars = 1, tags = [], date = moment.utc().format() }: Partial<CodeBundleDocument>
+  {
+    abi,
+    blockZeroHash,
+    codeHash,
+    creator,
+    genesisHash,
+    id = getNewCodeBundleId(),
+    instances = 1,
+    name,
+    stars = 1,
+    tags = [],
+    date = moment.utc().format(),
+  }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
     if (!creator) {
@@ -148,7 +177,7 @@ export async function createCodeBundle(
       tags,
       date,
       stars,
-      instances
+      instances,
     });
 
     await newCode.save();

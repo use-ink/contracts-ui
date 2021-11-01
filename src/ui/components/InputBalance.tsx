@@ -1,12 +1,15 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useCallback, useState } from 'react';
 import BN from 'bn.js';
 import { BN_ZERO } from '@polkadot/util';
 import { Input } from './Input';
+import { fromBalance, fromSats, toBalance } from 'api/util';
 import { SimpleSpread } from 'types';
-import { useCanvas } from 'ui/contexts';
-import { fromBalance, fromSats, toBalance } from 'canvas/util';
+import { useApi } from 'ui/contexts';
 
-type Props =  SimpleSpread<
+type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
   {
     value?: BN | null;
@@ -14,28 +17,25 @@ type Props =  SimpleSpread<
   }
 >;
 
-function InputBalanceBase ({ children, value = BN_ZERO, onChange: _onChange, ...props }: Props) {
-  const { api, tokenSymbol } = useCanvas();
+function InputBalanceBase({ children, value = BN_ZERO, onChange: _onChange, ...props }: Props) {
+  const { api, tokenSymbol } = useApi();
 
   const [stringValue, setStringValue] = useState(fromBalance(fromSats(api, value || BN_ZERO)));
 
-  const onChange = useCallback(
-    (value: string): void => {
-      setStringValue(value);
+  const onChange = useCallback((value: string): void => {
+    setStringValue(value);
 
-      const bn = toBalance(api, value);
+    const bn = toBalance(api, value);
 
-      _onChange(bn)
-    },
-    []
-  )
+    _onChange(bn);
+  }, []);
 
   return (
     <>
       <div className="relative rounded-md shadow-sm">
         <Input
           onChange={onChange}
-          onFocus={(e) => e.target.select()}
+          onFocus={e => e.target.select()}
           pattern="^\d*\.?\d*?$"
           value={stringValue}
           {...props}
@@ -55,10 +55,9 @@ function InputBalanceBase ({ children, value = BN_ZERO, onChange: _onChange, ...
           </div>
           {children}
         </Input>
-
       </div>
     </>
   );
-};
+}
 
 export const InputBalance = React.memo(InputBalanceBase);

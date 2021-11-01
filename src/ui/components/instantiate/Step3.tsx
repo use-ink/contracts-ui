@@ -1,14 +1,17 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { BN_ZERO, formatBalance, formatNumber } from '@polkadot/util';
 import { Account } from '../Account';
 import { Button, Buttons } from '../Button';
-import { isResultValid, useCanvas, useInstantiate } from 'ui/contexts';
+import { isResultValid, useApi, useInstantiate } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
-import { fromSats } from 'canvas';
+import { fromSats } from 'api';
 import { truncate } from 'ui/util';
 
-export function Step3 () {
-  const { api } = useCanvas();
+export function Step3() {
+  const { api } = useApi();
   const instantiateState = useInstantiate();
 
   const {
@@ -21,7 +24,7 @@ export function Step3 () {
     onInstantiate,
     onError,
     onUnFinalize,
-    tx
+    tx,
   } = instantiateState;
 
   const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
@@ -37,73 +40,46 @@ export function Step3 () {
   return (
     <>
       <div className="review">
-        <div className='field full'>
-          <p className="key">
-            Account
-          </p>
+        <div className="field full">
+          <p className="key">Account</p>
           <div className="value">
             <Account className="p-0" value={accountId.value} />
           </div>
         </div>
 
         <div className="field full">
-          <p className="key">
-            Name
-          </p>
-          <p className="value">
-            {name.value}
-          </p>
+          <p className="key">Name</p>
+          <p className="value">{name.value}</p>
         </div>
 
         <div className="field">
-          <p className="key">
-            Endowment
-          </p>
+          <p className="key">Endowment</p>
           <p className="value">
             {formatBalance(fromSats(api, endowment?.value || BN_ZERO), { forceUnit: '-' })}
           </p>
         </div>
 
         <div className="field">
-          <p className="key">
-            Weight
-          </p>
-          <p className="value">
-            {formatNumber(weight.weight)}
-          </p>
+          <p className="key">Weight</p>
+          <p className="value">{formatNumber(weight.weight)}</p>
         </div>
 
-        {
-          displayHash && (
-            <div className="field">
-              <p className="key">
-                Code Hash
-              </p>
-                <p className="value">
-                {truncate(displayHash)}
-              </p>
-            </div>
-          )
-        }
+        {displayHash && (
+          <div className="field">
+            <p className="key">Code Hash</p>
+            <p className="value">{truncate(displayHash)}</p>
+          </div>
+        )}
 
-          {tx?.args[3] && (
-            <div className="field">
-            <p className="key">
-              Data
-            </p>
-            <p className="value">
-              {tx?.args[3].toHex()}
-            </p>
+        {tx?.args[3] && (
+          <div className="field">
+            <p className="key">Data</p>
+            <p className="value">{tx?.args[3].toHex()}</p>
           </div>
         )}
       </div>
       <Buttons>
-        <Button
-          variant="primary"
-          isDisabled={!isValid}
-          isLoading={isProcessing}
-          onClick={onSubmit}
-        >
+        <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
           Upload and Instantiate
         </Button>
 
@@ -118,4 +94,4 @@ export function Step3 () {
       </Buttons>
     </>
   );
-};
+}

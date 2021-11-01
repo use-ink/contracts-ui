@@ -1,26 +1,30 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import React from 'react';
-import { SimpleSpread, VoidFn } from "types";
-import { classes, truncate } from "ui/util";
+import { SimpleSpread, VoidFn } from 'types';
+import { classes, truncate } from 'ui/util';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,
   {
     codeHash: string;
-    name?: string; 
-    error?: React.ReactNode
+    name?: string;
+    error?: React.ReactNode;
     isError?: boolean;
     isSuccess?: boolean;
     onClick?: VoidFn;
   }
->
+>;
 
-export function CodeHash ({ className, codeHash, error, name, isError, isSuccess, onClick }: Props) {
+export function CodeHash({ className, codeHash, error, name, isError, isSuccess, onClick }: Props) {
   return (
     <div
       className={classes(
         'group flex items-center dark:bg-elevation-1 dark:border-gray-700 border p-4 rounded',
-        onClick && 'cursor-pointer dark:hover:bg-opacity-10 dark:hover:bg-blue-700 dark:hover:border-blue-500',
+        onClick &&
+          'cursor-pointer dark:hover:bg-opacity-10 dark:hover:bg-blue-700 dark:hover:border-blue-500',
         isError && 'dark:bg-opacity-20 dark:bg-red-900 dark:border-red-500',
         isSuccess && 'dark:bg-opacity-20 dark:bg-green-900 dark:border-green-500',
         className
@@ -29,15 +33,10 @@ export function CodeHash ({ className, codeHash, error, name, isError, isSuccess
     >
       <div className="flex-1">
         <div className="dark:text-white mb-1">
-          {!isError ? 
-            (name || 'On-chain Code Hash')
-            : 'Invalid Code Hash'
-          }
+          {!isError ? name || 'On-chain Code Hash' : 'Invalid Code Hash'}
         </div>
         {codeHash && !isError && (
-          <div className="dark:text-gray-500 text-sm">
-            Code hash: {truncate(codeHash)}
-          </div>
+          <div className="dark:text-gray-500 text-sm">Code hash: {truncate(codeHash)}</div>
         )}
         {isError && (
           <div className="dark:text-gray-500 text-sm">

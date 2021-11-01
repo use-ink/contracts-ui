@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 // import { web3FromAddress, web3FromSource } from '@polkadot/extension-dapp';
 // import { stringToHex } from '@polkadot/util';
@@ -32,7 +33,11 @@ export function getStoredPrivateKey(): PrivateKey | null {
   }
 }
 
-function generateMessageForEntropy (address: string, applicationName: string, secret: string): string {
+function generateMessageForEntropy(
+  address: string,
+  applicationName: string,
+  secret: string
+): string {
   return `${'********************************************************************************'}
     ${'READ THIS MESSAGE CAREFULLY.'}
     ${'DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE'}
@@ -69,22 +74,22 @@ function generateMessageForEntropy (address: string, applicationName: string, se
   `;
 }
 
-export function getPrivateKeyFromPair (pair: KeyringPair, secretText = 'asdf'): PrivateKey {
+export function getPrivateKeyFromPair(pair: KeyringPair, secretText = 'asdf'): PrivateKey {
   // avoid sending the raw secret by hashing it first
   const secret = bcrypt.hashSync(secretText, 10);
-  const message = generateMessageForEntropy(pair.address, 'canvas-ui', secret);
+  const message = generateMessageForEntropy(pair.address, 'substrate-contracts-explorer', secret);
   const signedText = pair.sign(message);
   const hash = keccakAsU8a(signedText);
-  
+
   if (hash === null) {
     throw new Error('No account is provided. Please provide an account to this application.');
   }
-    
+
   if (hash.length !== 32) {
     throw new Error('Hash of signature is not the correct size! Something went wrong!');
   }
-  const identity = PrivateKey.fromRawEd25519Seed(hash)
+  const identity = PrivateKey.fromRawEd25519Seed(hash);
 
   // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
-  return identity
+  return identity;
 }

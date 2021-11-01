@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
@@ -19,7 +22,7 @@ const TABS = [
         <BookOpenIcon />
         Metadata
       </>
-    )
+    ),
   },
   {
     id: 'interact',
@@ -28,11 +31,11 @@ const TABS = [
         <PlayIcon />
         Interact
       </>
-    )
-  }
-]
+    ),
+  },
+];
 
-export function Contract () {
+export function Contract() {
   const history = useHistory();
   const { address, activeTab = 'interact' } = useParams<UrlParams>();
 
@@ -40,14 +43,11 @@ export function Contract () {
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
-  useEffect(
-    (): void => {
-      if (!isLoading && (!isValid || !data || !data[0])) {
-        history.replace('/');
-      }
-    },
-    [data, isLoading, isValid]
-  );
+  useEffect((): void => {
+    if (!isLoading && (!isValid || !data || !data[0])) {
+      history.replace('/');
+    }
+  }, [data, isLoading, isValid]);
 
   if (!data || !data[0] || !data[1]) {
     return null;
@@ -59,9 +59,7 @@ export function Contract () {
   return (
     <Loader isLoading={!contract && isLoading}>
       <PageFull
-        accessory={
-          <HeaderButtons contract={document} />
-        }
+        accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
         help={
           <>
@@ -71,23 +69,14 @@ export function Contract () {
               className="inline-block relative dark:bg-blue-500 dark:text-blue-400 dark:bg-opacity-20 text-xs px-1.5 font-mono rounded"
             >
               {projectName}
-            </Link>
-            {' '}on{' '}
-            {moment(document.date).format('D MMM')}
+            </Link>{' '}
+            on {moment(document.date).format('D MMM')}
           </>
         }
       >
-        <Tabs
-          index={tabIndex}
-          setIndex={setTabIndex}
-          tabs={TABS}
-        >
-          <MetadataTab
-            abi={contract?.abi}
-          />
-          <InteractTab
-            contract={contract}
-          />
+        <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
+          <MetadataTab abi={contract?.abi} />
+          <InteractTab contract={contract} />
         </Tabs>
         {/* {contract && (
         <>
@@ -114,8 +103,7 @@ export function Contract () {
             </ul>
           </div>
         </> */}
-        
       </PageFull>
     </Loader>
-  )
-};
+  );
+}

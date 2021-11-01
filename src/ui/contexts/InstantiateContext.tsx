@@ -1,13 +1,26 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer-v2 authors & contributors
 
 import React, { useState, useContext, useCallback, useMemo, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { AbiConstructor } from '@polkadot/api-contract/types';
 import { isHex, isNumber } from '@polkadot/util';
-import { useCanvas } from './CanvasContext';
+import { useApi } from './ApiContext';
 import { useDatabase } from './DatabaseContext';
-import { AnyJson, BlueprintPromise, ContractPromise, FileState, InstantiateProps, InstantiateState, SubmittableExtrinsic, OnInstantiateSuccess$Code, OnInstantiateSuccess$Hash, CodeSubmittableResult, BlueprintSubmittableResult } from 'types';
+import { createInstantiateTx, onInsantiateFromHash, onInstantiateFromCode } from 'api/instantiate';
+import {
+  AnyJson,
+  BlueprintPromise,
+  ContractPromise,
+  FileState,
+  InstantiateProps,
+  InstantiateState,
+  SubmittableExtrinsic,
+  OnInstantiateSuccess$Code,
+  OnInstantiateSuccess$Hash,
+  CodeSubmittableResult,
+  BlueprintSubmittableResult,
+} from 'types';
 import { useCodeBundle } from 'ui/hooks/useCodeBundle';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useMetadata } from 'ui/hooks/useMetadata';
@@ -18,11 +31,14 @@ import { useStepper } from 'ui/hooks/useStepper';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
-import { createInstantiateTx, onInsantiateFromHash, onInstantiateFromCode } from 'canvas/instantiate';
 
 export const InstantiateContext = React.createContext({} as unknown as InstantiateProps);
 
-type TxState = [SubmittableExtrinsic<'promise'> | null, OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash, string | null];
+type TxState = [
+  SubmittableExtrinsic<'promise'> | null,
+  OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash,
+  string | null
+];
 
 const NOOP = () => Promise.resolve();
 
@@ -30,14 +46,18 @@ export const CONTRACT_FILE = 0;
 export const DEPLOYMENT_INFO = 1;
 export const FINALIZE = 2;
 
-export function isResultValid ({ contract }: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
+export function isResultValid({
+  contract,
+}: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
   return !!contract;
 }
 
-export function InstantiateContextProvider ({ children }: React.PropsWithChildren<Partial<InstantiateProps>>) {
+export function InstantiateContextProvider({
+  children,
+}: React.PropsWithChildren<Partial<InstantiateProps>>) {
   const history = useHistory();
-  const { codeHash } = useParams<{codeHash: string}>();
-  const apiState = useCanvas();
+  const { codeHash } = useParams<{ codeHash: string }>();
+  const apiState = useApi();
   const dbState = useDatabase();
 
   const codeBundleQuery = useCodeBundle(codeHash || undefined);
@@ -56,39 +76,36 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
   const accountId = useAccountId();
 
   const name = useNonEmptyString();
-  const metadataFile = useState<FileState | undefined>()
+  const metadataFile = useState<FileState | undefined>();
 
   const { onChange: setName } = name;
   const [, setMetadataFile] = metadataFile;
 
   console.log(!codeBundle);
 
-  const metadata = useMetadata(
-    codeBundle?.abi as AnyJson || null,
-    {
-      isRequired: true,
-      isWasmRequired: !isOnChain,
-      onChange: setMetadataFile,
-    }
-  );
+  const metadata = useMetadata((codeBundle?.abi as AnyJson) || null, {
+    isRequired: true,
+    isWasmRequired: !isOnChain,
+    onChange: setMetadataFile,
+  });
 
   const constructorIndex = useFormField(0);
   const endowment = useBalance(10000);
   const weight = useWeight();
   const isUsingSalt = useToggle();
-  const salt = useFormField<string>(
-    randomAsHex(),
-    (value) => {
-      if (!!value && isHex(value) && value.length === 66) {
-        return { isValid: true }
-      }
-
-      return { isValid: false, isError: true, validation: 'Invalid hex string' }
+  const salt = useFormField<string>(randomAsHex(), value => {
+    if (!!value && isHex(value) && value.length === 66) {
+      return { isValid: true };
     }
-  );
+
+    return { isValid: false, isError: true, validation: 'Invalid hex string' };
+  });
 
   const deployConstructor = useMemo(
-    (): AbiConstructor | null => isNumber(constructorIndex.value) ? (metadata.value?.constructors[constructorIndex.value] || null) : null,
+    (): AbiConstructor | null =>
+      isNumber(constructorIndex.value)
+        ? metadata.value?.constructors[constructorIndex.value] || null
+        : null,
     [metadata.value, constructorIndex.value]
   );
   const argValues = useArgValues(deployConstructor?.args || []);
@@ -104,23 +121,17 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
 
   const [[tx, onInstantiate, txError], setTx] = useState<TxState>([null, NOOP, null]);
 
-  useEffect(
-    (): void => {
-      if (metadata.value?.info.contract.name && (!name.value || name.value === '')) {
-        setName(metadata.value?.info.contract.name.toString());
-      }
-    },
-    [metadata.value, name.value]
-  )
+  useEffect((): void => {
+    if (metadata.value?.info.contract.name && (!name.value || name.value === '')) {
+      setName(metadata.value?.info.contract.name.toString());
+    }
+  }, [metadata.value, name.value]);
 
-  useEffect(
-    (): void => {
-      if (codeHash && !codeBundleQuery.isValid) {
-        history.replace('/instantiate/hash');
-      }
-    },
-    [codeHash, codeBundleQuery.isValid]
-  )
+  useEffect((): void => {
+    if (codeHash && !codeBundleQuery.isValid) {
+      history.replace('/instantiate/hash');
+    }
+  }, [codeHash, codeBundleQuery.isValid]);
 
   const state: InstantiateState = {
     accountId,
@@ -139,23 +150,27 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
     name,
     salt,
     step,
-    weight
+    weight,
   } as unknown as InstantiateState;
 
-  function onFinalize () {
+  function onFinalize() {
     try {
       const tx = createInstantiateTx(apiState.api, state);
 
-      const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(apiState, dbState, state);
+      const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(
+        apiState,
+        dbState,
+        state
+      );
 
       setTx([tx, onInstantiate, null]);
       setStep(FINALIZE);
-    } catch (e){
+    } catch (e) {
       setTx([null, NOOP, 'Error creating transaction']);
     }
   }
 
-  function onUnFinalize () {
+  function onUnFinalize() {
     setTx([null, NOOP, null]);
     setStep(DEPLOYMENT_INFO);
   }
@@ -169,11 +184,7 @@ export function InstantiateContextProvider ({ children }: React.PropsWithChildre
     txError,
   };
 
-  return (
-    <InstantiateContext.Provider value={value}>
-      {children}
-    </InstantiateContext.Provider>
-  );
-};
+  return <InstantiateContext.Provider value={value}>{children}</InstantiateContext.Provider>;
+}
 
 export const useInstantiate = () => useContext(InstantiateContext);

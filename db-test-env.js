@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 
 import { TextEncoder, TextDecoder } from 'util';
 import Environment from 'jest-environment-jsdom';

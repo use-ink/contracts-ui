@@ -1,27 +1,32 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Step1 } from 'ui/components/instantiate/Step1';
-import { CanvasContext, DbContext, InstantiateContext } from 'ui/contexts';
-import { getMockCanvasState, getMockDbState, getMockInstantiateState } from 'test-utils';
-import { CanvasState } from 'types';
+import { ApiContext, DbContext, InstantiateContext } from 'ui/contexts';
+import { getMockApiState, getMockDbState, getMockInstantiateState } from 'test-utils';
+import { ApiState } from 'types';
 
-async function renderWithContexts () {
+async function renderWithContexts() {
   return render(
-    <CanvasContext.Provider value={{
-      ...getMockCanvasState(),
-      keyring: {
-        getPairs: jest.fn(() => [])
-      } as unknown as CanvasState['keyring']
-    }}>
-      <DbContext.Provider value={(await getMockDbState())}>
+    <ApiContext.Provider
+      value={{
+        ...getMockApiState(),
+        keyring: {
+          getPairs: jest.fn(() => []),
+        } as unknown as ApiState['keyring'],
+      }}
+    >
+      <DbContext.Provider value={await getMockDbState()}>
         <InstantiateContext.Provider value={getMockInstantiateState()}>
           <Step1 />
         </InstantiateContext.Provider>
       </DbContext.Provider>
-    </CanvasContext.Provider>
-  )
+    </ApiContext.Provider>
+  );
 }
 
 describe('Instantiate Step 1', () => {

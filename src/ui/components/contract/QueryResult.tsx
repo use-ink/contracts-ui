@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -8,10 +11,7 @@ interface Props {
   result: CallResult;
   date: string;
 }
-export const QueryResult = ({
-  result: { time, data, message, error },
-  date,
-}: Props) => {
+export const QueryResult = ({ result: { time, data, message, error }, date }: Props) => {
   return (
     <div
       key={`${time}`}
@@ -20,13 +20,9 @@ export const QueryResult = ({
       <div className="mb-2">{date}</div>
       <div>
         <div className="mb-2">
-          <MessageSignature
-            message={message}
-          />
+          <MessageSignature message={message} />
         </div>
-        <div className="bg-elevation-1 p-2 rounded-sm text-mono">
-          {`${data}`}
-        </div>
+        <div className="bg-elevation-1 p-2 rounded-sm text-mono">{`${data}`}</div>
       </div>
       {error && (
         <ReactMarkdown

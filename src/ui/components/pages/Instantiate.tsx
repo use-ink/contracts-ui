@@ -1,11 +1,14 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Wizard } from '../instantiate';
 import { Loader } from '../Loader';
 import { useInstantiate } from 'ui/contexts';
 
-export function Instantiate () {
-  const { pathname } = useLocation()
+export function Instantiate() {
+  const { pathname } = useLocation();
   const { isLoading } = useInstantiate();
 
   const isFromHash = /instantiate\/hash/.test(pathname);
@@ -19,30 +22,26 @@ export function Instantiate () {
               <h1 className="text-2.5xl dark:text-white text-gray-700">
                 {isFromHash
                   ? 'Instantiate Contract from Code Hash'
-                  : 'Upload and Instantiate Contract'
-                }
+                  : 'Upload and Instantiate Contract'}
               </h1>
               <p className="dark:text-gray-400 text-gray-500 text-sm">
-                {isFromHash
-                  ? (
-                    <>
-                      You can upload and instantate new contract code{' '}
-                      <Link to="/instantiate/new" className="text-blue-500">
-                        here
-                      </Link>
-                      .
-                    </>
-                  )
-                  : (
-                    <>
-                      You can instantiate a new contract from an existing code bundle{' '}
-                      <Link to="/instantiate/hash" className="text-blue-500">
-                        here
-                      </Link>
-                      .
-                    </>
-                  )
-                }
+                {isFromHash ? (
+                  <>
+                    You can upload and instantate new contract code{' '}
+                    <Link to="/instantiate/new" className="text-blue-500">
+                      here
+                    </Link>
+                    .
+                  </>
+                ) : (
+                  <>
+                    You can instantiate a new contract from an existing code bundle{' '}
+                    <Link to="/instantiate/hash" className="text-blue-500">
+                      here
+                    </Link>
+                    .
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -51,4 +50,4 @@ export function Instantiate () {
       </div>
     </Loader>
   );
-};
+}

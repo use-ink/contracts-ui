@@ -1,7 +1,19 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { isWasm, u8aToString } from '@polkadot/util';
 import { useEffect, useState } from 'react';
-import { Abi, AnyJson, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
-import { useCanvas } from 'ui/contexts/CanvasContext';
+import { useApi } from 'ui/contexts/ApiContext';
+import {
+  Abi,
+  AnyJson,
+  ApiPromise,
+  FileState,
+  MetadataState,
+  UseMetadata,
+  Validation,
+  VoidFn,
+} from 'types';
 
 type OnChange = (_: FileState | undefined, __?: AnyJson) => void;
 type OnRemove = VoidFn;
@@ -20,7 +32,11 @@ interface Callbacks {
   onRemove?: OnRemove;
 }
 
-function deriveFromJson (source: AnyJson = null, options: DeriveOptions, api?: ApiPromise | null): MetadataState {
+function deriveFromJson(
+  source: AnyJson = null,
+  options: DeriveOptions,
+  api?: ApiPromise | null
+): MetadataState {
   if (!source) {
     return EMPTY;
   }
@@ -41,13 +57,13 @@ function deriveFromJson (source: AnyJson = null, options: DeriveOptions, api?: A
     };
   } catch (e) {
     console.error(e);
-    
+
     return {
       source,
       name: null,
       value: null,
       isSupplied: true,
-      ...validate(value, options)
+      ...validate(value, options),
     };
   }
 }
@@ -62,12 +78,13 @@ const EMPTY: MetadataState = {
   validation: null,
 };
 
-function validate (metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
+function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
   if (!metadata) {
     return {
       isValid: false,
       isError: true,
-      validation: 'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.'
+      validation:
+        'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.',
     };
   }
 
@@ -81,25 +98,30 @@ function validate (metadata: Abi | undefined, { isWasmRequired }: Options): Vali
     return {
       isValid: false,
       isError: true,
-      validation: 'This contract bundle has an empty or invalid WASM field.'
-    }
+      validation: 'This contract bundle has an empty or invalid WASM field.',
+    };
   }
 
   return {
     isValid: true,
     isError: false,
     isSuccess: true,
-    validation: isWasmRequired ? 'Valid contract bundle!' : 'Valid metadata file!'
+    validation: isWasmRequired ? 'Valid contract bundle!' : 'Valid metadata file!',
   };
 }
 
-export function useMetadata (initialValue: AnyJson = null, options: Options & Callbacks = {}): UseMetadata {
-  const { api } = useCanvas();
+export function useMetadata(
+  initialValue: AnyJson = null,
+  options: Options & Callbacks = {}
+): UseMetadata {
+  const { api } = useApi();
 
   const { isRequired = false, isWasmRequired = false, ...callbacks } = options;
-  const [state, setState] = useState<MetadataState>(() => deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
+  const [state, setState] = useState<MetadataState>(() =>
+    deriveFromJson(initialValue, { isRequired, isWasmRequired }, api)
+  );
 
-  function onChange (file: FileState): void {
+  function onChange(file: FileState): void {
     try {
       const json = JSON.parse(u8aToString(file.data)) as AnyJson;
       const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
@@ -108,32 +130,34 @@ export function useMetadata (initialValue: AnyJson = null, options: Options & Ca
 
       setState(newState);
 
-      callbacks.onChange && callbacks.onChange(file, json)
+      callbacks.onChange && callbacks.onChange(file, json);
     } catch (error) {
       console.error(error);
 
-      setState({ ...EMPTY, validation: 'This contract file is not in a valid format.', isError: true, isSupplied: true, isValid: false });
+      setState({
+        ...EMPTY,
+        validation: 'This contract file is not in a valid format.',
+        isError: true,
+        isSupplied: true,
+        isValid: false,
+      });
     }
-  };
+  }
 
-  function onRemove (): void {
+  function onRemove(): void {
     setState(EMPTY);
 
     callbacks.onChange && callbacks.onChange(undefined);
     callbacks.onRemove && callbacks.onRemove();
-  };
+  }
 
-  useEffect(
-    (): void => {
-      setState(deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
-    },
-    [initialValue, isRequired, isWasmRequired]
-  )
+  useEffect((): void => {
+    setState(deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
+  }, [initialValue, isRequired, isWasmRequired]);
 
   return {
     ...state,
     onChange,
-    onRemove
+    onRemove,
   };
 }
-

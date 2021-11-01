@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { jest } from '@jest/globals';
 import { Abi, ContractPromise } from 'types';
 
@@ -57,5 +60,5 @@ export const mockAbiFlipper = {
 } as unknown as Abi;
 
 export const mockContract = {
-  abi: mockAbiFlipper
-} as ContractPromise
+  abi: mockAbiFlipper,
+} as ContractPromise;

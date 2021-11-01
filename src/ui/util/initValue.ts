@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import type { Registry, TypeDef } from '@polkadot/types/types';
 
 import { getTypeDef } from '@polkadot/types';
@@ -7,20 +10,18 @@ import { Keyring } from 'types';
 
 const warnList: string[] = [];
 
-export function getInitValue (registry: Registry, keyring: Keyring, def: TypeDef): unknown {
+export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef): unknown {
   if (def.info === TypeDefInfo.Vec) {
     return [getInitValue(registry, keyring, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.Tuple) {
-    return Array.isArray(def.sub)
-      ? def.sub.map((def) => getInitValue(registry, keyring, def))
-      : [];
+    return Array.isArray(def.sub) ? def.sub.map(def => getInitValue(registry, keyring, def)) : [];
   } else if (def.info === TypeDefInfo.Struct) {
     return Array.isArray(def.sub)
       ? def.sub.reduce((result: Record<string, unknown>, def): Record<string, unknown> => {
-        result[def.name as string] = getInitValue(registry, keyring, def);
+          result[def.name as string] = getInitValue(registry, keyring, def);
 
-        return result;
-      }, {})
+          return result;
+        }, {})
       : {};
   } else if (def.info === TypeDefInfo.Enum) {
     return Array.isArray(def.sub)
@@ -140,7 +141,11 @@ export function getInitValue (registry: Registry, keyring: Keyring, def: TypeDef
       if (!warnList.includes(type)) {
         warnList.push(type);
         error && console.error(`params: initValue: ${error}`);
-        console.info(`params: initValue: No default value for type ${type} from ${JSON.stringify(def)}, using defaults`);
+        console.info(
+          `params: initValue: No default value for type ${type} from ${JSON.stringify(
+            def
+          )}, using defaults`
+        );
       }
 
       return '0x';

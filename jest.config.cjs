@@ -18,12 +18,9 @@ module.exports = {
       __dirname,
       './node_modules/styled-components/dist/styled-components'
     ),
-    'react-dropzone': resolve(
-      __dirname,
-      './node_modules/react-dropzone/dist'
-    ),
-    '^canvas$': resolve(__dirname, './src/canvas'),
-    '^canvas/(.*)$': resolve(__dirname, './src/canvas/$1'),
+    'react-dropzone': resolve(__dirname, './node_modules/react-dropzone/dist'),
+    '^api$': resolve(__dirname, './src/api'),
+    '^api/(.*)$': resolve(__dirname, './src/api/$1'),
     '^ui$': resolve(__dirname, './src/ui'),
     '^ui/(.*)$': resolve(__dirname, './src/ui/$1'),
     '^db$': resolve(__dirname, './src/db'),

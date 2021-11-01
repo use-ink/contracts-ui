@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDatabase } from '../contexts/DatabaseContext';
@@ -6,7 +7,10 @@ import type { UseQuery } from 'types';
 
 type ValidateFn<T> = (_?: T | null) => boolean;
 
-export function useQuery<T>(query: () => Promise<T | null>, validate: ValidateFn<T> = (value) => !!value): UseQuery<T> {
+export function useQuery<T>(
+  query: () => Promise<T | null>,
+  validate: ValidateFn<T> = value => !!value
+): UseQuery<T> {
   const { isDbReady } = useDatabase();
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<React.ReactNode | null>(null);

@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
@@ -7,7 +10,7 @@ import { DropdownOption } from 'types';
 
 const options: DropdownOption<string>[] = [
   { name: 'foo', value: 'fooValue' },
-  { name: <span>bar</span>, value: 'barValue' }
+  { name: <span>bar</span>, value: 'barValue' },
 ];
 
 describe('Dropdown', () => {
@@ -15,16 +18,11 @@ describe('Dropdown', () => {
 
   test.skip('correctly renders the dropdown', () => {
     const rendered = render(
-      <Dropdown
-        className='foo'
-        options={options}
-        onChange={onChange}
-        value={options[0].value}
-       >
+      <Dropdown className="foo" options={options} onChange={onChange} value={options[0].value}>
         No options found
       </Dropdown>
-    )
-    
+    );
+
     const dropdown = rendered.getByTestId('dropdown-btn') as HTMLButtonElement;
 
     expect(dropdown).toBeInTheDocument();
@@ -33,32 +31,22 @@ describe('Dropdown', () => {
 
   test.skip('correctly renders without options', () => {
     const rendered = render(
-      <Dropdown
-        className='foo'
-        onChange={onChange}
-        options={[]}
-       >
-         No options found
+      <Dropdown className="foo" onChange={onChange} options={[]}>
+        No options found
       </Dropdown>
-    )
-    
+    );
+
     const dropdown = rendered.getByText('No options found');
 
     expect(dropdown).toBeInTheDocument();
   });
 
-
   test.skip('receives onChange event', () => {
     const rendered = render(
-      <Dropdown
-        className='foo'
-        options={options}
-        onChange={onChange}
-        value={options[0].value}
-       >
-         No options found
-        </Dropdown>
-    )
+      <Dropdown className="foo" options={options} onChange={onChange} value={options[0].value}>
+        No options found
+      </Dropdown>
+    );
 
     const dropdown = rendered.getByTestId('dropdown-btn');
 

@@ -1,4 +1,6 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { SubmittableResult } from '@polkadot/api';
 import BN from 'bn.js';
 import React, { ReactNode, ComponentType } from 'react';
@@ -17,11 +19,8 @@ import {
   RegistryError,
   SubmittableExtrinsic,
   BlueprintSubmittableResult,
-  CodeSubmittableResult
+  CodeSubmittableResult,
 } from './substrate';
-// import { SubmittableExtrinsic, BlueprintSubmittableResult, CodeSubmittableResult } from 'types';
-// import { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
-// import { UseFormField, Validation } from 'ui/hooks/useFormField';
 
 export type { BN };
 
@@ -35,7 +34,7 @@ export type VoidFn = () => void;
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
-export interface CanvasState extends ChainProperties {
+export interface ApiState extends ChainProperties {
   endpoint: string;
   keyring: Keyring;
   keyringStatus: string | null;
@@ -44,7 +43,7 @@ export interface CanvasState extends ChainProperties {
   status: Status;
 }
 
-export type CanvasAction =
+export type ApiAction =
   | { type: 'CONNECT_INIT' }
   | { type: 'CONNECT'; payload: ApiPromise }
   | { type: 'CONNECT_READY'; payload: Partial<ChainProperties> }
@@ -75,12 +74,15 @@ export interface Transaction {
   onError?: () => void;
 }
 
-export type TransactionOptions = Pick<Transaction, 'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'>;
+export type TransactionOptions = Pick<
+  Transaction,
+  'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'
+>;
 
 export interface TransactionsState {
   txs: Transaction[];
   process: (_: number) => Promise<void>;
-  queue: (_: TransactionOptions) => number
+  queue: (_: TransactionOptions) => number;
   unqueue: (id: number) => void;
   dismiss: (id: number) => void;
 }
@@ -90,23 +92,15 @@ export interface DropdownOption<T> {
   name: React.ReactNode;
 }
 
-// interface CustomProps<T> {
-//   button?: React.ComponentType<OptionProps<T>>,
-//   option?: React.ComponentType<OptionProps<T>>,
-//   onChange: (_: T) => void;
-//   options: DropdownOption<T>[];
-//   value?: T | null;
-// }
-
 export type DropdownProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
   UseFormField<T> & {
-    button?: React.ComponentType<OptionProps<T>>,
+    button?: React.ComponentType<OptionProps<T>>;
     isDisabled?: boolean;
-    option?: React.ComponentType<OptionProps<T>>,
+    option?: React.ComponentType<OptionProps<T>>;
     options?: DropdownOption<T>[];
   }
->
+>;
 
 export interface OptionProps<T> {
   option: DropdownOption<T>;
@@ -114,7 +108,7 @@ export interface OptionProps<T> {
   isSelected?: boolean;
 }
 
-export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>]
+export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>];
 
 export type UseToggle = [boolean, () => void, (value: boolean) => void];
 
@@ -144,7 +138,7 @@ export interface UseWeight {
 export interface UseFormField<T> extends Validation {
   value?: T;
   onChange: (_: T) => void;
-};
+}
 
 export type UseBalance = UseFormField<BN | null | undefined>;
 
@@ -155,9 +149,9 @@ export interface Validation {
   isValid?: boolean;
   isWarning?: boolean;
   validation?: React.ReactNode;
-};
+}
 
-export type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>
+export type ValidateFn<T> = (_?: T | null) => Omit<Validation, 'isError'>;
 
 export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;
 export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'>) => Promise<void>;
@@ -187,9 +181,8 @@ export interface InstantiateState {
   txError: string | null;
 }
 
-export type InstantiateProps = InstantiateState
-  // createTx: () => SubmittableExtrinsic<'promise'> | null;
-
+export type InstantiateProps = InstantiateState;
+// createTx: () => SubmittableExtrinsic<'promise'> | null;
 
 export type InstantiateAction =
   | { type: 'INSTANTIATE' }
@@ -197,29 +190,41 @@ export type InstantiateAction =
   | { type: 'INSTANTIATE_SUCCESS'; payload: ContractPromise }
   | { type: 'INSTANTIATE_ERROR'; payload: DispatchError }
   | {
-    type: 'UPLOAD_METADATA'; payload: {
-      codeHash: string; metadata: Abi; contractName: string, fromAddress: string; fromAccountName: string;
+      type: 'UPLOAD_METADATA';
+      payload: {
+        codeHash: string;
+        metadata: Abi;
+        contractName: string;
+        fromAddress: string;
+        fromAccountName: string;
+      };
     }
-  }
   | {
-    type: 'UPLOAD_CONTRACT'; payload: {
-      codeHash: string; fromAddress: string; fromAccountName: string; metadata: Abi; contractName: string, file: FileState
+      type: 'UPLOAD_CONTRACT';
+      payload: {
+        codeHash: string;
+        fromAddress: string;
+        fromAccountName: string;
+        metadata: Abi;
+        contractName: string;
+        file: FileState;
+      };
     }
-  }
   | {
-    type: 'DEPLOYMENT_INFO'; payload: {
-      constructorName: string;
-      constructorIndex: number;
-      argValues: Record<string, unknown>;
-      endowment: number;
-      salt: string;
-      gas: number;
+      type: 'DEPLOYMENT_INFO';
+      payload: {
+        constructorName: string;
+        constructorIndex: number;
+        argValues: Record<string, unknown>;
+        endowment: number;
+        salt: string;
+        gas: number;
+      };
+    }
+  | {
+      type: 'GO_TO';
+      payload: { step: number };
     };
-  }
-  | {
-    type: 'GO_TO';
-    payload: { step: number };
-  };
 
 export interface FileState {
   data: Uint8Array;
@@ -239,7 +244,7 @@ export type InputFileProps = SimpleSpread<
     successMessage?: React.ReactNode;
     value?: FileState;
   }
->
+>;
 
 export interface RouteInterface {
   path: string;
@@ -259,11 +264,6 @@ export type RawParamValues = RawParamValue | RawParamValueArray;
 export interface RawParam {
   isValid: boolean;
   value: RawParamValues;
-}
-
-export enum InstantiationTypeEnum {
-  CODE = 'code',
-  HASH = 'hash',
 }
 
 export interface ContractCallParams {
@@ -297,7 +297,7 @@ export interface ContractCallState {
   error?: RegistryError;
 }
 export type ContractCallAction =
-  | { type: 'CALL_INIT', payload: CallResult }
+  | { type: 'CALL_INIT'; payload: CallResult }
   | { type: 'CALL_FINALISED'; payload: CallResult }
   | { type: 'RESET' };
 

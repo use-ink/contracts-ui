@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Reducer } from 'react';
 import { ContractCallState, ContractCallAction } from 'types';
 
@@ -20,8 +23,8 @@ export const contractCallReducer: Reducer<ContractCallState, ContractCallAction>
           ...state.results,
           {
             ...action.payload,
-            isComplete: false
-          }
+            isComplete: false,
+          },
         ],
       };
 
@@ -29,13 +32,14 @@ export const contractCallReducer: Reducer<ContractCallState, ContractCallAction>
       return {
         ...state,
         isSuccess: true,
-        results: state.results.map((result) => action.payload.id === result.id
-          ? {
-            ...result,
-            ...action.payload,
-            isComplete: true
-          }
-          : result
+        results: state.results.map(result =>
+          action.payload.id === result.id
+            ? {
+                ...result,
+                ...action.payload,
+                isComplete: true,
+              }
+            : result
         ),
         isLoading: false,
       };

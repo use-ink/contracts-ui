@@ -1,10 +1,13 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { AwaitApis } from '../AwaitApis';
 import { Homepage } from '../pages';
 import { RouteWithSubRoutes } from './RouteWithSubRoutes';
 import { RouteInterface } from 'types';
-// import { CanvasContext, useCanvas } from 'ui/contexts';
+// import { ApiContext, useApi } from 'ui/contexts';
 
 interface Props {
   routes: RouteInterface[];

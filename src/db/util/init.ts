@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import { PrivateKey } from '@textile/crypto';
 import { ThreadID } from '@textile/threads-id';
@@ -10,13 +11,16 @@ import { getUser } from '../queries/user';
 import { getStoredPrivateKey } from './identity';
 import type { UserDocument } from 'types';
 
-const DB_VERSION_KEY = 'canvas:db-version';
+const DB_VERSION_KEY = 'substrate-contracts-explorer:db-version';
 
 function isLocalNode(rpcUrl: string): boolean {
   return !rpcUrl.includes('127.0.0.1');
 }
 
-export async function init(rpcUrl: string, isRemote = false): Promise<[DB, UserDocument | null, PrivateKey | null]> {
+export async function init(
+  rpcUrl: string,
+  isRemote = false
+): Promise<[DB, UserDocument | null, PrivateKey | null]> {
   const db = await initDb(rpcUrl);
   const [user, identity] = await initIdentity(db);
 
@@ -52,7 +56,7 @@ export async function initDb(rpcUrl: string): Promise<DB> {
   throw new Error('Unable to initialize database');
 }
 
-export async function initIdentity (db: DB): Promise<[UserDocument | null, PrivateKey | null]> {
+export async function initIdentity(db: DB): Promise<[UserDocument | null, PrivateKey | null]> {
   const identity = getStoredPrivateKey();
 
   const user = await getUser(db, identity);
@@ -60,7 +64,7 @@ export async function initIdentity (db: DB): Promise<[UserDocument | null, Priva
   return [user, identity];
 }
 
-export async function initRemote (db: DB, identity: PrivateKey, rpcUrl: string) {
+export async function initRemote(db: DB, identity: PrivateKey, rpcUrl: string) {
   try {
     if (!process.env.HUB_API_KEY || !process.env.HUB_API_SECRET) {
       throw new Error('No Textile Hub credentials found');
@@ -83,8 +87,6 @@ export async function initRemote (db: DB, identity: PrivateKey, rpcUrl: string) 
     console.error(e);
   }
 }
-
-
 
 // export function createContractFromDocument (api: ApiPromise, document: ContractDocument): Contract | null {
 //   try {

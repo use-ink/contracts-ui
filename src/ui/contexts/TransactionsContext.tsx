@@ -1,13 +1,13 @@
-// Copyright 2021 @paritytech/canvas-ui-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer-v2 authors & contributors
 
 import React, { useState, useContext, useEffect } from 'react';
-import { useCanvas } from './CanvasContext';
+import { useApi } from './ApiContext';
 import { TransactionOptions, Transaction as Tx, TransactionsState, Transaction } from 'types';
 import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 0;
 
-export function createTx (options: TransactionOptions): Transaction {
+export function createTx(options: TransactionOptions): Transaction {
   return {
     ...options,
     id: ++nextId,
@@ -20,19 +20,23 @@ export function createTx (options: TransactionOptions): Transaction {
 
 export const TransactionsContext = React.createContext({} as unknown as TransactionsState);
 
-export function TransactionsContextProvider ({ children }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { keyring } = useCanvas();
+export function TransactionsContextProvider({
+  children,
+}: React.PropsWithChildren<Partial<TransactionsState>>) {
+  const { keyring } = useApi();
   const [txs, setTxs] = useState<Tx[]>([]);
 
-  function queue (options: TransactionOptions): number {
+  function queue(options: TransactionOptions): number {
     setTxs(txs => [
-      ...txs.filter(({ id, isComplete, isProcessing }) => id < nextId && !isComplete && !isProcessing),
-      createTx(options)
+      ...txs.filter(
+        ({ id, isComplete, isProcessing }) => id < nextId && !isComplete && !isProcessing
+      ),
+      createTx(options),
     ]);
 
     return nextId;
   }
-  async function process (id: number) {
+  async function process(id: number) {
     const tx = txs.find(tx => id === tx.id);
 
     if (tx) {
@@ -40,59 +44,55 @@ export function TransactionsContextProvider ({ children }: React.PropsWithChildr
 
       try {
         setTxs(txs => [
-          ...txs.map((tx) => {
+          ...txs.map(tx => {
             return tx.id === id
               ? {
-                ...tx,
-                isProcessing: true
-              }
-              : tx
-          })
+                  ...tx,
+                  isProcessing: true,
+                }
+              : tx;
+          }),
         ]);
 
-        const unsub = await extrinsic.signAndSend(
-          keyring.getPair(accountId),
-          {},
-          async (result) => {
-            if ((result.isInBlock || result.isFinalized) && isValid(result)) {
-              onSuccess && await onSuccess(result);
+        const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
+          if ((result.isInBlock || result.isFinalized) && isValid(result)) {
+            onSuccess && (await onSuccess(result));
 
-              setTxs(txs => [
-                ...txs.map((tx) => {
-                  return tx.id === id
-                    ? {
+            setTxs(txs => [
+              ...txs.map(tx => {
+                return tx.id === id
+                  ? {
                       ...tx,
                       isComplete: true,
                       isProcessing: false,
-                      isSuccess: true
+                      isSuccess: true,
                     }
-                    : tx
-                })
-              ]);
+                  : tx;
+              }),
+            ]);
 
-              unsub();
-            }
+            unsub();
           }
-        )
+        });
       } catch (e) {
         console.error(e);
         onError && onError();
 
         setTxs(txs => [
-          ...txs.map((tx) => {
+          ...txs.map(tx => {
             return tx.id === id
               ? {
-                ...tx,
-                isComplete: true,
-                isProcessing: false,
-                isError: true
-              }
-              : tx
-          })
+                  ...tx,
+                  isComplete: true,
+                  isProcessing: false,
+                  isError: true,
+                }
+              : tx;
+          }),
         ]);
       }
-    } 
-  };
+    }
+  }
 
   // const queueAndProcess = useCallback(
   //   (options: TransactionOptions) => {
@@ -109,38 +109,25 @@ export function TransactionsContextProvider ({ children }: React.PropsWithChildr
   //   []
   // )
 
-  function unqueue (id: number) {
-    setTxs([
-      ...txs.filter((tx) => tx.id !== id || (tx.isProcessing || tx.isComplete))
-    ]);
+  function unqueue(id: number) {
+    setTxs([...txs.filter(tx => tx.id !== id || tx.isProcessing || tx.isComplete)]);
   }
 
-  function dismiss (id: number) {
-    setTxs([
-      ...txs.filter((tx) => tx.id !== id)
-    ]);
+  function dismiss(id: number) {
+    setTxs([...txs.filter(tx => tx.id !== id)]);
   }
 
+  useEffect((): (() => void) => {
+    let autoDismiss: NodeJS.Timeout;
 
-  useEffect(
-    (): () => void => {
-      let autoDismiss: NodeJS.Timeout;
+    if (txs.length > 0) {
+      autoDismiss = setTimeout((): void => {
+        setTxs([...txs.filter(({ isComplete }) => !isComplete)]);
+      }, 5000);
+    }
 
-      if (txs.length > 0) {
-        autoDismiss = setTimeout(
-          (): void => {
-            setTxs([
-              ...txs.filter(({ isComplete }) => !isComplete)
-            ])
-          },
-          5000
-        );
-      }
-
-      return () => clearTimeout(autoDismiss);
-    },
-    [txs]
-  )
+    return () => clearTimeout(autoDismiss);
+  }, [txs]);
 
   const state = {
     txs,
@@ -148,7 +135,7 @@ export function TransactionsContextProvider ({ children }: React.PropsWithChildr
     process,
     queue,
     unqueue,
-  }
+  };
 
   return (
     <TransactionsContext.Provider value={state}>
@@ -156,6 +143,6 @@ export function TransactionsContextProvider ({ children }: React.PropsWithChildr
       {children}
     </TransactionsContext.Provider>
   );
-};
+}
 
 export const useTransactions = () => useContext(TransactionsContext);

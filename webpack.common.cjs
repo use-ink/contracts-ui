@@ -41,11 +41,17 @@ const rules = [
 
 module.exports = {
   target: 'web',
-  entry: path.resolve(__dirname, 'src', 'index.tsx'),
+  entry: {
+    ui: {
+      import: path.resolve(__dirname, 'src', 'ui', 'index.tsx'),
+    },
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
+    chunkFilename: '[id].js',
     publicPath: '/',
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -53,7 +59,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      process: 'process/browser.js'
+      process: 'process/browser.js',
     }),
     new MiniCssExtractPlugin({
       filename: '[name].bundle.css',
@@ -73,5 +79,23 @@ module.exports = {
       assert: require.resolve('assert'),
     },
     plugins: [new TsconfigPathsPlugin()],
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxSize: 320000,
+      minSize: 240000,
+      cacheGroups: {
+        reactBundle: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+        },
+        polkadotBundle: {
+          test: /[\\/]node_modules[\\/](@polkadot)[\\/]/,
+        },
+        textileBundle: {
+          test: /[\\/]node_modules[\\/](@textile)[\\/]/,
+        },
+      },
+    },
   },
 };

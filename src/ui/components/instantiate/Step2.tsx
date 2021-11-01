@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import type { AbiConstructor } from '@polkadot/api-contract/types';
 import { Button, Buttons } from '../Button';
@@ -8,12 +11,12 @@ import { InputBalance } from '../InputBalance';
 import { InputSalt } from './InputSalt';
 import { ArgumentForm } from 'ui/components/args/ArgumentForm';
 import { Dropdown } from 'ui/components/Dropdown';
-import { createConstructorOptions } from 'canvas/util';
+import { createConstructorOptions } from 'api/util';
 import { useInstantiate } from 'ui/contexts';
-// import { createInstantiateTx } from 'canvas';
+// import { createInstantiateTx } from 'api';
 // import { isNumber } from '@polkadot/util';
 
-export function Step2 () {
+export function Step2() {
   const state = useInstantiate();
 
   const {
@@ -26,13 +29,7 @@ export function Step2 () {
     onFinalize,
     salt,
     step: [, , stepBack],
-    weight: {
-      executionTime,
-      isValid: isWeightValid,
-      megaGas, 
-      setMegaGas,
-      percentage
-    },
+    weight: { executionTime, isValid: isWeightValid, megaGas, setMegaGas, percentage },
   } = state;
 
   // const onSubmit = useCallback(
@@ -72,26 +69,11 @@ export function Step2 () {
             />
           )}
         </FormField>
-        <FormField
-          id="endowment"
-          label="Endowment"
-          {...getValidation(endowment)}
-        >
-          <InputBalance
-            id="endowment"
-            {...endowment}
-          />
+        <FormField id="endowment" label="Endowment" {...getValidation(endowment)}>
+          <InputBalance id="endowment" {...endowment} />
         </FormField>
-        <FormField
-          id="salt"
-          label="Deployment Salt"
-          {...getValidation(salt)}
-        >
-          <InputSalt
-            isActive={isUsingSalt}
-            toggleIsActive={toggleIsUsingSalt}
-            {...salt}
-          />
+        <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
+          <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
         <FormField
           id="maxGas"
@@ -99,11 +81,7 @@ export function Step2 () {
           isError={!isWeightValid}
           validation={!isWeightValid ? 'Invalid gas limit' : null}
         >
-          <InputNumber
-            value={megaGas}
-            onChange={setMegaGas}
-            placeholder="200000"
-          />
+          <InputNumber value={megaGas} onChange={setMegaGas} placeholder="200000" />
           <div className="relative pt-2">
             <p className="text-gray-500 text-xs pb-2">
               {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
@@ -120,20 +98,23 @@ export function Step2 () {
       </Form>
       <Buttons>
         <Button
-          isDisabled={!endowment.isValid || (isUsingSalt && !salt.isValid) || !isWeightValid || !deployConstructor?.method || !argValues}
+          isDisabled={
+            !endowment.isValid ||
+            (isUsingSalt && !salt.isValid) ||
+            !isWeightValid ||
+            !deployConstructor?.method ||
+            !argValues
+          }
           onClick={onFinalize}
-          variant='primary'
+          variant="primary"
         >
           Next
         </Button>
 
-        <Button
-          onClick={stepBack}
-          variant='default'
-        >
+        <Button onClick={stepBack} variant="default">
           Go Back
         </Button>
       </Buttons>
     </>
   );
-};
+}

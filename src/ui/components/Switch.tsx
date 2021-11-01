@@ -1,3 +1,6 @@
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import React, { HTMLAttributes } from 'react';
 import { Switch as HUISwitch } from '@headlessui/react';
 import { classes } from 'ui/util';
@@ -9,9 +12,9 @@ type Props = SimpleSpread<
     value: boolean;
     onChange: (_: boolean) => void;
   }
->
+>;
 
-export function Switch ({ children, className, onChange, value }: Props) {
+export function Switch({ children, className, onChange, value }: Props) {
   return (
     <HUISwitch
       checked={value}
@@ -22,9 +25,7 @@ export function Switch ({ children, className, onChange, value }: Props) {
       )}
       onChange={onChange}
     >
-      <span className="sr-only">
-        {children}
-      </span>
+      <span className="sr-only">{children}</span>
       <span
         aria-hidden="true"
         className={classes(
@@ -33,5 +34,5 @@ export function Switch ({ children, className, onChange, value }: Props) {
         )}
       />
     </HUISwitch>
-  )
+  );
 }
