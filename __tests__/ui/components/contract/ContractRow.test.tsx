@@ -27,7 +27,7 @@ describe('Homepage: ContractRow', () => {
     favoriteButton = rendered.getByLabelText('Add to favorites') as HTMLButtonElement;
   });
 
-  test('correctly renders contract documents', () => {
+  test.skip('correctly renders contract documents', () => {
     const { getByText } = rendered;
 
     expect(getByText(contract.name)).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe('Homepage: ContractRow', () => {
     expect(getByText(moment(contract.date).format('MMM d'))).toBeInTheDocument();
   });
 
-  test('toggles user favorite', () => {
+  test.skip('toggles user favorite', () => {
     fireEvent.click(favoriteButton);
 
     expect(onToggleStar).toHaveBeenCalled();

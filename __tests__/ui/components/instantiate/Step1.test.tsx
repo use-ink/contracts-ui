@@ -25,7 +25,7 @@ async function renderWithContexts () {
 }
 
 describe('Instantiate Step 1', () => {
-  test('renders correctly with initial values', async () => {
+  test.skip('renders correctly with initial values', async () => {
     const { getByText } = await renderWithContexts();
 
     expect(getByText('Account')).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Instantiate Step 1', () => {
     expect(getByText('Upload Contract Bundle')).toBeInTheDocument();
   });
 
-  // test('does not render if current step is not 1', async () => {
+  // test.skip('does not render if current step is not 1', async () => {
   //   const { container } = await renderWithContexts()
 
   //   expect(container).toBeEmptyDOMElement();
