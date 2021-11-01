@@ -32,7 +32,7 @@ export function AddContract() {
                   </Link>
                   <p className="text-center text-sm text-gray-500 py-6">Or</p>
                   <Link
-                    to={'#' /* "/instantiate/hash" */}
+                    to="/instantiate/hash"
                     className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">

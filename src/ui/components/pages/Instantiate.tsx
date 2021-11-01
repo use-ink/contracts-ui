@@ -36,7 +36,7 @@ export function Instantiate () {
                   : (
                     <>
                       You can instantiate a new contract from an existing code bundle{' '}
-                      <Link to={'#' /* "/instantiate/hash */} className="text-blue-500">
+                      <Link to="/instantiate/hash" className="text-blue-500">
                         here
                       </Link>
                       .
@@ -47,9 +47,7 @@ export function Instantiate () {
             </div>
           </div>
         </div>
-        <div className="grid md:grid-cols-12 gap-5 m-1">
-            <Wizard />
-        </div>
+        <Wizard />
       </div>
     </Loader>
   );

@@ -2,7 +2,7 @@ import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { isNumber } from '@polkadot/util';
 import { handleDispatchError, encodeSalt, transformUserInput } from '../util';
 import type { ApiPromise, InstantiateState, CanvasState, DbState, SubmittableExtrinsic, OnInstantiateSuccess$Code, OnInstantiateSuccess$Hash } from 'types';
-import { createCodeBundle, createContract } from 'db';
+import { createContract } from 'db';
 
 export function createInstantiateTx (
   api: ApiPromise,
@@ -95,20 +95,6 @@ export function onInstantiateFromCode (
       }
 
       if (accountId.value && contract && (status.isInBlock || status.isFinalized)) {
-        blueprint && await createCodeBundle(
-          db,
-          identity,
-          {
-            abi: blueprint.abi.json as Record<string, unknown>,
-            blockZeroHash: blockZeroHash || undefined,
-            codeHash: blueprint.codeHash.toHex(),
-            creator: accountId.value,
-            genesisHash: api.genesisHash.toHex(),
-            name: blueprint.abi.info.contract.name.toString(),
-            tags: []
-          }
-        );
-
         await createContract(
           db,
           identity,
