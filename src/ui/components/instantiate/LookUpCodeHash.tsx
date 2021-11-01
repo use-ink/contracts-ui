@@ -59,7 +59,7 @@ export function LookUpCodeHash () {
       </Input>
       <SearchResults
         codeBundles={searchResults}
-        isOpen={!isValid && searchString.length > 0}
+        isOpen={!codeHash && searchString.length > 0}
         onSelectCodeBundle={document => {
           setCodeHash(document.codeHash);
         }}
