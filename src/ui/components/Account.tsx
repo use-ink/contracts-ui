@@ -1,31 +1,33 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+//[object Object]
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Identicon } from '@polkadot/react-identicon';
+import { Identicon } from './Identicon';
+import { classes, truncate } from 'ui/util';
+import { OrFalsy } from 'types';
 import { useAccount } from 'ui/hooks/useAccount';
-import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   name?: React.ReactNode;
-  value?: string | null;
+  value: OrFalsy<string>;
 }
 
 export function Account({ className, name: propsName, value }: Props) {
   const account = useAccount(value);
-
   const name = propsName || account?.meta.name || 'Account';
+
+  if (!value) {
+    return null;
+  }
 
   return (
     <div className={classes('p-1.5 flex items-center w-full', className)}>
-      <Identicon size={32} value={value} className="pr-2" />
+      <Identicon size={42} value={value} className="pr-2" />
       <div className="flex-1 block truncate">
         <span className="flex font-semibold text-base dark:text-gray-300 text-gray-700">
           {name}
         </span>
-        <p className="text-gray-500 text-xs">
-          {String(value).slice(0, 4) + '...' + String(value).slice(-4)}
-        </p>
+        <p className="text-gray-500 text-xs">{truncate(value, 4)}</p>
       </div>
     </div>
   );

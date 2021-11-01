@@ -1,40 +1,24 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import crypto from 'crypto';
+import { Database } from '@textile/threaddb';
 import faker from 'faker';
-import { Keyring } from '@polkadot/api';
 import moment from 'moment';
-import { contractFiles } from './contracts';
-import { getNewCodeBundleId, getPrivateKeyFromPair, publicKeyHex } from 'db';
+import { contractFiles } from '../contracts';
+import { getKeyringPairRandom, getSecretRandom } from './keyring';
+import {
+  codeBundle,
+  contract,
+  user,
+  getNewCodeBundleId,
+  getPrivateKeyFromPair,
+  publicKeyHex,
+} from 'db';
 
-import { UserDocument, CodeBundleDocument, ContractDocument, KeyringPair, PrivateKey } from 'types';
+import type { UserDocument, CodeBundleDocument, ContractDocument, PrivateKey } from 'types';
 import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
-
-const keyring = new Keyring();
-
-export const keyringPairsMock = [
-  { address: '5H3pnZeretwBDzaJFxKMgr4fQMsVa2Bu73nB5Tin2aQGQ9H3', meta: { name: 'alice' } },
-  {
-    address: '5HKbr8t4Qg5y9kZBU9nwuDkoTsPShGQHYUbvyoB4ujvfKsbL',
-    meta: { name: 'alice_stash' },
-  },
-  { address: '5DkocVtKdD6wM7qrSAVTpR4jfTAPHvQhbrDZ6ZUB39d1DWzf', meta: { name: 'bob' } },
-  {
-    address: '5DUpcTjvPXG63kt1z8iwacJv7W7m6YuxfKCd4NoJtXhaUt6h',
-    meta: { name: 'bob_stash' },
-  },
-];
-
-export function getKeyringPairRandom(): KeyringPair {
-  return keyring.createFromUri(faker.name.firstName());
-}
-
-export function getSecretRandom(): string {
-  return crypto.randomBytes(8).toString('hex');
-}
 
 function randomHash(): string {
   return [...(Array(62) as unknown[])]
@@ -42,7 +26,7 @@ function randomHash(): string {
     .join('');
 }
 
-export function getTestUser(): TestUser {
+export function getMockDbUser(): TestUser {
   const pair = getKeyringPairRandom();
   const secret = getSecretRandom();
   const identity = getPrivateKeyFromPair(pair, secret);
@@ -60,17 +44,19 @@ export function getTestUser(): TestUser {
   ];
 }
 
-export function getTestUsers(count: number): TestUser[] {
-  const result: TestUser[] = [];
+export const mockDbUser = getMockDbUser();
 
-  for (let i = 0; i < count; i++) {
-    result.push(getTestUser());
+export function getMockDbUsers(count: number): TestUser[] {
+  const result: TestUser[] = [mockDbUser];
+
+  for (let i = 0; i < count - 1; i++) {
+    result.push(getMockDbUser());
   }
 
   return result;
 }
 
-export function getTestCodeBundles(): CodeBundleDocument[] {
+export function getMockCodeBundles(): CodeBundleDocument[] {
   const codeBundles: CodeBundleDocument[] = [];
 
   const blockZeroHashes = [randomHash(), randomHash()];
@@ -88,7 +74,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
       tags,
       abi,
       id: getNewCodeBundleId(),
-      date: moment.utc().format(),
+      date: moment().format(),
       stars: 1,
       instances: 0,
     });
@@ -97,7 +83,7 @@ export function getTestCodeBundles(): CodeBundleDocument[] {
   return codeBundles;
 }
 
-export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
+export function getMockContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
   const contracts: ContractDocument[] = [];
 
   const { blockZeroHash, creator, genesisHash } = codeBundles[0];
@@ -115,7 +101,7 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
       name,
       tags,
       abi,
-      date: moment.utc().format(),
+      date: moment().format(),
       stars: 1,
     });
   });
@@ -123,10 +109,21 @@ export function getTestContracts(codeBundles: CodeBundleDocument[]): ContractDoc
   return contracts;
 }
 
-export function getMockUpdates(withAbi?: boolean) {
+export function getMockDbUpdates(withAbi?: boolean) {
   return {
     name: faker.name.jobTitle(),
     tags: ['delta'],
     ...(withAbi ? { abi: Object.values(contractFiles)[3] } : undefined),
   };
+}
+
+export async function getMockDb() {
+  const db = await new Database(
+    'test',
+    { name: 'User', schema: user },
+    { name: 'Contract', schema: contract },
+    { name: 'CodeBundle', schema: codeBundle }
+  ).open(1);
+
+  return db;
 }

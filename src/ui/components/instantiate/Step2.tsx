@@ -79,7 +79,7 @@ export function Step2() {
           id="maxGas"
           label="Max Gas Allowed"
           isError={!isWeightValid}
-          validation={!isWeightValid ? 'Invalid gas limit' : null}
+          message={!isWeightValid ? 'Invalid gas limit' : null}
         >
           <InputNumber value={megaGas} onChange={setMegaGas} placeholder="200000" />
           <div className="relative pt-2">

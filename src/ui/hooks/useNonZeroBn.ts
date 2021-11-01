@@ -8,7 +8,7 @@ import type { BN, UseFormField, Validation } from 'types';
 
 function isValid(value?: BN | null): Validation {
   if (!value || value?.isZero()) {
-    return { isValid: false, validation: 'Value cannot be zero' };
+    return { isValid: false, message: 'Value cannot be zero' };
   }
 
   return { isValid: true };

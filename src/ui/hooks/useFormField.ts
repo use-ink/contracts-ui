@@ -8,7 +8,7 @@ import type { UseFormField, ValidateFn, Validation } from 'types';
 
 export function useFormField<T>(
   defaultValue: T,
-  validate: ValidateFn<T> = value => ({ isValid: !isNull(value), validation: null })
+  validate: ValidateFn<T> = value => ({ isValid: !isNull(value), message: null })
 ): UseFormField<T> {
   const [value, setValue] = useState<T>(defaultValue);
   const [validation, setValidation] = useState<Omit<Validation, 'isError'>>(validate(value));
@@ -38,9 +38,19 @@ export function useFormField<T>(
       value,
       onChange,
       isValid: validation.isValid,
-      validation: validation.validation,
+      isTouched: isTouched.current,
+      isWarning: validation.isWarning || false,
+      message: validation.message,
       isError,
     }),
-    [value, onChange, isError, validation.isValid, validation.validation]
+    [
+      value,
+      onChange,
+      isError,
+      isTouched.current,
+      validation.isValid,
+      validation.isWarning,
+      validation.message,
+    ]
   );
 }
