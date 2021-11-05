@@ -98,7 +98,7 @@ export function InstantiateContextProvider({
       return { isValid: true };
     }
 
-    return { isValid: false, isError: true, validation: 'Invalid hex string' };
+    return { isValid: false, isError: true, message: 'Invalid hex string' };
   });
 
   const deployConstructor = useMemo(

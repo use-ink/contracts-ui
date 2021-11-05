@@ -2,26 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useCallback, useEffect, useState } from 'react';
-import { useIsMountedRef } from './useIsMountedRef';
+import { useIsMounted } from './useIsMounted';
 import type { UseToggle } from 'types';
 
 // Simple wrapper for a true/false toggle
 export function useToggle(defaultValue = false, onToggle?: (isActive: boolean) => void): UseToggle {
-  const mountedRef = useIsMountedRef();
+  const isMounted = useIsMounted();
   const [isActive, setActive] = useState(defaultValue);
 
-  const _toggleActive = useCallback((): void => {
-    mountedRef.current && setActive(isActive => !isActive);
-  }, [mountedRef]);
+  const toggle = useCallback((): void => {
+    setActive(isActive => !isActive);
+  }, [isMounted]);
 
-  const _setActive = useCallback(
-    (isActive: boolean): void => {
-      mountedRef.current && setActive(isActive);
-    },
-    [mountedRef]
-  );
+  useEffect(() => {
+    isMounted && !!onToggle && onToggle(isActive);
+  }, [isMounted, isActive, onToggle]);
 
-  useEffect(() => onToggle && onToggle(isActive), [isActive, onToggle]);
-
-  return [isActive, _toggleActive, _setActive];
+  return [isActive, toggle, setActive];
 }

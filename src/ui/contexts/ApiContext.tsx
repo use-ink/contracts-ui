@@ -11,7 +11,7 @@ import type { ApiAction, ApiState, ChainProperties } from 'types';
 
 let loadedAccounts = false;
 
-const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
+export const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
 const DEFAULT_DECIMALS = 12;
 
 const NULL_CHAIN_PROPERTIES = {

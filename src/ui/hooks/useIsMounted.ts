@@ -3,9 +3,7 @@
 
 import { useEffect, useRef } from 'react';
 
-export type MountedRef = React.MutableRefObject<boolean>;
-
-export function useIsMountedRef(): MountedRef {
+export function useIsMounted(): boolean {
   const isMounted = useRef(false);
 
   useEffect((): (() => void) => {
@@ -16,5 +14,5 @@ export function useIsMountedRef(): MountedRef {
     };
   }, []);
 
-  return isMounted;
+  return isMounted.current;
 }

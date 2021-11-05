@@ -12,10 +12,10 @@ export function useAccountId(initialValue: string | null = null): UseFormField<s
   const validate = useCallback(
     (value): Validation => {
       if (!value || !keyring?.getAccount(value)) {
-        return { isValid: false, validation: 'Specified account does not exist' };
+        return { isValid: false, message: 'Specified account does not exist' };
       }
 
-      return { isValid: true, validation: null };
+      return { isValid: true, message: null };
     },
     [keyring?.accounts]
   );

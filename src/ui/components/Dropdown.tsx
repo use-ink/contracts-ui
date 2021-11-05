@@ -31,13 +31,12 @@ export function Dropdown<T>({
   );
 
   return (
-    <Listbox value={selected} onChange={onChange}>
+    <Listbox disabled={isDisabled ? true : undefined} value={selected} onChange={onChange}>
       {({ open }) => (
         <div className={classes('dropdown', isError ? 'isError' : '', className)}>
           <Listbox.Button
             data-testid="dropdown-btn"
             className={classes('dropdown-btn option', open ? ' rounded-b-none' : '')}
-            disabled={isDisabled ? true : undefined}
           >
             {Button ? (
               <Button option={selected} isPlaceholder={options.length === 0} />

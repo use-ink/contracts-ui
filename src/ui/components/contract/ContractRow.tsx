@@ -3,11 +3,11 @@
 
 import React from 'react';
 import 'styled-components';
-import { Identicon } from '@polkadot/react-identicon';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { Identicon } from '../Identicon';
 import { Button } from '../Button';
 import { ContractDocument } from 'types';
 

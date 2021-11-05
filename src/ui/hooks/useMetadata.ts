@@ -75,7 +75,7 @@ const EMPTY: MetadataState = {
   name: null,
   source: null,
   value: null,
-  validation: null,
+  message: null,
 };
 
 function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
@@ -83,7 +83,7 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
     return {
       isValid: false,
       isError: true,
-      validation:
+      message:
         'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.',
     };
   }
@@ -98,7 +98,7 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
     return {
       isValid: false,
       isError: true,
-      validation: 'This contract bundle has an empty or invalid WASM field.',
+      message: 'This contract bundle has an empty or invalid WASM field.',
     };
   }
 
@@ -106,7 +106,7 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
     isValid: true,
     isError: false,
     isSuccess: true,
-    validation: isWasmRequired ? 'Valid contract bundle!' : 'Valid metadata file!',
+    message: isWasmRequired ? 'Valid contract bundle!' : 'Valid metadata file!',
   };
 }
 
@@ -136,7 +136,7 @@ export function useMetadata(
 
       setState({
         ...EMPTY,
-        validation: 'This contract file is not in a valid format.',
+        message: 'This contract file is not in a valid format.',
         isError: true,
         isSupplied: true,
         isValid: false,

@@ -3,43 +3,78 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDatabase } from '../contexts/DatabaseContext';
-import type { UseQuery } from 'types';
+import type { VoidFn } from 'types';
 
 type ValidateFn<T> = (_?: T | null) => boolean;
+
+interface State<T> {
+  data: T | null;
+  error: React.ReactNode | null;
+  isLoading: boolean;
+  isValid: boolean;
+  updated: number;
+}
+
+interface UseQuery<T> extends State<T> {
+  refresh: VoidFn;
+}
+
+const initialState = {
+  data: null,
+  error: null,
+  isLoading: true,
+  isValid: true,
+  updated: 0,
+};
 
 export function useQuery<T>(
   query: () => Promise<T | null>,
   validate: ValidateFn<T> = value => !!value
 ): UseQuery<T> {
   const { isDbReady } = useDatabase();
-  const [data, setData] = useState<T | null>(null);
-  const [error, setError] = useState<React.ReactNode | null>(null);
-  const [isValid, setIsValid] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
-  const [updated, setUpdated] = useState(0);
+  const [state, setState] = useState<State<T>>(initialState);
+  // const [data, setData] = useState<T | null>(null);
+  // const [error, setError] = useState<React.ReactNode | null>(null);
+  // const [isValid, setIsValid] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [updated, setUpdated] = useState(0);
 
   const fetch = useCallback((): void => {
     if (!isDbReady) return;
 
     query()
       .then(result => {
-        setData(result);
-        setError(null);
-        setIsLoading(false);
-        setIsValid(validate(result));
-        setUpdated(Date.now());
+        setState(state => ({
+          ...state,
+          data: result,
+          error: null,
+          isLoading: false,
+          isValid: validate(result),
+          updated: Date.now(),
+        }));
       })
       .catch((e: Error) => {
-        setIsValid(false);
-        e.message && setError(e.message);
+        setState(state => ({
+          ...state,
+          data: null,
+          error: e.message || 'Error',
+          isLoading: false,
+          isValid: false,
+          updated: Date.now(),
+        }));
+
         console.error(e);
       });
   }, [isDbReady, query]);
 
   const refresh = useCallback((): void => {
-    setError(null);
-    setIsLoading(true);
-    setIsValid(true);
+    setState(state => ({
+      ...state,
+      error: null,
+      isLoading: true,
+      isValid: true,
+    }));
+
     fetch();
   }, [fetch]);
 
@@ -47,5 +82,5 @@ export function useQuery<T>(
     fetch();
   }, [fetch]);
 
-  return { data, error, isLoading, isValid, refresh, updated };
+  return { ...state, refresh };
 }

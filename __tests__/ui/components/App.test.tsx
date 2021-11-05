@@ -2,54 +2,24 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { customRender, getMockApiState, getMockDbState } from 'test-utils';
-import { ApiState, DbState } from 'types';
+import { customRender } from 'test-utils';
 import { Router, routes } from 'ui/components/Router';
 
 describe('ApiContext', () => {
-  let mockApiState: ApiState;
-  let mockDbState: DbState;
-  beforeAll(async (): Promise<void> => {
-    [mockApiState, mockDbState] = [getMockApiState(), await getMockDbState()];
-  });
   test.skip('should render the homepage if the api and database are in a ready state', () => {
-    const { getByText } = customRender(
-      <Router routes={routes} />,
-      {
-        ...mockApiState,
-        keyringStatus: 'READY',
-        status: 'READY',
-      },
-      mockDbState
-    );
+    const [{ getByText }] = customRender(<Router routes={routes} />);
     expect(getByText('Contracts')).toBeTruthy();
   });
   test.skip('should suggest to check extension if keyring state is not ready', () => {
-    const { getByText } = customRender(
-      <Router routes={routes} />,
-      { ...mockApiState, status: 'READY' },
-      mockDbState
-    );
+    const [{ getByText }] = customRender(<Router routes={routes} />);
     expect(getByText(`Loading accounts...`)).toBeTruthy();
   });
   test.skip('should render a message if the api is not ready but the keyring is', () => {
-    const { getByText } = customRender(
-      <Router routes={routes} />,
-      { ...mockApiState, keyringStatus: 'READY' },
-      mockDbState
-    );
+    const [{ getByText }] = customRender(<Router routes={routes} />);
     expect(getByText(`Connecting...`)).toBeTruthy();
   });
   test.skip('should render the error it encountered while connecting to the node', () => {
-    const { getByText } = customRender(
-      <Router routes={routes} />,
-      {
-        ...mockApiState,
-        error: { key: 'value' },
-        status: 'ERROR',
-      },
-      mockDbState
-    );
+    const [{ getByText }] = customRender(<Router routes={routes} />);
 
     expect(getByText(`Connection error`)).toBeTruthy();
   });

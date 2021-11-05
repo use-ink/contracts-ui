@@ -27,7 +27,7 @@ function validate(
   value: BN | null | undefined,
   { bitLength = DEFAULT_BITLENGTH, isZeroable, maxValue }: ValidateOptions
 ): Validation {
-  let validation: React.ReactNode;
+  let message: React.ReactNode;
   let isError = false;
 
   if (!value) {
@@ -39,33 +39,33 @@ function validate(
 
   if (value?.lt(BN_ZERO)) {
     isError = true;
-    validation = 'Value cannot be negative';
+    message = 'Value cannot be negative';
   }
 
   if (value?.gt(getGlobalMaxValue(bitLength))) {
     isError = true;
-    validation = 'Value exceeds global maximum';
+    message = 'Value exceeds global maximum';
   }
 
   if (!isZeroable && value?.isZero()) {
     isError = true;
-    validation = 'Value cannot be zero';
+    message = 'Value cannot be zero';
   }
 
   if (value && value?.bitLength() > (bitLength || DEFAULT_BITLENGTH)) {
     isError = true;
-    validation = "Value's bitlength is too high";
+    message = "Value's bitlength is too high";
   }
 
   if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
     isError = true;
-    validation = `Value cannot exceed ${maxValue?.toNumber()}`;
+    message = `Value cannot exceed ${maxValue?.toNumber()}`;
   }
 
   return {
     isError,
     isValid: !isError,
-    validation,
+    message,
   };
 }
 

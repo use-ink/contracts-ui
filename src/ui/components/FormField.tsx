@@ -11,7 +11,6 @@ type ValidationState = 'error' | 'success' | 'warning' | null;
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode;
   help?: React.ReactNode;
-  validation?: React.ReactNode;
 }
 
 export function getValidation({
@@ -19,9 +18,9 @@ export function getValidation({
   isSuccess,
   isValid,
   isWarning,
-  validation,
+  message,
 }: Validation): Validation {
-  return { isError, isSuccess, isValid, isWarning, validation };
+  return { isError, isSuccess, isValid, isWarning, message };
 }
 
 export function FormField({
@@ -32,17 +31,17 @@ export function FormField({
   isSuccess,
   isWarning,
   label,
-  validation,
+  message,
 }: Props & Validation) {
   const validationState = useMemo((): ValidationState => {
-    if (!validation) return null;
+    if (!message) return null;
 
     if (isError) return 'error';
     if (isWarning) return 'warning';
     if (isSuccess) return 'success';
 
     return null;
-  }, [isError, validation]);
+  }, [isError, message]);
 
   return (
     <div className={classes('form-field', className)}>
@@ -52,11 +51,11 @@ export function FormField({
         </label>
       )}
       {children}
-      {validation && validationState && (
+      {message && validationState && (
         <div className={classes('validation', validationState && validationState)}>
           {['error', 'warning'].includes(validationState) && <ExclamationCircleIcon />}
           {validationState === 'success' && <CheckCircleIcon />}
-          {validation}
+          {message}
         </div>
       )}
     </div>

@@ -17,11 +17,11 @@ export type {
   AbiParam,
 } from '@polkadot/api-contract/types';
 export type { ContractQuery, ContractTx } from '@polkadot/api-contract/base/types';
-export type { SubmittableExtrinsic } from '@polkadot/api/types';
+export type { SubmittableExtrinsic, VoidFn } from '@polkadot/api/types';
 
 // classes
 export { Bytes, Raw } from '@polkadot/types';
 export { Keyring } from '@polkadot/ui-keyring';
 export { Abi, ContractPromise, BlueprintPromise } from '@polkadot/api-contract';
 export { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
-export { ApiPromise } from '@polkadot/api';
+export { ApiPromise, SubmittableResult } from '@polkadot/api';
