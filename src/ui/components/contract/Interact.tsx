@@ -3,7 +3,7 @@
 
 import React, { useState, useReducer, useEffect } from 'react';
 import { Dropdown } from '../common/Dropdown';
-import { ArgumentForm } from '../args/ArgumentForm';
+import { ArgumentForm } from '../form/ArgumentForm';
 import { Button, Buttons } from '../common/Button';
 import { Input } from '../form/Input';
 import { AccountSelect } from '../account/AccountSelect';

@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { Input } from '../form/Input';
 import { FormField } from '../form/FormField';
-import { SearchResults } from './SearchResults';
+import { SearchResults } from '../common/SearchResults';
 import { CodeHash } from './CodeHash';
 import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';

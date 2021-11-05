@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Switch } from '../common/Switch';
-import { Input } from '../form/Input';
+import { Input } from './Input';
 import { SimpleSpread, UseFormField } from 'types';
 
 type Props = SimpleSpread<

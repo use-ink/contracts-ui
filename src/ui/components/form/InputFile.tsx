@@ -32,40 +32,6 @@ function convertResult(result: ArrayBuffer): Uint8Array {
   return data;
 }
 
-// function DropView (_: DropzoneState) {
-//   return (
-//     <>
-//       <label
-//         className="dark:text-gray-700 text-gray-400 font-normal py-2 px-4 border dark:border-gray-700 border-gray-200 rounded flex flex-col h-36 items-center cursor-pointer justify-center"
-//         htmlFor="file"
-//       >
-//         <svg
-//           xmlns="http://www.w3.org/2000/svg"
-//           className="h-8 mb-2 dark:text-gray-500"
-//           fill="none"
-//           viewBox="0 0 24 24"
-//           stroke="currentColor"
-//         >
-//           <path
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//             strokeWidth={2}
-//             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-//           />
-//         </svg>
-//         <span className="text-sm dark:text-gray-500 text-gray-400">{placeholder}</span>
-//       </label>
-//       <input
-//         type="file"
-//         id="file"
-//         style={{ display: 'none' }}
-//         onChange={onChange}
-//         accept={accept}
-//       />
-//     </>
-//   )
-// }
-
 export function InputFile({
   accept = '*/*',
   className = '',

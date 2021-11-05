@@ -2,8 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Homepage, Contract, Instantiate as InstantiatePage, AddContract } from '../pages';
-import { SelectCodeHash } from '../pages/SelectCodeHash';
+import {
+  Homepage,
+  Contract,
+  Instantiate as InstantiatePage,
+  AddContract,
+  SelectCodeHash,
+} from '../pages';
 import { InstantiateContextProvider } from 'ui/contexts';
 
 function Instantiate() {
