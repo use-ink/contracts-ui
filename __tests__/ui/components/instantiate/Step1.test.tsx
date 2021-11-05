@@ -23,10 +23,4 @@ describe('Instantiate Step 1', () => {
     expect(getByText('Contract Name')).toBeInTheDocument();
     expect(getByText('Upload Contract Bundle')).toBeInTheDocument();
   });
-
-  // test.skip('does not render if current step is not 1', async () => {
-  //   const { container } = await renderWithContexts()
-
-  //   expect(container).toBeEmptyDOMElement();
-  // });
 });
