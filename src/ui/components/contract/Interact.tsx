@@ -35,6 +35,7 @@ export const InteractTab = ({ contract }: Props) => {
         type: 'RESET',
       });
     }
+    message.value = contract.abi.messages[0];
   }, [contract.address]);
 
   if (!contract) return null;
