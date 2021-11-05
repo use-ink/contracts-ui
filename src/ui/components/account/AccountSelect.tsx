@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Dropdown } from './Dropdown';
+import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
 import { createAccountOptions } from 'api/util';
 import type { DropdownProps, OptionProps, UseFormField } from 'types';

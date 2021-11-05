@@ -3,7 +3,7 @@
 
 import React, { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
-import { Button } from '../Button';
+import { Button } from '../common/Button';
 import { useLocalStorage } from 'ui/hooks';
 
 export function HelpBox(): React.ReactElement | null {

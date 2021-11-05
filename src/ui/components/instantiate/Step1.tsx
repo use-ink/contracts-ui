@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Button, Buttons } from '../Button';
-import { Form, FormField, getValidation } from '../FormField';
-import { CodeHash } from '../CodeHash';
-import { InputFile } from 'ui/components/InputFile';
-import { Input } from 'ui/components/Input';
+import { Button, Buttons } from '../common/Button';
+import { Form, FormField, getValidation } from '../form/FormField';
+import { CodeHash } from './CodeHash';
+import { InputFile } from 'ui/components/form/InputFile';
+import { Input } from 'ui/components/form/Input';
 import { useInstantiate } from 'ui/contexts';
 
 export function Step1() {

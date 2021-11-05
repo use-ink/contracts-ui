@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Wizard } from '../components/instantiate';
-import { Loader } from '../components/Loader';
+import { Loader } from '../components/common/Loader';
 import { useInstantiate } from 'ui/contexts';
 
 export function Instantiate() {

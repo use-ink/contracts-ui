@@ -120,7 +120,7 @@
 
 import { CheckIcon, ClockIcon, ExclamationCircleIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
-import { Spinner } from './Spinner';
+import { Spinner } from './common/Spinner';
 import type { TransactionsState } from 'types';
 import { classes } from 'ui/util';
 

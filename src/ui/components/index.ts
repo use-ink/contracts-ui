@@ -7,8 +7,8 @@ export * from './instantiate';
 export * from './sidebar';
 
 export * from './App';
-export * from './Button';
-export * from './AccountSelect';
-export * from './Dropdown';
-export * from './InputBalance';
-export * from './MessageSignature';
+export * from './common/Button';
+export * from './account/AccountSelect';
+export * from './common/Dropdown';
+export * from './form/InputBalance';
+export * from './message/MessageSignature';

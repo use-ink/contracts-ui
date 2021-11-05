@@ -6,8 +6,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronUpIcon } from '@heroicons/react/solid';
 import { Disclosure } from '@headlessui/react';
-import { MessageSignature } from '../MessageSignature';
-import { Spinner } from '../Spinner';
+import { MessageSignature } from '../message/MessageSignature';
+import { Spinner } from '../common/Spinner';
 import type { CallResult } from 'types';
 
 interface Props {

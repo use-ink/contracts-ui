@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/solid';
-import { MessageSignature } from '../MessageSignature';
+import { MessageSignature } from './MessageSignature';
 import type { AbiConstructor, AbiMessage } from 'types';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

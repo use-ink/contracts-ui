@@ -4,7 +4,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { MessageDocs } from 'ui/components/contract/MessageDocs';
+import { MessageDocs } from 'ui/components/message/MessageDocs';
 import { AbiMessage, AbiParam } from 'types';
 
 describe('Message Docs', () => {

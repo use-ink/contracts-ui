@@ -3,7 +3,7 @@
 
 import React, { useMemo } from 'react';
 import type { HTMLAttributes } from 'react';
-import { Loader } from './Loader';
+import { Loader } from './common/Loader';
 import { useApi, useDatabase } from 'ui/contexts';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
