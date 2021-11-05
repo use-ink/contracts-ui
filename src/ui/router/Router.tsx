@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { AwaitApis } from '../AwaitApis';
+import { AwaitApis } from '../components/AwaitApis';
 import { Homepage } from '../pages';
 import { RouteWithSubRoutes } from './RouteWithSubRoutes';
 import { RouteInterface } from 'types';

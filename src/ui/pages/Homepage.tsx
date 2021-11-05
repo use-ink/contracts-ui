@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Contracts, HelpBox, Statistics } from '../homepage';
+import { Contracts, HelpBox, Statistics } from '../components/homepage';
 import { PageHome } from 'ui/templates';
 
 export function Homepage() {

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { customRender } from 'test-utils';
-import { Router, routes } from 'ui/components/Router';
+import { Router, routes } from 'ui/router';
 
 describe('ApiContext', () => {
   test.skip('should render the homepage if the api and database are in a ready state', () => {

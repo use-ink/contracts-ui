@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from './contract';
-export * from './pages';
+export * from '../pages';
 export * from './instantiate';
 export * from './sidebar';
 
