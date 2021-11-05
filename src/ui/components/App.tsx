@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { hot } from 'react-hot-loader';
+import { Router, routes } from '../router';
 import { Sidebar } from './sidebar';
-import { Router, routes } from './Router';
 import { ApiContextProvider, DatabaseContextProvider } from 'ui/contexts';
 import { TransactionsContextProvider } from 'ui/contexts/TransactionsContext';
 
