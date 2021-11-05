@@ -4,6 +4,6 @@
 export * from './ContractRow';
 export * from './Interact';
 export * from './Metadata';
-export * from '../message/MessageDocs';
 export * from './QueryResult';
+export * from './ResultsOutput';
 export * from './TransactionResult';
