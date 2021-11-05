@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { FormField, getValidation } from '../FormField';
-import { AccountSelect } from '../AccountSelect';
+import { FormField, getValidation } from '../form/FormField';
+import { AccountSelect } from '../account/AccountSelect';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';

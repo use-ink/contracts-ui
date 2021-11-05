@@ -3,8 +3,8 @@
 
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { CodeHash } from '../CodeHash';
-import { FormField } from '../FormField';
+import { FormField } from '../form/FormField';
+import { CodeHash } from './CodeHash';
 import { useAvailableCodeBundles } from 'ui/hooks/useAvailableCodeBundles';
 import { CodeBundleDocument } from 'types';
 

@@ -4,7 +4,7 @@
 import React from 'react';
 import { mockKeyring, customRender } from 'test-utils';
 import '@testing-library/jest-dom/extend-expect';
-import { Account } from 'ui/components/Account';
+import { Account } from 'ui/components/account/Account';
 import { truncate } from 'ui/util';
 
 describe('Account', () => {

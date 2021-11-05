@@ -5,7 +5,7 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent, RenderResult } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { Button } from 'ui/components/Button';
+import { Button } from 'ui/components/common/Button';
 
 describe('Button', () => {
   let rendered: RenderResult;

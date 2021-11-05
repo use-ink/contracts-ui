@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';
-import { Button } from '../Button';
+import { Button } from '../common/Button';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useStatistics } from 'ui/hooks';
 

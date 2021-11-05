@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Switch } from '../Switch';
-import { Input } from '../Input';
+import { Switch } from '../common/Switch';
+import { Input } from '../form/Input';
 import { SimpleSpread, UseFormField } from 'types';
 
 type Props = SimpleSpread<

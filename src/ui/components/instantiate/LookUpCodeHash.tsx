@@ -4,10 +4,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
-import { Input } from '../Input';
-import { FormField } from '../FormField';
-import { SearchResults } from '../SearchResults';
-import { CodeHash } from '../CodeHash';
+import { Input } from '../form/Input';
+import { FormField } from '../form/FormField';
+import { SearchResults } from './SearchResults';
+import { CodeHash } from './CodeHash';
 import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';
 

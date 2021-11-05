@@ -30,7 +30,7 @@ import {
   Raw,
   TypeDef,
 } from 'types';
-import { MessageSignature } from 'ui/components/MessageSignature';
+import { MessageSignature } from 'ui/components/message/MessageSignature';
 
 export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
   if (dispatchError.isModule) {

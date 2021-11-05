@@ -7,8 +7,8 @@ import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Identicon } from '../Identicon';
-import { Button } from '../Button';
+import { Identicon } from '../account/Identicon';
+import { Button } from '../common/Button';
 import { ContractDocument } from 'types';
 
 interface Props {

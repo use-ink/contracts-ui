@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { BN_ZERO, formatBalance, formatNumber } from '@polkadot/util';
-import { Account } from '../Account';
-import { Button, Buttons } from '../Button';
+import { Account } from '../account/Account';
+import { Button, Buttons } from '../common/Button';
 import { isResultValid, useApi, useInstantiate } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
 import { fromSats } from 'api';

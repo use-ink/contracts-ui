@@ -5,7 +5,7 @@ import React from 'react';
 import { jest } from '@jest/globals';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { Dropdown } from 'ui/components/Dropdown';
+import { Dropdown } from 'ui/components/common/Dropdown';
 import { DropdownOption, DropdownProps } from 'types';
 import { getNodeText } from 'test-utils';
 // import { getNodeText } from 'test-utils';

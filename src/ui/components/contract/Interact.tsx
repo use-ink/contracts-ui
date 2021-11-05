@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState, useReducer, useEffect } from 'react';
-import { Dropdown } from '../Dropdown';
+import { Dropdown } from '../common/Dropdown';
 import { ArgumentForm } from '../args/ArgumentForm';
-import { Button, Buttons } from '../Button';
-import { Input } from '../Input';
-import { AccountSelect } from '../AccountSelect';
-import { Form, FormField, getValidation } from '../FormField';
+import { Button, Buttons } from '../common/Button';
+import { Input } from '../form/Input';
+import { AccountSelect } from '../account/AccountSelect';
+import { Form, FormField, getValidation } from '../form/FormField';
 import { ResultsOutput } from './ResultsOutput';
 import { call, convertToNumber, createMessageOptions } from 'api';
 import { useApi } from 'ui/contexts';

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { SimpleSpread } from 'types';
-import { Dropdown } from 'ui/components/Dropdown';
+import { Dropdown } from 'ui/components/common/Dropdown';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,

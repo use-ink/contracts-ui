@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { MessageDocs } from './MessageDocs';
+import { MessageDocs } from '../message/MessageDocs';
 import { Abi } from 'types';
 
 interface Props {

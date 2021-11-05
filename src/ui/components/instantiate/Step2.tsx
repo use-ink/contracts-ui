@@ -3,14 +3,14 @@
 
 import React from 'react';
 import type { AbiConstructor } from '@polkadot/api-contract/types';
-import { Button, Buttons } from '../Button';
-import { Form, FormField, getValidation } from '../FormField';
-import { InputNumber } from '../InputNumber';
+import { Button, Buttons } from '../common/Button';
+import { Form, FormField, getValidation } from '../form/FormField';
+import { InputNumber } from '../form/InputNumber';
 // import { InputBalance } from '../InputBalance';
-import { InputBalance } from '../InputBalance';
+import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from './InputSalt';
 import { ArgumentForm } from 'ui/components/args/ArgumentForm';
-import { Dropdown } from 'ui/components/Dropdown';
+import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
 import { useInstantiate } from 'ui/contexts';
 // import { createInstantiateTx } from 'api';
