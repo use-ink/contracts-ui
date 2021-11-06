@@ -14,7 +14,7 @@ import {
 
 let nextId = 0;
 
-export function prepareContractTx(
+function prepareContractTx(
   tx: ContractTx<'promise'>,
   options: { gasLimit: number; salt: Uint8Array; value: number },
   args: unknown[]
@@ -22,7 +22,7 @@ export function prepareContractTx(
   return args.length > 0 ? tx(options, ...args) : tx(options);
 }
 
-export function sendContractQuery(
+function sendContractQuery(
   options: { endowment: number; gasLimit: number },
   fromAddress: string,
   query: ContractQuery<'promise'>,
