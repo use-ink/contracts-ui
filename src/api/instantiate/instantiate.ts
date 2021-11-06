@@ -1,62 +1,15 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
-import { isNumber } from '@polkadot/util';
-import { handleDispatchError, encodeSalt, transformUserInput } from '../util';
+import { handleDispatchError } from '../util';
 import type {
-  ApiPromise,
   InstantiateState,
   ApiState,
   DbState,
-  SubmittableExtrinsic,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
 } from 'types';
 import { createContract } from 'db';
-
-export function createInstantiateTx(
-  api: ApiPromise,
-  {
-    argValues: [argValues],
-    codeHash,
-    constructorIndex: { value: constructorIndex },
-    weight: { weight: gasLimit },
-    endowment,
-    metadata: { value: metadata },
-    salt,
-  }: InstantiateState
-): SubmittableExtrinsic<'promise'> | null {
-  const isFromHash = !!codeHash;
-  const saltu8a = encodeSalt(salt.value);
-
-  const options = {
-    gasLimit,
-    salt: saltu8a,
-    value: endowment.value ? api.registry.createType('Balance', endowment.value) : undefined,
-  };
-  console.log(options);
-
-  const wasm = metadata?.info.source.wasm;
-  const isValid = isFromHash || !!wasm;
-
-  if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
-    const codeOrBlueprint = isFromHash
-      ? new BlueprintPromise(api, metadata, codeHash)
-      : new CodePromise(api, metadata, wasm && wasm.toU8a());
-
-    const constructor = metadata.findConstructor(constructorIndex);
-
-    const transformed = transformUserInput(api, constructor.args, argValues);
-    // const transformed = [new BN(100000)]
-
-    return constructor.args.length > 0
-      ? codeOrBlueprint.tx[constructor.method](options, ...transformed)
-      : codeOrBlueprint.tx[constructor.method](options);
-  } else {
-    throw new Error('Unknown error');
-  }
-}
 
 export function onInsantiateFromHash(
   { api, blockZeroHash }: ApiState,
@@ -109,7 +62,6 @@ export function onInstantiateFromCode(
           name: name.value,
           tags: [],
         });
-        // const contract = getInstanceFromEvents(events, api, metadata.value as Abi);
         onSuccess && onSuccess(contract, blueprint);
       }
     } catch (e) {
