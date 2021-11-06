@@ -4,11 +4,11 @@
 import BN from 'bn.js';
 import { jest } from '@jest/globals';
 import { randomAsHex } from '@polkadot/util-crypto';
+import { LOCAL_NODE } from '../../src/constants';
 import { getMockDb, mockDbUser } from './db';
 import { mockKeyring } from './keyring';
 import { getMockFormField } from './hooks';
 import type { DbState, ApiPromise, InstantiateProps, AbiConstructor } from 'types';
-import { LOCAL_NODE } from 'ui/contexts';
 
 export const mockDbState = {
   db: undefined,
