@@ -9,4 +9,4 @@ export * from './homepage';
 export * from './instantiate';
 export * from './message';
 export * from './sidebar';
-export * from './App';
+export * as default from './App';
