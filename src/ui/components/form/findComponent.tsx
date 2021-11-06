@@ -8,6 +8,7 @@ import { InputNumber } from './InputNumber';
 import { Bool } from './Bool';
 import type { TypeDef } from 'types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function findComponent(type: TypeDef): React.ComponentType<any> {
   switch (type.type) {
     case 'AccountId':
