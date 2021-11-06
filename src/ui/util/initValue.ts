@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+/* eslint-disable header/header */
+// Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Registry, TypeDef } from '@polkadot/types/types';

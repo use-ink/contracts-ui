@@ -18,8 +18,8 @@
     "prettier"
   ],
   "plugins": [
-    "header",
     "only-warn",
+    "header",
     "import",
     "@typescript-eslint",
     "eslint-plugin-react",
@@ -50,7 +50,7 @@
   },
   "rules": {
     "header/header": [2, "line", [
-      { "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/substrate-contracts-explorer authors & contributors" },
+      { "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/substrate-contracts-explorer authors & contributors", "template": " Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors" },
       " SPDX-License-Identifier: Apache-2.0"
     ], 2],
     "indent": "off",
