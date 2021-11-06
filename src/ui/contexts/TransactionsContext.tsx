@@ -1,4 +1,5 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer-v2 authors & contributors
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// SPDX-License-Identifier: Apache-2.0
 
 import React, { useState, useContext, useEffect } from 'react';
 import { useApi } from './ApiContext';

@@ -1,3 +1,4 @@
+/* eslint-disable header/header */
 // Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
@@ -26,8 +27,7 @@ export const useBlockTime = (
 
   return useMemo((): Result => {
     const a = apiOverride || api;
-    const blockTime = // Babe
-    (a?.consts.babe?.expectedBlockTime ||
+    const blockTime = (a?.consts.babe?.expectedBlockTime || // Babe
       // POW, eg. Kulupu
       a?.consts.difficulty?.targetBlockTime ||
       // Check against threshold to determine value validity
