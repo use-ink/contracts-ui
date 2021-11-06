@@ -14,7 +14,7 @@ import { ApiContext, DbContext } from '../src/ui/contexts';
 import { ApiState, DbState } from '../src/types';
 import { mockApiState, mockDbState } from './mocks';
 
-export type RenderedPlusStates<T> = [T, ApiState, DbState];
+type RenderedPlusStates<T> = [T, ApiState, DbState];
 
 export function customRender(
   ui: React.ReactElement,
@@ -51,10 +51,7 @@ export function customRenderHook<T, U>(
   return [renderHook<T, U>(callback, { wrapper, ...options }), apiState, dbState];
 }
 
-export function createWrapper<T>(
-  api?: Partial<ApiState>,
-  db?: Partial<DbState>
-): WrapperComponent<T> {
+function createWrapper<T>(api?: Partial<ApiState>, db?: Partial<DbState>): WrapperComponent<T> {
   const apiState = { ...mockApiState, ...api } as ApiState;
   const dbState = { ...mockDbState, ...db } as DbState;
 
