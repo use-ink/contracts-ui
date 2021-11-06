@@ -2,4 +2,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from './instantiate';
-export * from './getAddressFromEvents';
+export * from './getInstanceFromEvents';
+export * from './createInstantiateTx';
