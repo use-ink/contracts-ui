@@ -132,8 +132,6 @@ describe('DB Queries', (): void => {
   it('updateCodebundle', async () => {
     const updates = getMockDbUpdates(true);
 
-    // const originalDocument = await q.findCodeBundleById(db, codeBundle.id);
-
     await q.updateCodeBundle(db, testCodeBundles[0].id, updates);
 
     const updatedDocument = await q.findCodeBundleById(db, testCodeBundles[0].id);
@@ -146,8 +144,6 @@ describe('DB Queries', (): void => {
 
   it('updateContract', async () => {
     const updates = getMockDbUpdates();
-
-    // const originalDocument = await q.findCodeBundleById(db, codeBundle.id);
 
     await q.updateContract(db, testContracts[0].address, updates, false);
 

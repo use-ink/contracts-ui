@@ -6,15 +6,12 @@ import type { AbiConstructor } from '@polkadot/api-contract/types';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputNumber } from '../form/InputNumber';
-// import { InputBalance } from '../InputBalance';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
 import { useInstantiate } from 'ui/contexts';
-// import { createInstantiateTx } from 'api';
-// import { isNumber } from '@polkadot/util';
 
 export function Step2() {
   const state = useInstantiate();
@@ -31,18 +28,6 @@ export function Step2() {
     step: [, , stepBack],
     weight: { executionTime, isValid: isWeightValid, megaGas, setMegaGas, percentage },
   } = state;
-
-  // const onSubmit = useCallback(
-  //   (): void => {
-  //     try {
-  //       createTx();
-  //       stepForward();
-  //     } catch (e) {
-
-  //     }
-  //   },
-  //   [createTx, stepForward]
-  // )
 
   return (
     <>

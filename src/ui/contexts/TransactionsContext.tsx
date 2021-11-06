@@ -94,21 +94,6 @@ export function TransactionsContextProvider({
     }
   }
 
-  // const queueAndProcess = useCallback(
-  //   (options: TransactionOptions) => {
-  //     const tx = createTx(options);
-
-  //     setTxs(
-  //       [ ...txs, tx ],
-  //       () => {
-  //         process(tx.id);
-  //       }
-  //     );
-
-  //   },
-  //   []
-  // )
-
   function unqueue(id: number) {
     setTxs([...txs.filter(tx => tx.id !== id || tx.isProcessing || tx.isComplete)]);
   }

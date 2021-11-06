@@ -1,8 +1,6 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import { web3FromAddress, web3FromSource } from '@polkadot/extension-dapp';
-// import { stringToHex } from '@polkadot/util';
 import { keccakAsU8a } from '@polkadot/util-crypto';
 import { PrivateKey } from '@textile/crypto';
 import bcrypt from 'bcryptjs';

@@ -137,7 +137,7 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
         error = (e as Error).message;
       }
 
-      // we only want to want once, not spam
+      // we only want to warn once, not spam
       if (!warnList.includes(type)) {
         warnList.push(type);
         error && console.error(`params: initValue: ${error}`);

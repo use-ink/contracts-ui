@@ -222,26 +222,4 @@ export function transformUserInput(
 
     return value || null;
   });
-
-  // return messageArgs.map(({ type: { type } }, index) => {
-  //   const value = userInput[index];
-
-  //   if (type === 'bool') {
-  //     return value === 'true';
-  //   }
-
-  //   if (type.startsWith('Vec')) {
-  //     return value.split(',').map(subStr => {
-  //       const v = subStr.trim();
-  //       if (isNumeric(type)) {
-  //         return convertToNumber(v);
-  //       }
-  //       return v;
-  //     });
-  //   }
-  //   if (isNumeric(type)) {
-  //     return convertToNumber(value);
-  //   }
-  //   return value;
-  // });
 }
