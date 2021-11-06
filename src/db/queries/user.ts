@@ -56,19 +56,6 @@ export async function getUser(
   return Promise.reject(new Error('Unable to create user'));
 }
 
-// export async function updateUser (db: Database, identity: PrivateKey, { codeBundlesStarred, contractsStarred }: Partial<UserDocument>): Promise<string> {
-//   const user = await getUserCollection(db).findOne({ publicKey: publicKeyHex(identity) });
-
-//   if (user) {
-//     if (codeBundlesStarred) user.codeBundlesStarred = codeBundlesStarred;
-//     if (contractsStarred) user.contractsStarred = contractsStarred;
-
-//     return user.save();
-//   }
-
-//   return Promise.reject(new Error('Invalid user'));
-// }
-
 export async function starContract(
   db: Database,
   identity: PrivateKey | null,

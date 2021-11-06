@@ -87,15 +87,3 @@ export async function initRemote(db: DB, identity: PrivateKey, rpcUrl: string) {
     console.error(e);
   }
 }
-
-// export function createContractFromDocument (api: ApiPromise, document: ContractDocument): Contract | null {
-//   try {
-//     const contract = new ContractPromise(api, document.abi, document.address);
-
-//     return [contract, document];
-//   } catch (e) {
-//     console.error(e);
-
-//     return null;
-//   }
-// }

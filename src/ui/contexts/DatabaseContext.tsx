@@ -1,8 +1,6 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import { PrivateKey } from '@textile/crypto';
-// import { Database as DB } from '@textile/threaddb';
 import React, {
   HTMLAttributes,
   useCallback,

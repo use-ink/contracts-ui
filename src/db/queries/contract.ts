@@ -1,7 +1,6 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import { keyring } from '@polkadot/ui-keyring';
 import type { Database, PrivateKey } from '@textile/threaddb';
 import moment from 'moment';
 import { keyring } from '@polkadot/ui-keyring';

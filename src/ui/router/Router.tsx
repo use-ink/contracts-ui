@@ -7,7 +7,6 @@ import { AwaitApis } from '../components/AwaitApis';
 import { Homepage } from '../pages';
 import { RouteWithSubRoutes } from './RouteWithSubRoutes';
 import { RouteInterface } from 'types';
-// import { ApiContext, useApi } from 'ui/contexts';
 
 interface Props {
   routes: RouteInterface[];

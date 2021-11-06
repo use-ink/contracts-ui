@@ -39,7 +39,6 @@ export function InputFile({
   value: propsFile,
   isDisabled = false,
   isError,
-  // isSupplied,
   onChange,
   placeholder,
   ...props

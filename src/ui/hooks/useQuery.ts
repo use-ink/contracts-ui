@@ -33,11 +33,6 @@ export function useQuery<T>(
 ): UseQuery<T> {
   const { isDbReady } = useDatabase();
   const [state, setState] = useState<State<T>>(initialState);
-  // const [data, setData] = useState<T | null>(null);
-  // const [error, setError] = useState<React.ReactNode | null>(null);
-  // const [isValid, setIsValid] = useState(true);
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [updated, setUpdated] = useState(0);
 
   const fetch = useCallback((): void => {
     if (!isDbReady) return;

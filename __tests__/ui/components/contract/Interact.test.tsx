@@ -9,8 +9,6 @@ import { customRender, mockContract } from 'test-utils';
 import { InteractTab } from 'ui/components/contract/Interact';
 
 describe('Contract Interact Tab', () => {
-  // const mockAddr = '5CXkiX14Axfq3EoncpXduFVyhqRti1ogCF3iUYtBXRLNQpQt';
-
   const mockCall = jest.fn();
 
   test.skip('renders correctly with initial values', () => {
