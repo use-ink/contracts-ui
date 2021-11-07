@@ -16,6 +16,7 @@
     "test:coverage:all": "yarn test:all --collectCoverage",
     "test:ci": "yarn test:all",
     "lint": "yarn eslint --fix .",
+    "format": "yarn prettier --write .",
     "clean": "rm -rf dist",
     "deep-clean": "yarn clean && rm -rf node_modules",
     "regenerate": "yarn deep-clean && yarn && yarn start",
