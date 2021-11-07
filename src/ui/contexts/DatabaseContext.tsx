@@ -42,7 +42,7 @@ export function DatabaseContextProvider({
             await dropExpiredDocuments(db, blockZeroHash);
           }
 
-          setState({ ...state, db, user, identity, isDbReady: true });
+          setState(state => ({ ...state, db, user, identity, isDbReady: true }));
         })
         .catch(e => {
           console.error(e);
@@ -53,7 +53,7 @@ export function DatabaseContextProvider({
     const user = await getUser(state.db, state.identity);
     const myContracts = await findMyContracts(state.db, state.identity);
 
-    setState({ ...state, user, myContracts });
+    setState(state => ({ ...state, user, myContracts }));
   }, [state.db, state.identity]);
 
   useEffect((): void => {

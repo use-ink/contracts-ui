@@ -13,7 +13,7 @@ export function useTopContracts(): UseQuery<ContractDocument[]> {
 
   const query = useCallback((): Promise<ContractDocument[] | null> => {
     return findTopContracts(db);
-  }, []);
+  }, [db]);
 
   return useQuery(query);
 }

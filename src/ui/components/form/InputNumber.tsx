@@ -15,10 +15,13 @@ type Props = SimpleSpread<
   }
 >;
 
-export function InputNumber({ children, onChange: _onChange, value = BN_ZERO, ...props }: Props) {
-  const onChange = useCallback((value: string) => {
-    _onChange(new BN(value));
-  }, []);
+export function InputNumber({ children, onChange: _onChange, value = BN_ZERO }: Props) {
+  const onChange = useCallback(
+    (value: string) => {
+      _onChange(new BN(value));
+    },
+    [_onChange]
+  );
 
   return (
     <Input
@@ -26,7 +29,6 @@ export function InputNumber({ children, onChange: _onChange, value = BN_ZERO, ..
       onFocus={e => e.target.select()}
       type="number"
       value={value ? value.toString() : ''}
-      {...props}
     >
       {children}
     </Input>

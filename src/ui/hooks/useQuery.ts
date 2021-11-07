@@ -60,6 +60,8 @@ export function useQuery<T>(
 
         console.error(e);
       });
+    // validate updates too often
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDbReady, query]);
 
   const refresh = useCallback((): void => {

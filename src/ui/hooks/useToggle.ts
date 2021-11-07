@@ -12,7 +12,7 @@ export function useToggle(defaultValue = false, onToggle?: (isActive: boolean) =
 
   const toggle = useCallback((): void => {
     setActive(isActive => !isActive);
-  }, [isMounted]);
+  }, []);
 
   useEffect(() => {
     isMounted && !!onToggle && onToggle(isActive);

@@ -22,7 +22,7 @@ export function Input({
   isError = false,
   onChange: _onChange,
   value,
-  ...props
+  onFocus,
 }: Props) {
   function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
     _onChange(e.target.value);
@@ -32,7 +32,7 @@ export function Input({
     <div className={classes(isError && 'isError', className)}>
       <input
         onChange={onChange}
-        onFocus={props.onFocus}
+        onFocus={onFocus}
         type="text"
         value={value || ''}
         className={classes(
@@ -40,7 +40,6 @@ export function Input({
           isDisabled && 'dark:text-gray-500'
         )}
         {...(isDisabled ? { disabled: true } : {})}
-        {...props}
       />
       {children}
     </div>

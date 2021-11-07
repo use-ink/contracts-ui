@@ -41,7 +41,7 @@ export function FormField({
     if (isSuccess) return 'success';
 
     return null;
-  }, [isError, message]);
+  }, [isError, isSuccess, isWarning, message]);
 
   return (
     <div className={classes('form-field', className)}>

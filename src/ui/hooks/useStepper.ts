@@ -10,11 +10,11 @@ export function useStepper(initialValue = 0, maxValue = 2): UseStepper {
 
   const increment = useCallback((): void => {
     setValue(Math.min(maxValue, value + 1));
-  }, [value]);
+  }, [maxValue, value]);
 
   const decrement = useCallback((): void => {
-    setValue(Math.max(0, value - 1));
-  }, [value]);
+    setValue(Math.max(initialValue, value - 1));
+  }, [initialValue, value]);
 
   return [value, increment, decrement, setValue];
 }

@@ -11,7 +11,7 @@ export function HelpBox(): React.ReactElement | null {
 
   const onClose = useCallback(() => {
     setClosedHelpBox(true);
-  }, []);
+  }, [setClosedHelpBox]);
 
   if (closedHelpBox) {
     return null;

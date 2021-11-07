@@ -13,7 +13,7 @@ export function useStatistics(): UseQuery<DbStatistics> {
 
   const query = useCallback((): Promise<DbStatistics | null> => {
     return getStatistics(db);
-  }, []);
+  }, [db]);
 
   return useQuery(query);
 }

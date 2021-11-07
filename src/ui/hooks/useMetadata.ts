@@ -153,7 +153,7 @@ export function useMetadata(
 
   useEffect((): void => {
     setState(deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
-  }, [initialValue, isRequired, isWasmRequired]);
+  }, [api, initialValue, isRequired, isWasmRequired]);
 
   return {
     ...state,
