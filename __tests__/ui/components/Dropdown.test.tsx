@@ -1,4 +1,4 @@
-//[object Object]
+// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
@@ -8,7 +8,6 @@ import '@testing-library/jest-dom/extend-expect';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { DropdownOption, DropdownProps } from 'types';
 import { getNodeText } from 'test-utils';
-// import { getNodeText } from 'test-utils';
 
 interface ReturnType {
   foo: string;

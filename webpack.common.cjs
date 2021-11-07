@@ -6,6 +6,7 @@ const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const rules = [
   {
@@ -64,6 +65,10 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].bundle.css',
       chunkFilename: '[id].css',
+    }),
+    new ESLintPlugin({
+      extensions: ['ts', 'tsx', 'js', 'jsx', 'cjs'],
+      fix: true,
     }),
   ],
   module: { rules },

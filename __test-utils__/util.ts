@@ -13,6 +13,7 @@ export function getNodeText(node: React.ReactNode): string {
 
   if (node instanceof Array) return node.map(getNodeText).join('');
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
   return getNodeText((node as unknown as React.ReactElement).props.children);
 }
 

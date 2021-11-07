@@ -16,7 +16,7 @@ function customRender() {
 }
 
 describe('Instantiate Step 1', () => {
-  test.skip('renders correctly with initial values', async () => {
+  test.skip('renders correctly with initial values', () => {
     const [{ getByText }] = customRender();
 
     expect(getByText('Account')).toBeInTheDocument();
