@@ -13,8 +13,9 @@
     "test": "yarn test:all --testPathIgnorePatterns ./__tests__/db/**",
     "test:watch": "yarn test --watch",
     "test:coverage": "yarn test --collectCoverage --coveragePathIgnorePatterns ./src/db/**",
+    "test:coverage:all": "yarn test:all --collectCoverage",
     "test:ci": "yarn test:all",
-    "lint": "eslint --fix src/",
+    "lint": "yarn eslint --fix .",
     "clean": "rm -rf dist",
     "deep-clean": "yarn clean && rm -rf node_modules",
     "regenerate": "yarn deep-clean && yarn && yarn start",
@@ -88,9 +89,9 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.1-alpha-ee069065d-20211105",
+    "eslint-webpack-plugin": "^3.1.0",
     "faker": "^5.5.3",
     "file-loader": "^6.2.0",
     "html-loader": "^3.0.0",
@@ -119,7 +120,6 @@
     "last 2 Chrome versions"
   ],
   "lint-staged": {
-    "*.{js,cjs,ts,tsx}": "eslint --cache --fix",
-    "*.{js,cjs,ts,tsx,css,md,json}": "prettier --write"
+    "*.{js,cjs,ts,tsx,css,md,json}": "yarn prettier --write"
   }
 }

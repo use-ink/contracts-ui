@@ -18,7 +18,6 @@
     "prettier"
   ],
   "plugins": [
-    "only-warn",
     "header",
     "import",
     "@typescript-eslint",
@@ -37,10 +36,10 @@
     "react": {
       "version": "detect"
     },
-    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx", ".cjs", ".json", ".css"],
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".cjs", ".json", ".css"]
       },
       "typescript": {
         "alwaysTryTypes": true,
@@ -49,24 +48,32 @@
     }
   },
   "rules": {
-    "header/header": [2, "line", [
-      { "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/substrate-contracts-explorer authors & contributors", "template": " Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors" },
-      " SPDX-License-Identifier: Apache-2.0"
-    ], 2],
+    "header/header": [
+      2,
+      "line",
+      [
+        {
+          "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/substrate-contracts-explorer authors & contributors",
+          "template": " Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors"
+        },
+        " SPDX-License-Identifier: Apache-2.0"
+      ],
+      2
+    ],
     "indent": "off",
     "import/named": "off",
-    "import/no-unresolved": "warn",
+    "import/no-unresolved": "error",
     "import/default": "warn",
     "import/no-absolute-path": "error",
     "import/no-self-import": "error",
     "import/no-cycle": "error",
     "import/no-useless-path-segments": "warn",
-    "import/no-named-as-default": "warn",
-    "import/no-named-as-default-member": "warn",
-    "import/no-deprecated": "warn",
-    "import/no-mutable-exports": "warn",
-    "import/first": "warn",
-    "import/no-duplicates": "warn",
+    "import/no-named-as-default": "error",
+    "import/no-named-as-default-member": "error",
+    "import/no-deprecated": "error",
+    "import/no-mutable-exports": "error",
+    "import/first": "error",
+    "import/no-duplicates": "error",
     "import/order": "warn",
     "import/newline-after-import": "warn",
     "@typescript-eslint/restrict-template-expressions": "off",
