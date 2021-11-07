@@ -20,7 +20,7 @@ export function useFormField<T>(
     }
 
     return !validation.isValid;
-  }, [validation.isValid, isTouched.current]);
+  }, [validation.isValid]);
 
   const onChange = useCallback((value?: T) => {
     if (!isUndefined(value)) {
@@ -31,6 +31,8 @@ export function useFormField<T>(
 
   useEffect((): void => {
     setValidation(validate(value));
+    // validate updates too often
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return useMemo(
@@ -43,14 +45,6 @@ export function useFormField<T>(
       message: validation.message,
       isError,
     }),
-    [
-      value,
-      onChange,
-      isError,
-      isTouched.current,
-      validation.isValid,
-      validation.isWarning,
-      validation.message,
-    ]
+    [value, onChange, isError, validation.isValid, validation.isWarning, validation.message]
   );
 }

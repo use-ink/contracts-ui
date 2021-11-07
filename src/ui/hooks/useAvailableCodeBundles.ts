@@ -24,7 +24,7 @@ export function useAvailableCodeBundles(limit = 1): UseQuery<ReturnType> {
     const popular = (await findTopCodeBundles(db, identity, limit)).sort(byDate);
 
     return [owned, popular];
-  }, []);
+  }, [db, identity, limit]);
 
   return useQuery(query);
 }

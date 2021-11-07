@@ -47,7 +47,7 @@ export function Statistics(): React.ReactElement | null {
 
       console.error('Toggled code bundle star ' + id);
     },
-    []
+    [user]
   );
 
   return (

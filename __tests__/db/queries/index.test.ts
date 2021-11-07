@@ -1,10 +1,6 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/**
- */
-/* eslint-disable header/header */
-
 import { Database, PrivateKey } from '@textile/threaddb';
 import { getMockDbUsers, getMockCodeBundles, getMockContracts, getMockDbUpdates } from 'test-utils';
 import { initDb } from 'db/util/init';
@@ -16,7 +12,6 @@ import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
 describe('DB Queries', (): void => {
   let db: Database;
-  // let testIdentities: PrivateKey[];
 
   let testUsers: [UserDocument, PrivateKey][];
   let testUserIds: string[];

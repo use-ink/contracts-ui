@@ -17,18 +17,21 @@ type Props = SimpleSpread<
   }
 >;
 
-function InputBalanceBase({ children, value = BN_ZERO, onChange: _onChange, ...props }: Props) {
+function InputBalanceBase({ children, value = BN_ZERO, onChange: _onChange }: Props) {
   const { api, tokenSymbol } = useApi();
 
   const [stringValue, setStringValue] = useState(fromBalance(fromSats(api, value || BN_ZERO)));
 
-  const onChange = useCallback((value: string): void => {
-    setStringValue(value);
+  const onChange = useCallback(
+    (value: string): void => {
+      setStringValue(value);
 
-    const bn = toBalance(api, value);
+      const bn = toBalance(api, value);
 
-    _onChange(bn);
-  }, []);
+      _onChange(bn);
+    },
+    [_onChange, api]
+  );
 
   return (
     <>
@@ -38,7 +41,6 @@ function InputBalanceBase({ children, value = BN_ZERO, onChange: _onChange, ...p
           onFocus={e => e.target.select()}
           pattern="^\d*\.?\d*?$"
           value={stringValue}
-          {...props}
         >
           <div className="absolute inset-y-0 right-0 flex items-center">
             <label htmlFor="unit" className="sr-only">

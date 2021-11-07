@@ -29,7 +29,7 @@ export function Contracts(): React.ReactElement | null {
           .catch(console.error);
       };
     },
-    [toggleContractStar]
+    [refresh, refreshUserData, toggleContractStar, user]
   );
 
   if (isLoading) {

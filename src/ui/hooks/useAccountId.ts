@@ -17,7 +17,7 @@ export function useAccountId(initialValue: string | null = null): UseFormField<s
 
       return { isValid: true, message: null };
     },
-    [keyring?.accounts]
+    [keyring]
   );
 
   return useFormField<string | null>(

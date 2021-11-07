@@ -21,7 +21,7 @@ export function useContract(address: string): UseQuery<ReturnType> {
     return api && document
       ? [new Contract(api, new Abi(document.abi as AnyJson), address), document]
       : [null, null];
-  }, [api, address, findContractByAddress]);
+  }, [db, address, api]);
 
   return useQuery(query, result => !!result && !!result[0]);
 }

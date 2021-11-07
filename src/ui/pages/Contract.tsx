@@ -47,7 +47,7 @@ export function Contract() {
     if (!isLoading && (!isValid || !data || !data[0])) {
       history.replace('/');
     }
-  }, [data, isLoading, isValid]);
+  }, [data, history, isLoading, isValid]);
 
   if (!data || !data[0] || !data[1]) {
     return null;
@@ -78,31 +78,6 @@ export function Contract() {
           <MetadataTab abi={contract?.abi} />
           <InteractTab contract={contract} />
         </Tabs>
-        {/* {contract && (
-        <>
-          <div className="grid grid-cols-12 w-full">
-            <ul className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8">
-              <li className="mr-1">
-                <button
-                  onClick={() => setActive('metadata')}
-                  className={classes('tab', active === 'metadata' ? 'active' : '')}
-                >
-                  <BookOpenIcon />
-                  Metadata
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => setActive('interact')}
-                  className={classes('tab', active === 'interact' ? 'active' : '')}
-                >
-                  <PlayIcon />
-                  Interact
-                </button>
-              </li>
-            </ul>
-          </div>
-        </> */}
       </PageFull>
     </Loader>
   );

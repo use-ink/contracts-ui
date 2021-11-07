@@ -13,7 +13,7 @@ export function useMyCodeBundles(): UseQuery<MyCodeBundles> {
 
   const query = useCallback((): Promise<MyCodeBundles | null> => {
     return findMyCodeBundles(db, identity);
-  }, []);
+  }, [db, identity]);
 
   return useQuery(query);
 }

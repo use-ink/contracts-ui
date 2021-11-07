@@ -36,6 +36,9 @@ export const InteractTab = ({ contract }: Props) => {
       });
     }
     message.value = contract.abi.messages[0];
+    // clears call results when navigating to another contract page
+    // to do: storage for call results
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract.address]);
 
   if (!contract) return null;

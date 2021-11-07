@@ -28,7 +28,7 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
     }
 
     return [false, null];
-  }, [children, error, keyringStatus, status, isDbReady]);
+  }, [error, keyringStatus, status, isDbReady]);
 
   return (
     <Loader isLoading={isLoading} message={message}>

@@ -1,4 +1,6 @@
+/* eslint-disable header/header */
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { createRef, useCallback, useEffect, useState } from 'react';
@@ -33,15 +35,13 @@ function convertResult(result: ArrayBuffer): Uint8Array {
 }
 
 export function InputFile({
-  accept = '*/*',
   className = '',
   errorMessage,
   value: propsFile,
-  isDisabled = false,
   isError,
   onChange,
   placeholder,
-  ...props
+  onRemove,
 }: Props) {
   const ref = createRef<DropzoneRef>();
   const [file, setFile] = useState<FileState | undefined>(propsFile);
@@ -77,11 +77,11 @@ export function InputFile({
     [ref, onChange, propsFile]
   );
 
-  const onRemove = useCallback((): void => {
-    props.onRemove && props.onRemove();
+  const removeHandler = useCallback((): void => {
+    onRemove && onRemove();
 
     !propsFile && setFile(undefined);
-  }, [props.onRemove, propsFile]);
+  }, [onRemove, propsFile]);
 
   useEffect((): void => {
     if (file !== propsFile) {
@@ -107,7 +107,7 @@ export function InputFile({
         <XIcon
           className="w-5 h-5 mr-2 text-gray-500 justify-self-end cursor-pointer"
           aria-hidden="true"
-          onClick={onRemove}
+          onClick={removeHandler}
         />
       </div>
     </div>

@@ -117,6 +117,7 @@ export function InstantiateContextProvider({
 
       dbState.refreshUserData();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dbState.refreshUserData]
   );
 
@@ -126,12 +127,14 @@ export function InstantiateContextProvider({
     if (metadata.value?.info.contract.name && (!name.value || name.value === '')) {
       setName(metadata.value?.info.contract.name.toString());
     }
-  }, [metadata.value, name.value]);
+  }, [metadata.value, name.value, setName]);
 
   useEffect((): void => {
     if (codeHash && !codeBundleQuery.isValid) {
       history.replace('/instantiate/hash');
     }
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codeHash, codeBundleQuery.isValid]);
 
   const state: InstantiateState = {

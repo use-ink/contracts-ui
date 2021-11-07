@@ -32,7 +32,7 @@ export function useCodeBundle(codeHash?: string | null): UseQuery<ReturnType> {
     const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
 
     return [true, document, document ? new Abi(document.abi as AnyJson) : null];
-  }, [codeHash]);
+  }, [api.query.contracts, blockZeroHash, codeHash, db]);
 
   return useQuery(query, result => !!result && result[0]);
 }
