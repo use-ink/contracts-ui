@@ -15,12 +15,3 @@ ReactDOM.render(
   </HashRouter>,
   root
 );
-
-if (module.hot && process.env.NODE_ENV === 'development') {
-  module.hot.accept('./components/App', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-    const NewApp = require('./components/App');
-
-    ReactDOM.render(<NewApp />, document.getElementById('app-root'));
-  });
-}
