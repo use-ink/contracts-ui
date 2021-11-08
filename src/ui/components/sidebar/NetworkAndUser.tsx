@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState } from 'react';
-import { Button } from '../common/Button';
 import { Dropdown } from '../common/Dropdown';
-import { useDatabase, useApi } from 'ui/contexts';
+import { useApi } from 'ui/contexts';
 import { classes } from 'ui/util';
 
 const options = [
@@ -16,7 +15,6 @@ const options = [
 
 export function NetworkAndUser() {
   const { endpoint, status } = useApi();
-  const { user } = useDatabase();
   const [chain] = useState(endpoint);
 
   return (
@@ -32,11 +30,6 @@ export function NetworkAndUser() {
         options={options}
         value={chain}
       />
-      {!user?.creator && (
-        <Button className="connect-account" variant="primary">
-          Connect Account
-        </Button>
-      )}
     </div>
   );
 }
