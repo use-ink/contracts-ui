@@ -13,7 +13,7 @@ This version succeeds [Canvas UI](https://paritytech.github.io/canvas-ui/#/insta
 
 1. #### [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) running locally
 
-   In order to be able to run any Substrate node locally, you need to prepare your environment according to your setup and familiarity with the Rust programming language. [This tutorial](https://docs.substrate.io/tutorials/v3/ink-workshop/pt1/#prerequisites) is a good step by step guide to get started.
+   In order to run any Substrate node locally, you need to prepare your environment according to your setup and familiarity with the Rust programming language. [This tutorial](https://docs.substrate.io/tutorials/v3/ink-workshop/pt1/#prerequisites) is a good step by step guide to get started.
 
 2. #### Compiled ink! contract
 
@@ -33,9 +33,9 @@ In Substrate, contract code is stored only once on-chain and shared between inst
 
 #### Use Existing Contract Code
 
-If you need to re-instantiate a contract from a different owner or for other reasons, you can use the "Use Existing Contract Code" option. You will have to provide a code hash that already exists on-chain or choose one that was previously uploaded via our UI. If the code hash you provided was not uploaded via Substrate Contracts Explorer, you will also have to provide the `metadata.json` file in the next step.
+If you need to re-instantiate a contract from a different owner or for other reasons, you can use the "Use Existing Contract Code" option. You will have to provide a code hash that already exists on-chain or choose one that belongs to a code bundle previously uploaded via our UI. If the code hash is on-chain but the contract was not uploaded via Substrate Contracts Explorer, you will also have to provide the `metadata.json` file in the next step.
 
-The UI will interpret the contract metadata and provide a guided instantiation form.
+The UI will interpret the contract metadata and output a guided instantiation form.
 
 ### Interaction
 
@@ -54,3 +54,7 @@ Run dev server
 ```bash
 yarn start
 ```
+
+## Contributing to the project
+
+Please see our [Contribution Guidelines](https://github.com/paritytech/substrate-contracts-explorer/blob/master/CONTRIBUTING.md) before opening an issue or PR.
