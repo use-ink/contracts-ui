@@ -21,6 +21,7 @@ export function Input({
   isDisabled = false,
   isError = false,
   onChange: _onChange,
+  placeholder,
   value,
   onFocus,
 }: Props) {
@@ -39,6 +40,7 @@ export function Input({
           'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
           isDisabled && 'dark:text-gray-500'
         )}
+        placeholder={placeholder}
         {...(isDisabled ? { disabled: true } : {})}
       />
       {children}

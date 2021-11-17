@@ -15,18 +15,18 @@ export function createInstantiateTx(
     weight: { weight: gasLimit },
     endowment,
     metadata: { value: metadata },
+    isUsingSalt,
     salt,
   }: InstantiateState
 ): SubmittableExtrinsic<'promise'> | null {
   const isFromHash = !!codeHash;
-  const saltu8a = encodeSalt(salt.value);
+  const saltu8a = isUsingSalt ? encodeSalt(salt.value) : undefined;
 
   const options = {
     gasLimit,
     salt: saltu8a,
     value: endowment.value ? api.registry.createType('Balance', endowment.value) : undefined,
   };
-  console.log(options);
 
   const wasm = metadata?.info.source.wasm;
   const isValid = isFromHash || !!wasm;

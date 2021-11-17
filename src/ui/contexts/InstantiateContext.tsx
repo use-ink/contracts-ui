@@ -93,7 +93,7 @@ export function InstantiateContextProvider({
   const constructorIndex = useFormField(0);
   const endowment = useBalance(10000);
   const weight = useWeight();
-  const isUsingSalt = useToggle();
+  const isUsingSalt = useToggle(true);
   const salt = useFormField<string>(randomAsHex(), value => {
     if (!!value && isHex(value) && value.length === 66) {
       return { isValid: true };
