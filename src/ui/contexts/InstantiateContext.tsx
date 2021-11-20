@@ -61,7 +61,7 @@ export function InstantiateContextProvider({
   const apiState = useApi();
   const dbState = useDatabase();
 
-  const codeBundleQuery = useCodeBundle(codeHash || null);
+  const codeBundleQuery = useCodeBundle(codeHash);
 
   const codeBundle = codeBundleQuery.data;
   const isLoading = useMemo(

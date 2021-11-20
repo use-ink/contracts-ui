@@ -14,12 +14,12 @@ function isValidHash(input: OrFalsy<string>): boolean {
   return !!input && codeHashRegex.test(input);
 }
 
-export function useCodeBundle(codeHash: string | null): DbQuery<CodeBundle> {
+export function useCodeBundle(codeHash: string): DbQuery<CodeBundle> {
   const { api, blockZeroHash } = useApi();
   const { db } = useDatabase();
 
   const query = useCallback(async (): Promise<CodeBundle> => {
-    if (isValidHash(codeHash) && typeof codeHash === 'string') {
+    if (isValidHash(codeHash)) {
       const isOnChain = !(await api.query.contracts.codeStorage(codeHash)).isEmpty;
       const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
       return { document, isOnChain };
