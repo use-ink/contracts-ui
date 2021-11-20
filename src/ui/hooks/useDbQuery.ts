@@ -27,7 +27,7 @@ const initialState = {
   updated: 0,
 };
 
-export function useQuery<T>(
+export function useDbQuery<T>(
   query: () => Promise<T | null>,
   validate: ValidateFn<T> = value => !!value
 ): UseQuery<T> {

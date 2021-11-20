@@ -3,7 +3,7 @@
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { findTopContracts } from 'db/queries';
 
 import type { ContractDocument, UseQuery } from 'types';
@@ -15,5 +15,5 @@ export function useTopContracts(): UseQuery<ContractDocument[]> {
     return findTopContracts(db);
   }, [db]);
 
-  return useQuery(query);
+  return useDbQuery(query);
 }

@@ -3,7 +3,7 @@
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts/DatabaseContext';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { findContractByAddress } from 'db/queries';
 
 import { Abi, AnyJson, ContractDocument, ContractPromise as Contract, UseQuery } from 'types';
@@ -23,5 +23,5 @@ export function useContract(address: string): UseQuery<ReturnType> {
       : [null, null];
   }, [db, address, api]);
 
-  return useQuery(query, result => !!result && !!result[0]);
+  return useDbQuery(query, result => !!result && !!result[0]);
 }

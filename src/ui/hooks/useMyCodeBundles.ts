@@ -3,7 +3,7 @@
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { findMyCodeBundles } from 'db/queries';
 
 import type { MyCodeBundles, UseQuery } from 'types';
@@ -15,5 +15,5 @@ export function useMyCodeBundles(): UseQuery<MyCodeBundles> {
     return findMyCodeBundles(db, identity);
   }, [db, identity]);
 
-  return useQuery(query);
+  return useDbQuery(query);
 }

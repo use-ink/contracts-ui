@@ -4,7 +4,7 @@
 import { useCallback } from 'react';
 import { useApi } from '../contexts/ApiContext';
 import { useDatabase } from '../contexts/DatabaseContext';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { findCodeBundleByHash } from 'db/queries';
 
 import { Abi } from 'types';
@@ -34,5 +34,5 @@ export function useCodeBundle(codeHash?: string | null): UseQuery<ReturnType> {
     return [true, document, document ? new Abi(document.abi as AnyJson) : null];
   }, [api.query.contracts, blockZeroHash, codeHash, db]);
 
-  return useQuery(query, result => !!result && result[0]);
+  return useDbQuery(query, result => !!result && result[0]);
 }

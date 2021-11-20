@@ -4,7 +4,7 @@
 import moment from 'moment';
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { findOwnedCodeBundles, findTopCodeBundles } from 'db/queries';
 
 import type { CodeBundleDocument, UseQuery } from 'types';
@@ -26,5 +26,5 @@ export function useAvailableCodeBundles(limit = 1): UseQuery<ReturnType> {
     return [owned, popular];
   }, [db, identity, limit]);
 
-  return useQuery(query);
+  return useDbQuery(query);
 }

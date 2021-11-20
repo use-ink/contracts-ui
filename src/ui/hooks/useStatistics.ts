@@ -3,7 +3,7 @@
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { getStatistics } from 'db/queries';
 
 import type { DbStatistics, UseQuery } from 'types';
@@ -15,5 +15,5 @@ export function useStatistics(): UseQuery<DbStatistics> {
     return getStatistics(db);
   }, [db]);
 
-  return useQuery(query);
+  return useDbQuery(query);
 }

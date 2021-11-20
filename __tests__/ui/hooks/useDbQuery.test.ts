@@ -4,7 +4,7 @@
 import { act, RenderResult } from '@testing-library/react-hooks';
 import { jest } from '@jest/globals';
 import type { OrFalsy, OrNull, UseQuery } from 'types';
-import { useQuery } from 'ui/hooks/useQuery';
+import { useDbQuery } from 'ui/hooks/useDbQuery';
 import { customRenderHook, timeout } from 'test-utils';
 
 interface ReturnType {
@@ -64,7 +64,7 @@ afterEach(() => {
 });
 
 test('should initialize correctly', () => {
-  const [{ result }] = customRenderHook(() => useQuery(mockQuery(0)), {}, { isDbReady: true });
+  const [{ result }] = customRenderHook(() => useDbQuery(mockQuery(0)), {}, { isDbReady: true });
 
   expect(extractResult(result)).toStrictEqual({ data: null, isLoading: true, isValid: true });
 
@@ -73,7 +73,7 @@ test('should initialize correctly', () => {
 
 test('should fetch data after initial mount', async () => {
   const [{ rerender, result, waitForValueToChange }] = customRenderHook(
-    () => useQuery(mockQuery(0)),
+    () => useDbQuery(mockQuery(0)),
     {},
     { isDbReady: true }
   );
@@ -93,7 +93,7 @@ test('should fetch data after initial mount', async () => {
 
 test('should handle query errors', async () => {
   const [{ result, rerender, waitForNextUpdate }] = customRenderHook(
-    () => useQuery(mockQuery(2)),
+    () => useDbQuery(mockQuery(2)),
     {},
     { isDbReady: true }
   );
@@ -110,7 +110,7 @@ test('should refresh automatically when query is changed', async () => {
   let query = mockQuery(0);
 
   const [{ result, rerender, waitForValueToChange }] = customRenderHook(
-    () => useQuery(query),
+    () => useDbQuery(query),
     {},
     { isDbReady: true }
   );
@@ -146,7 +146,7 @@ test('should provide working manual refresh callback', async () => {
   canReturnValid = false;
 
   const [{ result, rerender, waitForNextUpdate, waitForValueToChange }] = customRenderHook(
-    () => useQuery(mockQuery(0)),
+    () => useDbQuery(mockQuery(0)),
     {},
     { isDbReady: true }
   );
@@ -181,7 +181,7 @@ test('should provide working manual refresh callback', async () => {
 
 test('accepts a custom validate function', async () => {
   const [{ result, rerender, waitForNextUpdate }] = customRenderHook(
-    () => useQuery(mockQuery(0), validate),
+    () => useDbQuery(mockQuery(0), validate),
     {},
     { isDbReady: true }
   );

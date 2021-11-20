@@ -3,7 +3,7 @@
 
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { findMyContracts } from 'db/queries';
 
 import type { MyContracts, UseQuery } from 'types';
@@ -15,5 +15,5 @@ export function useMyContracts(): UseQuery<MyContracts> {
     return findMyContracts(db, identity);
   }, [db, identity]);
 
-  return useQuery(query);
+  return useDbQuery(query);
 }
