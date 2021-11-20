@@ -6,12 +6,12 @@ import { useDatabase } from '../contexts/DatabaseContext';
 import { useDbQuery } from './useDbQuery';
 import { findContractByAddress } from 'db/queries';
 
-import { Abi, AnyJson, ContractDocument, ContractPromise as Contract, UseQuery } from 'types';
+import { Abi, AnyJson, ContractDocument, ContractPromise as Contract, DbQuery } from 'types';
 import { useApi } from 'ui/contexts';
 
 type ReturnType = [Contract | null, ContractDocument | null];
 
-export function useContract(address: string): UseQuery<ReturnType> {
+export function useContract(address: string): DbQuery<ReturnType> {
   const { api } = useApi();
   const { db } = useDatabase();
 

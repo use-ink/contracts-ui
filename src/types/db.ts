@@ -50,7 +50,7 @@ export interface ContractDocument extends Document {
   tags?: string[];
 }
 
-export interface UseQuery<T> {
+export interface DbQuery<T> {
   data: T | null;
   error: React.ReactNode | null;
   isLoading: boolean;
@@ -58,7 +58,10 @@ export interface UseQuery<T> {
   refresh: VoidFn;
   updated: number;
 }
-
+export type CodeBundle = {
+  document: CodeBundleDocument | null;
+  isOnChain: boolean;
+};
 export interface CodeBundleQuery {
   codeHash: string;
   blockZeroHash?: string | null;

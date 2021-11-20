@@ -17,8 +17,7 @@ export function LookUpCodeHash() {
   const [codeHash, setCodeHash] = useState<string | null>(null);
   const { data: searchResults } = useCodeBundleSearch(searchString);
   const { data, error, isLoading, isValid } = useCodeBundle(codeHash);
-  const [isOnChain, document] = !!data && !isLoading ? data : [false, null];
-
+  const { isOnChain, document } = data || { document: null, isOnChain: false };
   useEffect((): void => {
     if (codeHash !== searchString) {
       if (searchString === '' || isValidCodeHash(searchString)) {

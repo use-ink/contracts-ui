@@ -3,7 +3,7 @@
 
 import { act, RenderResult } from '@testing-library/react-hooks';
 import { jest } from '@jest/globals';
-import type { OrFalsy, OrNull, UseQuery } from 'types';
+import type { OrFalsy, OrNull, DbQuery } from 'types';
 import { useDbQuery } from 'ui/hooks/useDbQuery';
 import { customRenderHook, timeout } from 'test-utils';
 
@@ -42,8 +42,8 @@ function mockQuery(argument: number): () => Promise<OrNull<ReturnType>> {
 const consoleError = console.error;
 
 function extractResult(
-  result: RenderResult<UseQuery<ReturnType>>
-): Partial<Omit<UseQuery<ReturnType>, 'refresh' | 'updated'>> {
+  result: RenderResult<DbQuery<ReturnType>>
+): Partial<Omit<DbQuery<ReturnType>, 'refresh' | 'updated'>> {
   return {
     data: result.current.data,
     isLoading: result.current.isLoading,
@@ -51,7 +51,7 @@ function extractResult(
   };
 }
 
-function isUpdatedAccurate(result: RenderResult<UseQuery<ReturnType>>, gt = 0, lt = Date.now()) {
+function isUpdatedAccurate(result: RenderResult<DbQuery<ReturnType>>, gt = 0, lt = Date.now()) {
   return result.current.updated > gt && result.current.updated <= lt;
 }
 

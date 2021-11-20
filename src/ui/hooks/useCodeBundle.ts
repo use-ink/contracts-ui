@@ -7,32 +7,25 @@ import { useDatabase } from '../contexts/DatabaseContext';
 import { useDbQuery } from './useDbQuery';
 import { findCodeBundleByHash } from 'db/queries';
 
-import { Abi } from 'types';
-import type { AnyJson, CodeBundleDocument, UseQuery } from 'types';
+import type { CodeBundle, DbQuery, OrFalsy } from 'types';
 
-type ReturnType = [boolean, CodeBundleDocument | null, Abi | null];
+function isValidHash(input: OrFalsy<string>): boolean {
+  const codeHashRegex = /^0x[0-9a-fA-F]{64}$/;
+  return !!input && codeHashRegex.test(input);
+}
 
-const codeHashRegex = /^0x[0-9a-fA-F]{64}$/;
-
-export function useCodeBundle(codeHash?: string | null): UseQuery<ReturnType> {
+export function useCodeBundle(codeHash: string | null): DbQuery<CodeBundle> {
   const { api, blockZeroHash } = useApi();
   const { db } = useDatabase();
 
-  const query = useCallback(async (): Promise<ReturnType> => {
-    if (!codeHash || !codeHashRegex.test(codeHash)) {
-      return Promise.resolve([false, null, null]);
+  const query = useCallback(async (): Promise<CodeBundle> => {
+    if (isValidHash(codeHash) && typeof codeHash === 'string') {
+      const isOnChain = !(await api.query.contracts.codeStorage(codeHash)).isEmpty;
+      const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
+      return { document, isOnChain };
     }
-
-    const isOnChain = (await api.query.contracts.codeStorage(codeHash)).isSome;
-
-    if (!isOnChain) {
-      return [false, null, null];
-    }
-
-    const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
-
-    return [true, document, document ? new Abi(document.abi as AnyJson) : null];
+    return { document: null, isOnChain: false };
   }, [api.query.contracts, blockZeroHash, codeHash, db]);
 
-  return useDbQuery(query, result => !!result && result[0]);
+  return useDbQuery(query, result => !!result);
 }

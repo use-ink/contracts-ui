@@ -7,7 +7,7 @@ import { useDatabase } from '../contexts';
 import { useDbQuery } from './useDbQuery';
 import { findOwnedCodeBundles, findTopCodeBundles } from 'db/queries';
 
-import type { CodeBundleDocument, UseQuery } from 'types';
+import type { CodeBundleDocument, DbQuery } from 'types';
 
 type ReturnType = [CodeBundleDocument[], CodeBundleDocument[]];
 
@@ -15,7 +15,7 @@ function byDate(a: CodeBundleDocument, b: CodeBundleDocument): number {
   return moment(b.date).valueOf() - moment(a.date).valueOf();
 }
 
-export function useAvailableCodeBundles(limit = 1): UseQuery<ReturnType> {
+export function useAvailableCodeBundles(limit = 1): DbQuery<ReturnType> {
   const { db, identity } = useDatabase();
 
   const query = useCallback(async (): Promise<ReturnType> => {

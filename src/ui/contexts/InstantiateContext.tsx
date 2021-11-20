@@ -61,9 +61,9 @@ export function InstantiateContextProvider({
   const apiState = useApi();
   const dbState = useDatabase();
 
-  const codeBundleQuery = useCodeBundle(codeHash || undefined);
+  const codeBundleQuery = useCodeBundle(codeHash || null);
 
-  const [isOnChain, codeBundle] = codeBundleQuery.data || [false, null];
+  const codeBundle = codeBundleQuery.data;
   const isLoading = useMemo(
     () => !!codeHash && codeBundleQuery.isLoading,
     [codeHash, codeBundleQuery.isLoading]
@@ -72,7 +72,10 @@ export function InstantiateContextProvider({
   const step = useStepper();
   const [, , , setStep] = step;
 
-  const isUsingStoredMetadata = useMemo((): boolean => !!codeBundle?.abi, [codeBundle?.abi]);
+  const isUsingStoredMetadata = useMemo(
+    (): boolean => !!codeBundle?.document,
+    [codeBundle?.document]
+  );
 
   const accountId = useAccountId();
 
@@ -84,9 +87,9 @@ export function InstantiateContextProvider({
 
   console.log(!codeBundle);
 
-  const metadata = useMetadata((codeBundle?.abi as AnyJson) || null, {
+  const metadata = useMetadata((codeBundle?.document?.abi as AnyJson) || null, {
     isRequired: true,
-    isWasmRequired: !isOnChain,
+    isWasmRequired: !codeBundle,
     onChange: setMetadataFile,
   });
 

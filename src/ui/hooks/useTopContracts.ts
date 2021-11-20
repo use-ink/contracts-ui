@@ -6,9 +6,9 @@ import { useDatabase } from '../contexts';
 import { useDbQuery } from './useDbQuery';
 import { findTopContracts } from 'db/queries';
 
-import type { ContractDocument, UseQuery } from 'types';
+import type { ContractDocument, DbQuery } from 'types';
 
-export function useTopContracts(): UseQuery<ContractDocument[]> {
+export function useTopContracts(): DbQuery<ContractDocument[]> {
   const { db } = useDatabase();
 
   const query = useCallback((): Promise<ContractDocument[] | null> => {

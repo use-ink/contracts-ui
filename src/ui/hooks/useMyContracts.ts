@@ -6,9 +6,9 @@ import { useDatabase } from '../contexts';
 import { useDbQuery } from './useDbQuery';
 import { findMyContracts } from 'db/queries';
 
-import type { MyContracts, UseQuery } from 'types';
+import type { MyContracts, DbQuery } from 'types';
 
-export function useMyContracts(): UseQuery<MyContracts> {
+export function useMyContracts(): DbQuery<MyContracts> {
   const { db, identity } = useDatabase();
 
   const query = useCallback((): Promise<MyContracts | null> => {

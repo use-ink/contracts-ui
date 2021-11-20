@@ -6,9 +6,9 @@ import { useDatabase } from '../contexts';
 import { useDbQuery } from './useDbQuery';
 import { getStatistics } from 'db/queries';
 
-import type { DbStatistics, UseQuery } from 'types';
+import type { DbStatistics, DbQuery } from 'types';
 
-export function useStatistics(): UseQuery<DbStatistics> {
+export function useStatistics(): DbQuery<DbStatistics> {
   const { db } = useDatabase();
 
   const query = useCallback((): Promise<DbStatistics | null> => {
