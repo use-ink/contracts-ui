@@ -5,8 +5,8 @@ import React from 'react';
 import { BN_ZERO, formatBalance, formatNumber } from '@polkadot/util';
 import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
-import { isResultValid, useApi, useInstantiate } from 'ui/contexts';
-import { useQueueTx } from 'ui/hooks/useQueueTx';
+import { useApi, useInstantiate } from 'ui/contexts';
+// import { useQueueTx } from 'ui/hooks/useQueueTx';
 import { fromSats } from 'api';
 import { truncate } from 'ui/util';
 
@@ -15,27 +15,18 @@ export function Step3() {
   const instantiateState = useInstantiate();
 
   const {
-    accountId,
-    codeHash,
-    endowment,
-    metadata,
-    weight,
-    name,
-    onInstantiate,
-    onError,
-    onUnFinalize,
-    tx,
+    data: { accountId, codeHash, endowment, metadata, weight, name },
   } = instantiateState;
 
-  const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
-    tx,
-    accountId.value,
-    onInstantiate,
-    onError,
-    isResultValid
-  );
+  // const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
+  //   tx,
+  //   accountId.value,
+  //   onInstantiate,
+  //   onError,
+  //   isResultValid
+  // );
 
-  const displayHash = codeHash || metadata.value?.info.source.wasmHash.toHex() || null;
+  const displayHash = codeHash || metadata?.info.source.wasmHash.toHex() || null;
 
   return (
     <>
@@ -43,25 +34,25 @@ export function Step3() {
         <div className="field full">
           <p className="key">Account</p>
           <div className="value">
-            <Account className="p-0" value={accountId.value} />
+            <Account className="p-0" value={accountId} />
           </div>
         </div>
 
         <div className="field full">
           <p className="key">Name</p>
-          <p className="value">{name.value}</p>
+          <p className="value">{name}</p>
         </div>
 
         <div className="field">
           <p className="key">Endowment</p>
           <p className="value">
-            {formatBalance(fromSats(api, endowment?.value || BN_ZERO), { forceUnit: '-' })}
+            {formatBalance(fromSats(api, endowment || BN_ZERO), { forceUnit: '-' })}
           </p>
         </div>
 
         <div className="field">
           <p className="key">Weight</p>
-          <p className="value">{formatNumber(weight.weight)}</p>
+          <p className="value">{formatNumber(weight)}</p>
         </div>
 
         {displayHash && (
@@ -71,22 +62,22 @@ export function Step3() {
           </div>
         )}
 
-        {tx?.args[3] && (
+        {/* {tx?.args[3] && (
           <div className="field">
             <p className="key">Data</p>
             <p className="value">{tx?.args[3].toHex()}</p>
           </div>
-        )}
+        )} */}
       </div>
       <Buttons>
-        <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
+        {/* <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
           Upload and Instantiate
-        </Button>
+        </Button> */}
 
         <Button
           onClick={(): void => {
-            onCancel();
-            onUnFinalize && onUnFinalize();
+            // onCancel();
+            // onUnFinalize && onUnFinalize();
           }}
         >
           Go Back

@@ -2,25 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type {
-  AbiConstructor,
+  Abi,
   ApiPromise,
-  BlueprintPromise,
+  // BlueprintPromise,
   BlueprintSubmittableResult,
   CodeSubmittableResult,
-  ContractPromise,
+  // ContractPromise,
   Keyring,
   SubmittableExtrinsic,
   SubmittableResult,
+  VoidFn,
 } from '../substrate';
-import type {
-  UseBalance,
-  UseFormField,
-  UseMetadata,
-  UseStepper,
-  UseToggle,
-  UseWeight,
-} from './hooks';
-import type { FileState, UseState } from './util';
+// import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
+import type { BN } from './util';
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
@@ -54,29 +48,29 @@ export interface ChainProperties {
 export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;
 export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'>) => Promise<void>;
 
+export interface InstantiateData {
+  accountId?: string;
+  argValues?: Record<string, unknown>;
+  endowment: BN;
+  metadata?: Abi;
+  name: string;
+  constructorIndex: number;
+  salt?: string;
+  weight: BN;
+  codeHash?: string;
+}
 export interface InstantiateState {
-  accountId: UseFormField<string | null>;
-  argValues: UseState<Record<string, unknown>>;
-  codeHash?: string | null;
-  constructorIndex: UseFormField<number>;
-  deployConstructor: AbiConstructor | null;
-  endowment: UseBalance;
-  isLoading: boolean;
-  isUsingSalt: UseToggle;
-  isUsingStoredMetadata: boolean;
-  metadata: UseMetadata;
-  metadataFile: UseState<FileState | undefined>;
-  name: UseFormField<string>;
-  onError: () => void;
-  onFinalize?: () => void;
-  onUnFinalize?: () => void;
-  onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
-  onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
-  salt: UseFormField<string>;
-  step: UseStepper;
-  weight: UseWeight;
-  tx: SubmittableExtrinsic<'promise'> | null;
-  txError: string | null;
+  data: InstantiateData;
+  setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
+  // onError: () => void;
+  // onFinalize?: () => void;
+  // onUnFinalize?: () => void;
+  // onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
+  currentStep: number;
+  stepForward?: VoidFn;
+  stepBackward?: VoidFn;
+  // tx: SubmittableExtrinsic<'promise'> | null;
+  // txError: string | null;
 }
 
 export type InstantiateProps = InstantiateState;

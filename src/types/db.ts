@@ -4,7 +4,7 @@
 import React from 'react';
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
-import type { VoidFn } from './substrate';
+import type { VoidFn, AnyJson } from './substrate';
 
 export type { Collection, Database, PrivateKey };
 
@@ -22,7 +22,7 @@ export interface UserDocument extends Document {
 }
 
 export interface CodeBundleDocument extends Document {
-  abi?: Record<string, unknown> | null;
+  abi?: AnyJson;
   blockZeroHash?: string;
   codeHash: string;
   creator: string;
@@ -37,7 +37,7 @@ export interface CodeBundleDocument extends Document {
 }
 
 export interface ContractDocument extends Document {
-  abi: Record<string, unknown>;
+  abi: AnyJson;
   address: string;
   blockZeroHash?: string;
   codeHash: string;

@@ -12,7 +12,7 @@ import { ResultsOutput } from './ResultsOutput';
 import { call, convertToNumber, createMessageOptions } from 'api';
 import { useApi } from 'ui/contexts';
 import { contractCallReducer, initialState } from 'ui/reducers';
-import { AbiMessage, ContractPromise } from 'types';
+import { ContractPromise } from 'types';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useFormField } from 'ui/hooks/useFormField';
 import { useArgValues } from 'ui/hooks/useArgValues';
@@ -87,7 +87,7 @@ export const InteractTab = ({ contract }: Props) => {
                 endowment: convertToNumber(endowment.trim()),
                 gasLimit: 155852802980,
                 argValues,
-                message: message.value as AbiMessage,
+                message: message.value,
                 keyringPair: accountId.value ? keyring?.getPair(accountId.value) : undefined,
                 dispatch,
               })

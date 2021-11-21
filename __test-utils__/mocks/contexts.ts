@@ -3,12 +3,10 @@
 
 import BN from 'bn.js';
 import { jest } from '@jest/globals';
-import { randomAsHex } from '@polkadot/util-crypto';
 import { LOCAL_NODE } from '../../src/constants';
 import { getMockDb, mockDbUser } from './db';
 import { mockKeyring } from './keyring';
-import { getMockFormField } from './hooks';
-import type { DbState, ApiPromise, InstantiateProps, AbiConstructor } from 'types';
+import type { DbState, ApiPromise, InstantiateProps } from 'types';
 
 export const mockDbState = {
   db: undefined,
@@ -46,47 +44,19 @@ export const mockApiState = {
 
 export function getMockInstantiateState(): InstantiateProps {
   return {
-    accountId: getMockFormField<string | null>(
-      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      true
-    ),
-    argValues: [{ initValue: 'true' }, jest.fn()],
-    codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-    constructorIndex: getMockFormField(0),
-    deployConstructor: {} as AbiConstructor,
-    endowment: { ...getMockFormField<BN | null | undefined>(new BN(10000).mul(new BN(10e12))) },
-    isLoading: false,
-    isUsingSalt: [false, jest.fn(), jest.fn()],
-    isUsingStoredMetadata: false,
-    metadata: {
-      isError: false,
-      isSupplied: false,
-      isValid: false,
-      message: null,
-      name: '',
-      source: null,
-      value: null,
-      onChange: jest.fn(),
-      onRemove: jest.fn(),
-    },
-    metadataFile: [undefined, jest.fn()],
-    name: getMockFormField('flipper', true),
-    onInstantiate: jest.fn(),
-    onError: jest.fn(),
-    onSuccess: jest.fn(),
-    salt: getMockFormField<string>(randomAsHex(), true),
-    step: [0, jest.fn(), jest.fn(), jest.fn()],
-    weight: {
-      executionTime: 0,
-      isEmpty: false,
-      isValid: true,
-      megaGas: new BN(0),
-      percentage: 0,
-      setIsEmpty: jest.fn(),
-      setMegaGas: jest.fn(),
+    data: {
+      accountId: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      argValues: { initValue: 'true' },
+      codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
+      constructorIndex: 0,
+      endowment: new BN(10000),
       weight: new BN(0),
+      name: 'flipper',
     },
-    tx: null,
-    txError: null,
+
+    // onInstantiate: jest.fn(),
+    // onError: jest.fn(),
+    // onSuccess: jest.fn(),
+    currentStep: 0,
   };
 }

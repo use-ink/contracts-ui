@@ -14,26 +14,26 @@ import { createContract } from 'db';
 export function onInsantiateFromHash(
   { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
-  { accountId, codeHash, name, onSuccess }: InstantiateState
+  { data: { accountId, codeHash, name } }: InstantiateState
 ): OnInstantiateSuccess$Hash {
   return async function ({ contract, dispatchError, status }): Promise<void> {
     if (dispatchError) {
       handleDispatchError(dispatchError, api);
     }
 
-    if (accountId.value && codeHash && contract && (status.isInBlock || status.isFinalized)) {
+    if (accountId && codeHash && contract && (status.isInBlock || status.isFinalized)) {
       await createContract(db, identity, {
-        abi: contract.abi.json as Record<string, unknown>,
+        abi: contract.abi.json,
         address: contract.address.toString(),
-        creator: accountId.value,
+        creator: accountId,
         blockZeroHash: blockZeroHash || undefined,
         codeHash,
         genesisHash: api?.genesisHash.toString(),
-        name: name.value,
+        name: name,
         tags: [],
       });
 
-      onSuccess && onSuccess(contract);
+      // onSuccess && onSuccess(contract);
     }
   };
 }
@@ -41,7 +41,7 @@ export function onInsantiateFromHash(
 export function onInstantiateFromCode(
   { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
-  { accountId, name, onSuccess }: InstantiateState
+  { data: { accountId, name } }: InstantiateState
 ): OnInstantiateSuccess$Code {
   return async function (result): Promise<void> {
     try {
@@ -51,18 +51,18 @@ export function onInstantiateFromCode(
         handleDispatchError(dispatchError, api);
       }
 
-      if (accountId.value && contract && (status.isInBlock || status.isFinalized)) {
+      if (accountId && contract && (status.isInBlock || status.isFinalized)) {
         await createContract(db, identity, {
-          abi: contract.abi.json as Record<string, unknown>,
+          abi: contract.abi.json,
           address: contract.address.toString(),
           blockZeroHash: blockZeroHash || undefined,
-          creator: accountId.value,
+          creator: accountId,
           codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
           genesisHash: api?.genesisHash.toString(),
-          name: name.value,
+          name: name,
           tags: [],
         });
-        onSuccess && onSuccess(contract, blueprint);
+        // onSuccess && onSuccess(contract, blueprint);
       }
     } catch (e) {
       console.error(e);

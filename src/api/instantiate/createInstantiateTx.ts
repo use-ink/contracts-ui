@@ -4,27 +4,27 @@
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { isNumber } from '@polkadot/util';
 import { encodeSalt, transformUserInput } from '../util';
-import type { ApiPromise, InstantiateState, SubmittableExtrinsic } from 'types';
+import type { ApiPromise, InstantiateData, SubmittableExtrinsic } from 'types';
 
 export function createInstantiateTx(
   api: ApiPromise,
   {
-    argValues: [argValues],
+    argValues,
     codeHash,
-    constructorIndex: { value: constructorIndex },
-    weight: { weight: gasLimit },
+    constructorIndex,
+    weight: gasLimit,
     endowment,
-    metadata: { value: metadata },
+    metadata,
     salt,
-  }: InstantiateState
+  }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
   const isFromHash = !!codeHash;
-  const saltu8a = encodeSalt(salt.value);
+  const saltu8a = encodeSalt(salt);
 
   const options = {
     gasLimit,
     salt: saltu8a,
-    value: endowment.value ? api.registry.createType('Balance', endowment.value) : undefined,
+    value: endowment ? api.registry.createType('Balance', endowment) : undefined,
   };
   console.log(options);
 
