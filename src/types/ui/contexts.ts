@@ -4,10 +4,10 @@
 import type {
   Abi,
   ApiPromise,
-  // BlueprintPromise,
+  BlueprintPromise,
   BlueprintSubmittableResult,
   CodeSubmittableResult,
-  // ContractPromise,
+  ContractPromise,
   Keyring,
   SubmittableExtrinsic,
   SubmittableResult,
@@ -62,14 +62,16 @@ export interface InstantiateData {
 export interface InstantiateState {
   data: InstantiateData;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
-  // onError: () => void;
-  // onFinalize?: () => void;
-  // onUnFinalize?: () => void;
-  // onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
+  onError: () => void;
+  onFinalize?: (data: Partial<InstantiateData>) => void;
+  onUnFinalize?: () => void;
+  onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
+  onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
   currentStep: number;
   stepForward?: VoidFn;
   stepBackward?: VoidFn;
-  // tx: SubmittableExtrinsic<'promise'> | null;
+  setStep?: React.Dispatch<number>;
+  tx: SubmittableExtrinsic<'promise'> | null;
   // txError: string | null;
 }
 

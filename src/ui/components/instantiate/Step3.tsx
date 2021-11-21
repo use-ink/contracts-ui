@@ -2,32 +2,31 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { BN_ZERO, formatBalance, formatNumber } from '@polkadot/util';
+import { formatBalance, formatNumber } from '@polkadot/util';
+import { useParams } from 'react-router';
 import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
-import { useApi, useInstantiate } from 'ui/contexts';
-// import { useQueueTx } from 'ui/hooks/useQueueTx';
+import { useApi, useInstantiate, isResultValid } from 'ui/contexts';
+import { useQueueTx } from 'ui/hooks/useQueueTx';
+
 import { fromSats } from 'api';
 import { truncate } from 'ui/util';
 
 export function Step3() {
-  const { api } = useApi();
-  const instantiateState = useInstantiate();
-
-  const {
-    data: { accountId, codeHash, endowment, metadata, weight, name },
-    currentStep,
-  } = instantiateState;
-
-  // const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
-  //   tx,
-  //   accountId.value,
-  //   onInstantiate,
-  //   onError,
-  //   isResultValid
-  // );
+  const apiState = useApi();
+  const { codeHash } = useParams<{ codeHash: string }>();
+  const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
+  const { accountId, endowment, metadata, weight, name } = data;
 
   const displayHash = codeHash || metadata?.info.source.wasmHash.toHex() || null;
+
+  const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
+    tx,
+    data.accountId,
+    onInstantiate,
+    onError,
+    isResultValid
+  );
 
   if (currentStep !== 3) return null;
 
@@ -49,7 +48,7 @@ export function Step3() {
         <div className="field">
           <p className="key">Endowment</p>
           <p className="value">
-            {formatBalance(fromSats(api, endowment || BN_ZERO), { forceUnit: '-' })}
+            {formatBalance(fromSats(apiState.api, endowment), { forceUnit: '-' })}
           </p>
         </div>
 
@@ -65,22 +64,22 @@ export function Step3() {
           </div>
         )}
 
-        {/* {tx?.args[3] && (
+        {tx?.args[3] && (
           <div className="field">
             <p className="key">Data</p>
             <p className="value">{tx?.args[3].toHex()}</p>
           </div>
-        )} */}
+        )}
       </div>
       <Buttons>
-        {/* <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
+        <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
           Upload and Instantiate
-        </Button> */}
+        </Button>
 
         <Button
           onClick={(): void => {
-            // onCancel();
-            // onUnFinalize && onUnFinalize();
+            onCancel();
+            onUnFinalize && onUnFinalize();
           }}
         >
           Go Back

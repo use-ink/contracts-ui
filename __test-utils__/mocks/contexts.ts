@@ -6,7 +6,7 @@ import { jest } from '@jest/globals';
 import { LOCAL_NODE } from '../../src/constants';
 import { getMockDb, mockDbUser } from './db';
 import { mockKeyring } from './keyring';
-import type { DbState, ApiPromise, InstantiateProps } from 'types';
+import type { DbState, ApiPromise, InstantiateProps, ApiState } from 'types';
 
 export const mockDbState = {
   db: undefined,
@@ -40,7 +40,7 @@ export const mockApiState = {
   keyring: mockKeyring,
   keyringStatus: 'READY',
   status: 'READY',
-} as unknown as CanvasState;
+} as unknown as ApiState;
 
 export const mockInstantiateState: InstantiateProps = {
   data: {
@@ -52,9 +52,9 @@ export const mockInstantiateState: InstantiateProps = {
     weight: new BN(0),
     name: 'flipper',
   },
-
-  // onInstantiate: jest.fn(),
-  // onError: jest.fn(),
-  // onSuccess: jest.fn(),
+  onSuccess: jest.fn(),
   currentStep: 1,
+  tx: null,
+  onError: jest.fn(),
+  onInstantiate: jest.fn(),
 };

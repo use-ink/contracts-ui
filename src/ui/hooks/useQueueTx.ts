@@ -40,8 +40,7 @@ export function useQueueTx(
       setTxId(newId);
       txIdRef.current = newId;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [accountId, extrinsic, isValid, onError, onSuccess, queue, txId]);
 
   return [onSubmit, onCancel, !isNull(txId), isProcessing];
 }

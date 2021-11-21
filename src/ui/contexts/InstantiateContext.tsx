@@ -1,105 +1,116 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState, useContext } from 'react';
-// import { useHistory, useParams } from 'react-router';
-
+import React, { useState, useContext, useCallback } from 'react';
+import { useHistory, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';
-// import { useApi } from './ApiContext';
-// import { useDatabase } from './DatabaseContext';
-// import { createInstantiateTx, onInsantiateFromHash, onInstantiateFromCode } from 'api/instantiate';
 import {
-  // BlueprintPromise,
-  // ContractPromise,
   InstantiateProps,
   InstantiateState,
-  // SubmittableExtrinsic,
-  // OnInstantiateSuccess$Code,
-  // OnInstantiateSuccess$Hash,
   CodeSubmittableResult,
   BlueprintSubmittableResult,
   InstantiateData,
+  ContractPromise,
+  BlueprintPromise,
+  SubmittableExtrinsic,
+  OnInstantiateSuccess$Code,
+  OnInstantiateSuccess$Hash,
 } from 'types';
-
 import { useStepper } from 'ui/hooks/useStepper';
+import { useDatabase } from 'ui/contexts/DatabaseContext';
+import { onInsantiateFromHash, onInstantiateFromCode, createInstantiateTx, NOOP } from 'api';
+import { useApi } from 'ui/contexts/ApiContext';
 
-// type TxState = [
-//   SubmittableExtrinsic<'promise'> | null,
-//   OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash,
-//   string | null
-// ];
+type TxState = [
+  SubmittableExtrinsic<'promise'> | null,
+  OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash,
+  string | null
+];
 
-// const NOOP = () => Promise.resolve();
-
-export function isResultValid({
-  contract,
-}: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
-  return !!contract;
-}
-const initialFormState: InstantiateData = {
+const initialData: InstantiateData = {
   constructorIndex: 0,
   endowment: BN_THOUSAND,
   name: '',
   weight: BN_THOUSAND,
 };
 const initialState: InstantiateState = {
-  data: initialFormState,
+  data: initialData,
   currentStep: 1,
+  tx: null,
+  onError: NOOP,
+  onSuccess: NOOP,
+  onInstantiate: () => Promise.resolve(),
 };
+const InstantiateContext = React.createContext(initialState);
 
-export const InstantiateContext = React.createContext(initialState);
+export function isResultValid({
+  contract,
+}: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
+  return !!contract;
+}
 
 export function InstantiateContextProvider({
   children,
 }: React.PropsWithChildren<Partial<InstantiateProps>>) {
-  // const history = useHistory();
-  // const { codeHash } = useParams<{ codeHash: string }>();
-  // const apiState = useApi();
-  // const dbState = useDatabase();
-  const [currentStep, stepForward, stepBackward] = useStepper(initialState.currentStep);
-  // const [, , , setStep] = step;
+  const history = useHistory();
+  const dbState = useDatabase();
+  const apiState = useApi();
+  const NOOP = () => Promise.resolve();
+  const { codeHash } = useParams<{ codeHash: string }>();
+  const [currentStep, stepForward, stepBackward, setStep] = useStepper(initialState.currentStep);
 
-  const [data, setData] = useState<InstantiateData>(initialFormState);
-  // const [[tx, , txError], setTx] = useState<TxState>([null, NOOP, null]);
+  const [data, setData] = useState<InstantiateData>(initialState.data);
+  const [[tx, onInstantiate], setTx] = useState<TxState>([null, NOOP, null]);
 
-  // const onSuccess = useCallback(
-  //   (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
-  //     history.push(`/contract/${contract.address}`);
+  const onSuccess = useCallback(
+    (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
+      history.push(`/contract/${contract.address}`);
 
-  //     dbState.refreshUserData();
-  //   },
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   [dbState.refreshUserData]
-  // );
+      dbState.refreshUserData();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dbState.refreshUserData]
+  );
 
-  // function onFinalize() {
-  //   try {
-  //     const tx = createInstantiateTx(apiState.api, data);
+  const onFinalize = (formData: Partial<InstantiateData>) => {
+    const newData = { ...data, ...formData };
+    try {
+      const tx = createInstantiateTx(apiState.api, newData);
 
-  //     const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(
-  //       apiState,
-  //       dbState,
-  //       data
-  //     );
+      const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(
+        apiState,
+        dbState,
+        data,
+        onSuccess
+      );
+      setTx([tx, onInstantiate, null]);
+      setData(newData);
+      stepForward();
+    } catch (e) {
+      console.log(e);
 
-  //     setTx([tx, onInstantiate, null]);
-  //     setStep(FINALIZE);
-  //   } catch (e) {
-  //     setTx([null, NOOP, 'Error creating transaction']);
-  //   }
-  // }
+      setTx([null, NOOP, 'Error creating transaction']);
+    }
+  };
 
-  // function onUnFinalize() {
-  //   setTx([null, NOOP, null]);
-  //   setStep(DEPLOYMENT_INFO);
-  // }
+  function onUnFinalize() {
+    setTx([null, NOOP, null]);
+    setStep(2);
+  }
 
   const value: InstantiateState = {
     data,
     setData,
     currentStep,
+    setStep,
     stepForward,
     stepBackward,
+    onSuccess,
+    onUnFinalize,
+    onFinalize,
+    tx,
+    onInstantiate,
+    onError: NOOP,
   };
 
   return <InstantiateContext.Provider value={value}>{children}</InstantiateContext.Provider>;

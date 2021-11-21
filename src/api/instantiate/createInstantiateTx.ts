@@ -18,7 +18,6 @@ export function createInstantiateTx(
     salt,
   }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
-  const isFromHash = !!codeHash;
   const saltu8a = encodeSalt(salt);
 
   const options = {
@@ -26,13 +25,12 @@ export function createInstantiateTx(
     salt: saltu8a,
     value: endowment ? api.registry.createType('Balance', endowment) : undefined,
   };
-  console.log(options);
 
   const wasm = metadata?.info.source.wasm;
-  const isValid = isFromHash || !!wasm;
+  const isValid = codeHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
-    const codeOrBlueprint = isFromHash
+    const codeOrBlueprint = codeHash
       ? new BlueprintPromise(api, metadata, codeHash)
       : new CodePromise(api, metadata, wasm && wasm.toU8a());
 

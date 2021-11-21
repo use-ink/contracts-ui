@@ -27,7 +27,7 @@ export const InteractTab = ({ contract }: Props) => {
   const [argValues, setArgValues] = useArgValues(message.value?.args || []);
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
   const [endowment, setEndowment] = useState('');
-  const accountId = useAccountId();
+  const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
 
   useEffect(() => {
     if (state.results.length > 0) {
@@ -47,8 +47,13 @@ export const InteractTab = ({ contract }: Props) => {
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
         <Form>
-          <FormField className="mb-8" id="accountId" label="Account" {...getValidation(accountId)}>
-            <AccountSelect id="accountId" className="mb-2" {...accountId} />
+          <FormField className="mb-8" id="accountId" label="Account" {...accountIdValidation}>
+            <AccountSelect
+              id="accountId"
+              className="mb-2"
+              value={accountId}
+              onChange={setAccountId}
+            />
           </FormField>
           <FormField id="message" label="Message to Send" {...getValidation(message)}>
             <Dropdown
@@ -88,7 +93,7 @@ export const InteractTab = ({ contract }: Props) => {
                 gasLimit: 155852802980,
                 argValues,
                 message: message.value,
-                keyringPair: accountId.value ? keyring?.getPair(accountId.value) : undefined,
+                keyringPair: accountId ? keyring?.getPair(accountId) : undefined,
                 dispatch,
               })
             }

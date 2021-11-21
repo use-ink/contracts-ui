@@ -45,7 +45,7 @@ describe('useAccountId', () => {
     const [{ result }] = customRenderHook(() => useAccountId());
 
     act(() => {
-      result.current.onChange(null);
+      result.current.onChange('');
     });
 
     expect(extractResult(result)).toMatchObject({
@@ -54,7 +54,7 @@ describe('useAccountId', () => {
       isValid: false,
       isWarning: false,
       message: 'Specified account does not exist',
-      value: null,
+      value: '',
     });
 
     act(() => {

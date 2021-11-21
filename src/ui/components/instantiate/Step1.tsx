@@ -20,9 +20,10 @@ import { FileState } from 'types';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
+  const history = useHistory();
+
   const { stepForward, setData, data, currentStep } = useInstantiate();
 
-  const history = useHistory();
   const codeBundleQuery = useCodeBundle(codeHashUrlParam);
   const codeBundle = codeBundleQuery.data;
 
@@ -32,14 +33,17 @@ export function Step1() {
     () => !!codeHashUrlParam && codeBundleQuery.isLoading,
     [codeHashUrlParam, codeBundleQuery.isLoading]
   );
+
   const isUsingStoredMetadata = useMemo(
     (): boolean => !!codeBundle?.document,
     [codeBundle?.document]
   );
+
   const metadata = useMetadata(codeBundle?.document?.abi, {
     isWasmRequired: !codeBundle,
     onChange: setMetadataFile,
   });
+
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
 
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
@@ -61,6 +65,7 @@ export function Step1() {
     setData &&
       setData({
         ...data,
+        accountId,
         metadata: metadata?.value,
         name,
         codeHash: codeHashUrlParam || undefined,

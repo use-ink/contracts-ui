@@ -3,18 +3,20 @@
 
 import { handleDispatchError } from '../util';
 import type {
-  InstantiateState,
   ApiState,
   DbState,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
+  InstantiateData,
+  InstantiateState,
 } from 'types';
 import { createContract } from 'db';
 
 export function onInsantiateFromHash(
   { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
-  { data: { accountId, codeHash, name } }: InstantiateState
+  { accountId, codeHash, name }: InstantiateData,
+  onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Hash {
   return async function ({ contract, dispatchError, status }): Promise<void> {
     if (dispatchError) {
@@ -33,7 +35,7 @@ export function onInsantiateFromHash(
         tags: [],
       });
 
-      // onSuccess && onSuccess(contract);
+      onSuccess && onSuccess(contract);
     }
   };
 }
@@ -41,7 +43,8 @@ export function onInsantiateFromHash(
 export function onInstantiateFromCode(
   { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
-  { data: { accountId, name } }: InstantiateState
+  { accountId, name }: InstantiateData,
+  onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Code {
   return async function (result): Promise<void> {
     try {
@@ -62,7 +65,7 @@ export function onInstantiateFromCode(
           name: name,
           tags: [],
         });
-        // onSuccess && onSuccess(contract, blueprint);
+        onSuccess && onSuccess(contract, blueprint);
       }
     } catch (e) {
       console.error(e);

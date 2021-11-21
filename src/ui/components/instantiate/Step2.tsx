@@ -1,15 +1,14 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useMemo } from 'react';
-import { isNumber, isHex } from '@polkadot/util';
+import React, { useEffect, useState } from 'react';
+import { isHex } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputNumber } from '../form/InputNumber';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
-import type { AbiConstructor } from 'types';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
@@ -20,18 +19,31 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
+import { AbiMessage } from 'types';
+
 export function Step2() {
   const {
     data: { metadata },
     stepBackward,
     currentStep,
+    onFinalize,
   } = useInstantiate();
+
   const {
     value: endowment,
     onChange: onChangeEndowment,
     ...endowmentValidation
   } = useBalance(10000);
-  const { executionTime, isValid: isWeightValid, megaGas, setMegaGas, percentage } = useWeight();
+
+  const {
+    executionTime,
+    isValid: isWeightValid,
+    megaGas,
+    setMegaGas,
+    percentage,
+    weight,
+  } = useWeight();
+
   const salt = useFormField<string>(randomAsHex(), value => {
     if (!!value && isHex(value) && value.length === 66) {
       return { isValid: true };
@@ -40,39 +52,55 @@ export function Step2() {
     return { isValid: false, isError: true, message: 'Invalid hex string' };
   });
 
-  const constructorIndex = useFormField(0);
+  const [constructorIndex, setConstructorIndex] = useState<number>(0);
+  const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
 
-  const deployConstructor = useMemo(
-    (): AbiConstructor | null =>
-      isNumber(constructorIndex.value)
-        ? metadata?.constructors[constructorIndex.value] || null
-        : null,
-    [metadata, constructorIndex.value]
-  );
-  const [argValues, setArgValues] = useArgValues(deployConstructor?.args || []);
+  const [argValues, setArgValues, setArgs] = useArgValues([]);
+
+  useEffect(() => {
+    setConstructorIndex(0);
+    metadata && setDeployConstructor(metadata.constructors[0]);
+  }, [metadata, setConstructorIndex]);
+
+  useEffect(() => {
+    deployConstructor && setArgs(deployConstructor.args);
+  }, [deployConstructor, setArgs]);
+
   const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+
+  const submitHandler = () => {
+    onFinalize &&
+      onFinalize({
+        constructorIndex,
+        salt: salt.value,
+        endowment,
+        argValues,
+        weight,
+      });
+  };
 
   if (currentStep !== 2) return null;
 
   return metadata ? (
     <>
       <Form>
-        <FormField
-          id="constructor"
-          label="Deployment Constructor"
-          {...getValidation(constructorIndex)}
-        >
+        <FormField id="constructor" label="Deployment Constructor">
           <Dropdown
             id="constructor"
             options={createConstructorOptions(metadata.constructors)}
             className="mb-4"
-            {...constructorIndex}
+            value={constructorIndex}
+            onChange={v => {
+              setConstructorIndex(v);
+              setDeployConstructor(metadata.constructors[v]);
+              setArgs(metadata.constructors[v].args);
+            }}
           >
             No constructors found
           </Dropdown>
           {deployConstructor && argValues && (
             <ArgumentForm
-              key={`args-${deployConstructor?.method}`}
+              key={`args-${deployConstructor.method}`}
               args={deployConstructor.args}
               setArgValues={setArgValues}
               argValues={argValues}
@@ -115,7 +143,7 @@ export function Step2() {
             !deployConstructor?.method ||
             !argValues
           }
-          // onClick={onFinalize}
+          onClick={submitHandler}
           variant="primary"
         >
           Next
