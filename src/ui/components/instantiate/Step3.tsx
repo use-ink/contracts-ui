@@ -14,11 +14,11 @@ import { truncate } from 'ui/util';
 
 export function Step3() {
   const apiState = useApi();
-  const { codeHash } = useParams<{ codeHash: string }>();
+  const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
   const { accountId, endowment, metadata, weight, name } = data;
 
-  const displayHash = codeHash || metadata?.info.source.wasmHash.toHex() || null;
+  const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
   const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
     tx,

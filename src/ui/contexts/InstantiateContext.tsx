@@ -56,7 +56,7 @@ export function InstantiateContextProvider({
   const dbState = useDatabase();
   const apiState = useApi();
   const NOOP = () => Promise.resolve();
-  const { codeHash } = useParams<{ codeHash: string }>();
+  const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const [currentStep, stepForward, stepBackward, setStep] = useStepper(initialState.currentStep);
 
   const [data, setData] = useState<InstantiateData>(initialState.data);
@@ -77,7 +77,7 @@ export function InstantiateContextProvider({
     try {
       const tx = createInstantiateTx(apiState.api, newData);
 
-      const onInstantiate = (codeHash ? onInsantiateFromHash : onInstantiateFromCode)(
+      const onInstantiate = (codeHashUrlParam ? onInsantiateFromHash : onInstantiateFromCode)(
         apiState,
         dbState,
         data,
