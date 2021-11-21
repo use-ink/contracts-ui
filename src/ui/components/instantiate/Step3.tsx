@@ -16,6 +16,7 @@ export function Step3() {
 
   const {
     data: { accountId, codeHash, endowment, metadata, weight, name },
+    currentStep,
   } = instantiateState;
 
   // const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
@@ -27,6 +28,8 @@ export function Step3() {
   // );
 
   const displayHash = codeHash || metadata?.info.source.wasmHash.toHex() || null;
+
+  if (currentStep !== 3) return null;
 
   return (
     <>

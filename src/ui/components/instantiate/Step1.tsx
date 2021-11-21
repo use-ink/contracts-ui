@@ -20,7 +20,7 @@ import { FileState } from 'types';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
-  const { stepForward, setData, data } = useInstantiate();
+  const { stepForward, setData, data, currentStep } = useInstantiate();
 
   const history = useHistory();
   const codeBundleQuery = useCodeBundle(codeHashUrlParam);
@@ -68,6 +68,8 @@ export function Step1() {
 
     stepForward && stepForward();
   }
+
+  if (currentStep !== 1) return null;
 
   return (
     <Loader isLoading={isLoading}>

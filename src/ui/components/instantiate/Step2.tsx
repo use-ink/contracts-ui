@@ -24,6 +24,7 @@ export function Step2() {
   const {
     data: { metadata },
     stepBackward,
+    currentStep,
   } = useInstantiate();
   const {
     value: endowment,
@@ -50,6 +51,8 @@ export function Step2() {
   );
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args || []);
   const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+
+  if (currentStep !== 2) return null;
 
   return metadata ? (
     <>

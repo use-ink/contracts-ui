@@ -31,10 +31,6 @@ import { useStepper } from 'ui/hooks/useStepper';
 
 // const NOOP = () => Promise.resolve();
 
-export const CONTRACT_FILE = 0;
-export const DEPLOYMENT_INFO = 1;
-export const FINALIZE = 2;
-
 export function isResultValid({
   contract,
 }: CodeSubmittableResult<'promise'> | BlueprintSubmittableResult<'promise'>): boolean {
@@ -42,14 +38,13 @@ export function isResultValid({
 }
 const initialFormState: InstantiateData = {
   constructorIndex: 0,
-  argValues: undefined,
   endowment: BN_THOUSAND,
   name: '',
   weight: BN_THOUSAND,
 };
 const initialState: InstantiateState = {
   data: initialFormState,
-  currentStep: 0,
+  currentStep: 1,
 };
 
 export const InstantiateContext = React.createContext(initialState);
@@ -61,7 +56,7 @@ export function InstantiateContextProvider({
   // const { codeHash } = useParams<{ codeHash: string }>();
   // const apiState = useApi();
   // const dbState = useDatabase();
-  const [currentStep, stepForward, stepBackward] = useStepper();
+  const [currentStep, stepForward, stepBackward] = useStepper(initialState.currentStep);
   // const [, , , setStep] = step;
 
   const [data, setData] = useState<InstantiateData>(initialFormState);

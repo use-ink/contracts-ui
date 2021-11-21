@@ -5,11 +5,11 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { Step1 } from 'ui/components/instantiate/Step1';
 import { InstantiateContext } from 'ui/contexts';
-import { customRender as customRenderBase, getMockInstantiateState } from 'test-utils';
+import { customRender as customRenderBase, mockInstantiateState } from 'test-utils';
 
 function customRender() {
   return customRenderBase(
-    <InstantiateContext.Provider value={getMockInstantiateState()}>
+    <InstantiateContext.Provider value={{ ...mockInstantiateState }}>
       <Step1 />
     </InstantiateContext.Provider>
   );

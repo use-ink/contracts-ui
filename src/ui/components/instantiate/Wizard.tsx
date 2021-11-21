@@ -6,22 +6,23 @@ import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';
 import { Stepper } from './Stepper';
-import { CONTRACT_FILE, DEPLOYMENT_INFO, FINALIZE, useInstantiate } from 'ui/contexts';
 
-const steps = ['Contract Bundle', 'Deployment Info', 'Confirmation'];
+const steps = [
+  { name: 'Contract Bundle', index: 1 },
+  { name: 'Deployment Info', index: 2 },
+  { name: 'Confirmation', index: 3 },
+];
 
 export function Wizard() {
-  const { currentStep } = useInstantiate();
-
   return (
     <div className="grid md:grid-cols-12 gap-5 m-1">
       <main className="md:col-span-9 p-4">
-        {currentStep === CONTRACT_FILE && <Step1 />}
-        {currentStep === DEPLOYMENT_INFO && <Step2 />}
-        {currentStep === FINALIZE && <Step3 />}
+        <Step1 />
+        <Step2 />
+        <Step3 />
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
-        <Stepper step={currentStep} steps={steps} />
+        <Stepper steps={steps} />
       </aside>
     </div>
   );

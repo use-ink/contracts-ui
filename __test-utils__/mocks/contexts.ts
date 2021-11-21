@@ -42,21 +42,19 @@ export const mockApiState = {
   status: 'READY',
 } as unknown as CanvasState;
 
-export function getMockInstantiateState(): InstantiateProps {
-  return {
-    data: {
-      accountId: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      argValues: { initValue: 'true' },
-      codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
-      constructorIndex: 0,
-      endowment: new BN(10000),
-      weight: new BN(0),
-      name: 'flipper',
-    },
+export const mockInstantiateState: InstantiateProps = {
+  data: {
+    accountId: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    argValues: { initValue: 'true' },
+    codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
+    constructorIndex: 0,
+    endowment: new BN(10000),
+    weight: new BN(0),
+    name: 'flipper',
+  },
 
-    // onInstantiate: jest.fn(),
-    // onError: jest.fn(),
-    // onSuccess: jest.fn(),
-    currentStep: 0,
-  };
-}
+  // onInstantiate: jest.fn(),
+  // onError: jest.fn(),
+  // onSuccess: jest.fn(),
+  currentStep: 1,
+};

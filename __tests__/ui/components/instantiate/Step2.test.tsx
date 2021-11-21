@@ -6,11 +6,11 @@ import { fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Step2 } from 'ui/components/instantiate/Step2';
 import { InstantiateContext } from 'ui/contexts';
-import { customRender as customRenderBase, getMockInstantiateState } from 'test-utils';
+import { customRender as customRenderBase, mockInstantiateState } from 'test-utils';
 
 function customRender() {
   return customRenderBase(
-    <InstantiateContext.Provider value={getMockInstantiateState()}>
+    <InstantiateContext.Provider value={{ ...mockInstantiateState, currentStep: 2 }}>
       <Step2 />
     </InstantiateContext.Provider>
   );
