@@ -14,17 +14,16 @@ import { classes, isValidCodeHash } from 'ui/util';
 export function LookUpCodeHash() {
   const history = useHistory();
   const [searchString, setSearchString] = useState('');
-  const [codeHash, setCodeHash] = useState<string | null>(null);
+  const [codeHash, setCodeHash] = useState('');
   const { data: searchResults } = useCodeBundleSearch(searchString);
   const { data, error, isLoading, isValid } = useCodeBundle(codeHash);
-  const [isOnChain, document] = !!data && !isLoading ? data : [false, null];
-
+  const { isOnChain, document } = data || { document: null, isOnChain: false };
   useEffect((): void => {
     if (codeHash !== searchString) {
       if (searchString === '' || isValidCodeHash(searchString)) {
         setCodeHash(searchString);
       } else {
-        setCodeHash(null);
+        setCodeHash('');
       }
     }
   }, [codeHash, searchString]);

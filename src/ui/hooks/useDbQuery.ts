@@ -1,23 +1,13 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDatabase } from '../contexts/DatabaseContext';
-import type { VoidFn } from 'types';
+import type { DbQuery } from 'types';
 
 type ValidateFn<T> = (_?: T | null) => boolean;
 
-interface State<T> {
-  data: T | null;
-  error: React.ReactNode | null;
-  isLoading: boolean;
-  isValid: boolean;
-  updated: number;
-}
-
-interface UseQuery<T> extends State<T> {
-  refresh: VoidFn;
-}
+type State<T> = Omit<DbQuery<T>, 'refresh'>;
 
 const initialState = {
   data: null,
@@ -27,10 +17,10 @@ const initialState = {
   updated: 0,
 };
 
-export function useQuery<T>(
+export function useDbQuery<T>(
   query: () => Promise<T | null>,
   validate: ValidateFn<T> = value => !!value
-): UseQuery<T> {
+): DbQuery<T> {
   const { isDbReady } = useDatabase();
   const [state, setState] = useState<State<T>>(initialState);
 

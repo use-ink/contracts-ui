@@ -1,67 +1,70 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
-import { Form, FormField, getValidation } from '../form/FormField';
-import { CodeHash } from './CodeHash';
-import { InputFile } from 'ui/components/form/InputFile';
-import { Input } from 'ui/components/form/Input';
+import { Form, useAccountSelect, useContractName, useMetadataField, CodeHashField } from '../form';
+import { Loader } from '../common/Loader';
 import { useInstantiate } from 'ui/contexts';
 
 export function Step1() {
-  const {
-    codeHash,
-    name,
-    isUsingStoredMetadata,
-    metadata,
-    metadataFile: [metadataFile],
-    step: [, stepForward],
-  } = useInstantiate();
+  const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
+
+  const { stepForward, setData, data, currentStep } = useInstantiate();
+
+  const { accountId, AccountSelectField } = useAccountSelect();
+  const { name, setName, ContractNameField, nameValidation } = useContractName();
+  const { metadata, isLoadingCodeBundle, isUsingStoredMetadata, isErrorMetadata, MetadataField } =
+    useMetadataField();
+
+  useEffect((): void => {
+    if (metadata?.info.contract.name && !name) {
+      setName(metadata?.info.contract.name.toString());
+    }
+  }, [metadata, name, setName]);
+
+  function submitStep1() {
+    setData &&
+      setData({
+        ...data,
+        accountId,
+        metadata: metadata,
+        name,
+        codeHash: codeHashUrlParam || undefined,
+      });
+
+    stepForward && stepForward();
+  }
+
+  if (currentStep !== 1) return null;
 
   return (
-    <>
+    <Loader isLoading={isLoadingCodeBundle}>
       <Form>
-        <FormField id="name" label="Contract Name" {...getValidation(name)}>
-          <Input id="contractName" placeholder="Give your contract a descriptive name" {...name} />
-        </FormField>
-        {codeHash && (
-          <FormField id="metadata" label="On-Chain Code">
-            <CodeHash
-              codeHash={codeHash}
-              name={
-                isUsingStoredMetadata
-                  ? metadata.value?.info.contract.name.toString()
-                  : 'Unidentified Code'
-              }
-            />
-          </FormField>
+        <AccountSelectField />
+        <ContractNameField />
+        {codeHashUrlParam && (
+          <CodeHashField
+            codeHash={codeHashUrlParam}
+            name={
+              isUsingStoredMetadata
+                ? metadata?.info?.contract.name.toString() || 'Contract'
+                : 'Unidentified Code'
+            }
+          />
         )}
-        {(!codeHash || !isUsingStoredMetadata) && (
-          <FormField
-            id="metadata"
-            label={codeHash ? 'Upload Metadata' : 'Upload Contract Bundle'}
-            {...getValidation(metadata)}
-          >
-            <InputFile
-              placeholder="Click to select or drag & drop to upload file."
-              onChange={metadata.onChange}
-              onRemove={metadata.onRemove}
-              isError={metadata.isError}
-              value={metadataFile}
-            />
-          </FormField>
-        )}
+        {(!codeHashUrlParam || !isUsingStoredMetadata) && <MetadataField />}
       </Form>
       <Buttons>
         <Button
-          isDisabled={!metadata.value || !name.isValid || metadata.isError}
-          onClick={stepForward}
+          isDisabled={!metadata || !nameValidation.isValid || isErrorMetadata}
+          onClick={submitStep1}
           variant="primary"
         >
           Next
         </Button>
       </Buttons>
-    </>
+    </Loader>
   );
 }

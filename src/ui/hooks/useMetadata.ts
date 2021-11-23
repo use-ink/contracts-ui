@@ -60,8 +60,8 @@ function deriveFromJson(
 
     return {
       source,
-      name: null,
-      value: null,
+      name: '',
+      value,
       isSupplied: true,
       ...validate(value, options),
     };
@@ -72,9 +72,8 @@ const EMPTY: MetadataState = {
   isError: false,
   isSupplied: false,
   isValid: false,
-  name: null,
+  name: '',
   source: null,
-  value: null,
   message: null,
 };
 

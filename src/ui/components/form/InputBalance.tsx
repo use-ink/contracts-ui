@@ -12,8 +12,8 @@ import { useApi } from 'ui/contexts';
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
   {
-    value?: BN | null;
-    onChange: (_?: BN | null) => void;
+    value: BN;
+    onChange: (_: BN) => void;
   }
 >;
 

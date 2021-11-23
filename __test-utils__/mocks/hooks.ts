@@ -4,7 +4,7 @@
 import { jest } from '@jest/globals';
 import type { UseFormField } from 'types';
 
-export function getMockFormField<T>(value: T | undefined, isValid = false): UseFormField<T> {
+export function getMockFormField<T>(value: T, isValid = false): UseFormField<T> {
   return {
     onChange: jest.fn(),
     value,
