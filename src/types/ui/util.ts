@@ -36,8 +36,8 @@ export interface FileState {
 }
 
 export interface MetadataState extends Validation {
-  source: AnyJson | null;
-  name: string | null;
-  value: Abi | null;
+  source: AnyJson;
+  name: string;
+  value?: Abi;
   isSupplied: boolean;
 }

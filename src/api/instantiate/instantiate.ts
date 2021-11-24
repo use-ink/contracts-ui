@@ -3,33 +3,35 @@
 
 import { handleDispatchError } from '../util';
 import type {
-  InstantiateState,
   ApiState,
   DbState,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
+  InstantiateData,
+  InstantiateState,
 } from 'types';
 import { createContract } from 'db';
 
 export function onInsantiateFromHash(
   { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
-  { accountId, codeHash, name, onSuccess }: InstantiateState
+  { accountId, codeHash, name }: InstantiateData,
+  onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Hash {
   return async function ({ contract, dispatchError, status }): Promise<void> {
     if (dispatchError) {
       handleDispatchError(dispatchError, api);
     }
 
-    if (accountId.value && codeHash && contract && (status.isInBlock || status.isFinalized)) {
+    if (accountId && codeHash && contract && (status.isInBlock || status.isFinalized)) {
       await createContract(db, identity, {
-        abi: contract.abi.json as Record<string, unknown>,
+        abi: contract.abi.json,
         address: contract.address.toString(),
-        creator: accountId.value,
+        creator: accountId,
         blockZeroHash: blockZeroHash || undefined,
         codeHash,
         genesisHash: api?.genesisHash.toString(),
-        name: name.value,
+        name: name,
         tags: [],
       });
 
@@ -41,7 +43,8 @@ export function onInsantiateFromHash(
 export function onInstantiateFromCode(
   { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
-  { accountId, name, onSuccess }: InstantiateState
+  { accountId, name }: InstantiateData,
+  onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Code {
   return async function (result): Promise<void> {
     try {
@@ -51,15 +54,15 @@ export function onInstantiateFromCode(
         handleDispatchError(dispatchError, api);
       }
 
-      if (accountId.value && contract && (status.isInBlock || status.isFinalized)) {
+      if (accountId && contract && (status.isInBlock || status.isFinalized)) {
         await createContract(db, identity, {
-          abi: contract.abi.json as Record<string, unknown>,
+          abi: contract.abi.json,
           address: contract.address.toString(),
           blockZeroHash: blockZeroHash || undefined,
-          creator: accountId.value,
+          creator: accountId,
           codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
           genesisHash: api?.genesisHash.toString(),
-          name: name.value,
+          name: name,
           tags: [],
         });
         onSuccess && onSuccess(contract, blueprint);

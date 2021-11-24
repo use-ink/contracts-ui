@@ -10,6 +10,6 @@ export * from './useMyContracts';
 export * from './useStatistics';
 export * from './useToggleContractStar';
 export * from './useTopContracts';
-export * from './useQuery';
+export * from './useDbQuery';
 export * from './useWeight';
 export * from './useBlockTime';

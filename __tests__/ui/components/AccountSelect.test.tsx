@@ -6,13 +6,11 @@ import { jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { AccountSelect } from 'ui/components/account/AccountSelect';
-import { DropdownProps, OrNull } from 'types';
+import { DropdownProps } from 'types';
 import { mockKeyring, customRender } from 'test-utils';
 import { truncate } from 'ui/util';
 
-function mockProps(
-  overrides: Partial<DropdownProps<OrNull<string>>> = {}
-): DropdownProps<OrNull<string>> {
+function mockProps(overrides: Partial<DropdownProps<string>> = {}): DropdownProps<string> {
   const value = mockKeyring.getAccounts()[0].address;
 
   return {

@@ -4,7 +4,7 @@
 import { VoidFn } from '../substrate';
 import { BN, FileState, MetadataState, SetState, Validation } from './util';
 
-export interface UseWeight {
+export type UseWeight = {
   executionTime: number;
   isEmpty: boolean;
   isValid: boolean;
@@ -13,14 +13,14 @@ export interface UseWeight {
   setIsEmpty: SetState<boolean>;
   setMegaGas: React.Dispatch<BN | undefined>;
   weight: BN;
-}
+};
 
 export interface UseFormField<T> extends Validation {
-  value?: T;
+  value: T;
   onChange: (_: T) => void;
 }
 
-export type UseBalance = UseFormField<BN | null | undefined>;
+export type UseBalance = UseFormField<BN>;
 
 export interface UseMetadata extends MetadataState {
   onChange: (_: FileState) => void;

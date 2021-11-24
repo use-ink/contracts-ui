@@ -15,7 +15,13 @@ import {
   publicKeyHex,
 } from 'db';
 
-import type { UserDocument, CodeBundleDocument, ContractDocument, PrivateKey } from 'types';
+import type {
+  UserDocument,
+  CodeBundleDocument,
+  ContractDocument,
+  PrivateKey,
+  AnyJson,
+} from 'types';
 import { MOCK_CONTRACT_DATA } from 'ui/util';
 
 type TestUser = [UserDocument, PrivateKey];
@@ -63,7 +69,7 @@ export function getMockCodeBundles(): CodeBundleDocument[] {
   const genesisHash = randomHash();
 
   MOCK_CONTRACT_DATA.forEach(([name, , tags]) => {
-    const abi = (contractFiles as Record<string, Record<string, unknown>>)[name];
+    const abi = (contractFiles as Record<string, AnyJson>)[name.toLowerCase()];
 
     codeBundles.push({
       blockZeroHash: blockZeroHashes[Math.round(Math.random())],
@@ -90,7 +96,7 @@ export function getMockContracts(codeBundles: CodeBundleDocument[]): ContractDoc
 
   // Original instantiation and 0-2 reinstantiations
   MOCK_CONTRACT_DATA.forEach(([name, , tags], index) => {
-    const abi = (contractFiles as Record<string, Record<string, unknown>>)[name.toLowerCase()];
+    const abi = (contractFiles as Record<string, AnyJson>)[name.toLowerCase()];
 
     contracts.push({
       address: faker.random.alphaNumeric(62),

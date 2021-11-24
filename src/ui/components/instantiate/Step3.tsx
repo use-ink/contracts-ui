@@ -2,40 +2,33 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { BN_ZERO, formatBalance, formatNumber } from '@polkadot/util';
+import { formatBalance, formatNumber } from '@polkadot/util';
+import { useParams } from 'react-router';
 import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
-import { isResultValid, useApi, useInstantiate } from 'ui/contexts';
+import { useApi, useInstantiate, isResultValid } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
+
 import { fromSats } from 'api';
 import { truncate } from 'ui/util';
 
 export function Step3() {
-  const { api } = useApi();
-  const instantiateState = useInstantiate();
+  const apiState = useApi();
+  const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
+  const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
+  const { accountId, endowment, metadata, weight, name } = data;
 
-  const {
-    accountId,
-    codeHash,
-    endowment,
-    metadata,
-    weight,
-    name,
-    onInstantiate,
-    onError,
-    onUnFinalize,
-    tx,
-  } = instantiateState;
+  const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
   const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
     tx,
-    accountId.value,
+    data.accountId,
     onInstantiate,
     onError,
     isResultValid
   );
 
-  const displayHash = codeHash || metadata.value?.info.source.wasmHash.toHex() || null;
+  if (currentStep !== 3) return null;
 
   return (
     <>
@@ -43,25 +36,25 @@ export function Step3() {
         <div className="field full">
           <p className="key">Account</p>
           <div className="value">
-            <Account className="p-0" value={accountId.value} />
+            <Account className="p-0" value={accountId} />
           </div>
         </div>
 
         <div className="field full">
           <p className="key">Name</p>
-          <p className="value">{name.value}</p>
+          <p className="value">{name}</p>
         </div>
 
         <div className="field">
           <p className="key">Endowment</p>
           <p className="value">
-            {formatBalance(fromSats(api, endowment?.value || BN_ZERO), { forceUnit: '-' })}
+            {formatBalance(fromSats(apiState.api, endowment), { forceUnit: '-' })}
           </p>
         </div>
 
         <div className="field">
           <p className="key">Weight</p>
-          <p className="value">{formatNumber(weight.weight)}</p>
+          <p className="value">{formatNumber(weight)}</p>
         </div>
 
         {displayHash && (
