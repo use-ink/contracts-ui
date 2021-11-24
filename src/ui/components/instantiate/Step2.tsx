@@ -72,7 +72,7 @@ export function Step2() {
     onFinalize &&
       onFinalize({
         constructorIndex,
-        salt: salt.value,
+        salt: isUsingSalt ? salt.value : undefined,
         endowment,
         argValues,
         weight,
