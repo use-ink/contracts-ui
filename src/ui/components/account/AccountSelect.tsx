@@ -8,9 +8,9 @@ import { createAccountOptions } from 'api/util';
 import type { DropdownProps, OptionProps, UseFormField } from 'types';
 import { useApi } from 'ui/contexts';
 
-type Props = UseFormField<string | null> & Omit<DropdownProps<string | null>, 'options'>;
+type Props = UseFormField<string> & Omit<DropdownProps<string>, 'options'>;
 
-function Option({ option: { name, value } }: OptionProps<string | null>) {
+function Option({ option: { name, value } }: OptionProps<string>) {
   return <Account name={name} value={value} />;
 }
 

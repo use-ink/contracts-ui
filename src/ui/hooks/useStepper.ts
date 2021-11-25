@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 
 import type { UseStepper } from 'types';
 
-export function useStepper(initialValue = 0, maxValue = 2): UseStepper {
+export function useStepper(initialValue = 0, maxValue = 3): UseStepper {
   const [value, setValue] = useState(Math.min(initialValue, maxValue));
 
   const increment = useCallback((): void => {

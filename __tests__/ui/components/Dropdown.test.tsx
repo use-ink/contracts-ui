@@ -50,7 +50,7 @@ describe('Dropdown', () => {
 
   test('correctly renders without options', () => {
     const { getByText } = render(
-      <Dropdown onChange={jest.fn() as () => void}>No options found</Dropdown>
+      <Dropdown {...mockProps({ options: undefined })}>No options found</Dropdown>
     );
 
     const dropdown = getByText('No options found');

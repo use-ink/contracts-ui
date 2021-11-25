@@ -4,35 +4,33 @@
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { isNumber } from '@polkadot/util';
 import { encodeSalt, transformUserInput } from '../util';
-import type { ApiPromise, InstantiateState, SubmittableExtrinsic } from 'types';
+import type { ApiPromise, InstantiateData, SubmittableExtrinsic } from 'types';
 
 export function createInstantiateTx(
   api: ApiPromise,
   {
-    argValues: [argValues],
+    argValues,
     codeHash,
-    constructorIndex: { value: constructorIndex },
-    weight: { weight: gasLimit },
+    constructorIndex,
+    weight: gasLimit,
     endowment,
-    metadata: { value: metadata },
-    isUsingSalt,
+    metadata,
     salt,
-  }: InstantiateState
+  }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
-  const isFromHash = !!codeHash;
-  const saltu8a = isUsingSalt ? encodeSalt(salt.value) : undefined;
+  const saltu8a = encodeSalt(salt);
 
   const options = {
     gasLimit,
     salt: saltu8a,
-    value: endowment.value ? api.registry.createType('Balance', endowment.value) : undefined,
+    value: endowment ? api.registry.createType('Balance', endowment) : undefined,
   };
 
   const wasm = metadata?.info.source.wasm;
-  const isValid = isFromHash || !!wasm;
+  const isValid = codeHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
-    const codeOrBlueprint = isFromHash
+    const codeOrBlueprint = codeHash
       ? new BlueprintPromise(api, metadata, codeHash)
       : new CodePromise(api, metadata, wasm && wasm.toU8a());
 

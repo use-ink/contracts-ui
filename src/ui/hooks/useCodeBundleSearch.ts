@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useCallback } from 'react';
-import { useQuery } from './useQuery';
+import { useDbQuery } from './useDbQuery';
 import { searchForCodeBundle } from 'db';
 import type { CodeBundleDocument } from 'types';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
@@ -14,5 +14,5 @@ export function useCodeBundleSearch(fragment: string) {
     return searchForCodeBundle(db, fragment);
   }, [db, fragment]);
 
-  return useQuery(query);
+  return useDbQuery(query);
 }
