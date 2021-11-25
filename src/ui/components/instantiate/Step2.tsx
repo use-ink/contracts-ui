@@ -66,7 +66,7 @@ export function Step2() {
     deployConstructor && setArgs(deployConstructor.args);
   }, [deployConstructor, setArgs]);
 
-  const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+  const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
 
   const submitHandler = () => {
     onFinalize &&
