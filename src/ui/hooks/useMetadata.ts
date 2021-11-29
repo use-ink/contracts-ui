@@ -91,8 +91,6 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
   const isWasmEmpty = wasm.isEmpty;
   const isWasmInvalid = !isWasm(wasm.toU8a());
 
-  console.log(isWasmRequired);
-
   if (isWasmRequired && (isWasmEmpty || isWasmInvalid)) {
     return {
       isValid: false,

@@ -36,7 +36,7 @@ export function createInstantiateTx(
 
     const constructor = metadata.findConstructor(constructorIndex);
 
-    const transformed = transformUserInput(api, constructor.args, argValues);
+    const transformed = transformUserInput(api.registry, constructor.args, argValues);
 
     return constructor.args.length > 0
       ? codeOrBlueprint.tx[constructor.method](options, ...transformed)
