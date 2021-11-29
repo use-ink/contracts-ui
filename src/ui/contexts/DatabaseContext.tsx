@@ -12,7 +12,7 @@ import React, {
 import { useApi } from './ApiContext';
 import { init } from 'db/util';
 import type { DbState } from 'types';
-import { dropExpiredDocuments, findMyContracts, getUser } from 'db';
+import { findMyContracts, getUser } from 'db';
 
 export const DbContext: React.Context<DbState> = React.createContext({} as unknown as DbState);
 export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
@@ -23,7 +23,7 @@ const INITIAL = { isDbReady: false } as unknown as DbState;
 export function DatabaseContextProvider({
   children,
 }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { status, blockZeroHash, endpoint } = useApi();
+  const { status, blockOneHash, endpoint } = useApi();
 
   const [state, setState] = useState<DbState>(INITIAL);
 
@@ -34,20 +34,17 @@ export function DatabaseContextProvider({
 
   useEffect((): void => {
     status === 'READY' &&
-      !!blockZeroHash &&
-      init(endpoint, isRemote)
-        .then(async ([db, user, identity]): Promise<void> => {
+      !!blockOneHash &&
+      init(endpoint, blockOneHash, isRemote)
+        .then(([db, user, identity]): void => {
           console.log('init once');
-          if (!isRemote) {
-            await dropExpiredDocuments(db, blockZeroHash);
-          }
 
           setState(state => ({ ...state, db, user, identity, isDbReady: true }));
         })
         .catch(e => {
           console.error(e);
         });
-  }, [blockZeroHash, endpoint, isRemote, status]);
+  }, [blockOneHash, endpoint, isRemote, status]);
 
   const refreshUserData = useCallback(async (): Promise<void> => {
     const user = await getUser(state.db, state.identity);

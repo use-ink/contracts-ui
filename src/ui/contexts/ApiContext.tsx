@@ -8,31 +8,62 @@ import { keyring } from '@polkadot/ui-keyring';
 import { INIT_STATE, DEFAULT_DECIMALS } from '../../constants';
 import type { ApiState, ChainProperties } from 'types';
 import { apiReducer } from 'ui/reducers';
+import { blockTimeMs } from 'api/util/blockTime';
 
 let loadedAccounts = false;
 
-async function getChainProperties(api: ApiPromise): Promise<ChainProperties> {
-  const [chainProperties, blockZeroHash, systemName, systemVersion] = await Promise.all([
-    api.rpc.system.properties(),
-    api.query.system.blockHash(0),
-    api.rpc.system.name(),
-    api.rpc.system.version(),
-  ]);
+async function getChainProperties(api: ApiPromise): Promise<ChainProperties | null> {
+  console.log('getChainProperties');
+  const blockNumber = (await api.rpc.chain.getHeader()).number.toNumber();
 
-  return {
-    blockZeroHash: blockZeroHash.toString(),
-    systemName: systemName.toString(),
-    systemVersion: systemVersion.toString(),
-    tokenDecimals: chainProperties.tokenDecimals.isSome
-      ? chainProperties.tokenDecimals.unwrap().toArray()[0].toNumber()
-      : DEFAULT_DECIMALS,
-    tokenSymbol: chainProperties.tokenSymbol.isSome
-      ? chainProperties.tokenSymbol
-          .unwrap()
-          .toArray()
-          .map(s => s.toString())[0]
-      : 'Unit',
-  };
+  if (blockNumber > 1) {
+    const [chainProperties, blockOneHash, systemName, systemVersion] = await Promise.all([
+      api.rpc.system.properties(),
+      api.query.system.blockHash(1),
+      api.rpc.system.name(),
+      api.rpc.system.version(),
+    ]);
+
+    const result = {
+      blockOneHash: blockOneHash.toString(),
+      systemName: systemName.toString(),
+      systemVersion: systemVersion.toString(),
+      tokenDecimals: chainProperties.tokenDecimals.isSome
+        ? chainProperties.tokenDecimals.unwrap().toArray()[0].toNumber()
+        : DEFAULT_DECIMALS,
+      tokenSymbol: chainProperties.tokenSymbol.isSome
+        ? chainProperties.tokenSymbol
+            .unwrap()
+            .toArray()
+            .map(s => s.toString())[0]
+        : 'Unit',
+    };
+
+    return result;
+  }
+
+  return null;
+}
+
+async function getChainPropertiesWhenReady(api: ApiPromise) {
+  let chainProperties = await getChainProperties(api);
+
+  if (!chainProperties) {
+    chainProperties = await new Promise(resolve => {
+      const interval = setInterval(() => {
+        getChainProperties(api)
+          .then(result => {
+            if (result) {
+              clearInterval(interval);
+              resolve(result);
+            }
+          })
+          .catch(console.error);
+      }, blockTimeMs(api).toNumber());
+    });
+  }
+
+  return chainProperties as ChainProperties;
 }
 
 export const ApiContext = React.createContext(INIT_STATE);
@@ -56,14 +87,14 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
 
       dispatch({
         type: 'CONNECT_READY',
-        payload: await getChainProperties(_api),
+        payload: await getChainPropertiesWhenReady(_api),
       });
     });
 
     _api.on('ready', async () => {
       dispatch({
         type: 'CONNECT_READY',
-        payload: await getChainProperties(_api),
+        payload: await getChainPropertiesWhenReady(_api),
       });
     });
 
