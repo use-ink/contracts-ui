@@ -38,7 +38,7 @@ export type ApiAction =
   | { type: 'KEYRING_ERROR' };
 
 export interface ChainProperties {
-  blockZeroHash: string | null;
+  blockOneHash: string | null;
   tokenDecimals: number;
   systemName: string | null;
   systemVersion: string | null;

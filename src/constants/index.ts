@@ -7,7 +7,7 @@ export const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
 export const DEFAULT_DECIMALS = 12;
 
 export const NULL_CHAIN_PROPERTIES = {
-  blockZeroHash: null,
+  blockOneHash: null,
   systemName: null,
   systemVersion: null,
   tokenDecimals: DEFAULT_DECIMALS,
