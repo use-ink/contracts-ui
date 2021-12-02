@@ -13,7 +13,7 @@ import type {
 import { createContract } from 'db';
 
 export function onInsantiateFromHash(
-  { api }: ApiState,
+  { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
   { accountId, codeHash, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
@@ -28,6 +28,7 @@ export function onInsantiateFromHash(
         abi: contract.abi.json,
         address: contract.address.toString(),
         creator: accountId,
+        blockZeroHash: blockZeroHash || undefined,
         codeHash,
         genesisHash: api?.genesisHash.toString(),
         name: name,
@@ -40,7 +41,7 @@ export function onInsantiateFromHash(
 }
 
 export function onInstantiateFromCode(
-  { api }: ApiState,
+  { api, blockZeroHash }: ApiState,
   { db, identity }: DbState,
   { accountId, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
@@ -57,6 +58,7 @@ export function onInstantiateFromCode(
         await createContract(db, identity, {
           abi: contract.abi.json,
           address: contract.address.toString(),
+          blockZeroHash: blockZeroHash || undefined,
           creator: accountId,
           codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
           genesisHash: api?.genesisHash.toString(),

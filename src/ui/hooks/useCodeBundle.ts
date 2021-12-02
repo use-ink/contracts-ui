@@ -15,17 +15,17 @@ function isValidHash(input: OrFalsy<string>): boolean {
 }
 
 export function useCodeBundle(codeHash: string): DbQuery<CodeBundle> {
-  const { api } = useApi();
+  const { api, blockZeroHash } = useApi();
   const { db } = useDatabase();
 
   const query = useCallback(async (): Promise<CodeBundle> => {
     if (isValidHash(codeHash)) {
       const isOnChain = !(await api.query.contracts.codeStorage(codeHash)).isEmpty;
-      const document = await findCodeBundleByHash(db, codeHash);
+      const document = await findCodeBundleByHash(db, { blockZeroHash, codeHash });
       return { document, isOnChain };
     }
     return { document: null, isOnChain: false };
-  }, [api.query.contracts, codeHash, db]);
+  }, [api.query.contracts, blockZeroHash, codeHash, db]);
 
   return useDbQuery(query, result => !!result);
 }

@@ -23,6 +23,7 @@ export interface UserDocument extends Document {
 
 export interface CodeBundleDocument extends Document {
   abi?: AnyJson;
+  blockZeroHash?: string;
   codeHash: string;
   creator: string;
   date: string;
@@ -38,6 +39,7 @@ export interface CodeBundleDocument extends Document {
 export interface ContractDocument extends Document {
   abi: AnyJson;
   address: string;
+  blockZeroHash?: string;
   codeHash: string;
   creator: string;
   date: string;
@@ -60,6 +62,10 @@ export type CodeBundle = {
   document: CodeBundleDocument | null;
   isOnChain: boolean;
 };
+export interface CodeBundleQuery {
+  codeHash: string;
+  blockZeroHash?: string | null;
+}
 
 export interface Starred<T> {
   isExistent: boolean;
