@@ -13,7 +13,6 @@ import type { UseWeight } from 'types';
 export const useWeight = (): UseWeight => {
   const { api } = useApi();
   const [blockTime] = useBlockTime();
-  console.log(blockTime);
   const [megaGas, _setMegaGas] = useState<BN>(
     (api?.consts.system.blockWeights
       ? api.consts.system.blockWeights.maxBlock

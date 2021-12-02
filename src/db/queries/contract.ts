@@ -60,6 +60,7 @@ export async function createContract(
   {
     abi,
     address,
+    blockZeroHash,
     codeHash,
     creator,
     date = moment.utc().format(),
@@ -70,7 +71,7 @@ export async function createContract(
   savePair = true
 ): Promise<ContractDocument> {
   try {
-    if (!abi || !address || !codeHash || !creator || !name || !genesisHash) {
+    if (!abi || !address || !codeHash || !creator || !name || !genesisHash || !blockZeroHash) {
       return Promise.reject(new Error('Missing required fields'));
     }
 
@@ -78,11 +79,12 @@ export async function createContract(
       return Promise.reject(new Error('Contract already exists'));
     }
 
-    const exists = await getCodeBundleCollection(db).findOne({ codeHash });
+    const exists = await getCodeBundleCollection(db).findOne({ blockZeroHash, codeHash });
 
     if (!exists) {
       await createCodeBundle(db, owner, {
         abi,
+        blockZeroHash,
         codeHash,
         creator,
         genesisHash,
@@ -101,7 +103,8 @@ export async function createContract(
     const newContract = getContractCollection(db).create({
       abi,
       address,
-      codeHash,
+      blockZeroHash,
+      codeHash: codeHash,
       creator,
       genesisHash,
       name,

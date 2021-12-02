@@ -6,7 +6,7 @@ import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
 import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
-import type { CodeBundleDocument, MyCodeBundles } from 'types';
+import type { CodeBundleDocument, CodeBundleQuery, MyCodeBundles } from 'types';
 
 export async function findTopCodeBundles(
   db: Database,
@@ -97,9 +97,14 @@ export async function findMyCodeBundles(
 
 export async function findCodeBundleByHash(
   db: Database,
-  codeHash: string
+  { codeHash, blockZeroHash }: CodeBundleQuery
 ): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ codeHash })) || null;
+  return (
+    (await getCodeBundleCollection(db).findOne({
+      blockZeroHash: blockZeroHash || undefined,
+      codeHash,
+    })) || null
+  );
 }
 
 export async function findCodeBundleById(
@@ -135,6 +140,7 @@ export async function createCodeBundle(
   owner: PrivateKey | null,
   {
     abi,
+    blockZeroHash,
     codeHash,
     creator,
     genesisHash,
@@ -161,6 +167,7 @@ export async function createCodeBundle(
 
     const newCode = getCodeBundleCollection(db).create({
       abi,
+      blockZeroHash,
       codeHash,
       creator,
       genesisHash,
