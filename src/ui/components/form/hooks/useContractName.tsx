@@ -8,17 +8,17 @@ import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 
 export const useContractName = () => {
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
-  const ContractNameField = () => {
-    return (
-      <FormField id="name" label="Contract Name" {...nameValidation}>
-        <Input
-          id="contractName"
-          placeholder="Give your contract a descriptive name"
-          value={name}
-          onChange={setName}
-        />
-      </FormField>
-    );
-  };
-  return { name, setName, ContractNameField, nameValidation };
+
+  const contractNameField = (
+    <FormField id="name" label="Contract Name" {...nameValidation}>
+      <Input
+        id="contractName"
+        placeholder="Give your contract a descriptive name"
+        value={name}
+        onChange={setName}
+      />
+    </FormField>
+  );
+
+  return { name, setName, contractNameField, nameValidation };
 };

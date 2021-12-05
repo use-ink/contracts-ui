@@ -14,7 +14,7 @@ export function Step1() {
   const { stepForward, setData, data, currentStep } = useInstantiate();
 
   const { accountId, AccountSelectField } = useAccountSelect();
-  const { name, setName, ContractNameField, nameValidation } = useContractName();
+  const { contractNameField, name, nameValidation, setName } = useContractName();
   const { metadata, isLoadingCodeBundle, isUsingStoredMetadata, isErrorMetadata, MetadataField } =
     useMetadataField();
 
@@ -43,7 +43,7 @@ export function Step1() {
     <Loader isLoading={isLoadingCodeBundle}>
       <Form>
         <AccountSelectField />
-        <ContractNameField />
+        {contractNameField}
         {codeHashUrlParam && (
           <CodeHashField
             codeHash={codeHashUrlParam}
