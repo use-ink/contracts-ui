@@ -112,7 +112,7 @@ export function Step2() {
           isError={!weight.isValid}
           message={!weight.isValid ? 'Invalid gas limit' : null}
         >
-          <InputGas {...weight} />
+          <InputGas isCall {...weight} />
         </FormField>
       </Form>
       <Buttons>

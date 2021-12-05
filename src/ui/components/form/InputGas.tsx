@@ -35,10 +35,12 @@ export function InputGas({
 }: Props) {
   const { api } = useApi();
   useEffect((): void => {
-    setIsEmpty(true);
+    if (estimatedWeight || withEstimate) {
+      setIsEmpty(true);
 
-    setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
-  }, [api, estimatedWeight, setIsEmpty, setMegaGas]);
+      setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
+    }
+  }, [api, estimatedWeight, withEstimate, setIsEmpty, setMegaGas]);
 
   return (
     <div className={classes(className)} {...props}>
