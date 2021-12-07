@@ -55,7 +55,6 @@ export interface InstantiateData {
   metadata?: Abi;
   name: string;
   constructorIndex: number;
-  salt?: string;
   weight: BN;
   codeHash?: string;
 }

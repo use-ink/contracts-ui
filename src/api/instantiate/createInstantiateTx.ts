@@ -8,21 +8,11 @@ import type { ApiPromise, InstantiateData, SubmittableExtrinsic } from 'types';
 
 export function createInstantiateTx(
   api: ApiPromise,
-  {
-    argValues,
-    codeHash,
-    constructorIndex,
-    weight: gasLimit,
-    endowment,
-    metadata,
-    salt,
-  }: InstantiateData
+  { argValues, codeHash, constructorIndex, weight: gasLimit, endowment, metadata }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
-  const saltu8a = encodeSalt(salt);
-
   const options = {
     gasLimit,
-    salt: saltu8a,
+    salt: encodeSalt(),
     value: endowment ? api.registry.createType('Balance', endowment) : undefined,
   };
 

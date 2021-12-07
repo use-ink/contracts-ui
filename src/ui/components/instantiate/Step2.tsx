@@ -2,22 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useState } from 'react';
-import { isHex } from '@polkadot/util';
-import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';
-import { Form, FormField, getValidation } from '../form/FormField';
+import { Form, FormField } from '../form/FormField';
 import { InputNumber } from '../form/InputNumber';
 import { InputBalance } from '../form/InputBalance';
-import { InputSalt } from '../form/InputSalt';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
 import { useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
-import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
-import { useToggle } from 'ui/hooks/useToggle';
 
 import { AbiMessage } from 'types';
 
@@ -44,14 +39,6 @@ export function Step2() {
     weight,
   } = useWeight();
 
-  const salt = useFormField<string>(randomAsHex(), value => {
-    if (!!value && isHex(value) && value.length === 66) {
-      return { isValid: true };
-    }
-
-    return { isValid: false, isError: true, message: 'Invalid hex string' };
-  });
-
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
 
@@ -66,13 +53,10 @@ export function Step2() {
     deployConstructor && setArgs(deployConstructor.args);
   }, [deployConstructor, setArgs]);
 
-  const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
-
   const submitHandler = () => {
     onFinalize &&
       onFinalize({
         constructorIndex,
-        salt: isUsingSalt ? salt.value : undefined,
         endowment,
         argValues,
         weight,
@@ -110,9 +94,6 @@ export function Step2() {
         <FormField id="endowment" label="Endowment" {...endowmentValidation}>
           <InputBalance id="endowment" value={endowment} onChange={onChangeEndowment} />
         </FormField>
-        <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
-          <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
-        </FormField>
         <FormField
           id="maxGas"
           label="Max Gas Allowed"
@@ -138,7 +119,6 @@ export function Step2() {
         <Button
           isDisabled={
             !endowmentValidation.isValid ||
-            (isUsingSalt && !salt.isValid) ||
             !isWeightValid ||
             !deployConstructor?.method ||
             !argValues
