@@ -6,9 +6,9 @@ import { isHex } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
-import { InputNumber } from '../form/InputNumber';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
+import { InputGas } from '../form/InputGas';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
@@ -19,7 +19,7 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
-import { AbiMessage } from 'types';
+import type { AbiMessage } from 'types';
 
 export function Step2() {
   const {
@@ -35,14 +35,7 @@ export function Step2() {
     ...endowmentValidation
   } = useBalance(10000);
 
-  const {
-    executionTime,
-    isValid: isWeightValid,
-    megaGas,
-    setMegaGas,
-    percentage,
-    weight,
-  } = useWeight();
+  const weight = useWeight();
 
   const salt = useFormField<string>(randomAsHex(), value => {
     if (!!value && isHex(value) && value.length === 66) {
@@ -75,7 +68,7 @@ export function Step2() {
         salt: salt.value,
         endowment,
         argValues,
-        weight,
+        weight: weight.weight,
       });
   };
 
@@ -116,22 +109,10 @@ export function Step2() {
         <FormField
           id="maxGas"
           label="Max Gas Allowed"
-          isError={!isWeightValid}
-          message={!isWeightValid ? 'Invalid gas limit' : null}
+          isError={!weight.isValid}
+          message={!weight.isValid ? 'Invalid gas limit' : null}
         >
-          <InputNumber value={megaGas} onChange={setMegaGas} placeholder="200000" />
-          <div className="relative pt-2">
-            <p className="text-gray-500 text-xs pb-2">
-              {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
-              {percentage}% of block time)
-            </p>
-            <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-700">
-              <div
-                style={{ width: `${percentage}%` }}
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"
-              ></div>
-            </div>
-          </div>
+          <InputGas isCall {...weight} />
         </FormField>
       </Form>
       <Buttons>
@@ -139,7 +120,7 @@ export function Step2() {
           isDisabled={
             !endowmentValidation.isValid ||
             (isUsingSalt && !salt.isValid) ||
-            !isWeightValid ||
+            !weight.isValid ||
             !deployConstructor?.method ||
             !argValues
           }

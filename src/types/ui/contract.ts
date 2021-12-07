@@ -1,11 +1,11 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import BN from 'bn.js';
 import type {
-  Abi,
   AbiMessage,
   AnyJson,
-  ApiPromise,
+  ContractPromise,
   KeyringPair,
   RegistryError,
 } from '../substrate';
@@ -18,15 +18,16 @@ export interface RawParam {
   value: RawParamValues;
 }
 
-export interface ContractCallParams {
-  api: ApiPromise;
-  abi: Abi;
-  contractAddress: string;
+export interface ContractDryRunParams {
+  contract: ContractPromise;
   message: AbiMessage;
-  endowment: number;
-  gasLimit: number;
-  keyringPair?: KeyringPair;
+  payment: BN;
+  sender: KeyringPair;
   argValues?: Record<string, unknown>;
+}
+
+export interface ContractCallParams extends ContractDryRunParams {
+  gasLimit: BN;
   dispatch: (action: ContractCallAction) => void;
 }
 

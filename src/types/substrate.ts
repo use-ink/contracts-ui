@@ -3,9 +3,15 @@
 
 // types & interfaces
 export type { AnyJson, Codec, Registry, RegistryError, TypeDef } from '@polkadot/types/types';
-export type { DispatchError, EventRecord } from '@polkadot/types/interfaces';
+export type { DispatchError, EventRecord, Weight } from '@polkadot/types/interfaces';
 export type { KeyringPair } from '@polkadot/keyring/types';
-export type { AbiConstructor, AbiMessage, AbiParam } from '@polkadot/api-contract/types';
+export type {
+  AbiConstructor,
+  AbiMessage,
+  AbiParam,
+  BlueprintOptions,
+  ContractOptions,
+} from '@polkadot/api-contract/types';
 export type { ContractQuery, ContractTx } from '@polkadot/api-contract/base/types';
 export type { SubmittableExtrinsic, VoidFn } from '@polkadot/api/types';
 

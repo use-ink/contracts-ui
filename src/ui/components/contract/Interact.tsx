@@ -1,21 +1,24 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import { Dropdown } from '../common/Dropdown';
 import { ArgumentForm } from '../form/ArgumentForm';
 import { Button, Buttons } from '../common/Button';
-import { Input } from '../form/Input';
 import { AccountSelect } from '../account/AccountSelect';
 import { Form, FormField, getValidation } from '../form/FormField';
+import { InputBalance } from '../form/InputBalance';
+import { InputGas } from '../form/InputGas';
 import { ResultsOutput } from './ResultsOutput';
-import { call, convertToNumber, createMessageOptions } from 'api';
+import { call, createMessageOptions, dryRun } from 'api';
 import { useApi } from 'ui/contexts';
 import { contractCallReducer, initialState } from 'ui/reducers';
-import { ContractPromise } from 'types';
+import { BN, ContractPromise } from 'types';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useFormField } from 'ui/hooks/useFormField';
 import { useArgValues } from 'ui/hooks/useArgValues';
+import { useBalance } from 'ui/hooks/useBalance';
+import { useWeight } from 'ui/hooks';
 
 interface Props {
   contract: ContractPromise;
@@ -26,8 +29,9 @@ export const InteractTab = ({ contract }: Props) => {
   const message = useFormField(contract.abi.messages[0]);
   const [argValues, setArgValues] = useArgValues(message.value?.args || []);
   const [state, dispatch] = useReducer(contractCallReducer, initialState);
-  const [endowment, setEndowment] = useState('');
+  const payment = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
+  const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
 
   useEffect(() => {
     if (state.results.length > 0) {
@@ -40,6 +44,37 @@ export const InteractTab = ({ contract }: Props) => {
     // to do: storage for call results
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract.address]);
+
+  useEffect((): void => {
+    if (!accountId || !message.value?.args || !argValues) return;
+
+    const sender = keyring?.getPair(accountId);
+
+    if (message.value.isMutating !== true) {
+      setEstimatedWeight(null);
+
+      return;
+    }
+
+    sender &&
+      message.value.isMutating &&
+      dryRun({
+        contract,
+        message: message.value,
+        argValues,
+        payment: payment.value,
+        sender,
+      })
+        .then(({ gasRequired }) => {
+          setEstimatedWeight(gasRequired);
+        })
+        .catch(e => {
+          console.error(e);
+          setEstimatedWeight(null);
+        });
+  }, [api, accountId, argValues, contract, keyring, message.value, payment.value]);
+
+  const weight = useWeight();
 
   if (!contract) return null;
 
@@ -74,32 +109,52 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
 
           {message?.value?.isPayable && (
-            <>
-              <h2 className="mb-2 text-sm">Payment</h2>
-              <Input value={endowment} onChange={setEndowment} placeholder="Endowment" />
-            </>
+            <FormField id="endowment" label="Payment" {...getValidation(payment)}>
+              <InputBalance
+                value={payment.value}
+                onChange={payment.onChange}
+                placeholder="Payment"
+              />
+            </FormField>
           )}
+          <FormField
+            id="maxGas"
+            label="Max Gas Allowed"
+            isError={!weight.isValid}
+            message={!weight.isValid ? 'Invalid gas limit' : null}
+          >
+            <InputGas
+              estimatedWeight={estimatedWeight}
+              isCall={message.value.isMutating}
+              withEstimate
+              {...weight}
+            />
+          </FormField>
         </Form>
         <Buttons>
           <Button
+            isDisabled={!(weight.isValid || weight.isEmpty)}
             isLoading={state.isLoading}
-            onClick={() =>
-              message &&
-              call({
-                api,
-                abi: contract.abi,
-                contractAddress: contract.address.toString(),
-                endowment: convertToNumber(endowment.trim()),
-                gasLimit: 155852802980,
-                argValues,
-                message: message.value,
-                keyringPair: accountId ? keyring?.getPair(accountId) : undefined,
-                dispatch,
-              })
-            }
+            onClick={() => {
+              const sender = keyring?.getPair(accountId);
+
+              if (sender) {
+                call({
+                  contract,
+                  payment: payment.value,
+                  gasLimit: weight.weight,
+                  argValues,
+                  message: message.value,
+                  sender,
+                  dispatch,
+                })
+                  .then()
+                  .catch(console.error);
+              }
+            }}
             variant="primary"
           >
-            Call
+            {message.value.isMutating ? 'Call' : 'Read'}
           </Button>
         </Buttons>
       </div>
