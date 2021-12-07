@@ -11,5 +11,5 @@ export * from './ArgumentForm';
 export * from './CodeHashField';
 export * from './Bool';
 export * from './hooks/useAccountField';
-export * from './hooks/useContractName';
+export * from './ContractNameField';
 export * from './hooks/useMetadataField';
