@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from '@jest/globals';
-import type { UseFormField } from 'types';
+import type { ValidFormField } from 'types';
 
-export function getMockFormField<T>(value: T, isValid = false): UseFormField<T> {
+export function getMockFormField<T>(value: T, isValid = false): ValidFormField<T> {
   return {
     onChange: jest.fn(),
     value,

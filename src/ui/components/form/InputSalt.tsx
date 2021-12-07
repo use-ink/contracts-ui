@@ -4,11 +4,11 @@
 import React from 'react';
 import { Switch } from '../common/Switch';
 import { Input } from './Input';
-import { SimpleSpread, UseFormField } from 'types';
+import { SimpleSpread, ValidFormField } from 'types';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
-  UseFormField<string> & {
+  ValidFormField<string> & {
     isActive?: boolean;
     toggleIsActive: () => void;
   }
