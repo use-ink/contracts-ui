@@ -10,12 +10,19 @@ import { SimpleSpread } from 'types';
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
   {
+    isDisabled?: boolean;
     value?: BN;
     onChange: (_: BN) => void;
   }
 >;
 
-export function InputNumber({ children, onChange: _onChange, value = BN_ZERO }: Props) {
+export function InputNumber({
+  children,
+  isDisabled,
+  onChange: _onChange,
+  value = BN_ZERO,
+  ...props
+}: Props) {
   const onChange = useCallback(
     (value: string) => {
       _onChange(new BN(value));
@@ -25,10 +32,12 @@ export function InputNumber({ children, onChange: _onChange, value = BN_ZERO }: 
 
   return (
     <Input
+      isDisabled={isDisabled}
       onChange={onChange}
       onFocus={e => e.target.select()}
       type="number"
       value={value ? value.toString() : ''}
+      {...props}
     >
       {children}
     </Input>

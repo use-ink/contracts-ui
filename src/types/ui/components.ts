@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { UseFormField } from './hooks';
+import { ValidFormField } from './hooks';
 import { FileState, SimpleSpread } from './util';
 
 export interface DropdownOption<T> {
@@ -11,7 +11,7 @@ export interface DropdownOption<T> {
 
 export type DropdownProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
-  UseFormField<T> & {
+  ValidFormField<T> & {
     button?: React.ComponentType<OptionProps<T>>;
     isDisabled?: boolean;
     option?: React.ComponentType<OptionProps<T>>;

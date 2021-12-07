@@ -15,12 +15,12 @@ export type UseWeight = {
   weight: BN;
 };
 
-export interface UseFormField<T> extends Validation {
+export interface ValidFormField<T> extends Validation {
   value: T;
   onChange: (_: T) => void;
 }
 
-export type UseBalance = UseFormField<BN>;
+export type UseBalance = ValidFormField<BN>;
 
 export interface UseMetadata extends MetadataState {
   onChange: (_: FileState) => void;

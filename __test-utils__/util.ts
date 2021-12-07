@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { RenderResult } from '@testing-library/react-hooks';
-import { UseFormField } from 'types';
+import { ValidFormField } from 'types';
 
 export function timeout(ms = 10) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -18,8 +18,8 @@ export function getNodeText(node: React.ReactNode): string {
 }
 
 export function extractFormFieldResult<T>(
-  result: RenderResult<UseFormField<T>>
-): Partial<Omit<UseFormField<T>, 'onChange'>> {
+  result: RenderResult<ValidFormField<T>>
+): Partial<Omit<ValidFormField<T>, 'onChange'>> {
   return {
     isError: result.current.isError,
     isTouched: result.current.isTouched,

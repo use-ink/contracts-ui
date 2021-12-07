@@ -1,50 +1,67 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { BN_ZERO } from '@polkadot/util';
 import { encodeSalt, transformUserInput } from 'api/util';
 
 import {
-  ContractPromise,
+  BlueprintOptions,
   ContractQuery,
+  ContractOptions,
   ContractTx,
   ContractCallParams,
   CallResult,
   RegistryError,
+  KeyringPair,
+  ContractDryRunParams,
 } from 'types';
 
 let nextId = 0;
 
-function prepareContractTx(
-  tx: ContractTx<'promise'>,
-  options: { gasLimit: number; salt: Uint8Array; value: number },
-  args: unknown[]
-) {
+function prepareContractTx(tx: ContractTx<'promise'>, options: BlueprintOptions, args: unknown[]) {
   return args.length > 0 ? tx(options, ...args) : tx(options);
 }
 
-function sendContractQuery(
-  options: { endowment: number; gasLimit: number },
-  fromAddress: string,
+export function sendContractQuery(
   query: ContractQuery<'promise'>,
+  sender: KeyringPair,
+  options: ContractOptions,
   args: unknown[]
 ) {
-  return args?.length > 0 ? query(fromAddress, options, ...args) : query(fromAddress, options);
+  return args?.length > 0
+    ? query(sender.address, options, ...args)
+    : query(sender.address, options);
+}
+
+export function dryRun({
+  contract,
+  message,
+  payment: value,
+  sender,
+  argValues,
+}: ContractDryRunParams) {
+  const { isPayable, method } = message;
+  const transformed = transformUserInput(contract.registry, message.args, argValues);
+
+  return sendContractQuery(
+    contract.query[method],
+    sender,
+    { gasLimit: -1, value: isPayable ? value : 0 },
+    transformed
+  );
 }
 
 export async function call({
-  api,
-  abi,
-  contractAddress,
+  contract,
   message,
-  endowment,
+  payment: value,
   gasLimit,
-  keyringPair,
+  sender,
   argValues,
   dispatch,
 }: ContractCallParams) {
-  const contract = new ContractPromise(api, abi, contractAddress);
   const salt = encodeSalt();
-  const transformed = transformUserInput(api, message.args, argValues);
+  const transformed = transformUserInput(contract.registry, message.args, argValues);
 
   const callResult: CallResult = {
     id: ++nextId,
@@ -55,63 +72,59 @@ export async function call({
     time: Date.now(),
   };
 
-  if (keyringPair) {
-    dispatch({ type: 'CALL_INIT', payload: callResult });
-    if (message.isMutating || message.isPayable) {
-      const tx = prepareContractTx(
-        contract.tx[message.method],
-        { gasLimit, value: endowment, salt },
-        transformed
-      );
+  dispatch({ type: 'CALL_INIT', payload: callResult });
+  if (message.isMutating || message.isPayable) {
+    const tx = prepareContractTx(
+      contract.tx[message.method],
+      { gasLimit: gasLimit.addn(1), value: message.isPayable ? value || BN_ZERO : undefined, salt },
+      transformed
+    );
 
-      const unsub = await tx.signAndSend(keyringPair, result => {
-        const { status, events, dispatchError, dispatchInfo } = result;
+    const unsub = await tx.signAndSend(sender, result => {
+      const { status, events, dispatchError, dispatchInfo } = result;
 
-        const log = events.map(({ event }) => {
-          return `${event.section}:${event.method}`;
-        });
-
-        let error: RegistryError | undefined;
-
-        if (status.isFinalized) {
-          if (dispatchError) {
-            error = api.registry.findMetaError(dispatchError.asModule);
-          }
-
-          dispatch({
-            type: 'CALL_FINALISED',
-            payload: {
-              ...callResult,
-              log: log,
-              error,
-              blockHash: status.asFinalized.toString(),
-              info: dispatchInfo?.toHuman(),
-            },
-          });
-
-          unsub();
-        }
+      const log = events.map(({ event }) => {
+        return `${event.section}:${event.method}`;
       });
-    } else {
-      const { result, output } = await sendContractQuery(
-        { gasLimit, endowment },
-        keyringPair.address,
-        contract.query[message.method],
-        transformed
-      );
 
       let error: RegistryError | undefined;
 
-      if (result.isErr && result.asErr.isModule) {
-        error = api.registry.findMetaError(result.asErr.asModule);
-      }
+      if (status.isFinalized) {
+        if (dispatchError) {
+          error = contract.registry.findMetaError(dispatchError.asModule);
+        }
 
-      dispatch({
-        type: 'CALL_FINALISED',
-        payload: { ...callResult, data: output?.toHuman(), error },
-      });
-    }
+        dispatch({
+          type: 'CALL_FINALISED',
+          payload: {
+            ...callResult,
+            log: log,
+            error,
+            blockHash: status.asFinalized.toString(),
+            info: dispatchInfo?.toHuman(),
+          },
+        });
+
+        unsub();
+      }
+    });
   } else {
-    console.error('Kering pair not found');
+    const { result, output } = await sendContractQuery(
+      contract.query[message.method],
+      sender,
+      { gasLimit, value: message.isPayable ? value || BN_ZERO : undefined },
+      transformed
+    );
+
+    let error: RegistryError | undefined;
+
+    if (result.isErr && result.asErr.isModule) {
+      error = contract.registry.findMetaError(result.asErr.asModule);
+    }
+
+    dispatch({
+      type: 'CALL_FINALISED',
+      payload: { ...callResult, data: output?.toHuman(), error },
+    });
   }
 }

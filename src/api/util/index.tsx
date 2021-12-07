@@ -5,6 +5,7 @@ import React from 'react';
 import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
+import { MAX_CALL_WEIGHT } from '../../constants';
 import {
   AbiConstructor,
   Bytes,
@@ -14,6 +15,9 @@ import {
   KeyringPair,
   AbiMessage,
   DropdownOption,
+  Registry,
+  OrFalsy,
+  Weight,
 } from 'types';
 import { MessageSignature } from 'ui/components/message/MessageSignature';
 
@@ -27,6 +31,12 @@ export function handleDispatchError(dispatchError: DispatchError, api: ApiPromis
 }
 
 const EMPTY_SALT = new Uint8Array();
+
+export function maximumBlockWeight(api: OrFalsy<ApiPromise>): Weight {
+  return api?.consts.system.blockWeights
+    ? api.consts.system.blockWeights.maxBlock
+    : (api?.consts.system.maximumBlockWeight as Weight) || MAX_CALL_WEIGHT;
+}
 
 export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Uint8Array {
   return salt instanceof Bytes
@@ -99,7 +109,7 @@ export function convertToNumber(value: string) {
 }
 
 export function transformUserInput(
-  api: ApiPromise,
+  registry: Registry,
   messageArgs: AbiParam[],
   values?: Record<string, unknown>
 ) {
@@ -107,7 +117,7 @@ export function transformUserInput(
     const value = values ? values[name] : null;
 
     if (type === 'Balance') {
-      return api.registry.createType('Balance', value);
+      return registry.createType('Balance', value);
     }
 
     return value || null;
