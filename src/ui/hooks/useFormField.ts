@@ -4,12 +4,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { isNull, isUndefined } from '@polkadot/util';
-import type { UseFormField, ValidateFn, Validation } from 'types';
+import type { ValidFormField, ValidateFn, Validation } from 'types';
 
 export function useFormField<T>(
   defaultValue: T,
   validate: ValidateFn<T> = value => ({ isValid: !isNull(value), message: null })
-): UseFormField<T> {
+): ValidFormField<T> {
   const [value, setValue] = useState<T>(defaultValue);
   const [validation, setValidation] = useState<Omit<Validation, 'isError'>>(validate(value));
   const isTouched = useRef(false);

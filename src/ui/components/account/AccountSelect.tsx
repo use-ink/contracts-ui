@@ -5,10 +5,10 @@ import React from 'react';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
 import { createAccountOptions } from 'api/util';
-import type { DropdownProps, OptionProps, UseFormField } from 'types';
+import type { DropdownProps, OptionProps, ValidFormField } from 'types';
 import { useApi } from 'ui/contexts';
 
-type Props = UseFormField<string> & Omit<DropdownProps<string>, 'options'>;
+type Props = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;
 
 function Option({ option: { name, value } }: OptionProps<string>) {
   return <Account name={name} value={value} />;

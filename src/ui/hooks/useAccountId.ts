@@ -4,9 +4,9 @@
 import { useCallback } from 'react';
 import { useFormField } from './useFormField';
 import { useApi } from 'ui/contexts/ApiContext';
-import type { OrFalsy, UseFormField, Validation } from 'types';
+import type { OrFalsy, ValidFormField, Validation } from 'types';
 
-export function useAccountId(initialValue = ''): UseFormField<string> {
+export function useAccountId(initialValue = ''): ValidFormField<string> {
   const { keyring } = useApi();
 
   const validate = useCallback(
