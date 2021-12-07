@@ -37,8 +37,6 @@ export function DatabaseContextProvider({
       !!blockOneHash &&
       init(endpoint, blockOneHash, isRemote)
         .then(([db, user, identity]): void => {
-          console.log('init once');
-
           setState(state => ({ ...state, db, user, identity, isDbReady: true }));
         })
         .catch(e => {
@@ -54,10 +52,10 @@ export function DatabaseContextProvider({
   }, [state.db, state.identity]);
 
   useEffect((): void => {
-    if (state.isDbReady && (!state.user || !state.myContracts)) {
+    if (state.isDbReady) {
       refreshUserData().then().catch(console.error);
     }
-  }, [refreshUserData, state.isDbReady, state.user, state.myContracts]);
+  }, [refreshUserData, state.isDbReady]);
 
   return <DbContext.Provider value={{ ...state, refreshUserData }}>{children}</DbContext.Provider>;
 }
