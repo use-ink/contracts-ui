@@ -56,6 +56,7 @@ export interface InstantiateData {
   name: string;
   constructorIndex: number;
   salt?: string;
+  storageDepositLimit?: BN | null;
   weight: BN;
   codeHash?: string;
 }

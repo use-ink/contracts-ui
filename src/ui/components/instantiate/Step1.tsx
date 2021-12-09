@@ -4,13 +4,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
-import {
-  Form,
-  useAccountSelect,
-  useMetadataField,
-  CodeHashField,
-  ContractNameField,
-} from '../form';
+import { Form, useMetadataField, CodeHashField, ContractNameField } from '../form';
 import { Loader } from '../common/Loader';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useInstantiate } from 'ui/contexts';
@@ -20,7 +14,6 @@ export function Step1() {
 
   const { stepForward, setData, data, currentStep } = useInstantiate();
 
-  const { accountId, AccountSelectField } = useAccountSelect();
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
 
   const { metadata, isLoadingCodeBundle, isUsingStoredMetadata, isErrorMetadata, MetadataField } =
@@ -36,7 +29,6 @@ export function Step1() {
     setData &&
       setData({
         ...data,
-        accountId,
         metadata: metadata,
         name,
         codeHash: codeHashUrlParam || undefined,
@@ -50,7 +42,6 @@ export function Step1() {
   return (
     <Loader isLoading={isLoadingCodeBundle}>
       <Form>
-        <AccountSelectField />
         <ContractNameField value={name} onChange={setName} {...nameValidation} />
         {codeHashUrlParam && (
           <CodeHashField

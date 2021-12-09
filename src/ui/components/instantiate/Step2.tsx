@@ -2,13 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useState } from 'react';
-import { isHex } from '@polkadot/util';
+// import { isHex } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
+import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
+import { useAccountSelect } from '../form';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
@@ -20,6 +22,7 @@ import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
 import type { AbiMessage } from 'types';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 
 export function Step2() {
   const {
@@ -29,6 +32,8 @@ export function Step2() {
     onFinalize,
   } = useInstantiate();
 
+  const { accountId, AccountSelectField } = useAccountSelect();
+
   const {
     value: endowment,
     onChange: onChangeEndowment,
@@ -36,14 +41,18 @@ export function Step2() {
   } = useBalance(10000);
 
   const weight = useWeight();
+  const storageDepositLimit = useStorageDepositLimit(accountId);
 
-  const salt = useFormField<string>(randomAsHex(), value => {
-    if (!!value && isHex(value) && value.length === 66) {
-      return { isValid: true };
-    }
+  const salt = useFormField<string>(
+    randomAsHex()
+    // value => {
+    //   if (!!value && isHex(value) && value.length === 66) {
+    //     return { isValid: true };
+    //   }
 
-    return { isValid: false, isError: true, message: 'Invalid hex string' };
-  });
+    //   return { isValid: false, isError: true, message: 'Invalid hex string' };
+    // }
+  );
 
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
@@ -64,10 +73,12 @@ export function Step2() {
   const submitHandler = () => {
     onFinalize &&
       onFinalize({
+        accountId,
         constructorIndex,
         salt: salt.value,
         endowment,
         argValues,
+        storageDepositLimit: storageDepositLimit.value || undefined,
         weight: weight.weight,
       });
   };
@@ -77,6 +88,7 @@ export function Step2() {
   return metadata ? (
     <>
       <Form>
+        <AccountSelectField />
         <FormField id="constructor" label="Deployment Constructor">
           <Dropdown
             id="constructor"
@@ -114,6 +126,18 @@ export function Step2() {
         >
           <InputGas isCall {...weight} />
         </FormField>
+        <FormField
+          id="storageDepositLimit"
+          label="Storage Deposit Limit"
+          isError={!storageDepositLimit.isValid}
+          message={
+            !storageDepositLimit.isValid
+              ? storageDepositLimit.message || 'Invalid storage deposit limit'
+              : null
+          }
+        >
+          <InputStorageDepositLimit {...storageDepositLimit} />
+        </FormField>
       </Form>
       <Buttons>
         <Button
@@ -121,6 +145,7 @@ export function Step2() {
             !endowmentValidation.isValid ||
             (isUsingSalt && !salt.isValid) ||
             !weight.isValid ||
+            !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
             !argValues
           }

@@ -16,12 +16,14 @@ export function createInstantiateTx(
     endowment,
     metadata,
     salt,
+    storageDepositLimit,
   }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
   const saltu8a = encodeSalt(salt);
 
   const options = {
     gasLimit,
+    storageDepositLimit: storageDepositLimit || undefined,
     salt: saltu8a,
     value: endowment ? api.registry.createType('Balance', endowment) : undefined,
   };
