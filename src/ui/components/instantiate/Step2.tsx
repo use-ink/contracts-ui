@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 // import { isHex } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
+import { isHex } from '@polkadot/util';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
@@ -43,16 +44,13 @@ export function Step2() {
   const weight = useWeight();
   const storageDepositLimit = useStorageDepositLimit(accountId);
 
-  const salt = useFormField<string>(
-    randomAsHex()
-    // value => {
-    //   if (!!value && isHex(value) && value.length === 66) {
-    //     return { isValid: true };
-    //   }
+  const salt = useFormField<string>(randomAsHex(), value => {
+    if (!!value && isHex(value) && value.length === 66) {
+      return { isValid: true };
+    }
 
-    //   return { isValid: false, isError: true, message: 'Invalid hex string' };
-    // }
-  );
+    return { isValid: false, isError: true, message: 'Invalid hex string' };
+  });
 
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
