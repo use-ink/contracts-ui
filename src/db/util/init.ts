@@ -11,6 +11,7 @@ import { getUser } from '../queries/user';
 import { getStoredPrivateKey } from './identity';
 import type { UserDocument } from 'types';
 
+const DELIMITER = '__';
 const DB_VERSION_KEY = 'substrate-contracts-explorer:db-version';
 const LOCAL_NODE_DB_NAME = 'substrate-contracts-explorer:local-db-name';
 
@@ -23,7 +24,7 @@ function purgeOutdatedDBs(blockOneHash: string) {
   const oldLocalDbName = window.localStorage.getItem(LOCAL_NODE_DB_NAME);
 
   if (oldLocalDbName) {
-    const [url, hash] = oldLocalDbName.split('_');
+    const [url, hash] = oldLocalDbName.split(DELIMITER);
 
     if (isLocalNode(url) && hash !== blockOneHash) {
       console.log(`Deleting database ${oldLocalDbName}...`);
@@ -37,8 +38,8 @@ export async function init(
   blockOneHash: string,
   isRemote = false
 ): Promise<[DB, UserDocument | null, PrivateKey | null]> {
-  const name = `${rpcUrl}__${blockOneHash}`;
-  console.log(name);
+  const name = `${rpcUrl}${DELIMITER}${blockOneHash}`;
+
   const db = await initDb(name);
   const [user, identity] = await initIdentity(db);
 
