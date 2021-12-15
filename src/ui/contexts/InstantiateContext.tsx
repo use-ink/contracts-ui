@@ -10,8 +10,8 @@ import {
   CodeSubmittableResult,
   BlueprintSubmittableResult,
   InstantiateData,
-  ContractPromise,
-  BlueprintPromise,
+  Contract,
+  Blueprint,
   SubmittableExtrinsic,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
@@ -63,7 +63,7 @@ export function InstantiateContextProvider({
   const [[tx, onInstantiate], setTx] = useState<TxState>([null, NOOP, null]);
 
   const onSuccess = useCallback(
-    (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
+    (contract: Contract, _?: Blueprint | undefined) => {
       history.push(`/contract/${contract.address}`);
 
       dbState.refreshUserData();

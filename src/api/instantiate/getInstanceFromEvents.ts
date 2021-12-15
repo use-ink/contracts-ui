@@ -1,16 +1,16 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ContractPromise } from '@polkadot/api-contract';
-import type { ApiPromise, Abi, EventRecord } from 'types';
+import { ApiPromise, Abi, Contract, ContractPromise, EventRecord } from 'types';
 
 export const getInstanceFromEvents = (
   events: EventRecord[],
   api: ApiPromise,
   metadata: Abi
-): ContractPromise | undefined => {
+): Contract | undefined => {
   let address;
-  let contract: ContractPromise | undefined;
+  let contract: Contract | undefined;
+
   events
     .filter(({ event }) => api.events.contracts.Instantiated.is(event))
     .map(

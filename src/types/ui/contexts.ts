@@ -4,10 +4,10 @@
 import type {
   Abi,
   ApiPromise,
-  BlueprintPromise,
+  Blueprint,
   BlueprintSubmittableResult,
   CodeSubmittableResult,
-  ContractPromise,
+  Contract,
   Keyring,
   SubmittableExtrinsic,
   SubmittableResult,
@@ -66,7 +66,7 @@ export interface InstantiateState {
   onError: () => void;
   onFinalize?: (data: Partial<InstantiateData>) => void;
   onUnFinalize?: () => void;
-  onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
+  onSuccess: (_: Contract, __?: Blueprint | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
   currentStep: number;
   stepForward?: VoidFn;

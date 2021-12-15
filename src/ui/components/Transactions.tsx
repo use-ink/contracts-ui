@@ -4,7 +4,7 @@
 import { CheckIcon, ClockIcon, ExclamationCircleIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { Spinner } from './common/Spinner';
-import type { TransactionsState } from 'types';
+import type { CallFunction, TransactionsState } from 'types';
 import { classes } from 'ui/util';
 
 type Props = React.HTMLAttributes<HTMLDivElement> & TransactionsState;
@@ -45,7 +45,9 @@ export function Transactions({ className, dismiss, txs }: Props) {
           >
             {icon}
             <div className="pl-2 flex-grow text-sm">
-              <div>{extrinsic.registry.findMetaCall(extrinsic.callIndex).method}</div>
+              <div>
+                {(extrinsic.registry.findMetaCall(extrinsic.callIndex) as CallFunction).method}
+              </div>
               <div className="dark:text-gray-400">{text}</div>
             </div>
             {isComplete && (

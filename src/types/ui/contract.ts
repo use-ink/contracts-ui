@@ -2,13 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import BN from 'bn.js';
-import type {
-  AbiMessage,
-  AnyJson,
-  ContractPromise,
-  KeyringPair,
-  RegistryError,
-} from '../substrate';
+import type { AbiMessage, AnyJson, Contract, KeyringPair, RegistryError } from '../substrate';
 
 export type RawParamValue = unknown | undefined;
 export type RawParamValueArray = (RawParamValue | RawParamValue[])[];
@@ -19,7 +13,7 @@ export interface RawParam {
 }
 
 export interface ContractDryRunParams {
-  contract: ContractPromise;
+  contract: Contract;
   message: AbiMessage;
   payment: BN;
   sender: KeyringPair;

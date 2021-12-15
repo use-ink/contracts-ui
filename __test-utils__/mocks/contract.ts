@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { jest } from '@jest/globals';
-import { Abi, ContractPromise } from 'types';
+import { Abi, Contract } from 'types';
 
 export const mockAbiFlipper = {
   constructors: [
@@ -61,4 +61,4 @@ export const mockAbiFlipper = {
 
 export const mockContract = {
   abi: mockAbiFlipper,
-} as ContractPromise;
+} as Contract;

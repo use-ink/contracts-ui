@@ -13,7 +13,7 @@ import { ResultsOutput } from './ResultsOutput';
 import { call, createMessageOptions, dryRun } from 'api';
 import { useApi } from 'ui/contexts';
 import { contractCallReducer, initialState } from 'ui/reducers';
-import { BN, ContractPromise } from 'types';
+import { BN, Contract } from 'types';
 import { useAccountId } from 'ui/hooks/useAccountId';
 import { useFormField } from 'ui/hooks/useFormField';
 import { useArgValues } from 'ui/hooks/useArgValues';
@@ -21,7 +21,7 @@ import { useBalance } from 'ui/hooks/useBalance';
 import { useWeight } from 'ui/hooks';
 
 interface Props {
-  contract: ContractPromise;
+  contract: Contract;
 }
 
 export const InteractTab = ({ contract }: Props) => {

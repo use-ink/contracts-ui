@@ -44,7 +44,7 @@ function deriveFromJson(
   let value: Abi | undefined = undefined;
 
   try {
-    value = new Abi(source, api?.registry.getChainProperties());
+    value = new Abi(source as Record<string, unknown>, api?.registry.getChainProperties());
 
     const name = options.name || value.info.contract.name.toString();
 

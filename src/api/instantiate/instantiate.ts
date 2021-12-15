@@ -3,6 +3,7 @@
 
 import { handleDispatchError } from '../util';
 import type {
+  AnyJson,
   ApiState,
   DbState,
   OnInstantiateSuccess$Code,
@@ -25,7 +26,7 @@ export function onInsantiateFromHash(
 
     if (accountId && codeHash && contract && (status.isInBlock || status.isFinalized)) {
       await createContract(db, identity, {
-        abi: contract.abi.json,
+        abi: contract.abi.json as AnyJson,
         address: contract.address.toString(),
         creator: accountId,
         blockZeroHash: blockZeroHash || undefined,
@@ -56,7 +57,7 @@ export function onInstantiateFromCode(
 
       if (accountId && contract && (status.isInBlock || status.isFinalized)) {
         await createContract(db, identity, {
-          abi: contract.abi.json,
+          abi: contract.abi.json as AnyJson,
           address: contract.address.toString(),
           blockZeroHash: blockZeroHash || undefined,
           creator: accountId,
