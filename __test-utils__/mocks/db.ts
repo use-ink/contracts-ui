@@ -65,14 +65,12 @@ export function getMockDbUsers(count: number): TestUser[] {
 export function getMockCodeBundles(): CodeBundleDocument[] {
   const codeBundles: CodeBundleDocument[] = [];
 
-  const blockZeroHashes = [randomHash(), randomHash()];
   const genesisHash = randomHash();
 
   MOCK_CONTRACT_DATA.forEach(([name, , tags]) => {
     const abi = (contractFiles as Record<string, AnyJson>)[name.toLowerCase()];
 
     codeBundles.push({
-      blockZeroHash: blockZeroHashes[Math.round(Math.random())],
       codeHash: randomHash(),
       creator: getKeyringPairRandom().address,
       genesisHash,
@@ -92,7 +90,7 @@ export function getMockCodeBundles(): CodeBundleDocument[] {
 export function getMockContracts(codeBundles: CodeBundleDocument[]): ContractDocument[] {
   const contracts: ContractDocument[] = [];
 
-  const { blockZeroHash, creator, genesisHash } = codeBundles[0];
+  const { creator, genesisHash } = codeBundles[0];
 
   // Original instantiation and 0-2 reinstantiations
   MOCK_CONTRACT_DATA.forEach(([name, , tags], index) => {
@@ -100,7 +98,6 @@ export function getMockContracts(codeBundles: CodeBundleDocument[]): ContractDoc
 
     contracts.push({
       address: faker.random.alphaNumeric(62),
-      blockZeroHash,
       creator,
       genesisHash,
       codeHash: codeBundles[index].codeHash,

@@ -17,10 +17,6 @@
       "description": "The Polkadot address that instantiated this contract",
       "type": "string"
     },
-    "blockZeroHash": {
-      "description": "The identifying block hash for the contract's chain (for distinguishing development/local node instances)",
-      "type": "string"
-    },
     "address": {
       "description": "The contract's instantiation address",
       "type": "string"

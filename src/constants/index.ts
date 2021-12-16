@@ -10,7 +10,7 @@ export const DEFAULT_DECIMALS = 12;
 export const MAX_CALL_WEIGHT = new BN(2_000_000_000_000);
 
 export const NULL_CHAIN_PROPERTIES = {
-  blockZeroHash: null,
+  blockOneHash: null,
   systemName: null,
   systemVersion: null,
   tokenDecimals: DEFAULT_DECIMALS,
