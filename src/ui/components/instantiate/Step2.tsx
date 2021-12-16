@@ -67,6 +67,7 @@ export function Step2() {
   }, [deployConstructor, setArgs]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const submitHandler = () => {
     onFinalize &&
@@ -134,7 +135,11 @@ export function Step2() {
               : null
           }
         >
-          <InputStorageDepositLimit {...storageDepositLimit} />
+          <InputStorageDepositLimit
+            isActive={isUsingStorageDepositLimit}
+            toggleIsActive={toggleIsUsingStorageDepositLimit}
+            {...storageDepositLimit}
+          />
         </FormField>
       </Form>
       <Buttons>
