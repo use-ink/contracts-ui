@@ -80,7 +80,7 @@ export function InstantiateContextProvider({
       const onInstantiate = (codeHashUrlParam ? onInsantiateFromHash : onInstantiateFromCode)(
         apiState,
         dbState,
-        data,
+        newData,
         onSuccess
       );
       setTx([tx, onInstantiate, null]);
