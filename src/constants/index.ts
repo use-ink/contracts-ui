@@ -4,7 +4,7 @@
 import BN from 'bn.js';
 import type { ApiState } from 'types';
 
-export const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://canvas-rpc.parity.io
+export const LOCAL_NODE = 'ws://127.0.0.1:9944'; //wss://rococo-canvas-rpc.polkadot.io
 export const DEFAULT_DECIMALS = 12;
 
 export const MAX_CALL_WEIGHT = new BN(2_000_000_000_000);
