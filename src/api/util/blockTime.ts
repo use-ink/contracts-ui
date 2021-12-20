@@ -1,8 +1,7 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
-import { BN_THOUSAND, BN_TWO } from '@polkadot/util';
+import { BN_THOUSAND, BN_TWO, BN } from '@polkadot/util';
 import { ApiPromise, OrFalsy } from 'types';
 
 const DEFAULT_TIME = new BN(6_000);

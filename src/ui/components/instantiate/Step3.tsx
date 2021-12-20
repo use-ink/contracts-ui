@@ -16,7 +16,7 @@ export function Step3() {
   const apiState = useApi();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
-  const { accountId, endowment, metadata, weight, name } = data;
+  const { accountId, value, metadata, weight, name } = data;
 
   const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
@@ -48,7 +48,7 @@ export function Step3() {
         <div className="field">
           <p className="key">Endowment</p>
           <p className="value">
-            {formatBalance(fromSats(apiState.api, endowment), { forceUnit: '-' })}
+            {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
           </p>
         </div>
 

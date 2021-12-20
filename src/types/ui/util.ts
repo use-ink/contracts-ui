@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import BN from 'bn.js';
-import type { AnyJson, Abi } from '../substrate';
+import type { Abi } from '../substrate';
 
 export type { BN };
 
@@ -36,7 +36,7 @@ export interface FileState {
 }
 
 export interface MetadataState extends Validation {
-  source: AnyJson;
+  source?: Record<string, unknown>;
   name: string;
   value?: Abi;
   isSupplied: boolean;

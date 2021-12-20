@@ -4,18 +4,9 @@
 import { isWasm, u8aToString } from '@polkadot/util';
 import { useEffect, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
-import {
-  Abi,
-  AnyJson,
-  ApiPromise,
-  FileState,
-  MetadataState,
-  UseMetadata,
-  Validation,
-  VoidFn,
-} from 'types';
+import { Abi, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
 
-type OnChange = (_: FileState | undefined, __?: AnyJson) => void;
+type OnChange = (_: FileState | undefined, __?: Record<string, unknown>) => void;
 type OnRemove = VoidFn;
 
 interface Options {
@@ -33,8 +24,8 @@ interface Callbacks {
 }
 
 function deriveFromJson(
-  source: AnyJson = null,
   options: DeriveOptions,
+  source?: Record<string, unknown>,
   api?: ApiPromise | null
 ): MetadataState {
   if (!source) {
@@ -73,7 +64,6 @@ const EMPTY: MetadataState = {
   isSupplied: false,
   isValid: false,
   name: '',
-  source: null,
   message: null,
 };
 
@@ -108,22 +98,22 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
 }
 
 export function useMetadata(
-  initialValue: AnyJson = null,
+  initialValue?: Record<string, unknown>,
   options: Options & Callbacks = {}
 ): UseMetadata {
   const { api } = useApi();
 
   const { isRequired = false, isWasmRequired = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
-    deriveFromJson(initialValue, { isRequired, isWasmRequired }, api)
+    deriveFromJson({ isRequired, isWasmRequired }, initialValue, api)
   );
 
   function onChange(file: FileState): void {
     try {
-      const json = JSON.parse(u8aToString(file.data)) as AnyJson;
+      const json = JSON.parse(u8aToString(file.data)) as Record<string, unknown>;
       const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
 
-      const newState = deriveFromJson(json, { isRequired, isWasmRequired, name }, api);
+      const newState = deriveFromJson({ isRequired, isWasmRequired, name }, json, api);
 
       setState(newState);
 
@@ -149,7 +139,7 @@ export function useMetadata(
   }
 
   useEffect((): void => {
-    setState(deriveFromJson(initialValue, { isRequired, isWasmRequired }, api));
+    setState(deriveFromJson({ isRequired, isWasmRequired }, initialValue, api));
   }, [api, initialValue, isRequired, isWasmRequired]);
 
   return {
