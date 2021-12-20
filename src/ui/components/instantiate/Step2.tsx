@@ -29,11 +29,7 @@ export function Step2() {
     onFinalize,
   } = useInstantiate();
 
-  const {
-    value: endowment,
-    onChange: onChangeEndowment,
-    ...endowmentValidation
-  } = useBalance(10000);
+  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
 
   const weight = useWeight();
 
@@ -66,7 +62,7 @@ export function Step2() {
       onFinalize({
         constructorIndex,
         salt: salt.value,
-        endowment,
+        value,
         argValues,
         weight: weight.weight,
       });
@@ -100,8 +96,8 @@ export function Step2() {
             />
           )}
         </FormField>
-        <FormField id="endowment" label="Endowment" {...endowmentValidation}>
-          <InputBalance id="endowment" value={endowment} onChange={onChangeEndowment} />
+        <FormField id="value" label="Endowment" {...valueValidation}>
+          <InputBalance id="value" value={value} onChange={onChangeValue} />
         </FormField>
         <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
@@ -118,7 +114,7 @@ export function Step2() {
       <Buttons>
         <Button
           isDisabled={
-            !endowmentValidation.isValid ||
+            !valueValidation.isValid ||
             (isUsingSalt && !salt.isValid) ||
             !weight.isValid ||
             !deployConstructor?.method ||

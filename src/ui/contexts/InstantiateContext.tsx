@@ -29,7 +29,7 @@ type TxState = [
 
 const initialData: InstantiateData = {
   constructorIndex: 0,
-  endowment: BN_THOUSAND,
+  value: BN_THOUSAND,
   name: '',
   weight: BN_THOUSAND,
 };

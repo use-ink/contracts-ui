@@ -48,7 +48,7 @@ export const mockInstantiateState: InstantiateProps = {
     argValues: { initValue: 'true' },
     codeHash: '0xd0bc2fee1ad35d66436a1ee818859322b24ba8c9ad80a26ef369cdd2666d173d',
     constructorIndex: 0,
-    endowment: new BN(10000),
+    value: new BN(10000),
     weight: new BN(0),
     name: 'flipper',
   },

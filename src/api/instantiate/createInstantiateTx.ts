@@ -13,7 +13,7 @@ export function createInstantiateTx(
     codeHash,
     constructorIndex,
     weight: gasLimit,
-    endowment,
+    value,
     metadata,
     salt,
   }: InstantiateData
@@ -23,7 +23,7 @@ export function createInstantiateTx(
   const options = {
     gasLimit,
     salt: saltu8a,
-    value: endowment ? api.registry.createType('Balance', endowment) : undefined,
+    value: value ? api.registry.createType('Balance', value) : undefined,
   };
 
   const wasm = metadata?.info.source.wasm;

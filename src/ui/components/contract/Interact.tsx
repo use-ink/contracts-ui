@@ -109,7 +109,7 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
 
           {message?.value?.isPayable && (
-            <FormField id="endowment" label="Payment" {...getValidation(payment)}>
+            <FormField id="value" label="Payment" {...getValidation(payment)}>
               <InputBalance
                 value={payment.value}
                 onChange={payment.onChange}

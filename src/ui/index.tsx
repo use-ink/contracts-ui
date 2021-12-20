@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
 import App from 'ui/components/App';
 import './styles/main.css';
+import '@polkadot/api-augment';
 
 const root = document.getElementById('app-root');
 
