@@ -9,7 +9,7 @@
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "NODE_ENV=development webpack --progress --config webpack.dev.cjs",
     "build:prod": "NODE_ENV=production webpack --config webpack.prod.cjs",
-    "test:all": "jest --clearCache && node --expose-gc --experimental-vm-modules $(yarn bin)/jest --runInBand",
+    "test:all": "jest --clearCache && TOOL_NODE_FLAGS=--expose-gc NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand",
     "test": "yarn test:all --testPathIgnorePatterns ./__tests__/db/**",
     "test:watch": "yarn test --watch",
     "test:coverage": "yarn test --collectCoverage --coveragePathIgnorePatterns ./src/db/**",
@@ -122,5 +122,6 @@
   ],
   "lint-staged": {
     "*.{js,cjs,ts,tsx,css,md,json}": "yarn prettier --write"
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }
