@@ -16,6 +16,7 @@ export function createTx(options: TransactionOptions): Transaction {
     isProcessing: false,
     isError: false,
     isSuccess: false,
+    events: {},
   };
 }
 
@@ -24,7 +25,7 @@ export const TransactionsContext = React.createContext({} as unknown as Transact
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { keyring } = useApi();
+  const { keyring, api } = useApi();
   const [txs, setTxs] = useState<Tx[]>([]);
 
   function queue(options: TransactionOptions): number {
@@ -41,24 +42,36 @@ export function TransactionsContextProvider({
     const tx = txs.find(tx => id === tx.id);
 
     if (tx) {
-      const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
+      const { extrinsic, accountId, isValid, onSuccess } = tx;
 
-      try {
-        setTxs(txs => [
-          ...txs.map(tx => {
-            return tx.id === id
-              ? {
-                  ...tx,
-                  isProcessing: true,
-                }
-              : tx;
-          }),
-        ]);
+      setTxs(txs => [
+        ...txs.map(tx => {
+          return tx.id === id
+            ? {
+                ...tx,
+                isProcessing: true,
+              }
+            : tx;
+        }),
+      ]);
 
-        const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
-          if ((result.isInBlock || result.isFinalized) && isValid(result)) {
-            onSuccess && (await onSuccess(result));
+      const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
+        if (result.isFinalized) {
+          const events: Record<string, number> = {};
 
+          result.events.forEach(record => {
+            const { event } = record;
+            const key = `${event.section}:${event.method}`;
+            if (!events[key]) {
+              events[key] = 1;
+            } else {
+              events[key]++;
+            }
+          });
+
+          console.log(result);
+
+          if (!isValid(result)) {
             setTxs(txs => [
               ...txs.map(tx => {
                 return tx.id === id
@@ -66,32 +79,41 @@ export function TransactionsContextProvider({
                       ...tx,
                       isComplete: true,
                       isProcessing: false,
-                      isSuccess: true,
+                      isError: true,
+                      events,
                     }
                   : tx;
               }),
             ]);
 
-            unsub();
-          }
-        });
-      } catch (e) {
-        console.error(e);
-        onError && onError();
+            let message = 'Transaction failed';
 
-        setTxs(txs => [
-          ...txs.map(tx => {
-            return tx.id === id
-              ? {
-                  ...tx,
-                  isComplete: true,
-                  isProcessing: false,
-                  isError: true,
-                }
-              : tx;
-          }),
-        ]);
-      }
+            if (result.dispatchError?.isModule) {
+              const decoded = api.registry.findMetaError(result.dispatchError.asModule);
+              message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
+            }
+            throw new Error(message);
+          }
+
+          onSuccess && (await onSuccess(result));
+
+          setTxs(txs => [
+            ...txs.map(tx => {
+              return tx.id === id
+                ? {
+                    ...tx,
+                    isComplete: true,
+                    isProcessing: false,
+                    isSuccess: true,
+                    events,
+                  }
+                : tx;
+            }),
+          ]);
+
+          unsub();
+        }
+      });
     }
   }
 

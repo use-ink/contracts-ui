@@ -85,6 +85,7 @@ export interface Transaction {
   isSuccess?: boolean;
   extrinsic: SubmittableExtrinsic<'promise'>;
   accountId: string;
+  events: Record<string, number>;
   isValid: (_: SubmittableResult) => boolean;
   onSuccess?: (_: SubmittableResult) => Promise<void>;
   onError?: () => void;
