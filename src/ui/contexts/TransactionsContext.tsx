@@ -3,7 +3,13 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import { useApi } from './ApiContext';
-import { TransactionOptions, Transaction as Tx, TransactionsState, Transaction } from 'types';
+import {
+  TransactionOptions,
+  Transaction as Tx,
+  TransactionsState,
+  Transaction,
+  TxStatus as Status,
+} from 'types';
 import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 0;
@@ -12,10 +18,7 @@ export function createTx(options: TransactionOptions): Transaction {
   return {
     ...options,
     id: ++nextId,
-    isComplete: false,
-    isProcessing: false,
-    isError: false,
-    isSuccess: false,
+    status: Status.Queued,
     events: {},
   };
 }
@@ -30,9 +33,7 @@ export function TransactionsContextProvider({
 
   function queue(options: TransactionOptions): number {
     setTxs(txs => [
-      ...txs.filter(
-        ({ id, isComplete, isProcessing }) => id < nextId && !isComplete && !isProcessing
-      ),
+      ...txs.filter(({ id, status }) => id < nextId && status === 'queued'),
       createTx(options),
     ]);
 
@@ -49,7 +50,7 @@ export function TransactionsContextProvider({
           return tx.id === id
             ? {
                 ...tx,
-                isProcessing: true,
+                status: Status.Processing,
               }
             : tx;
         }),
@@ -69,17 +70,13 @@ export function TransactionsContextProvider({
             }
           });
 
-          console.log(result);
-
           if (!isValid(result)) {
             setTxs(txs => [
               ...txs.map(tx => {
                 return tx.id === id
                   ? {
                       ...tx,
-                      isComplete: true,
-                      isProcessing: false,
-                      isError: true,
+                      status: Status.Error,
                       events,
                     }
                   : tx;
@@ -102,9 +99,7 @@ export function TransactionsContextProvider({
               return tx.id === id
                 ? {
                     ...tx,
-                    isComplete: true,
-                    isProcessing: false,
-                    isSuccess: true,
+                    status: Status.Success,
                     events,
                   }
                 : tx;
@@ -118,7 +113,7 @@ export function TransactionsContextProvider({
   }
 
   function unqueue(id: number) {
-    setTxs([...txs.filter(tx => tx.id !== id || tx.isProcessing || tx.isComplete)]);
+    setTxs([...txs.filter(tx => tx.id !== id || tx.status !== 'queued')]);
   }
 
   function dismiss(id: number) {
@@ -130,7 +125,7 @@ export function TransactionsContextProvider({
 
     if (txs.length > 0) {
       autoDismiss = setTimeout((): void => {
-        setTxs([...txs.filter(({ isComplete }) => !isComplete)]);
+        setTxs([...txs.filter(({ status }) => status === 'processing' || status === 'queued')]);
       }, 5000);
     }
 
