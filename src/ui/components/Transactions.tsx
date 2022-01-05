@@ -64,11 +64,10 @@ export function Transactions({ className, dismiss, txs }: Props) {
                 <BellIcon className="dark:text-yellow-400 w-12 h-12" />
                 <div className="pl-2 flex-grow text-sm">
                   {Object.keys(events).map(eventName => {
-                    const times = events[eventName] > 1 ? ` x ${events[eventName]}` : '';
+                    const times = events[eventName] > 1 ? ` (x${events[eventName]})` : '';
                     return (
                       <div key={eventName} className="dark:text-gray-400">
-                        {eventName}
-                        {times}
+                        {`${eventName}${times}`}
                       </div>
                     );
                   })}
