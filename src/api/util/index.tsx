@@ -9,7 +9,6 @@ import { MAX_CALL_WEIGHT } from '../../constants';
 import {
   AbiConstructor,
   Bytes,
-  DispatchError,
   ApiPromise,
   AbiParam,
   KeyringPair,
@@ -20,15 +19,6 @@ import {
   Weight,
 } from 'types';
 import { MessageSignature } from 'ui/components/message/MessageSignature';
-
-export function handleDispatchError(dispatchError: DispatchError, api: ApiPromise): void {
-  if (dispatchError.isModule) {
-    const decoded = api.registry.findMetaError(dispatchError.asModule);
-    console.error('Error sending transaction: ', decoded);
-  } else {
-    console.error(`Error sending transaction: ${dispatchError}`);
-  }
-}
 
 const EMPTY_SALT = new Uint8Array();
 

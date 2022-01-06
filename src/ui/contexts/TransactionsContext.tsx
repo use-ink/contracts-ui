@@ -3,7 +3,13 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import { useApi } from './ApiContext';
-import { TransactionOptions, Transaction as Tx, TransactionsState, Transaction } from 'types';
+import {
+  TransactionOptions,
+  Transaction as Tx,
+  TransactionsState,
+  Transaction,
+  TxStatus as Status,
+} from 'types';
 import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 0;
@@ -12,10 +18,8 @@ export function createTx(options: TransactionOptions): Transaction {
   return {
     ...options,
     id: ++nextId,
-    isComplete: false,
-    isProcessing: false,
-    isError: false,
-    isSuccess: false,
+    status: Status.Queued,
+    events: {},
   };
 }
 
@@ -24,14 +28,12 @@ export const TransactionsContext = React.createContext({} as unknown as Transact
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { keyring } = useApi();
+  const { keyring, api } = useApi();
   const [txs, setTxs] = useState<Tx[]>([]);
 
   function queue(options: TransactionOptions): number {
     setTxs(txs => [
-      ...txs.filter(
-        ({ id, isComplete, isProcessing }) => id < nextId && !isComplete && !isProcessing
-      ),
+      ...txs.filter(({ id, status }) => id < nextId && status === 'queued'),
       createTx(options),
     ]);
 
@@ -41,62 +43,77 @@ export function TransactionsContextProvider({
     const tx = txs.find(tx => id === tx.id);
 
     if (tx) {
-      const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
+      const { extrinsic, accountId, isValid, onSuccess } = tx;
 
-      try {
-        setTxs(txs => [
-          ...txs.map(tx => {
-            return tx.id === id
-              ? {
-                  ...tx,
-                  isProcessing: true,
-                }
-              : tx;
-          }),
-        ]);
+      setTxs(txs => [
+        ...txs.map(tx => {
+          return tx.id === id
+            ? {
+                ...tx,
+                status: Status.Processing,
+              }
+            : tx;
+        }),
+      ]);
 
-        const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
-          if ((result.isInBlock || result.isFinalized) && isValid(result)) {
-            onSuccess && (await onSuccess(result));
+      const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
+        if (result.isFinalized) {
+          const events: Record<string, number> = {};
 
+          result.events.forEach(record => {
+            const { event } = record;
+            const key = `${event.section}:${event.method}`;
+            if (!events[key]) {
+              events[key] = 1;
+            } else {
+              events[key]++;
+            }
+          });
+
+          if (!isValid(result)) {
             setTxs(txs => [
               ...txs.map(tx => {
                 return tx.id === id
                   ? {
                       ...tx,
-                      isComplete: true,
-                      isProcessing: false,
-                      isSuccess: true,
+                      status: Status.Error,
+                      events,
                     }
                   : tx;
               }),
             ]);
 
-            unsub();
-          }
-        });
-      } catch (e) {
-        console.error(e);
-        onError && onError();
+            let message = 'Transaction failed';
 
-        setTxs(txs => [
-          ...txs.map(tx => {
-            return tx.id === id
-              ? {
-                  ...tx,
-                  isComplete: true,
-                  isProcessing: false,
-                  isError: true,
-                }
-              : tx;
-          }),
-        ]);
-      }
+            if (result.dispatchError?.isModule) {
+              const decoded = api.registry.findMetaError(result.dispatchError.asModule);
+              message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
+            }
+            throw new Error(message);
+          }
+
+          onSuccess && (await onSuccess(result));
+
+          setTxs(txs => [
+            ...txs.map(tx => {
+              return tx.id === id
+                ? {
+                    ...tx,
+                    status: Status.Success,
+                    events,
+                  }
+                : tx;
+            }),
+          ]);
+
+          unsub();
+        }
+      });
     }
   }
 
   function unqueue(id: number) {
-    setTxs([...txs.filter(tx => tx.id !== id || tx.isProcessing || tx.isComplete)]);
+    setTxs([...txs.filter(tx => tx.id !== id || tx.status !== 'queued')]);
   }
 
   function dismiss(id: number) {
@@ -108,7 +125,7 @@ export function TransactionsContextProvider({
 
     if (txs.length > 0) {
       autoDismiss = setTimeout((): void => {
-        setTxs([...txs.filter(({ isComplete }) => !isComplete)]);
+        setTxs([...txs.filter(({ status }) => status === 'processing' || status === 'queued')]);
       }, 5000);
     }
 

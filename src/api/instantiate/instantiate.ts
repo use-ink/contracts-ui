@@ -1,7 +1,6 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { handleDispatchError } from '../util';
 import type {
   ApiState,
   DbState,
@@ -18,11 +17,7 @@ export function onInsantiateFromHash(
   { accountId, codeHash, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Hash {
-  return async function ({ contract, dispatchError, status }): Promise<void> {
-    if (dispatchError) {
-      handleDispatchError(dispatchError, api);
-    }
-
+  return async function ({ contract, status }): Promise<void> {
     if (accountId && codeHash && contract && (status.isInBlock || status.isFinalized)) {
       await createContract(db, identity, {
         abi: contract.abi.json,
@@ -47,11 +42,7 @@ export function onInstantiateFromCode(
 ): OnInstantiateSuccess$Code {
   return async function (result): Promise<void> {
     try {
-      const { blueprint, contract, dispatchError, status } = result;
-
-      if (dispatchError) {
-        handleDispatchError(dispatchError, api);
-      }
+      const { blueprint, contract, status } = result;
 
       if (accountId && contract && (status.isInBlock || status.isFinalized)) {
         await createContract(db, identity, {

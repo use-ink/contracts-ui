@@ -72,19 +72,23 @@ export interface InstantiateState {
   stepBackward?: VoidFn;
   setStep?: React.Dispatch<number>;
   tx: SubmittableExtrinsic<'promise'> | null;
-  // txError: string | null;
 }
 
 export type InstantiateProps = InstantiateState;
 
+export enum TxStatus {
+  Error = 'error',
+  Success = 'success',
+  Processing = 'processing',
+  Queued = 'queued',
+}
+
 export interface Transaction {
   id: number;
-  isComplete?: boolean;
-  isError?: boolean;
-  isProcessing?: boolean;
-  isSuccess?: boolean;
+  status: TxStatus;
   extrinsic: SubmittableExtrinsic<'promise'>;
   accountId: string;
+  events: Record<string, number>;
   isValid: (_: SubmittableResult) => boolean;
   onSuccess?: (_: SubmittableResult) => Promise<void>;
   onError?: () => void;

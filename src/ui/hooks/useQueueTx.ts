@@ -21,7 +21,7 @@ export function useQueueTx(
   const txIdRef = useRef(txId);
 
   const isProcessing = useMemo(
-    (): boolean => !!txs.find(({ id }) => txId === id)?.isProcessing,
+    (): boolean => !!(txs.find(({ id }) => txId === id)?.status === 'processing'),
     [txs, txId]
   );
 

@@ -23,11 +23,13 @@ export function Statistics(): React.ReactElement | null {
       });
     }
 
-    try {
-      listenToBlocks().then().catch(console.error);
-    } catch (e) {
-      console.error(e);
-    }
+    let cleanUp: VoidFunction;
+
+    listenToBlocks()
+      .then(unsub => (cleanUp = unsub))
+      .catch(console.error);
+
+    return () => cleanUp();
   }, [api]);
 
   const entries = useMemo((): Record<string, React.ReactNode> => {

@@ -67,7 +67,7 @@ export function Step3() {
         {tx?.args[3] && (
           <div className="field">
             <p className="key">Data</p>
-            <p className="value">{tx?.args[3].toHex()}</p>
+            <p className="value">{truncate(tx?.args[3].toHex())}</p>
           </div>
         )}
       </div>
