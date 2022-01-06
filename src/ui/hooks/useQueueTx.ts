@@ -31,6 +31,7 @@ export function useQueueTx(
 
   const onCancel = useCallback((): void => {
     txId && unqueue(txId);
+    setTxId(null);
   }, [unqueue, txId]);
 
   useEffect((): void => {
