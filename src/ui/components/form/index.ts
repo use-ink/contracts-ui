@@ -7,6 +7,7 @@ export * from './InputBalance';
 export * from './InputFile';
 export * from './InputNumber';
 export * from './InputSalt';
+export * from './InputGas';
 export * from './ArgumentForm';
 export * from './CodeHashField';
 export * from './Bool';

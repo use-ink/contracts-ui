@@ -12,12 +12,12 @@ import {
 } from 'types';
 import { Transactions } from 'ui/components/Transactions';
 
-let nextId = 0;
+let nextId = 1;
 
 export function createTx(options: TransactionOptions): Transaction {
   return {
     ...options,
-    id: ++nextId,
+    id: nextId,
     status: Status.Queued,
     events: {},
   };
@@ -107,6 +107,8 @@ export function TransactionsContextProvider({
           ]);
 
           unsub();
+
+          nextId++;
         }
       });
     }
@@ -124,9 +126,12 @@ export function TransactionsContextProvider({
     let autoDismiss: NodeJS.Timeout;
 
     if (txs.length > 0) {
-      autoDismiss = setTimeout((): void => {
-        setTxs([...txs.filter(({ status }) => status === 'processing' || status === 'queued')]);
-      }, 5000);
+      const completed = txs.filter(({ status }) => status === 'error' || status === 'success');
+      if (completed.length > 0) {
+        autoDismiss = setTimeout((): void => {
+          setTxs([...txs.filter(({ status }) => status === 'processing' || status === 'queued')]);
+        }, 5000);
+      }
     }
 
     return () => clearTimeout(autoDismiss);

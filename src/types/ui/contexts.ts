@@ -90,7 +90,7 @@ export interface Transaction {
   accountId: string;
   events: Record<string, number>;
   isValid: (_: SubmittableResult) => boolean;
-  onSuccess?: (_: SubmittableResult) => Promise<void>;
+  onSuccess?: ((_: SubmittableResult) => void) | ((_: SubmittableResult) => Promise<void>);
   onError?: () => void;
 }
 

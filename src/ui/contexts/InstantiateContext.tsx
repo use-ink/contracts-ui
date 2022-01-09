@@ -87,7 +87,7 @@ export function InstantiateContextProvider({
       setData(newData);
       stepForward();
     } catch (e) {
-      console.log(e);
+      console.error(e);
 
       setTx([null, NOOP, 'Error creating transaction']);
     }
