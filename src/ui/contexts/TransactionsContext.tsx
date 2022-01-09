@@ -3,25 +3,10 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import { useApi } from './ApiContext';
-import {
-  TransactionOptions,
-  Transaction as Tx,
-  TransactionsState,
-  Transaction,
-  TxStatus as Status,
-} from 'types';
+import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 1;
-
-export function createTx(options: TransactionOptions): Transaction {
-  return {
-    ...options,
-    id: nextId,
-    status: Status.Queued,
-    events: {},
-  };
-}
 
 export const TransactionsContext = React.createContext({} as unknown as TransactionsState);
 
@@ -29,32 +14,28 @@ export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
   const { keyring, api } = useApi();
-  const [txs, setTxs] = useState<Tx[]>([]);
+  const [txs, setTxs] = useState<TransactionsQueue>({});
 
-  function queue(options: TransactionOptions): number {
-    setTxs(txs => [
-      ...txs.filter(({ id, status }) => id < nextId && status === 'queued'),
-      createTx(options),
-    ]);
+  function queue(options: TxOptions): number {
+    setTxs({
+      ...txs,
+      [nextId]: {
+        ...options,
+
+        status: Status.Queued,
+        events: {},
+      },
+    });
 
     return nextId;
   }
   async function process(id: number) {
-    const tx = txs.find(tx => id === tx.id);
+    const tx = txs[id];
 
     if (tx) {
       const { extrinsic, accountId, isValid, onSuccess } = tx;
 
-      setTxs(txs => [
-        ...txs.map(tx => {
-          return tx.id === id
-            ? {
-                ...tx,
-                status: Status.Processing,
-              }
-            : tx;
-        }),
-      ]);
+      setTxs({ ...txs, [id]: { ...txs[id], status: Status.Processing } });
 
       const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
         if (result.isFinalized) {
@@ -71,17 +52,7 @@ export function TransactionsContextProvider({
           });
 
           if (!isValid(result)) {
-            setTxs(txs => [
-              ...txs.map(tx => {
-                return tx.id === id
-                  ? {
-                      ...tx,
-                      status: Status.Error,
-                      events,
-                    }
-                  : tx;
-              }),
-            ]);
+            setTxs({ ...txs, [id]: { ...txs[id], status: Status.Error, events } });
 
             let message = 'Transaction failed';
 
@@ -94,17 +65,7 @@ export function TransactionsContextProvider({
 
           onSuccess && (await onSuccess(result));
 
-          setTxs(txs => [
-            ...txs.map(tx => {
-              return tx.id === id
-                ? {
-                    ...tx,
-                    status: Status.Success,
-                    events,
-                  }
-                : tx;
-            }),
-          ]);
+          setTxs({ ...txs, [id]: { ...txs[id], status: Status.Success, events } });
 
           unsub();
 
@@ -114,22 +75,27 @@ export function TransactionsContextProvider({
     }
   }
 
-  function unqueue(id: number) {
-    setTxs([...txs.filter(tx => tx.id !== id || tx.status !== 'queued')]);
-  }
-
   function dismiss(id: number) {
-    setTxs([...txs.filter(tx => tx.id !== id)]);
+    const newTxs = { ...txs };
+    delete newTxs[id];
+    setTxs(newTxs);
   }
 
   useEffect((): (() => void) => {
     let autoDismiss: NodeJS.Timeout;
 
-    if (txs.length > 0) {
-      const completed = txs.filter(({ status }) => status === 'error' || status === 'success');
+    if (JSON.stringify(txs) !== '{}') {
+      const completed: number[] = [];
+      for (const id in txs) {
+        if (txs[id].status === 'error' || txs[id].status === 'success') {
+          completed.push(parseInt(id));
+        }
+      }
       if (completed.length > 0) {
         autoDismiss = setTimeout((): void => {
-          setTxs([...txs.filter(({ status }) => status === 'processing' || status === 'queued')]);
+          const newTxs = { ...txs };
+          completed.forEach(id => delete newTxs[id]);
+          setTxs(newTxs);
         }, 5000);
       }
     }
@@ -142,7 +108,6 @@ export function TransactionsContextProvider({
     dismiss,
     process,
     queue,
-    unqueue,
   };
 
   return (

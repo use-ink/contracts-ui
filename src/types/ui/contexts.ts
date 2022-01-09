@@ -82,27 +82,25 @@ export enum TxStatus {
   Processing = 'processing',
   Queued = 'queued',
 }
-
-export interface Transaction {
-  id: number;
-  status: TxStatus;
+export interface TxOptions {
   extrinsic: SubmittableExtrinsic<'promise'>;
   accountId: string;
-  events: Record<string, number>;
   isValid: (_: SubmittableResult) => boolean;
   onSuccess?: ((_: SubmittableResult) => void) | ((_: SubmittableResult) => Promise<void>);
   onError?: () => void;
 }
 
-export type TransactionOptions = Pick<
-  Transaction,
-  'accountId' | 'extrinsic' | 'onSuccess' | 'onError' | 'isValid'
->;
+export interface QueuedTxOptions extends TxOptions {
+  status: TxStatus;
+  events: Record<string, number>;
+}
+export interface TransactionsQueue {
+  [id: number]: QueuedTxOptions;
+}
 
 export interface TransactionsState {
-  txs: Transaction[];
+  txs: TransactionsQueue;
   process: (_: number) => Promise<void>;
-  queue: (_: TransactionOptions) => number;
-  unqueue: (id: number) => void;
+  queue: (_: TxOptions) => number;
   dismiss: (id: number) => void;
 }
