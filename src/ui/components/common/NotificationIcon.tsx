@@ -20,7 +20,7 @@ export const NotificationIcon = ({ status }: Props) => {
       return <ExclamationCircleIcon key="error" className="dark:text-red-400 w-12 h-12" />;
 
     case 'processing':
-      return <Spinner key="processing" width={12} strokeWidth={4} />;
+      return <Spinner key="processing" width={8} strokeWidth={2} className="m-2" />;
 
     case 'queued':
       return <ClockIcon key="queued" className={classes('dark:text-blue-500 w-12 h-12')} />;
