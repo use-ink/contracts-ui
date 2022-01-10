@@ -95,7 +95,7 @@ export interface QueuedTxOptions extends TxOptions {
   events: Record<string, number>;
 }
 export interface TransactionsQueue {
-  [id: number]: QueuedTxOptions;
+  [id: number]: QueuedTxOptions | undefined;
 }
 
 export interface TransactionsState {

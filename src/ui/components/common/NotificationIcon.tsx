@@ -8,7 +8,7 @@ import { TxStatus } from 'types';
 import { classes } from 'ui/util';
 
 interface Props {
-  status: TxStatus;
+  status?: TxStatus;
 }
 
 export const NotificationIcon = ({ status }: Props) => {
@@ -22,7 +22,10 @@ export const NotificationIcon = ({ status }: Props) => {
     case 'processing':
       return <Spinner key="processing" width={12} strokeWidth={4} />;
 
-    default:
+    case 'queued':
       return <ClockIcon key="queued" className={classes('dark:text-blue-500 w-12 h-12')} />;
+
+    default:
+      return null;
   }
 };

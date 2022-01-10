@@ -21,7 +21,6 @@ export function TransactionsContextProvider({
       ...txs,
       [nextId]: {
         ...options,
-
         status: Status.Queued,
         events: {},
       },
@@ -35,7 +34,7 @@ export function TransactionsContextProvider({
     if (tx) {
       const { extrinsic, accountId, isValid, onSuccess } = tx;
 
-      setTxs({ ...txs, [id]: { ...txs[id], status: Status.Processing } });
+      setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
       const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
         if (result.isFinalized) {
@@ -52,7 +51,7 @@ export function TransactionsContextProvider({
           });
 
           if (!isValid(result)) {
-            setTxs({ ...txs, [id]: { ...txs[id], status: Status.Error, events } });
+            setTxs({ ...txs, [id]: { ...tx, status: Status.Error, events } });
 
             let message = 'Transaction failed';
 
@@ -65,7 +64,7 @@ export function TransactionsContextProvider({
 
           onSuccess && (await onSuccess(result));
 
-          setTxs({ ...txs, [id]: { ...txs[id], status: Status.Success, events } });
+          setTxs({ ...txs, [id]: { ...tx, status: Status.Success, events } });
 
           unsub();
 
@@ -87,7 +86,7 @@ export function TransactionsContextProvider({
     if (JSON.stringify(txs) !== '{}') {
       const completed: number[] = [];
       for (const id in txs) {
-        if (txs[id].status === 'error' || txs[id].status === 'success') {
+        if (txs[id]?.status === 'error' || txs[id]?.status === 'success') {
           completed.push(parseInt(id));
         }
       }

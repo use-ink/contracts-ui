@@ -94,9 +94,7 @@ export const InteractTab = ({ contract }: Props) => {
     value: message.value.isPayable ? payment.value || BN_ZERO : undefined,
   };
 
-  const { queue, process } = useTransactions();
-
-  const tx = prepareContractTx(contract.tx[message.value.method], options, transformed);
+  const { queue, process, txs } = useTransactions();
 
   const onSuccess = ({ status, dispatchInfo, dispatchError, events }: SubmittableResult) => {
     const callResult = {
@@ -171,6 +169,8 @@ export const InteractTab = ({ contract }: Props) => {
   const newId = useRef<number>();
 
   const clickHandler = () => {
+    const tx = prepareContractTx(contract.tx[message.value.method], options, transformed);
+
     if (tx && accountId) {
       const callResult = {
         id: nextId,
@@ -257,7 +257,7 @@ export const InteractTab = ({ contract }: Props) => {
           {message.value.isPayable || message.value.isMutating ? (
             <Button
               isDisabled={!(weight.isValid || weight.isEmpty)}
-              isLoading={state.isLoading}
+              isLoading={txs[txId]?.status === 'processing'}
               onClick={() => clickHandler()}
               variant="primary"
             >
@@ -266,7 +266,6 @@ export const InteractTab = ({ contract }: Props) => {
           ) : (
             <Button
               isDisabled={!(weight.isValid || weight.isEmpty)}
-              isLoading={state.isLoading}
               onClick={read}
               variant="primary"
             >

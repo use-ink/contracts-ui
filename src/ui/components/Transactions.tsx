@@ -13,7 +13,7 @@ export function Transactions({
 }: React.HTMLAttributes<HTMLDivElement> & TransactionsState) {
   const Notifications: JSX.Element[] = [];
   for (const id in txs) {
-    const { extrinsic, status, events } = txs[id];
+    const { extrinsic, status, events } = txs[id] || {};
     const isComplete = status === 'error' || status === 'success';
 
     Notifications.push(
@@ -24,14 +24,14 @@ export function Transactions({
         >
           <NotificationIcon status={status} />
           <div className="pl-2 flex-grow text-sm">
-            <div>{extrinsic.registry.findMetaCall(extrinsic.callIndex).method}</div>
+            <div>{extrinsic?.registry.findMetaCall(extrinsic.callIndex).method}</div>
             <div className="dark:text-gray-400">{status}</div>
           </div>
           {isComplete && (
             <XIcon className="dark:text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
           )}
         </div>
-        {isComplete && (
+        {isComplete && events && (
           <div className="max-w-full dark:bg-elevation-3 dark:text-white p-3 mt-2 flex items-center">
             <BellIcon className="dark:text-yellow-400 w-12 h-12" />
             <div className="pl-2 flex-grow text-sm">
