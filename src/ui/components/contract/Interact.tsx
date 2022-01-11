@@ -19,6 +19,9 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useArgValues } from 'ui/hooks/useArgValues';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useWeight } from 'ui/hooks';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
+import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
+import { useToggle } from 'ui/hooks/useToggle';
 
 interface Props {
   contract: Contract;
@@ -32,6 +35,7 @@ export const InteractTab = ({ contract }: Props) => {
   const payment = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
+  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   useEffect(() => {
     if (state.results.length > 0) {
@@ -75,6 +79,7 @@ export const InteractTab = ({ contract }: Props) => {
   }, [api, accountId, argValues, contract, keyring, message.value, payment.value]);
 
   const weight = useWeight();
+  const storageDepositLimit = useStorageDepositLimit(accountId);
 
   if (!contract) return null;
 
@@ -130,6 +135,22 @@ export const InteractTab = ({ contract }: Props) => {
               {...weight}
             />
           </FormField>
+          <FormField
+            id="storageDepositLimit"
+            label="Storage Deposit Limit"
+            isError={!storageDepositLimit.isValid}
+            message={
+              !storageDepositLimit.isValid
+                ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                : null
+            }
+          >
+            <InputStorageDepositLimit
+              isActive={isUsingStorageDepositLimit}
+              toggleIsActive={toggleIsUsingStorageDepositLimit}
+              {...storageDepositLimit}
+            />
+          </FormField>
         </Form>
         <Buttons>
           <Button
@@ -143,6 +164,7 @@ export const InteractTab = ({ contract }: Props) => {
                   contract,
                   payment: payment.value,
                   gasLimit: weight.weight,
+                  storageDepositLimit: storageDepositLimit.value,
                   argValues,
                   message: message.value,
                   sender,

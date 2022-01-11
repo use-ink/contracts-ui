@@ -56,6 +56,7 @@ export async function call({
   message,
   payment: value,
   gasLimit,
+  storageDepositLimit,
   sender,
   argValues,
   dispatch,
@@ -76,7 +77,12 @@ export async function call({
   if (message.isMutating || message.isPayable) {
     const tx = prepareContractTx(
       contract.tx[message.method],
-      { gasLimit: gasLimit.addn(1), value: message.isPayable ? value || BN_ZERO : undefined, salt },
+      {
+        gasLimit: gasLimit.addn(1),
+        storageDepositLimit,
+        value: message.isPayable ? value || BN_ZERO : undefined,
+        salt,
+      },
       transformed
     );
 

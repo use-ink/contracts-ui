@@ -22,6 +22,7 @@ export interface ContractDryRunParams {
 
 export interface ContractCallParams extends ContractDryRunParams {
   gasLimit: BN;
+  storageDepositLimit?: BN;
   dispatch: (action: ContractCallAction) => void;
 }
 
