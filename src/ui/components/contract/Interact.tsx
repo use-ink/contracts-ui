@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useReducer, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
@@ -16,15 +16,12 @@ import {
   transformUserInput,
 } from 'api';
 import { useApi, useTransactions } from 'ui/contexts';
-import { contractCallReducer, initialState } from 'ui/reducers';
-import { BN, ContractPromise, RegistryError, SubmittableResult } from 'types';
+import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
 
 interface Props {
   contract: ContractPromise;
 }
-
-let nextId = 1;
 
 export const InteractTab = ({ contract }: Props) => {
   const { api, keyring } = useApi();
@@ -34,19 +31,16 @@ export const InteractTab = ({ contract }: Props) => {
     ...messageValidation
   } = useFormField(contract.abi.messages[0]);
   const [argValues, setArgValues] = useArgValues(message?.args || []);
-  const [state, dispatch] = useReducer(contractCallReducer, initialState);
+  const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
+  const [nextResultId, setNextResultId] = useState(1);
 
   useEffect(() => {
-    if (state.results.length > 0) {
-      dispatch({
-        type: 'RESET',
-      });
-    }
-    nextId = 1;
+    setCallResults([]);
+    setNextResultId(1);
     setMessage(contract.abi.messages[0]);
     // clears call results and resets data when navigating to another contract page
     // to do: storage for call results
@@ -95,46 +89,29 @@ export const InteractTab = ({ contract }: Props) => {
   const { queue, process, txs } = useTransactions();
 
   const onSuccess = ({ status, dispatchInfo, dispatchError, events }: SubmittableResult) => {
-    const callResult = {
-      id: nextId,
-      isComplete: false,
-      data: '',
-      log: [],
-      message,
-      time: Date.now(),
-    };
     const log = events.map(({ event }) => {
       return `${event.section}:${event.method}`;
     });
 
-    dispatch({
-      type: 'CALL_FINALISED',
-      payload: {
-        ...callResult,
+    setCallResults([
+      ...callResults,
+      {
+        id: nextResultId,
+        data: '',
         isComplete: true,
+        message,
+        time: Date.now(),
         log: log,
         error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
         blockHash: status.asFinalized.toString(),
         info: dispatchInfo?.toHuman(),
       },
-    });
-    nextId++;
+    ]);
+
+    setNextResultId(nextResultId + 1);
   };
 
   const read = async () => {
-    const callResult = {
-      id: nextId,
-      isComplete: false,
-      data: '',
-      log: [],
-      message,
-      time: Date.now(),
-    };
-
-    dispatch({
-      type: 'CALL_INIT',
-      payload: { ...callResult },
-    });
     const { result, output } = await sendContractQuery(
       contract.query[message.method],
       keyring?.getPair(accountId),
@@ -148,16 +125,20 @@ export const InteractTab = ({ contract }: Props) => {
       error = contract.registry.findMetaError(result.asErr.asModule);
     }
 
-    dispatch({
-      type: 'CALL_FINALISED',
-      payload: {
-        ...callResult,
+    setCallResults([
+      ...callResults,
+      {
+        id: nextResultId,
+        log: [],
+        message,
+        time: Date.now(),
         isComplete: true,
         data: output?.toHuman(),
         error,
       },
-    });
-    nextId++;
+    ]);
+
+    setNextResultId(nextResultId + 1);
   };
 
   const isValid = () => true;
@@ -170,19 +151,6 @@ export const InteractTab = ({ contract }: Props) => {
     const tx = prepareContractTx(contract.tx[message.method], options, transformed);
 
     if (tx && accountId) {
-      const callResult = {
-        id: nextId,
-        isComplete: false,
-        data: '',
-        log: [],
-        message,
-        time: Date.now(),
-      };
-
-      dispatch({
-        type: 'CALL_INIT',
-        payload: { ...callResult },
-      });
       newId.current = queue({ extrinsic: tx, accountId, onSuccess, onError, isValid });
       setTxId(newId.current);
     }
@@ -269,7 +237,7 @@ export const InteractTab = ({ contract }: Props) => {
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
-        <ResultsOutput results={state.results} />
+        <ResultsOutput results={callResults} />
       </div>
     </div>
   );

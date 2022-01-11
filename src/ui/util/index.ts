@@ -24,4 +24,8 @@ export function isValidCodeHash(value: string): boolean {
   return /^0x[0-9a-fA-F]{64}$/.test(value);
 }
 
+export function isEmptyObj(value: unknown) {
+  return JSON.stringify(value) === '{}';
+}
+
 export * from './initValue';

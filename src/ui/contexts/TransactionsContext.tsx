@@ -5,6 +5,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
+import { isEmptyObj } from 'ui/util';
 
 let nextId = 1;
 
@@ -83,7 +84,7 @@ export function TransactionsContextProvider({
   useEffect((): (() => void) => {
     let autoDismiss: NodeJS.Timeout;
 
-    if (JSON.stringify(txs) !== '{}') {
+    if (!isEmptyObj(txs)) {
       const completed: number[] = [];
       for (const id in txs) {
         if (txs[id]?.status === 'error' || txs[id]?.status === 'success') {
