@@ -250,7 +250,7 @@ export const InteractTab = ({ contract }: Props) => {
         <Buttons>
           {message.isPayable || message.isMutating ? (
             <Button
-              isDisabled={!(weight.isValid || weight.isEmpty)}
+              isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
               isLoading={txs[txId]?.status === 'processing'}
               onClick={() => clickHandler()}
               variant="primary"
