@@ -5,7 +5,7 @@ import { BellIcon, XIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { NotificationIcon } from './common/NotificationIcon';
 import type { TransactionsState } from 'types';
-import { classes } from 'ui/util';
+import { classes, isEmptyObj } from 'ui/util';
 
 export function Transactions({
   dismiss,
@@ -31,7 +31,7 @@ export function Transactions({
             <XIcon className="dark:text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
           )}
         </div>
-        {isComplete && events && (
+        {isComplete && events && !isEmptyObj(events) && (
           <div className="max-w-full dark:bg-elevation-3 dark:text-white p-3 mt-2 flex items-center">
             <BellIcon className="dark:text-yellow-400 w-12 h-12" />
             <div className="pl-2 flex-grow text-sm">

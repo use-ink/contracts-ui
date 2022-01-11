@@ -37,41 +37,46 @@ export function TransactionsContextProvider({
 
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
-      const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
-        if (result.isFinalized) {
-          const events: Record<string, number> = {};
+      try {
+        const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
+          if (result.isFinalized) {
+            const events: Record<string, number> = {};
 
-          result.events.forEach(record => {
-            const { event } = record;
-            const key = `${event.section}:${event.method}`;
-            if (!events[key]) {
-              events[key] = 1;
-            } else {
-              events[key]++;
+            result.events.forEach(record => {
+              const { event } = record;
+              const key = `${event.section}:${event.method}`;
+              if (!events[key]) {
+                events[key] = 1;
+              } else {
+                events[key]++;
+              }
+            });
+
+            if (!isValid(result)) {
+              setTxs({ ...txs, [id]: { ...tx, status: Status.Error, events } });
+
+              let message = 'Transaction failed';
+
+              if (result.dispatchError?.isModule) {
+                const decoded = api.registry.findMetaError(result.dispatchError.asModule);
+                message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
+              }
+              throw new Error(message);
             }
-          });
 
-          if (!isValid(result)) {
-            setTxs({ ...txs, [id]: { ...tx, status: Status.Error, events } });
+            onSuccess && (await onSuccess(result));
 
-            let message = 'Transaction failed';
+            setTxs({ ...txs, [id]: { ...tx, status: Status.Success, events } });
 
-            if (result.dispatchError?.isModule) {
-              const decoded = api.registry.findMetaError(result.dispatchError.asModule);
-              message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
-            }
-            throw new Error(message);
+            unsub();
+
+            nextId++;
           }
-
-          onSuccess && (await onSuccess(result));
-
-          setTxs({ ...txs, [id]: { ...tx, status: Status.Success, events } });
-
-          unsub();
-
-          nextId++;
-        }
-      });
+        });
+      } catch (error) {
+        setTxs({ ...txs, [id]: { ...tx, status: Status.Error } });
+        console.error(error);
+      }
     }
   }
 
