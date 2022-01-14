@@ -1,24 +1,23 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useReducer, useEffect, useState } from 'react';
-import { Dropdown } from '../common/Dropdown';
-import { ArgumentForm } from '../form/ArgumentForm';
-import { Button, Buttons } from '../common/Button';
-import { AccountSelect } from '../account/AccountSelect';
-import { Form, FormField, getValidation } from '../form/FormField';
-import { InputBalance } from '../form/InputBalance';
-import { InputGas } from '../form/InputGas';
+import React, { useEffect, useState, useRef } from 'react';
+import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
-import { call, createMessageOptions, dryRun } from 'api';
-import { useApi } from 'ui/contexts';
-import { contractCallReducer, initialState } from 'ui/reducers';
-import { BN, ContractPromise } from 'types';
-import { useAccountId } from 'ui/hooks/useAccountId';
-import { useFormField } from 'ui/hooks/useFormField';
-import { useArgValues } from 'ui/hooks/useArgValues';
-import { useBalance } from 'ui/hooks/useBalance';
-import { useWeight } from 'ui/hooks';
+import { AccountSelect } from 'ui/components/account';
+import { Dropdown, Button, Buttons } from 'ui/components/common';
+import { ArgumentForm, InputGas, InputBalance, Form, FormField } from 'ui/components/form';
+import {
+  createMessageOptions,
+  dryRun,
+  NOOP,
+  prepareContractTx,
+  sendContractQuery,
+  transformUserInput,
+} from 'api';
+import { useApi, useTransactions } from 'ui/contexts';
+import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
+import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
 
 interface Props {
   contract: ContractPromise;
@@ -26,43 +25,47 @@ interface Props {
 
 export const InteractTab = ({ contract }: Props) => {
   const { api, keyring } = useApi();
-  const message = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(message.value?.args || []);
-  const [state, dispatch] = useReducer(contractCallReducer, initialState);
-  const payment = useBalance(100);
+  const {
+    value: message,
+    onChange: setMessage,
+    ...messageValidation
+  } = useFormField(contract.abi.messages[0]);
+  const [argValues, setArgValues] = useArgValues(message?.args || []);
+  const [callResults, setCallResults] = useState<CallResult[]>([]);
+  const { value, onChange: setValue, ...valueValidation } = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
+  const [txId, setTxId] = useState<number>(0);
+  const [nextResultId, setNextResultId] = useState(1);
 
   useEffect(() => {
-    if (state.results.length > 0) {
-      dispatch({
-        type: 'RESET',
-      });
-    }
-    message.value = contract.abi.messages[0];
-    // clears call results when navigating to another contract page
+    setCallResults([]);
+    setNextResultId(1);
+    setMessage(contract.abi.messages[0]);
+    // clears call results and resets data when navigating to another contract page
     // to do: storage for call results
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract.address]);
 
   useEffect((): void => {
-    if (!accountId || !message.value?.args || !argValues) return;
+    if (!accountId || !message.args || !argValues) return;
 
     const sender = keyring?.getPair(accountId);
 
-    if (message.value.isMutating !== true) {
+    if (message.isMutating !== true) {
       setEstimatedWeight(null);
 
       return;
     }
 
     sender &&
-      message.value.isMutating &&
+      message.isMutating &&
+      contract.abi.messages[message.index].method === message.method &&
       dryRun({
         contract,
-        message: message.value,
+        message,
         argValues,
-        payment: payment.value,
+        payment: value,
         sender,
       })
         .then(({ gasRequired }) => {
@@ -72,9 +75,93 @@ export const InteractTab = ({ contract }: Props) => {
           console.error(e);
           setEstimatedWeight(null);
         });
-  }, [api, accountId, argValues, contract, keyring, message.value, payment.value]);
+  }, [api, accountId, argValues, keyring, message, value, contract]);
 
   const weight = useWeight();
+
+  const transformed = transformUserInput(contract.registry, message.args, argValues);
+
+  const options = {
+    gasLimit: weight.weight.addn(1),
+    value: message.isPayable ? value || BN_ZERO : undefined,
+  };
+
+  const { queue, process, txs } = useTransactions();
+
+  const onSuccess = ({ status, dispatchInfo, dispatchError, events }: SubmittableResult) => {
+    const log = events.map(({ event }) => {
+      return `${event.section}:${event.method}`;
+    });
+
+    setCallResults([
+      ...callResults,
+      {
+        id: nextResultId,
+        data: '',
+        isComplete: true,
+        message,
+        time: Date.now(),
+        log: log,
+        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
+        blockHash: status.asFinalized.toString(),
+        info: dispatchInfo?.toHuman(),
+      },
+    ]);
+
+    setNextResultId(nextResultId + 1);
+  };
+
+  const read = async () => {
+    const { result, output } = await sendContractQuery(
+      contract.query[message.method],
+      keyring?.getPair(accountId),
+      options,
+      transformed
+    );
+
+    let error: RegistryError | undefined;
+
+    if (result.isErr && result.asErr.isModule) {
+      error = contract.registry.findMetaError(result.asErr.asModule);
+    }
+
+    setCallResults([
+      ...callResults,
+      {
+        id: nextResultId,
+        log: [],
+        message,
+        time: Date.now(),
+        isComplete: true,
+        data: output?.toHuman(),
+        error,
+      },
+    ]);
+
+    setNextResultId(nextResultId + 1);
+  };
+
+  const isValid = (result: SubmittableResult) => !result.isError;
+
+  const onError = NOOP;
+
+  const newId = useRef<number>();
+
+  const clickHandler = () => {
+    const tx = prepareContractTx(contract.tx[message.method], options, transformed);
+
+    if (tx && accountId) {
+      newId.current = queue({ extrinsic: tx, accountId, onSuccess, onError, isValid });
+      setTxId(newId.current);
+    }
+  };
+
+  useEffect(() => {
+    async function processTx() {
+      txs[txId]?.status === 'queued' && (await process(txId));
+    }
+    processTx().catch(e => console.error(e));
+  }, [process, txId, txs]);
 
   if (!contract) return null;
 
@@ -90,31 +177,28 @@ export const InteractTab = ({ contract }: Props) => {
               onChange={setAccountId}
             />
           </FormField>
-          <FormField id="message" label="Message to Send" {...getValidation(message)}>
+          <FormField id="message" label="Message to Send" {...messageValidation}>
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}
               className="mb-4"
-              {...message}
+              onChange={setMessage}
+              value={message}
             >
               No messages found
             </Dropdown>
             {argValues && (
               <ArgumentForm
-                args={message.value?.args || []}
+                args={message.args || []}
                 setArgValues={setArgValues}
                 argValues={argValues}
               />
             )}
           </FormField>
 
-          {message?.value?.isPayable && (
-            <FormField id="value" label="Payment" {...getValidation(payment)}>
-              <InputBalance
-                value={payment.value}
-                onChange={payment.onChange}
-                placeholder="Payment"
-              />
+          {message.isPayable && (
+            <FormField id="value" label="Payment" {...valueValidation}>
+              <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
           <FormField
@@ -125,41 +209,35 @@ export const InteractTab = ({ contract }: Props) => {
           >
             <InputGas
               estimatedWeight={estimatedWeight}
-              isCall={message.value.isMutating}
+              isCall={message.isMutating}
               withEstimate
               {...weight}
             />
           </FormField>
         </Form>
         <Buttons>
-          <Button
-            isDisabled={!(weight.isValid || weight.isEmpty)}
-            isLoading={state.isLoading}
-            onClick={() => {
-              const sender = keyring?.getPair(accountId);
-
-              if (sender) {
-                call({
-                  contract,
-                  payment: payment.value,
-                  gasLimit: weight.weight,
-                  argValues,
-                  message: message.value,
-                  sender,
-                  dispatch,
-                })
-                  .then()
-                  .catch(console.error);
-              }
-            }}
-            variant="primary"
-          >
-            {message.value.isMutating ? 'Call' : 'Read'}
-          </Button>
+          {message.isPayable || message.isMutating ? (
+            <Button
+              isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
+              isLoading={txs[txId]?.status === 'processing'}
+              onClick={() => clickHandler()}
+              variant="primary"
+            >
+              Call
+            </Button>
+          ) : (
+            <Button
+              isDisabled={!(weight.isValid || weight.isEmpty)}
+              onClick={read}
+              variant="primary"
+            >
+              Read
+            </Button>
+          )}
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
-        <ResultsOutput results={state.results} />
+        <ResultsOutput results={callResults} />
       </div>
     </div>
   );

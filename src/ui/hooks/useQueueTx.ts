@@ -15,13 +15,13 @@ export function useQueueTx(
   onError: VoidFn,
   isValid: (_: SubmittableResult) => boolean
 ): [VoidFn, VoidFn, boolean, boolean] {
-  const { queue, unqueue, process, txs } = useTransactions();
-  const [txId, setTxId] = useState<number | null>(null);
+  const { queue, dismiss, process, txs } = useTransactions();
+  const [txId, setTxId] = useState<number>(0);
 
   const txIdRef = useRef(txId);
 
   const isProcessing = useMemo(
-    (): boolean => !!(txs.find(({ id }) => txId === id)?.status === 'processing'),
+    (): boolean => !!(txs[txId] && txs[txId]?.status === 'processing'),
     [txs, txId]
   );
 
@@ -30,12 +30,12 @@ export function useQueueTx(
   }, [process, txId]);
 
   const onCancel = useCallback((): void => {
-    txId && unqueue(txId);
-    setTxId(null);
-  }, [unqueue, txId]);
+    txId && dismiss(txId);
+    setTxId(0);
+  }, [dismiss, txId]);
 
   useEffect((): void => {
-    if (extrinsic && accountId && isNull(txId)) {
+    if (extrinsic && accountId && txId === 0) {
       const newId = queue({ extrinsic, accountId, onSuccess, onError, isValid });
 
       setTxId(newId);
