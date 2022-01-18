@@ -3,7 +3,7 @@
 
 import BN from 'bn.js';
 import { jest } from '@jest/globals';
-import { LOCAL_NODE } from '../../src/constants';
+import { ENDPOINT } from '../../src/constants';
 import { getMockDb, mockDbUser } from './db';
 import { mockKeyring } from './keyring';
 import type { DbState, ApiPromise, InstantiateProps, ApiState } from 'types';
@@ -36,7 +36,7 @@ export const mockApi = {
 
 export const mockApiState = {
   api: mockApi,
-  endpoint: LOCAL_NODE,
+  endpoint: ENDPOINT.LOCAL,
   keyring: mockKeyring,
   keyringStatus: 'READY',
   status: 'READY',

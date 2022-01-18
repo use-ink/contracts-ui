@@ -15,6 +15,7 @@ import type {
 } from '../substrate';
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
+import { ENDPOINT } from 'src/constants';
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
@@ -25,6 +26,7 @@ export interface ApiState extends ChainProperties {
   api: ApiPromise;
   error: unknown | null;
   status: Status;
+  setEndpoint: (e: ENDPOINT) => void;
 }
 
 export type ApiAction =

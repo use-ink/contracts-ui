@@ -1,21 +1,25 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Dropdown } from '../common/Dropdown';
+import { ENDPOINT } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'ui/util';
 
 const options = [
   {
     name: 'Local Node',
-    value: 'ws://127.0.0.1:9944',
+    value: ENDPOINT.LOCAL,
+  },
+  {
+    name: 'Canvas',
+    value: ENDPOINT.CANVAS,
   },
 ];
 
 export function NetworkAndUser() {
-  const { endpoint, status } = useApi();
-  const [chain] = useState(endpoint);
+  const { endpoint, status, setEndpoint } = useApi();
 
   return (
     <div className="network-and-user">
@@ -26,9 +30,9 @@ export function NetworkAndUser() {
           status === 'CONNECTING' ? 'isConnecting' : '',
           status === 'ERROR' ? 'isError' : ''
         )}
-        onChange={() => {}}
+        onChange={setEndpoint}
         options={options}
-        value={chain}
+        value={options.find(o => o.value === endpoint)?.value || ENDPOINT.LOCAL}
       />
     </div>
   );

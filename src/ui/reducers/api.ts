@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Reducer } from 'react';
-import { INIT_STATE, NULL_CHAIN_PROPERTIES } from '../../constants';
+import { NULL_CHAIN_PROPERTIES } from '../../constants';
 import type { ApiAction, ApiState } from 'types';
 
 export const apiReducer: Reducer<ApiState, ApiAction> = (state, action) => {
   switch (action.type) {
     case 'SET_ENDPOINT':
-      return { ...INIT_STATE, status: 'CONNECT_INIT', endpoint: action.payload };
+      return { ...state, endpoint: action.payload };
 
     case 'CONNECT_INIT':
       return { ...state, status: 'CONNECT_INIT' };

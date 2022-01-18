@@ -5,10 +5,11 @@ import React, { useReducer, useEffect, useContext } from 'react';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
-import { INIT_STATE, DEFAULT_DECIMALS } from '../../constants';
+import { INIT_STATE, DEFAULT_DECIMALS, ENDPOINT } from '../../constants';
 import type { ApiState, ChainProperties } from 'types';
 import { apiReducer } from 'ui/reducers';
 import { blockTimeMs } from 'api/util/blockTime';
+import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 
 let loadedAccounts = false;
 
@@ -69,7 +70,16 @@ async function getChainPropertiesWhenReady(api: ApiPromise) {
 export const ApiContext = React.createContext(INIT_STATE);
 
 export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial<ApiState>>) => {
-  const [state, dispatch] = useReducer(apiReducer, INIT_STATE);
+  const [prefferedEndpoint, setPrefferedEndpoint] = useLocalStorage(
+    'preferredEndpoint',
+    ENDPOINT.LOCAL
+  );
+  const [state, dispatch] = useReducer(apiReducer, { ...INIT_STATE, endpoint: prefferedEndpoint });
+
+  const setEndpoint = (e: ENDPOINT) => {
+    dispatch({ type: 'SET_ENDPOINT', payload: e });
+    setPrefferedEndpoint(e);
+  };
 
   const { endpoint, keyringStatus } = state;
 
@@ -118,7 +128,12 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
             address,
             meta: { ...meta, name: `${meta.name} (${meta.source})` },
           }));
-          keyring.loadAll({ isDevelopment: true }, allAccounts);
+          keyring.loadAll(
+            {
+              isDevelopment: endpoint === ENDPOINT.LOCAL,
+            },
+            allAccounts
+          );
           dispatch({ type: 'SET_KEYRING', payload: keyring });
         }
       } catch (e) {
@@ -129,9 +144,9 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
 
     loadedAccounts = true;
     loadAccounts().catch(console.error);
-  }, [keyringStatus]);
+  }, [keyringStatus, endpoint]);
 
-  return <ApiContext.Provider value={state}>{children}</ApiContext.Provider>;
+  return <ApiContext.Provider value={{ ...state, setEndpoint }}>{children}</ApiContext.Provider>;
 };
 
 export const useApi = () => useContext(ApiContext);
