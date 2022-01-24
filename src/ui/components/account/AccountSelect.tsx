@@ -5,38 +5,36 @@ import React from 'react';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
 import { createAccountOptions } from 'api/util';
-import type { DropdownProps, OptionProps, ValidFormField } from 'types';
+import type { DropdownOption, DropdownProps, OrFalsy, ValidFormField } from 'types';
 import { useApi } from 'ui/contexts';
+import { classes } from 'ui/util';
 
-type Props = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;
+type Props = ValidFormField<OrFalsy<string>> & Omit<DropdownProps<string>, 'options'>;
 
-function Option({ option: { name, value } }: OptionProps<string>) {
-  return <Account name={name} value={value} />;
+function Option({ label, value }: DropdownOption<string>) {
+  return <Account name={label} value={value} />;
 }
 
 export function AccountSelect({
   isDisabled,
-  isError,
-  value,
   onChange,
-  children: placeholder = 'No Accounts Found',
+  placeholder = 'No Accounts Found',
   className,
+  value,
 }: Props) {
   const { keyring } = useApi();
   const options = createAccountOptions(keyring.getPairs());
 
   return (
     <Dropdown
-      button={Option}
-      className={className}
+      className={classes('account-select', className)}
       isDisabled={isDisabled}
-      isError={isError}
-      option={Option}
+      formatOptionLabel={Option}
       onChange={onChange}
       options={options}
+      placeholder={placeholder}
+      isSearchable
       value={value}
-    >
-      {placeholder}
-    </Dropdown>
+    />
   );
 }

@@ -22,8 +22,8 @@ export function useFormField<T>(
     return !validation.isValid;
   }, [validation.isValid]);
 
-  const onChange = useCallback((value?: T) => {
-    if (!isUndefined(value)) {
+  const onChange = useCallback((value?: T | null) => {
+    if (!isUndefined(value) && !isNull(value)) {
       setValue(value);
       isTouched.current = true;
     }

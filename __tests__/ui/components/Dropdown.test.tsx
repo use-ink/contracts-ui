@@ -14,8 +14,8 @@ interface ReturnType {
 }
 
 const options: DropdownOption<ReturnType>[] = [
-  { name: 'bar', value: { foo: 'bar' } },
-  { name: <span>baz</span>, value: { foo: 'baz' } },
+  { label: 'bar', value: { foo: 'bar' } },
+  { label: <span>baz</span>, value: { foo: 'baz' } },
 ];
 
 function mockProps(overrides: Partial<DropdownProps<ReturnType>> = {}): DropdownProps<ReturnType> {
@@ -40,11 +40,11 @@ describe('Dropdown', () => {
 
     fireEvent.click(dropdownBtn);
 
-    options.forEach(({ name }, index) => {
+    options.forEach(({ label }, index) => {
       const li = getByTestId(`dropdown-option-${index}`);
 
       expect(li).toBeInTheDocument();
-      expect(li).toHaveTextContent(getNodeText(name));
+      expect(li).toHaveTextContent(getNodeText(label));
     });
   });
 

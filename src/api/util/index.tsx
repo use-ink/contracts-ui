@@ -36,24 +36,24 @@ export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Ui
     : EMPTY_SALT;
 }
 
-export function createConstructorOptions(data: AbiConstructor[]): DropdownOption<number>[] {
-  return data.map((constructor, index) => ({
-    name: <MessageSignature message={constructor} />,
+export function createConstructorOptions(data?: AbiConstructor[]): DropdownOption<number>[] {
+  return (data || []).map((constructor, index) => ({
+    label: <MessageSignature message={constructor} />,
     value: index,
   }));
 }
 
 export function createMessageOptions(data?: AbiMessage[]): DropdownOption<AbiMessage>[] {
   return (data || []).map(message => ({
-    name: <MessageSignature message={message} />,
+    label: <MessageSignature message={message} />,
     value: message,
   }));
 }
 
 export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOption<string>[] {
   return data.map(pair => ({
+    label: pair.meta?.name as string,
     value: pair.address || '',
-    name: pair.meta?.name as string,
   }));
 }
 
