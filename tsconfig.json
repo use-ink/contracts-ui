@@ -19,8 +19,6 @@
       "api/*": ["./src/api/*"],
       "db": ["./src/db"],
       "db/*": ["./src/db/*"],
-      "test-utils": ["./__test-utils__"],
-      "test-utils/*": ["./__test-utils__/*"],
       "types": ["./src/types"],
       "types/*": ["./src/types/*"],
       "ui": ["./src/ui"],
