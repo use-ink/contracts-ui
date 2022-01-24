@@ -1,4 +1,4 @@
-name: Jest tests
+name: 'Build project'
 
 on:
   push:
@@ -35,7 +35,5 @@ jobs:
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --frozen-lockfile
-      - name: Lint
-        run: yarn lint
       - name: Build
         run: yarn build
