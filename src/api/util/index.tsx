@@ -17,6 +17,7 @@ import {
   Registry,
   OrFalsy,
   Weight,
+  ContractDocument,
 } from 'types';
 import { MessageSignature } from 'ui/components/message/MessageSignature';
 
@@ -54,6 +55,13 @@ export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOpti
   return data.map(pair => ({
     label: pair.meta?.name as string,
     value: pair.address || '',
+  }));
+}
+
+export function createContractOptions(data: ContractDocument[]): DropdownOption<string>[] {
+  return data.map(({ name, address }) => ({
+    label: name,
+    value: address,
   }));
 }
 

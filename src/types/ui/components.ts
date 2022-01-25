@@ -15,15 +15,9 @@ export type DropdownProps<T> = SimpleSpread<
   ValidFormField<T> &
     Pick<
       ReactSelectProps<DropdownOption<T>, false>,
-      'formatOptionLabel' | 'isDisabled' | 'isSearchable' | 'options' | 'placeholder'
+      'components' | 'formatOptionLabel' | 'isDisabled' | 'isSearchable' | 'options' | 'placeholder'
     >
 >;
-
-// export interface OptionProps<T> {
-//   option: DropdownOption<T>;
-//   isPlaceholder?: boolean;
-//   isSelected?: boolean;
-// }
 
 export type InputFileProps = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,

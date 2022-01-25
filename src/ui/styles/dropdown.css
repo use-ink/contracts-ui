@@ -3,7 +3,7 @@
 }
 
 .dropdown__control {
-  @apply relative flex items-center w-full p-1 text-left text-sm dark:bg-transparent rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
+  @apply relative flex items-center w-full p-0.5 text-left text-sm dark:bg-transparent rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
 }
 
 .dropdown__control--is-focused,
@@ -55,29 +55,29 @@
   @apply dark:bg-transparent;
 }
 
-.dropdown.chain .dropdown-btn {
-  @apply flex items-center text-xs font-medium bg-elevation-1 hover:bg-elevation-3;
+.dropdown.chain .dropdown__control {
+  @apply dark:hover:bg-elevation-3;
 }
 
-.dropdown.chain .dropdown-btn:before {
+.dropdown.chain .dropdown__single-value {
+  @apply flex flex-grow items-center text-xs font-medium;
+}
+
+.dropdown.chain .dropdown__single-value:before {
   content: '';
-  @apply block rounded-full w-1.5 h-1.5 mr-1;
+  @apply block rounded-full w-1.5 h-1.5 ml-1 mr-2;
 }
 
-.dropdown.chain.isConnected .dropdown-btn:before {
+.dropdown.chain.isConnected .dropdown__single-value:before {
   @apply bg-green-400;
 }
 
-.dropdown.chain.isConnecting .dropdown-btn:before {
+.dropdown.chain.isConnecting .dropdown__single-value:before {
   @apply bg-yellow-300;
 }
 
-.dropdown.chain.isError .dropdown-btn:before {
+.dropdown.chain.isError .dropdown__single-value:before {
   @apply bg-red-400;
-}
-
-.dropdown.chain .options .option {
-  @apply text-xs;
 }
 
 .account-select .dropdown__control {
