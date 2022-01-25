@@ -20,21 +20,21 @@ export function createInstantiateTx(
 ): SubmittableExtrinsic<'promise'> | null {
   const saltu8a = encodeSalt(salt);
 
-  const options = {
-    gasLimit,
-    salt: saltu8a,
-    value: value ? api.registry.createType('Balance', value) : undefined,
-  };
-
   const wasm = metadata?.info.source.wasm;
   const isValid = codeHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
+    const constructor = metadata.findConstructor(constructorIndex);
+
+    const options = {
+      gasLimit,
+      salt: saltu8a,
+      value: value && constructor.isPayable ? api.registry.createType('Balance', value) : undefined,
+    };
+
     const codeOrBlueprint = codeHash
       ? new BlueprintPromise(api, metadata, codeHash)
       : new CodePromise(api, metadata, wasm && wasm.toU8a());
-
-    const constructor = metadata.findConstructor(constructorIndex);
 
     const transformed = transformUserInput(api.registry, constructor.args, argValues);
 

@@ -10,7 +10,6 @@ type OnChange = (_: FileState | undefined, __?: Record<string, unknown>) => void
 type OnRemove = VoidFn;
 
 interface Options {
-  isRequired?: boolean;
   isWasmRequired?: boolean;
 }
 
@@ -103,9 +102,9 @@ export function useMetadata(
 ): UseMetadata {
   const { api } = useApi();
 
-  const { isRequired = false, isWasmRequired = false, ...callbacks } = options;
+  const { isWasmRequired = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
-    deriveFromJson({ isRequired, isWasmRequired }, initialValue, api)
+    deriveFromJson({ isWasmRequired }, initialValue, api)
   );
 
   function onChange(file: FileState): void {
@@ -113,7 +112,7 @@ export function useMetadata(
       const json = JSON.parse(u8aToString(file.data)) as Record<string, unknown>;
       const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
 
-      const newState = deriveFromJson({ isRequired, isWasmRequired, name }, json, api);
+      const newState = deriveFromJson({ isWasmRequired, name }, json, api);
 
       setState(newState);
 
@@ -139,8 +138,8 @@ export function useMetadata(
   }
 
   useEffect((): void => {
-    setState(deriveFromJson({ isRequired, isWasmRequired }, initialValue, api));
-  }, [api, initialValue, isRequired, isWasmRequired]);
+    setState(deriveFromJson({ isWasmRequired }, initialValue, api));
+  }, [api, initialValue, isWasmRequired]);
 
   return {
     ...state,
