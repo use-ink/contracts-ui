@@ -8,7 +8,7 @@ import { classes } from 'ui/util';
 
 const options = [
   {
-    name: 'Local Node',
+    label: 'Local Node',
     value: 'ws://127.0.0.1:9944',
   },
 ];

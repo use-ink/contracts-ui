@@ -2,25 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { SimpleSpread } from 'types';
+import { SimpleSpread, ValidFormField } from 'types';
 import { Dropdown } from 'ui/components/common/Dropdown';
 
-type Props = SimpleSpread<
-  React.HTMLAttributes<HTMLDivElement>,
-  {
-    value: boolean;
-    onChange: (_: boolean) => void;
-  }
->;
+type Props = SimpleSpread<React.HTMLAttributes<HTMLDivElement>, ValidFormField<boolean>>;
 
 const options = [
   {
     value: false,
-    name: 'false',
+    label: 'false',
   },
   {
     value: true,
-    name: 'true',
+    label: 'true',
   },
 ];
 

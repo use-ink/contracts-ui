@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useState } from 'react';
-import { isHex } from '@polkadot/util';
+import { isHex, isNumber } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
@@ -80,9 +80,11 @@ export function Step2() {
             className="mb-4"
             value={constructorIndex}
             onChange={v => {
-              setConstructorIndex(v);
-              setDeployConstructor(metadata.constructors[v]);
-              setArgs(metadata.constructors[v].args);
+              if (isNumber(v)) {
+                setConstructorIndex(v);
+                setDeployConstructor(metadata.constructors[v]);
+                setArgs(metadata.constructors[v].args);
+              }
             }}
           >
             No constructors found

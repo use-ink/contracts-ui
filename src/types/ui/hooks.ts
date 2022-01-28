@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { VoidFn } from '../substrate';
-import { BN, FileState, MetadataState, SetState, Validation } from './util';
+import { BN, FileState, MetadataState, OrFalsy, SetState, Validation } from './util';
 
 export type UseWeight = {
   executionTime: number;
@@ -17,7 +17,7 @@ export type UseWeight = {
 
 export interface ValidFormField<T> extends Validation {
   value: T;
-  onChange: (_: T) => void;
+  onChange: (_: OrFalsy<T>) => void;
 }
 
 export type UseBalance = ValidFormField<BN>;

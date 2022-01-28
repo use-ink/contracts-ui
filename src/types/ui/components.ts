@@ -1,29 +1,23 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { Props as ReactSelectProps } from 'react-select';
 import { ValidFormField } from './hooks';
 import { FileState, SimpleSpread } from './util';
 
 export interface DropdownOption<T> {
   value: T;
-  name: React.ReactNode;
+  label: React.ReactNode;
 }
 
 export type DropdownProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
-  ValidFormField<T> & {
-    button?: React.ComponentType<OptionProps<T>>;
-    isDisabled?: boolean;
-    option?: React.ComponentType<OptionProps<T>>;
-    options?: DropdownOption<T>[];
-  }
+  ValidFormField<T> &
+    Pick<
+      ReactSelectProps<DropdownOption<T>, false>,
+      'components' | 'formatOptionLabel' | 'isDisabled' | 'isSearchable' | 'options' | 'placeholder'
+    >
 >;
-
-export interface OptionProps<T> {
-  option: DropdownOption<T>;
-  isPlaceholder?: boolean;
-  isSelected?: boolean;
-}
 
 export type InputFileProps = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,

@@ -2,59 +2,84 @@
   @apply relative;
 }
 
-.dropdown .dropdown-btn {
-  @apply relative flex items-center w-full p-2 text-left text-sm dark:text-gray-300 text-gray-500 rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
+.dropdown__control {
+  @apply relative flex items-center w-full p-0.5 text-left text-sm dark:bg-transparent rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
 }
 
-.dropdown .dropdown-btn > span {
+.dropdown__control--is-focused,
+.dropdown__control--menu-is-open {
+  @apply dark:shadow-none dark:border-blue-600 dark:hover:border-blue-600;
+}
+
+.dropdown__single-value {
+  @apply dark:text-gray-300 text-gray-500;
+}
+
+.dropdown__value-container {
   @apply flex-1 min-w-0 block truncate;
 }
 
-.dropdown .dropdown-btn > svg {
-  @apply w-4 h-4 text-gray-400;
+.dropdown__dropdown-indicator svg {
+  @apply w-5 h-5 text-gray-400;
 }
 
-.dropdown .options {
+.dropdown__indicator-separator {
+  @apply hidden;
+}
+
+.dropdown__input-container {
+  @apply m-0;
+}
+
+.dropdown__menu {
   @apply absolute z-50 w-full max-h-80 overflow-y-auto dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 bg-white rounded-b;
 }
 
-.dropdown .options .option {
+.dropdown__option {
   @apply flex items-center cursor-pointer select-none relative py-2 px-3 dark:hover:bg-elevation-2 dark:text-gray-300;
 }
 
-.dropdown .options .option > span {
+.dropdown__option > span {
   @apply flex-grow block truncate;
 }
 
-.dropdown .options .option > svg {
+.dropdown__option svg.selected {
   @apply w-3.5 h-3.5;
 }
 
-.dropdown .options .option.selected {
-  @apply font-medium bg-elevation-1;
+.dropdown__option--is-selected {
+  @apply font-bold dark:bg-elevation-1;
 }
 
-.dropdown.chain .dropdown-btn {
-  @apply flex items-center text-xs font-medium bg-elevation-1 hover:bg-elevation-3;
+.dropdown__option--is-focused {
+  @apply dark:bg-transparent;
 }
 
-.dropdown.chain .dropdown-btn:before {
+.dropdown.chain .dropdown__control {
+  @apply dark:hover:bg-elevation-3;
+}
+
+.dropdown.chain .dropdown__single-value {
+  @apply flex flex-grow items-center text-xs font-medium;
+}
+
+.dropdown.chain .dropdown__single-value:before {
   content: '';
-  @apply block rounded-full w-1.5 h-1.5 mr-1;
+  @apply block rounded-full w-1.5 h-1.5 ml-1 mr-2;
 }
 
-.dropdown.chain.isConnected .dropdown-btn:before {
+.dropdown.chain.isConnected .dropdown__single-value:before {
   @apply bg-green-400;
 }
 
-.dropdown.chain.isConnecting .dropdown-btn:before {
+.dropdown.chain.isConnecting .dropdown__single-value:before {
   @apply bg-yellow-300;
 }
 
-.dropdown.chain.isError .dropdown-btn:before {
+.dropdown.chain.isError .dropdown__single-value:before {
   @apply bg-red-400;
 }
 
-.dropdown.chain .options .option {
-  @apply text-xs;
+.account-select .dropdown__control {
+  min-height: 68px;
 }
