@@ -74,8 +74,6 @@ export function Dropdown<T>({
   );
 
   const value = useMemo(() => {
-    console.log(options);
-
     if (isGroupedOptions(options)) {
       return options
         .reduce((result: DropdownOption<T>[], { options }) => [...result, ...options], [])

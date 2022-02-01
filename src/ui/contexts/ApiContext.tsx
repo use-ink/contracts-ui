@@ -13,7 +13,6 @@ import { blockTimeMs } from 'api/util/blockTime';
 let loadedAccounts = false;
 
 async function getChainProperties(api: ApiPromise): Promise<ChainProperties | null> {
-  console.log('getChainProperties');
   const blockNumber = (await api.rpc.chain.getHeader()).number.toNumber();
 
   if (blockNumber > 1) {
