@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { FormField, getValidation } from '../FormField';
 import { InputFile } from '../InputFile';
 import { FileState } from 'types';
@@ -10,12 +10,12 @@ import { useMetadata } from 'ui/hooks/useMetadata';
 import { useCodeBundle } from 'ui/hooks/useCodeBundle';
 
 export const useMetadataField = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   const [metadataFile, setMetadataFile] = useState<FileState>();
 
-  const codeBundleQuery = useCodeBundle(codeHashUrlParam);
+  const codeBundleQuery = useCodeBundle(codeHashUrlParam || '');
   const codeBundle = codeBundleQuery.data;
   const metadata = useMetadata(codeBundle?.document?.abi, {
     isWasmRequired: !codeBundle,
@@ -34,10 +34,9 @@ export const useMetadataField = () => {
 
   useEffect((): void => {
     if (codeHashUrlParam && !codeBundleQuery.isValid) {
-      history.replace('/instantiate/hash');
+      navigate(`/instantiate/${codeHashUrlParam}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codeHashUrlParam, codeBundleQuery.isValid]);
+  }, [codeHashUrlParam, codeBundleQuery.isValid, navigate]);
 
   const MetadataField = () => {
     return (

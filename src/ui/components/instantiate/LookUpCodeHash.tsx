@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { Input } from '../form/Input';
 import { FormField } from '../form/FormField';
@@ -12,7 +12,7 @@ import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';
 
 export function LookUpCodeHash() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [codeHash, setCodeHash] = useState('');
   const { data: searchResults } = useCodeBundleSearch(searchString);
@@ -62,7 +62,7 @@ export function LookUpCodeHash() {
           isError={!isValid}
           isSuccess={isValid}
           name={document?.name || 'On-chain Code Exists'}
-          onClick={isValid ? () => history.push(`/instantiate/hash/${codeHash}`) : undefined}
+          onClick={isValid ? () => navigate(`/instantiate/${codeHash}`) : undefined}
         />
       )}
     </FormField>

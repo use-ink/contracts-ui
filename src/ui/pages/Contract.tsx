@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import moment from 'moment';
 import { InteractTab } from '../components/contract/Interact';
@@ -36,8 +36,11 @@ const TABS = [
 ];
 
 export function Contract() {
-  const history = useHistory();
+  const navigate = useNavigate();
+
   const { address, activeTab = 'interact' } = useParams<UrlParams>();
+
+  if (!address) throw new Error('No address in url');
 
   const { data, isLoading, isValid } = useContract(address);
 
@@ -45,9 +48,9 @@ export function Contract() {
 
   useEffect((): void => {
     if (!isLoading && (!isValid || !data || !data[0])) {
-      history.replace('/');
+      navigate('/');
     }
-  }, [data, history, isLoading, isValid]);
+  }, [data, isLoading, isValid, navigate]);
 
   if (!data || !data[0] || !data[1]) {
     return null;
@@ -65,7 +68,7 @@ export function Contract() {
           <>
             You instantiated this contract from{' '}
             <Link
-              to={`/instantiate/hash/${document.codeHash}`}
+              to={`/instantiate/${document.codeHash}`}
               className="inline-block relative dark:bg-blue-500 dark:text-blue-400 dark:bg-opacity-20 text-xs px-1.5 font-mono rounded"
             >
               {projectName}

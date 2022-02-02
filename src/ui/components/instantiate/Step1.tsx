@@ -27,8 +27,8 @@ export function Step1() {
     useMetadataField();
 
   useEffect((): void => {
-    if (metadata?.info.contract.name && !name) {
-      setName(metadata?.info.contract.name.toString());
+    if (metadata && !name) {
+      setName(metadata.info.contract.name.toString());
     }
   }, [metadata, name, setName]);
 
@@ -37,9 +37,9 @@ export function Step1() {
       setData({
         ...data,
         accountId,
-        metadata: metadata,
+        metadata,
         name,
-        codeHash: codeHashUrlParam || undefined,
+        codeHash: codeHashUrlParam,
       });
 
     stepForward && stepForward();
