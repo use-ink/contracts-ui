@@ -44,16 +44,16 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
 
-  const [argValues, setArgValues, setArgs] = useArgValues([]);
+  const [argValues, setArgValues] = useArgValues(deployConstructor?.args || []);
 
   useEffect(() => {
     setConstructorIndex(0);
     metadata && setDeployConstructor(metadata.constructors[0]);
   }, [metadata, setConstructorIndex]);
 
-  useEffect(() => {
-    deployConstructor && setArgs(deployConstructor.args);
-  }, [deployConstructor, setArgs]);
+  // useEffect(() => {
+  //   deployConstructor && setArgs(deployConstructor.args);
+  // }, [deployConstructor, setArgs]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle();
 
@@ -83,7 +83,6 @@ export function Step2() {
               if (isNumber(v)) {
                 setConstructorIndex(v);
                 setDeployConstructor(metadata.constructors[v]);
-                setArgs(metadata.constructors[v].args);
               }
             }}
           >

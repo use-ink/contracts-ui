@@ -18,16 +18,13 @@ function fromArgs(api: ApiPromise, keyring: Keyring, args: AbiParam[]): ArgValue
   return result;
 }
 
-export function useArgValues(
-  args: AbiParam[]
-): [ArgValues, SetState<ArgValues>, SetState<AbiParam[]>] {
+export function useArgValues(args: AbiParam[]): [ArgValues, SetState<ArgValues>] {
   const { api, keyring } = useApi();
-  const [params, setParams] = useState(args);
   const [value, setValue] = useState<ArgValues>(fromArgs(api, keyring, args));
 
   useEffect((): void => {
-    setValue(fromArgs(api, keyring, params));
-  }, [params, api, keyring]);
+    setValue(fromArgs(api, keyring, args));
+  }, [api, keyring, args]);
 
-  return [value, setValue, setParams];
+  return [value, setValue];
 }
