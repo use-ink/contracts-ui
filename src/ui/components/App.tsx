@@ -19,20 +19,25 @@ const App = (): JSX.Element => {
         <AwaitApis>
           <div className="dark">
             <TransactionsContextProvider>
-              <InstantiateContextProvider>
-                <Routes>
-                  <Route path="/" element={<Layout />}>
-                    <Route index element={<Homepage />} />
-                    <Route path="add-contract" element={<AddContract />} />
-                    <Route path="hash-lookup" element={<SelectCodeHash />} />
-                    <Route path="/instantiate">
-                      <Route path=":codeHash" element={<Instantiate />} />
-                      <Route path="" element={<Instantiate />} />
-                    </Route>
-                    <Route path="/contract/:address/" element={<Contract />} />
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Homepage />} />
+                  <Route path="add-contract" element={<AddContract />} />
+                  <Route path="hash-lookup" element={<SelectCodeHash />} />
+                  <Route
+                    path="/instantiate"
+                    element={
+                      <InstantiateContextProvider>
+                        <Instantiate />
+                      </InstantiateContextProvider>
+                    }
+                  >
+                    <Route path=":codeHash" />
+                    <Route path="" />
                   </Route>
-                </Routes>
-              </InstantiateContextProvider>
+                  <Route path="/contract/:address/" element={<Contract />} />
+                </Route>
+              </Routes>
             </TransactionsContextProvider>
           </div>
         </AwaitApis>
