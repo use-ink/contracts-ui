@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';
 import {
   InstantiateProps,
+  InstantiateReturnValue,
   InstantiateState,
   CodeSubmittableResult,
   BlueprintSubmittableResult,
@@ -33,14 +34,16 @@ const initialData: InstantiateData = {
   name: '',
   weight: BN_THOUSAND,
 };
-const initialState: InstantiateState = {
+
+const initialState = {
   data: initialData,
   currentStep: 1,
   tx: null,
   onError: NOOP,
   onSuccess: NOOP,
   onInstantiate: () => Promise.resolve(),
-};
+} as unknown as InstantiateState;
+
 const InstantiateContext = React.createContext(initialState);
 
 export function isResultValid({
@@ -61,6 +64,7 @@ export function InstantiateContextProvider({
 
   const [data, setData] = useState<InstantiateData>(initialState.data);
   const [[tx, onInstantiate], setTx] = useState<TxState>([null, NOOP, null]);
+  const [dryRunResult, setDryRunResult] = useState<InstantiateReturnValue>();
 
   const onSuccess = useCallback(
     (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
@@ -80,7 +84,7 @@ export function InstantiateContextProvider({
       const onInstantiate = (codeHashUrlParam ? onInsantiateFromHash : onInstantiateFromCode)(
         apiState,
         dbState,
-        data,
+        newData,
         onSuccess
       );
       setTx([tx, onInstantiate, null]);
@@ -93,6 +97,27 @@ export function InstantiateContextProvider({
     }
   };
 
+  const onFormChange = async (formData: Partial<InstantiateData>) => {
+    const newData = { ...data, ...formData };
+    try {
+      const result = await apiState.api.rpc.contracts.instantiate({
+        origin: newData.accountId,
+        gasLimit: newData.weight,
+        storageDepositLimit: newData.storageDepositLimit,
+        code: codeHashUrlParam
+          ? { Existing: codeHashUrlParam }
+          : { Upload: newData.metadata?.info.source.wasm },
+        data: newData.argValues,
+      });
+
+      if (result.isOk) {
+        setDryRunResult(result.asOk);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   function onUnFinalize() {
     setTx([null, NOOP, null]);
     setStep(2);
@@ -102,12 +127,14 @@ export function InstantiateContextProvider({
     data,
     setData,
     currentStep,
+    dryRunResult,
     setStep,
     stepForward,
     stepBackward,
     onSuccess,
     onUnFinalize,
     onFinalize,
+    onFormChange,
     tx,
     onInstantiate,
     onError: NOOP,

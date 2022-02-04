@@ -1269,6 +1269,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/big.js@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@types/big.js@npm:6.1.2"
+  checksum: fb0daa4b23e1cb9d0d1c847722ae3764978d0290875d91687c6ecc7566860129ce86b190b732294484077d45f9b82ef3e97784ee32c83aef05e8c8433c4fde6a
+  languageName: node
+  linkType: hard
+
 "@types/bn.js@npm:^4.11.6":
   version: 4.11.6
   resolution: "@types/bn.js@npm:4.11.6"
@@ -2521,6 +2528,13 @@ __metadata:
   version: 5.2.2
   resolution: "big.js@npm:5.2.2"
   checksum: b89b6e8419b097a8fb4ed2399a1931a68c612bce3cfd5ca8c214b2d017531191070f990598de2fc6f3f993d91c0f08aa82697717f6b3b8732c9731866d233c9e
+  languageName: node
+  linkType: hard
+
+"big.js@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "big.js@npm:6.1.1"
+  checksum: ba5db278e7d6700d7f92b7421e851bb65b6336d90b882869696c50574623c6be31f81500c3195fb1b391045163ffe62745e1c2bc30b35cb15e1b3e3ed135266b
   languageName: node
   linkType: hard
 
@@ -9351,6 +9365,7 @@ __metadata:
     "@textile/hub": ^6.3.2
     "@textile/threaddb": 0.2.2
     "@types/bcryptjs": ^2.4.2
+    "@types/big.js": ^6.1.2
     "@types/mini-css-extract-plugin": ^2.5.1
     "@types/node": ^17.0.10
     "@types/react": ^17.0.38
@@ -9365,6 +9380,7 @@ __metadata:
     assert: ^2.0.0
     autoprefixer: ^10.4.2
     bcryptjs: ^2.4.3
+    big.js: ^6.1.1
     crypto-browserify: ^3.12.0
     css-loader: ^6.5.1
     eslint: ^8.5.0

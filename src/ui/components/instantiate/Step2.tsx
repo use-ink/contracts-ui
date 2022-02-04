@@ -9,6 +9,7 @@ import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
+import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'api/util';
@@ -20,10 +21,11 @@ import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
 import type { AbiMessage } from 'types';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 
 export function Step2() {
   const {
-    data: { metadata },
+    data: { accountId, metadata },
     stepBackward,
     currentStep,
     onFinalize,
@@ -32,6 +34,7 @@ export function Step2() {
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
 
   const weight = useWeight();
+  const storageDepositLimit = useStorageDepositLimit(accountId);
 
   const salt = useFormField<string>(randomAsHex(), value => {
     if (!!value && isHex(value) && value.length === 66) {
@@ -56,14 +59,16 @@ export function Step2() {
   // }, [deployConstructor, setArgs]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
-  const submitHandler = () => {
+  const onSubmit = () => {
     onFinalize &&
       onFinalize({
         constructorIndex,
         salt: salt.value,
         value,
         argValues,
+        storageDepositLimit: storageDepositLimit.value,
         weight: weight.weight,
       });
   };
@@ -111,6 +116,22 @@ export function Step2() {
         >
           <InputGas isCall {...weight} />
         </FormField>
+        <FormField
+          id="storageDepositLimit"
+          label="Storage Deposit Limit"
+          isError={!storageDepositLimit.isValid}
+          message={
+            !storageDepositLimit.isValid
+              ? storageDepositLimit.message || 'Invalid storage deposit limit'
+              : null
+          }
+        >
+          <InputStorageDepositLimit
+            isActive={isUsingStorageDepositLimit}
+            toggleIsActive={toggleIsUsingStorageDepositLimit}
+            {...storageDepositLimit}
+          />
+        </FormField>
       </Form>
       <Buttons>
         <Button
@@ -118,10 +139,11 @@ export function Step2() {
             !valueValidation.isValid ||
             (isUsingSalt && !salt.isValid) ||
             !weight.isValid ||
+            !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
             !argValues
           }
-          onClick={submitHandler}
+          onClick={onSubmit}
           variant="primary"
         >
           Next

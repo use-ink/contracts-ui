@@ -6,7 +6,14 @@ import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
-import { ArgumentForm, InputGas, InputBalance, Form, FormField } from 'ui/components/form';
+import {
+  ArgumentForm,
+  InputGas,
+  InputBalance,
+  InputStorageDepositLimit,
+  Form,
+  FormField,
+} from 'ui/components/form';
 import {
   createMessageOptions,
   dryRun,
@@ -18,6 +25,8 @@ import {
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
+import { useToggle } from 'ui/hooks/useToggle';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 
 interface Props {
   contract: ContractPromise;
@@ -37,6 +46,7 @@ export const InteractTab = ({ contract }: Props) => {
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
+  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   useEffect(() => {
     setCallResults([]);
@@ -78,11 +88,13 @@ export const InteractTab = ({ contract }: Props) => {
   }, [api, accountId, argValues, keyring, message, value, contract]);
 
   const weight = useWeight();
+  const storageDepositLimit = useStorageDepositLimit(accountId);
 
   const transformed = transformUserInput(contract.registry, message.args, argValues);
 
   const options = {
     gasLimit: weight.weight.addn(1),
+    storageDepositLimit: storageDepositLimit.value,
     value: message.isPayable ? value || BN_ZERO : undefined,
   };
 
@@ -147,7 +159,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   const newId = useRef<number>();
 
-  const clickHandler = () => {
+  const call = () => {
     const tx = prepareContractTx(contract.tx[message.method], options, transformed);
 
     if (tx && accountId) {
@@ -214,13 +226,29 @@ export const InteractTab = ({ contract }: Props) => {
               {...weight}
             />
           </FormField>
+          <FormField
+            id="storageDepositLimit"
+            label="Storage Deposit Limit"
+            isError={!storageDepositLimit.isValid}
+            message={
+              !storageDepositLimit.isValid
+                ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                : null
+            }
+          >
+            <InputStorageDepositLimit
+              isActive={isUsingStorageDepositLimit}
+              toggleIsActive={toggleIsUsingStorageDepositLimit}
+              {...storageDepositLimit}
+            />
+          </FormField>
         </Form>
         <Buttons>
           {message.isPayable || message.isMutating ? (
             <Button
               isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
               isLoading={txs[txId]?.status === 'processing'}
-              onClick={() => clickHandler()}
+              onClick={call}
               variant="primary"
             >
               Call

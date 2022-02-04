@@ -1,6 +1,8 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { Struct } from '@polkadot/types';
+import { AccountId, ContractExecResult } from '@polkadot/types/interfaces';
 import type {
   Abi,
   ApiPromise,
@@ -17,6 +19,11 @@ import type {
 import type { BN } from './util';
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
+
+export interface InstantiateReturnValue extends Struct {
+  readonly result: ContractExecResult;
+  readonly accountId: AccountId;
+}
 
 export interface ApiState extends ChainProperties {
   endpoint: string;
@@ -56,14 +63,17 @@ export interface InstantiateData {
   name: string;
   constructorIndex: number;
   salt?: string;
+  storageDepositLimit?: BN | null;
   weight: BN;
   codeHash?: string;
 }
 export interface InstantiateState {
   data: InstantiateData;
+  dryRunResult?: InstantiateReturnValue;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
   onFinalize?: (data: Partial<InstantiateData>) => void;
+  onFormChange: (data: Partial<InstantiateData>) => void;
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
