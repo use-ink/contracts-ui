@@ -3,7 +3,8 @@
 
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Wizard } from '../components/instantiate';
+import { InstantiateContextProvider } from 'ui/contexts';
+import { Wizard } from 'ui/components/instantiate';
 
 export function Instantiate() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -40,7 +41,9 @@ export function Instantiate() {
           </div>
         </div>
       </div>
-      <Wizard />
+      <InstantiateContextProvider>
+        <Wizard />
+      </InstantiateContextProvider>
     </div>
   );
 }

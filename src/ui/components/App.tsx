@@ -2,45 +2,30 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { AddContract, Contract, Homepage, Instantiate, SelectCodeHash, Layout } from '../pages';
-import { AwaitApis } from './AwaitApis';
+import { Outlet } from 'react-router';
+import { AwaitApis } from 'ui/components/AwaitApis';
+import { Sidebar } from 'ui/components/sidebar';
+
 import {
   ApiContextProvider,
   DatabaseContextProvider,
-  InstantiateContextProvider,
+  TransactionsContextProvider,
 } from 'ui/contexts';
-import { TransactionsContextProvider } from 'ui/contexts/TransactionsContext';
 
 const App = (): JSX.Element => {
   return (
     <ApiContextProvider>
       <DatabaseContextProvider>
-        <AwaitApis>
-          <div className="dark">
-            <TransactionsContextProvider>
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<Homepage />} />
-                  <Route path="add-contract" element={<AddContract />} />
-                  <Route path="hash-lookup" element={<SelectCodeHash />} />
-                  <Route
-                    path="/instantiate"
-                    element={
-                      <InstantiateContextProvider>
-                        <Instantiate />
-                      </InstantiateContextProvider>
-                    }
-                  >
-                    <Route path=":codeHash" />
-                    <Route path="" />
-                  </Route>
-                  <Route path="/contract/:address/" element={<Contract />} />
-                </Route>
-              </Routes>
-            </TransactionsContextProvider>
-          </div>
-        </AwaitApis>
+        <div className="dark">
+          <TransactionsContextProvider>
+            <div className="relative md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900 dark:text-white text-black">
+              <Sidebar />
+              <AwaitApis>
+                <Outlet />
+              </AwaitApis>
+            </div>
+          </TransactionsContextProvider>
+        </div>
       </DatabaseContextProvider>
     </ApiContextProvider>
   );
