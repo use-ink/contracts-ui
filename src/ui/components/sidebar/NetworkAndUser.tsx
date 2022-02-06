@@ -1,21 +1,27 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
+import { RPCS } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'ui/util';
 
 const options = [
   {
     label: 'Local Node',
-    value: 'ws://127.0.0.1:9944',
+    value: RPCS.LOCAL,
+  },
+  {
+    label: 'Canvas',
+    value: RPCS.CANVAS,
   },
 ];
 
 export function NetworkAndUser() {
   const { endpoint, status } = useApi();
-  const [chain] = useState(endpoint);
+  const navigate = useNavigate();
 
   return (
     <div className="network-and-user">
@@ -26,9 +32,11 @@ export function NetworkAndUser() {
           status === 'CONNECTING' ? 'isConnecting' : '',
           status === 'ERROR' ? 'isError' : ''
         )}
-        onChange={() => {}}
+        onChange={e => {
+          navigate(`/?rpc=${e}`);
+        }}
         options={options}
-        value={chain}
+        value={options.find(o => o.value === endpoint)?.value || 'ws://127.0.0.1:9944'}
       />
     </div>
   );

@@ -11,7 +11,7 @@ import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
-import { createConstructorOptions } from 'api/util';
+import { createConstructorOptions } from 'ui/util/dropdown';
 import { useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
@@ -50,10 +50,6 @@ export function Step2() {
     setConstructorIndex(0);
     metadata && setDeployConstructor(metadata.constructors[0]);
   }, [metadata, setConstructorIndex]);
-
-  // useEffect(() => {
-  //   deployConstructor && setArgs(deployConstructor.args);
-  // }, [deployConstructor, setArgs]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle();
 
