@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState, useContext, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';
 import {
   InstantiateProps,
@@ -52,7 +52,7 @@ export function isResultValid({
 export function InstantiateContextProvider({
   children,
 }: React.PropsWithChildren<Partial<InstantiateProps>>) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dbState = useDatabase();
   const apiState = useApi();
   const NOOP = () => Promise.resolve();
@@ -64,12 +64,12 @@ export function InstantiateContextProvider({
 
   const onSuccess = useCallback(
     (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
-      history.push(`/contract/${contract.address}`);
+      navigate(`/contract/${contract.address}`);
 
       dbState.refreshUserData();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dbState.refreshUserData]
+
+    [dbState, navigate]
   );
 
   const onFinalize = (formData: Partial<InstantiateData>) => {

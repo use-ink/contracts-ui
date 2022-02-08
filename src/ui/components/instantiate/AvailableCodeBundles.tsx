@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { FormField } from '../form/FormField';
 import { CodeHash } from './CodeHash';
 import { useAvailableCodeBundles } from 'ui/hooks/useAvailableCodeBundles';
@@ -16,7 +16,7 @@ interface ListProps {
 }
 
 function List({ items, label }: ListProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (items.length === 0) {
@@ -32,7 +32,7 @@ function List({ items, label }: ListProps) {
             name={codeBundle.name}
             codeHash={codeBundle.codeHash}
             key={codeBundle.codeHash}
-            onClick={() => history.push(`/instantiate/hash/${codeBundle.codeHash}`)}
+            onClick={() => navigate(`/instantiate/${codeBundle.codeHash}`)}
           />
         );
       })}
