@@ -10,7 +10,6 @@ import { MetadataTab } from '../components/contract/Metadata';
 import { Loader } from '../components/common/Loader';
 import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
-import type { UrlParams } from 'types';
 import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
 
@@ -38,7 +37,7 @@ const TABS = [
 export function Contract() {
   const navigate = useNavigate();
 
-  const { address, activeTab = 'interact' } = useParams<UrlParams>();
+  const { address, activeTab = 'interact' } = useParams();
 
   if (!address) throw new Error('No address in url');
 
