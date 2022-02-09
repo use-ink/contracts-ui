@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://paritytech.github.io/substrate-contracts-explorer/contract.schema.json",
+  "$id": "https://paritytech.github.io/contracts-ui/contract.schema.json",
   "title": "Contract",
   "description": "An instiated smart contract",
   "type": "object",

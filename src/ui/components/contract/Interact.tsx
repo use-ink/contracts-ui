@@ -14,19 +14,13 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import {
-  createMessageOptions,
-  dryRun,
-  NOOP,
-  prepareContractTx,
-  sendContractQuery,
-  transformUserInput,
-} from 'api';
+import { dryRun, NOOP, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
+import { createMessageOptions } from 'ui/util/dropdown';
 
 interface Props {
   contract: ContractPromise;
@@ -126,7 +120,7 @@ export const InteractTab = ({ contract }: Props) => {
   const read = async () => {
     const { result, output } = await sendContractQuery(
       contract.query[message.method],
-      keyring?.getPair(accountId),
+      keyring.getPair(accountId),
       options,
       transformed
     );

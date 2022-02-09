@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { GroupBase } from 'react-select';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
-import { createAccountOptions } from 'api/util';
+import { createAccountOptions } from 'ui/util/dropdown';
 import type { DropdownOption, DropdownProps, OrFalsy, ValidFormField } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { classes } from 'ui/util';
@@ -33,7 +33,7 @@ export function AccountSelect({
     return [
       {
         label: 'My Accounts',
-        options: createAccountOptions(keyring.getPairs()),
+        options: createAccountOptions(keyring?.getPairs()),
       },
       ...(myContracts?.owned && myContracts.owned.length > 0
         ? [

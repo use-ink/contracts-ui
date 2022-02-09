@@ -2,11 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { hot } from 'react-hot-loader';
-import { Router, routes } from '../router';
-import { Sidebar } from './sidebar';
-import { ApiContextProvider, DatabaseContextProvider } from 'ui/contexts';
-import { TransactionsContextProvider } from 'ui/contexts/TransactionsContext';
+import { Outlet } from 'react-router';
+import { AwaitApis } from 'ui/components/AwaitApis';
+import { Sidebar } from 'ui/components/sidebar';
+
+import {
+  ApiContextProvider,
+  DatabaseContextProvider,
+  TransactionsContextProvider,
+} from 'ui/contexts';
 
 const App = (): JSX.Element => {
   return (
@@ -16,7 +20,9 @@ const App = (): JSX.Element => {
           <TransactionsContextProvider>
             <div className="relative md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900 dark:text-white text-black">
               <Sidebar />
-              <Router routes={routes} />
+              <AwaitApis>
+                <Outlet />
+              </AwaitApis>
             </div>
           </TransactionsContextProvider>
         </div>
@@ -25,4 +31,4 @@ const App = (): JSX.Element => {
   );
 };
 
-export default hot(module)(App);
+export default App;

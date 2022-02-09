@@ -16,6 +16,7 @@ import type {
   SubmittableExtrinsic,
   SubmittableResult,
   VoidFn,
+  ChainType,
 } from '../substrate';
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
@@ -42,7 +43,7 @@ export interface ApiState extends ChainProperties {
 export type ApiAction =
   | { type: 'CONNECT_INIT' }
   | { type: 'CONNECT'; payload: ApiPromise }
-  | { type: 'CONNECT_READY'; payload: Partial<ChainProperties> }
+  | { type: 'CONNECT_READY'; payload: ChainProperties | null }
   | { type: 'CONNECT_ERROR'; payload: unknown }
   | { type: 'LOAD_KEYRING' }
   | { type: 'SET_ENDPOINT'; payload: string }
@@ -54,6 +55,8 @@ export interface ChainProperties {
   tokenDecimals: number;
   systemName: string | null;
   systemVersion: string | null;
+  systemChainType: ChainType;
+  systemChain: string;
   tokenSymbol: string;
 }
 

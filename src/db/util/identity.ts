@@ -75,7 +75,7 @@ function generateMessageForEntropy(
 export function getPrivateKeyFromPair(pair: KeyringPair, secretText = 'asdf'): PrivateKey {
   // avoid sending the raw secret by hashing it first
   const secret = bcrypt.hashSync(secretText, 10);
-  const message = generateMessageForEntropy(pair.address, 'substrate-contracts-explorer', secret);
+  const message = generateMessageForEntropy(pair.address, 'contracts-ui', secret);
   const signedText = pair.sign(message);
   const hash = keccakAsU8a(signedText);
 

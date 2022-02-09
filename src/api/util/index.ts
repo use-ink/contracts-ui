@@ -1,25 +1,11 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
 import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import { MAX_CALL_WEIGHT } from '../../constants';
-import {
-  AbiConstructor,
-  Bytes,
-  ApiPromise,
-  AbiParam,
-  KeyringPair,
-  AbiMessage,
-  DropdownOption,
-  Registry,
-  OrFalsy,
-  Weight,
-  ContractDocument,
-} from 'types';
-import { MessageSignature } from 'ui/components/message/MessageSignature';
+import { Bytes, ApiPromise, AbiParam, Registry, OrFalsy, Weight } from 'types';
 
 const EMPTY_SALT = new Uint8Array();
 
@@ -35,34 +21,6 @@ export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Ui
     : salt && salt.length
     ? compactAddLength(u8aToU8a(salt))
     : EMPTY_SALT;
-}
-
-export function createConstructorOptions(data?: AbiConstructor[]): DropdownOption<number>[] {
-  return (data || []).map((constructor, index) => ({
-    label: <MessageSignature message={constructor} />,
-    value: index,
-  }));
-}
-
-export function createMessageOptions(data?: AbiMessage[]): DropdownOption<AbiMessage>[] {
-  return (data || []).map(message => ({
-    label: <MessageSignature message={message} />,
-    value: message,
-  }));
-}
-
-export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOption<string>[] {
-  return data.map(pair => ({
-    label: pair.meta?.name as string,
-    value: pair.address || '',
-  }));
-}
-
-export function createContractOptions(data: ContractDocument[]): DropdownOption<string>[] {
-  return data.map(({ name, address }) => ({
-    label: name,
-    value: address,
-  }));
 }
 
 export const NOOP = (): void => undefined;
@@ -120,4 +78,18 @@ export function transformUserInput(
 
     return value || null;
   });
+}
+
+export function isValidWsUrl(s: unknown) {
+  if (typeof s === 'string') {
+    let url;
+    try {
+      url = new URL(s);
+    } catch (_) {
+      return false;
+    }
+
+    return url.protocol === 'ws:' || url.protocol === 'wss:';
+  }
+  return false;
 }

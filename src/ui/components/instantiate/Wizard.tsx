@@ -17,13 +17,16 @@ const steps = [
 ];
 
 export function Wizard() {
-  const { currentStep } = useInstantiate();
+  const {
+    currentStep,
+    data: { metadata },
+  } = useInstantiate();
 
   return (
     <div className="grid md:grid-cols-12 gap-5 m-1">
       <main className="md:col-span-9 p-4">
         <Step1 />
-        <Step2 />
+        {metadata && <Step2 />}
         <Step3 />
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">

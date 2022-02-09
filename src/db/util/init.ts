@@ -12,8 +12,8 @@ import { getStoredPrivateKey } from './identity';
 import type { UserDocument } from 'types';
 
 const DELIMITER = '__';
-const DB_VERSION_KEY = 'substrate-contracts-explorer:db-version';
-const LOCAL_NODE_DB_NAME = 'substrate-contracts-explorer:local-db-name';
+const DB_VERSION_KEY = 'contracts-ui:db-version';
+const LOCAL_NODE_DB_NAME = 'contracts-ui:local-db-name';
 
 function isLocalNode(rpcUrl: string): boolean {
   return rpcUrl.includes('127.0.0.1');
