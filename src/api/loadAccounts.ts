@@ -12,7 +12,7 @@ export const loadAccounts = (state: ApiState, dispatch: React.Dispatch<ApiAction
 
   const asyncLoadAccounts = async () => {
     try {
-      await web3Enable('substrate-contracts-explorer');
+      await web3Enable('contracts-ui');
       let allAccounts = await web3Accounts();
 
       allAccounts = allAccounts.map(({ address, meta }) => ({

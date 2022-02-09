@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://paritytech.github.io/substrate-contracts-explorer/user.schema.json",
+  "$id": "https://paritytech.github.io/contracts-ui/user.schema.json",
   "title": "User",
   "description": "A Api UI user identity",
   "type": "object",

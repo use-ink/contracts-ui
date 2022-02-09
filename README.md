@@ -57,4 +57,4 @@ yarn start
 
 ## Contributing to the project
 
-Please see our [Contribution Guidelines](https://github.com/paritytech/substrate-contracts-explorer/blob/master/CONTRIBUTING.md) before opening an issue or PR.
+Please see our [Contribution Guidelines](https://github.com/paritytech/contracts-ui/blob/master/CONTRIBUTING.md) before opening an issue or PR.

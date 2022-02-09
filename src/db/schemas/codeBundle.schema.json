@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://paritytech.github.io/substrate-contracts-explorer/codeBundle.schema.json",
+  "$id": "https://paritytech.github.io/contracts-ui/codeBundle.schema.json",
   "title": "CodeBundle",
   "description": "An uploaded WASM code bundle",
   "type": "object",
