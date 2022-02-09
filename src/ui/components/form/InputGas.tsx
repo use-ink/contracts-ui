@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useRef } from 'react';
-import { BN_MILLION, BN_ZERO } from '@polkadot/util';
+import { BN_MILLION, BN_ONE, BN_ZERO } from '@polkadot/util';
 import { InputNumber } from './InputNumber';
 import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
 import { classes } from 'ui/util';
@@ -84,8 +84,9 @@ export function InputGas({
                   }}
                 >
                   {isCall
-                    ? `Use Estimated Weight (${(estimatedWeight || BN_ZERO)
+                    ? `Use Estimated Gas (${(estimatedWeight || BN_ZERO)
                         .div(BN_MILLION)
+                        .add(BN_ONE)
                         .toString()}M)`
                     : 'Use Maximum Query Gas'}
                 </a>

@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { BN_ONE, BN_TWO, BN_ZERO, isBn } from '@polkadot/util';
+import { BN_ONE, BN_TWO, BN_ZERO, formatBalance, isBn } from '@polkadot/util';
 import BN from 'bn.js';
 import { useCallback } from 'react';
 import { useFormField } from './useFormField';
@@ -63,7 +63,7 @@ export function useBalance(
 
       if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
         isError = true;
-        message = `Value cannot exceed ${maxValue?.toString()}`;
+        message = `Value cannot exceed ${formatBalance(maxValue?.toString())}`;
       }
 
       return {
