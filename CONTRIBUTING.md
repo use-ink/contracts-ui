@@ -1,4 +1,4 @@
-# Contributing to Substrate Contracts Explorer
+# Contributing to Substrate Contracts UI
 
 👍🎉 &nbsp; First off, thanks for taking the time to contribute! &nbsp; 🎉👍
 

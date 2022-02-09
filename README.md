@@ -1,6 +1,6 @@
-# Substrate Contracts Explorer
+# Substrate Contracts UI
 
-Substrate Contracts Explorer is a `React.js` application for testing WASM smart contracts deployment and interaction on compatible Substrate blockchains.
+Substrate Contracts UI is a `React.js` application for testing WASM smart contracts deployment and interaction on compatible Substrate blockchains.
 Currently works only with smart contracts written in [ink!](https://paritytech.github.io/ink-docs/) but should support similar smart contract languages in the near future.
 
 In order to deploy a smart contract you have to run a local [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node).
@@ -23,7 +23,7 @@ This version succeeds [Canvas UI](https://paritytech.github.io/canvas-ui/#/insta
 
 ### Contract instantiation
 
-Once you have a compiled contract and a local node running, you can use the hosted version of Substrate Contracts Explorer to [add a new contract on-chain](https://paritytech.github.io/contracts-ui/#/instantiate).
+Once you have a compiled contract and a local node running, you can use the hosted version of Contracts UI to [add a new contract on-chain](https://paritytech.github.io/contracts-ui/#/instantiate).
 
 There are 2 instantiation methods:
 
@@ -33,7 +33,7 @@ In Substrate, contract code is stored only once on-chain and shared between inst
 
 #### Use Existing Contract Code
 
-If you need to re-instantiate a contract from a different owner or for other reasons, you can use the "Use Existing Contract Code" option. You will have to provide a code hash that already exists on-chain or choose one that belongs to a code bundle previously uploaded via our UI. If the code hash is on-chain but the contract was not uploaded via Substrate Contracts Explorer, you will also have to provide the `metadata.json` file in the next step.
+If you need to re-instantiate a contract from a different owner or for other reasons, you can use the "Use Existing Contract Code" option. You will have to provide a code hash that already exists on-chain or choose one that belongs to a code bundle previously uploaded via our UI. If the code hash is on-chain but the contract was not uploaded via Contracts UI, you will also have to provide the `metadata.json` file in the next step.
 
 The UI will interpret the contract metadata and output a guided instantiation form.
 
