@@ -4,9 +4,9 @@
 import React, { useState, useContext, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';
+import { ContractInstantiateResult } from '@polkadot/types/interfaces';
 import {
   InstantiateProps,
-  InstantiateReturnValue,
   InstantiateState,
   CodeSubmittableResult,
   BlueprintSubmittableResult,
@@ -64,7 +64,7 @@ export function InstantiateContextProvider({
 
   const [data, setData] = useState<InstantiateData>(initialState.data);
   const [[tx, onInstantiate], setTx] = useState<TxState>([null, NOOP, null]);
-  const [dryRunResult, setDryRunResult] = useState<InstantiateReturnValue>();
+  const [dryRunResult, setDryRunResult] = useState<ContractInstantiateResult>();
 
   const onSuccess = useCallback(
     (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
@@ -97,26 +97,37 @@ export function InstantiateContextProvider({
     }
   };
 
-  const onFormChange = async (formData: Partial<InstantiateData>) => {
-    const newData = { ...data, ...formData };
-    try {
-      const result = await apiState.api.rpc.contracts.instantiate({
-        origin: newData.accountId,
-        gasLimit: newData.weight,
-        storageDepositLimit: newData.storageDepositLimit,
-        code: codeHashUrlParam
-          ? { Existing: codeHashUrlParam }
-          : { Upload: newData.metadata?.info.source.wasm },
-        data: newData.argValues,
-      });
+  const onFormChange = useCallback(
+    async (formData: Partial<InstantiateData>) => {
+      const newData = { ...data, ...formData };
 
-      if (result.isOk) {
-        setDryRunResult(result.asOk);
+      try {
+        const params = {
+          origin: newData.accountId,
+          gasLimit: newData.weight,
+          storageDepositLimit: newData.storageDepositLimit,
+          code: codeHashUrlParam
+            ? { Existing: codeHashUrlParam }
+            : { Upload: newData.metadata?.info.source.wasm },
+          data: newData.argValues,
+          value: newData.value,
+        };
+
+        console.log(newData.storageDepositLimit?.toString());
+
+        if (params.origin) {
+          const result = await apiState.api.rpc.contracts.instantiate(params);
+
+          setDryRunResult(result);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    },
+    [apiState.api.rpc.contracts, codeHashUrlParam, data]
+  );
+
+  console.log(dryRunResult?.storageDeposit.asCharge.toString());
 
   function onUnFinalize() {
     setTx([null, NOOP, null]);

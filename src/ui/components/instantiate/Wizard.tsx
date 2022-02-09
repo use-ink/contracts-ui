@@ -28,7 +28,7 @@ export function Wizard() {
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
         <Stepper steps={steps} />
-        {currentStep > 0 && <DryRun />}
+        {currentStep > 1 && <DryRun />}
       </aside>
     </div>
   );

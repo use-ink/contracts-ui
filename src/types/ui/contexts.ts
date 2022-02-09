@@ -1,8 +1,10 @@
 // Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Struct } from '@polkadot/types';
-import { AccountId, ContractExecResult } from '@polkadot/types/interfaces';
+// import { Struct } from '@polkadot/types';
+// import { AccountId, ContractExecResult } from '@polkadot/types/interfaces';
+import { Struct, Text, u64 } from '@polkadot/types';
+import { ContractInstantiateResult, StorageDeposit } from '@polkadot/types/interfaces';
 import type {
   Abi,
   ApiPromise,
@@ -18,12 +20,15 @@ import type {
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
 
-type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
-
-export interface InstantiateReturnValue extends Struct {
-  readonly result: ContractExecResult;
-  readonly accountId: AccountId;
+export interface MyContractInstantiateResult extends Struct {
+  readonly gasConsumed: u64;
+  readonly gasRequired: u64;
+  readonly storageDeposit: StorageDeposit;
+  readonly debugMessage: Text;
+  readonly result: ContractInstantiateResult;
 }
+
+type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
 export interface ApiState extends ChainProperties {
   endpoint: string;
@@ -69,7 +74,7 @@ export interface InstantiateData {
 }
 export interface InstantiateState {
   data: InstantiateData;
-  dryRunResult?: InstantiateReturnValue;
+  dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
   onFinalize?: (data: Partial<InstantiateData>) => void;

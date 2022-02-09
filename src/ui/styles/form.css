@@ -7,21 +7,25 @@
 }
 
 .form-field > .validation {
-  @apply mt-2 text-sm flex items-center;
+  @apply mt-2 text-sm;
 }
 
-.form-field > .validation svg {
+.validation {
+  @apply flex items-center;
+}
+
+.validation svg {
   @apply w-3 h-3 mr-1;
 }
 
-.form-field > .validation.warning {
+.validation.warning {
   @apply text-orange-400;
 }
 
-.form-field > .validation.error {
+.validation.error {
   @apply text-red-400;
 }
 
-.form-field > .validation.success {
+.validation.success {
   @apply text-green-400;
 }
