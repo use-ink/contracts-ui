@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Circle } from '@polkadot/ui-shared/icons/types';

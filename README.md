@@ -23,7 +23,7 @@ This version succeeds [Canvas UI](https://paritytech.github.io/canvas-ui/#/insta
 
 ### Contract instantiation
 
-Once you have a compiled contract and a local node running, you can use the hosted version of Substrate Contracts Explorer to [add a new contract on-chain](https://paritytech.github.io/substrate-contracts-explorer/#/instantiate).
+Once you have a compiled contract and a local node running, you can use the hosted version of Substrate Contracts Explorer to [add a new contract on-chain](https://paritytech.github.io/contracts-ui/#/instantiate).
 
 There are 2 instantiation methods:
 
