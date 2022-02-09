@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
@@ -12,7 +12,7 @@ export const loadAccounts = (state: ApiState, dispatch: React.Dispatch<ApiAction
 
   const asyncLoadAccounts = async () => {
     try {
-      await web3Enable('substrate-contracts-explorer');
+      await web3Enable('contracts-ui');
       let allAccounts = await web3Accounts();
 
       allAccounts = allAccounts.map(({ address, meta }) => ({

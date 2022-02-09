@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { keccakAsU8a } from '@polkadot/util-crypto';
@@ -75,7 +75,7 @@ function generateMessageForEntropy(
 export function getPrivateKeyFromPair(pair: KeyringPair, secretText = 'asdf'): PrivateKey {
   // avoid sending the raw secret by hashing it first
   const secret = bcrypt.hashSync(secretText, 10);
-  const message = generateMessageForEntropy(pair.address, 'substrate-contracts-explorer', secret);
+  const message = generateMessageForEntropy(pair.address, 'contracts-ui', secret);
   const signedText = pair.sign(message);
   const hash = keccakAsU8a(signedText);
 

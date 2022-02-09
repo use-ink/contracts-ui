@@ -1,10 +1,10 @@
 {
-  "name": "substrate-contracts-explorer",
+  "name": "contracts-ui",
   "version": "2.0.0",
-  "description": "Substrate Contracts Explorer",
+  "description": "Substrate Contracts UI",
   "private": true,
   "type": "module",
-  "homepage": "https://paritytech.github.io/substrate-contracts-explorer",
+  "homepage": "https://paritytech.github.io/contracts-ui",
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "NODE_ENV=development webpack --progress --config webpack.dev.cjs",
