@@ -83,6 +83,7 @@ export function Step3() {
             onCancel();
             onUnFinalize && onUnFinalize();
           }}
+          isDisabled={isProcessing}
         >
           Go Back
         </Button>
