@@ -93,9 +93,11 @@ export function Step2() {
             />
           )}
         </FormField>
-        <FormField id="value" label="Endowment" {...valueValidation}>
-          <InputBalance id="value" value={value} onChange={onChangeValue} />
-        </FormField>
+        {deployConstructor?.isPayable && (
+          <FormField id="value" label="Value" {...valueValidation}>
+            <InputBalance id="value" value={value} onChange={onChangeValue} />
+          </FormField>
+        )}
         <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
@@ -111,7 +113,7 @@ export function Step2() {
       <Buttons>
         <Button
           isDisabled={
-            !valueValidation.isValid ||
+            (deployConstructor?.isPayable && !valueValidation.isValid) ||
             (isUsingSalt && !salt.isValid) ||
             !weight.isValid ||
             !deployConstructor?.method ||

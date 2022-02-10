@@ -16,7 +16,8 @@ export function Step3() {
   const apiState = useApi();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
-  const { accountId, value, metadata, weight, name } = data;
+  const { accountId, value, metadata, weight, name, constructorIndex } = data;
+  const isConstructorPayable = metadata?.constructors[constructorIndex].isPayable;
 
   const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
@@ -44,13 +45,14 @@ export function Step3() {
           <p className="key">Name</p>
           <p className="value">{name}</p>
         </div>
-
-        <div className="field">
-          <p className="key">Endowment</p>
-          <p className="value">
-            {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
-          </p>
-        </div>
+        {isConstructorPayable && (
+          <div className="field">
+            <p className="key">Value</p>
+            <p className="value">
+              {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
+            </p>
+          </div>
+        )}
 
         <div className="field">
           <p className="key">Weight</p>
