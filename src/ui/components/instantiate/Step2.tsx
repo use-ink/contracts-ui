@@ -51,13 +51,13 @@ export function Step2() {
     metadata && setDeployConstructor(metadata.constructors[0]);
   }, [metadata, setConstructorIndex]);
 
-  const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+  const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
 
   const submitHandler = () => {
     onFinalize &&
       onFinalize({
         constructorIndex,
-        salt: salt.value,
+        salt: isUsingSalt ? salt.value : undefined,
         value,
         argValues,
         weight: weight.weight,

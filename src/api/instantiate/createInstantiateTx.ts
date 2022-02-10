@@ -18,8 +18,6 @@ export function createInstantiateTx(
     salt,
   }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
-  const saltu8a = encodeSalt(salt);
-
   const wasm = metadata?.info.source.wasm;
   const isValid = codeHash || !!wasm;
 
@@ -28,7 +26,7 @@ export function createInstantiateTx(
 
     const options = {
       gasLimit,
-      salt: saltu8a,
+      salt: salt ? encodeSalt(salt) : null,
       value: value && constructor.isPayable ? api.registry.createType('Balance', value) : undefined,
     };
 
