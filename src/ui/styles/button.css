@@ -15,9 +15,9 @@
 }
 
 .btn.primary {
-  @apply bg-blue-500 text-gray-100 border border-blue-500;
+  @apply bg-green-500 text-gray-100 border border-green-500;
 }
 
 .btn.primary:hover:not(:disabled) {
-  @apply bg-blue-400 border border-blue-400;
+  @apply bg-green-450 border border-green-450;
 }
