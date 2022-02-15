@@ -3,9 +3,7 @@
 
 import React from 'react';
 import { Outlet } from 'react-router';
-import { AwaitApis } from 'ui/components/AwaitApis';
-import { Sidebar } from 'ui/components/sidebar';
-
+import { Sidebar, AwaitApis } from 'ui/components';
 import {
   ApiContextProvider,
   DatabaseContextProvider,
