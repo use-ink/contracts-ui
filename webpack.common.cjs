@@ -31,12 +31,8 @@ const rules = [
     ],
   },
   {
-    test: /\.(png|jpe?g|gif)$/i,
-    use: [
-      {
-        loader: 'file-loader',
-      },
-    ],
+    test: /\.(png|svg|jpg|jpeg|gif)$/i,
+    type: 'asset/resource',
   },
 ];
 
