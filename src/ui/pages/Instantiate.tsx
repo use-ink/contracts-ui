@@ -12,7 +12,7 @@ export function Instantiate() {
   return (
     <div className="w-full max-w-6xl overflow-y-auto px-5 py-3 m-2">
       <div className="grid md:grid-cols-12 gap-5">
-        <div className="md:col-span-9 py-3 px-4">
+        <div className="md:col-span-9 p-4">
           <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
             <h1 className="text-2.5xl font-semibold dark:text-white text-gray-700">
               {codeHashUrlParam
