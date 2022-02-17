@@ -27,7 +27,9 @@ a {
 .content aside {
   width: 100%;
 }
-
+a:focus {
+  outline: none;
+}
 @screen xl {
   .content main {
     width: calc(100% - 24rem);

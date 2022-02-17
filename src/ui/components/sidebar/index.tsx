@@ -9,17 +9,19 @@ import { QuickLinks } from './QuickLinks';
 
 export function Sidebar() {
   return (
-    <div className="sidebar">
-      <div className="sidebar-inner">
-        <div className="upper">
-          <nav aria-label="Sidebar">
-            <NetworkAndUser />
-            <Navigation />
-            <QuickLinks />
-          </nav>
+    <>
+      <div className="sidebar">
+        <div className="sidebar-inner">
+          <div className="upper">
+            <nav aria-label="Sidebar">
+              <NetworkAndUser />
+              <Navigation />
+              <QuickLinks />
+            </nav>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
-    </div>
+    </>
   );
 }
