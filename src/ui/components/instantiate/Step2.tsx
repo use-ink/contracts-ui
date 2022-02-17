@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import BN from 'bn.js';
@@ -66,14 +66,14 @@ export function Step2() {
     metadata && setDeployConstructor(metadata.constructors[0]);
   }, [metadata, setConstructorIndex]);
 
-  const [isUsingSalt, toggleIsUsingSalt] = useToggle();
+  const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const onSubmit = () => {
     onFinalize &&
       onFinalize({
         constructorIndex,
-        salt: salt.value,
+        salt: isUsingSalt ? salt.value : undefined,
         value,
         argValues,
         storageDepositLimit: storageDepositLimit.value,
@@ -138,9 +138,11 @@ export function Step2() {
             />
           )}
         </FormField>
-        <FormField id="value" label="Endowment" {...valueValidation}>
-          <InputBalance id="value" value={value} onChange={onChangeValue} />
-        </FormField>
+        {deployConstructor?.isPayable && (
+          <FormField id="value" label="Value" {...valueValidation}>
+            <InputBalance id="value" value={value} onChange={onChangeValue} />
+          </FormField>
+        )}
         <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
@@ -172,7 +174,7 @@ export function Step2() {
       <Buttons>
         <Button
           isDisabled={
-            !valueValidation.isValid ||
+            (deployConstructor?.isPayable && !valueValidation.isValid) ||
             (isUsingSalt && !salt.isValid) ||
             !weight.isValid ||
             !storageDepositLimit.isValid ||

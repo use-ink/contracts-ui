@@ -1,7 +1,8 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState, useContext, useEffect } from 'react';
+import { web3FromAddress } from '@polkadot/extension-dapp';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
@@ -14,7 +15,7 @@ export const TransactionsContext = React.createContext({} as unknown as Transact
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { keyring, api } = useApi();
+  const { api, keyring } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
@@ -37,42 +38,54 @@ export function TransactionsContextProvider({
 
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
+      let injector, accountOrPair;
       try {
-        const unsub = await extrinsic.signAndSend(keyring.getPair(accountId), {}, async result => {
-          if (result.isFinalized) {
-            const events: Record<string, number> = {};
+        injector = await web3FromAddress(accountId);
+        accountOrPair = accountId;
+      } catch (e) {
+        accountOrPair = keyring.getPair(accountId);
+      }
 
-            result.events.forEach(record => {
-              const { event } = record;
-              const key = `${event.section}:${event.method}`;
-              if (!events[key]) {
-                events[key] = 1;
-              } else {
-                events[key]++;
+      try {
+        const unsub = await extrinsic.signAndSend(
+          accountOrPair,
+          { signer: injector?.signer || undefined },
+          async result => {
+            if (result.isFinalized) {
+              const events: Record<string, number> = {};
+
+              result.events.forEach(record => {
+                const { event } = record;
+                const key = `${event.section}:${event.method}`;
+                if (!events[key]) {
+                  events[key] = 1;
+                } else {
+                  events[key]++;
+                }
+              });
+
+              if (!isValid(result)) {
+                setTxs({ ...txs, [id]: { ...tx, status: Status.Error, events } });
+
+                let message = 'Transaction failed';
+
+                if (result.dispatchError?.isModule) {
+                  const decoded = api.registry.findMetaError(result.dispatchError.asModule);
+                  message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
+                }
+                throw new Error(message);
               }
-            });
 
-            if (!isValid(result)) {
-              setTxs({ ...txs, [id]: { ...tx, status: Status.Error, events } });
+              onSuccess && (await onSuccess(result));
 
-              let message = 'Transaction failed';
+              setTxs({ ...txs, [id]: { ...tx, status: Status.Success, events } });
 
-              if (result.dispatchError?.isModule) {
-                const decoded = api.registry.findMetaError(result.dispatchError.asModule);
-                message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
-              }
-              throw new Error(message);
+              unsub();
+
+              nextId++;
             }
-
-            onSuccess && (await onSuccess(result));
-
-            setTxs({ ...txs, [id]: { ...tx, status: Status.Success, events } });
-
-            unsub();
-
-            nextId++;
           }
-        });
+        );
       } catch (error) {
         setTxs({ ...txs, [id]: { ...tx, status: Status.Error } });
         console.error(error);

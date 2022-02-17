@@ -1,6 +1,5 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 export * from './instantiate';
-export * from './getInstanceFromEvents';
 export * from './createInstantiateTx';

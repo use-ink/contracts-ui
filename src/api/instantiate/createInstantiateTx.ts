@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
@@ -19,8 +19,6 @@ export function createInstantiateTx(
     storageDepositLimit,
   }: InstantiateData
 ): SubmittableExtrinsic<'promise'> | null {
-  const saltu8a = encodeSalt(salt);
-
   const wasm = metadata?.info.source.wasm;
   const isValid = codeHash || !!wasm;
 
@@ -29,7 +27,7 @@ export function createInstantiateTx(
 
     const options = {
       gasLimit,
-      salt: saltu8a,
+      salt: salt ? encodeSalt(salt) : null,
       storageDepositLimit: storageDepositLimit || undefined,
       value: value && constructor.isPayable ? api.registry.createType('Balance', value) : undefined,
     };

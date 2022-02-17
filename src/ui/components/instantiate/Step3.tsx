@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
@@ -16,7 +16,8 @@ export function Step3() {
   const apiState = useApi();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
-  const { accountId, value, metadata, weight, name } = data;
+  const { accountId, value, metadata, weight, name, constructorIndex } = data;
+  const isConstructorPayable = metadata?.constructors[constructorIndex].isPayable;
 
   const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
@@ -44,13 +45,14 @@ export function Step3() {
           <p className="key">Name</p>
           <p className="value">{name}</p>
         </div>
-
-        <div className="field">
-          <p className="key">Endowment</p>
-          <p className="value">
-            {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
-          </p>
-        </div>
+        {isConstructorPayable && (
+          <div className="field">
+            <p className="key">Value</p>
+            <p className="value">
+              {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
+            </p>
+          </div>
+        )}
 
         <div className="field">
           <p className="key">Weight</p>
@@ -81,6 +83,7 @@ export function Step3() {
             onCancel();
             onUnFinalize && onUnFinalize();
           }}
+          isDisabled={isProcessing}
         >
           Go Back
         </Button>

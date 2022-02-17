@@ -1,11 +1,9 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
 import { Outlet } from 'react-router';
-import { AwaitApis } from 'ui/components/AwaitApis';
-import { Sidebar } from 'ui/components/sidebar';
-
+import { Sidebar, AwaitApis } from 'ui/components';
 import {
   ApiContextProvider,
   DatabaseContextProvider,

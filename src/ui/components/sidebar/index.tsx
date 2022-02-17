@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/substrate-contracts-explorer authors & contributors
+// Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
@@ -9,17 +9,19 @@ import { QuickLinks } from './QuickLinks';
 
 export function Sidebar() {
   return (
-    <div className="sidebar">
-      <div className="sidebar-inner">
-        <div className="upper">
-          <nav aria-label="Sidebar">
-            <NetworkAndUser />
-            <Navigation />
-            <QuickLinks />
-          </nav>
+    <>
+      <div className="sidebar">
+        <div className="sidebar-inner">
+          <div className="upper">
+            <nav aria-label="Sidebar">
+              <NetworkAndUser />
+              <Navigation />
+              <QuickLinks />
+            </nav>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
-    </div>
+    </>
   );
 }
