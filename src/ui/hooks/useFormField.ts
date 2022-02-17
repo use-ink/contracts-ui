@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { isNull, isUndefined } from '@polkadot/util';
 import type { ValidFormField, ValidateFn, Validation } from 'types';
@@ -22,18 +22,16 @@ export function useFormField<T>(
     return !validation.isValid;
   }, [validation.isValid]);
 
-  const onChange = useCallback((value?: T | null) => {
-    if (!isUndefined(value) && !isNull(value)) {
-      setValue(value);
-      isTouched.current = true;
-    }
-  }, []);
-
-  useEffect((): void => {
-    setValidation(validate(value));
-    // validate updates too often
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  const onChange = useCallback(
+    (value?: T | null) => {
+      if (!isUndefined(value) && !isNull(value)) {
+        setValue(value);
+        setValidation(validate(value));
+        isTouched.current = true;
+      }
+    },
+    [validate]
+  );
 
   return useMemo(
     () => ({

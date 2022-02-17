@@ -1,6 +1,10 @@
 // Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// import { Struct } from '@polkadot/types';
+// import { AccountId, ContractExecResult } from '@polkadot/types/interfaces';
+import { Struct, Text, u64 } from '@polkadot/types';
+import { ContractInstantiateResult, StorageDeposit } from '@polkadot/types/interfaces';
 import type {
   Abi,
   ApiPromise,
@@ -16,6 +20,14 @@ import type {
 } from '../substrate';
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
+
+export interface MyContractInstantiateResult extends Struct {
+  readonly gasConsumed: u64;
+  readonly gasRequired: u64;
+  readonly storageDeposit: StorageDeposit;
+  readonly debugMessage: Text;
+  readonly result: ContractInstantiateResult;
+}
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
@@ -59,14 +71,17 @@ export interface InstantiateData {
   name: string;
   constructorIndex: number;
   salt?: string;
+  storageDepositLimit?: BN | null;
   weight: BN;
   codeHash?: string;
 }
 export interface InstantiateState {
   data: InstantiateData;
+  dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
   onFinalize?: (data: Partial<InstantiateData>) => void;
+  onFormChange: (data: Partial<InstantiateData>) => void;
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;

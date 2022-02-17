@@ -2,13 +2,12 @@
 // Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type BN from 'bn.js';
 import type { Weight } from '@polkadot/types/interfaces';
 import { useCallback, useMemo, useState } from 'react';
 import { BN_MILLION, BN_TEN, BN_ZERO } from '@polkadot/util';
 import { useBlockTime } from './useBlockTime';
 import { useApi } from 'ui/contexts/ApiContext';
-import type { UseWeight } from 'types';
+import type { BN, UseWeight } from 'types';
 
 export const useWeight = (): UseWeight => {
   const { api } = useApi();

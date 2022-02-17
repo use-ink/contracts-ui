@@ -4,6 +4,7 @@
 export * from './useCodeBundle';
 export * from './useCodeBundleSearch';
 export * from './useContract';
+export * from './useDebounce';
 export * from './useLocalStorage';
 export * from './useAvailableCodeBundles';
 export * from './useMyContracts';

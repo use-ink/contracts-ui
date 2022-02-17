@@ -1,8 +1,8 @@
 // Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect } from 'react';
-import { BN_MILLION, BN_ZERO } from '@polkadot/util';
+import React, { useEffect, useRef } from 'react';
+import { BN_MILLION, BN_ONE, BN_ZERO } from '@polkadot/util';
 import { InputNumber } from './InputNumber';
 import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
 import { classes } from 'ui/util';
@@ -34,11 +34,18 @@ export function InputGas({
   ...props
 }: Props) {
   const { api } = useApi();
+  const estimatedWeightRef = useRef(estimatedWeight);
   useEffect((): void => {
-    if (estimatedWeight || withEstimate) {
+    if (
+      estimatedWeight &&
+      withEstimate &&
+      (!estimatedWeightRef.current || !estimatedWeight.eq(estimatedWeightRef.current))
+    ) {
       setIsEmpty(true);
 
       setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
+
+      estimatedWeightRef.current = estimatedWeight;
     }
   }, [api, estimatedWeight, withEstimate, setIsEmpty, setMegaGas]);
 
@@ -77,8 +84,9 @@ export function InputGas({
                   }}
                 >
                   {isCall
-                    ? `Use Estimated Weight (${(estimatedWeight || BN_ZERO)
+                    ? `Use Estimated Gas (${(estimatedWeight || BN_ZERO)
                         .div(BN_MILLION)
+                        .add(BN_ONE)
                         .toString()}M)`
                     : 'Use Maximum Query Gas'}
                 </a>
