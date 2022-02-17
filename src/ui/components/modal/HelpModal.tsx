@@ -52,7 +52,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
             <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-100" />
           </a>
         </li>
-        <li className="flex w-full justify-between items-center border-b border-gray-800">
+        <li>
           <a
             className="group flex w-full justify-between items-center border-b border-gray-800"
             href="https://matrix.to/#/#ink:matrix.parity.io"
