@@ -15,9 +15,9 @@ export function HeaderButtons({ contract }: Props) {
     <div className="inline-flex dark:text-gray-300 relative h-8 text-xs right-0">
       <div className="inline-flex h-8">
         <Link to={`/instantiate/${contract.codeHash}`}>
-          <button className="flex items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 border h-full px-3 rounded">
+          <button className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 border h-full px-3 rounded">
             <ArrowCircleRightIcon
-              className="w-4 dark:text-gray-500 mr-0.5 justify-self-end "
+              className="w-4 dark:text-gray-500 mr-1 justify-self-end"
               aria-hidden="true"
               fontSize="1.5rem"
             />

@@ -8,7 +8,7 @@
 
 .dropdown__control--is-focused,
 .dropdown__control--menu-is-open {
-  @apply dark:shadow-none dark:border-blue-600 dark:hover:border-blue-600;
+  @apply dark:shadow-none dark:border-gray-100 dark:hover:border-gray-100;
 }
 
 .dropdown__single-value {
@@ -60,7 +60,7 @@
 }
 
 .dropdown.chain .dropdown__single-value {
-  @apply flex flex-grow items-center text-xs font-medium;
+  @apply flex flex-grow items-center text-sm font-medium;
 }
 
 .dropdown.chain .dropdown__single-value:before {

@@ -22,7 +22,9 @@ export function PageFull({
           <main className="md:col-span-12 p-4">
             <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
               {accessory && <div className="float-right">{accessory}</div>}
-              <h1 className="text-2xl dark:text-white text-gray-700 capitalize">{header}</h1>
+              <h1 className="text-2xl font-semibold dark:text-white text-gray-700 capitalize">
+                {header}
+              </h1>
               <p className="dark:text-gray-400 text-gray-500 text-sm">{help}</p>
             </div>
             <div className="flex flex-col py-4 h-full">
