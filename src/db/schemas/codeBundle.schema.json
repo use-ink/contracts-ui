@@ -43,8 +43,7 @@
     },
     "date": {
       "description": "The deployment date for this code bundle",
-      "type": "string",
-      "format": "date-time"
+      "type": "string"
     },
     "stars": {
       "description": "The number of stars/favorites received",
