@@ -66,11 +66,11 @@ export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'
 export interface InstantiateData {
   accountId?: string;
   argValues?: Record<string, unknown>;
-  value: BN;
+  value?: BN | null;
   metadata?: Abi;
   name: string;
   constructorIndex: number;
-  salt?: string;
+  salt?: string | null;
   storageDepositLimit?: BN | null;
   weight: BN;
   codeHash?: string;

@@ -19,7 +19,7 @@ import {
 } from 'types';
 import { useStepper } from 'ui/hooks/useStepper';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
-import { onInsantiateFromHash, onInstantiateFromCode, createInstantiateTx, NOOP } from 'api';
+import { onInsantiateFromHash, onInstantiateFromCode, createInstantiateTx, NOOP, transformUserInput } from 'api';
 import { useApi } from 'ui/contexts/ApiContext';
 
 type TxState = [
@@ -102,15 +102,22 @@ export function InstantiateContextProvider({
       const newData = { ...data, ...formData };
 
       try {
+        const constructor = newData.metadata?.findConstructor(newData.constructorIndex);
+
+        const inputData = constructor?.toU8a(
+          transformUserInput(apiState.api.registry, constructor.args, newData.argValues)
+        );
+
         const params = {
           origin: newData.accountId,
           gasLimit: newData.weight,
-          storageDepositLimit: newData.storageDepositLimit,
+          storageDepositLimit: newData.storageDepositLimit || undefined,
           code: codeHashUrlParam
             ? { Existing: codeHashUrlParam }
             : { Upload: newData.metadata?.info.source.wasm },
-          data: newData.argValues,
-          value: newData.value,
+          data: inputData,
+          salt: newData.salt || undefined,
+          value: newData.value ? apiState.api.registry.createType('Balance', newData.value) : null,
         };
 
         console.log(newData.storageDepositLimit?.toString());
@@ -124,7 +131,7 @@ export function InstantiateContextProvider({
         console.error(e);
       }
     },
-    [apiState.api.rpc.contracts, codeHashUrlParam, data]
+    [apiState.api.rpc.contracts, apiState.api.registry, codeHashUrlParam, data]
   );
 
   console.log(dryRunResult?.storageDeposit.asCharge.toString());

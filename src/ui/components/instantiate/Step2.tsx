@@ -85,20 +85,23 @@ export function Step2() {
     onFormChange &&
       onFormChange({
         constructorIndex,
-        salt: dbSalt,
-        value: dbValue,
+        salt: isUsingSalt ? dbSalt : null,
+        value: dbValue && deployConstructor?.isPayable ? dbValue : null,
         argValues: dbArgValues,
-        storageDepositLimit: dbStorageDepositLimit,
+        storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
         weight: dbWeight,
       });
   }, [
     onFormChange,
     constructorIndex,
+    deployConstructor,
     dbSalt,
     dbValue,
     dbArgValues,
     dbStorageDepositLimit,
     dbWeight,
+    isUsingSalt,
+    isUsingStorageDepositLimit
   ]);
 
   useEffect((): void => {

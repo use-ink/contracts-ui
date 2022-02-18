@@ -45,7 +45,7 @@ export function Step3() {
           <p className="key">Name</p>
           <p className="value">{name}</p>
         </div>
-        {isConstructorPayable && (
+        {isConstructorPayable && value && (
           <div className="field">
             <p className="key">Value</p>
             <p className="value">
