@@ -8,44 +8,78 @@ import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { useApi, useInstantiate } from 'ui/contexts';
 import { fromSats } from 'api';
+import { classes } from 'ui/util';
 
 export function DryRun() {
   const { api } = useApi();
   const { dryRunResult } = useInstantiate();
 
   return (
-    <SidePanel header="Predicted Outcome">
-      {dryRunResult?.result.isErr ? (
-        <>
-          <span className="validation error">Failure</span>
-          {dryRunResult?.result.asErr.isModule &&
-            api.registry.findMetaError(dryRunResult?.result.asErr.asModule).name}
-        </>
-      ) : (
-        <>
-          <span className="validation success">Success</span>
-          <Account value={dryRunResult?.result.asOk.accountId.toString()} />
-        </>
-      )}
-      {dryRunResult?.gasRequired && (
-        <div>Gas Required: {formatBalance(dryRunResult.gasRequired)}</div>
-      )}
-      {dryRunResult?.gasConsumed && (
-        <div>Gas Consumed: {formatBalance(dryRunResult.gasConsumed)}</div>
-      )}
-      {dryRunResult?.storageDeposit && (
-        <div>
-          {dryRunResult.storageDeposit.isCharge
-            ? `Charge: ${formatBalance(
-                createType(
-                  api.registry,
-                  'Balance',
-                  fromSats(api, dryRunResult.storageDeposit.asCharge)
-                )
-              )}`
-            : `Refund: ${formatBalance(fromSats(api, dryRunResult.storageDeposit.asRefund))}`}
+    <SidePanel className="instantiate-outcome" header="Predicted Outcome">
+      <div className="body">
+        <div className="row">
+          <div>
+            Gas Required:
+          </div>
+          <div>
+            {dryRunResult?.gasRequired && (
+              <>{formatBalance(dryRunResult.gasRequired)}</>
+            )}
+          </div>
         </div>
-      )}
+        <div className="row">
+          <div>
+            Gas Consumed:
+          </div>
+          <div>
+            {dryRunResult?.gasConsumed && (
+              <>{formatBalance(dryRunResult.gasConsumed)}</>
+            )}
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            Storage Deposit:
+          </div>
+          <div>
+            {dryRunResult?.storageDeposit && (
+              <>
+                {dryRunResult.storageDeposit.isCharge
+                  ? `Charge - ${formatBalance(createType(api.registry, 'Balance', fromSats(api, dryRunResult.storageDeposit.asCharge)))}`
+                  : `Refund - ${formatBalance(createType(api.registry, 'Balance', fromSats(api, dryRunResult.storageDeposit.asRefund)))}`
+                }
+              </>
+            )}
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            Contract Address:
+          </div>
+          <div>
+            {dryRunResult?.result.isOk
+              ? (
+                <Account size={26} value={dryRunResult?.result.asOk.accountId.toString()} />
+              )
+              : 'None'
+            }
+          </div>
+        </div>
+        <div className="row">
+          <span className={classes('validation', dryRunResult?.result.isOk ? 'success' : 'error')}>
+            {
+              dryRunResult?.result.isOk
+                ? 'The instantiation will be successful.'
+                : 'The instantiation will fail.'
+            }
+          </span>
+        </div>
+        {dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule && (
+          <div className="font-monospace p-2 text-xs text-center rounded dark:text-red-400 dark:bg-red-800">
+            {api.registry.findMetaError(dryRunResult?.result.asErr.asModule).name}
+          </div>
+        )}
+      </div>
     </SidePanel>
   );
 }

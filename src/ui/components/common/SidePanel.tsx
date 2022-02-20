@@ -2,15 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   header: React.ReactNode;
   emptyView?: React.ReactNode;
 }
 
-export const SidePanel = ({ children, header, emptyView = '' }: Props) => {
+export const SidePanel = ({ children, className, header, emptyView = '' }: Props) => {
   return (
-    <div className="mb-8 border rounded-md border-gray-200 dark:border-gray-700">
+    <div className={classes('mb-8 border rounded-md border-gray-200 dark:border-gray-700', className)}>
       <div className="text-sm rounded-t-md border-b text-gray-300 border-gray-200 dark:border-gray-700 bg-elevation-1 p-4">
         {header}
       </div>

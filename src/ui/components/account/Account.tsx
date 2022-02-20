@@ -10,9 +10,10 @@ import { useAccount } from 'ui/hooks/useAccount';
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   name?: React.ReactNode;
   value: OrFalsy<string>;
+  size?: number;
 }
 
-export function Account({ className, name: propsName, value }: Props) {
+export function Account({ className, name: propsName, size = 42, value }: Props) {
   const account = useAccount(value);
   const name = propsName || account?.meta.name;
 
@@ -21,8 +22,8 @@ export function Account({ className, name: propsName, value }: Props) {
   }
 
   return (
-    <div className={classes('p-1.5 flex items-center w-full', className)}>
-      <Identicon size={42} value={value} className="pr-2" />
+    <div className={classes('p-1.5 inline-flex items-center', className)}>
+      <Identicon size={size} value={value} className="pr-2" />
       <div className="flex-1 block truncate">
         {name && (
           <span className="flex font-semibold text-base dark:text-gray-300 text-gray-700">
