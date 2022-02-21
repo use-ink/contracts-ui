@@ -142,7 +142,7 @@ export async function createCodeBundle(
     name,
     stars = 1,
     tags = [],
-    date = (new Date()).toISOString()
+    date = new Date().toISOString(),
   }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {

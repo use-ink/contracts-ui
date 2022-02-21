@@ -25,9 +25,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
       <div className="flex-grow text-gray-500 dark:text-gray-400">
         {address.slice(0, 4)}...{address.slice(-4)}
       </div>
-      <div className="w-14 text-gray-500 dark:text-gray-400">
-        {displayDate(date)}
-      </div>
+      <div className="w-14 text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
     </Link>
   );
 }

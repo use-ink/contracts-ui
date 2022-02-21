@@ -61,7 +61,7 @@ export async function createContract(
     address,
     codeHash,
     creator,
-    date = (new Date()).toISOString(),
+    date = new Date().toISOString(),
     genesisHash,
     name,
     tags = [],
