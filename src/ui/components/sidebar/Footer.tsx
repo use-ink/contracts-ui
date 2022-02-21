@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState } from 'react';
-import { ChatAltIcon } from '@heroicons/react/outline';
+import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
+import { Link } from 'react-router-dom';
 import { HelpModal } from 'ui/components/modal';
 
 export function Footer() {
@@ -18,12 +19,12 @@ export function Footer() {
           <ChatAltIcon className="h-4 w-4 mr-2" aria-hidden="true" />
           Help &amp; Feedback
         </a>
-        {/* <a href="#">
+        <Link to="/settings">
           <CogIcon
             className="h-4 w-4 dark:text-gray-500 dark:hover:text-gray-300 text-gray-600 hover:text-gray-500"
             aria-hidden="true"
           />
-        </a> */}
+        </Link>
       </div>
       <HelpModal setIsOpen={setIsOpen} isOpen={isOpen} />
     </footer>

@@ -20,20 +20,20 @@ export function Transactions({
       <>
         <div
           key={id}
-          className="max-w-full dark:bg-elevation-3 dark:text-white p-3 flex items-center"
+          className="max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
         >
           <NotificationIcon status={status} />
           <div className="pl-2 flex-grow text-sm">
             <div>{extrinsic?.registry.findMetaCall(extrinsic.callIndex).method}</div>
-            <div className="dark:text-gray-400">{status}</div>
+            <div className="text-gray-400">{status}</div>
           </div>
           {isComplete && (
-            <XIcon className="dark:text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
+            <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
           )}
         </div>
         {isComplete && events && !isEmptyObj(events) && (
-          <div className="max-w-full dark:bg-elevation-3 dark:text-white p-3 mt-2 flex items-center">
-            <BellIcon className="dark:text-yellow-400 w-12 h-12" />
+          <div className="max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 mt-2 flex items-center">
+            <BellIcon className="text-yellow-400 w-12 h-12" />
             <div className="pl-2 flex-grow text-sm">
               {Object.keys(events).map(eventName => {
                 const times = events[eventName] > 1 ? ` (x${events[eventName]})` : '';
@@ -44,7 +44,7 @@ export function Transactions({
                 );
               })}
             </div>
-            <XIcon className="dark:text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
+            <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
           </div>
         )}
       </>

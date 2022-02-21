@@ -24,7 +24,7 @@ export const TransactionResult = ({
       {({ open }) => (
         <div
           key={`${time}`}
-          className="text-xs text-gray-400 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+          className="text-xs dark:text-gray-400 text-gray-600 break-all p-4 border-b border-gray-200 dark:border-gray-700"
         >
           <div className="flex-col">
             <div className="mb-2">{date}</div>
@@ -59,13 +59,13 @@ export const TransactionResult = ({
                   )}
                   <div className="pt-4 mb-4">
                     <span className="mr-2">Included at #</span>
-                    <span className="text-mono p-1 bg-elevation-1">
+                    <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">
                       {`${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
                     </span>
                   </div>
                   <div>
                     <span className="mr-2">Weight</span>
-                    <span className="text-mono p-1 bg-elevation-1">{`${info?.weight}`}</span>
+                    <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">{`${info?.weight}`}</span>
                   </div>
                 </Disclosure.Panel>
               </>
