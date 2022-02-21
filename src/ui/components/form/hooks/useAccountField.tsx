@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import { AccountSelect } from '../../account/AccountSelect';
+import { AccountSelect } from '../../account/Select';
 import { FormField } from '../FormField';
 import { useAccountId } from 'ui/hooks/useAccountId';
 
