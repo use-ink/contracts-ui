@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Database, PrivateKey } from '@textile/threaddb';
-import moment from 'moment';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
 import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
@@ -143,7 +142,7 @@ export async function createCodeBundle(
     name,
     stars = 1,
     tags = [],
-    date = moment.utc().format(),
+    date = new Date().toISOString(),
   }: Partial<CodeBundleDocument>
 ): Promise<CodeBundleDocument> {
   try {
