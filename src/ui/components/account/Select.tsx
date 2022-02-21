@@ -52,7 +52,6 @@ export function AccountSelect({
     <Select
       options={createAccountOptions(keyring?.getPairs())}
       placeholder={placeholder}
-      isSearchable
       {...props}
     />
   )
