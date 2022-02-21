@@ -20,15 +20,51 @@ function Option({ label, value }: DropdownOption<string>) {
   return <Account name={label} value={value} />;
 }
 
-export function AccountSelect({
+function Select({
   isDisabled,
   onChange,
-  placeholder = 'No Accounts Found',
+  options,
+  placeholder = 'No Addresses Found',
   className,
   value,
+}: DropdownProps<string>) {
+  return (
+    <Dropdown
+      className={classes('account-select', className)}
+      isDisabled={isDisabled}
+      formatOptionLabel={Option}
+      onChange={onChange}
+      options={options}
+      placeholder={placeholder}
+      isSearchable
+      value={value}
+    />
+  );
+}
+
+export function AccountSelect({
+  placeholder = 'No Accounts Found',
+  ...props
+}: Props) {
+  const { keyring } = useApi();
+
+  return (
+    <Select
+      options={createAccountOptions(keyring?.getPairs())}
+      placeholder={placeholder}
+      isSearchable
+      {...props}
+    />
+  )
+}
+
+export function AddressSelect({
+  placeholder = 'No Addresses Found',
+  ...props
 }: Props) {
   const { keyring } = useApi();
   const { myContracts } = useDatabase();
+
   const options = useMemo((): GroupBase<DropdownOption<string>>[] => {
     return [
       {
@@ -68,15 +104,10 @@ export function AccountSelect({
   }, [keyring, myContracts?.owned, myContracts?.starred]);
 
   return (
-    <Dropdown
-      className={classes('account-select', className)}
-      isDisabled={isDisabled}
-      formatOptionLabel={Option}
-      onChange={onChange}
+    <Select
       options={options}
       placeholder={placeholder}
-      isSearchable
-      value={value}
+      {...props}
     />
   );
 }

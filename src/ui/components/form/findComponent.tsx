@@ -1,7 +1,7 @@
 // Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { AccountSelect } from '../account/AccountSelect';
+import { AddressSelect } from '../account/Select';
 import { Input } from './Input';
 import { InputBalance } from './InputBalance';
 import { InputNumber } from './InputNumber';
@@ -13,7 +13,7 @@ export function findComponent(type: TypeDef): React.ComponentType<any> {
   switch (type.type) {
     case 'AccountId':
     case 'Address':
-      return AccountSelect;
+      return AddressSelect;
 
     case 'Balance':
       return InputBalance;
