@@ -3,10 +3,10 @@
 
 import React from 'react';
 import 'styled-components';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Identicon } from '../account/Identicon';
 import { ContractDocument } from 'types';
+import { displayDate } from 'ui/util';
 
 interface Props {
   contract: ContractDocument;
@@ -25,7 +25,9 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
       <div className="flex-grow text-gray-500 dark:text-gray-400">
         {address.slice(0, 4)}...{address.slice(-4)}
       </div>
-      <div className="w-14 text-gray-500 dark:text-gray-400">{moment(date).format('D MMM')}</div>
+      <div className="w-14 text-gray-500 dark:text-gray-400">
+        {displayDate(date)}
+      </div>
     </Link>
   );
 }

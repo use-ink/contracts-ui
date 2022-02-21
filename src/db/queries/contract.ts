@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Database, PrivateKey } from '@textile/threaddb';
-import moment from 'moment';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
@@ -62,7 +61,7 @@ export async function createContract(
     address,
     codeHash,
     creator,
-    date = moment.utc().format(),
+    date = (new Date()).toISOString(),
     genesisHash,
     name,
     tags = [],
