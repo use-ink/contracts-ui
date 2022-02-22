@@ -20,8 +20,8 @@ export function Page({ header, help, children }: PageProps): React.ReactElement<
             </div>
             <div className="flex flex-col py-4 h-full">
               <div className="-my-2 h-full overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full h-full sm:px-6 lg:px-8">
-                  <div className="mt-4">{children}</div>
+                <div className="py-2 align-middle inline-block min-w-full h-full sm:px-6 lg:px-8 mt-4">
+                  <>{children}</>
                 </div>
               </div>
             </div>

@@ -32,7 +32,8 @@
 }
 
 .dropdown .dropdown__menu {
-  @apply absolute z-50 w-full max-h-80 overflow-y-auto bg-white  dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 rounded-b;
+  @apply absolute w-full max-h-80 overflow-y-auto bg-white  dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 rounded-b;
+  z-index: 1000;
 }
 
 .dropdown .dropdown__option {
