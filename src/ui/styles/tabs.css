@@ -9,5 +9,5 @@
 }
 
 .routed-tabs .tab.active {
-  @apply dark:bg-elevation-2 dark:border-gray-stroke border-gray-200;
+  @apply dark:bg-elevation-2 dark:border-gray-stroke border-gray-200 bg-gray-200;
 }

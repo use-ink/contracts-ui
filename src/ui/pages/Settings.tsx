@@ -21,7 +21,7 @@ export function Settings() {
   const { theme, setTheme } = useTheme();
   return (
     <Page header="Settings" help={<>Manage settings and preferences.</>}>
-      <div className="pb-10 border-b border-gray-200 dark:border-gray-700 mt-4 dark:text-white text-gray-600">
+      <div className="pb-10 border-b border-gray-200 dark:border-gray-800 mt-4 dark:text-white text-gray-600">
         <h2 className="text-lg pb-1 mb-2">Appearance</h2>
         <div className="grid grid-cols-12 w-full">
           <div className="flex flex-col col-span-6 lg:col-span-7 2xl:col-span-8 text-sm">

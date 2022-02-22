@@ -14,7 +14,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
       <ul className="dark:text-gray-200 text-gray-600 text-sm">
         <li>
           <a
-            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200"
+            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
             href="https://paritytech.github.io/ink-docs/"
             target="_blank"
             rel="noopener noreferrer"
@@ -35,7 +35,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
         </li>
         <li>
           <a
-            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200"
+            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
             href="https://substrate.stackexchange.com/questions/tagged/smart-contract?sort=Newest"
             target="_blank"
             rel="noopener noreferrer"
@@ -56,7 +56,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
         </li>
         <li>
           <a
-            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200"
+            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
             href="https://matrix.to/#/#ink:matrix.parity.io"
             target="_blank"
             rel="noopener noreferrer"

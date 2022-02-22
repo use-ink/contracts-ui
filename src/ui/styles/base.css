@@ -7,10 +7,6 @@ body {
   @apply antialiased;
 }
 
-a {
-  @apply dark:text-blue-500 dark:hover:text-blue-300;
-}
-
 .text-mono {
   font-family: 'SF Mono', 'SFMono-Regular', ui-monospace, 'DejaVu Sans Mono', 'Menlo', 'Consolas',
     monospace;

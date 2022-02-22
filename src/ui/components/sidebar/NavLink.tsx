@@ -11,7 +11,7 @@ interface Props extends NavLinkProps {
 export function NavLink({ children, icon: Icon, ...props }: Props): React.ReactElement<Props> {
   return (
     <NavLinkBase className="nav-link group" {...props}>
-      <Icon className="dark:group-hover:text-gray-300" />
+      <Icon className="dark:group-hover:text-gray-300 group-hover:text-gray-400" />
       {children}
     </NavLinkBase>
   );
