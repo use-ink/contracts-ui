@@ -33,7 +33,6 @@ export function Settings() {
               onChange={e => setTheme && setTheme(e as 'light' | 'dark')}
               options={options}
               value={theme}
-              className="settings-dropdown"
             />
           </div>
         </div>
