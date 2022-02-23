@@ -3,7 +3,7 @@
 
 import Big from 'big.js';
 import React, { useMemo } from 'react';
-import { isNumber } from '@polkadot/util';
+import { isNull, isNumber } from '@polkadot/util';
 import { Meter, Switch } from '../common';
 import { InputBalance } from './InputBalance';
 import { getValidation } from './FormField';
@@ -29,7 +29,7 @@ export function InputStorageDepositLimit({
   ...props
 }: Props) {
   const percentage = useMemo((): number | null => {
-    if (!maximum) {
+    if (!maximum || maximum.eqn(0)) {
       return null;
     }
     return 100 * new Big(value.toString()).div(new Big(maximum.toString())).toNumber();
@@ -51,7 +51,7 @@ export function InputStorageDepositLimit({
           <Switch value={isActive} onChange={toggleIsActive} />
         </div>
       </div>
-      {isActive && (
+      {isActive && !isNull(percentage) && (
         <Meter
           label={isNumber(percentage) ? `${percentage.toFixed(2)}% of free balance` : null}
           percentage={isNumber(percentage) ? percentage : 100}
