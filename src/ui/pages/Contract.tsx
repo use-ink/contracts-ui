@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
-import moment from 'moment';
 import { InteractTab } from '../components/contract/Interact';
 import { MetadataTab } from '../components/contract/Metadata';
 import { Loader } from '../components/common/Loader';
@@ -12,6 +11,7 @@ import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
+import { displayDate } from 'ui/util';
 
 const TABS = [
   {
@@ -72,7 +72,7 @@ export function Contract() {
             >
               {projectName}
             </Link>{' '}
-            on {moment(document.date).format('D MMM')}
+            on {displayDate(document.date)}
           </>
         }
       >

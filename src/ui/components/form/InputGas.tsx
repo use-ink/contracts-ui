@@ -61,7 +61,7 @@ export function InputGas({
               {isEmpty ? (
                 <>
                   {isCall ? 'Using Estimated Gas' : 'Using Maximum Query Gas'}
-                  {' · '}
+                  &nbsp;{' · '}&nbsp;
                   <a
                     href="#"
                     onClick={e => {

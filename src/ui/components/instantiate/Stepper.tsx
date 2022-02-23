@@ -25,7 +25,7 @@ export function Stepper({ steps }: Props) {
             {index > 1 ? (
               <div className="flex justify-center w-6 py-4">
                 <span
-                  className={`h-8 ${isFilled ? 'bg-indigo-500' : 'bg-elevation-2'}`}
+                  className={`h-8 ${isFilled ? 'bg-green-500' : 'bg-elevation-2'}`}
                   style={{ width: '2px' }}
                 ></span>
               </div>
@@ -33,12 +33,12 @@ export function Stepper({ steps }: Props) {
             <div className="flex space-x-4 items-center">
               <div
                 className={classes(
-                  isFilled ? 'bg-indigo-500' : 'bg-elevation-2',
+                  isFilled ? 'bg-green-500' : 'bg-elevation-2',
                   'flex items-center justify-center text-white text-center text-sm rounded-md w-6 h-6 p-1'
                 )}
               >
                 {index < currentStep ? (
-                  <CheckIcon className="bg-indigo-500 text-white text-lg rounded-md w-6" />
+                  <CheckIcon className="bg-green-500 text-white text-lg rounded-md w-6" />
                 ) : (
                   index
                 )}

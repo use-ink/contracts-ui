@@ -18,7 +18,7 @@ export function PageHome({
         <div className="flex flex-col xl:flex-row px-5 py-3 m-2">
           <main className="main order-2 lg:pr-8 xl:order-1">
             <div className="space-y-1 pb-1">
-              <h1 className="text-lg pb-2 dark:text-white text-gray-700">{header}</h1>
+              <h1 className="text-lg font-semibold pb-2 dark:text-white text-gray-700">{header}</h1>
             </div>
             <div className="flex flex-col">
               <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
