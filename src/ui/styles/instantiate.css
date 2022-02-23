@@ -23,11 +23,11 @@
 }
 
 .instantiate-outcome .body {
-  @apply p-4
+  @apply text-xs p-4
 }
 
 .instantiate-outcome .row {
-  @apply flex items-center dark:text-gray-400 text-xs
+  @apply flex items-center dark:text-gray-400
 }
 
 .instantiate-outcome .row:not(:last-child) {

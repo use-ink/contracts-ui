@@ -182,7 +182,8 @@ export function Step2() {
             !weight.isValid ||
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
-            !argValues
+            !argValues ||
+            (dryRunResult && dryRunResult.result.isErr)
           }
           onClick={onSubmit}
           variant="primary"

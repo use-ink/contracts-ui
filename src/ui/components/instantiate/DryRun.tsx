@@ -2,13 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { formatBalance } from '@polkadot/util';
-import { createType } from '@polkadot/types';
+import { formatBalance, formatNumber } from '@polkadot/util';
+import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { useApi, useInstantiate } from 'ui/contexts';
 import { fromSats } from 'api';
-import { classes } from 'ui/util';
 
 export function DryRun() {
   const { api } = useApi();
@@ -23,7 +22,7 @@ export function DryRun() {
           </div>
           <div>
             {dryRunResult?.gasRequired && (
-              <>{formatBalance(dryRunResult.gasRequired)}</>
+              <>{formatNumber(dryRunResult.gasRequired)}</>
             )}
           </div>
         </div>
@@ -33,26 +32,48 @@ export function DryRun() {
           </div>
           <div>
             {dryRunResult?.gasConsumed && (
-              <>{formatBalance(dryRunResult.gasConsumed)}</>
+              <>{formatNumber(dryRunResult.gasConsumed)}</>
             )}
           </div>
         </div>
-        <div className="row">
+        <div className="row h-8">
           <div>
             Storage Deposit:
           </div>
           <div>
-            {dryRunResult?.storageDeposit && (
-              <>
-                {dryRunResult.storageDeposit.isCharge
-                  ? `Charge - ${formatBalance(createType(api.registry, 'Balance', fromSats(api, dryRunResult.storageDeposit.asCharge)))}`
-                  : `Refund - ${formatBalance(createType(api.registry, 'Balance', fromSats(api, dryRunResult.storageDeposit.asRefund)))}`
+            {dryRunResult?.storageDeposit && (() => {
+              if (dryRunResult.storageDeposit.isCharge) {
+                if (dryRunResult.storageDeposit.asCharge.eqn(0)) {
+                  return 'None';
                 }
-              </>
-            )}
+
+                return (
+                  <>
+                    <div className='text-red-400'>Charge</div>
+                    <div>
+                      {formatBalance(fromSats(api, dryRunResult.storageDeposit.asCharge))}
+                    </div>
+                  </>
+                );
+              }
+
+              if (dryRunResult.storageDeposit.asRefund.eqn(0)) {
+                return 'None';
+              }
+
+              return (
+                <>
+                  <div className='text-green-400'>Refund</div>
+                  <div>
+                    {formatBalance(fromSats(api, dryRunResult.storageDeposit.asRefund))}
+                  </div>
+                </>
+              );
+
+            })()}
           </div>
         </div>
-        <div className="row">
+        <div className="row h-8">
           <div>
             Contract Address:
           </div>
@@ -65,20 +86,28 @@ export function DryRun() {
             }
           </div>
         </div>
-        <div className="row">
-          <span className={classes('validation', dryRunResult?.result.isOk ? 'success' : 'error')}>
-            {
-              dryRunResult?.result.isOk
-                ? 'The instantiation will be successful.'
-                : 'The instantiation will fail.'
-            }
-          </span>
-        </div>
+        <div>
+          {dryRunResult?.result.isOk
+            && (
+              <div className='validation success font-bold'>
+                <CheckCircleIcon className='mr-3' />
+                The instantiation will be successful.
+              </div>
+            )}
         {dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule && (
-          <div className="font-monospace p-2 text-xs text-center rounded dark:text-red-400 dark:bg-red-800">
-            {api.registry.findMetaError(dryRunResult?.result.asErr.asModule).name}
-          </div>
+          <>
+            <div className="validation error text-mono font-bold">
+              <ExclamationCircleIcon className='mr-3' />
+              {api.registry.findMetaError(dryRunResult?.result.asErr.asModule).name}
+            </div>
+            {dryRunResult.debugMessage.length > 0 && (
+              <div className='validation error block text-mono break-words pl-4 mt-1'>
+                {dryRunResult.debugMessage.toString()}
+              </div>
+            )}
+          </>
         )}
+        </div>
       </div>
     </SidePanel>
   );

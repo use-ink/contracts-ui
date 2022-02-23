@@ -120,8 +120,6 @@ export function InstantiateContextProvider({
           value: newData.value ? apiState.api.registry.createType('Balance', newData.value) : null,
         };
 
-        console.log(newData.storageDepositLimit?.toString());
-
         if (params.origin) {
           const result = await apiState.api.rpc.contracts.instantiate(params);
 
@@ -133,8 +131,6 @@ export function InstantiateContextProvider({
     },
     [apiState.api.rpc.contracts, apiState.api.registry, codeHashUrlParam, data]
   );
-
-  console.log(dryRunResult?.storageDeposit.asCharge.toString());
 
   function onUnFinalize() {
     setTx([null, NOOP, null]);
