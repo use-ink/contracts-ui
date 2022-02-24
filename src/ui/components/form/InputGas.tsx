@@ -62,6 +62,7 @@ export function InputGas({
 
                       setIsEmpty(false);
                     }}
+                    className="text-blue-500"
                   >
                     Use Custom
                   </a>
@@ -75,6 +76,7 @@ export function InputGas({
                     setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
                     setIsEmpty(true);
                   }}
+                  className="text-blue-500"
                 >
                   {isCall
                     ? `Use Estimated Weight (${(estimatedWeight || BN_ZERO)
