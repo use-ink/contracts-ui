@@ -43,7 +43,8 @@ function InputBalanceBase({ children, value = BN_ZERO, onChange: _onChange }: Pr
           value={stringValue}
         >
           <div className="absolute inset-y-0 right-0 flex items-center">
-            <label htmlFor="unit" className="sr-only">
+            <span className="text-gray-500 sm:text-sm mr-7">{tokenSymbol}</span>
+            {/* <label htmlFor="unit" className="sr-only">
               Unit
             </label>
             <select
@@ -53,7 +54,7 @@ function InputBalanceBase({ children, value = BN_ZERO, onChange: _onChange }: Pr
               className="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
             >
               <option value={tokenSymbol}>{tokenSymbol}</option>
-            </select>
+            </select> */}
           </div>
           {children}
         </Input>
