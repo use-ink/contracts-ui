@@ -62,7 +62,11 @@ export const InteractTab = ({ contract }: Props) => {
         payment: value,
         sender,
       })
-        .then(({ gasRequired }) => {
+        .then(({ result, gasRequired }) => {
+          if (result.isOk) {
+            const { flags } = result.asOk;
+            console.log(`flags: ${flags.toNumber()}`);
+          }
           setEstimatedWeight(gasRequired);
         })
         .catch(e => {
