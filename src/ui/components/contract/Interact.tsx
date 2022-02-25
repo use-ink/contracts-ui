@@ -67,7 +67,9 @@ export const InteractTab = ({ contract }: Props) => {
         .then(({ result, gasRequired }) => {
           if (result.isOk) {
             const { flags } = result.asOk;
-            if (flags.toNumber() === 1) throw new Error('RPC dry-run call reverted');
+            if (flags.toNumber() === 1) {
+              throw new Error('RPC dry-run call reverted');
+            }
           }
           setEstimatedWeight(gasRequired);
           setRpcDryRunResult('success');
@@ -220,10 +222,7 @@ export const InteractTab = ({ contract }: Props) => {
         <Buttons>
           {message.isPayable || message.isMutating ? (
             <Button
-              isDisabled={
-                !(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing') ||
-                rpcDryRunResult !== 'success'
-              }
+              isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
               isLoading={txs[txId]?.status === 'processing'}
               onClick={() => clickHandler()}
               variant="primary"
