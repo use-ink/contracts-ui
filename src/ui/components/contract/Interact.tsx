@@ -31,11 +31,13 @@ export const InteractTab = ({ contract }: Props) => {
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
+  const [rpcDryRunResult, setRpcDryRunResult] = useState<Error | null | 'success'>(null);
 
   useEffect(() => {
     setCallResults([]);
     setNextResultId(1);
     setMessage(contract.abi.messages[0]);
+    setRpcDryRunResult(null);
     // clears call results and resets data when navigating to another contract page
     // to do: storage for call results
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,13 +67,15 @@ export const InteractTab = ({ contract }: Props) => {
         .then(({ result, gasRequired }) => {
           if (result.isOk) {
             const { flags } = result.asOk;
-            console.log(`flags: ${flags.toNumber()}`);
+            if (flags.toNumber() === 1) throw new Error('RPC dry-run call reverted');
           }
           setEstimatedWeight(gasRequired);
+          setRpcDryRunResult('success');
         })
         .catch(e => {
           console.error(e);
           setEstimatedWeight(null);
+          e instanceof Error && setRpcDryRunResult(e);
         });
   }, [api, accountId, argValues, keyring, message, value, contract]);
 
@@ -216,7 +220,10 @@ export const InteractTab = ({ contract }: Props) => {
         <Buttons>
           {message.isPayable || message.isMutating ? (
             <Button
-              isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
+              isDisabled={
+                !(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing') ||
+                rpcDryRunResult !== 'success'
+              }
               isLoading={txs[txId]?.status === 'processing'}
               onClick={() => clickHandler()}
               variant="primary"
@@ -233,6 +240,23 @@ export const InteractTab = ({ contract }: Props) => {
             </Button>
           )}
         </Buttons>
+        {rpcDryRunResult instanceof Error ? (
+          <div className="float-left text-red-500 text-xs pt-2 pb-2">
+            <>{`Error: ${rpcDryRunResult.message}`}</>
+          </div>
+        ) : (
+          <>
+            {rpcDryRunResult === 'success' ? (
+              <div className="float-left text-green-500 text-xs pt-2 pb-2">
+                RPC dry-run successfull
+              </div>
+            ) : (
+              <div className="float-left text-gray-500 text-xs pt-2 pb-2">
+                Waiting for RPC dry-run to finish
+              </div>
+            )}
+          </>
+        )}
       </div>
       <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
         <ResultsOutput results={callResults} />
