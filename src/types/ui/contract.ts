@@ -5,6 +5,7 @@ import BN from 'bn.js';
 import type {
   AbiMessage,
   AnyJson,
+  Codec,
   ContractPromise,
   KeyringPair,
   RegistryError,
@@ -19,7 +20,7 @@ export interface ContractDryRunParams {
 }
 
 export interface CallResult {
-  data: AnyJson;
+  data: Codec | null;
   id: number;
   isComplete: boolean;
   log: string[];

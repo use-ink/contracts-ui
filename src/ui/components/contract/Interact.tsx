@@ -91,7 +91,7 @@ export const InteractTab = ({ contract }: Props) => {
       ...callResults,
       {
         id: nextResultId,
-        data: '',
+        data: null,
         isComplete: true,
         message,
         time: Date.now(),
@@ -127,7 +127,7 @@ export const InteractTab = ({ contract }: Props) => {
         message,
         time: Date.now(),
         isComplete: true,
-        data: output?.toHuman(),
+        data: output,
         error,
       },
     ]);
