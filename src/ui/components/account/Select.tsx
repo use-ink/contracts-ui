@@ -17,7 +17,7 @@ function isContractExistent<T>(value: T | undefined | { identifier: string }): v
 }
 
 function Option({ label, value }: DropdownOption<string>) {
-  return <Account name={label} value={value} />;
+  return <Account className='p-1.5' name={label} value={value} />;
 }
 
 function Select({

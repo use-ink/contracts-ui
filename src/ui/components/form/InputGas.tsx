@@ -25,6 +25,7 @@ export function InputGas({
   executionTime,
   isCall,
   isEmpty,
+  isValid,
   megaGas,
   percentage,
   setIsEmpty,

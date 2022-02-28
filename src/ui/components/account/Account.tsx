@@ -22,7 +22,7 @@ export function Account({ className, name: propsName, size = 42, value }: Props)
   }
 
   return (
-    <div className={classes('p-1.5 inline-flex items-center', className)}>
+    <div className={classes('inline-flex items-center', className)}>
       <Identicon size={size} value={value} className="pr-2" />
       <div className="flex-1 block truncate">
         {name && (

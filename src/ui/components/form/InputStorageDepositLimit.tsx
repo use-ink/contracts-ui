@@ -36,7 +36,7 @@ export function InputStorageDepositLimit({
   }, [maximum, value]);
 
   return (
-    <div className={classes(className)} {...props}>
+    <div className={classes(className)}>
       <div className="flex items-center">
         <InputBalance
           className="flex-1"

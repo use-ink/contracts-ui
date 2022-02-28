@@ -25,7 +25,7 @@ export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Ui
 
 export const NOOP = (): void => undefined;
 
-export function fromBalance(value: BN | null): string {
+export function fromBalance(value: BN | number | string | null): string {
   if (!value) {
     return '';
   }
@@ -52,12 +52,23 @@ export function toBalance(api: ApiPromise, value: string | number): BN {
   }
 }
 
-export function toSats(api: ApiPromise, balance: BN): BN {
-  return balance.mul(BN_TEN.pow(new BN(api.registry.chainDecimals)));
+export function toSats(api: ApiPromise, balance: BN | number): BN {
+  let bn: BN;
+
+  if (isNumber(balance)) {
+    bn = new BN(balance)
+  } else {
+    bn = balance;
+  }
+
+  return bn.mul(BN_TEN.pow(new BN(api.registry.chainDecimals[0])));
 }
 
-export function fromSats(api: ApiPromise, sats: BN): BN {
-  return sats.div(BN_TEN.pow(new BN(api.registry.chainDecimals)));
+export function fromSats(api: ApiPromise, sats: BN): string {
+  const pow = BN_TEN.pow(new BN(api.registry.chainDecimals[0]));
+  const [div, mod] = [sats.div(pow), sats.mod(pow)];
+
+  return `${div.toString()}${!mod.eqn(0) ? `.${mod.toString()}` : ''}`;
 }
 
 export function convertToNumber(value: string) {

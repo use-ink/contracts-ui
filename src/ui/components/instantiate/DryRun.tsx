@@ -7,7 +7,8 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { useApi, useInstantiate } from 'ui/contexts';
-import { fromSats } from 'api';
+// import { fromSats } from 'api';
+// import { fromSats } from 'api';
 
 export function DryRun() {
   const { api } = useApi();
@@ -36,7 +37,7 @@ export function DryRun() {
             )}
           </div>
         </div>
-        <div className="row h-8">
+        <div className="row">
           <div>
             Storage Deposit:
           </div>
@@ -47,29 +48,10 @@ export function DryRun() {
                   return 'None';
                 }
 
-                return (
-                  <>
-                    <div className='text-red-400'>Charge</div>
-                    <div>
-                      {formatBalance(fromSats(api, dryRunResult.storageDeposit.asCharge))}
-                    </div>
-                  </>
-                );
+                return formatBalance(dryRunResult.storageDeposit.asCharge, { decimals: 12 })
               }
 
-              if (dryRunResult.storageDeposit.asRefund.eqn(0)) {
-                return 'None';
-              }
-
-              return (
-                <>
-                  <div className='text-green-400'>Refund</div>
-                  <div>
-                    {formatBalance(fromSats(api, dryRunResult.storageDeposit.asRefund))}
-                  </div>
-                </>
-              );
-
+              return 'None';
             })()}
           </div>
         </div>
