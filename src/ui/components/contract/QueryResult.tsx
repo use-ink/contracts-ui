@@ -20,14 +20,14 @@ export const QueryResult = ({ result: { time, data, message, error }, date }: Pr
   return (
     <div
       key={`${time}`}
-      className="text-xs text-gray-400 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+      className="text-xs dark:text-gray-400 text-gray-600 break-all p-4 border-b border-gray-200 dark:border-gray-700"
     >
       <div className="mb-2">{date}</div>
       <div>
         <div className="mb-2">
           <MessageSignature message={message} />
         </div>
-        <div className="bg-elevation-1 p-2 rounded-sm text-mono">{`${
+        <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono">{`${
           isBn(data) ? fromSats(api, data) : data
         }`}</div>
       </div>

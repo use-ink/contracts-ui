@@ -7,7 +7,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import App from 'ui/components/App';
 import './styles/main.css';
 import '@polkadot/api-augment';
-import { AddContract, Contract, Homepage, Instantiate, SelectCodeHash } from 'ui/pages';
+import { AddContract, Contract, Homepage, Instantiate, SelectCodeHash, Settings } from 'ui/pages';
 
 const root = document.getElementById('app-root');
 
@@ -22,6 +22,7 @@ ReactDOM.render(
           <Route path=":codeHash" />
         </Route>
         <Route path="/contract/:address/" element={<Contract />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>
   </HashRouter>,

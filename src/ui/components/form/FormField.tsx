@@ -46,7 +46,10 @@ export function FormField({
   return (
     <div className={classes('form-field', className)}>
       {label && (
-        <label className="block mb-1.5 text-sm font-semibold dark:text-white" htmlFor={id}>
+        <label
+          className="block mb-1.5 text-sm font-semibold dark:text-white text-gray-600"
+          htmlFor={id}
+        >
           {label}
         </label>
       )}

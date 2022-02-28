@@ -38,11 +38,11 @@
 }
 
 .sidebar .section .header {
-  @apply text-gray-400 text-xs font-medium py-1;
+  @apply dark:text-gray-400 text-gray-600 text-xs font-medium py-1;
 }
 
 .sidebar .section .none-yet {
-  @apply text-gray-200 text-xs pl-2;
+  @apply dark:text-gray-200 text-gray-400 text-xs pl-2;
 }
 
 .sidebar .footer {

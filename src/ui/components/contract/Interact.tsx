@@ -161,7 +161,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   return (
     <div className="grid grid-cols-12 w-full">
-      <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
+      <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
         <Form>
           <FormField className="mb-8" id="accountId" label="Account" {...accountIdValidation}>
             <AccountSelect
@@ -230,7 +230,7 @@ export const InteractTab = ({ contract }: Props) => {
           )}
         </Buttons>
       </div>
-      <div className="col-span-6 lg:col-span-5 2xl:col-span-4 pl-10 lg:pl-20 w-full">
+      <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
         <ResultsOutput results={callResults} />
       </div>
     </div>

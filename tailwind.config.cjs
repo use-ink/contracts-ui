@@ -3,11 +3,8 @@ const process = require('process');
 
 module.exports = {
   mode: 'jit',
-  purge: {
-    content: ['./src/**/*.{js,ts,jsx,tsx}'],
-    safelist: ['dark:border-blue-500', 'border-blue-500', 'border-gray-600'],
-  },
-  darkMode: 'class', // or 'media' or 'class'
+  darkMode: 'class',
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -109,15 +106,6 @@ module.exports = {
       fontSize: {
         '2.5xl': '1.75rem',
       },
-    },
-  },
-  variants: {
-    extend: {
-      borderWidth: ['last'],
-      opacity: ['disabled'],
-      cursor: ['disabled'],
-      scale: ['focus-within'],
-      stroke: ['hover', 'group-hover'],
     },
   },
   plugins: [require('@tailwindcss/forms')],

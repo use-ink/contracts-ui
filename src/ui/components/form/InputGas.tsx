@@ -62,6 +62,7 @@ export function InputGas({
 
                       setIsEmpty(false);
                     }}
+                    className="text-blue-500"
                   >
                     Use Custom
                   </a>
@@ -75,6 +76,7 @@ export function InputGas({
                     setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
                     setIsEmpty(true);
                   }}
+                  className="text-blue-500"
                 >
                   {isCall
                     ? `Use Estimated Weight (${(estimatedWeight || BN_ZERO)
@@ -86,7 +88,7 @@ export function InputGas({
             </div>
           )}
         </div>
-        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-700">
+        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded dark:bg-gray-700 bg-gray-200">
           <div
             style={{ width: `${percentage}%` }}
             className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"

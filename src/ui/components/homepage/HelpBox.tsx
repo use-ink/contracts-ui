@@ -31,7 +31,12 @@ export function HelpBox(): React.ReactElement | null {
         <div className="text-xs text-gray-500 dark:text-gray-400 pb-2">
           Substrate Contracts UI lets you explore and interact with smart contracts written in ink!
           - a smart contract language based on Rust!{' '}
-          <a href="https://paritytech.github.io/ink-docs/" target="_blank" rel="noreferrer">
+          <a
+            href="https://paritytech.github.io/ink-docs/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-500"
+          >
             Learn more
           </a>
         </div>
