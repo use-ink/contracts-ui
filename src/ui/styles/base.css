@@ -7,10 +7,6 @@ body {
   @apply antialiased;
 }
 
-a {
-  @apply dark:text-blue-500 dark:hover:text-blue-300;
-}
-
 .text-mono {
   font-family: 'SF Mono', 'SFMono-Regular', ui-monospace, 'DejaVu Sans Mono', 'Menlo', 'Consolas',
     monospace;
@@ -43,7 +39,7 @@ a:focus {
   @apply leading-relaxed;
 }
 .markdown code {
-  @apply bg-elevation-2 text-xs rounded-sm;
+  @apply dark:bg-elevation-2 bg-gray-200 text-xs rounded-sm;
   padding: 2px 4px;
 }
 .markdown :last-child {

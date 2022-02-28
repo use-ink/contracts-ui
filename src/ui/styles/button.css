@@ -7,11 +7,11 @@
 }
 
 .btn.default {
-  @apply border dark:text-gray-300 bg-elevation-2 border-gray-200 dark:border-gray-700;
+  @apply border dark:text-gray-300 dark:bg-elevation-2 border-gray-200 dark:border-gray-700;
 }
 
 .btn.default:hover:not(:disabled) {
-  @apply bg-elevation-3;
+  @apply dark:bg-elevation-3;
 }
 
 .btn.primary {

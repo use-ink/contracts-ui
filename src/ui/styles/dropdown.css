@@ -1,9 +1,9 @@
 .dropdown {
-  @apply relative;
+  @apply relative cursor-pointer;
 }
 
-.dropdown__control {
-  @apply relative flex items-center w-full p-0.5 text-left text-sm dark:bg-transparent rounded border dark:border-gray-700 border-gray-200 focus:outline-none;
+.dropdown .dropdown__control {
+  @apply relative flex items-center w-full p-0.5 text-left text-sm bg-transparent rounded border dark:border-gray-700 border-gray-200 focus:outline-none cursor-pointer;
 }
 
 .dropdown__control--is-focused,
@@ -11,7 +11,7 @@
   @apply dark:shadow-none dark:border-gray-100 dark:hover:border-gray-100;
 }
 
-.dropdown__single-value {
+.dropdown .dropdown__single-value {
   @apply dark:text-gray-300 text-gray-500;
 }
 
@@ -31,12 +31,13 @@
   @apply m-0;
 }
 
-.dropdown__menu {
-  @apply absolute z-50 w-full max-h-80 overflow-y-auto dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 bg-white rounded-b;
+.dropdown .dropdown__menu {
+  @apply absolute w-full max-h-80 overflow-y-auto bg-white  dark:bg-gray-900 border dark:border-gray-stroke border-gray-200 text-sm dark:text-gray-300 text-gray-500 rounded-b;
+  z-index: 1000;
 }
 
-.dropdown__option {
-  @apply flex items-center cursor-pointer select-none relative py-2 px-3 dark:hover:bg-elevation-2 dark:text-gray-300;
+.dropdown .dropdown__option {
+  @apply flex items-center cursor-pointer select-none relative py-2 px-3 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:text-gray-300;
 }
 
 .dropdown__option > span {
@@ -52,7 +53,7 @@
 }
 
 .dropdown__option--is-focused {
-  @apply dark:bg-transparent;
+  @apply bg-transparent;
 }
 
 .dropdown.chain .dropdown__control {

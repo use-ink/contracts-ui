@@ -18,13 +18,13 @@ export const MessageDocs = ({ message, message: { docs } }: Props) => {
     <Disclosure defaultOpen>
       {({ open }) => (
         <div className="collapsible-panel">
-          <Disclosure.Button className="panel-title text-xs leading-normal p-3 bg-elevation-1 text-mono flex w-full">
+          <Disclosure.Button className="panel-title text-xs leading-normal p-3 dark:bg-elevation-1 text-mono flex w-full">
             <ChevronUpIcon
               className={`${open ? 'transform rotate-180' : ''} w-5 h-5 mr-1 border-gray-500`}
             />
             <MessageSignature message={message} />
           </Disclosure.Button>
-          <Disclosure.Panel className="panel-body p-4 markdown border-t border-gray-700">
+          <Disclosure.Panel className="panel-body p-4 markdown border-t dark:border-gray-700 border-gray-200">
             {/* eslint-disable-next-line react/no-children-prop */}
             {docs.length ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{docs.join('\r\n')}</ReactMarkdown>

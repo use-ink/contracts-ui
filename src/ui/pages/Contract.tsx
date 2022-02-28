@@ -68,7 +68,7 @@ export function Contract() {
             You instantiated this contract from{' '}
             <Link
               to={`/instantiate/${document.codeHash}`}
-              className="inline-block relative dark:bg-blue-500 dark:text-blue-400 dark:bg-opacity-20 text-xs px-1.5 font-mono rounded"
+              className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
             >
               {projectName}
             </Link>{' '}

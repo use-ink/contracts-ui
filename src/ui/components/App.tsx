@@ -8,13 +8,14 @@ import {
   ApiContextProvider,
   DatabaseContextProvider,
   TransactionsContextProvider,
+  ThemeContextProvider,
 } from 'ui/contexts';
 
 const App = (): JSX.Element => {
   return (
-    <ApiContextProvider>
-      <DatabaseContextProvider>
-        <div className="dark">
+    <ThemeContextProvider>
+      <ApiContextProvider>
+        <DatabaseContextProvider>
           <TransactionsContextProvider>
             <div className="relative md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900 dark:text-white text-black">
               <Sidebar />
@@ -23,9 +24,9 @@ const App = (): JSX.Element => {
               </AwaitApis>
             </div>
           </TransactionsContextProvider>
-        </div>
-      </DatabaseContextProvider>
-    </ApiContextProvider>
+        </DatabaseContextProvider>
+      </ApiContextProvider>
+    </ThemeContextProvider>
   );
 };
 
