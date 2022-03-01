@@ -33,7 +33,7 @@ export function findComponent(
     );
   }
 
-  if (type.sub) {
+  if (type.sub && !Array.isArray(type.sub)) {
     const Component = findComponent(registry, type.sub as TypeDef);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
     return (props: any) => Vector({ Component, props });
