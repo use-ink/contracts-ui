@@ -18,7 +18,7 @@ export function Meter({ accessory, label, percentage, withAccessory }: Props) {
         {label}
         {withAccessory && <div className="float-right">{accessory}</div>}
       </div>
-      <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-700">
+      <div className="overflow-hidden h-2 mb-4 text-xs flex rounded dark:bg-gray-700 bg-gray-200">
         <div
           style={{ width: `${percentage}%` }}
           className={classes(

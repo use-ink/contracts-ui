@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { BN_MILLION, BN_ONE, BN_ZERO } from '@polkadot/util';
+import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
 import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
 import { classes } from 'ui/util';
@@ -53,57 +54,46 @@ export function InputGas({
   return (
     <div className={classes(className)} {...props}>
       <InputNumber value={megaGas} isDisabled={isEmpty} onChange={setMegaGas} placeholder="MGas" />
-      <div className="relative pt-2">
-        <div className="text-gray-500 text-xs pb-2">
-          {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
-          {percentage.toFixed(2)}% of block time)
-          {withEstimate && (
-            <div className="float-right">
-              {isEmpty ? (
-                <>
-                  {isCall ? 'Using Estimated Gas' : 'Using Maximum Query Gas'}
-                  &nbsp;{' · '}&nbsp;
-                  <a
-                    href="#"
-                    onClick={e => {
-                      e.preventDefault();
+      <Meter
+        accessory={isEmpty ? (
+          <>
+            {isCall ? 'Using Estimated Gas' : 'Using Maximum Query Gas'}
+            &nbsp;{' · '}&nbsp;
+            <a
+              href="#"
+              onClick={e => {
+                e.preventDefault();
 
-                      setIsEmpty(false);
-                    }}
-                    className="text-blue-500"
-                  >
-                    Use Custom
-                  </a>
-                </>
-              ) : (
-                <a
-                  href="#"
-                  onClick={e => {
-                    e.preventDefault();
+                setIsEmpty(false);
+              }}
+              className="text-blue-500"
+            >
+              Use Custom
+            </a>
+          </>
+        ) : (
+          <a
+            href="#"
+            onClick={e => {
+              e.preventDefault();
 
-                    setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
-                    setIsEmpty(true);
-                  }}
-                  className="text-blue-500"
-                >
-                  {isCall
-                    ? `Use Estimated Gas (${(estimatedWeight || BN_ZERO)
-                        .div(BN_MILLION)
-                        .add(BN_ONE)
-                        .toString()}M)`
-                    : 'Use Maximum Query Gas'}
-                </a>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded dark:bg-gray-700 bg-gray-200">
-          <div
-            style={{ width: `${percentage}%` }}
-            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"
-          ></div>
-        </div>
-      </div>
+              setMegaGas(estimatedMegaGas(api, estimatedWeight, !!estimatedWeight));
+              setIsEmpty(true);
+            }}
+            className="text-blue-500"
+          >
+            {isCall
+              ? `Use Estimated Gas (${(estimatedWeight || BN_ZERO)
+                  .div(BN_MILLION)
+                  .add(BN_ONE)
+                  .toString()}M)`
+              : 'Use Maximum Query Gas'}
+          </a>
+        )}
+        label={`${executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (${percentage.toFixed(2)}% of block time)}`}
+        percentage={percentage}
+        withAccessory={withEstimate}
+      />
     </div>
   );
 }
