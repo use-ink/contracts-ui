@@ -3,7 +3,7 @@
 
 // types & interfaces
 export type { AnyJson, Codec, Registry, RegistryError, TypeDef } from '@polkadot/types/types';
-export type { DispatchError, EventRecord, Weight, ChainType } from '@polkadot/types/interfaces';
+export type { ContractInstantiateResult, DispatchError, EventRecord, Weight, ChainType } from '@polkadot/types/interfaces';
 export type { KeyringPair } from '@polkadot/keyring/types';
 export type {
   AbiConstructor,

@@ -1,16 +1,13 @@
 // Copyright 2021 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import { Struct } from '@polkadot/types';
-// import { AccountId, ContractExecResult } from '@polkadot/types/interfaces';
-import { Struct, Text, u64 } from '@polkadot/types';
-import { ContractInstantiateResult, StorageDeposit } from '@polkadot/types/interfaces';
 import type {
   Abi,
   ApiPromise,
   BlueprintPromise,
   BlueprintSubmittableResult,
   CodeSubmittableResult,
+  ContractInstantiateResult,
   ContractPromise,
   Keyring,
   SubmittableExtrinsic,
@@ -20,14 +17,6 @@ import type {
 } from '../substrate';
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
-
-export interface MyContractInstantiateResult extends Struct {
-  readonly gasConsumed: u64;
-  readonly gasRequired: u64;
-  readonly storageDeposit: StorageDeposit;
-  readonly debugMessage: Text;
-  readonly result: ContractInstantiateResult;
-}
 
 type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
