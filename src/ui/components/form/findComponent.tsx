@@ -14,7 +14,9 @@ import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } fro
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function findComponent(
   registry: Registry,
-  type: TypeDef
+  type: TypeDef,
+  nestingNumber = 0,
+  parentType = ''
 ): React.ComponentType<ArgComponentProps<any>> {
   if (type.info === TypeDefInfo.Si) {
     return findComponent(registry, registry.lookup.getTypeDef(type.type));
@@ -34,9 +36,9 @@ export function findComponent(
   }
 
   if (type.sub && !Array.isArray(type.sub)) {
-    const Component = findComponent(registry, type.sub as TypeDef);
+    const Component = findComponent(registry, type.sub as TypeDef, nestingNumber + 1);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-    return (props: any) => Vector({ Component, props });
+    return (props: any) => Vector({ Component, props: { ...props, nestingNumber, parentType } });
   }
   switch (type.type) {
     case 'AccountId':
