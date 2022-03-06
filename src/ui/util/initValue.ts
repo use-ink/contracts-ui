@@ -12,7 +12,11 @@ import { Keyring } from 'types';
 const warnList: string[] = [];
 
 export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef): unknown {
-  if (def.info === TypeDefInfo.Vec) {
+  if (def.info === TypeDefInfo.Si) {
+    const lookupTypeDef = registry.lookup.getTypeDef(def.lookupIndex as number);
+
+    return getInitValue(registry, keyring, lookupTypeDef);
+  } else if (def.info === TypeDefInfo.Vec) {
     return [getInitValue(registry, keyring, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.Tuple) {
     return Array.isArray(def.sub) ? def.sub.map(def => getInitValue(registry, keyring, def)) : [];
