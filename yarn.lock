@@ -420,7 +420,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@improbable-eng/grpc-web@npm:^0.14.0":
+"@improbable-eng/grpc-web@npm:^0.14.0, @improbable-eng/grpc-web@npm:^0.14.1":
   version: 0.14.1
   resolution: "@improbable-eng/grpc-web@npm:0.14.1"
   dependencies:
@@ -1060,6 +1060,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@textile/context@npm:^0.12.2":
+  version: 0.12.2
+  resolution: "@textile/context@npm:0.12.2"
+  dependencies:
+    "@improbable-eng/grpc-web": ^0.13.0
+    "@textile/security": ^0.9.1
+  checksum: aec67d9b4d58c67e50ae53f5c9c8cff074ca24371cd69e558116e40b98502dde74c72217b9119856e919cf3e69e4deae0a7963e5f29af112b37864eaf6fc8bd1
+  languageName: node
+  linkType: hard
+
 "@textile/crypto@npm:^4.2.1":
   version: 4.2.1
   resolution: "@textile/crypto@npm:4.2.1"
@@ -1208,17 +1218,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@textile/threaddb@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@textile/threaddb@npm:0.2.2"
+"@textile/threaddb@npm:0.2.3":
+  version: 0.2.3
+  resolution: "@textile/threaddb@npm:0.2.3"
   dependencies:
     "@improbable-eng/grpc-web": ^0.14.0
-    "@textile/context": ^0.12.1
+    "@textile/context": ^0.12.2
     "@textile/crypto": ^4.2.1
     "@textile/grpc-transport": ^0.5.2
     "@textile/security": ^0.9.1
-    "@textile/threads-client": ^2.3.2
-    "@textile/threads-client-grpc": ^1.1.1
+    "@textile/threads-client": ^2.3.3
+    "@textile/threads-client-grpc": ^1.1.2
     "@textile/threads-id": ^0.6.1
     "@types/json-schema": ^7.0.7
     "@types/to-json-schema": ^0.2.0
@@ -1233,7 +1243,7 @@ __metadata:
     regenerator-runtime: ^0.13.7
     to-json-schema: ^0.2.5
     ulid: ^2.3.0
-  checksum: b26b3de4833993b74e4792b6b178d5ab0e49818811a931a59435d6b100d8df8275d2fc427f6d99144ffa43d1cce9d88eea6f8fe9b8c2d6f4687e1e5ef39cf42d
+  checksum: 4bdaeedb57a8fab0aee42ebf8e7af4545ea1207199949e5865da30a26a3d0f556f2dd66dcfe1b70286d8015997087655e31e5325e5597a6788f0de55b465d1a4
   languageName: node
   linkType: hard
 
@@ -1245,6 +1255,17 @@ __metadata:
     "@types/google-protobuf": ^3.15.5
     google-protobuf: ^3.17.3
   checksum: 2b54783cffd7453544f560fbb2d986e913d57d732ecc54237c24dfbd40cdf2146b6fba80d4cc68858dd80b6c470cd9790869eec1858d624be81001032c7599bc
+  languageName: node
+  linkType: hard
+
+"@textile/threads-client-grpc@npm:^1.1.2":
+  version: 1.1.5
+  resolution: "@textile/threads-client-grpc@npm:1.1.5"
+  dependencies:
+    "@improbable-eng/grpc-web": ^0.14.1
+    "@types/google-protobuf": ^3.15.5
+    google-protobuf: ^3.19.4
+  checksum: ace7f0163e1d5f8e411148323cd09f753e03306a8047cb1f27d7ae1615e3a809a3ced5e4a5f6117016a2c6aa0a917407295fef8f598e0ba8c094e11e98c27ede
   languageName: node
   linkType: hard
 
@@ -1264,6 +1285,25 @@ __metadata:
     fastestsmallesttextencoderdecoder: ^1.0.22
     to-json-schema: ^0.2.5
   checksum: 97f2b697cd51c8695f4f04b930388f2221464bc4a4a506bf4a7a7e8ae1493570399d41916a0c30ee08bd74bcef6e5c09914e51590c03070b70c6476587287e95
+  languageName: node
+  linkType: hard
+
+"@textile/threads-client@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@textile/threads-client@npm:2.3.3"
+  dependencies:
+    "@improbable-eng/grpc-web": ^0.13.0
+    "@textile/context": ^0.12.2
+    "@textile/crypto": ^4.2.1
+    "@textile/grpc-transport": ^0.5.2
+    "@textile/multiaddr": ^0.6.1
+    "@textile/security": ^0.9.1
+    "@textile/threads-client-grpc": ^1.1.2
+    "@textile/threads-id": ^0.6.1
+    "@types/to-json-schema": ^0.2.0
+    fastestsmallesttextencoderdecoder: ^1.0.22
+    to-json-schema: ^0.2.5
+  checksum: 3fc1b9ea4b010c638825864a803822189bc291c15f94293b082109694a569490b1f15ff91cf2fdbdf4f361b91d4c8ffd3462406b2ef90a637f428ce6f592c880
   languageName: node
   linkType: hard
 
@@ -3267,7 +3307,7 @@ __metadata:
     "@tailwindcss/forms": ^0.4.0
     "@textile/crypto": ^4.2.1
     "@textile/hub": ^6.3.2
-    "@textile/threaddb": 0.2.2
+    "@textile/threaddb": 0.2.3
     "@types/bcryptjs": ^2.4.2
     "@types/mini-css-extract-plugin": ^2.5.1
     "@types/node": ^17.0.18
@@ -5028,7 +5068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-protobuf@npm:^3.13.0, google-protobuf@npm:^3.17.3":
+"google-protobuf@npm:^3.13.0, google-protobuf@npm:^3.17.3, google-protobuf@npm:^3.19.4":
   version: 3.19.4
   resolution: "google-protobuf@npm:3.19.4"
   checksum: c0ebc0afbb635271b54db933be74441429e0df095347d0145ae7036377a2cc6fc402ed015855ebc1809c7cedfde3246344ad28a98eac1e6a21800c7b572b2caf
