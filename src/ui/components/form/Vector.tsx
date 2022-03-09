@@ -29,9 +29,9 @@ const Title = ({ nestingNumber, count, type }: TitleProps) => {
   //const vecColor = count == 1 ? 'text-white' : 'text-gray-300';
   return (
     <div className={'flex justify-start'}>
-      <div className={count == 1 ? 'text-white' : ''}>{'Vec<'}</div>
+      <div className={count == 1 ? 'dark:text-white text-gray-600' : ''}>{'Vec<'}</div>
       <Title nestingNumber={nestingNumber} count={count - 1} type={type} />
-      <div className={count == 1 ? 'text-white' : ''}>{'>'}</div>
+      <div className={count == 1 ? 'dark:text-white text-gray-600' : ''}>{'>'}</div>
     </div>
   );
 };
@@ -51,12 +51,12 @@ export function Vector({
   return (
     <div
       className={`p-4 text-left text-sm ${
-        isOddNesting ? 'bg-gray-900' : 'bg-gray-500'
+        isOddNesting ? 'dark:bg-gray-900 bg-white' : 'dark:bg-gray-500 bg-gray-100'
       } rounded border dark:border-gray-500 border-gray-200`}
     >
       <div className="flex justify-between align-middle">
         <div className="table mt-2 mb-4">
-          <div className="table-cell align-middle font-mono font-bold text-gray-300">
+          <div className="table-cell align-middle font-mono font-bold dark:text-gray-300 text-gray-400">
             <Title
               nestingNumber={nestingNumber}
               type={(type?.sub as TypeDef)?.type || ''}
