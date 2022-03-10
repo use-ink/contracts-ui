@@ -84,3 +84,9 @@
 .account-select .dropdown__control {
   min-height: 68px;
 }
+
+.dropdown .dropdown__control .font-mono,
+.dropdown .dropdown__menu .font-mono,
+.dropdown.chain .dropdown__single-value .font-mono {
+  @apply text-xs;
+}
