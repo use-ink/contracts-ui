@@ -5,6 +5,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { isBn } from '@polkadot/util';
+import { encodeTypeDef } from '@polkadot/types';
 import { MessageSignature } from '../message/MessageSignature';
 import { CallResult } from 'types';
 import { useApi } from 'ui/contexts';
@@ -14,6 +15,7 @@ interface Props {
   result: CallResult;
   date: string;
 }
+
 export const QueryResult = ({ result: { time, data, message, error }, date }: Props) => {
   const { api } = useApi();
 
@@ -28,7 +30,11 @@ export const QueryResult = ({ result: { time, data, message, error }, date }: Pr
           <MessageSignature message={message} />
         </div>
         <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono">{`${
-          isBn(data) ? fromSats(api, data) : data
+          message.returnType &&
+          encodeTypeDef(api.registry, message.returnType) === 'u128' &&
+          isBn(data)
+            ? fromSats(api, data)
+            : data
         }`}</div>
       </div>
       {error && (
