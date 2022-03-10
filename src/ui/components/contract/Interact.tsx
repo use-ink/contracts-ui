@@ -184,6 +184,7 @@ export const InteractTab = ({ contract }: Props) => {
             {argValues && (
               <ArgumentForm
                 args={message.args || []}
+                registry={contract.abi.registry}
                 setArgValues={setArgValues}
                 argValues={argValues}
               />

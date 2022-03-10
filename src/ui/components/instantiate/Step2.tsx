@@ -88,6 +88,7 @@ export function Step2() {
             <ArgumentForm
               key={`args-${deployConstructor.method}`}
               args={deployConstructor.args}
+              registry={metadata.registry}
               setArgValues={setArgValues}
               argValues={argValues}
             />
