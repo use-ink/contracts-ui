@@ -24,7 +24,7 @@ function Select({
   isDisabled,
   onChange,
   options,
-  placeholder = 'Select Adress...',
+  placeholder = 'Select Address...',
   className,
   value,
 }: DropdownProps<string>) {
