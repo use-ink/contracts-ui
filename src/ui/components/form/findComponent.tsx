@@ -12,11 +12,11 @@ import { Enum } from './Enum';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } from 'types';
 
 // nestingNumber counts the depth of nested components
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function findComponent(
   registry: Registry,
   type: TypeDef,
   nestingNumber = 0
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): React.ComponentType<ArgComponentProps<any>> {
   if (type.info === TypeDefInfo.Si) {
     return findComponent(registry, registry.lookup.getTypeDef(type.type));
@@ -35,7 +35,7 @@ export function findComponent(
     );
   }
   if (type.sub && !Array.isArray(type.sub)) {
-    const Component = findComponent(registry, type.sub as TypeDef, nestingNumber + 1);
+    const Component = findComponent(registry, type.sub, nestingNumber + 1);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
     return (props: any) => Vector({ Component, props: { ...props, nestingNumber, type } });
   }
