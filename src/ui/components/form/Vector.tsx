@@ -26,7 +26,6 @@ type TitleProps = {
 
 const Title = ({ nestingNumber, count, type }: TitleProps) => {
   if (count == 0) return <>{type}</>;
-  //const vecColor = count == 1 ? 'text-white' : 'text-gray-300';
   return (
     <div className={'flex justify-start'}>
       <div className={count == 1 ? 'dark:text-white text-gray-600' : ''}>{'Vec<'}</div>
