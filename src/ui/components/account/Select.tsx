@@ -24,7 +24,7 @@ function Select({
   isDisabled,
   onChange,
   options,
-  placeholder = 'No Addresses Found',
+  placeholder = 'Select Adress...',
   className,
   value,
 }: DropdownProps<string>) {
@@ -42,10 +42,7 @@ function Select({
   );
 }
 
-export function AccountSelect({
-  placeholder = 'No Accounts Found',
-  ...props
-}: Props) {
+export function AccountSelect({ placeholder = 'No Accounts Found', ...props }: Props) {
   const { keyring } = useApi();
 
   return (
@@ -54,13 +51,10 @@ export function AccountSelect({
       placeholder={placeholder}
       {...props}
     />
-  )
+  );
 }
 
-export function AddressSelect({
-  placeholder = 'No Addresses Found',
-  ...props
-}: Props) {
+export function AddressSelect({ placeholder = 'No Addresses Found', ...props }: Props) {
   const { keyring } = useApi();
   const { myContracts } = useDatabase();
 
@@ -102,11 +96,5 @@ export function AddressSelect({
     ];
   }, [keyring, myContracts?.owned, myContracts?.starred]);
 
-  return (
-    <Select
-      options={options}
-      placeholder={placeholder}
-      {...props}
-    />
-  );
+  return <Select options={options} placeholder={placeholder} {...props} />;
 }
