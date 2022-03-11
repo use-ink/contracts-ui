@@ -51,7 +51,7 @@ export function Vector({
   return (
     <div
       className={`p-4 text-left text-sm ${
-        isOddNesting ? 'dark:bg-gray-900 bg-white' : 'dark:bg-gray-500 bg-gray-100'
+        isOddNesting ? 'dark:bg-gray-900 bg-white' : 'dark:bg-elevation-1 bg-gray-100'
       } rounded border dark:border-gray-500 border-gray-200`}
     >
       <div className="flex justify-between align-middle">
