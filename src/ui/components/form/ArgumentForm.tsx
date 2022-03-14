@@ -5,19 +5,20 @@ import React from 'react';
 import { ArgSignature } from '../message/ArgSignature';
 import { Form, FormField } from './FormField';
 import { findComponent } from './findComponent';
-import type { AbiParam, SetState } from 'types';
+import { AbiParam, Registry, SetState } from 'types';
 
 interface Props {
   args: AbiParam[];
   argValues: Record<string, unknown>;
+  registry: Registry;
   setArgValues: SetState<Record<string, unknown>>;
 }
 
-export function ArgumentForm({ args, argValues, setArgValues }: Props) {
+export function ArgumentForm({ args, argValues, registry, setArgValues }: Props) {
   return (
     <Form>
       {args.map(arg => {
-        const Component = findComponent(arg.type);
+        const Component = findComponent(registry, arg.type);
 
         const onChange = (value: unknown) => {
           setArgValues(prev => ({

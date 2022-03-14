@@ -6,6 +6,10 @@
   @apply block mb-1.5 text-sm font-semibold dark:text-white;
 }
 
+.form-field > label .font-mono {
+  @apply text-xs;
+}
+
 .form-field > .validation {
   @apply mt-2 text-sm;
 }

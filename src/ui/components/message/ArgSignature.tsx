@@ -4,11 +4,11 @@
 import React from 'react';
 import { encodeTypeDef } from '@polkadot/types/create';
 import { useApi } from 'ui/contexts/ApiContext';
-import { AbiParam } from 'types';
+import { TypeDef } from 'types';
 import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  arg: AbiParam;
+  arg: { name?: string; type: TypeDef };
   value?: string;
 }
 
@@ -27,7 +27,10 @@ export function ArgSignature({ arg: { name, type }, children, className, value, 
 
   return (
     <span className={classes('font-mono', className)} {...props}>
-      {name}: <span>{value ? <b>{truncate(value)}</b> : encodeTypeDef(api.registry, type)}</span>
+      {name ? `${name}: ` : ''}
+      <span>
+        {value ? <b>{truncate(value)}</b> : type.typeName || encodeTypeDef(api.registry, type)}
+      </span>
       {children}
     </span>
   );

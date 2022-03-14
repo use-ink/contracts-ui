@@ -101,7 +101,7 @@ export function Step2() {
     dbStorageDepositLimit,
     dbWeight,
     isUsingSalt,
-    isUsingStorageDepositLimit
+    isUsingStorageDepositLimit,
   ]);
 
   useEffect((): void => {
@@ -136,6 +136,7 @@ export function Step2() {
             <ArgumentForm
               key={`args-${deployConstructor.method}`}
               args={deployConstructor.args}
+              registry={metadata.registry}
               setArgValues={setArgValues}
               argValues={argValues}
             />
