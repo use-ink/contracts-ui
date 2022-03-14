@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import { InteractTab } from '../components/contract/Interact';
@@ -19,7 +20,7 @@ const TABS = [
     label: (
       <>
         <BookOpenIcon />
-        Metadata
+        <Trans key='metadata'>Metadata</Trans>
       </>
     ),
   },
@@ -28,7 +29,7 @@ const TABS = [
     label: (
       <>
         <PlayIcon />
-        Interact
+        <Trans key='interact'>Interact</Trans>
       </>
     ),
   },
@@ -64,16 +65,21 @@ export function Contract() {
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
         help={
-          <>
-            You instantiated this contract from{' '}
-            <Link
-              to={`/instantiate/${document.codeHash}`}
-              className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
-            >
-              {projectName}
-            </Link>{' '}
-            on {displayDate(document.date)}
-          </>
+          
+          <Trans i18nKey="contractPageHelp" projectName={projectName} date={displayDate(document.date)}>
+              You instantiated this contract from
+              {' '}
+              <Link
+                to={`/instantiate/${document.codeHash}`}
+                className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
+              >
+                {{projectName}}
+              </Link>
+              {' '}
+              on
+              {' '}
+              {{ date: displayDate(document.date) }}
+          </Trans>
         }
       >
         <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>

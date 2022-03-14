@@ -3,6 +3,8 @@
 
 import { isWasm, u8aToString } from '@polkadot/util';
 import { useEffect, useState } from 'react';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { useApi } from 'ui/contexts/ApiContext';
 import { Abi, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
 
@@ -23,6 +25,7 @@ interface Callbacks {
 }
 
 function deriveFromJson(
+  t: TFunction,
   options: DeriveOptions,
   source?: Record<string, unknown>,
   api?: ApiPromise | null
@@ -43,7 +46,7 @@ function deriveFromJson(
       name,
       value,
       isSupplied: true,
-      ...validate(value, options),
+      ...validate(t, value, options),
     };
   } catch (e) {
     console.error(e);
@@ -53,7 +56,7 @@ function deriveFromJson(
       name: '',
       value,
       isSupplied: true,
-      ...validate(value, options),
+      ...validate(t, value, options),
     };
   }
 }
@@ -66,13 +69,13 @@ const EMPTY: MetadataState = {
   message: null,
 };
 
-function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
+function validate(t: TFunction, metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
   if (!metadata) {
     return {
       isValid: false,
       isError: true,
       message:
-        'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.',
+        t('metadataInvalidFormat', 'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.'),
     };
   }
 
@@ -84,7 +87,7 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
     return {
       isValid: false,
       isError: true,
-      message: 'This contract bundle has an empty or invalid WASM field.',
+      message: t('metadataWasmMissing', 'This contract bundle has an empty or invalid WASM field.'),
     };
   }
 
@@ -92,7 +95,9 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
     isValid: true,
     isError: false,
     isSuccess: true,
-    message: isWasmRequired ? 'Valid contract bundle!' : 'Valid metadata file!',
+    message: isWasmRequired
+      ? t('metadataValidBundle', 'Valid contract bundle!')
+      : t('metadataValidFile', 'Valid metadata file!'),
   };
 }
 
@@ -100,11 +105,12 @@ export function useMetadata(
   initialValue?: Record<string, unknown>,
   options: Options & Callbacks = {}
 ): UseMetadata {
+  const { t } = useTranslation();
   const { api } = useApi();
 
   const { isWasmRequired = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
-    deriveFromJson({ isWasmRequired }, initialValue, api)
+    deriveFromJson(t, { isWasmRequired }, initialValue, api)
   );
 
   function onChange(file: FileState): void {
@@ -112,7 +118,7 @@ export function useMetadata(
       const json = JSON.parse(u8aToString(file.data)) as Record<string, unknown>;
       const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
 
-      const newState = deriveFromJson({ isWasmRequired, name }, json, api);
+      const newState = deriveFromJson(t, { isWasmRequired, name }, json, api);
 
       setState(newState);
 
@@ -122,7 +128,7 @@ export function useMetadata(
 
       setState({
         ...EMPTY,
-        message: 'This contract file is not in a valid format.',
+        message: t('metadataInvalidFormatShort', 'This contract file is not in a valid format.'),
         isError: true,
         isSupplied: true,
         isValid: false,
@@ -138,8 +144,8 @@ export function useMetadata(
   }
 
   useEffect((): void => {
-    setState(deriveFromJson({ isWasmRequired }, initialValue, api));
-  }, [api, initialValue, isWasmRequired]);
+    setState(deriveFromJson(t, { isWasmRequired }, initialValue, api));
+  }, [t, api, initialValue, isWasmRequired]);
 
   return {
     ...state,

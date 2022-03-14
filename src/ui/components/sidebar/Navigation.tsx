@@ -3,16 +3,19 @@
 
 import React from 'react';
 import { DocumentAddIcon, CollectionIcon } from '@heroicons/react/outline';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from './NavLink';
 
 export function Navigation() {
+  const { t } = useTranslation();
+
   return (
     <div className="navigation">
       <NavLink to={`/add-contract`} icon={DocumentAddIcon}>
-        Add New Contract
+        {t('addNewContract', 'Add New Contract')}
       </NavLink>
       <NavLink icon={CollectionIcon} to={`/`} end>
-        All Contracts
+        {t('allContracts', 'All Contracts')}
       </NavLink>
     </div>
   );

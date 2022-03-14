@@ -4,16 +4,20 @@
 import React from 'react';
 import { DocumentTextIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from './NavLink';
 import { useDatabase } from 'ui/contexts';
 
 export function QuickLinks() {
+  const { t } = useTranslation();
   const { myContracts } = useDatabase();
 
   return (
     <div className="quick-links">
       <div className="section your-contracts">
-        <div className="header">Your Contracts</div>
+        <div className="header">
+          {t('yourContracts', 'Your Contracts')}
+        </div>
         {myContracts?.owned && myContracts?.owned.length > 0 ? (
           myContracts?.owned?.map(({ name, address }) => {
             return (
@@ -24,9 +28,9 @@ export function QuickLinks() {
           })
         ) : (
           <div className="none-yet">
-            None yet&nbsp;
+            {t('noneYet', 'None yet')}&nbsp;
             {' • '}&nbsp;
-            <Link to={`/instantiate`}>Upload one</Link>
+            <Link to={`/instantiate`}>{t('uploadOne', 'Upload one')}</Link>
           </div>
         )}
       </div>

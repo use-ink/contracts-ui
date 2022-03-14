@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../form/Input';
 import { FormField } from '../form/FormField';
 import { SearchResults } from '../common/SearchResults';
@@ -12,6 +13,7 @@ import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';
 
 export function LookUpCodeHash() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [codeHash, setCodeHash] = useState('');
@@ -33,12 +35,12 @@ export function LookUpCodeHash() {
   }, [codeHash]);
 
   return (
-    <FormField className="h-36 relative" label="Look Up Code Hash">
+    <FormField className="h-36 relative" label={t('lookUpCodeHash', 'Look Up Code Hash')}>
       <Input
         className={classes('relative flex items-center', isOnChain && 'font-mono')}
         isDisabled={isOnChain}
         onChange={setSearchString}
-        placeholder="Paste a code hash or search for existing code bundles already on-chain"
+        placeholder={t('codeHashPlaceholder', 'Paste a code hash or search for existing code bundles already on-chain')}
         value={searchString}
       >
         {isOnChain && (
@@ -61,7 +63,7 @@ export function LookUpCodeHash() {
           error={error}
           isError={!isValid}
           isSuccess={isValid}
-          name={document?.name || 'On-chain Code Exists'}
+          name={document?.name || t('onChainCodeExists', 'On-chain Code Exists')}
           onClick={isValid ? () => navigate(`/instantiate/${codeHash}`) : undefined}
         />
       )}

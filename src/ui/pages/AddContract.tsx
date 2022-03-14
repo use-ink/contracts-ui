@@ -4,18 +4,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, CodeIcon, UploadIcon } from '@heroicons/react/outline';
+import { useTranslation } from 'react-i18next';
 import { Page } from 'ui/templates';
 
 export function AddContract() {
+  const { t } = useTranslation();
+
   return (
     <Page
-      header="Add New Contract"
-      help={
-        <>
-          You can upload and instantiate new contract code, or use contract code that already exists
-          on-chain.
-        </>
-      }
+      header={t('addContractTitle', 'Add New Contract')}
+      help={t('addContractHelp', 'You can upload and instantiate new contract code, or use contract code that already exists on-chain.')}
     >
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -29,7 +27,7 @@ export function AddContract() {
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
-                      <span>Upload New Contract Code</span>
+                      <span>{t('uploadNewContractCode', 'Upload New Contract Code')}</span>
                     </div>
                     <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                   </Link>
@@ -40,7 +38,7 @@ export function AddContract() {
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <CodeIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
-                      <span>Use Existing Contract Code</span>
+                      <span>{t('useExistingContractCode', 'Use Existing Contract Code')}</span>
                     </div>
                     <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                   </Link>

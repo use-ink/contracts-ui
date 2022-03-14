@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { BN_ZERO } from '@polkadot/util';
+import { useTranslation } from 'react-i18next';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export const InteractTab = ({ contract }: Props) => {
+  const { t } = useTranslation();
   const { api, keyring } = useApi();
   const {
     value: message,
@@ -163,7 +165,7 @@ export const InteractTab = ({ contract }: Props) => {
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
         <Form>
-          <FormField className="mb-8" id="accountId" label="Account" {...accountIdValidation}>
+          <FormField className="mb-8" id="accountId" label={t('account', 'Account')} {...accountIdValidation}>
             <AccountSelect
               id="accountId"
               className="mb-2"
@@ -171,7 +173,7 @@ export const InteractTab = ({ contract }: Props) => {
               onChange={setAccountId}
             />
           </FormField>
-          <FormField id="message" label="Message to Send" {...messageValidation}>
+          <FormField id="message" label={t('messageToSend', 'Message to Send')} {...messageValidation}>
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}
@@ -179,7 +181,7 @@ export const InteractTab = ({ contract }: Props) => {
               onChange={setMessage}
               value={message}
             >
-              No messages found
+              {t('noMessagesFound', 'No messages found')}
             </Dropdown>
             {argValues && (
               <ArgumentForm
@@ -192,15 +194,15 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
 
           {message.isPayable && (
-            <FormField id="value" label="Payment" {...valueValidation}>
-              <InputBalance value={value} onChange={setValue} placeholder="Value" />
+            <FormField id="value" label={t('payment', 'Payment')} {...valueValidation}>
+              <InputBalance value={value} onChange={setValue} />
             </FormField>
           )}
           <FormField
             id="maxGas"
-            label="Max Gas Allowed"
+            label={t('maxGasAllowed', 'Max Gas Allowed (M)')}
             isError={!weight.isValid}
-            message={!weight.isValid ? 'Invalid gas limit' : null}
+            message={!weight.isValid ? t('invalidGasLimit', 'Invalid gas limit') : null}
           >
             <InputGas
               estimatedWeight={estimatedWeight}
@@ -218,7 +220,7 @@ export const InteractTab = ({ contract }: Props) => {
               onClick={() => clickHandler()}
               variant="primary"
             >
-              Call
+              {t('call', 'Call')}
             </Button>
           ) : (
             <Button
@@ -226,7 +228,7 @@ export const InteractTab = ({ contract }: Props) => {
               onClick={read}
               variant="primary"
             >
-              Read
+              {t('read', 'Read')}
             </Button>
           )}
         </Buttons>

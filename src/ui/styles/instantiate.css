@@ -11,7 +11,7 @@
 }
 
 .review .field .key {
-  @apply dark:text-gray-300 text-gray-700 font-semibold mb-2;
+  @apply dark:text-gray-300 text-gray-700 capitalize font-semibold mb-2;
 }
 
 .review .field .value {

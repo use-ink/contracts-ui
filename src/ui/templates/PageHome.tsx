@@ -28,7 +28,7 @@ export function PageHome({
               </div>
             </div>
           </main>
-          <aside className="aside flex-none order-1 xl:order-2">{...aside}</aside>
+          <aside className="aside flex-none order-1 xl:order-2">{aside}</aside>
         </div>
       </div>
     </>

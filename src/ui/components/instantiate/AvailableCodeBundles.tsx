@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { FormField } from '../form/FormField';
 import { CodeHash } from './CodeHash';
@@ -16,6 +17,7 @@ interface ListProps {
 }
 
 function List({ items, label }: ListProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -41,7 +43,8 @@ function List({ items, label }: ListProps) {
           className="text-xs cursor-pointer dark:text-gray-500 dark:hover:text-gray-300"
           onClick={() => setIsExpanded(true)}
         >
-          → Show More
+          {'→ '}
+          {t('showMore', 'Show More')}
         </a>
       )}
     </FormField>
@@ -49,6 +52,7 @@ function List({ items, label }: ListProps) {
 }
 
 export function AvailableCodeBundles() {
+  const { t } = useTranslation();
   const { data } = useAvailableCodeBundles(PAGE_SIZE * 2);
 
   const [owned, popular] = data || [[], []];
@@ -60,10 +64,10 @@ export function AvailableCodeBundles() {
   return (
     <>
       <div className="text-sm py-4 text-center dark:text-gray-500">
-        Or choose from a code hash below
+        {t('codeHashListHelp', 'Or choose from a code hash below')}
       </div>
-      <List items={owned} label="Uploaded Contract Code" />
-      <List items={popular} label="Popular Contract Code" />
+      <List items={owned} label={t('uploadedContractCode', 'Uploaded Contract Code')} />
+      <List items={popular} label={t('popularContractCode', 'Popular Contract Code')} />
     </>
   );
 }

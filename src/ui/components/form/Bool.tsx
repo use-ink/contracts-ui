@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SimpleSpread, ValidFormField } from 'types';
 import { Dropdown } from 'ui/components/common/Dropdown';
 
@@ -19,5 +20,7 @@ const options = [
 ];
 
 export function Bool({ value, onChange, ...props }: Props) {
-  return <Dropdown {...props} onChange={onChange} options={options} value={value} />;
+  const { t } = useTranslation();
+
+  return <Dropdown {...props} onChange={onChange} options={options.map((option) => ({ ...option, label: t(option.label, option.label) }))} value={value} />;
 }

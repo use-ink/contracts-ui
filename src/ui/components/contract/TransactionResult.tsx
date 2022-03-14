@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronUpIcon } from '@heroicons/react/solid';
 import { Disclosure } from '@headlessui/react';
+import { useTranslation } from 'react-i18next';
 import { MessageSignature } from '../message/MessageSignature';
 import { Spinner } from '../common/Spinner';
 import type { CallResult } from 'types';
@@ -19,6 +20,8 @@ export const TransactionResult = ({
   result: { isComplete, time, message, blockHash, info, error, log },
   date,
 }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <Disclosure>
       {({ open }) => (
@@ -58,13 +61,13 @@ export const TransactionResult = ({
                     />
                   )}
                   <div className="pt-4 mb-4">
-                    <span className="mr-2">Included at #</span>
+                    <span className="mr-2">{t('includedAtNo', 'Included at #')}</span>
                     <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">
                       {`${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
                     </span>
                   </div>
                   <div>
-                    <span className="mr-2">Weight</span>
+                    <span className="mr-2">{t('weight', 'Weight')}</span>
                     <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">{`${info?.weight}`}</span>
                   </div>
                 </Disclosure.Panel>

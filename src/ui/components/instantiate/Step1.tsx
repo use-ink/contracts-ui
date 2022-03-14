@@ -3,6 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Button, Buttons } from '../common/Button';
 import {
   Form,
@@ -16,6 +17,7 @@ import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useInstantiate } from 'ui/contexts';
 
 export function Step1() {
+  const { t } = useTranslation();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   const { stepForward, setData, data, currentStep } = useInstantiate();
@@ -57,8 +59,8 @@ export function Step1() {
             codeHash={codeHashUrlParam}
             name={
               isUsingStoredMetadata
-                ? metadata?.info?.contract.name.toString() || 'Contract'
-                : 'Unidentified Code'
+                ? metadata?.info?.contract.name.toString() || t('contract', 'Contract')
+                : t('unidentifiedCode', 'Unidentified Code')
             }
           />
         )}
@@ -70,7 +72,7 @@ export function Step1() {
           onClick={submitStep1}
           variant="primary"
         >
-          Next
+          {t('next', 'Next')}
         </Button>
       </Buttons>
     </Loader>

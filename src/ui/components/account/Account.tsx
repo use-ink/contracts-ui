@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Identicon } from './Identicon';
 import { classes, truncate } from 'ui/util';
 import { OrFalsy } from 'types';
@@ -13,8 +14,9 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Account({ className, name: propsName, value }: Props) {
+  const { t } = useTranslation();
   const account = useAccount(value);
-  const name = propsName || account?.meta.name || 'Account';
+  const name = propsName || account?.meta.name || t('account', 'Account');
 
   if (!value) {
     return null;

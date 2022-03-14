@@ -3,6 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { BN_MILLION, BN_ZERO } from '@polkadot/util';
+import { useTranslation } from 'react-i18next';
 import { InputNumber } from './InputNumber';
 import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
 import { classes } from 'ui/util';
@@ -33,7 +34,9 @@ export function InputGas({
   withEstimate,
   ...props
 }: Props) {
+  const { t } = useTranslation();
   const { api } = useApi();
+
   useEffect((): void => {
     if (estimatedWeight || withEstimate) {
       setIsEmpty(true);
@@ -47,13 +50,17 @@ export function InputGas({
       <InputNumber value={megaGas} isDisabled={isEmpty} onChange={setMegaGas} placeholder="MGas" />
       <div className="relative pt-2">
         <div className="text-gray-500 text-xs pb-2">
-          {executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)}s execution time (
-          {percentage.toFixed(2)}% of block time)
+          {t('inputGasExecutionTime', '{{executionTime}}s execution time ({{percentage}}% of block time)', {
+            replace: {
+              executionTime: executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3),
+              percentage: percentage.toFixed(2)
+            }
+          })}
           {withEstimate && (
             <div className="float-right">
               {isEmpty ? (
                 <>
-                  {isCall ? 'Using Estimated Gas' : 'Using Maximum Query Gas'}
+                  {isCall ? t('usingEstimatedGas', 'Using Estimated Gas') : t('usingMaximumQueryGas', 'Using Maximum Query Gas')}
                   &nbsp;{' · '}&nbsp;
                   <a
                     href="#"
@@ -64,7 +71,7 @@ export function InputGas({
                     }}
                     className="text-blue-500"
                   >
-                    Use Custom
+                    {t('useCustomWeight', 'Use Custom')}
                   </a>
                 </>
               ) : (
@@ -79,10 +86,15 @@ export function InputGas({
                   className="text-blue-500"
                 >
                   {isCall
-                    ? `Use Estimated Weight (${(estimatedWeight || BN_ZERO)
-                        .div(BN_MILLION)
-                        .toString()}M)`
-                    : 'Use Maximum Query Gas'}
+                    ? t('useEstimatedWeight', 'Use Estimated Weight ({{estimatedWeight}}M)', {
+                      replace: {
+                        estimatedWeight: (estimatedWeight || BN_ZERO)
+                          .div(BN_MILLION)
+                          .toString()
+                      }
+                    })
+                    : t('useMaximumQueryGas', 'Use Maximum Query Gas')
+                  }
                 </a>
               )}
             </div>

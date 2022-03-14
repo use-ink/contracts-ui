@@ -4,13 +4,16 @@
 import React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import { BookOpenIcon } from '@heroicons/react/solid';
+import { useTranslation } from 'react-i18next';
 import { GithubLogo, StackExchangeLogo, ElementLogo } from './Logos';
 import { ModalBase as Modal } from './ModalBase';
 import type { ModalProps } from './ModalBase';
 
 export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
+  const { t } = useTranslation();
+
   return (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Help">
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} title={t('helpModalTitle', 'Help')}>
       <ul className="dark:text-gray-200 text-gray-600 text-sm">
         <li>
           <a
@@ -24,9 +27,11 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <BookOpenIcon className="h-5 w-5 text-indigo-400" aria-hidden="true" />
               </div>
               <div className="flex flex-col">
-                <strong>ink! Docs</strong>
+                <strong>
+                  {t('inkDocsTitle', 'ink! Docs')}
+                </strong>
                 <span className="dark:text-gray-400 text-gray-500">
-                  Read more about the ink! smart contract language.
+                  {t('inkDocsText', 'Read more about the ink! smart contract language.')}
                 </span>
               </div>
             </div>
@@ -45,9 +50,11 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <StackExchangeLogo />
               </div>
               <div className="flex flex-col">
-                <strong>Stack Exchange</strong>
+                <strong>
+                  {t('stackExchangeTitle', 'Stack Exchange')}
+                </strong>
                 <span className="dark:text-gray-400 text-gray-500">
-                  Browse through common questions.{' '}
+                  {t('stackExchangeText', 'Browse through common questions.')}{' '}
                 </span>
               </div>
             </div>
@@ -66,9 +73,11 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <ElementLogo />
               </div>
               <div className="flex flex-col">
-                <strong>Element Channel</strong>
+                <strong>
+                  {t('elementTitle', 'Element Channel')}
+                </strong>
                 <span className="dark:text-gray-400 text-gray-500">
-                  Ask questions and help others.{' '}
+                  {t('elementText', 'Ask questions and help others.')}{' '}
                 </span>
               </div>
             </div>
@@ -87,9 +96,10 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <GithubLogo />
               </div>
               <div className="flex flex-col">
-                <strong>Github Repo</strong>
+                <strong>
+                  {t('githubTitle', 'Github Repo')}</strong>
                 <span className="dark:text-gray-400 text-gray-500">
-                  Let us know if there is an issue.{' '}
+                  {t('githubText', 'Let us know if there is an issue.')}{' '}
                 </span>
               </div>
             </div>

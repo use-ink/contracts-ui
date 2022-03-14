@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Disclosure } from '@headlessui/react';
@@ -14,6 +15,8 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const MessageDocs = ({ message, message: { docs } }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
@@ -29,7 +32,7 @@ export const MessageDocs = ({ message, message: { docs } }: Props) => {
             {docs.length ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{docs.join('\r\n')}</ReactMarkdown>
             ) : (
-              <i>No documentation provided</i>
+              <i>{t('noDocumentationProvided', 'No documentation provided')}</i>
             )}
           </Disclosure.Panel>
         </div>

@@ -4,9 +4,11 @@
 import React, { useState } from 'react';
 import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { HelpModal } from 'ui/components/modal';
 
 export function Footer() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -17,7 +19,7 @@ export function Footer() {
           onClick={() => setIsOpen(true)}
         >
           <ChatAltIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-          Help &amp; Feedback
+          {t('helpAndFeedback', 'Help & Feedback')}
         </a>
         <Link to="/settings">
           <CogIcon

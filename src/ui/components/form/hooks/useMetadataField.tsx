@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { FormField, getValidation } from '../FormField';
 import { InputFile } from '../InputFile';
 import { FileState } from 'types';
@@ -10,6 +11,7 @@ import { useMetadata } from 'ui/hooks/useMetadata';
 import { useCodeBundle } from 'ui/hooks/useCodeBundle';
 
 export const useMetadataField = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
@@ -42,11 +44,11 @@ export const useMetadataField = () => {
     return (
       <FormField
         id="metadata"
-        label={codeHashUrlParam ? 'Upload Metadata' : 'Upload Contract Bundle'}
+        label={codeHashUrlParam ? t('uploadMetadata', 'Upload Metadata') : t('uploadContractBundle', 'Upload Contract Bundle')}
         {...getValidation(metadata)}
       >
         <InputFile
-          placeholder="Click to select or drag & drop to upload file."
+          placeholder={t('inputFileHelp', 'Click to select or drag and drop to upload file.')}
           onChange={metadata.onChange}
           onRemove={metadata.onRemove}
           isError={metadata.isError}

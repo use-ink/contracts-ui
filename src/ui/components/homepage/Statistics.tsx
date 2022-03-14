@@ -5,11 +5,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../common/Button';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useStatistics } from 'ui/hooks';
 
 export function Statistics(): React.ReactElement | null {
+  const { t } = useTranslation();
   const { api } = useApi();
   const { user } = useDatabase();
 
@@ -34,12 +36,12 @@ export function Statistics(): React.ReactElement | null {
 
   const entries = useMemo((): Record<string, React.ReactNode> => {
     return {
-      'Highest Block': `#${formatNumber(blockNumber)}`,
-      Nodes: 1,
-      'Code Bundles Uploaded': statistics?.codeBundlesCount || 0,
-      'Contracts Instantiated': statistics?.contractsCount || 0,
+      [t('highestBlock', 'Highest Block')]: `#${formatNumber(blockNumber)}`,
+      [t('nodes', 'Nodes')]: 1,
+      [t('codeBundlesUploaded', 'Code Bundles Uploaded')]: statistics?.codeBundlesCount || 0,
+      [t('contractsInstantiated', 'Contracts Instantiated')]: statistics?.contractsCount || 0,
     };
-  }, [blockNumber, statistics]);
+  }, [t, blockNumber, statistics]);
 
   const onClickStar = useCallback(
     (id: string) => () => {
@@ -55,7 +57,9 @@ export function Statistics(): React.ReactElement | null {
   return (
     <>
       <div className="grid grid-cols-4 xl:grid-cols-2 w-full mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
-        <div className="text-sm mb-4 col-span-4 xl:col-span-2 w-full">Chain Metrics</div>
+        <div className="text-sm mb-4 col-span-4 xl:col-span-2 w-full">
+          {t('statisticsHeader', 'Chain Metrics')}
+        </div>
         {Object.entries(entries).map(([label, value], i) => {
           return (
             <div key={`entry-${i}`} className="mb-4">
@@ -67,7 +71,9 @@ export function Statistics(): React.ReactElement | null {
       </div>
       {(statistics?.mostPopularCodeBundles || []).length > 0 && (
         <div className="grid grid-cols-4 xl:grid-cols-2 w-full">
-          <div className="text-sm mb-4 col-span-4 xl:col-span-4">Popular Contract Code</div>
+          <div className="text-sm mb-4 col-span-4 xl:col-span-4">
+            {t('popularContractCode', 'Popular Contract Code')}
+          </div>
           {statistics?.mostPopularCodeBundles.map(({ id, name, instances, stars }, i) => {
             const isStarred = user?.contractsStarred.includes(id);
 
@@ -90,7 +96,7 @@ export function Statistics(): React.ReactElement | null {
                     aria-hidden="true"
                     fontSize="1.5rem"
                   />
-                  {instances} instances
+                  {t('noInstances', '{{instances}} instances', { replace: { instances } })}
                 </Button>
               </div>
             );

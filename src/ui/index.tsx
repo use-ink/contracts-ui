@@ -7,6 +7,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import App from 'ui/components/App';
 import './styles/main.css';
 import '@polkadot/api-augment';
+import '../i18n';
 import { AddContract, Contract, Homepage, Instantiate, SelectCodeHash, Settings } from 'ui/pages';
 
 const root = document.getElementById('app-root');

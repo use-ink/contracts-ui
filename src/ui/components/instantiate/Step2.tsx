@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { isHex, isNumber } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
+import { useTranslation } from 'react-i18next';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
@@ -22,6 +23,7 @@ import { useToggle } from 'ui/hooks/useToggle';
 import type { AbiMessage } from 'types';
 
 export function Step2() {
+  const { t } = useTranslation();
   const {
     data: { metadata },
     stepBackward,
@@ -69,7 +71,7 @@ export function Step2() {
   return metadata ? (
     <>
       <Form>
-        <FormField id="constructor" label="Deployment Constructor">
+        <FormField id="constructor" label={t('constructorLabel', 'Deployment Constructor')}>
           <Dropdown
             id="constructor"
             options={createConstructorOptions(metadata.constructors)}

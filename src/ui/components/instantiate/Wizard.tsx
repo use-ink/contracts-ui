@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { Step3 } from './Step3';
@@ -9,12 +10,13 @@ import { Stepper } from './Stepper';
 import { useInstantiate } from 'ui/contexts';
 
 const steps = [
-  { name: 'Contract Bundle', index: 1 },
-  { name: 'Deployment Info', index: 2 },
-  { name: 'Confirmation', index: 3 },
+  { name: ['instantiateStep1', 'Contract Bundle'], index: 1 },
+  { name: ['instantiateStep2', 'Deployment Info'], index: 2 },
+  { name: ['instantiateStep3', 'Confirmation'], index: 3 },
 ];
 
 export function Wizard() {
+  const { t } = useTranslation();
   const {
     data: { metadata },
   } = useInstantiate();
@@ -26,7 +28,10 @@ export function Wizard() {
         <Step3 />
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
-        <Stepper steps={steps} />
+        <Stepper steps={steps.map((step) => ({
+          ...step,
+          name: t(step.name[0], step.name[1])
+        }))} />
       </aside>
     </div>
   );

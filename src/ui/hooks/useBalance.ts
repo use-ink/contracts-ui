@@ -4,6 +4,7 @@
 import { BN_ONE, BN_TWO, BN_ZERO, isBn } from '@polkadot/util';
 import BN from 'bn.js';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFormField } from './useFormField';
 import { toBalance, toSats } from 'api/util';
 import { useApi } from 'ui/contexts/ApiContext';
@@ -28,6 +29,7 @@ export function useBalance(
   isZeroable = false,
   maxValue?: BN
 ): UseBalance {
+  const { t } = useTranslation();
   const { api } = useApi();
 
   const validate = useCallback(
@@ -47,27 +49,27 @@ export function useBalance(
 
       if (value?.lt(BN_ZERO)) {
         isError = true;
-        message = 'Value cannot be negative';
+        message = t('balanceNegative', 'Value cannot be negative');
       }
 
       if (value?.gt(getGlobalMaxValue(bitLength))) {
         isError = true;
-        message = 'Value exceeds global maximum';
+        message = t('balanceGlobalMaximum', 'Value exceeds global maximum');
       }
 
       if (!isZeroable && value?.isZero()) {
         isError = true;
-        message = 'Value cannot be zero';
+        message = t('balanceNonZero', 'Value cannot be zero');
       }
 
       if (value && value?.bitLength() > (bitLength || DEFAULT_BITLENGTH)) {
         isError = true;
-        message = "Value's bitlength is too high";
+        message = t('balanceBitlength', 'Value\'s bitlength is too high');
       }
 
       if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
         isError = true;
-        message = `Value cannot exceed ${maxValue?.toNumber()}`;
+        message = t('balanceMaximum', 'Value cannot exceed {{maxValue}}', { replace: { maxValue: maxValue.toNumber() } });
       }
 
       return {
@@ -76,7 +78,7 @@ export function useBalance(
         message,
       };
     },
-    []
+    [t]
   );
 
   const balance = useFormField<BN>(

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Switch } from '../common/Switch';
 import { Input } from './Input';
 import { SimpleSpread, ValidFormField } from 'types';
@@ -15,6 +16,8 @@ type Props = SimpleSpread<
 >;
 
 export function InputSalt({ isError, onChange, value, isActive = false, toggleIsActive }: Props) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center">
       <Input
@@ -24,7 +27,7 @@ export function InputSalt({ isError, onChange, value, isActive = false, toggleIs
         isError={isError}
         value={isActive ? value : ''}
         onChange={onChange}
-        placeholder={isActive ? '0x' : 'Do not use'}
+        placeholder={isActive ? '0x' : t('doNotUse', 'Do not use')}
       />
       <div className="flex justify-center items-center w-18">
         <Switch value={isActive} onChange={toggleIsActive} />
