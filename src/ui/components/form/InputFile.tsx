@@ -1,4 +1,3 @@
-/* eslint-disable header/header */
 // Copyright 2021 @paritytech/contracts-ui authors & contributors
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
