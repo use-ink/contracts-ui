@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useContext, useEffect } from 'react';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 

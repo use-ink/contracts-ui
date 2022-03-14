@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useState } from 'react';
 import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';

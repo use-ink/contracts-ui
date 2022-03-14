@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 // types & interfaces
 export type { AnyJson, Codec, Registry, RegistryError, TypeDef } from '@polkadot/types/types';
 export type { DispatchError, EventRecord, Weight, ChainType } from '@polkadot/types/interfaces';

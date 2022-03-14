@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React from 'react';
 import { DocumentAddIcon, CollectionIcon } from '@heroicons/react/outline';
 import { NavLink } from './NavLink';

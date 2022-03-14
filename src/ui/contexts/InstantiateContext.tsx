@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';

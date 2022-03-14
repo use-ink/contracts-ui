@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { TypeRegistry } from '@polkadot/types/create';
 import { DEFAULT_DECIMALS } from '../constants';
 import { blockTimeMs } from 'api/util/blockTime';

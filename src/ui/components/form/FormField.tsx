@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import React, { useMemo } from 'react';
 import type { Validation } from 'types';

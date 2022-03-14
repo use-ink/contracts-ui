@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React from 'react';
 import { MessageSignature } from '../components/message/MessageSignature';
 import { AbiConstructor, AbiMessage, DropdownOption, ContractDocument, KeyringPair } from 'types';

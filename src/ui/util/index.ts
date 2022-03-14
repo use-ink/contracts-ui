@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { twMerge } from 'tailwind-merge';

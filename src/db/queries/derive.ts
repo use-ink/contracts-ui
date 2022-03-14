@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { getCodeBundleCollection, getContractCollection } from './util';
 // import { findTopCodeBundles } from "./codeBundle";
 import type { Database, DbStatistics } from 'types';

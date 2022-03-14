@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { isNumber } from '@polkadot/util';
 import { encodeSalt, transformUserInput } from '../util';

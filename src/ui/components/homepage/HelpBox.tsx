@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { Button } from '../common/Button';

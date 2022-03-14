@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { SubmittableResult } from '@polkadot/api';
 import { VoidFn } from '@polkadot/api/types';
 import { isNull } from '@polkadot/util';

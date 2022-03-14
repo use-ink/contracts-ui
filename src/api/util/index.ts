@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';

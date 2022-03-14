@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import type { Reducer } from 'react';
 import { NULL_CHAIN_PROPERTIES } from '../../constants';
 import type { ApiAction, ApiState } from 'types';

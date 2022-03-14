@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';

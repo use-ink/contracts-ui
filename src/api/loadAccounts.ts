@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { keyring as Keyring } from '@polkadot/ui-keyring';
 import { isTestChain } from '@polkadot/util';

@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { BN_THOUSAND, BN_TWO, BN } from '@polkadot/util';
 import { ApiPromise, OrFalsy } from 'types';
 

@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React from 'react';
 import { ArgSignature } from '../message/ArgSignature';
 import { Form, FormField } from './FormField';

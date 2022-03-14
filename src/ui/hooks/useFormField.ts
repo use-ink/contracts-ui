@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { isNull, isUndefined } from '@polkadot/util';

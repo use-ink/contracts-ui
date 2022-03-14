@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import type { Database, PrivateKey } from '@textile/threaddb';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';

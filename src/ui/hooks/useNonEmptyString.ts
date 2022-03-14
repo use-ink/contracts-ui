@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useCallback } from 'react';
 import { useFormField } from './useFormField';
 import type { ValidFormField, Validation } from 'types';

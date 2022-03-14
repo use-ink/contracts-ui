@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useReducer, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { INIT_STATE, RPCS } from '../../constants';

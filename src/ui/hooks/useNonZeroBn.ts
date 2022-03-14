@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useMemo } from 'react';
 import { BN_ZERO, bnToBn } from '@polkadot/util';
 import { useFormField } from './useFormField';

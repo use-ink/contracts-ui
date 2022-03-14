@@ -17,13 +17,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
   ],
-  "plugins": [
-    "header",
-    "import",
-    "@typescript-eslint",
-    "eslint-plugin-react",
-    "eslint-plugin-react-hooks"
-  ],
+  "plugins": ["import", "@typescript-eslint", "eslint-plugin-react", "eslint-plugin-react-hooks"],
   "overrides": [
     {
       "files": ["*.tsx", "*.js", "*.jsx", "*.ts"],
@@ -48,18 +42,6 @@
     }
   },
   "rules": {
-    "header/header": [
-      2,
-      "line",
-      [
-        {
-          "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/contracts-ui authors & contributors",
-          "template": " Copyright 2021 @paritytech/contracts-ui authors & contributors"
-        },
-        " SPDX-License-Identifier: Apache-2.0"
-      ],
-      2
-    ],
     "indent": "off",
     "import/named": "off",
     "import/no-unresolved": "error",

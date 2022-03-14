@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { useApi } from './ApiContext';

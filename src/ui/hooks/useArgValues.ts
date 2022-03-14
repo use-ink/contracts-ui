@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useEffect, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
 import { AbiParam, ApiPromise, Keyring, SetState } from 'types';

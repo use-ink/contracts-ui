@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React from 'react';
 import { formatBalance, formatNumber } from '@polkadot/util';
 import { useParams } from 'react-router';

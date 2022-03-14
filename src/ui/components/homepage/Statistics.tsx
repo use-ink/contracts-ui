@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';

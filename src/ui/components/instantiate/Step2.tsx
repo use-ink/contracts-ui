@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useEffect, useState } from 'react';
 import { isHex, isNumber } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';

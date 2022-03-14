@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import type { Collection, Database } from '@textile/threaddb';
 import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 

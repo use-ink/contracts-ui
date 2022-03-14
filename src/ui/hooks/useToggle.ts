@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useCallback, useEffect, useState } from 'react';
 import { useIsMounted } from './useIsMounted';
 import type { UseToggle } from 'types';

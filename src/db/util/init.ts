@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { PrivateKey } from '@textile/crypto';
 import { ThreadID } from '@textile/threads-id';
 import { Database as DB } from '@textile/threaddb';

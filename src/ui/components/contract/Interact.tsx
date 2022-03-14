@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useEffect, useState, useRef } from 'react';
 import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';

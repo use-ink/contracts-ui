@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { useState } from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (_: T) => void] {

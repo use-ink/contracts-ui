@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { useMemo } from 'react';
 import { useApi } from 'ui/contexts';

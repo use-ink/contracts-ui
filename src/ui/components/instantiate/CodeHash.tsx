@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { SimpleSpread, VoidFn } from 'types';

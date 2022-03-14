@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';

@@ -1,6 +1,3 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
 import React, { HTMLAttributes } from 'react';
 import { Switch as HUISwitch } from '@headlessui/react';
 import { classes } from 'ui/util';
