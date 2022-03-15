@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { encodeTypeDef } from '@polkadot/types/create';
@@ -8,7 +8,7 @@ import { TypeDef } from 'types';
 import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  arg: { name?: string, type: TypeDef };
+  arg: { name?: string; type: TypeDef };
   value?: string;
 }
 
@@ -28,7 +28,9 @@ export function ArgSignature({ arg: { name, type }, children, className, value, 
   return (
     <span className={classes('font-mono', className)} {...props}>
       {name ? `${name}: ` : ''}
-      <span>{value ? <b>{truncate(value)}</b> : (type.typeName || encodeTypeDef(api.registry, type))}</span>
+      <span>
+        {value ? <b>{truncate(value)}</b> : type.typeName || encodeTypeDef(api.registry, type)}
+      </span>
       {children}
     </span>
   );
