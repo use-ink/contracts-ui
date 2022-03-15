@@ -91,6 +91,7 @@ export function Step2() {
               registry={metadata.registry}
               setArgValues={setArgValues}
               argValues={argValues}
+              className="argument-form"
             />
           )}
         </FormField>
@@ -122,6 +123,7 @@ export function Step2() {
           }
           onClick={submitHandler}
           variant="primary"
+          data-cy="next-btn"
         >
           Next
         </Button>

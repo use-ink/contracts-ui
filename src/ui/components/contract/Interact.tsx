@@ -175,7 +175,7 @@ export const InteractTab = ({ contract }: Props) => {
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}
-              className="mb-4"
+              className="constructorDropdown mb-4"
               onChange={setMessage}
               value={message}
             >
