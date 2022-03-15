@@ -21,6 +21,7 @@ export function Transactions({
         <div
           key={id}
           className="max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
+          data-cy="transaction-queued"
         >
           <NotificationIcon status={status} />
           <div className="pl-2 flex-grow text-sm">
@@ -47,7 +48,11 @@ export function Transactions({
                 );
               })}
             </div>
-            <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
+            <XIcon
+              className="text-gray-400 w-4 h-4"
+              onClick={() => dismiss(parseInt(id))}
+              data-cy="dismiss-notification"
+            />
           </div>
         )}
       </>
