@@ -6,15 +6,16 @@ import { ArgSignature } from '../message/ArgSignature';
 import { Form, FormField } from './FormField';
 import { findComponent } from './findComponent';
 import { AbiParam, Registry, SetState } from 'types';
+import { classes } from 'ui/util';
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLFormElement> {
   args: AbiParam[];
   argValues: Record<string, unknown>;
   registry: Registry;
   setArgValues: SetState<Record<string, unknown>>;
 }
 
-export function ArgumentForm({ args, argValues, registry, setArgValues }: Props) {
+export function ArgumentForm({ args, argValues, registry, setArgValues, className }: Props) {
   return (
     <Form>
       {args.map(arg => {
@@ -29,7 +30,7 @@ export function ArgumentForm({ args, argValues, registry, setArgValues }: Props)
 
         return (
           <FormField
-            className="ml-6 mt-2 mb-4"
+            className={classes(className, arg.name, 'ml-6 mt-2 mb-4')}
             key={`${arg.name}`}
             label={<ArgSignature arg={arg} className="dark:text-gray-300 text-gray-600" />}
           >

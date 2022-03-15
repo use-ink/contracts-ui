@@ -74,7 +74,13 @@ export function Step3() {
         )}
       </div>
       <Buttons>
-        <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
+        <Button
+          variant="primary"
+          isDisabled={!isValid}
+          isLoading={isProcessing}
+          onClick={onSubmit}
+          data-cy="submit-btn"
+        >
           Upload and Instantiate
         </Button>
 

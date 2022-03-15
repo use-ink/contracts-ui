@@ -69,6 +69,7 @@ export function Step1() {
           isDisabled={!metadata || !nameValidation.isValid || isErrorMetadata}
           onClick={submitStep1}
           variant="primary"
+          data-cy="next-btn"
         >
           Next
         </Button>
