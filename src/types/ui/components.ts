@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { Props as ReactSelectProps } from 'react-select';
@@ -14,7 +14,7 @@ export interface DropdownOption<T> {
 export type ArgComponentProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
   ValidFormField<T>
->
+>;
 
 export type DropdownProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
