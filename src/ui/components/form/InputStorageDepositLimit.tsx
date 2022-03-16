@@ -40,11 +40,12 @@ export function InputStorageDepositLimit({
       <div className="flex items-center">
         <InputBalance
           className="flex-1"
-          value={value}
+          value={isActive ? value : undefined}
           id="storageDepositLimit"
           isDisabled={!isActive}
           onChange={onChange}
-          placeholder={isActive ? '1000' : 'None'}
+          placeholder={isActive ? undefined : 'Do not use'}
+          withUnits={isActive}
           {...getValidation(props)}
         />
         <div className="flex justify-center items-center w-18">

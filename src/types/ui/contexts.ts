@@ -64,13 +64,16 @@ export interface InstantiateData {
   weight: BN;
   codeHash?: string;
 }
+
+export type Step2FormData = Omit<InstantiateData, 'accountId' | 'name'>;
+
 export interface InstantiateState {
   data: InstantiateData;
   dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
-  onFinalize?: (data: Partial<InstantiateData>) => void;
-  onFormChange: (data: Partial<InstantiateData>) => void;
+  onFinalize?: (_: Partial<InstantiateData>) => void;
+  onFormChange: (_: Step2FormData, __?: boolean, ___?: boolean) => void;
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;

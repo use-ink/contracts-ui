@@ -16,7 +16,7 @@ export function useStorageDepositLimit(accountId: OrFalsy<string>): UseStorageDe
   const { api } = useApi();
   const [maximum, setMaximum] = useState<BN | null>(null);
 
-  const storageDepositLimit = useBalance(1000, { maxValue: maximum || undefined });
+  const storageDepositLimit = useBalance(0, { maxValue: maximum || undefined });
 
   useEffect((): void => {
     accountId &&

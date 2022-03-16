@@ -81,7 +81,7 @@ export const InteractTab = ({ contract }: Props) => {
         });
   }, [api, accountId, argValues, keyring, message, value, contract]);
 
-  const weight = useWeight();
+  const weight = useWeight(estimatedWeight);
   const storageDepositLimit = useStorageDepositLimit(accountId);
 
   const transformed = transformUserInput(contract.registry, message.args, argValues);
@@ -214,12 +214,7 @@ export const InteractTab = ({ contract }: Props) => {
             isError={!weight.isValid}
             message={!weight.isValid ? 'Invalid gas limit' : null}
           >
-            <InputGas
-              estimatedWeight={estimatedWeight}
-              isCall={message.isMutating}
-              withEstimate
-              {...weight}
-            />
+            <InputGas isCall={message.isMutating} withEstimate {...weight} />
           </FormField>
           <FormField
             id="storageDepositLimit"
@@ -241,7 +236,9 @@ export const InteractTab = ({ contract }: Props) => {
         <Buttons>
           {message.isPayable || message.isMutating ? (
             <Button
-              isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
+              isDisabled={
+                !(weight.isValid || !weight.isActive || txs[txId]?.status === 'processing')
+              }
               isLoading={txs[txId]?.status === 'processing'}
               onClick={call}
               variant="primary"
@@ -250,7 +247,7 @@ export const InteractTab = ({ contract }: Props) => {
             </Button>
           ) : (
             <Button
-              isDisabled={!(weight.isValid || weight.isEmpty)}
+              isDisabled={!(weight.isValid || !weight.isActive)}
               onClick={read}
               variant="primary"
             >

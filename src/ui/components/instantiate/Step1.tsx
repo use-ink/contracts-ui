@@ -18,7 +18,7 @@ import { useInstantiate } from 'ui/contexts';
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
-  const { onFormChange, stepForward, setData, data, currentStep } = useInstantiate();
+  const { stepForward, setData, data, currentStep } = useInstantiate();
 
   const { accountId, AccountSelectField } = useAccountSelect();
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
@@ -44,14 +44,6 @@ export function Step1() {
 
     stepForward && stepForward();
   }
-
-  useEffect((): void => {
-    onFormChange &&
-      onFormChange({
-        accountId,
-        metadata,
-      });
-  }, [accountId, metadata, onFormChange]);
 
   if (currentStep !== 1) return null;
 

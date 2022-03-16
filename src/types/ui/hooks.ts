@@ -5,12 +5,14 @@ import { VoidFn } from '../substrate';
 import { BN, FileState, MetadataState, OrFalsy, SetState, Validation } from './util';
 
 export type UseWeight = {
+  defaultWeight: BN;
+  estimatedWeight: OrFalsy<BN>;
   executionTime: number;
-  isEmpty: boolean;
+  isActive: boolean;
   isValid: boolean;
   megaGas: BN;
   percentage: number;
-  setIsEmpty: SetState<boolean>;
+  setIsActive: SetState<boolean>;
   setMegaGas: React.Dispatch<BN | undefined>;
   weight: BN;
 };

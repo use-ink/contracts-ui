@@ -21,7 +21,7 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
-import type { AbiMessage } from 'types';
+import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { useDebounce } from 'ui/hooks';
 
@@ -38,10 +38,9 @@ export function Step2() {
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
   const dbValue = useDebounce(value);
 
-  const weight = useWeight();
+  const [estimatedWeight, setEstimatedWeight] = useState<OrFalsy<BN>>(null);
+  const weight = useWeight(estimatedWeight);
   const dbWeight = useDebounce(weight.weight);
-  const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
-  // const lastSuccessfulWeight = useRef<BN>();
 
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const dbStorageDepositLimit = useDebounce(storageDepositLimit.value);
@@ -77,9 +76,24 @@ export function Step2() {
         value,
         argValues,
         storageDepositLimit: storageDepositLimit.value,
-        weight: weight.weight,
+        weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
       });
   };
+
+  useEffect((): void => {
+    if (
+      dryRunResult?.result.isOk &&
+      dryRunResult.gasRequired &&
+      !estimatedWeight?.eq(dryRunResult.gasRequired)
+    ) {
+      setEstimatedWeight(dryRunResult.gasRequired);
+    }
+  }, [
+    dryRunResult?.result.isOk,
+    dryRunResult?.result.isErr,
+    dryRunResult?.gasRequired,
+    estimatedWeight,
+  ]);
 
   useEffect((): void => {
     onFormChange &&
@@ -89,7 +103,7 @@ export function Step2() {
         value: dbValue && deployConstructor?.isPayable ? dbValue : null,
         argValues: dbArgValues,
         storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
-        weight: dbWeight,
+        weight: weight.isActive ? dbWeight : weight.defaultWeight,
       });
   }, [
     onFormChange,
@@ -102,15 +116,20 @@ export function Step2() {
     dbWeight,
     isUsingSalt,
     isUsingStorageDepositLimit,
+    weight.defaultWeight,
+    weight.isActive,
   ]);
 
-  useEffect((): void => {
-    if (dryRunResult?.result.isOk && dryRunResult.gasRequired) {
-      setEstimatedWeight(dryRunResult.gasRequired);
-
-      // lastSuccessfulWeight.current = dryRunResult.gasRequired;
-    }
-  }, [dryRunResult?.result.isOk, dryRunResult?.gasRequired]);
+  useEffect(
+    (): void => {
+      if (!metadata) {
+        setEstimatedWeight(null);
+        weight.setIsActive(false);
+      }
+    },
+    // eslint-disable-next-line
+    [metadata]
+  );
 
   if (currentStep !== 2) return null;
 
@@ -156,7 +175,7 @@ export function Step2() {
           isError={!weight.isValid}
           message={!weight.isValid ? 'Invalid gas limit' : null}
         >
-          <InputGas isCall estimatedWeight={estimatedWeight} withEstimate {...weight} />
+          <InputGas isCall withEstimate {...weight} />
         </FormField>
         <FormField
           id="storageDepositLimit"

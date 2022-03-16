@@ -16,10 +16,18 @@ import {
   SubmittableExtrinsic,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
+  Step2FormData,
 } from 'types';
 import { useStepper } from 'ui/hooks/useStepper';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
-import { onInsantiateFromHash, onInstantiateFromCode, createInstantiateTx, NOOP, transformUserInput } from 'api';
+import {
+  onInsantiateFromHash,
+  onInstantiateFromCode,
+  createInstantiateTx,
+  NOOP,
+  transformUserInput,
+  maximumBlockWeight,
+} from 'api';
 import { useApi } from 'ui/contexts/ApiContext';
 
 type TxState = [
@@ -98,26 +106,26 @@ export function InstantiateContextProvider({
   };
 
   const onFormChange = useCallback(
-    async (formData: Partial<InstantiateData>) => {
-      const newData = { ...data, ...formData };
-
+    async (formData: Step2FormData) => {
       try {
-        const constructor = newData.metadata?.findConstructor(newData.constructorIndex);
+        const constructor = data.metadata?.findConstructor(formData.constructorIndex);
 
         const inputData = constructor?.toU8a(
-          transformUserInput(apiState.api.registry, constructor.args, newData.argValues)
+          transformUserInput(apiState.api.registry, constructor.args, formData.argValues)
         );
 
         const params = {
-          origin: newData.accountId,
-          gasLimit: newData.weight,
-          storageDepositLimit: newData.storageDepositLimit || undefined,
+          origin: data.accountId,
+          gasLimit: formData.weight || maximumBlockWeight(apiState.api),
+          storageDepositLimit: formData.storageDepositLimit,
           code: codeHashUrlParam
             ? { Existing: codeHashUrlParam }
-            : { Upload: newData.metadata?.info.source.wasm },
+            : { Upload: data.metadata?.info.source.wasm },
           data: inputData,
-          salt: newData.salt || undefined,
-          value: newData.value ? apiState.api.registry.createType('Balance', newData.value) : null,
+          salt: formData.salt || undefined,
+          value: formData.value
+            ? apiState.api.registry.createType('Balance', formData.value)
+            : null,
         };
 
         if (params.origin) {
@@ -129,7 +137,7 @@ export function InstantiateContextProvider({
         console.error(e);
       }
     },
-    [apiState.api.rpc.contracts, apiState.api.registry, codeHashUrlParam, data]
+    [apiState.api, codeHashUrlParam, data.accountId, data.metadata]
   );
 
   function onUnFinalize() {

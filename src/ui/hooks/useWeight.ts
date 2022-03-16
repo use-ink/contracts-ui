@@ -2,39 +2,46 @@
 // Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Weight } from '@polkadot/types/interfaces';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BN_MILLION, BN_TEN, BN_ZERO } from '@polkadot/util';
 import { useBlockTime } from './useBlockTime';
 import { useApi } from 'ui/contexts/ApiContext';
-import type { BN, UseWeight } from 'types';
+import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
+import { maximumBlockWeight } from 'api';
 
-export const useWeight = (): UseWeight => {
+function getEstimatedMegaGas(api: ApiPromise, estimatedWeight: OrFalsy<BN>, withBuffer = true): BN {
+  return (estimatedWeight || maximumBlockWeight(api)).div(BN_MILLION).addn(withBuffer ? 1 : 0);
+}
+
+function getDefaultMegaGas(api: OrFalsy<ApiPromise>, estimatedWeight?: OrFalsy<BN>): BN {
+  if (api && estimatedWeight) {
+    return getEstimatedMegaGas(api, estimatedWeight);
+  }
+
+  return maximumBlockWeight(api).div(BN_MILLION).div(BN_TEN);
+}
+
+export const useWeight = (estimatedWeight: OrFalsy<BN>): UseWeight => {
+  // const estimatedWeightRef = useRef(estimatedWeight);
   const { api } = useApi();
   const [blockTime] = useBlockTime();
-  const [megaGas, _setMegaGas] = useState<BN>(
-    (api?.consts.system.blockWeights
-      ? api.consts.system.blockWeights.maxBlock
-      : (api?.consts.system.maximumBlockWeight as Weight)
-    )
-      .div(BN_MILLION)
-      .div(BN_TEN)
-  );
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [megaGas, _setMegaGas] = useState<BN>(getDefaultMegaGas(api, estimatedWeight));
+  const [isActive, setIsActive] = useState(!!estimatedWeight);
+
+  const defaultWeight = useMemo((): BN => maximumBlockWeight(api), [api]);
 
   const setMegaGas = useCallback(
-    (value?: BN | undefined) =>
-      _setMegaGas(
-        value ||
-          (api?.consts.system.blockWeights
-            ? api.consts.system.blockWeights.maxBlock
-            : (api?.consts.system.maximumBlockWeight as Weight)
-          )
-            .div(BN_MILLION)
-            .div(BN_TEN)
-      ),
+    (value?: BN | undefined) => {
+      _setMegaGas(value || getDefaultMegaGas(api, null));
+    },
     [api]
   );
+
+  useEffect((): void => {
+    if (!isActive) {
+      _setMegaGas(getDefaultMegaGas(api, estimatedWeight));
+    }
+  }, [api, estimatedWeight, isActive]);
 
   return useMemo((): UseWeight => {
     let executionTime = 0;
@@ -44,14 +51,7 @@ export const useWeight = (): UseWeight => {
 
     if (megaGas) {
       weight = megaGas.mul(BN_MILLION);
-      executionTime = weight
-        .muln(blockTime)
-        .div(
-          api?.consts.system.blockWeights
-            ? api.consts.system.blockWeights.maxBlock
-            : (api?.consts.system.maximumBlockWeight as Weight)
-        )
-        .toNumber();
+      executionTime = weight.muln(blockTime).div(maximumBlockWeight(api)).toNumber();
       percentage = (executionTime / blockTime) * 100;
 
       // execution is 2s of 6s blocks, i.e. 1/3
@@ -60,14 +60,16 @@ export const useWeight = (): UseWeight => {
     }
 
     return {
+      defaultWeight,
+      estimatedWeight,
       executionTime,
-      isEmpty,
-      isValid: isEmpty || isValid,
+      isActive,
+      isValid: !isActive || isValid,
       megaGas: megaGas || BN_ZERO,
       percentage,
-      setIsEmpty,
+      setIsActive,
       setMegaGas,
       weight,
     };
-  }, [api, blockTime, isEmpty, megaGas, setIsEmpty, setMegaGas]);
+  }, [api, blockTime, defaultWeight, estimatedWeight, isActive, megaGas, setIsActive, setMegaGas]);
 };
