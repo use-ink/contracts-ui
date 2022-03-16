@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import type { Reducer } from 'react';
 import { NULL_CHAIN_PROPERTIES } from '../../constants';

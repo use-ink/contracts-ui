@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
 import React, { useEffect, useState } from 'react';
@@ -158,6 +158,7 @@ export function Step2() {
               registry={metadata.registry}
               setArgValues={setArgValues}
               argValues={argValues}
+              className="argument-form"
             />
           )}
         </FormField>
@@ -207,6 +208,7 @@ export function Step2() {
           }
           onClick={onSubmit}
           variant="primary"
+          data-cy="next-btn"
         >
           Next
         </Button>

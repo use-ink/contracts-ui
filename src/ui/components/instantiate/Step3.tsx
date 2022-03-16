@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { formatBalance, formatNumber } from '@polkadot/util';
@@ -73,7 +73,13 @@ export function Step3() {
         )}
       </div>
       <Buttons>
-        <Button variant="primary" isDisabled={!isValid} isLoading={isProcessing} onClick={onSubmit}>
+        <Button
+          variant="primary"
+          isDisabled={!isValid}
+          isLoading={isProcessing}
+          onClick={onSubmit}
+          data-cy="submit-btn"
+        >
           Upload and Instantiate
         </Button>
 

@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -22,14 +22,17 @@ export const QueryResult = ({ result: { time, data, message, error }, date }: Pr
   return (
     <div
       key={`${time}`}
-      className="text-xs dark:text-gray-400 text-gray-600 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+      className={
+        'text-xs dark:text-gray-400 text-gray-600 break-all p-4 border-b border-gray-200 dark:border-gray-700'
+      }
+      data-cy={message.method}
     >
       <div className="mb-2">{date}</div>
       <div>
         <div className="mb-2">
           <MessageSignature message={message} />
         </div>
-        <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono">{`${
+        <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono return-value">{`${
           message.returnType &&
           encodeTypeDef(api.registry, message.returnType) === 'u128' &&
           isBn(data)

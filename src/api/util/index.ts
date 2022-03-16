@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
@@ -56,7 +56,7 @@ export function toSats(api: ApiPromise, balance: BN | number): BN {
   let bn: BN;
 
   if (isNumber(balance)) {
-    bn = new BN(balance)
+    bn = new BN(balance);
   } else {
     bn = balance;
   }

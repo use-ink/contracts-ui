@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect, useState, useRef } from 'react';
 import { BN_ZERO } from '@polkadot/util';
@@ -187,7 +187,7 @@ export const InteractTab = ({ contract }: Props) => {
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}
-              className="mb-4"
+              className="constructorDropdown mb-4"
               onChange={setMessage}
               value={message}
             >
