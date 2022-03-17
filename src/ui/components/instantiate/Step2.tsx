@@ -75,7 +75,7 @@ export function Step2() {
         salt: isUsingSalt ? salt.value : undefined,
         value,
         argValues,
-        storageDepositLimit: storageDepositLimit.value,
+        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
         weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
       });
   };
