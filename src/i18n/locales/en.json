@@ -101,5 +101,5 @@
   "addContractHelp": "You can upload and instantiate new contract code, or use contract code that already exists on-chain.",
   "uploadNewContractCode": "Upload New Contract Code",
   "useExistingContractCode": "Use Existing Contract Code",
-  "contractPageHelp": "You instantiated this contract from <2><0>{{projectName}}</0></2> on <6>{{date}}</6>"
+  "contractPageHelp": "You instantiated this contract from <2><0>{{projectName}}</0></2> on <5>{{date}}</5>"
 }
