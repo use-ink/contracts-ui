@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,10 +28,12 @@ export function Wizard() {
         <Step3 />
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
-        <Stepper steps={steps.map((step) => ({
-          ...step,
-          name: t(step.name[0], step.name[1])
-        }))} />
+        <Stepper
+          steps={steps.map(step => ({
+            ...step,
+            name: t(step.name[0], step.name[1]),
+          }))}
+        />
       </aside>
     </div>
   );

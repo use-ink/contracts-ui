@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,9 +34,7 @@ export const ResultsOutput = ({ results }: Props) => {
           })
           .reverse()}
         {results.length === 0 && (
-          <p className="p-4 text-gray-400 text-xs">
-            {t('noResultsYet', 'No results yet.')}
-          </p>
+          <p className="p-4 text-gray-400 text-xs">{t('noResultsYet', 'No results yet.')}</p>
         )}
       </div>
     </div>

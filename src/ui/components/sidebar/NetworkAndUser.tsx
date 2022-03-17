@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { useNavigate } from 'react-router';
@@ -37,7 +37,7 @@ export function NetworkAndUser() {
         onChange={e => {
           navigate(`/?rpc=${e}`);
         }}
-        options={options.map((option) => ({ ...option, label: t(option.label[0], option.label[1]) }))}
+        options={options.map(option => ({ ...option, label: t(option.label[0], option.label[1]) }))}
         value={options.find(o => o.value === endpoint)?.value || 'ws://127.0.0.1:9944'}
       />
     </div>

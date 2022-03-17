@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import { isWasm, u8aToString } from '@polkadot/util';
 import { useEffect, useState } from 'react';
@@ -69,13 +69,19 @@ const EMPTY: MetadataState = {
   message: null,
 };
 
-function validate(t: TFunction, metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
+function validate(
+  t: TFunction,
+  metadata: Abi | undefined,
+  { isWasmRequired }: Options
+): Validation {
   if (!metadata) {
     return {
       isValid: false,
       isError: true,
-      message:
-        t('metadataInvalidFormat', 'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.'),
+      message: t(
+        'metadataInvalidFormat',
+        'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.'
+      ),
     };
   }
 

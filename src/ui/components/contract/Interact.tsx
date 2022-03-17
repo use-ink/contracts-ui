@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect, useState, useRef } from 'react';
 import { BN_ZERO } from '@polkadot/util';
@@ -165,7 +165,12 @@ export const InteractTab = ({ contract }: Props) => {
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
         <Form>
-          <FormField className="mb-8" id="accountId" label={t('account', 'Account')} {...accountIdValidation}>
+          <FormField
+            className="mb-8"
+            id="accountId"
+            label={t('account', 'Account')}
+            {...accountIdValidation}
+          >
             <AccountSelect
               id="accountId"
               className="mb-2"
@@ -173,7 +178,11 @@ export const InteractTab = ({ contract }: Props) => {
               onChange={setAccountId}
             />
           </FormField>
-          <FormField id="message" label={t('messageToSend', 'Message to Send')} {...messageValidation}>
+          <FormField
+            id="message"
+            label={t('messageToSend', 'Message to Send')}
+            {...messageValidation}
+          >
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}

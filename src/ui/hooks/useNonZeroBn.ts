@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback, useMemo } from 'react';
 import { BN_ZERO, bnToBn } from '@polkadot/util';
@@ -13,15 +13,14 @@ export function useNonZeroBn(initialValue: BN | number = BN_ZERO): ValidFormFiel
 
   const isValid = useCallback(
     (value?: BN | null): Validation => {
-    
       if (!value || value?.isZero()) {
         return { isValid: false, message: t('valueCannotBeZero', 'Value cannot be zero') };
       }
-    
+
       return { isValid: true };
     },
     [t]
-  )
+  );
 
   return useFormField(value, isValid);
 }

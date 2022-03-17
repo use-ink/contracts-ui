@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
@@ -31,8 +31,10 @@ export function HelpBox(): React.ReactElement | null {
           {t('helpBoxHeader', 'Get started writing smart contracts')}
         </div>
         <div className="text-xs text-gray-500 dark:text-gray-400 pb-2">
-          {t('helpBoxText', 'Substrate Contracts UI lets you explore and interact with smart contracts written in ink! - a smart contract language based on Rust!')}
-          {' '}
+          {t(
+            'helpBoxText',
+            'Substrate Contracts UI lets you explore and interact with smart contracts written in ink! - a smart contract language based on Rust!'
+          )}{' '}
           <a
             href="https://paritytech.github.io/ink-docs/"
             target="_blank"

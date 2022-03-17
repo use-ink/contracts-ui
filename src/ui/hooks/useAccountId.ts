@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,10 @@ export function useAccountId(initialValue = '', isOwned = false): ValidFormField
   const validate = useCallback(
     (value: OrFalsy<string>): Validation => {
       if (!value?.trim() || (isOwned && !keyring?.getAccount(value))) {
-        return { isValid: false, message: t('accountDoesNotExist', 'Specified account does not exist') };
+        return {
+          isValid: false,
+          message: t('accountDoesNotExist', 'Specified account does not exist'),
+        };
       }
 
       return { isValid: true, message: null };

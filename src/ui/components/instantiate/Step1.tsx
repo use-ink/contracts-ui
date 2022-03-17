@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
@@ -71,6 +71,7 @@ export function Step1() {
           isDisabled={!metadata || !nameValidation.isValid || isErrorMetadata}
           onClick={submitStep1}
           variant="primary"
+          data-cy="next-btn"
         >
           {t('next', 'Next')}
         </Button>

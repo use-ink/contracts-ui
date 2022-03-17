@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import { CodeIcon } from '@heroicons/react/outline';
 import React from 'react';
@@ -67,11 +67,8 @@ export function SearchResults({
             })}
           {!contracts ||
             (contracts.length === 0 && (
-              <div className="text-sm">
-                {t('noMatchesFound', 'No matches found.')}
-              </div>
-            ))
-          }
+              <div className="text-sm">{t('noMatchesFound', 'No matches found.')}</div>
+            ))}
         </>
       )}
 
@@ -98,11 +95,8 @@ export function SearchResults({
             })}
           {!codeBundles ||
             (codeBundles.length === 0 && (
-              <div className="text-sm">
-                {t('noMatchesFound', 'No matches found.')}
-              </div>
-            )
-          )}
+              <div className="text-sm">{t('noMatchesFound', 'No matches found.')}</div>
+            ))}
         </>
       )}
     </div>

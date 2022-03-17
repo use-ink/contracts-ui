@@ -54,9 +54,9 @@
       [
         {
           "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/contracts-ui authors & contributors",
-          "template": " Copyright 2021 @paritytech/contracts-ui authors & contributors"
+          "template": " Copyright 2022 @paritytech/contracts-ui authors & contributors"
         },
-        " SPDX-License-Identifier: Apache-2.0"
+        " SPDX-License-Identifier: GPL-3.0-only"
       ],
       2
     ],

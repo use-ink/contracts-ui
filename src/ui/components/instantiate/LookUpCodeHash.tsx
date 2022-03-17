@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -40,7 +40,10 @@ export function LookUpCodeHash() {
         className={classes('relative flex items-center', isOnChain && 'font-mono')}
         isDisabled={isOnChain}
         onChange={setSearchString}
-        placeholder={t('codeHashPlaceholder', 'Paste a code hash or search for existing code bundles already on-chain')}
+        placeholder={t(
+          'codeHashPlaceholder',
+          'Paste a code hash or search for existing code bundles already on-chain'
+        )}
         value={searchString}
       >
         {isOnChain && (

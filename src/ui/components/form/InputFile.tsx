@@ -136,7 +136,7 @@ export function InputFile({
               </svg>
               <span className="text-sm dark:text-gray-500 text-gray-400">{placeholder}</span>
             </label>
-            <input {...getInputProps()} />
+            <input {...getInputProps()} data-cy="file-input" />
           </div>
         );
       }}

@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useMemo } from 'react';
 import { GroupBase } from 'react-select';
@@ -45,10 +45,7 @@ function Select({
   );
 }
 
-export function AccountSelect({
-  placeholder,
-  ...props
-}: Props) {
+export function AccountSelect({ placeholder, ...props }: Props) {
   const { t } = useTranslation();
   const { keyring } = useApi();
 
@@ -58,13 +55,10 @@ export function AccountSelect({
       placeholder={placeholder || t('noAccountsFound', 'No Accounts Found')}
       {...props}
     />
-  )
+  );
 }
 
-export function AddressSelect({
-  placeholder,
-  ...props
-}: Props) {
+export function AddressSelect({ placeholder, ...props }: Props) {
   const { t } = useTranslation();
   const { keyring } = useApi();
   const { myContracts } = useDatabase();

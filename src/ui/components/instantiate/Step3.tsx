@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { formatBalance, formatNumber } from '@polkadot/util';
@@ -37,25 +37,19 @@ export function Step3() {
     <>
       <div className="review">
         <div className="field full">
-          <p className="key">
-            {t('account', 'Account')}
-          </p>
+          <p className="key">{t('account', 'Account')}</p>
           <div className="value">
             <Account className="p-0" value={accountId} />
           </div>
         </div>
 
         <div className="field full">
-          <p className="key">
-            {t('name', 'Name')}
-          </p>
+          <p className="key">{t('name', 'Name')}</p>
           <p className="value">{name}</p>
         </div>
         {isConstructorPayable && (
           <div className="field">
-            <p className="key">
-              {t('value', 'Value')}
-            </p>
+            <p className="key">{t('value', 'Value')}</p>
             <p className="value">
               {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
             </p>

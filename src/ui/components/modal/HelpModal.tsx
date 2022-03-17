@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
@@ -27,9 +27,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <BookOpenIcon className="h-5 w-5 text-indigo-400" aria-hidden="true" />
               </div>
               <div className="flex flex-col">
-                <strong>
-                  {t('inkDocsTitle', 'ink! Docs')}
-                </strong>
+                <strong>{t('inkDocsTitle', 'ink! Docs')}</strong>
                 <span className="dark:text-gray-400 text-gray-500">
                   {t('inkDocsText', 'Read more about the ink! smart contract language.')}
                 </span>
@@ -50,9 +48,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <StackExchangeLogo />
               </div>
               <div className="flex flex-col">
-                <strong>
-                  {t('stackExchangeTitle', 'Stack Exchange')}
-                </strong>
+                <strong>{t('stackExchangeTitle', 'Stack Exchange')}</strong>
                 <span className="dark:text-gray-400 text-gray-500">
                   {t('stackExchangeText', 'Browse through common questions.')}{' '}
                 </span>
@@ -73,9 +69,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <ElementLogo />
               </div>
               <div className="flex flex-col">
-                <strong>
-                  {t('elementTitle', 'Element Channel')}
-                </strong>
+                <strong>{t('elementTitle', 'Element Channel')}</strong>
                 <span className="dark:text-gray-400 text-gray-500">
                   {t('elementText', 'Ask questions and help others.')}{' '}
                 </span>
@@ -96,8 +90,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <GithubLogo />
               </div>
               <div className="flex flex-col">
-                <strong>
-                  {t('githubTitle', 'Github Repo')}</strong>
+                <strong>{t('githubTitle', 'Github Repo')}</strong>
                 <span className="dark:text-gray-400 text-gray-500">
                   {t('githubText', 'Let us know if there is an issue.')}{' '}
                 </span>

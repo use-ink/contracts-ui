@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,10 @@ export function AddContract() {
   return (
     <Page
       header={t('addContractTitle', 'Add New Contract')}
-      help={t('addContractHelp', 'You can upload and instantiate new contract code, or use contract code that already exists on-chain.')}
+      help={t(
+        'addContractHelp',
+        'You can upload and instantiate new contract code, or use contract code that already exists on-chain.'
+      )}
     >
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

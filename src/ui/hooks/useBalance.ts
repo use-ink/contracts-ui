@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import { BN_ONE, BN_TWO, BN_ZERO, isBn } from '@polkadot/util';
 import BN from 'bn.js';
@@ -64,12 +64,14 @@ export function useBalance(
 
       if (value && value?.bitLength() > (bitLength || DEFAULT_BITLENGTH)) {
         isError = true;
-        message = t('balanceBitlength', 'Value\'s bitlength is too high');
+        message = t('balanceBitlength', "Value's bitlength is too high");
       }
 
       if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
         isError = true;
-        message = t('balanceMaximum', 'Value cannot exceed {{maxValue}}', { replace: { maxValue: maxValue.toNumber() } });
+        message = t('balanceMaximum', 'Value cannot exceed {{maxValue}}', {
+          replace: { maxValue: maxValue.toNumber() },
+        });
       }
 
       return {

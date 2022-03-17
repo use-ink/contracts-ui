@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect } from 'react';
 import { BN_MILLION, BN_ZERO } from '@polkadot/util';
@@ -50,17 +50,23 @@ export function InputGas({
       <InputNumber value={megaGas} isDisabled={isEmpty} onChange={setMegaGas} placeholder="MGas" />
       <div className="relative pt-2">
         <div className="text-gray-500 text-xs pb-2">
-          {t('inputGasExecutionTime', '{{executionTime}}s execution time ({{percentage}}% of block time)', {
-            replace: {
-              executionTime: executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3),
-              percentage: percentage.toFixed(2)
+          {t(
+            'inputGasExecutionTime',
+            '{{executionTime}}s execution time ({{percentage}}% of block time)',
+            {
+              replace: {
+                executionTime: executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3),
+                percentage: percentage.toFixed(2),
+              },
             }
-          })}
+          )}
           {withEstimate && (
             <div className="float-right">
               {isEmpty ? (
                 <>
-                  {isCall ? t('usingEstimatedGas', 'Using Estimated Gas') : t('usingMaximumQueryGas', 'Using Maximum Query Gas')}
+                  {isCall
+                    ? t('usingEstimatedGas', 'Using Estimated Gas')
+                    : t('usingMaximumQueryGas', 'Using Maximum Query Gas')}
                   &nbsp;{' · '}&nbsp;
                   <a
                     href="#"
@@ -87,14 +93,11 @@ export function InputGas({
                 >
                   {isCall
                     ? t('useEstimatedWeight', 'Use Estimated Weight ({{estimatedWeight}}M)', {
-                      replace: {
-                        estimatedWeight: (estimatedWeight || BN_ZERO)
-                          .div(BN_MILLION)
-                          .toString()
-                      }
-                    })
-                    : t('useMaximumQueryGas', 'Use Maximum Query Gas')
-                  }
+                        replace: {
+                          estimatedWeight: (estimatedWeight || BN_ZERO).div(BN_MILLION).toString(),
+                        },
+                      })
+                    : t('useMaximumQueryGas', 'Use Maximum Query Gas')}
                 </a>
               )}
             </div>

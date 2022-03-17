@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
@@ -44,7 +44,11 @@ export const useMetadataField = () => {
     return (
       <FormField
         id="metadata"
-        label={codeHashUrlParam ? t('uploadMetadata', 'Upload Metadata') : t('uploadContractBundle', 'Upload Contract Bundle')}
+        label={
+          codeHashUrlParam
+            ? t('uploadMetadata', 'Upload Metadata')
+            : t('uploadContractBundle', 'Upload Contract Bundle')
+        }
         {...getValidation(metadata)}
       >
         <InputFile

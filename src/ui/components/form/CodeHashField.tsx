@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,4 +19,4 @@ export const CodeHashField = ({ codeHash, name }: Props) => {
       <CodeHash codeHash={codeHash} name={name} />
     </FormField>
   );
-}
+};

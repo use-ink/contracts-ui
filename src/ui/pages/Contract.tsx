@@ -1,5 +1,5 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
@@ -20,7 +20,7 @@ const TABS = [
     label: (
       <>
         <BookOpenIcon />
-        <Trans key='metadata'>Metadata</Trans>
+        <Trans key="metadata">Metadata</Trans>
       </>
     ),
   },
@@ -29,7 +29,7 @@ const TABS = [
     label: (
       <>
         <PlayIcon />
-        <Trans key='interact'>Interact</Trans>
+        <Trans key="interact">Interact</Trans>
       </>
     ),
   },
@@ -65,20 +65,19 @@ export function Contract() {
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
         help={
-          
-          <Trans i18nKey="contractPageHelp" projectName={projectName} date={displayDate(document.date)}>
-              You instantiated this contract from
-              {' '}
-              <Link
-                to={`/instantiate/${document.codeHash}`}
-                className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
-              >
-                {{projectName}}
-              </Link>
-              {' '}
-              on
-              {' '}
-              {{ date: displayDate(document.date) }}
+          <Trans
+            i18nKey="contractPageHelp"
+            projectName={projectName}
+            date={displayDate(document.date)}
+          >
+            You instantiated this contract from{' '}
+            <Link
+              to={`/instantiate/${document.codeHash}`}
+              className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
+            >
+              {{ projectName }}
+            </Link>{' '}
+            on {{ date: displayDate(document.date) }}
           </Trans>
         }
       >
