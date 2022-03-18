@@ -1,0 +1,40 @@
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
+
+import { TypeDef } from '@polkadot/types/types';
+import React from 'react';
+
+type Props = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  components: Array<React.ComponentType<any>>;
+  props: {
+    className: string;
+    value: unknown[];
+    id: string;
+    onChange: (value: unknown[]) => void;
+    nestingNumber: number;
+    type: TypeDef;
+  };
+};
+
+export function SubForm({ components, props: { value, onChange, nestingNumber }, props }: Props) {
+  const _onChange = (row: number) => (newEntry: unknown) => {
+    const newValue = value.map((entry, index) => (index == row ? newEntry : entry));
+    onChange(newValue);
+  };
+  const isOddNesting = nestingNumber % 2 != 0;
+  return (
+    <div
+      className={`p-4 text-left text-sm ${
+        isOddNesting ? 'dark:bg-gray-900 bg-white' : 'dark:bg-elevation-1 bg-gray-100'
+      } rounded border dark:border-gray-500 border-gray-200`}
+    >
+      {components &&
+        components.map((Component, row) => (
+          <div key={`div-${row}`} className={'mb-4 mr-1'}>
+            <Component key={`component-${row}`} {...props} onChange={_onChange(row)} />
+          </div>
+        ))}
+    </div>
+  );
+}
