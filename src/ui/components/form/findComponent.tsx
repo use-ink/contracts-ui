@@ -45,7 +45,6 @@ export function findComponent(
             name: subtype.name,
           } as SubComponent)
       );
-      console.log('components: ', components);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       return (props: any) => SubForm({ components, props: { ...props, nestingNumber, type } });
     }

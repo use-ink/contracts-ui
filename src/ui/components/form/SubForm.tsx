@@ -28,7 +28,6 @@ export function SubForm({ components, props: { value, onChange, nestingNumber },
     onChange(newValue);
   };
   const isOddNesting = nestingNumber % 2 != 0;
-  console.log('value: ', value);
   return (
     <div
       className={`p-4 text-left text-sm ${
