@@ -7,7 +7,7 @@ import { Input } from './Input';
 import { InputBalance } from './InputBalance';
 import { InputNumber } from './InputNumber';
 import { Vector } from './Vector';
-import { SubForm } from './SubForm';
+import { SubForm, SubComponent } from './SubForm';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } from 'types';
@@ -38,9 +38,14 @@ export function findComponent(
 
   if (type.info === TypeDefInfo.Struct && type.sub) {
     if (Array.isArray(type.sub)) {
-      const components = type.sub.map(subtype =>
-        findComponent(registry, subtype, nestingNumber + 1)
+      const components = type.sub.map(
+        subtype =>
+          ({
+            Component: findComponent(registry, subtype, nestingNumber + 1),
+            name: subtype.name,
+          } as SubComponent)
       );
+      console.log('components: ', components);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       return (props: any) => SubForm({ components, props: { ...props, nestingNumber, type } });
     }

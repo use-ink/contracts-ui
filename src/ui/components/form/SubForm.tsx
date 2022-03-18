@@ -4,25 +4,31 @@
 import { TypeDef } from '@polkadot/types/types';
 import React from 'react';
 
-type Props = {
+export type SubComponent = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  components: Array<React.ComponentType<any>>;
+  Component: React.ComponentType<any>;
+  name: string;
+};
+
+type Props = {
+  components: Array<SubComponent>;
   props: {
     className: string;
-    value: unknown[];
+    value: Record<string, unknown>;
     id: string;
-    onChange: (value: unknown[]) => void;
+    onChange: (value: Record<string, unknown>) => void;
     nestingNumber: number;
     type: TypeDef;
   };
 };
 
 export function SubForm({ components, props: { value, onChange, nestingNumber }, props }: Props) {
-  const _onChange = (row: number) => (newEntry: unknown) => {
-    const newValue = value.map((entry, index) => (index == row ? newEntry : entry));
+  const _onChange = (name: string) => (newEntry: unknown) => {
+    const newValue = Object.assign(value, { [name]: newEntry });
     onChange(newValue);
   };
   const isOddNesting = nestingNumber % 2 != 0;
+  console.log('value: ', value);
   return (
     <div
       className={`p-4 text-left text-sm ${
@@ -30,9 +36,14 @@ export function SubForm({ components, props: { value, onChange, nestingNumber },
       } rounded border dark:border-gray-500 border-gray-200`}
     >
       {components &&
-        components.map((Component, row) => (
+        components.map(({ Component, name }, row) => (
           <div key={`div-${row}`} className={'mb-4 mr-1'}>
-            <Component key={`component-${row}`} {...props} onChange={_onChange(row)} />
+            <Component
+              key={`component-${row}`}
+              {...props}
+              value={value ? value[name] : ''}
+              onChange={_onChange(name)}
+            />
           </div>
         ))}
     </div>
