@@ -24,7 +24,7 @@ type Props = {
 
 export function SubForm({ components, props: { value, onChange, nestingNumber }, props }: Props) {
   const _onChange = (name: string) => (newEntry: unknown) => {
-    const newValue = Object.assign(value, { [name]: newEntry });
+    const newValue = { ...value, [name]: newEntry };
     onChange(newValue);
   };
   const isOddNesting = nestingNumber % 2 != 0;
