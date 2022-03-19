@@ -10,7 +10,7 @@ export function Instantiate() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   return (
-    <div className="w-full max-w-6xl overflow-y-auto px-5 py-3 m-2">
+    <div className="w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2">
       <div className="grid md:grid-cols-12 gap-5">
         <div className="md:col-span-9 p-4">
           <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
