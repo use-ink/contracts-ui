@@ -88,7 +88,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   const options = {
     gasLimit: weight.weight.addn(1),
-    storageDepositLimit: storageDepositLimit.value,
+    storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
     value: message.isPayable ? value || BN_ZERO : undefined,
   };
 
