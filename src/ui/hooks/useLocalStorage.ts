@@ -8,7 +8,11 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (_: T) => 
     try {
       const item = window.localStorage.getItem(key);
 
-      return item ? (JSON.parse(item) as T) : initialValue;
+      return item
+        ? typeof initialValue !== 'string'
+          ? (JSON.parse(item) as T)
+          : (item as unknown as T)
+        : initialValue;
     } catch (error) {
       console.error(error);
       return initialValue;
@@ -20,7 +24,10 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (_: T) => 
       const valueToStore = value instanceof Function ? (value(storedValue) as T) : value;
       setStoredValue(valueToStore);
 
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      window.localStorage.setItem(
+        key,
+        typeof valueToStore === 'string' ? valueToStore : JSON.stringify(valueToStore)
+      );
     } catch (error) {
       console.error(error);
     }
