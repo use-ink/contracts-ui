@@ -29,4 +29,4 @@ export interface UseMetadata extends MetadataState {
 
 export type UseStepper = [number, VoidFn, VoidFn, React.Dispatch<number>];
 
-export type UseToggle = [boolean, () => void, (value: boolean) => void];
+export type UseToggle = [boolean, () => void, React.Dispatch<React.SetStateAction<boolean>>];
