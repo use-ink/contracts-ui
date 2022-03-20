@@ -2,4 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn build:i18n
+git add src/i18n/locales/*
 yarn dlx lint-staged
