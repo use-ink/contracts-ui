@@ -108,7 +108,7 @@
   "settingsHelp": "Manage settings and preferences.",
   "settingsGeneral": "General",
   "settingsLanguageTitle": "Language",
-  "settingsLanguageHelp": "Text language",
-  "settingsThemeTitle": "Theme mode",
+  "settingsLanguageHelp": "Select a preferred language",
+  "settingsThemeTitle": "Theme",
   "settingsThemeHelp": "Select a display theme"
 }
