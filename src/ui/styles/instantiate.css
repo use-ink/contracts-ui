@@ -17,3 +17,27 @@
 .review .field .value {
   @apply text-gray-500;
 }
+
+.instantiate-outcome {
+  @apply mt-6;
+}
+
+.instantiate-outcome .body {
+  @apply text-xs p-4;
+}
+
+.instantiate-outcome .row {
+  @apply flex items-center dark:text-gray-400;
+}
+
+.instantiate-outcome .row:not(:last-child) {
+  @apply mb-2;
+}
+
+.instantiate-outcome .row div:last-child {
+  @apply flex-1 text-left;
+}
+
+.instantiate-outcome .row div:last-child {
+  @apply text-right;
+}
