@@ -6,11 +6,20 @@ import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
-import { ArgumentForm, InputGas, InputBalance, Form, FormField } from 'ui/components/form';
+import {
+  ArgumentForm,
+  InputGas,
+  InputBalance,
+  InputStorageDepositLimit,
+  Form,
+  FormField,
+} from 'ui/components/form';
 import { dryRun, NOOP, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
+import { useToggle } from 'ui/hooks/useToggle';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
 
 interface Props {
@@ -31,6 +40,7 @@ export const InteractTab = ({ contract }: Props) => {
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
+  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   useEffect(() => {
     setCallResults([]);
@@ -71,12 +81,14 @@ export const InteractTab = ({ contract }: Props) => {
         });
   }, [api, accountId, argValues, keyring, message, value, contract]);
 
-  const weight = useWeight();
+  const weight = useWeight(estimatedWeight);
+  const storageDepositLimit = useStorageDepositLimit(accountId);
 
   const transformed = transformUserInput(contract.registry, message.args, argValues);
 
   const options = {
     gasLimit: weight.weight.addn(1),
+    storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
     value: message.isPayable ? value || BN_ZERO : undefined,
   };
 
@@ -141,7 +153,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   const newId = useRef<number>();
 
-  const clickHandler = () => {
+  const call = () => {
     const tx = prepareContractTx(contract.tx[message.method], options, transformed);
 
     if (tx && accountId) {
@@ -202,27 +214,40 @@ export const InteractTab = ({ contract }: Props) => {
             isError={!weight.isValid}
             message={!weight.isValid ? 'Invalid gas limit' : null}
           >
-            <InputGas
-              estimatedWeight={estimatedWeight}
-              isCall={message.isMutating}
-              withEstimate
-              {...weight}
+            <InputGas isCall={message.isMutating} withEstimate {...weight} />
+          </FormField>
+          <FormField
+            id="storageDepositLimit"
+            label="Storage Deposit Limit"
+            isError={!storageDepositLimit.isValid}
+            message={
+              !storageDepositLimit.isValid
+                ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                : null
+            }
+          >
+            <InputStorageDepositLimit
+              isActive={isUsingStorageDepositLimit}
+              toggleIsActive={toggleIsUsingStorageDepositLimit}
+              {...storageDepositLimit}
             />
           </FormField>
         </Form>
         <Buttons>
           {message.isPayable || message.isMutating ? (
             <Button
-              isDisabled={!(weight.isValid || weight.isEmpty || txs[txId]?.status === 'processing')}
+              isDisabled={
+                !(weight.isValid || !weight.isActive || txs[txId]?.status === 'processing')
+              }
               isLoading={txs[txId]?.status === 'processing'}
-              onClick={() => clickHandler()}
+              onClick={call}
               variant="primary"
             >
               Call
             </Button>
           ) : (
             <Button
-              isDisabled={!(weight.isValid || weight.isEmpty)}
+              isDisabled={!(weight.isValid || !weight.isActive)}
               onClick={read}
               variant="primary"
             >
