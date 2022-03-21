@@ -36,14 +36,22 @@ export function SubForm({ components, props: { value, onChange, nestingNumber },
     >
       {components &&
         components.map(({ Component, name }, row) => (
-          <div key={`div-${row}`} className={'mb-4 mr-1'}>
-            <Component
-              key={`component-${row}`}
-              {...props}
-              value={value ? value[name] : ''}
-              onChange={_onChange(name)}
-            />
-          </div>
+          <>
+            <label
+              className="block mb-1.5 text-sm font-semibold dark:text-white text-gray-600"
+              htmlFor={name}
+            >
+              {name}
+            </label>
+            <div key={`div-${row}`} className={'mb-4 mr-1'}>
+              <Component
+                key={`component-${row}`}
+                {...props}
+                value={value ? value[name] : ''}
+                onChange={_onChange(name)}
+              />
+            </div>
+          </>
         ))}
     </div>
   );
