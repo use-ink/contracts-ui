@@ -11,7 +11,8 @@ import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
-import { displayDate } from 'ui/util';
+import { displayDate, truncate } from 'ui/util';
+import { CopyButton } from 'ui/components/common/CopyButton';
 
 const TABS = [
   {
@@ -64,8 +65,15 @@ export function Contract() {
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
         help={
-          <>
-            You instantiated this contract from{' '}
+          <div>
+            You instantiated this contract{' '}
+            <div className="inline-flex items-center">
+              <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded">
+                {truncate(address)}
+              </span>
+              <CopyButton className="ml-1" iconClassName="-mt-1.5" value={address} />
+            </div>{' '}
+            from{' '}
             <Link
               to={`/instantiate/${document.codeHash}`}
               className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
@@ -73,7 +81,7 @@ export function Contract() {
               {projectName}
             </Link>{' '}
             on {displayDate(document.date)}
-          </>
+          </div>
         }
       >
         <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>

@@ -2,39 +2,25 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import copy from 'copy-to-clipboard';
-import React, { useCallback, useMemo } from 'react';
-import Select, {
-  components,
-  ControlProps,
-  DropdownIndicatorProps,
-  GroupBase,
-  InputProps,
-  OptionProps,
-  Props as ReactSelectProps,
-} from 'react-select';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import { classes } from 'ui/util';
-import type { DropdownOption, DropdownProps } from 'types';
-import { useToggle } from 'ui/hooks/useToggle';
-import { Button } from '.';
-import { ClipboardCopyIcon } from '@heroicons/react/outline';
+import React, { useCallback } from 'react';
 import ReactTooltip from 'react-tooltip';
+import { DocumentDuplicateIcon } from '@heroicons/react/outline';
+import { Button } from './Button';
+import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<unknown> {
+  iconClassName?: string;
   value: string;
 }
 
-export function CopyButton({ className, value }: Props) {
-  const [isShowingTooltip, , setIsShowingTooltip] = useToggle();
-
+export function CopyButton({ className, iconClassName, value }: Props) {
   const onClick = useCallback((): void => {
     copy(value);
 
-    setIsShowingTooltip(true);
     setTimeout((): void => {
-      setIsShowingTooltip(false);
-    }, 5000);
-  }, [setIsShowingTooltip, value]);
+      ReactTooltip.hide();
+    }, 3000);
+  }, [value]);
 
   const id = `copyButton-${value}`;
 
@@ -47,9 +33,19 @@ export function CopyButton({ className, value }: Props) {
         onClick={onClick}
         variant="plain"
       >
-        <ClipboardCopyIcon />
+        <DocumentDuplicateIcon
+          className={classes('w-4 h-4 hover:text-gray-600 dark:hover:text-gray-300', iconClassName)}
+        />
       </Button>
-      <ReactTooltip id={id}>Copied to clipboard</ReactTooltip>
+      <ReactTooltip
+        className="font-sans text-xs"
+        delayHide={3000}
+        afterShow={onClick}
+        event="click"
+        id={id}
+      >
+        Copied to clipboard
+      </ReactTooltip>
     </>
   );
 }

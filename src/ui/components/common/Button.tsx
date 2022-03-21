@@ -9,6 +9,7 @@ type Variant = 'default' | 'primary' | 'plain' | 'negative';
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   isDisabled?: boolean;
   isLoading?: boolean;
+  ref?: React.MutableRefObject<HTMLButtonElement | null>;
   variant?: Variant;
 }
 
@@ -22,10 +23,12 @@ export function Button({
   isDisabled = false,
   isLoading,
   variant = 'default',
+  ref,
   ...props
 }: Props) {
   return (
     <button
+      ref={ref}
       type="button"
       className={classes('btn relative', variant, className)}
       {...(isDisabled || isLoading ? { disabled: true } : {})}
