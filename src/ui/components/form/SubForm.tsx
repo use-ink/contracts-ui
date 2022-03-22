@@ -12,17 +12,15 @@ export type SubComponent = {
 
 type Props = {
   components: Array<SubComponent>;
-  props: {
-    className: string;
-    value: Record<string, unknown>;
-    id: string;
-    onChange: (value: Record<string, unknown>) => void;
-    nestingNumber: number;
-    type: TypeDef;
-  };
+  className: string;
+  value: Record<string, unknown>;
+  id: string;
+  onChange: (value: Record<string, unknown>) => void;
+  nestingNumber: number;
+  type: TypeDef;
 };
 
-export function SubForm({ components, props: { value, onChange, nestingNumber }, props }: Props) {
+export function SubForm({ components, value, onChange, nestingNumber, ...props }: Props) {
   const _onChange = (name: string) => (newEntry: unknown) => {
     const newValue = { ...value, [name]: newEntry };
     onChange(newValue);
