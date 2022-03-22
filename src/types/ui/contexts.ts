@@ -7,6 +7,7 @@ import type {
   BlueprintPromise,
   BlueprintSubmittableResult,
   CodeSubmittableResult,
+  ContractInstantiateResult,
   ContractPromise,
   Keyring,
   SubmittableExtrinsic,
@@ -54,19 +55,25 @@ export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'
 export interface InstantiateData {
   accountId?: string;
   argValues?: Record<string, unknown>;
-  value: BN;
+  value?: BN | null;
   metadata?: Abi;
   name: string;
   constructorIndex: number;
-  salt?: string;
+  salt?: string | null;
+  storageDepositLimit?: BN | null;
   weight: BN;
   codeHash?: string;
 }
+
+export type Step2FormData = Omit<InstantiateData, 'accountId' | 'name'>;
+
 export interface InstantiateState {
   data: InstantiateData;
+  dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
-  onFinalize?: (data: Partial<InstantiateData>) => void;
+  onFinalize?: (_: Partial<InstantiateData>) => void;
+  onFormChange: (_: Step2FormData, __?: boolean, ___?: boolean) => void;
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;

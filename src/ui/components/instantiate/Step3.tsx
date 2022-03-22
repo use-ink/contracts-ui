@@ -9,7 +9,6 @@ import { Button, Buttons } from '../common/Button';
 import { useApi, useInstantiate, isResultValid } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
 
-import { fromSats } from 'api';
 import { truncate } from 'ui/util';
 
 export function Step3() {
@@ -37,7 +36,7 @@ export function Step3() {
         <div className="field full">
           <p className="key">Account</p>
           <div className="value">
-            <Account className="p-0" value={accountId} />
+            <Account value={accountId} />
           </div>
         </div>
 
@@ -45,11 +44,11 @@ export function Step3() {
           <p className="key">Name</p>
           <p className="value">{name}</p>
         </div>
-        {isConstructorPayable && (
+        {isConstructorPayable && value && (
           <div className="field">
             <p className="key">Value</p>
             <p className="value">
-              {formatBalance(fromSats(apiState.api, value), { forceUnit: '-' })}
+              {formatBalance(value, { decimals: apiState.tokenDecimals, forceUnit: '-' })}
             </p>
           </div>
         )}

@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import BN from 'bn.js';
 import React, { useEffect, useState } from 'react';
 import { isHex, isNumber } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
@@ -9,6 +10,7 @@ import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
+import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'ui/util/dropdown';
@@ -19,19 +21,29 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
-import type { AbiMessage } from 'types';
+import { AbiMessage, OrFalsy } from 'types';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
+import { useDebounce } from 'ui/hooks';
 
 export function Step2() {
   const {
-    data: { metadata },
+    data: { accountId, metadata },
+    dryRunResult,
     stepBackward,
     currentStep,
     onFinalize,
+    onFormChange,
   } = useInstantiate();
 
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
+  const dbValue = useDebounce(value);
 
-  const weight = useWeight();
+  const [estimatedWeight, setEstimatedWeight] = useState<OrFalsy<BN>>(null);
+  const weight = useWeight(estimatedWeight);
+  const dbWeight = useDebounce(weight.weight);
+
+  const storageDepositLimit = useStorageDepositLimit(accountId);
+  const dbStorageDepositLimit = useDebounce(storageDepositLimit.value);
 
   const salt = useFormField<string>(randomAsHex(), value => {
     if (!!value && isHex(value) && value.length === 66) {
@@ -40,11 +52,13 @@ export function Step2() {
 
     return { isValid: false, isError: true, message: 'Invalid hex string' };
   });
+  const dbSalt = useDebounce(salt.value);
 
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
 
-  const [argValues, setArgValues] = useArgValues(deployConstructor?.args || []);
+  const [argValues, setArgValues] = useArgValues(deployConstructor?.args || null);
+  const dbArgValues = useDebounce(argValues);
 
   useEffect(() => {
     setConstructorIndex(0);
@@ -52,17 +66,70 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
+  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
-  const submitHandler = () => {
+  const onSubmit = () => {
     onFinalize &&
       onFinalize({
         constructorIndex,
         salt: isUsingSalt ? salt.value : undefined,
         value,
         argValues,
-        weight: weight.weight,
+        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+        weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
       });
   };
+
+  useEffect((): void => {
+    if (
+      dryRunResult?.result.isOk &&
+      dryRunResult.gasRequired &&
+      !estimatedWeight?.eq(dryRunResult.gasRequired)
+    ) {
+      setEstimatedWeight(dryRunResult.gasRequired);
+    }
+  }, [
+    dryRunResult?.result.isOk,
+    dryRunResult?.result.isErr,
+    dryRunResult?.gasRequired,
+    estimatedWeight,
+  ]);
+
+  useEffect((): void => {
+    onFormChange &&
+      onFormChange({
+        constructorIndex,
+        salt: isUsingSalt ? dbSalt : null,
+        value: dbValue && deployConstructor?.isPayable ? dbValue : null,
+        argValues: dbArgValues,
+        storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
+        weight: weight.isActive ? dbWeight : weight.defaultWeight,
+      });
+  }, [
+    onFormChange,
+    constructorIndex,
+    deployConstructor,
+    dbSalt,
+    dbValue,
+    dbArgValues,
+    dbStorageDepositLimit,
+    dbWeight,
+    isUsingSalt,
+    isUsingStorageDepositLimit,
+    weight.defaultWeight,
+    weight.isActive,
+  ]);
+
+  useEffect(
+    (): void => {
+      if (!metadata) {
+        setEstimatedWeight(null);
+        weight.setIsActive(false);
+      }
+    },
+    // eslint-disable-next-line
+    [metadata]
+  );
 
   if (currentStep !== 2) return null;
 
@@ -109,7 +176,23 @@ export function Step2() {
           isError={!weight.isValid}
           message={!weight.isValid ? 'Invalid gas limit' : null}
         >
-          <InputGas isCall {...weight} />
+          <InputGas isCall withEstimate {...weight} />
+        </FormField>
+        <FormField
+          id="storageDepositLimit"
+          label="Storage Deposit Limit"
+          isError={!storageDepositLimit.isValid}
+          message={
+            !storageDepositLimit.isValid
+              ? storageDepositLimit.message || 'Invalid storage deposit limit'
+              : null
+          }
+        >
+          <InputStorageDepositLimit
+            isActive={isUsingStorageDepositLimit}
+            toggleIsActive={toggleIsUsingStorageDepositLimit}
+            {...storageDepositLimit}
+          />
         </FormField>
       </Form>
       <Buttons>
@@ -118,10 +201,12 @@ export function Step2() {
             (deployConstructor?.isPayable && !valueValidation.isValid) ||
             (isUsingSalt && !salt.isValid) ||
             !weight.isValid ||
+            !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
-            !argValues
+            !argValues ||
+            (dryRunResult && dryRunResult.result.isErr)
           }
-          onClick={submitHandler}
+          onClick={onSubmit}
           variant="primary"
           data-cy="next-btn"
         >

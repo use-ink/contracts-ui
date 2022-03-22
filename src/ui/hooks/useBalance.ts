@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { BN_ONE, BN_TWO, BN_ZERO, isBn } from '@polkadot/util';
+import { BN_ONE, BN_TWO, BN_ZERO, formatBalance, isBn } from '@polkadot/util';
 import BN from 'bn.js';
 import { useCallback } from 'react';
 import { useFormField } from './useFormField';
@@ -25,16 +25,12 @@ function getGlobalMaxValue(bitLength?: number): BN {
 
 export function useBalance(
   initialValue: BN | string | number = 0,
-  isZeroable = false,
-  maxValue?: BN
+  { bitLength = DEFAULT_BITLENGTH, isZeroable = true, maxValue }: ValidateOptions = {}
 ): UseBalance {
   const { api } = useApi();
 
   const validate = useCallback(
-    (
-      value: BN | null | undefined,
-      { bitLength = DEFAULT_BITLENGTH, isZeroable, maxValue }: ValidateOptions
-    ): Validation => {
+    (value: BN | null | undefined): Validation => {
       let message: React.ReactNode;
       let isError = false;
 
@@ -67,7 +63,7 @@ export function useBalance(
 
       if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
         isError = true;
-        message = `Value cannot exceed ${maxValue?.toNumber()}`;
+        message = `Value cannot exceed ${formatBalance(maxValue?.toString())}`;
       }
 
       return {
@@ -76,12 +72,12 @@ export function useBalance(
         message,
       };
     },
-    []
+    [bitLength, isZeroable, maxValue]
   );
 
   const balance = useFormField<BN>(
     isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue),
-    value => validate(value, { isZeroable, maxValue })
+    validate
   );
 
   return balance;

@@ -4,6 +4,7 @@
 import React, { useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';
+import { ContractInstantiateResult } from '@polkadot/types/interfaces';
 import {
   InstantiateProps,
   InstantiateState,
@@ -15,10 +16,18 @@ import {
   SubmittableExtrinsic,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
+  Step2FormData,
 } from 'types';
 import { useStepper } from 'ui/hooks/useStepper';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
-import { onInsantiateFromHash, onInstantiateFromCode, createInstantiateTx, NOOP } from 'api';
+import {
+  onInsantiateFromHash,
+  onInstantiateFromCode,
+  createInstantiateTx,
+  NOOP,
+  transformUserInput,
+  maximumBlockWeight,
+} from 'api';
 import { useApi } from 'ui/contexts/ApiContext';
 
 type TxState = [
@@ -33,14 +42,16 @@ const initialData: InstantiateData = {
   name: '',
   weight: BN_THOUSAND,
 };
-const initialState: InstantiateState = {
+
+const initialState = {
   data: initialData,
   currentStep: 1,
   tx: null,
   onError: NOOP,
   onSuccess: NOOP,
   onInstantiate: () => Promise.resolve(),
-};
+} as unknown as InstantiateState;
+
 const InstantiateContext = React.createContext(initialState);
 
 export function isResultValid({
@@ -61,6 +72,7 @@ export function InstantiateContextProvider({
 
   const [data, setData] = useState<InstantiateData>(initialState.data);
   const [[tx, onInstantiate], setTx] = useState<TxState>([null, NOOP, null]);
+  const [dryRunResult, setDryRunResult] = useState<ContractInstantiateResult>();
 
   const onSuccess = useCallback(
     (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
@@ -80,7 +92,7 @@ export function InstantiateContextProvider({
       const onInstantiate = (codeHashUrlParam ? onInsantiateFromHash : onInstantiateFromCode)(
         apiState,
         dbState,
-        data,
+        newData,
         onSuccess
       );
       setTx([tx, onInstantiate, null]);
@@ -93,6 +105,41 @@ export function InstantiateContextProvider({
     }
   };
 
+  const onFormChange = useCallback(
+    async (formData: Step2FormData) => {
+      try {
+        const constructor = data.metadata?.findConstructor(formData.constructorIndex);
+
+        const inputData = constructor?.toU8a(
+          transformUserInput(apiState.api.registry, constructor.args, formData.argValues)
+        );
+
+        const params = {
+          origin: data.accountId,
+          gasLimit: formData.weight || maximumBlockWeight(apiState.api),
+          storageDepositLimit: formData.storageDepositLimit,
+          code: codeHashUrlParam
+            ? { Existing: codeHashUrlParam }
+            : { Upload: data.metadata?.info.source.wasm },
+          data: inputData,
+          salt: formData.salt || undefined,
+          value: formData.value
+            ? apiState.api.registry.createType('Balance', formData.value)
+            : null,
+        };
+
+        if (params.origin) {
+          const result = await apiState.api.rpc.contracts.instantiate(params);
+
+          setDryRunResult(result);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [apiState.api, codeHashUrlParam, data.accountId, data.metadata]
+  );
+
   function onUnFinalize() {
     setTx([null, NOOP, null]);
     setStep(2);
@@ -102,12 +149,14 @@ export function InstantiateContextProvider({
     data,
     setData,
     currentStep,
+    dryRunResult,
     setStep,
     stepForward,
     stepBackward,
     onSuccess,
     onUnFinalize,
     onFinalize,
+    onFormChange,
     tx,
     onInstantiate,
     onError: NOOP,

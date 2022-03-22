@@ -34,7 +34,7 @@ export function findComponent(
       />
     );
   }
-  if (type.sub && !Array.isArray(type.sub)) {
+  if (type.info === TypeDefInfo.Vec && type.sub && !Array.isArray(type.sub)) {
     const Component = findComponent(registry, type.sub, nestingNumber + 1);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
     return (props: any) => Vector({ Component, props: { ...props, nestingNumber, type } });
