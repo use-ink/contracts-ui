@@ -16,7 +16,7 @@ type Props = ArgComponentProps<Record<string, unknown>> & {
   type: TypeDef;
 };
 
-export function SubForm({ components, value, onChange, nestingNumber, ...props }: Props) {
+export function SubForm({ components, value, onChange, nestingNumber, type, ...props }: Props) {
   const _onChange = (name: string) => (newEntry: unknown) => {
     const newValue = { ...value, [name]: newEntry };
     onChange(newValue);
@@ -33,17 +33,13 @@ export function SubForm({ components, value, onChange, nestingNumber, ...props }
           <>
             <label
               className="block mb-1.5 text-sm font-semibold dark:text-white text-gray-600"
+              key={`${type.name}-label-${row}`}
               htmlFor={name}
             >
               {name}
             </label>
-            <div key={`div-${row}`} className={'mb-4 mr-1'}>
-              <Component
-                key={`component-${row}`}
-                {...props}
-                value={value ? value[name] : ''}
-                onChange={_onChange(name)}
-              />
+            <div key={`${type.name}-component-${row}`} className={'mb-4 mr-1'}>
+              <Component {...props} value={value ? value[name] : ''} onChange={_onChange(name)} />
             </div>
           </>
         ))}
