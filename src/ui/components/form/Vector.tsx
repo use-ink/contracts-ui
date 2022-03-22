@@ -1,9 +1,9 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { TypeDef } from 'types';
 import React from 'react';
 import { Button, Buttons } from '../common';
+import { TypeDef } from 'types';
 
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

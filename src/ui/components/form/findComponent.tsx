@@ -45,8 +45,8 @@ export function findComponent(
             name: subtype.name,
           } as SubComponent)
       );
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-      return (props: any) => SubForm({ ...props, components, nestingNumber, type });
+      return (props: ArgComponentProps<Record<string, unknown>>) =>
+        SubForm({ ...props, components, nestingNumber, type });
     }
   }
 

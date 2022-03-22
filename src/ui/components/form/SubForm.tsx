@@ -1,8 +1,8 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { TypeDef } from 'types';
 import React from 'react';
+import { TypeDef, ArgComponentProps } from 'types';
 
 export type SubComponent = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,12 +10,8 @@ export type SubComponent = {
   name: string;
 };
 
-type Props = {
+type Props = ArgComponentProps<Record<string, unknown>> & {
   components: Array<SubComponent>;
-  className: string;
-  value: Record<string, unknown>;
-  id: string;
-  onChange: (value: Record<string, unknown>) => void;
   nestingNumber: number;
   type: TypeDef;
 };
