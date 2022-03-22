@@ -3,15 +3,11 @@
 
 import React from 'react';
 import { Button, Buttons } from '../common';
-import { TypeDef } from 'types';
+import { TypeDef, ArgComponentProps } from 'types';
 
-type Props = {
+type Props = ArgComponentProps<unknown[]> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: React.ComponentType<any>;
-  className: string;
-  value: unknown[];
-  id: string;
-  onChange: (value: unknown[]) => void;
   nestingNumber: number;
   type: TypeDef;
 };
