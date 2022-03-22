@@ -8,14 +8,12 @@ import { Button, Buttons } from '../common';
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: React.ComponentType<any>;
-  props: {
-    className: string;
-    value: unknown[];
-    id: string;
-    onChange: (value: unknown[]) => void;
-    nestingNumber: number;
-    type: TypeDef;
-  };
+  className: string;
+  value: unknown[];
+  id: string;
+  onChange: (value: unknown[]) => void;
+  nestingNumber: number;
+  type: TypeDef;
 };
 
 type TitleProps = {
@@ -35,11 +33,7 @@ const Title = ({ nestingNumber, count, type }: TitleProps) => {
   );
 };
 
-export function Vector({
-  Component,
-  props: { value, onChange, nestingNumber, type },
-  props,
-}: Props) {
+export function Vector({ Component, value, onChange, nestingNumber, type, ...props }: Props) {
   const _rowAdd = () => onChange([...value, '']);
   const _rowRemove = () => onChange(value.slice(0, -1));
   const _onChange = (row: number) => (newEntry: unknown) => {
