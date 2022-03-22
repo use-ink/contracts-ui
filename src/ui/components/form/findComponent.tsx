@@ -46,14 +46,14 @@ export function findComponent(
           } as SubComponent)
       );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-      return (props: any) => SubForm({ components, ...props, nestingNumber, type });
+      return (props: any) => SubForm({ ...props, components, nestingNumber, type });
     }
   }
 
   if (type.info === TypeDefInfo.Vec && type.sub && !Array.isArray(type.sub)) {
     const Component = findComponent(registry, type.sub, nestingNumber + 1);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-    return (props: any) => Vector({ Component, ...props, nestingNumber, type });
+    return (props: any) => Vector({ ...props, Component, nestingNumber, type });
   }
 
   switch (type.type) {
