@@ -5,7 +5,17 @@ import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import { MAX_CALL_WEIGHT } from '../../constants';
-import { Bytes, ApiPromise, AbiParam, Registry, OrFalsy, Weight } from 'types';
+import {
+  Bytes,
+  ApiPromise,
+  AbiParam,
+  Registry,
+  OrFalsy,
+  Weight,
+  ChainType,
+  SubmittableResult,
+  Hash,
+} from 'types';
 
 const EMPTY_SALT = new Uint8Array();
 
@@ -103,4 +113,15 @@ export function isValidWsUrl(s: unknown) {
     return url.protocol === 'ws:' || url.protocol === 'wss:';
   }
   return false;
+}
+
+export function isResultReady(result: SubmittableResult, systemChainType: ChainType): boolean {
+  return systemChainType.isDevelopment ? result.isInBlock : result.isFinalized;
+}
+
+export function getBlockHash(
+  status: SubmittableResult['status'],
+  systemChainType: ChainType
+): Hash {
+  return systemChainType.isDevelopment ? status.asInBlock : status.asFinalized;
 }
