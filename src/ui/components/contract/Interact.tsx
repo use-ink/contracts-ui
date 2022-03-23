@@ -148,7 +148,7 @@ export const InteractTab = ({ contract }: Props) => {
     setNextResultId(nextResultId + 1);
   };
 
-  const isValid = (result: SubmittableResult) => !result.isError;
+  const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
   const onError = NOOP;
 
