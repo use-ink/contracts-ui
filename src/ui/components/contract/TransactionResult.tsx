@@ -63,7 +63,7 @@ export const TransactionResult = ({
                   <div className="pt-4 mb-4">
                     <span className="mr-2">{t('includedAtNo', 'Included at #')}</span>
                     <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">
-                      {`${blockHash?.slice(0, 6)}...${blockHash?.slice(-4)}`}
+                      {`${blockHash?.toHex().slice(0, 6)}...${blockHash?.toHex().slice(-4)}`}
                     </span>
                   </div>
                   <div>

@@ -6,6 +6,7 @@ import { web3FromAddress } from '@polkadot/extension-dapp';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
+import { isResultReady } from 'api/util';
 import { isEmptyObj } from 'ui/util';
 
 let nextId = 1;
@@ -15,7 +16,7 @@ export const TransactionsContext = React.createContext({} as unknown as Transact
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { api, keyring } = useApi();
+  const { api, keyring, systemChainType } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
@@ -51,7 +52,7 @@ export function TransactionsContextProvider({
           accountOrPair,
           { signer: injector?.signer || undefined },
           async result => {
-            if (result.isFinalized) {
+            if (isResultReady(result, systemChainType)) {
               const events: Record<string, number> = {};
 
               result.events.forEach(record => {

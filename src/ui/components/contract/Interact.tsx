@@ -16,6 +16,7 @@ import {
   FormField,
 } from 'ui/components/form';
 import { dryRun, NOOP, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
+import { getBlockHash } from 'api/util';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
@@ -29,7 +30,7 @@ interface Props {
 
 export const InteractTab = ({ contract }: Props) => {
   const { t } = useTranslation();
-  const { api, keyring } = useApi();
+  const { api, keyring, systemChainType } = useApi();
   const {
     value: message,
     onChange: setMessage,
@@ -111,7 +112,7 @@ export const InteractTab = ({ contract }: Props) => {
         time: Date.now(),
         log: log,
         error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
-        blockHash: status.asFinalized.toString(),
+        blockHash: getBlockHash(status, systemChainType),
         info: dispatchInfo?.toHuman(),
       },
     ]);
