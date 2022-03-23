@@ -97,7 +97,7 @@ export interface TxOptions {
   accountId: string;
   isValid: (_: SubmittableResult) => boolean;
   onSuccess?: ((_: SubmittableResult) => void) | ((_: SubmittableResult) => Promise<void>);
-  onError?: () => void;
+  onError?: (result: SubmittableResult) => void;
 }
 
 export interface QueuedTxOptions extends TxOptions {

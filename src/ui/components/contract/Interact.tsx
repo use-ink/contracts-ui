@@ -14,7 +14,7 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import { dryRun, NOOP, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
+import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
 import { getBlockHash } from 'api/util';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
@@ -95,7 +95,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   const { queue, process, txs } = useTransactions();
 
-  const onSuccess = ({ status, dispatchInfo, dispatchError, events }: SubmittableResult) => {
+  const onCallSuccess = ({ status, dispatchInfo, events }: SubmittableResult) => {
     const log = events.map(({ event }) => {
       return `${event.section}:${event.method}`;
     });
@@ -108,8 +108,7 @@ export const InteractTab = ({ contract }: Props) => {
         isComplete: true,
         message,
         time: Date.now(),
-        log: log,
-        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
+        log,
         blockHash: getBlockHash(status, systemChainType),
         info: dispatchInfo?.toHuman(),
       },
@@ -117,7 +116,26 @@ export const InteractTab = ({ contract }: Props) => {
 
     setNextResultId(nextResultId + 1);
   };
+  const onCallError = ({ events, dispatchError, dispatchInfo }: SubmittableResult) => {
+    const log = events.map(({ event }) => {
+      return `${event.section}:${event.method}`;
+    });
+    setCallResults([
+      ...callResults,
+      {
+        id: nextResultId,
+        message,
+        time: Date.now(),
+        isComplete: true,
+        data: null,
+        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
+        log,
+        info: dispatchInfo?.toHuman(),
+      },
+    ]);
 
+    setNextResultId(nextResultId + 1);
+  };
   const read = async () => {
     const { result, output } = await sendContractQuery(
       contract.query[message.method],
@@ -150,15 +168,19 @@ export const InteractTab = ({ contract }: Props) => {
 
   const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-  const onError = NOOP;
-
   const newId = useRef<number>();
 
   const call = () => {
     const tx = prepareContractTx(contract.tx[message.method], options, transformed);
 
     if (tx && accountId) {
-      newId.current = queue({ extrinsic: tx, accountId, onSuccess, onError, isValid });
+      newId.current = queue({
+        extrinsic: tx,
+        accountId,
+        onSuccess: onCallSuccess,
+        onError: onCallError,
+        isValid,
+      });
       setTxId(newId.current);
     }
   };

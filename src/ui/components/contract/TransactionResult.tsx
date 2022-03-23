@@ -49,24 +49,27 @@ export const TransactionResult = ({
                   />
                 </Disclosure.Button>
                 <Disclosure.Panel>
-                  {error && (
+                  {error ? (
                     <ReactMarkdown
                       // eslint-disable-next-line react/no-children-prop
                       children={error.docs.join('\r\n')}
                       remarkPlugins={[remarkGfm]}
                       className="markdown mt-4 mb-4"
                     />
+                  ) : (
+                    <>
+                      <div className="pt-4 mb-4">
+                        <span className="mr-2">Included at #</span>
+                        <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">
+                          {`${blockHash?.toHex().slice(0, 6)}...${blockHash?.toHex().slice(-4)}`}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="mr-2">Weight</span>
+                        <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">{`${info?.weight}`}</span>
+                      </div>
+                    </>
                   )}
-                  <div className="pt-4 mb-4">
-                    <span className="mr-2">Included at #</span>
-                    <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">
-                      {`${blockHash?.toHex().slice(0, 6)}...${blockHash?.toHex().slice(-4)}`}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="mr-2">Weight</span>
-                    <span className="text-mono p-1 dark:bg-elevation-1 bg-gray-200">{`${info?.weight}`}</span>
-                  </div>
                 </Disclosure.Panel>
               </>
             )}
