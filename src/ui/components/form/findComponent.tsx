@@ -7,6 +7,7 @@ import { Input } from './Input';
 import { InputBalance } from './InputBalance';
 import { InputNumber } from './InputNumber';
 import { Vector } from './Vector';
+import { SubForm, SubComponent } from './SubForm';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } from 'types';
@@ -34,11 +35,29 @@ export function findComponent(
       />
     );
   }
-  if (type.info === TypeDefInfo.Vec && type.sub && !Array.isArray(type.sub)) {
-    const Component = findComponent(registry, type.sub, nestingNumber + 1);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-    return (props: any) => Vector({ Component, props: { ...props, nestingNumber, type } });
+
+  if (type.info === TypeDefInfo.Struct) {
+    if (Array.isArray(type.sub)) {
+      const components = type.sub.map(
+        subtype =>
+          ({
+            Component: findComponent(registry, subtype, nestingNumber + 1),
+            name: subtype.name,
+          } as SubComponent)
+      );
+      return (props: ArgComponentProps<Record<string, unknown>>) =>
+        SubForm({ ...props, components, nestingNumber, type });
+    }
   }
+
+  if (type.info === TypeDefInfo.Vec) {
+    if (type.sub && !Array.isArray(type.sub)) {
+      const Component = findComponent(registry, type.sub, nestingNumber + 1);
+      return (props: ArgComponentProps<unknown[]>) =>
+        Vector({ ...props, Component, nestingNumber, type });
+    }
+  }
+
   switch (type.type) {
     case 'AccountId':
     case 'Address':

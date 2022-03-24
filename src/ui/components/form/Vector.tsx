@@ -1,21 +1,15 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { TypeDef } from '@polkadot/types/types';
 import React from 'react';
 import { Button, Buttons } from '../common';
+import { TypeDef, ArgComponentProps } from 'types';
 
-type Props = {
+type Props = ArgComponentProps<unknown[]> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: React.ComponentType<any>;
-  props: {
-    className: string;
-    value: unknown[];
-    id: string;
-    onChange: (value: unknown[]) => void;
-    nestingNumber: number;
-    type: TypeDef;
-  };
+  nestingNumber: number;
+  type: TypeDef;
 };
 
 type TitleProps = {
@@ -35,11 +29,7 @@ const Title = ({ nestingNumber, count, type }: TitleProps) => {
   );
 };
 
-export function Vector({
-  Component,
-  props: { value, onChange, nestingNumber, type },
-  props,
-}: Props) {
+export function Vector({ Component, value, onChange, nestingNumber, type, ...props }: Props) {
   const _rowAdd = () => onChange([...value, '']);
   const _rowRemove = () => onChange(value.slice(0, -1));
   const _onChange = (row: number) => (newEntry: unknown) => {
