@@ -19,14 +19,14 @@ function isLocalNode(rpcUrl: string): boolean {
   return rpcUrl.includes('127.0.0.1');
 }
 
-function purgeOutdatedDBs(blockOneHash: string) {
+function purgeOutdatedDBs(genesisHash: string) {
   // TODO: Investigate use of indexedDB.databases() - not present in Firefox?
   const oldLocalDbName = window.localStorage.getItem(LOCAL_NODE_DB_NAME);
 
   if (oldLocalDbName) {
     const [url, hash] = oldLocalDbName.split(DELIMITER);
 
-    if (isLocalNode(url) && hash !== blockOneHash) {
+    if (isLocalNode(url) && hash !== genesisHash) {
       console.log(`Deleting database ${oldLocalDbName}...`);
       indexedDB.deleteDatabase(oldLocalDbName);
     }
@@ -35,10 +35,10 @@ function purgeOutdatedDBs(blockOneHash: string) {
 
 export async function init(
   rpcUrl: string,
-  blockOneHash: string,
+  genesisHash: string,
   isRemote = false
 ): Promise<[DB, UserDocument | null, PrivateKey | null]> {
-  const name = `${rpcUrl}${DELIMITER}${blockOneHash}`;
+  const name = `${rpcUrl}${DELIMITER}${genesisHash}`;
 
   const db = await initDb(name);
   const [user, identity] = await initIdentity(db);
@@ -48,7 +48,7 @@ export async function init(
   }
 
   if (isLocalNode(rpcUrl)) {
-    purgeOutdatedDBs(blockOneHash);
+    purgeOutdatedDBs(genesisHash);
 
     window.localStorage.setItem(LOCAL_NODE_DB_NAME, name);
   }

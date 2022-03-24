@@ -3,7 +3,7 @@
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { isValidWsUrl } from './util';
-import { getChainPropertiesWhenReady } from './chainProps';
+import { getChainProperties } from './chainProps';
 import { ApiAction } from 'types';
 
 export const connect = (endpoint: string, dispatch: React.Dispatch<ApiAction>) => {
@@ -22,14 +22,14 @@ export const connect = (endpoint: string, dispatch: React.Dispatch<ApiAction>) =
 
     dispatch({
       type: 'CONNECT_READY',
-      payload: await getChainPropertiesWhenReady(_api),
+      payload: await getChainProperties(_api),
     });
   });
 
   _api.on('ready', async () => {
     dispatch({
       type: 'CONNECT_READY',
-      payload: await getChainPropertiesWhenReady(_api),
+      payload: await getChainProperties(_api),
     });
   });
 
