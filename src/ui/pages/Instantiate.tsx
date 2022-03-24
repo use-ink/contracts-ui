@@ -3,9 +3,9 @@
 
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { InstantiateContextProvider } from 'ui/contexts';
 import { Wizard } from 'ui/components/instantiate';
-import { useTranslation } from 'react-i18next';
 
 export function Instantiate() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
