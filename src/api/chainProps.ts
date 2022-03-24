@@ -3,7 +3,6 @@
 
 import { TypeRegistry } from '@polkadot/types/create';
 import { DEFAULT_DECIMALS } from '../constants';
-// import { blockTimeMs } from 'api/util/blockTime';
 import { ChainProperties, ApiPromise } from 'types';
 
 const registry = new TypeRegistry();
