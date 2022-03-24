@@ -8,7 +8,7 @@
   "scripts": {
     "start": "yarn build && webpack serve --config webpack.dev.cjs --open",
     "build": "yarn build:i18n && NODE_ENV=development webpack --progress --config webpack.dev.cjs",
-    "build:i18n": "rm -f src/i18n/locales/en.json && i18next-scanner --config i18next-scanner.config.cjs",
+    "build:i18n": "rm -f src/i18n/locales/en.json && i18next-scanner --config i18next-scanner.config.cjs && node scripts/i18nSort.cjs",
     "build:prod": "NODE_ENV=production webpack --config webpack.prod.cjs",
     "lint": "yarn eslint --fix .",
     "format": "yarn prettier --write .",
