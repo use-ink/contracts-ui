@@ -6,6 +6,7 @@ import { web3FromAddress } from '@polkadot/extension-dapp';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
+import { isResultReady } from 'api/util';
 import { isEmptyObj } from 'ui/util';
 
 let nextId = 1;
@@ -15,7 +16,7 @@ export const TransactionsContext = React.createContext({} as unknown as Transact
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { api, keyring } = useApi();
+  const { api, keyring, systemChainType } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
@@ -34,7 +35,7 @@ export function TransactionsContextProvider({
     const tx = txs[id];
 
     if (tx) {
-      const { extrinsic, accountId, isValid, onSuccess } = tx;
+      const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
 
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
@@ -51,7 +52,7 @@ export function TransactionsContextProvider({
           accountOrPair,
           { signer: injector?.signer || undefined },
           async result => {
-            if (result.isFinalized) {
+            if (isResultReady(result, systemChainType)) {
               const events: Record<string, number> = {};
 
               result.events.forEach(record => {
@@ -73,6 +74,9 @@ export function TransactionsContextProvider({
                   const decoded = api.registry.findMetaError(result.dispatchError.asModule);
                   message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
                 }
+
+                onError && onError(result);
+
                 throw new Error(message);
               }
 

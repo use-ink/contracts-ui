@@ -9,6 +9,7 @@ export type {
   EventRecord,
   Weight,
   ChainType,
+  Hash,
 } from '@polkadot/types/interfaces';
 export type { KeyringPair } from '@polkadot/keyring/types';
 export type {
