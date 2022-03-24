@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { TFunction, useTranslation } from 'react-i18next';
 import { DryRun } from './DryRun';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
@@ -10,10 +10,10 @@ import { Step3 } from './Step3';
 import { Stepper } from './Stepper';
 import { useInstantiate } from 'ui/contexts';
 
-const steps = [
-  { name: ['instantiateStep1', 'Contract Bundle'], index: 1 },
-  { name: ['instantiateStep2', 'Deployment Info'], index: 2 },
-  { name: ['instantiateStep3', 'Confirmation'], index: 3 },
+const steps = (t: TFunction<'translation', undefined>) => [
+  { name: ['instantiateStep1', t('contractBundle', 'Contract Bundle')], index: 1 },
+  { name: ['instantiateStep2', t('deploymentInfo', 'Deployment Info')], index: 2 },
+  { name: ['instantiateStep3', t('confirmation', 'Confirmation')], index: 3 },
 ];
 
 export function Wizard() {
@@ -32,7 +32,7 @@ export function Wizard() {
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
         <Stepper
-          steps={steps.map(step => ({
+          steps={steps(t).map(step => ({
             ...step,
             name: t(step.name[0], step.name[1]),
           }))}
