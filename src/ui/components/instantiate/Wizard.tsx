@@ -10,12 +10,6 @@ import { Step3 } from './Step3';
 import { Stepper } from './Stepper';
 import { useInstantiate } from 'ui/contexts';
 
-const steps = [
-  { name: ['instantiateStep1', 'Contract Bundle'], index: 1 },
-  { name: ['instantiateStep2', 'Deployment Info'], index: 2 },
-  { name: ['instantiateStep3', 'Confirmation'], index: 3 },
-];
-
 export function Wizard() {
   const { t } = useTranslation();
   const {
@@ -32,10 +26,11 @@ export function Wizard() {
       </main>
       <aside className="md:col-span-3 md:pt-0 p-4">
         <Stepper
-          steps={steps.map(step => ({
-            ...step,
-            name: t(step.name[0], step.name[1]),
-          }))}
+          steps={[
+            { name: t('instantiateStep1', 'Contract Bundle'), index: 1 },
+            { name: t('instantiateStep2', 'Deployment Info'), index: 2 },
+            { name: t('instantiateStep3', 'Confirmation'), index: 3 },
+          ]}
         />
         {currentStep > 1 && <DryRun />}
       </aside>

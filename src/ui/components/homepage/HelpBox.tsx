@@ -50,7 +50,7 @@ export function HelpBox(): React.ReactElement | null {
             target="_blank"
             rel="noreferrer"
           >
-            <Button className="border-2 py-1.5 px-3" variant="default">
+            <Button className="border-2 py-1.5 px-3 text-gray-500" variant="default">
               {t('helpBoxButton', 'Explore Examples')}
             </Button>
           </a>

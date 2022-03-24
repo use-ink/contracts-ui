@@ -105,5 +105,18 @@
   "settingsLanguageTitle": "Sprache",
   "settingsLanguageHelp": "Wahele die gewünschte Sprache aus",
   "settingsThemeTitle": "Theme",
-  "settingsThemeHelp": "Wähle ein Darstellungs Theme"
+  "settingsThemeHelp": "Wähle ein Darstellungs Theme",
+  "useEstimatedWeight": "Use Estimated Weight ({{estimatedWeight}}M)",
+  "useMaximumQueryGas": "Use Maximum Query Gas",
+  "usingEstimatedGas": "Using Estimated Gas",
+  "usingMaximumQueryGas": "Using Maximum Query Gas",
+  "useCustomWeight": "Use Custom",
+  "instantiateStep1": "Contract Bundle",
+  "instantiateStep2": "Deployment Info",
+  "instantiateStep3": "Confirmation",
+  "instantiateCodeHashTitle": "Instantiate Contract from Code Hash",
+  "instantiateUploadTitle": "Upload and Instantiate Contract",
+  "instantiateCodeHashHelp": "You can upload and instantate new contract code <2>here</2>.",
+  "selectCodeHashTitle": "Instantiate Contract from Code Hash",
+  "selectCodeHashHelp": "You can upload and instantate new contract code <2>here</2>."
 }

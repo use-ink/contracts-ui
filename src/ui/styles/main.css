@@ -44,6 +44,10 @@ body {
   width: 100%;
 }
 
+a {
+  @apply text-green-500 hover:text-green-300;
+}
+
 @screen xl {
   .content main {
     width: calc(100% - 24rem);

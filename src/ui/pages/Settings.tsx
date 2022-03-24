@@ -64,7 +64,6 @@ export function Settings() {
           help={t('settingsLanguageHelp', 'Select a preferred language')}
         >
           <Dropdown
-            isDisabled
             onChange={e => {
               setI18nextLng && setI18nextLng(e as string);
 
