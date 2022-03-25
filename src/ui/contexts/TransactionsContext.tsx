@@ -35,7 +35,7 @@ export function TransactionsContextProvider({
     const tx = txs[id];
 
     if (tx) {
-      const { extrinsic, accountId, isValid, onSuccess } = tx;
+      const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
 
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
@@ -74,6 +74,9 @@ export function TransactionsContextProvider({
                   const decoded = api.registry.findMetaError(result.dispatchError.asModule);
                   message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
                 }
+
+                onError && onError(result);
+
                 throw new Error(message);
               }
 

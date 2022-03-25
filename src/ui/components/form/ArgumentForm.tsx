@@ -16,11 +16,13 @@ interface Props extends React.HTMLAttributes<HTMLFormElement> {
 }
 
 export function ArgumentForm({ args, argValues, registry, setArgValues, className }: Props) {
+  const components = React.useMemo(
+    () => args.map(arg => ({ arg, Component: findComponent(registry, arg.type) })),
+    [args, registry]
+  );
   return (
     <Form>
-      {args.map(arg => {
-        const Component = findComponent(registry, arg.type);
-
+      {components.map(({ arg, Component }) => {
         const onChange = (value: unknown) => {
           setArgValues(prev => ({
             ...prev,

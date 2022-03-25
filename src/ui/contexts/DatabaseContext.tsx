@@ -23,7 +23,7 @@ const INITIAL = { isDbReady: false } as unknown as DbState;
 export function DatabaseContextProvider({
   children,
 }: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { status, blockOneHash, endpoint } = useApi();
+  const { status, genesisHash, endpoint } = useApi();
 
   const [state, setState] = useState<DbState>(INITIAL);
 
@@ -34,15 +34,15 @@ export function DatabaseContextProvider({
 
   useEffect((): void => {
     status === 'READY' &&
-      !!blockOneHash &&
-      init(endpoint, blockOneHash, isRemote)
+      !!genesisHash &&
+      init(endpoint, genesisHash, isRemote)
         .then(([db, user, identity]): void => {
           setState(state => ({ ...state, db, user, identity, isDbReady: true }));
         })
         .catch(e => {
           console.error(e);
         });
-  }, [blockOneHash, endpoint, isRemote, status]);
+  }, [genesisHash, endpoint, isRemote, status]);
 
   const refreshUserData = useCallback(async (): Promise<void> => {
     const user = await getUser(state.db, state.identity);

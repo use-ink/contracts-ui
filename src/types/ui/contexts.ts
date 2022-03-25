@@ -40,7 +40,7 @@ export type ApiAction =
   | { type: 'KEYRING_ERROR' };
 
 export interface ChainProperties {
-  blockOneHash: string | null;
+  genesisHash: string | null;
   tokenDecimals: number;
   systemName: string | null;
   systemVersion: string | null;
@@ -97,7 +97,7 @@ export interface TxOptions {
   accountId: string;
   isValid: (_: SubmittableResult) => boolean;
   onSuccess?: ((_: SubmittableResult) => void) | ((_: SubmittableResult) => Promise<void>);
-  onError?: () => void;
+  onError?: (result: SubmittableResult) => void;
 }
 
 export interface QueuedTxOptions extends TxOptions {
