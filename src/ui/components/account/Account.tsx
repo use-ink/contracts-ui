@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Identicon } from './Identicon';
 import { classes, truncate } from 'ui/util';
 import { OrFalsy } from 'types';
@@ -15,9 +14,8 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Account({ className, name: propsName, size = 42, value }: Props) {
-  const { t } = useTranslation();
   const account = useAccount(value);
-  const name = propsName || account?.meta.name || t('account', 'Account');
+  const name = propsName || account?.meta.name;
 
   if (!value) {
     return null;

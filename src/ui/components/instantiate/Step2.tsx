@@ -165,28 +165,29 @@ export function Step2() {
           )}
         </FormField>
         {deployConstructor?.isPayable && (
-          <FormField id="value" label="Value" {...valueValidation}>
+          <FormField id="value" label={t('valueLabel', 'Value')} {...valueValidation}>
             <InputBalance id="value" value={value} onChange={onChangeValue} />
           </FormField>
         )}
-        <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
+        <FormField id="salt" label={t('saltLabel', 'Deployment Salt')} {...getValidation(salt)}>
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
         <FormField
-          id="maxGas"
-          label="Max Gas Allowed"
+          id="maxGasAllowed"
+          label={t('maxGasAllowedLabel', 'Max Gas Allowed (M)')}
           isError={!weight.isValid}
-          message={!weight.isValid ? 'Invalid gas limit' : null}
+          message={!weight.isValid ? t('maxGasAllowedInvalid', 'Invalid gas limit') : null}
         >
           <InputGas isCall withEstimate {...weight} />
         </FormField>
         <FormField
           id="storageDepositLimit"
-          label="Storage Deposit Limit"
+          label={t('storageDepositLimitLabel', 'Storage Deposit Limit')}
           isError={!storageDepositLimit.isValid}
           message={
             !storageDepositLimit.isValid
-              ? storageDepositLimit.message || 'Invalid storage deposit limit'
+              ? storageDepositLimit.message ||
+                t('storageDepositLimitInvalid', 'Invalid storage deposit limit')
               : null
           }
         >
@@ -212,11 +213,11 @@ export function Step2() {
           variant="primary"
           data-cy="next-btn"
         >
-          Next
+          {t('next', 'Next')}
         </Button>
 
         <Button onClick={stepBackward} variant="default">
-          Go Back
+          {t('back', 'Go Back')}
         </Button>
       </Buttons>
     </>

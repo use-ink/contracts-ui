@@ -4,6 +4,7 @@
 import React from 'react';
 import { formatBalance, formatNumber } from '@polkadot/util';
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
+import { useTranslation } from 'react-i18next';
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { useApi, useInstantiate } from 'ui/contexts';
@@ -11,6 +12,7 @@ import { useApi, useInstantiate } from 'ui/contexts';
 // import { fromSats } from 'api';
 
 export function DryRun() {
+  const { t } = useTranslation();
   const { api } = useApi();
   const { dryRunResult } = useInstantiate();
 
@@ -18,15 +20,15 @@ export function DryRun() {
     <SidePanel className="instantiate-outcome" header="Predicted Outcome">
       <div className="body">
         <div className="row">
-          <div>Gas Required:</div>
+          <div>{t('gasRequired', 'Gas Required')}:</div>
           <div>{dryRunResult?.gasRequired && <>{formatNumber(dryRunResult.gasRequired)}</>}</div>
         </div>
         <div className="row">
-          <div>Gas Consumed:</div>
+          <div>{t('gasConsumed', 'Gas Consumed')}:</div>
           <div>{dryRunResult?.gasConsumed && <>{formatNumber(dryRunResult.gasConsumed)}</>}</div>
         </div>
         <div className="row">
-          <div>Storage Deposit:</div>
+          <div>{t('storageDeposit', 'Storage Deposit')}:</div>
           <div>
             {dryRunResult?.storageDeposit &&
               (() => {
@@ -43,7 +45,7 @@ export function DryRun() {
           </div>
         </div>
         <div className="row h-8">
-          <div>Contract Address:</div>
+          <div>{t('contractAddress', 'Contract Address')}:</div>
           <div>
             {dryRunResult?.result.isOk ? (
               <Account size={26} value={dryRunResult?.result.asOk.accountId.toString()} />
@@ -56,7 +58,7 @@ export function DryRun() {
           {dryRunResult?.result.isOk && (
             <div className="validation success font-bold">
               <CheckCircleIcon className="mr-3" />
-              The instantiation will be successful.
+              {t('instantiateDryRunSuccess', 'The instantiation will be successful.')}
             </div>
           )}
           {dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule && (

@@ -28,7 +28,7 @@ export function Instantiate() {
                   <Link to="/instantiate">here</Link>.
                 </Trans>
               ) : (
-                <Trans i18nkey="instantiateUploadHelp">
+                <Trans i18nKey="instantiateUploadHelp">
                   You can instantiate a new contract from an existing code bundle{' '}
                   <Link to="/hash-lookup">here</Link>.
                 </Trans>

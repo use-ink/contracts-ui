@@ -193,7 +193,7 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
           <FormField
             id="message"
-            label={t('messageToSend', 'Message to Send')}
+            label={t('messageLabel', 'Message to Send')}
             {...messageValidation}
           >
             <Dropdown
@@ -216,25 +216,26 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
 
           {message.isPayable && (
-            <FormField id="value" label={t('payment', 'Payment')} {...valueValidation}>
+            <FormField id="value" label={t('paymentLabel', 'Payment')} {...valueValidation}>
               <InputBalance value={value} onChange={setValue} />
             </FormField>
           )}
           <FormField
-            id="maxGas"
-            label={t('maxGasAllowed', 'Max Gas Allowed (M)')}
+            id="maxGasAllowed"
+            label={t('maxGasAllowedLabel', 'Max Gas Allowed (M)')}
             isError={!weight.isValid}
-            message={!weight.isValid ? t('invalidGasLimit', 'Invalid gas limit') : null}
+            message={!weight.isValid ? t('maxGasAllowedInvalid', 'maxGasAllowedInvalid') : null}
           >
             <InputGas isCall={message.isMutating} withEstimate {...weight} />
           </FormField>
           <FormField
             id="storageDepositLimit"
-            label="Storage Deposit Limit"
+            label={t('storageDepositLimitLabel', 'Storage Deposit Limit')}
             isError={!storageDepositLimit.isValid}
             message={
               !storageDepositLimit.isValid
-                ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                ? storageDepositLimit.message ||
+                  t('storageDepositLimitInvalid', 'Invalid storage deposit limit')
                 : null
             }
           >

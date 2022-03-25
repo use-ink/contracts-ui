@@ -14,27 +14,6 @@ import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
 import { displayDate } from 'ui/util';
 
-const TABS = [
-  {
-    id: 'metadata',
-    label: (
-      <>
-        <BookOpenIcon />
-        <Trans key="metadata">Metadata</Trans>
-      </>
-    ),
-  },
-  {
-    id: 'interact',
-    label: (
-      <>
-        <PlayIcon />
-        <Trans key="interact">Interact</Trans>
-      </>
-    ),
-  },
-];
-
 export function Contract() {
   const navigate = useNavigate();
 
@@ -44,7 +23,28 @@ export function Contract() {
 
   const { data, isLoading, isValid } = useContract(address);
 
-  const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
+  const tabs = [
+    {
+      id: 'metadata',
+      label: (
+        <>
+          <BookOpenIcon />
+          <Trans key="metadata">Metadata</Trans>
+        </>
+      ),
+    },
+    {
+      id: 'interact',
+      label: (
+        <>
+          <PlayIcon />
+          <Trans key="interact">Interact</Trans>
+        </>
+      ),
+    },
+  ];
+
+  const [tabIndex, setTabIndex] = useState(tabs.findIndex(({ id }) => id === activeTab) || 1);
 
   useEffect((): void => {
     if (!isLoading && (!isValid || !data || !data[0])) {
@@ -81,7 +81,7 @@ export function Contract() {
           </Trans>
         }
       >
-        <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
+        <Tabs index={tabIndex} setIndex={setTabIndex} tabs={tabs}>
           <MetadataTab abi={contract?.abi} />
           <InteractTab contract={contract} />
         </Tabs>
