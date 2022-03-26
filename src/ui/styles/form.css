@@ -3,19 +3,19 @@
 }
 
 .form-field > label {
-  @apply block mb-1.5 text-sm font-semibold dark:text-white;
+  @apply inline-flex items-center mb-1.5 text-sm font-semibold dark:text-white text-gray-600;
+}
+
+.form-field > label > svg {
+  @apply cursor-help ml-1.5 w-4 h-4 dark:text-gray-500;
 }
 
 .form-field > label .font-mono {
   @apply text-xs;
 }
 
-.form-field > .validation {
-  @apply mt-2 text-sm;
-}
-
 .validation {
-  @apply flex items-center;
+  @apply mt-2 text-sm flex items-center;
 }
 
 .validation svg {
