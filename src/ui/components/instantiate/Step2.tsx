@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import { isHex, isNumber } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
-import { useTranslation } from 'react-i18next';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
