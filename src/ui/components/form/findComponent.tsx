@@ -10,6 +10,7 @@ import { Vector } from './Vector';
 import { SubForm, SubComponent } from './SubForm';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
+import { Option } from './Option';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } from 'types';
 
 // nestingNumber counts the depth of nested components
@@ -21,6 +22,17 @@ export function findComponent(
 ): React.ComponentType<ArgComponentProps<any>> {
   if (type.info === TypeDefInfo.Si) {
     return findComponent(registry, registry.lookup.getTypeDef(type.type));
+  }
+
+  if (type.info === TypeDefInfo.Option) {
+    return (props: React.PropsWithChildren<ValidFormField<unknown>>) => (
+      <Option
+        component={findComponent(registry, type.sub as TypeDef)}
+        registry={registry}
+        typeDef={type}
+        {...props}
+      />
+    );
   }
 
   if (type.info === TypeDefInfo.Enum) {
@@ -58,6 +70,10 @@ export function findComponent(
     }
   }
 
+  if (type.info === TypeDefInfo.Compact) {
+    return findComponent(registry, type.sub as TypeDef);
+  }
+
   switch (type.type) {
     case 'AccountId':
     case 'Address':
@@ -69,7 +85,12 @@ export function findComponent(
     case 'bool':
       return Bool;
 
+    case 'u8':
+    case 'i8':
     case 'i32':
+    case 'u32':
+    case 'i64':
+    case 'u64':
     case 'BN':
       return InputNumber;
 
