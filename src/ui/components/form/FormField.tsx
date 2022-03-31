@@ -57,7 +57,7 @@ export function FormField({
           {help && (
             <>
               <InformationCircleIcon data-tip data-for={`formFieldHelp-${id}`} />
-              <ReactTooltip border borderColor="rgb(76, 82, 95)" className="font-medium text-xs bg-elevation-0 text-white opacity-100 py-1 px-3" id={`formFieldHelp-${id}`}>{help}</ReactTooltip>
+              <ReactTooltip id={`formFieldHelp-${id}`}>{help}</ReactTooltip>
             </>
           )}
         </label>
