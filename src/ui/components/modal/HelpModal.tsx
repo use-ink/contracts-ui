@@ -4,7 +4,7 @@
 import React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import { BookOpenIcon } from '@heroicons/react/solid';
-import { GithubLogo, StackExchangeLogo, ElementLogo } from './Logos';
+import { GithubLogo, StackExchangeLogo } from './Logos';
 import { ModalBase as Modal } from './ModalBase';
 import type { ModalProps } from './ModalBase';
 
@@ -48,27 +48,6 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <strong>Stack Exchange</strong>
                 <span className="dark:text-gray-400 text-gray-500">
                   Browse through common questions.{' '}
-                </span>
-              </div>
-            </div>
-            <ChevronRightIcon className="h-4 w-4 dark:text-gray-400 text-gray-500 group-hover:opacity-50" />
-          </a>
-        </li>
-        <li>
-          <a
-            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
-            href="https://matrix.to/#/#ink:matrix.parity.io"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div className="flex py-4">
-              <div className="w-5 mr-2" style={{ position: 'relative', top: 2 }}>
-                <ElementLogo />
-              </div>
-              <div className="flex flex-col">
-                <strong>Element Channel</strong>
-                <span className="dark:text-gray-400 text-gray-500">
-                  Ask questions and help others.{' '}
                 </span>
               </div>
             </div>
