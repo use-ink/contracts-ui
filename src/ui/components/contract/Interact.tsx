@@ -198,7 +198,13 @@ export const InteractTab = ({ contract }: Props) => {
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
         <Form>
-          <FormField className="mb-8" id="accountId" label="Account" {...accountIdValidation}>
+          <FormField
+            className="mb-8"
+            help="The sending account for this interaction. Any transaction fees will be deducted from this account."
+            id="accountId"
+            label="Account"
+            {...accountIdValidation}
+          >
             <AccountSelect
               id="accountId"
               className="mb-2"
@@ -206,7 +212,12 @@ export const InteractTab = ({ contract }: Props) => {
               onChange={setAccountId}
             />
           </FormField>
-          <FormField id="message" label="Message to Send" {...messageValidation}>
+          <FormField
+            help="The message to send to this contract. Parameters are adjusted based on the stored contract metadata."
+            id="message"
+            label="Message to Send"
+            {...messageValidation}
+          >
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}
@@ -227,11 +238,17 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
 
           {message.isPayable && (
-            <FormField id="value" label="Payment" {...valueValidation}>
+            <FormField
+              help="The balance to transfer to the contract as part of this call."
+              id="value"
+              label="Payment"
+              {...valueValidation}
+            >
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
           <FormField
+            help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
             id="maxGas"
             label="Max Gas Allowed"
             isError={!weight.isValid}
@@ -240,6 +257,7 @@ export const InteractTab = ({ contract }: Props) => {
             <InputGas isCall={message.isMutating} withEstimate {...weight} />
           </FormField>
           <FormField
+            help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
             id="storageDepositLimit"
             label="Storage Deposit Limit"
             isError={!storageDepositLimit.isValid}

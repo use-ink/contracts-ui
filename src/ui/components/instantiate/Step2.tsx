@@ -136,7 +136,11 @@ export function Step2() {
   return metadata ? (
     <>
       <Form>
-        <FormField id="constructor" label="Deployment Constructor">
+        <FormField
+          help="The constructor to use for this contract deployment."
+          id="constructor"
+          label="Deployment Constructor"
+        >
           <Dropdown
             id="constructor"
             options={createConstructorOptions(metadata.constructors)}
@@ -163,14 +167,25 @@ export function Step2() {
           )}
         </FormField>
         {deployConstructor?.isPayable && (
-          <FormField id="value" label="Value" {...valueValidation}>
+          <FormField
+            help="The balance to transfer from the `origin` to the newly created contract."
+            id="value"
+            label="Value"
+            {...valueValidation}
+          >
             <InputBalance id="value" value={value} onChange={onChangeValue} />
           </FormField>
         )}
-        <FormField id="salt" label="Deployment Salt" {...getValidation(salt)}>
+        <FormField
+          help="A hex or string value that acts as a salt for this deployment."
+          id="salt"
+          label="Deployment Salt"
+          {...getValidation(salt)}
+        >
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
         <FormField
+          help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
           id="maxGas"
           label="Max Gas Allowed"
           isError={!weight.isValid}
@@ -179,6 +194,7 @@ export function Step2() {
           <InputGas isCall withEstimate {...weight} />
         </FormField>
         <FormField
+          help="The maximum balance allowed to be deducted for the new contract's storage deposit."
           id="storageDepositLimit"
           label="Storage Deposit Limit"
           isError={!storageDepositLimit.isValid}

@@ -4,27 +4,31 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
-import {
-  Form,
-  useAccountSelect,
-  useMetadataField,
-  CodeHashField,
-  ContractNameField,
-} from '../form';
+import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
 import { Loader } from '../common/Loader';
+import { AccountSelect } from '../account';
+import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useInstantiate } from 'ui/contexts';
+import { useAccountId } from 'ui/hooks';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   const { stepForward, setData, data, currentStep } = useInstantiate();
 
-  const { accountId, AccountSelectField } = useAccountSelect();
+  const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
 
-  const { metadata, isLoadingCodeBundle, isUsingStoredMetadata, isErrorMetadata, MetadataField } =
-    useMetadataField();
+  const {
+    file,
+    value: metadata,
+    isLoading,
+    isStored,
+    onChange,
+    onRemove,
+    ...metadataValidation
+  } = useMetadataField();
 
   useEffect((): void => {
     if (metadata && !name) {
@@ -48,25 +52,67 @@ export function Step1() {
   if (currentStep !== 1) return null;
 
   return (
-    <Loader isLoading={isLoadingCodeBundle}>
+    <Loader isLoading={isLoading}>
       <Form>
-        <AccountSelectField />
-        <ContractNameField value={name} onChange={setName} {...nameValidation} />
-        {codeHashUrlParam && (
-          <CodeHashField
-            codeHash={codeHashUrlParam}
-            name={
-              isUsingStoredMetadata
-                ? metadata?.info?.contract.name.toString() || 'Contract'
-                : 'Unidentified Code'
-            }
+        <FormField
+          help="The account to use for this instantiation. The fees and storage deposit will be deducted from this account."
+          id="accountId"
+          label="Account"
+          {...accountIdValidation}
+        >
+          <AccountSelect
+            id="accountId"
+            className="mb-2"
+            value={accountId}
+            onChange={setAccountId}
           />
+        </FormField>
+        <FormField
+          help="A name for the new contract to help users distinguish it. Only used for display purposes."
+          id="name"
+          label="Contract Name"
+          {...nameValidation}
+        >
+          <Input
+            id="contractName"
+            placeholder="Give your contract a descriptive name"
+            value={name}
+            onChange={setName}
+          />
+        </FormField>
+        {codeHashUrlParam && (
+          <FormField
+            help="The on-chain code hash that will be reinstantiated as a new contract."
+            id="metadata"
+            label="On-Chain Code"
+          >
+            <CodeHash codeHash={codeHashUrlParam} name={name} />
+          </FormField>
         )}
-        {(!codeHashUrlParam || !isUsingStoredMetadata) && <MetadataField />}
+        {(!codeHashUrlParam || !isStored) && (
+          <FormField
+            help={
+              codeHashUrlParam && !isStored
+                ? 'The contract metadata JSON file to save for this contract. Constructor and message information will be derived from this file.'
+                : 'The contract bundle file containing the WASM blob and metadata.'
+            }
+            id="metadata"
+            label={codeHashUrlParam ? 'Upload Metadata' : 'Upload Contract Bundle'}
+            {...getValidation(metadataValidation)}
+          >
+            <InputFile
+              placeholder="Click to select or drag and drop to upload file."
+              onChange={onChange}
+              onRemove={onRemove}
+              isError={metadataValidation.isError}
+              value={file}
+            />
+          </FormField>
+        )}
       </Form>
       <Buttons>
         <Button
-          isDisabled={!metadata || !nameValidation.isValid || isErrorMetadata}
+          isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
           onClick={submitStep1}
           variant="primary"
           data-cy="next-btn"
