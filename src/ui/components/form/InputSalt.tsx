@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React from 'react';
 import { Switch } from '../common/Switch';
 import { Input } from './Input';
 import { SimpleSpread, ValidFormField } from 'types';
