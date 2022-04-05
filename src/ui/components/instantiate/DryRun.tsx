@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import React from 'react';
 import { formatBalance, formatNumber } from '@polkadot/util';
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { SidePanel } from '../common/SidePanel';

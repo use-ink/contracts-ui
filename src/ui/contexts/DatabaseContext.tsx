@@ -1,11 +1,12 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import {
-  createContext,
+import React, {
+  HTMLAttributes,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { useApi } from './ApiContext';
@@ -13,7 +14,7 @@ import { init } from 'db/util';
 import type { DbState } from 'types';
 import { findMyContracts, getUser } from 'db';
 
-export const DbContext: React.Context<DbState> = createContext({} as unknown as DbState);
+export const DbContext: React.Context<DbState> = React.createContext({} as unknown as DbState);
 export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
 export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 
@@ -21,22 +22,27 @@ const INITIAL = { isDbReady: false } as unknown as DbState;
 
 export function DatabaseContextProvider({
   children,
-}: React.HTMLAttributes<HTMLDivElement>): JSX.Element | null {
+}: HTMLAttributes<HTMLDivElement>): JSX.Element | null {
   const { status, genesisHash, endpoint } = useApi();
 
   const [state, setState] = useState<DbState>(INITIAL);
 
+  const isRemote = useMemo(
+    (): boolean => false, // !isDevelopment
+    []
+  );
+
   useEffect((): void => {
     status === 'READY' &&
       !!genesisHash &&
-      init(endpoint, genesisHash)
+      init(endpoint, genesisHash, isRemote)
         .then(([db, user, identity]): void => {
           setState(state => ({ ...state, db, user, identity, isDbReady: true }));
         })
         .catch(e => {
           console.error(e);
         });
-  }, [genesisHash, endpoint, status]);
+  }, [genesisHash, endpoint, isRemote, status]);
 
   const refreshUserData = useCallback(async (): Promise<void> => {
     const user = await getUser(state.db, state.identity);

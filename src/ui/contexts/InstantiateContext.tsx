@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { createContext, useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { BN_THOUSAND } from '@polkadot/util';
 import { ContractInstantiateResult } from '@polkadot/types/interfaces';
@@ -52,7 +52,7 @@ const initialState = {
   onInstantiate: () => Promise.resolve(),
 } as unknown as InstantiateState;
 
-const InstantiateContext = createContext(initialState);
+const InstantiateContext = React.createContext(initialState);
 
 export function isResultValid({
   contract,

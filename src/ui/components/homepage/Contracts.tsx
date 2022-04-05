@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { FolderOpenIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { ContractRow } from '../contract/ContractRow';

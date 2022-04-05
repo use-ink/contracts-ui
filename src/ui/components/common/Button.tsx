@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import React from 'react';
 import { classes } from 'ui/util';
 
 type Variant = 'default' | 'primary' | 'plain' | 'negative';

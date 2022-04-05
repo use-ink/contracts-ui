@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { ChevronRightIcon } from '@heroicons/react/outline';
+import React from 'react';
 import { SimpleSpread, VoidFn } from 'types';
 import { classes, truncate } from 'ui/util';
 

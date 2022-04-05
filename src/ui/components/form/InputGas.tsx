@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import React from 'react';
 import { BN_MILLION, BN_ONE, BN_ZERO } from '@polkadot/util';
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
