@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import Big from 'big.js';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { isNull, isNumber } from '@polkadot/util';
 import { Meter, Switch } from '../common';
 import { InputBalance } from './InputBalance';

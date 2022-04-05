@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { GroupBase } from 'react-select';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';

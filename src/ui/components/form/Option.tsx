@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Switch } from '../common/Switch';
 import { Input } from './Input';
 import { OrFalsy, Registry, SimpleSpread, TypeDef, ValidFormField } from 'types';

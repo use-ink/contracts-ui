@@ -3,7 +3,7 @@
 
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/solid';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 export type ModalProps = {
   isOpen: boolean;

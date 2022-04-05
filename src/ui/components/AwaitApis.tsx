@@ -1,11 +1,12 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
+import type { HTMLAttributes } from 'react';
 import { Loader } from './common/Loader';
 import { useApi, useDatabase } from 'ui/contexts';
 
-export function AwaitApis({ children }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
+export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { error, status, keyringStatus } = useApi();
   const { isDbReady } = useDatabase();
 

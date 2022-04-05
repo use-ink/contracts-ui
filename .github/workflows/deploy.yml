@@ -28,7 +28,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --frozen-lockfile
       - name: Build
-        run: yarn build
+        run: yarn build:prod
       - name: Init new repo in dist folder and commit generated files
         run: |
           cd dist

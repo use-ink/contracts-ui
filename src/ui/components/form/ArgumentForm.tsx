@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useMemo } from 'react';
+import React from 'react';
 import { ArgSignature } from '../message/ArgSignature';
 import { Form, FormField } from './FormField';
 import { findComponent } from './findComponent';
@@ -16,7 +16,7 @@ interface Props extends React.HTMLAttributes<HTMLFormElement> {
 }
 
 export function ArgumentForm({ args, argValues, registry, setArgValues, className }: Props) {
-  const components = useMemo(
+  const components = React.useMemo(
     () => args.map(arg => ({ arg, Component: findComponent(registry, arg.type) })),
     [args, registry]
   );

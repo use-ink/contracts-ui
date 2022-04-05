@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import React from 'react';
 import { Dropdown } from 'ui/components';
 import { useTheme } from 'ui/contexts';
 import { Page } from 'ui/templates';
