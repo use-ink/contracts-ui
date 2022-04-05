@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React from 'react';
+import type { ReactNode } from 'react';
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './substrate';
@@ -50,7 +50,7 @@ export interface ContractDocument extends Document {
 
 export interface DbQuery<T> {
   data: T | null;
-  error: React.ReactNode | null;
+  error: ReactNode | null;
   isLoading: boolean;
   isValid: boolean;
   refresh: VoidFn;

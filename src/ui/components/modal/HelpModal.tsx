@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import { BookOpenIcon } from '@heroicons/react/solid';
 import { GithubLogo, StackExchangeLogo } from './Logos';

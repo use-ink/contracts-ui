@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React from 'react';
 import { AddressSelect } from '../account/Select';
 import { Input } from './Input';
 import { InputBalance } from './InputBalance';
