@@ -50,14 +50,13 @@ export async function createContract(
     codeHash,
     creator,
     date = new Date().toISOString(),
-    genesisHash,
     name,
     tags = [],
   }: Partial<ContractDocument>,
   savePair = true
 ): Promise<ContractDocument> {
   try {
-    if (!abi || !address || !codeHash || !creator || !name || !genesisHash) {
+    if (!abi || !address || !codeHash || !creator || !name) {
       return Promise.reject(new Error('Missing required fields'));
     }
 
@@ -72,7 +71,6 @@ export async function createContract(
         abi,
         codeHash,
         creator,
-        genesisHash,
         name,
         owner: publicKeyHex(owner),
         tags: [],
@@ -90,7 +88,6 @@ export async function createContract(
       address,
       codeHash,
       creator,
-      genesisHash,
       name,
       owner: publicKeyHex(owner),
       tags,

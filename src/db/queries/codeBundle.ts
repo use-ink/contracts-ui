@@ -124,7 +124,6 @@ export async function createCodeBundle(
     abi,
     codeHash,
     creator,
-    genesisHash,
     id = getNewCodeBundleId(),
     instances = 1,
     name,
@@ -137,11 +136,7 @@ export async function createCodeBundle(
       return Promise.reject(new Error('Missing creator address'));
     }
 
-    if (!genesisHash) {
-      return Promise.reject(new Error('Missing block genesis hash'));
-    }
-
-    if (!codeHash || !name || !genesisHash) {
+    if (!codeHash || !name) {
       return Promise.reject(new Error('Missing codeHash or name'));
     }
 
@@ -149,7 +144,6 @@ export async function createCodeBundle(
       abi,
       codeHash,
       creator,
-      genesisHash,
       id,
       name,
       owner: publicKeyHex(owner),

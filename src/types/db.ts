@@ -24,7 +24,6 @@ export interface CodeBundleDocument extends Document {
   codeHash: string;
   creator: string;
   date: string;
-  genesisHash: string;
   id: string;
   instances: number;
   name: string;
@@ -38,7 +37,6 @@ export interface ContractDocument extends Document {
   codeHash: string;
   creator: string;
   date: string;
-  genesisHash: string;
   name: string;
   owner?: string;
   tags?: string[];
