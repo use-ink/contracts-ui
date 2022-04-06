@@ -36,8 +36,6 @@ export async function getUser(
 
   if (identity && !existing) {
     const user = getUserCollection(db).create({
-      codeBundlesStarred: [],
-      contractsStarred: [],
       creator,
       name,
       email,

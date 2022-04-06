@@ -13,8 +13,6 @@ interface Document {
 }
 
 export interface UserDocument extends Document {
-  codeBundlesStarred: string[];
-  contractsStarred: string[];
   creator?: string;
   publicKey: string;
   email?: string;
@@ -58,12 +56,6 @@ export type CodeBundle = {
   document: CodeBundleDocument | null;
   isOnChain: boolean;
 };
-
-export interface Starred<T> {
-  isExistent: boolean;
-  value?: T | { identifier: string };
-}
-
 export interface UserArtifacts<T> {
   owned: Array<T>;
 }
