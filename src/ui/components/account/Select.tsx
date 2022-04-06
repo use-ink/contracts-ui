@@ -38,7 +38,7 @@ function Select({
   );
 }
 
-export function AccountSelect({ placeholder = 'No Accounts Found', ...props }: Props) {
+export function AccountSelect({ placeholder = 'Select account', ...props }: Props) {
   const { keyring } = useApi();
 
   return (
@@ -50,7 +50,7 @@ export function AccountSelect({ placeholder = 'No Accounts Found', ...props }: P
   );
 }
 
-export function AddressSelect({ placeholder = 'No Addresses Found', ...props }: Props) {
+export function AddressSelect({ placeholder = 'Select address', ...props }: Props) {
   const { keyring } = useApi();
   const { myContracts } = useDatabase();
 
