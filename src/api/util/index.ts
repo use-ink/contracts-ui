@@ -125,3 +125,7 @@ export function getBlockHash(
 ): Hash {
   return systemChainType.isDevelopment ? status.asInBlock : status.asFinalized;
 }
+
+export async function getContractInfo(api: ApiPromise, address: string) {
+  return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
+}
