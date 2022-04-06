@@ -7,7 +7,6 @@ export * from './useContract';
 export * from './useDebounce';
 export * from './useLocalStorage';
 export * from './useAvailableCodeBundles';
-export * from './useMyContracts';
 export * from './useStatistics';
 export * from './useTopContracts';
 export * from './useDbQuery';
