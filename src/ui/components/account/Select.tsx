@@ -12,10 +12,6 @@ import { classes } from 'ui/util';
 
 type Props = ValidFormField<OrFalsy<string>> & Omit<DropdownProps<string>, 'options'>;
 
-function isContractExistent<T>(value: T | undefined | { identifier: string }): value is T {
-  return !!value && (value as Record<string, unknown>).identifier === undefined;
-}
-
 function Option({ label, value }: DropdownOption<string>) {
   return <Account className="p-1.5" name={label} value={value} />;
 }
@@ -75,26 +71,8 @@ export function AddressSelect({ placeholder = 'No Addresses Found', ...props }: 
             },
           ]
         : []),
-      ...(myContracts?.starred && myContracts.starred.length > 0
-        ? [
-            {
-              label: 'Starred Contracts',
-              options: (myContracts?.starred || []).reduce(
-                (result: DropdownOption<string>[], starredContract) => {
-                  return [
-                    ...result,
-                    ...(isContractExistent(starredContract.value)
-                      ? [{ label: starredContract.value.name, value: starredContract.value.name }]
-                      : []),
-                  ];
-                },
-                []
-              ),
-            },
-          ]
-        : []),
     ];
-  }, [keyring, myContracts?.owned, myContracts?.starred]);
+  }, [keyring, myContracts?.owned]);
 
   return <Select options={options} placeholder={placeholder} {...props} />;
 }

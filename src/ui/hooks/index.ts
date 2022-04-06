@@ -9,7 +9,6 @@ export * from './useLocalStorage';
 export * from './useAvailableCodeBundles';
 export * from './useMyContracts';
 export * from './useStatistics';
-export * from './useToggleContractStar';
 export * from './useTopContracts';
 export * from './useDbQuery';
 export * from './useWeight';

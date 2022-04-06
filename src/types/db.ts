@@ -31,7 +31,6 @@ export interface CodeBundleDocument extends Document {
   instances: number;
   name: string;
   owner?: string;
-  stars: number;
   tags?: string[];
 }
 
@@ -44,7 +43,6 @@ export interface ContractDocument extends Document {
   genesisHash: string;
   name: string;
   owner?: string;
-  stars: number;
   tags?: string[];
 }
 
@@ -68,7 +66,6 @@ export interface Starred<T> {
 
 export interface UserArtifacts<T> {
   owned: Array<T>;
-  starred: Array<Starred<T>>;
 }
 
 export interface DbState {

@@ -10,8 +10,6 @@ import { displayDate } from 'ui/util';
 
 interface Props {
   contract: ContractDocument;
-  isStarred: boolean;
-  onToggleStar?: () => void;
 }
 
 export function ContractRow({ contract: { address, name, date } }: Props) {

@@ -13,7 +13,7 @@ export async function findTopContracts(db: Database): Promise<ContractDocument[]
   return getContractCollection(db).find({}).toArray();
 }
 
-const EMPTY = { owned: [], starred: [] };
+const EMPTY = { owned: [] };
 
 export async function findMyContracts(
   db: Database,
@@ -30,20 +30,8 @@ export async function findMyContracts(
   }
 
   const owned = await getContractCollection(db).find({ owner: user.publicKey }).toArray();
-  const existingStarred = await getContractCollection(db)
-    .find({ address: { $in: user.contractsStarred } })
-    .toArray();
 
-  const starred = user.contractsStarred.map((starredAddress: string) => {
-    const match = existingStarred.find(({ address }) => starredAddress === address);
-
-    return {
-      isExistent: !!match,
-      value: match || { identifier: starredAddress },
-    };
-  });
-
-  return { owned, starred };
+  return { owned };
 }
 
 export async function findContractByAddress(
@@ -107,7 +95,6 @@ export async function createContract(
       owner: publicKeyHex(owner),
       tags,
       date,
-      stars: 1,
     });
 
     savePair && keyring.saveContract(address, { name, tags, abi });

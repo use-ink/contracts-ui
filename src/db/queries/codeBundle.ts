@@ -69,24 +69,12 @@ export async function findMyCodeBundles(
     const user = await findUser(db, identity);
 
     if (!user) {
-      return { owned: [], starred: [] };
+      return { owned: [] };
     }
 
     const owned = await findOwnedCodeBundles(db, identity);
-    const existingStarred = await getCodeBundleCollection(db)
-      .find({ id: { $in: user.codeBundlesStarred } })
-      .toArray();
 
-    const starred = user.codeBundlesStarred.map((starredId: string) => {
-      const match = existingStarred.find(({ id }) => starredId === id);
-
-      return {
-        isExistent: !!match,
-        value: match || { identifier: starredId },
-      };
-    });
-
-    return { owned, starred };
+    return { owned };
   } catch (e) {
     console.error(e);
 
@@ -140,7 +128,6 @@ export async function createCodeBundle(
     id = getNewCodeBundleId(),
     instances = 1,
     name,
-    stars = 1,
     tags = [],
     date = new Date().toISOString(),
   }: Partial<CodeBundleDocument>
@@ -168,7 +155,6 @@ export async function createCodeBundle(
       owner: publicKeyHex(owner),
       tags,
       date,
-      stars,
       instances,
     });
 
