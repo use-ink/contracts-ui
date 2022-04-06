@@ -4,12 +4,7 @@
 import type { Database, PrivateKey } from '@textile/threaddb';
 
 import { publicKeyHex } from '../util/identity';
-import {
-  getCodeBundleCollection,
-  getContractCollection,
-  getUserCollection,
-  pushToRemote,
-} from './util';
+import { getCodeBundleCollection, getContractCollection, getUserCollection } from './util';
 import type { UserDocument } from 'types';
 
 export async function findUser(
@@ -82,8 +77,6 @@ export async function starContract(
 
       await contract.save();
 
-      await pushToRemote(db, 'Contract', 'User');
-
       return contract.stars;
     }
 
@@ -118,8 +111,6 @@ export async function unstarContract(
       contract.stars = Math.max(1, contract.stars - 1);
 
       await contract.save();
-
-      await pushToRemote(db, 'Contract', 'User');
 
       return contract.stars;
     }
@@ -157,8 +148,6 @@ export async function starCodeBundle(
       await user.save();
       await codeBundle.save();
 
-      await pushToRemote(db, 'User', 'CodeBundle');
-
       return codeBundle.stars;
     }
 
@@ -192,8 +181,6 @@ export async function unstarCodeBundle(
 
       await user.save();
       await codeBundle.save();
-
-      await pushToRemote(db, 'User', 'CodeBundle');
 
       return codeBundle.stars;
     }

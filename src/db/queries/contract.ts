@@ -5,7 +5,7 @@ import type { Database, PrivateKey } from '@textile/threaddb';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
-import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection } from './util';
 import { createCodeBundle } from './codeBundle';
 import type { ContractDocument, MyContracts } from 'types';
 
@@ -114,8 +114,6 @@ export async function createContract(
 
     await newContract.save();
 
-    await pushToRemote(db, 'Contract');
-
     return Promise.resolve(newContract);
   } catch (e) {
     console.error(e);
@@ -146,8 +144,6 @@ export async function updateContract(
 
       const id = await contract.save();
 
-      await pushToRemote(db, 'Contract');
-
       return id;
     }
 
@@ -173,8 +169,6 @@ export async function removeContract(
       await getContractCollection(db).delete(existing._id as string);
 
       savePair && keyring.forgetContract(address);
-
-      await pushToRemote(db, 'Contract');
     }
 
     return Promise.resolve();

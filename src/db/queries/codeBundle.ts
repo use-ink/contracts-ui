@@ -4,7 +4,7 @@
 import type { Database, PrivateKey } from '@textile/threaddb';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
-import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection } from './util';
 import type { CodeBundleDocument, MyCodeBundles } from 'types';
 
 export async function findTopCodeBundles(
@@ -174,8 +174,6 @@ export async function createCodeBundle(
 
     await newCode.save();
 
-    await pushToRemote(db, 'CodeBundle');
-
     return Promise.resolve(newCode);
   } catch (e) {
     console.error(e);
@@ -199,8 +197,6 @@ export async function updateCodeBundle(
 
       const id = await codeBundle.save();
 
-      await pushToRemote(db, 'CodeBundle');
-
       return id;
     }
 
@@ -218,8 +214,6 @@ export async function removeCodeBundle(db: Database, id: string): Promise<void> 
 
     if (existing) {
       await getCodeBundleCollection(db).delete(existing._id as string);
-
-      await pushToRemote(db, 'CodeBundle');
     }
 
     return Promise.resolve();
