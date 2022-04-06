@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { StarIcon as StarIconFill } from '@heroicons/react/solid';

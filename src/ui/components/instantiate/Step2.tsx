@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isHex, isNumber } from '@polkadot/util';
 import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';

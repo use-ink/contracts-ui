@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { BN_ZERO } from '@polkadot/util';
 import { Input } from './Input';
 import { SimpleSpread } from 'types';

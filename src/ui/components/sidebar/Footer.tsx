@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { HelpModal } from 'ui/components/modal';

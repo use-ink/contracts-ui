@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';

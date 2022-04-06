@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import React from 'react';
 import { encodeTypeDef } from '@polkadot/types/create';
 import { useApi } from 'ui/contexts/ApiContext';
 import { TypeDef } from 'types';

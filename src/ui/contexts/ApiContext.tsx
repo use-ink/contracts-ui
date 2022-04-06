@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { createContext, useReducer, useEffect, useContext } from 'react';
+import React, { useReducer, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { INIT_STATE, RPCS } from '../../constants';
 import type { ApiState } from 'types';
@@ -9,7 +9,7 @@ import { loadAccounts, connect, isValidWsUrl } from 'api';
 import { apiReducer } from 'ui/reducers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 
-export const ApiContext = createContext(INIT_STATE);
+export const ApiContext = React.createContext(INIT_STATE);
 
 let keyringLoadAll = false;
 

@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Buffer } from 'buffer';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import App from 'ui/components/App';
@@ -16,8 +16,6 @@ import {
   Settings,
   NotFound,
 } from 'ui/pages';
-
-globalThis.Buffer = Buffer;
 
 const root = document.getElementById('app-root');
 
