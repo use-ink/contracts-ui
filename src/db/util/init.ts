@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { PrivateKey } from '@textile/crypto';
-import { ThreadID } from '@textile/threads-id';
 import { Database as DB } from '@textile/threaddb';
-import type { KeyInfo } from '@textile/hub';
 
 import { codeBundle, contract, user } from '../schemas';
 import { getUser } from '../queries/user';
@@ -35,17 +33,12 @@ function purgeOutdatedDBs(genesisHash: string) {
 
 export async function init(
   rpcUrl: string,
-  genesisHash: string,
-  isRemote = false
+  genesisHash: string
 ): Promise<[DB, UserDocument | null, PrivateKey | null]> {
   const name = `${rpcUrl}${DELIMITER}${genesisHash}`;
 
   const db = await initDb(name);
   const [user, identity] = await initIdentity(db);
-
-  if (isRemote && identity && !isLocalNode(rpcUrl)) {
-    await initRemote(db, identity, rpcUrl);
-  }
 
   if (isLocalNode(rpcUrl)) {
     purgeOutdatedDBs(genesisHash);
@@ -88,28 +81,4 @@ export async function initIdentity(db: DB): Promise<[UserDocument | null, Privat
   const user = await getUser(db, identity);
 
   return [user, identity];
-}
-
-export async function initRemote(db: DB, identity: PrivateKey, rpcUrl: string) {
-  try {
-    if (!process.env.HUB_API_KEY || !process.env.HUB_API_SECRET) {
-      throw new Error('No Textile Hub credentials found');
-    }
-
-    const info: KeyInfo = {
-      key: process.env.HUB_API_KEY,
-      secret: process.env.HUB_API_SECRET,
-    };
-
-    const remote = await db.remote.setKeyInfo(info);
-
-    await remote.authorize(identity);
-
-    const threadId = ThreadID.fromString(rpcUrl);
-
-    await remote.initialize(threadId);
-    await remote.pull('User', 'Contract', 'Code');
-  } catch (e) {
-    console.error(e);
-  }
 }
