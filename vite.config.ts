@@ -9,25 +9,25 @@ import eslintPlugin from '@nabla/vite-plugin-eslint';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsConfigPaths(), eslintPlugin()],
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (/[\\/]node_modules[\\/](react|react-dom)[\\/]/.test(id)) {
-            return 'react';
-          }
+  // build: {
+  //   rollupOptions: {
+  //     output: {
+  //       manualChunks(id) {
+  //         if (/[\\/]node_modules[\\/](react|react-dom)[\\/]/.test(id)) {
+  //           return 'react';
+  //         }
 
-          if (/[\\/]node_modules[\\/](@polkadot)[\\/]/.test(id)) {
-            return 'polkadot';
-          }
+  //         if (/[\\/]node_modules[\\/](@polkadot)[\\/]/.test(id)) {
+  //           return 'polkadot';
+  //         }
 
-          if (/[\\/]node_modules[\\/](@textile)[\\/]/.test(id)) {
-            return 'textile';
-          }
+  //         if (/[\\/]node_modules[\\/](@textile)[\\/]/.test(id)) {
+  //           return 'textile';
+  //         }
 
-          return 'index';
-        }
-      }
-    }
-  }
+  //         return 'index';
+  //       }
+  //     }
+  //   }
+  // }
 })
