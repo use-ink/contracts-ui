@@ -2,12 +2,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import React, { useEffect, useState } from 'react';
-import { ArrowCircleRightIcon } from '@heroicons/react/outline';
-import { Link } from 'react-router-dom';
+import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
+import { Link, useNavigate } from 'react-router-dom';
 import { ContractDocument } from 'types';
-import { useApi } from 'ui/contexts';
+import { useApi, useDatabase } from 'ui/contexts';
 import { truncate } from 'ui/util';
 import { getContractInfo } from 'api';
+import { removeContract } from 'db';
 
 interface Props {
   contract: ContractDocument;
@@ -15,7 +16,9 @@ interface Props {
 
 export function HeaderButtons({ contract }: Props) {
   const { api } = useApi();
+  const { db, refreshUserData } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getContractInfo(api, contract.address)
@@ -44,6 +47,17 @@ export function HeaderButtons({ contract }: Props) {
             contract.address
           )}`}</p>
         )}
+        <button
+          title="Forget contract"
+          className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full px-3 rounded"
+          onClick={async () => {
+            await removeContract(db, contract.address).catch(console.error);
+            refreshUserData();
+            navigate('/');
+          }}
+        >
+          <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
+        </button>
       </div>
     </div>
   );
