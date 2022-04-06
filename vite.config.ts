@@ -9,11 +9,11 @@ import eslintPlugin from '@nabla/vite-plugin-eslint';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsConfigPaths(), eslintPlugin()],
-  base: '/contracts-ui/',
   server: { port: 8081 },
   build: {
     rollupOptions: {
       output: {
+        dir: '.',
         manualChunks(id) {
           if (/[\\/]node_modules[\\/](react|react-dom)[\\/]/.test(id)) {
             return 'react';
