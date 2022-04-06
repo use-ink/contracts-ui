@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   header: React.ReactNode;
@@ -28,7 +28,7 @@ export function PageHome({
               </div>
             </div>
           </main>
-          <aside className="aside flex-none order-1 xl:order-2">{...aside}</aside>
+          <aside className="aside flex-none order-1 xl:order-2">{aside}</aside>
         </div>
       </div>
     </>

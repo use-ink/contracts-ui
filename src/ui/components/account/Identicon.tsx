@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { Circle } from '@polkadot/ui-shared/icons/types';
-
 import React from 'react';
-
 import { polkadotIcon } from '@polkadot/ui-shared';
 
 export interface Props extends React.HTMLAttributes<HTMLImageElement> {
