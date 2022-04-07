@@ -188,12 +188,12 @@ export async function updateCodeBundle(
   }
 }
 
-export async function removeCodeBundle(db: Database, id: string): Promise<void> {
+export async function removeCodeBundle(db: Database, codeHash: string): Promise<void> {
   try {
-    const existing = await findCodeBundleById(db, id);
+    const existing = await getCodeBundleCollection(db).findOne({ codeHash });
 
     if (existing) {
-      await getCodeBundleCollection(db).delete(existing._id as string);
+      await getCodeBundleCollection(db).delete(existing._id);
     }
 
     return Promise.resolve();

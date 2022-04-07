@@ -10,9 +10,12 @@ import { SearchResults } from '../common/SearchResults';
 import { CodeHash } from './CodeHash';
 import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';
+import { checkOnChainCode } from 'api';
+import { useApi } from 'ui/contexts';
 
 export function LookUpCodeHash() {
   const navigate = useNavigate();
+  const { api } = useApi();
   const [searchString, setSearchString] = useState('');
   const [codeHash, setCodeHash] = useState('');
   const { data: searchResults } = useCodeBundleSearch(searchString);
@@ -21,12 +24,14 @@ export function LookUpCodeHash() {
   useEffect((): void => {
     if (codeHash !== searchString) {
       if (searchString === '' || isValidCodeHash(searchString)) {
-        setCodeHash(searchString);
+        checkOnChainCode(api, searchString)
+          .then(isOnChain => (isOnChain ? setCodeHash(searchString) : setCodeHash('')))
+          .catch(console.error);
       } else {
         setCodeHash('');
       }
     }
-  }, [codeHash, searchString]);
+  }, [api, codeHash, searchString]);
 
   useEffect((): void => {
     codeHash && setSearchString(codeHash);

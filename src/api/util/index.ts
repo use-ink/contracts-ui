@@ -15,6 +15,7 @@ import {
   ChainType,
   SubmittableResult,
   Hash,
+  CodeBundleDocument,
 } from 'types';
 
 const EMPTY_SALT = new Uint8Array();
@@ -128,4 +129,17 @@ export function getBlockHash(
 
 export async function getContractInfo(api: ApiPromise, address: string) {
   return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
+}
+
+export async function checkOnChainCode(api: ApiPromise, codeHash: string): Promise<boolean> {
+  return (await api.query.contracts.codeStorage(codeHash)).isSome;
+}
+
+export async function filterOnChainCode(api: ApiPromise, items: CodeBundleDocument[]) {
+  const codes: CodeBundleDocument[] = [];
+  for (const item of items) {
+    const isOnChain = await checkOnChainCode(api, item.codeHash);
+    isOnChain && codes.push(item);
+  }
+  return codes;
 }
