@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
+import { ConfirmModal } from 'ui/components/modal';
 import { ContractDocument } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { truncate } from 'ui/util';
@@ -18,7 +19,14 @@ export function HeaderButtons({ contract }: Props) {
   const { api } = useApi();
   const { db, refreshUserData } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+
+  const forgetContract = async () => {
+    await removeContract(db, contract.address).catch(console.error);
+    refreshUserData();
+    navigate('/');
+  };
 
   useEffect(() => {
     getContractInfo(api, contract.address)
@@ -50,15 +58,14 @@ export function HeaderButtons({ contract }: Props) {
         <button
           title="Forget contract"
           className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full px-3 rounded"
-          onClick={async () => {
-            await removeContract(db, contract.address).catch(console.error);
-            refreshUserData();
-            navigate('/');
+          onClick={() => {
+            setIsOpen(true);
           }}
         >
           <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
         </button>
       </div>
+      <ConfirmModal setIsOpen={setIsOpen} isOpen={isOpen} confirm={forgetContract} />
     </div>
   );
 }
