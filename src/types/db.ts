@@ -52,7 +52,6 @@ export interface DbQuery<T> {
 }
 export type CodeBundle = {
   document: CodeBundleDocument | null;
-  isOnChain: boolean;
 };
 export interface UserArtifacts<T> {
   owned: Array<T>;

@@ -51,9 +51,7 @@ function List({ items, label }: ListProps) {
 export function AvailableCodeBundles() {
   const { data } = useAvailableCodeBundles(PAGE_SIZE * 2);
 
-  const [owned, popular] = data || [[], []];
-
-  if (owned.length === 0 && popular.length === 0) {
+  if (!data || data.length === 0) {
     return null;
   }
 
@@ -62,8 +60,7 @@ export function AvailableCodeBundles() {
       <div className="text-sm py-4 text-center dark:text-gray-500">
         Or choose from a code hash below
       </div>
-      <List items={owned} label="Uploaded Contract Code" />
-      <List items={popular} label="Popular Contract Code" />
+      <List items={data} label="Uploaded Contract Code" />
     </>
   );
 }
