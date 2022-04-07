@@ -17,6 +17,7 @@ import {
   Hash,
   CodeBundleDocument,
 } from 'types';
+import { isValidCodeHash } from 'ui/util';
 
 const EMPTY_SALT = new Uint8Array();
 
@@ -132,7 +133,9 @@ export async function getContractInfo(api: ApiPromise, address: string) {
 }
 
 export async function checkOnChainCode(api: ApiPromise, codeHash: string): Promise<boolean> {
-  return (await api.query.contracts.codeStorage(codeHash)).isSome;
+  return isValidCodeHash(codeHash)
+    ? (await api.query.contracts.codeStorage(codeHash)).isSome
+    : false;
 }
 
 export async function filterOnChainCode(api: ApiPromise, items: CodeBundleDocument[]) {
