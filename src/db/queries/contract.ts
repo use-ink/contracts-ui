@@ -5,7 +5,7 @@ import type { Database, PrivateKey } from '@textile/threaddb';
 import { keyring } from '@polkadot/ui-keyring';
 import { publicKeyHex } from '../util';
 import { findUser } from './user';
-import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection } from './util';
 import { createCodeBundle } from './codeBundle';
 import type { ContractDocument, MyContracts } from 'types';
 
@@ -13,7 +13,7 @@ export async function findTopContracts(db: Database): Promise<ContractDocument[]
   return getContractCollection(db).find({}).toArray();
 }
 
-const EMPTY = { owned: [], starred: [] };
+const EMPTY = { owned: [] };
 
 export async function findMyContracts(
   db: Database,
@@ -30,20 +30,8 @@ export async function findMyContracts(
   }
 
   const owned = await getContractCollection(db).find({ owner: user.publicKey }).toArray();
-  const existingStarred = await getContractCollection(db)
-    .find({ address: { $in: user.contractsStarred } })
-    .toArray();
 
-  const starred = user.contractsStarred.map((starredAddress: string) => {
-    const match = existingStarred.find(({ address }) => starredAddress === address);
-
-    return {
-      isExistent: !!match,
-      value: match || { identifier: starredAddress },
-    };
-  });
-
-  return { owned, starred };
+  return { owned };
 }
 
 export async function findContractByAddress(
@@ -62,14 +50,13 @@ export async function createContract(
     codeHash,
     creator,
     date = new Date().toISOString(),
-    genesisHash,
     name,
     tags = [],
   }: Partial<ContractDocument>,
   savePair = true
 ): Promise<ContractDocument> {
   try {
-    if (!abi || !address || !codeHash || !creator || !name || !genesisHash) {
+    if (!abi || !address || !codeHash || !creator || !name) {
       return Promise.reject(new Error('Missing required fields'));
     }
 
@@ -84,7 +71,6 @@ export async function createContract(
         abi,
         codeHash,
         creator,
-        genesisHash,
         name,
         owner: publicKeyHex(owner),
         tags: [],
@@ -102,19 +88,15 @@ export async function createContract(
       address,
       codeHash,
       creator,
-      genesisHash,
       name,
       owner: publicKeyHex(owner),
       tags,
       date,
-      stars: 1,
     });
 
     savePair && keyring.saveContract(address, { name, tags, abi });
 
     await newContract.save();
-
-    await pushToRemote(db, 'Contract');
 
     return Promise.resolve(newContract);
   } catch (e) {
@@ -146,8 +128,6 @@ export async function updateContract(
 
       const id = await contract.save();
 
-      await pushToRemote(db, 'Contract');
-
       return id;
     }
 
@@ -173,8 +153,6 @@ export async function removeContract(
       await getContractCollection(db).delete(existing._id as string);
 
       savePair && keyring.forgetContract(address);
-
-      await pushToRemote(db, 'Contract');
     }
 
     return Promise.resolve();

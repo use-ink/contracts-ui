@@ -12,6 +12,8 @@ import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
 import { displayDate } from 'ui/util';
+import { checkOnChainCode } from 'api';
+import { useApi } from 'ui/contexts';
 
 const TABS = [
   {
@@ -36,14 +38,26 @@ const TABS = [
 
 export function Contract() {
   const navigate = useNavigate();
+  const { api } = useApi();
 
   const { address, activeTab = 'interact' } = useParams();
 
   if (!address) throw new Error('No address in url');
 
+  //TODO: check if address is valid
+
   const { data, isLoading, isValid } = useContract(address);
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
+
+  const [isOnChain, setIsOnChain] = useState(true);
+
+  useEffect(() => {
+    data &&
+      checkOnChainCode(api, data[1]?.codeHash || '')
+        .then(isOnChain => setIsOnChain(isOnChain))
+        .catch(console.error);
+  }, [api, data]);
 
   useEffect((): void => {
     if (!isLoading && (!isValid || !data || !data[0])) {
@@ -64,16 +78,18 @@ export function Contract() {
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
         help={
-          <>
-            You instantiated this contract from{' '}
-            <Link
-              to={`/instantiate/${document.codeHash}`}
-              className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
-            >
-              {projectName}
-            </Link>{' '}
-            on {displayDate(document.date)}
-          </>
+          isOnChain && (
+            <>
+              You instantiated this contract from{' '}
+              <Link
+                to={`/instantiate/${document.codeHash}`}
+                className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
+              >
+                {projectName}
+              </Link>{' '}
+              on {displayDate(document.date)}
+            </>
+          )
         }
       >
         <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>

@@ -16,27 +16,6 @@
         "type": "string"
       }
     },
-    "codeBundlesStarred": {
-      "description": "Addresses of user's starred code bundles",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "contractsOwned": {
-      "description": "Addresses of user's instantiated smart contracts",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "contractsStarred": {
-      "description": "Addresses of user's starred smart contracts",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
     "creator": {
       "description": "The Polkadot account used to create this user",
       "type": "string"

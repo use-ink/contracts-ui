@@ -8,10 +8,9 @@ import { ChainProperties, ApiPromise } from 'types';
 const registry = new TypeRegistry();
 
 export async function getChainProperties(api: ApiPromise): Promise<ChainProperties | null> {
-  const [chainProperties, genesisHash, systemName, systemVersion, systemChain, systemChainType] =
+  const [chainProperties, systemName, systemVersion, systemChain, systemChainType] =
     await Promise.all([
       api.rpc.system.properties(),
-      api.query.system.blockHash(0),
       api.rpc.system.name(),
       api.rpc.system.version(),
       (await api.rpc.system.chain()).toString(),
@@ -22,7 +21,6 @@ export async function getChainProperties(api: ApiPromise): Promise<ChainProperti
     ]);
 
   const result = {
-    genesisHash: genesisHash.toString(),
     systemName: systemName.toString(),
     systemVersion: systemVersion.toString(),
     systemChainType,

@@ -13,8 +13,6 @@ interface Document {
 }
 
 export interface UserDocument extends Document {
-  codeBundlesStarred: string[];
-  contractsStarred: string[];
   creator?: string;
   publicKey: string;
   email?: string;
@@ -26,12 +24,10 @@ export interface CodeBundleDocument extends Document {
   codeHash: string;
   creator: string;
   date: string;
-  genesisHash: string;
   id: string;
   instances: number;
   name: string;
   owner?: string;
-  stars: number;
   tags?: string[];
 }
 
@@ -41,10 +37,8 @@ export interface ContractDocument extends Document {
   codeHash: string;
   creator: string;
   date: string;
-  genesisHash: string;
   name: string;
   owner?: string;
-  stars: number;
   tags?: string[];
 }
 
@@ -58,17 +52,9 @@ export interface DbQuery<T> {
 }
 export type CodeBundle = {
   document: CodeBundleDocument | null;
-  isOnChain: boolean;
 };
-
-export interface Starred<T> {
-  isExistent: boolean;
-  value?: T | { identifier: string };
-}
-
 export interface UserArtifacts<T> {
   owned: Array<T>;
-  starred: Array<Starred<T>>;
 }
 
 export interface DbState {
