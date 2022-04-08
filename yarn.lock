@@ -2950,7 +2950,7 @@ __metadata:
     eslint-plugin-import: ^2.25.4
     eslint-plugin-react: ^7.29.4
     eslint-plugin-react-hooks: ^4.3.0
-    husky: ">=7.0.4"
+    husky: ^7.0.0
     indexeddb-export-import: ^2.1.5
     lint-staged: ">=12.3.7"
     nanoid: ^3.3.1
@@ -4937,7 +4937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:>=7.0.4":
+"husky@npm:^7.0.0":
   version: 7.0.4
   resolution: "husky@npm:7.0.4"
   bin:

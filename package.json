@@ -12,8 +12,7 @@
     "format": "yarn prettier --write .",
     "clean": "rm -rf dist",
     "deep-clean": "yarn clean && rm -rf node_modules",
-    "regenerate": "yarn deep-clean && yarn && yarn start",
-    "prepare": "husky install"
+    "regenerate": "yarn deep-clean && yarn && yarn start"
   },
   "keywords": [],
   "author": "",
@@ -85,7 +84,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "husky": ">=7.0.4",
+    "husky": "^7.0.0",
     "indexeddb-export-import": "^2.1.5",
     "lint-staged": ">=12.3.7",
     "postcss": "^8.4.12",
