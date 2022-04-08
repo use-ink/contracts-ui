@@ -9,7 +9,6 @@ import { getUser } from '../queries/user';
 import { getStoredPrivateKey } from './identity';
 import type { UserDocument } from 'types';
 
-const DELIMITER = '__';
 const DB_VERSION_KEY = 'contracts-ui:db-version';
 const LOCAL_NODE_DB_NAME = 'contracts-ui:local-db-name';
 
@@ -17,32 +16,13 @@ function isLocalNode(rpcUrl: string): boolean {
   return rpcUrl.includes('127.0.0.1');
 }
 
-function purgeOutdatedDBs(genesisHash: string) {
-  // TODO: Investigate use of indexedDB.databases() - not present in Firefox?
-  const oldLocalDbName = window.localStorage.getItem(LOCAL_NODE_DB_NAME);
-
-  if (oldLocalDbName) {
-    const [url, hash] = oldLocalDbName.split(DELIMITER);
-
-    if (isLocalNode(url) && hash !== genesisHash) {
-      console.log(`Deleting database ${oldLocalDbName}...`);
-      indexedDB.deleteDatabase(oldLocalDbName);
-    }
-  }
-}
-
-export async function init(
-  rpcUrl: string,
-  genesisHash: string
-): Promise<[DB, UserDocument | null, PrivateKey | null]> {
-  const name = `${rpcUrl}${DELIMITER}${genesisHash}`;
+export async function init(rpcUrl: string): Promise<[DB, UserDocument | null, PrivateKey | null]> {
+  const name = `${rpcUrl}`;
 
   const db = await initDb(name);
   const [user, identity] = await initIdentity(db);
 
   if (isLocalNode(rpcUrl)) {
-    purgeOutdatedDBs(genesisHash);
-
     window.localStorage.setItem(LOCAL_NODE_DB_NAME, name);
   }
 

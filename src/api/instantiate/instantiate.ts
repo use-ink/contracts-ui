@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type {
-  ApiState,
   DbState,
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
@@ -12,7 +11,6 @@ import type {
 import { createContract } from 'db';
 
 export function onInsantiateFromHash(
-  { api }: ApiState,
   { db, identity }: DbState,
   { accountId, codeHash, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
@@ -24,7 +22,6 @@ export function onInsantiateFromHash(
         address: contract.address.toString(),
         creator: accountId,
         codeHash,
-        genesisHash: api?.genesisHash.toString(),
         name: name,
         tags: [],
       });
@@ -35,7 +32,6 @@ export function onInsantiateFromHash(
 }
 
 export function onInstantiateFromCode(
-  { api }: ApiState,
   { db, identity }: DbState,
   { accountId, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
@@ -50,7 +46,6 @@ export function onInstantiateFromCode(
           address: contract.address.toString(),
           creator: accountId,
           codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
-          genesisHash: api?.genesisHash.toString(),
           name: name,
           tags: [],
         });

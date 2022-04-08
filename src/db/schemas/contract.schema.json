@@ -45,12 +45,7 @@
       "description": "The deployment date for this code bundle",
       "type": "string",
       "format": "date-time"
-    },
-    "stars": {
-      "description": "The number of stars/favorites received",
-      "type": "number",
-      "minimum": 0
     }
   },
-  "required": ["creator", "address", "abi", "codeHash", "name", "date", "stars"]
+  "required": ["creator", "address", "abi", "codeHash", "name", "date"]
 }

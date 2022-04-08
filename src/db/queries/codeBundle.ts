@@ -4,7 +4,7 @@
 import type { Database, PrivateKey } from '@textile/threaddb';
 import { getNewCodeBundleId, publicKeyHex } from '../util';
 import { findUser } from './user';
-import { getCodeBundleCollection, getContractCollection, pushToRemote } from './util';
+import { getCodeBundleCollection, getContractCollection } from './util';
 import type { CodeBundleDocument, MyCodeBundles } from 'types';
 
 export async function findTopCodeBundles(
@@ -69,24 +69,12 @@ export async function findMyCodeBundles(
     const user = await findUser(db, identity);
 
     if (!user) {
-      return { owned: [], starred: [] };
+      return { owned: [] };
     }
 
     const owned = await findOwnedCodeBundles(db, identity);
-    const existingStarred = await getCodeBundleCollection(db)
-      .find({ id: { $in: user.codeBundlesStarred } })
-      .toArray();
 
-    const starred = user.codeBundlesStarred.map((starredId: string) => {
-      const match = existingStarred.find(({ id }) => starredId === id);
-
-      return {
-        isExistent: !!match,
-        value: match || { identifier: starredId },
-      };
-    });
-
-    return { owned, starred };
+    return { owned };
   } catch (e) {
     console.error(e);
 
@@ -136,11 +124,9 @@ export async function createCodeBundle(
     abi,
     codeHash,
     creator,
-    genesisHash,
     id = getNewCodeBundleId(),
     instances = 1,
     name,
-    stars = 1,
     tags = [],
     date = new Date().toISOString(),
   }: Partial<CodeBundleDocument>
@@ -150,11 +136,7 @@ export async function createCodeBundle(
       return Promise.reject(new Error('Missing creator address'));
     }
 
-    if (!genesisHash) {
-      return Promise.reject(new Error('Missing block genesis hash'));
-    }
-
-    if (!codeHash || !name || !genesisHash) {
+    if (!codeHash || !name) {
       return Promise.reject(new Error('Missing codeHash or name'));
     }
 
@@ -162,19 +144,15 @@ export async function createCodeBundle(
       abi,
       codeHash,
       creator,
-      genesisHash,
       id,
       name,
       owner: publicKeyHex(owner),
       tags,
       date,
-      stars,
       instances,
     });
 
     await newCode.save();
-
-    await pushToRemote(db, 'CodeBundle');
 
     return Promise.resolve(newCode);
   } catch (e) {
@@ -199,8 +177,6 @@ export async function updateCodeBundle(
 
       const id = await codeBundle.save();
 
-      await pushToRemote(db, 'CodeBundle');
-
       return id;
     }
 
@@ -212,14 +188,12 @@ export async function updateCodeBundle(
   }
 }
 
-export async function removeCodeBundle(db: Database, id: string): Promise<void> {
+export async function removeCodeBundle(db: Database, codeHash: string): Promise<void> {
   try {
-    const existing = await findCodeBundleById(db, id);
+    const existing = await getCodeBundleCollection(db).findOne({ codeHash });
 
     if (existing) {
-      await getCodeBundleCollection(db).delete(existing._id as string);
-
-      await pushToRemote(db, 'CodeBundle');
+      await getCodeBundleCollection(db).delete(existing._id);
     }
 
     return Promise.resolve();

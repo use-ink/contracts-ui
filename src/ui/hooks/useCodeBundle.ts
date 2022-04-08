@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback } from 'react';
-import { useApi } from '../contexts/ApiContext';
 import { useDatabase } from '../contexts/DatabaseContext';
 import { useDbQuery } from './useDbQuery';
 import { findCodeBundleByHash } from 'db/queries';
@@ -15,17 +14,15 @@ function isValidHash(input: OrFalsy<string>): boolean {
 }
 
 export function useCodeBundle(codeHash: string): DbQuery<CodeBundle> {
-  const { api } = useApi();
   const { db } = useDatabase();
 
   const query = useCallback(async (): Promise<CodeBundle> => {
     if (isValidHash(codeHash)) {
-      const isOnChain = !(await api.query.contracts.codeStorage(codeHash)).isEmpty;
       const document = await findCodeBundleByHash(db, codeHash);
-      return { document, isOnChain };
+      return { document };
     }
-    return { document: null, isOnChain: false };
-  }, [api.query.contracts, codeHash, db]);
+    return { document: null };
+  }, [codeHash, db]);
 
   return useDbQuery(query, result => !!result);
 }
