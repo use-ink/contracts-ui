@@ -13,7 +13,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        dir: '.',
+        dir: './dist',
         manualChunks(id) {
           if (/[\\/]node_modules[\\/](react|react-dom)[\\/]/.test(id)) {
             return 'react';
