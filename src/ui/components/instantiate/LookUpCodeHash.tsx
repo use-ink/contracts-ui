@@ -10,23 +10,28 @@ import { SearchResults } from '../common/SearchResults';
 import { CodeHash } from './CodeHash';
 import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';
+import { checkOnChainCode } from 'api';
+import { useApi } from 'ui/contexts';
 
 export function LookUpCodeHash() {
   const navigate = useNavigate();
+  const { api } = useApi();
   const [searchString, setSearchString] = useState('');
   const [codeHash, setCodeHash] = useState('');
   const { data: searchResults } = useCodeBundleSearch(searchString);
   const { data, error, isLoading, isValid } = useCodeBundle(codeHash);
-  const { isOnChain, document } = data || { document: null, isOnChain: false };
+  const { document } = data || { document: null };
   useEffect((): void => {
     if (codeHash !== searchString) {
       if (searchString === '' || isValidCodeHash(searchString)) {
-        setCodeHash(searchString);
+        checkOnChainCode(api, searchString)
+          .then(isOnChain => (isOnChain ? setCodeHash(searchString) : setCodeHash('')))
+          .catch(console.error);
       } else {
         setCodeHash('');
       }
     }
-  }, [codeHash, searchString]);
+  }, [api, codeHash, searchString]);
 
   useEffect((): void => {
     codeHash && setSearchString(codeHash);
@@ -35,13 +40,12 @@ export function LookUpCodeHash() {
   return (
     <FormField className="h-36 relative" label="Look Up Code Hash">
       <Input
-        className={classes('relative flex items-center', isOnChain && 'font-mono')}
-        isDisabled={isOnChain}
+        className={classes('relative flex items-center')}
         onChange={setSearchString}
         placeholder="Paste a code hash or search for existing code bundles already on-chain"
         value={searchString}
       >
-        {isOnChain && (
+        {document && (
           <button className="absolute right-2" onClick={() => setSearchString('')}>
             <XCircleIcon className="w-5 h-5 text-gray-500" aria-hidden="true" />
           </button>
@@ -54,7 +58,7 @@ export function LookUpCodeHash() {
           setCodeHash(document.codeHash);
         }}
       />
-      {codeHash && !isLoading && (
+      {codeHash && !isLoading && document && (
         <CodeHash
           className="mt-1"
           codeHash={codeHash}

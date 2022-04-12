@@ -7,3 +7,4 @@ export * from './Homepage';
 export * from './Instantiate';
 export * from './SelectCodeHash';
 export * from './Settings';
+export * from './NotFound';

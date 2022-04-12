@@ -12,10 +12,6 @@ import { classes } from 'ui/util';
 
 type Props = ValidFormField<OrFalsy<string>> & Omit<DropdownProps<string>, 'options'>;
 
-function isContractExistent<T>(value: T | undefined | { identifier: string }): value is T {
-  return !!value && (value as Record<string, unknown>).identifier === undefined;
-}
-
 function Option({ label, value }: DropdownOption<string>) {
   return <Account className="p-1.5" name={label} value={value} />;
 }
@@ -42,7 +38,7 @@ function Select({
   );
 }
 
-export function AccountSelect({ placeholder = 'No Accounts Found', ...props }: Props) {
+export function AccountSelect({ placeholder = 'Select account', ...props }: Props) {
   const { keyring } = useApi();
 
   return (
@@ -54,7 +50,7 @@ export function AccountSelect({ placeholder = 'No Accounts Found', ...props }: P
   );
 }
 
-export function AddressSelect({ placeholder = 'No Addresses Found', ...props }: Props) {
+export function AddressSelect({ placeholder = 'Select address', ...props }: Props) {
   const { keyring } = useApi();
   const { myContracts } = useDatabase();
 
@@ -75,26 +71,8 @@ export function AddressSelect({ placeholder = 'No Addresses Found', ...props }: 
             },
           ]
         : []),
-      ...(myContracts?.starred && myContracts.starred.length > 0
-        ? [
-            {
-              label: 'Starred Contracts',
-              options: (myContracts?.starred || []).reduce(
-                (result: DropdownOption<string>[], starredContract) => {
-                  return [
-                    ...result,
-                    ...(isContractExistent(starredContract.value)
-                      ? [{ label: starredContract.value.name, value: starredContract.value.name }]
-                      : []),
-                  ];
-                },
-                []
-              ),
-            },
-          ]
-        : []),
     ];
-  }, [keyring, myContracts?.owned, myContracts?.starred]);
+  }, [keyring, myContracts?.owned]);
 
   return <Select options={options} placeholder={placeholder} {...props} />;
 }

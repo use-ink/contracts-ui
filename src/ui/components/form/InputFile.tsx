@@ -8,7 +8,7 @@ import Dropzone, { DropzoneRef } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/solid';
 import { DocumentTextIcon } from '@heroicons/react/outline';
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
-import type { FileState, InputFileProps as Props } from 'types';
+import type { FileState, InputFileProps as Props, OrFalsy } from 'types';
 
 const BYTE_STR_0 = '0'.charCodeAt(0);
 const BYTE_STR_X = 'x'.charCodeAt(0);
@@ -44,7 +44,7 @@ export function InputFile({
   onRemove,
 }: Props) {
   const ref = createRef<DropzoneRef>();
-  const [file, setFile] = useState<FileState | undefined>(propsFile);
+  const [file, setFile] = useState<OrFalsy<FileState>>(propsFile);
 
   const onDrop = useCallback(
     (files: File[]): void => {

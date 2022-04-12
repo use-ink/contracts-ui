@@ -7,12 +7,15 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { useApi, useInstantiate } from 'ui/contexts';
-// import { fromSats } from 'api';
-// import { fromSats } from 'api';
 
 export function DryRun() {
   const { api } = useApi();
   const { dryRunResult } = useInstantiate();
+
+  const dryRunError =
+    dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
+      ? api.registry.findMetaError(dryRunResult?.result.asErr.asModule)
+      : null;
 
   return (
     <SidePanel className="instantiate-outcome" header="Predicted Outcome">
@@ -59,11 +62,14 @@ export function DryRun() {
               The instantiation will be successful.
             </div>
           )}
-          {dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule && (
+          {dryRunError && dryRunResult && (
             <>
-              <div className="validation error text-mono font-bold">
-                <ExclamationCircleIcon className="mr-3" />
-                {api.registry.findMetaError(dryRunResult?.result.asErr.asModule).name}
+              <div className="validation error text-mono font-bold items-start">
+                <ExclamationCircleIcon className="mr-3" style={{ marginTop: 1 }} />
+                <div>
+                  <p>{dryRunError.name}</p>
+                  <p>{dryRunError.docs}</p>
+                </div>
               </div>
               {dryRunResult.debugMessage.length > 0 && (
                 <div className="validation error block text-mono break-words pl-4 mt-1">

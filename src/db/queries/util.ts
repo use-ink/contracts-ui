@@ -4,22 +4,26 @@
 import type { Collection, Database } from '@textile/threaddb';
 import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
 
-export async function pushToRemote(db: Database, ...collections: string[]): Promise<void> {
-  if (db.remote?.id) {
-    for (const collection of collections) {
-      await db.remote.push(collection);
-    }
-  }
-}
-
 export function getCodeBundleCollection(db: Database): Collection<CodeBundleDocument> {
-  return db.collection('CodeBundle') as Collection<CodeBundleDocument>;
+  const collection = db.collection<CodeBundleDocument>('CodeBundle');
+
+  if (!collection) throw new Error('Code Bundle collection not found.');
+
+  return collection;
 }
 
 export function getContractCollection(db: Database): Collection<ContractDocument> {
-  return db.collection('Contract') as Collection<ContractDocument>;
+  const collection = db.collection<ContractDocument>('Contract');
+
+  if (!collection) throw new Error('Contract collection not found.');
+
+  return collection;
 }
 
 export function getUserCollection(db: Database): Collection<UserDocument> {
-  return db.collection('User') as Collection<UserDocument>;
+  const collection = db.collection<UserDocument>('User');
+
+  if (!collection) throw new Error('User collection not found.');
+
+  return collection;
 }

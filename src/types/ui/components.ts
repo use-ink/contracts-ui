@@ -4,7 +4,7 @@
 import React from 'react';
 import { Props as ReactSelectProps } from 'react-select';
 import { ValidFormField } from './hooks';
-import { FileState, SimpleSpread } from './util';
+import { FileState, OrFalsy, SimpleSpread } from './util';
 
 export interface DropdownOption<T> {
   value: T;
@@ -35,6 +35,6 @@ export type InputFileProps = SimpleSpread<
     onChange: (_: FileState) => void;
     onRemove: () => void;
     successMessage?: React.ReactNode;
-    value?: FileState;
+    value: OrFalsy<FileState>;
   }
 >;

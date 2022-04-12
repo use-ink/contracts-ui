@@ -1,12 +1,14 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { FormField } from '../form/FormField';
 import { CodeHash } from './CodeHash';
 import { useAvailableCodeBundles } from 'ui/hooks/useAvailableCodeBundles';
 import { CodeBundleDocument } from 'types';
+import { useApi } from 'ui/contexts';
+import { filterOnChainCode } from 'api';
 
 const PAGE_SIZE = 5;
 
@@ -49,21 +51,29 @@ function List({ items, label }: ListProps) {
 }
 
 export function AvailableCodeBundles() {
+  const { api } = useApi();
   const { data } = useAvailableCodeBundles(PAGE_SIZE * 2);
+  const [codes, setCodes] = useState<CodeBundleDocument[]>([]);
 
-  const [owned, popular] = data || [[], []];
+  useEffect(() => {
+    data &&
+      filterOnChainCode(api, data)
+        .then(codes => setCodes(codes))
+        .catch(console.error);
+  }, [api, data]);
 
-  if (owned.length === 0 && popular.length === 0) {
+  if (!data || data.length === 0) {
     return null;
   }
 
   return (
     <>
-      <div className="text-sm py-4 text-center dark:text-gray-500">
-        Or choose from a code hash below
-      </div>
-      <List items={owned} label="Uploaded Contract Code" />
-      <List items={popular} label="Popular Contract Code" />
+      {codes.length > 0 && (
+        <div className="text-sm py-4 text-center dark:text-gray-500">
+          Or choose from a code hash below
+        </div>
+      )}
+      <List items={codes} label="Uploaded Contract Code" />
     </>
   );
 }

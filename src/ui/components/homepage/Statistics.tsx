@@ -1,17 +1,13 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
-import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
-import { StarIcon as StarIconFill } from '@heroicons/react/solid';
-import { Button } from '../common/Button';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useApi } from 'ui/contexts';
 import { useStatistics } from 'ui/hooks';
 
 export function Statistics(): React.ReactElement | null {
   const { api } = useApi();
-  const { user } = useDatabase();
 
   const [blockNumber, setBlockNumber] = useState(0);
   const { data: statistics } = useStatistics();
@@ -41,17 +37,6 @@ export function Statistics(): React.ReactElement | null {
     };
   }, [blockNumber, statistics]);
 
-  const onClickStar = useCallback(
-    (id: string) => () => {
-      if (!user) {
-        console.error('Not signed in');
-      }
-
-      console.error('Toggled code bundle star ' + id);
-    },
-    [user]
-  );
-
   return (
     <>
       <div className="grid grid-cols-4 xl:grid-cols-2 w-full mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
@@ -65,38 +50,6 @@ export function Statistics(): React.ReactElement | null {
           );
         })}
       </div>
-      {(statistics?.mostPopularCodeBundles || []).length > 0 && (
-        <div className="grid grid-cols-4 xl:grid-cols-2 w-full">
-          <div className="text-sm mb-4 col-span-4 xl:col-span-4">Popular Contract Code</div>
-          {statistics?.mostPopularCodeBundles.map(({ id, name, instances, stars }, i) => {
-            const isStarred = user?.contractsStarred.includes(id);
-
-            const Star = isStarred ? StarIconFill : StarIconOutline;
-
-            return (
-              <div
-                key={`code-bundle-${i}`}
-                className="mb-4 col-span-2 xs:col-span-1 md:col-span-1 xl:col-span-1"
-              >
-                <div className="text-xs mb-1">{name}</div>
-                <Button
-                  className="flex text-xs dark:text-gray-400"
-                  onClick={onClickStar(id)}
-                  variant="plain"
-                >
-                  {stars}
-                  <Star
-                    className="w-4 ml-1 mr-2 justify-self-end "
-                    aria-hidden="true"
-                    fontSize="1.5rem"
-                  />
-                  {instances} instances
-                </Button>
-              </div>
-            );
-          })}
-        </div>
-      )}
     </>
   );
 }

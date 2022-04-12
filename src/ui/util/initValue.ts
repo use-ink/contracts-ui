@@ -16,6 +16,8 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
     const lookupTypeDef = registry.lookup.getTypeDef(def.lookupIndex as number);
 
     return getInitValue(registry, keyring, lookupTypeDef);
+  } else if (def.info === TypeDefInfo.Option) {
+    return null;
   } else if (def.info === TypeDefInfo.Vec) {
     return [getInitValue(registry, keyring, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.Tuple) {

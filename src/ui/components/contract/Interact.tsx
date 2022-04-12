@@ -14,7 +14,8 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import { dryRun, NOOP, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
+import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
+import { getBlockHash } from 'api/util';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
@@ -27,7 +28,7 @@ interface Props {
 }
 
 export const InteractTab = ({ contract }: Props) => {
-  const { api, keyring } = useApi();
+  const { api, keyring, systemChainType } = useApi();
   const {
     value: message,
     onChange: setMessage,
@@ -94,7 +95,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   const { queue, process, txs } = useTransactions();
 
-  const onSuccess = ({ status, dispatchInfo, dispatchError, events }: SubmittableResult) => {
+  const onCallSuccess = ({ status, dispatchInfo, events }: SubmittableResult) => {
     const log = events.map(({ event }) => {
       return `${event.section}:${event.method}`;
     });
@@ -107,16 +108,34 @@ export const InteractTab = ({ contract }: Props) => {
         isComplete: true,
         message,
         time: Date.now(),
-        log: log,
-        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
-        blockHash: status.asFinalized.toString(),
+        log,
+        blockHash: getBlockHash(status, systemChainType),
         info: dispatchInfo?.toHuman(),
       },
     ]);
 
     setNextResultId(nextResultId + 1);
   };
+  const onCallError = ({ events, dispatchError, dispatchInfo }: SubmittableResult) => {
+    const log = events.map(({ event }) => {
+      return `${event.section}:${event.method}`;
+    });
+    setCallResults([
+      ...callResults,
+      {
+        id: nextResultId,
+        message,
+        time: Date.now(),
+        isComplete: true,
+        data: null,
+        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
+        log,
+        info: dispatchInfo?.toHuman(),
+      },
+    ]);
 
+    setNextResultId(nextResultId + 1);
+  };
   const read = async () => {
     const { result, output } = await sendContractQuery(
       contract.query[message.method],
@@ -147,9 +166,7 @@ export const InteractTab = ({ contract }: Props) => {
     setNextResultId(nextResultId + 1);
   };
 
-  const isValid = (result: SubmittableResult) => !result.isError;
-
-  const onError = NOOP;
+  const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
   const newId = useRef<number>();
 
@@ -157,7 +174,13 @@ export const InteractTab = ({ contract }: Props) => {
     const tx = prepareContractTx(contract.tx[message.method], options, transformed);
 
     if (tx && accountId) {
-      newId.current = queue({ extrinsic: tx, accountId, onSuccess, onError, isValid });
+      newId.current = queue({
+        extrinsic: tx,
+        accountId,
+        onSuccess: onCallSuccess,
+        onError: onCallError,
+        isValid,
+      });
       setTxId(newId.current);
     }
   };
@@ -175,7 +198,13 @@ export const InteractTab = ({ contract }: Props) => {
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
         <Form>
-          <FormField className="mb-8" id="accountId" label="Account" {...accountIdValidation}>
+          <FormField
+            className="mb-8"
+            help="The sending account for this interaction. Any transaction fees will be deducted from this account."
+            id="accountId"
+            label="Account"
+            {...accountIdValidation}
+          >
             <AccountSelect
               id="accountId"
               className="mb-2"
@@ -183,7 +212,12 @@ export const InteractTab = ({ contract }: Props) => {
               onChange={setAccountId}
             />
           </FormField>
-          <FormField id="message" label="Message to Send" {...messageValidation}>
+          <FormField
+            help="The message to send to this contract. Parameters are adjusted based on the stored contract metadata."
+            id="message"
+            label="Message to Send"
+            {...messageValidation}
+          >
             <Dropdown
               id="message"
               options={createMessageOptions(contract.abi.messages)}
@@ -204,11 +238,17 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
 
           {message.isPayable && (
-            <FormField id="value" label="Payment" {...valueValidation}>
+            <FormField
+              help="The balance to transfer to the contract as part of this call."
+              id="value"
+              label="Payment"
+              {...valueValidation}
+            >
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
           <FormField
+            help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
             id="maxGas"
             label="Max Gas Allowed"
             isError={!weight.isValid}
@@ -217,6 +257,7 @@ export const InteractTab = ({ contract }: Props) => {
             <InputGas isCall={message.isMutating} withEstimate {...weight} />
           </FormField>
           <FormField
+            help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
             id="storageDepositLimit"
             label="Storage Deposit Limit"
             isError={!storageDepositLimit.isValid}

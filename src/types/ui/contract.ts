@@ -9,6 +9,7 @@ import type {
   ContractPromise,
   KeyringPair,
   RegistryError,
+  Hash,
 } from '../substrate';
 
 export interface ContractDryRunParams {
@@ -25,7 +26,7 @@ export interface CallResult {
   isComplete: boolean;
   log: string[];
   message: AbiMessage;
-  blockHash?: string;
+  blockHash?: Hash;
   error?: RegistryError;
   info?: Record<string, AnyJson>;
   time: number;
