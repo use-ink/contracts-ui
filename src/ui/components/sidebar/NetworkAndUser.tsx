@@ -4,18 +4,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
-import { RPCS } from '../../../constants';
+import { RPC } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'ui/util';
 
 const options = [
   {
     label: 'Local Node',
-    value: RPCS.LOCAL,
+    value: RPC.LOCAL,
   },
   {
     label: 'Canvas',
-    value: RPCS.CANVAS,
+    value: RPC.CANVAS,
   },
 ];
 

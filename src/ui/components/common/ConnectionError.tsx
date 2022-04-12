@@ -5,7 +5,7 @@ import React from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from 'ui/contexts';
-import { RPCS } from 'src/constants';
+import { RPC } from 'src/constants';
 
 function ContractsNodeHelp() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ function ContractsNodeHelp() {
         <a
           href="#"
           onClick={() => {
-            navigate(`/?rpc=${RPCS.CANVAS}`);
+            navigate(`/?rpc=${RPC.CANVAS}`);
           }}
         >
           {' '}
@@ -45,7 +45,7 @@ export function ConnectionError() {
       <div className=" w-7/12 h-60 border dark:border-gray-700 grid place-content-center justify-items-center">
         <ExclamationCircleIcon className="w-10 h-10 text-red-400 mb-1" />
         <p className="dark:text-gray-300 text-gray-500 mb-6">Could not connect to {endpoint}</p>
-        {endpoint === RPCS.LOCAL && <ContractsNodeHelp />}
+        {endpoint === RPC.LOCAL && <ContractsNodeHelp />}
       </div>
     </div>
   );
