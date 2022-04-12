@@ -1,38 +1,28 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
-import { Loader } from './common/Loader';
+
 import { useApi, useDatabase } from 'ui/contexts';
+import { Loader, ConnectionError } from 'ui/components/common';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
-  const { error, status, keyringStatus } = useApi();
+  const { error, status, keyringStatus, endpoint } = useApi();
   const { isDbReady } = useDatabase();
+  const [message, setMessage] = useState('');
 
-  const [isLoading, message] = useMemo((): [boolean, string | null] => {
-    if (error) {
-      return [true, `Connection error`];
-    }
+  const isLoading = !isDbReady || keyringStatus !== 'READY' || status !== 'READY';
 
-    if (!isDbReady) {
-      return [true, 'Initializing database...'];
-    }
-
-    if (keyringStatus !== 'READY') {
-      return [true, 'Loading accounts...'];
-    }
-
-    if (status !== 'READY') {
-      return [true, 'Connecting...'];
-    }
-
-    return [false, null];
-  }, [error, keyringStatus, status, isDbReady]);
+  useEffect(() => {
+    !isDbReady && setMessage('Initializing database...');
+    keyringStatus !== 'READY' && setMessage('Loading accounts...');
+    status !== 'READY' && setMessage(`Connecting to ${endpoint}...`);
+  }, [isDbReady, keyringStatus, status, endpoint]);
 
   return (
-    <Loader isLoading={isLoading} message={message}>
-      {children}
-    </Loader>
+    <>
+      {error ? <ConnectionError /> : isLoading ? <Loader message={message} isLoading /> : children}
+    </>
   );
 }
