@@ -15,7 +15,7 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
   const isLoading = !isDbReady || keyringStatus !== 'READY' || status !== 'READY';
 
   useEffect(() => {
-    !isDbReady && setMessage('Initializing database...');
+    !isDbReady && setMessage('Loading data...');
     keyringStatus !== 'READY' && setMessage('Loading accounts...');
     status !== 'READY' && setMessage(`Connecting to ${endpoint}...`);
   }, [isDbReady, keyringStatus, status, endpoint]);
