@@ -32,6 +32,5 @@
     },
     "types": ["cypress", "cypress-wait-until"]
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"]
 }
