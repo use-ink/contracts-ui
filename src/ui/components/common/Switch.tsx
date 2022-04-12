@@ -1,13 +1,12 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { HTMLAttributes } from 'react';
 import { Switch as HUISwitch } from '@headlessui/react';
 import { classes } from 'ui/util';
 import { SimpleSpread } from 'types';
 
 type Props = SimpleSpread<
-  HTMLAttributes<HTMLDivElement>,
+  React.HTMLAttributes<HTMLDivElement>,
   {
     value: boolean;
     onChange: (_: boolean) => void;
