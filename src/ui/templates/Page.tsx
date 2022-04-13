@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 
 interface PageProps extends HTMLAttributes<HTMLDivElement> {
   header: React.ReactNode;

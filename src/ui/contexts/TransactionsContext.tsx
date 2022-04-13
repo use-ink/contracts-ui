@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
@@ -11,7 +11,7 @@ import { isEmptyObj } from 'ui/util';
 
 let nextId = 1;
 
-export const TransactionsContext = React.createContext({} as unknown as TransactionsState);
+export const TransactionsContext = createContext({} as unknown as TransactionsState);
 
 export function TransactionsContextProvider({
   children,

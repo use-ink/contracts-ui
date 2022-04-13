@@ -1,8 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React from 'react';
-
 import { DryRun } from './DryRun';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';

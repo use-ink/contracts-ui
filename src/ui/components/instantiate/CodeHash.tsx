@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/outline';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { classes, truncate } from 'ui/util';

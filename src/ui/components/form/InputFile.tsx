@@ -3,7 +3,7 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { createRef, useCallback, useEffect, useState } from 'react';
+import { createRef, useCallback, useEffect, useState } from 'react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/solid';
 import { DocumentTextIcon } from '@heroicons/react/outline';

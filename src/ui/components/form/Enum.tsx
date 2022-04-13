@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { isNumber } from '@polkadot/util';
 import { Dropdown } from '../common/Dropdown';
 import { ArgSignature } from '../message/ArgSignature';

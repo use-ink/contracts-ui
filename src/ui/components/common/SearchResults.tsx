@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { CodeIcon } from '@heroicons/react/outline';
-import React from 'react';
 import { CodeBundleDocument, ContractDocument, VoidFn } from 'types';
 import { classes } from 'ui/util';
 

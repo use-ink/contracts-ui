@@ -6,7 +6,7 @@ import {
   ExclamationCircleIcon,
   CheckCircleIcon,
 } from '@heroicons/react/outline';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import ReactTooltip from 'react-tooltip';
 import type { Validation } from 'types';
 import { classes } from 'ui/util';
