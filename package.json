@@ -8,6 +8,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
+    "build-github-pages": "tsc && vite build --config vite.config.ghp.ts",
     "lint": "yarn eslint --fix .",
     "format": "yarn prettier --write .",
     "clean": "rm -rf dist",
