@@ -11,7 +11,9 @@ export function classes(...classLists: (string | null | undefined | false)[]) {
 
 export function truncate(value: string | undefined, sideLength = 6): string {
   return value
-    ? `${value.substring(0, sideLength)}...${value.substring(value.length - sideLength)}`
+    ? value.length > sideLength * 2
+      ? `${value.substring(0, sideLength)}...${value.substring(value.length - sideLength)}`
+      : value
     : '';
 }
 

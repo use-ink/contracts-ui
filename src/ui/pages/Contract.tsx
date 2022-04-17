@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
+import { isNull } from '@polkadot/util';
 import { InteractTab } from '../components/contract/Interact';
 import { MetadataTab } from '../components/contract/Metadata';
 import { CopyButton } from '../components/common/CopyButton';
@@ -51,7 +52,7 @@ export function Contract() {
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
-  const [isOnChain, setIsOnChain] = useState(true);
+  const [isOnChain, setIsOnChain] = useState<boolean | null>(null);
 
   useEffect(() => {
     data &&
@@ -74,7 +75,7 @@ export function Contract() {
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={!contract && isLoading}>
+    <Loader isLoading={(!contract && isLoading) || isNull(isOnChain)}>
       <PageFull
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
@@ -84,7 +85,7 @@ export function Contract() {
               You instantiated this contract{' '}
               <div className="inline-flex items-center">
                 <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded">
-                  {truncate(address)}
+                  {truncate(address, 4)}
                 </span>
                 <CopyButton className="ml-1" iconClassName="-mt-1.5" value={address} />
               </div>{' '}

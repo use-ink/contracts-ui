@@ -1,17 +1,25 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { CheckIcon, ClockIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
+import {
+  CheckIcon,
+  ClipboardCopyIcon,
+  ClockIcon,
+  ExclamationCircleIcon,
+} from '@heroicons/react/outline';
 import { Spinner } from './Spinner';
-import { TxStatus } from 'types';
+import { NotificationType, TxStatus } from 'types';
 import { classes } from 'ui/util';
 
 interface Props {
-  status?: TxStatus;
+  type?: TxStatus | NotificationType;
 }
 
-export const NotificationIcon = ({ status }: Props) => {
-  switch (status) {
+export const NotificationIcon = ({ type }: Props) => {
+  switch (type) {
+    case 'copied':
+      return <ClipboardCopyIcon key="copied" className="text-green-400 w-12 h-12" />;
+
     case 'success':
       return <CheckIcon key="success" className="text-green-400 w-12 h-12" />;
 

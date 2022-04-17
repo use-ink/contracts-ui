@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import 'styled-components';
 import { Link } from 'react-router-dom';
-import { Identicon } from '../account/Identicon';
+import { Identicon } from '@polkadot/react-identicon';
 import { ContractDocument } from 'types';
 import { displayDate } from 'ui/util';
 import { useApi } from 'ui/contexts';

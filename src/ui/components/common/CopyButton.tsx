@@ -3,10 +3,10 @@
 
 import copy from 'copy-to-clipboard';
 import React, { useCallback } from 'react';
-import ReactTooltip from 'react-tooltip';
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { Button } from './Button';
 import { classes } from 'ui/util';
+import { useNotifications } from 'ui/contexts';
 
 interface Props extends React.HTMLAttributes<unknown> {
   iconClassName?: string;
@@ -14,38 +14,28 @@ interface Props extends React.HTMLAttributes<unknown> {
 }
 
 export function CopyButton({ className, iconClassName, value }: Props) {
+  const { notify } = useNotifications();
   const onClick = useCallback((): void => {
     copy(value);
-
-    setTimeout((): void => {
-      ReactTooltip.hide();
-    }, 3000);
-  }, [value]);
+    notify({
+      type: 'copied',
+      value,
+    });
+  }, [notify, value]);
 
   const id = `copyButton-${value}`;
 
   return (
-    <>
-      <Button
-        className={classes('', className)}
-        data-for={id}
-        data-tip
-        onClick={onClick}
-        variant="plain"
-      >
-        <DocumentDuplicateIcon
-          className={classes('w-4 h-4 hover:text-gray-600 dark:hover:text-gray-300', iconClassName)}
-        />
-      </Button>
-      <ReactTooltip
-        className="font-sans text-xs"
-        delayHide={3000}
-        afterShow={onClick}
-        event="click"
-        id={id}
-      >
-        Copied to clipboard
-      </ReactTooltip>
-    </>
+    <Button
+      className={classes('', className)}
+      data-for={id}
+      data-tip
+      onClick={onClick}
+      variant="plain"
+    >
+      <DocumentDuplicateIcon
+        className={classes('w-4 h-4 hover:text-gray-600 dark:hover:text-gray-300', iconClassName)}
+      />
+    </Button>
   );
 }

@@ -16,7 +16,7 @@ import {
 } from 'ui/components/form';
 import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
 import { getBlockHash } from 'api/util';
-import { useApi, useTransactions } from 'ui/contexts';
+import { useApi, useNotifications } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
@@ -93,7 +93,7 @@ export const InteractTab = ({ contract }: Props) => {
     value: message.isPayable ? value || BN_ZERO : undefined,
   };
 
-  const { queue, process, txs } = useTransactions();
+  const { queue, process, txs } = useNotifications();
 
   const onCallSuccess = ({ status, dispatchInfo, events }: SubmittableResult) => {
     const log = events.map(({ event }) => {

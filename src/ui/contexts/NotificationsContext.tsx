@@ -4,20 +4,37 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { useApi } from './ApiContext';
-import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
-import { Transactions } from 'ui/components/Transactions';
+import {
+  TxOptions,
+  NotificationsState,
+  TxStatus as Status,
+  Notification,
+  NotificationsQueue,
+  TransactionsQueue,
+} from 'types';
+import { Notifications } from 'ui/components/Notifications';
 import { isResultReady } from 'api/util';
 import { isEmptyObj } from 'ui/util';
 
 let nextId = 1;
 
-export const TransactionsContext = createContext({} as unknown as TransactionsState);
+export const NotificationsContext = createContext({} as unknown as NotificationsState);
 
-export function TransactionsContextProvider({
+export function NotificationsContextProvider({
   children,
-}: React.PropsWithChildren<Partial<TransactionsState>>) {
+}: React.PropsWithChildren<Partial<NotificationsState>>) {
   const { api, keyring, systemChainType } = useApi();
+  const [notifications, setNotifications] = useState<NotificationsQueue>({});
   const [txs, setTxs] = useState<TransactionsQueue>({});
+
+  function notify(value: Notification) {
+    setNotifications({
+      ...notifications,
+      [nextId]: value,
+    });
+
+    return ++nextId;
+  }
 
   function queue(options: TxOptions): number {
     setTxs({
@@ -100,44 +117,64 @@ export function TransactionsContextProvider({
   function dismiss(id: number) {
     const newTxs = { ...txs };
     delete newTxs[id];
+
+    const newNotifications = { ...notifications };
+    delete newNotifications[id];
+
+    setNotifications(newNotifications);
     setTxs(newTxs);
   }
 
   useEffect((): (() => void) => {
     let autoDismiss: NodeJS.Timeout;
 
+    const completed: number[] = [];
+
+    for (const id in notifications) {
+      completed.push(parseInt(id));
+    }
+
     if (!isEmptyObj(txs)) {
-      const completed: number[] = [];
       for (const id in txs) {
         if (txs[id]?.status === 'error' || txs[id]?.status === 'success') {
           completed.push(parseInt(id));
         }
       }
-      if (completed.length > 0) {
-        autoDismiss = setTimeout((): void => {
-          const newTxs = { ...txs };
-          completed.forEach(id => delete newTxs[id]);
-          setTxs(newTxs);
-        }, 5000);
-      }
+    }
+
+    if (completed.length > 0) {
+      autoDismiss = setTimeout((): void => {
+        const newTxs = { ...txs };
+        const newNotifications = { ...notifications };
+
+        completed.forEach(id => {
+          delete newTxs[id];
+          delete newNotifications[id];
+        });
+
+        setTxs(newTxs);
+        setNotifications(newNotifications);
+      }, 5000);
     }
 
     return () => clearTimeout(autoDismiss);
-  }, [txs]);
+  }, [notifications, txs]);
 
   const state = {
+    notifications,
     txs,
     dismiss,
+    notify,
     process,
     queue,
   };
 
   return (
-    <TransactionsContext.Provider value={state}>
-      <Transactions {...state} />
+    <NotificationsContext.Provider value={state}>
+      <Notifications {...state} />
       {children}
-    </TransactionsContext.Provider>
+    </NotificationsContext.Provider>
   );
 }
 
-export const useTransactions = () => useContext(TransactionsContext);
+export const useNotifications = () => useContext(NotificationsContext);

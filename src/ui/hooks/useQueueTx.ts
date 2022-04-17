@@ -6,7 +6,7 @@ import { VoidFn } from '@polkadot/api/types';
 import { isNull } from '@polkadot/util';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SubmittableExtrinsic } from 'types';
-import { useTransactions } from 'ui/contexts/TransactionsContext';
+import { useNotifications } from 'ui/contexts/NotificationsContext';
 
 export function useQueueTx(
   extrinsic: SubmittableExtrinsic<'promise'> | null,
@@ -15,7 +15,7 @@ export function useQueueTx(
   onError: VoidFn,
   isValid: (_: SubmittableResult) => boolean
 ): [VoidFn, VoidFn, boolean, boolean] {
-  const { queue, dismiss, process, txs } = useTransactions();
+  const { queue, dismiss, process, txs } = useNotifications();
   const [txId, setTxId] = useState<number>(0);
 
   const txIdRef = useRef(txId);

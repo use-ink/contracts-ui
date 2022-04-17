@@ -103,12 +103,26 @@ export interface QueuedTxOptions extends TxOptions {
   status: TxStatus;
   events: Record<string, number>;
 }
+
+export type NotificationType = 'copied';
+
+export interface Notification {
+  type: NotificationType;
+  value: unknown;
+}
+
+export interface NotificationsQueue {
+  [id: string]: Notification;
+}
+
 export interface TransactionsQueue {
   [id: number]: QueuedTxOptions | undefined;
 }
 
-export interface TransactionsState {
+export interface NotificationsState {
+  notifications: NotificationsQueue;
   txs: TransactionsQueue;
+  notify: (_: Notification) => number;
   process: (_: number) => Promise<void>;
   queue: (_: TxOptions) => number;
   dismiss: (id: number) => void;
