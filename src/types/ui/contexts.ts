@@ -106,13 +106,13 @@ export interface QueuedTxOptions extends TxOptions {
 
 export type NotificationType = 'copied';
 
-export interface Notification {
+export interface NotificationObject {
   type: NotificationType;
   value: unknown;
 }
 
 export interface NotificationsQueue {
-  [id: string]: Notification;
+  [id: string]: NotificationObject;
 }
 
 export interface TransactionsQueue {

@@ -3,12 +3,7 @@
 
 import { BellIcon, XIcon } from '@heroicons/react/outline';
 import { NotificationIcon } from './common/NotificationIcon';
-import type {
-  QueuedTxOptions,
-  NotificationsState,
-  Notification as NotificationObject,
-  VoidFn,
-} from 'types';
+import type { QueuedTxOptions, NotificationsState, NotificationObject, VoidFn } from 'types';
 import { classes, isEmptyObj, truncate } from 'ui/util';
 
 interface NotificationProps {
