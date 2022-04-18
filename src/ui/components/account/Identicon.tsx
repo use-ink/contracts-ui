@@ -36,7 +36,7 @@ function IdenticonBase({
   try {
     return (
       <svg
-        className={classes('cursor-help', className)}
+        className={classes('cursor-copy', className)}
         height={size}
         id={value || undefined}
         name={value || undefined}
