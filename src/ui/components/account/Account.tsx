@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Identicon } from '@polkadot/react-identicon';
+import { Identicon } from './Identicon';
 import { classes, truncate } from 'ui/util';
 import { OrFalsy } from 'types';
 import { useAccount } from 'ui/hooks/useAccount';

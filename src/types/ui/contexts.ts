@@ -122,7 +122,7 @@ export interface TransactionsQueue {
 export interface NotificationsState {
   notifications: NotificationsQueue;
   txs: TransactionsQueue;
-  notify: (_: Notification) => number;
+  notify: (_: NotificationObject) => number;
   process: (_: number) => Promise<void>;
   queue: (_: TxOptions) => number;
   dismiss: (id: number) => void;

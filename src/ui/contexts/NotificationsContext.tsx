@@ -8,7 +8,7 @@ import {
   TxOptions,
   NotificationsState,
   TxStatus as Status,
-  Notification,
+  NotificationObject,
   NotificationsQueue,
   TransactionsQueue,
 } from 'types';
@@ -27,7 +27,7 @@ export function NotificationsContextProvider({
   const [notifications, setNotifications] = useState<NotificationsQueue>({});
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
-  function notify(value: Notification) {
+  function notify(value: NotificationObject) {
     setNotifications({
       ...notifications,
       [nextId]: value,
