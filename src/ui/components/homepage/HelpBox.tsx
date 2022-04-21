@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { Button } from '../common/Button';
 import { useLocalStorage } from 'ui/hooks';

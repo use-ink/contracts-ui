@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { useApi } from 'ui/contexts';
 import { useStatistics } from 'ui/hooks';
