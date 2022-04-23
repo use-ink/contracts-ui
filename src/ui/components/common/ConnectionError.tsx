@@ -40,7 +40,7 @@ export function ConnectionError() {
   const { endpoint } = useApi();
 
   return (
-    <div className="w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2 flex justify-center items-center">
+    <div className="w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2 flex justify-center items-center rounded-md">
       <div className=" w-7/12 h-60 border dark:border-gray-700 grid place-content-center justify-items-center">
         <ExclamationCircleIcon className="w-10 h-10 text-red-400 mb-1" />
         <p className="text-gray-500 mb-6">Could not connect to {endpoint}</p>
