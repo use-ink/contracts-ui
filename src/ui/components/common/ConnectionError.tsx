@@ -12,12 +12,12 @@ function ContractsNodeHelp() {
     <>
       <div className="mb-1 text-gray-500">
         <span>Make sure you are running a local </span>
-        <a href="https://github.com/paritytech/substrate-contracts-node" className="text-blue-400">
+        <a href="https://github.com/paritytech/substrate-contracts-node" target="_blank" rel="noreferrer" className="text-blue-400">
           substrate-contracts-node
         </a>
         .
       </div>
-      <p className="py-1 px-4 dark:bg-slate-800 bg-slate-200 text-gray-500 font-mono mb-6 text-sm rounded-sm">
+      <p className="py-1 px-3 dark:bg-slate-800 bg-slate-200 text-gray-500 dark:text-gray-400 font-mono mb-6 text-sm rounded">
         substrate-contracts-node --dev
       </p>
       <p className="text-gray-500">
@@ -29,7 +29,7 @@ function ContractsNodeHelp() {
           }}
           className="text-blue-400"
         >
-          Canvas on Rococo
+          Canvas on Rococo.
         </a>
       </p>
     </>
