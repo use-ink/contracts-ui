@@ -18,7 +18,7 @@ function ContractsNodeHelp() {
         .
       </div>
       <p className="py-1 px-4 dark:bg-slate-800 bg-slate-200 text-gray-500 font-mono mb-6 text-sm rounded-sm">
-        susbtrate-contracts-node --dev
+        substrate-contracts-node --dev
       </p>
       <p className="text-gray-500">
         <span>Alternatively, connect to </span>
