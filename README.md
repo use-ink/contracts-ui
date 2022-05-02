@@ -1,29 +1,20 @@
 # Substrate Contracts UI
 
-Substrate Contracts UI is a `React.js` application for testing WASM smart contracts deployment and interaction on compatible Substrate blockchains.
-Currently works only with smart contracts written in [ink!](https://paritytech.github.io/ink-docs/) but should support similar smart contract languages in the near future.
+Substrate Contracts UI is a web application for deploying and interacting with WASM smart contracts on Substrate blockchains that include the FRAME Contracts Pallet.
 
-In order to deploy a smart contract you have to run a local [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node).
+Supported languages:
+- [ink!](https://github.com/paritytech/ink)
+- [ask!](https://github.com/ask-lang/ask)
+- [solang](https://github.com/hyperledger-labs/solang)
 
-Support for Canvas Testnet and other smart contract chains comming soon.
 
-This version succeeds [Canvas UI](https://paritytech.github.io/canvas-ui/#/instantiate), with the purpose of having a maintainable and well tested codebase, as well as some cool new features like user contract collections, favorites, statistics and more.
-
-## Prerequisites
-
-1. #### [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) running locally
-
-   In order to run any Substrate node locally, you need to prepare your environment according to your setup and familiarity with the Rust programming language. [This tutorial](https://docs.substrate.io/tutorials/v3/ink-workshop/pt1/#prerequisites) is a good step by step guide to get started.
-
-2. #### Compiled ink! contract
-
-   After installing all the prerequisites for Substrate development and the ink! CLI tool (cargo-contract), you are able to either [start a new ink! project](https://docs.substrate.io/tutorials/v3/ink-workshop/pt1/#creating-an-ink-project) or compile one of the [example smart contracts](https://github.com/paritytech/ink/tree/master/examples) by cloning the repo and running `cargo +nightly contract build` in the root folder of each example.
+We recommend running a [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) for local development or using the Canvas parachain on the Rococo Testnet. 
 
 ## Features
 
 ### Contract instantiation
 
-Once you have a compiled contract and a local node running, you can use the hosted version of Contracts UI to [add a new contract on-chain](https://paritytech.github.io/contracts-ui/#/instantiate).
+Once you have a compiled contract and you are connected to a node, you can use the hosted version of Contracts UI to [add a new contract on-chain](https://paritytech.github.io/contracts-ui/#/instantiate).
 
 There are 2 instantiation methods:
 
