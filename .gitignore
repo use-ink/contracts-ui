@@ -123,3 +123,4 @@ dist
 *.sqlite
 *.sqlite-journal
 .fuse_*
+.DS_Store
