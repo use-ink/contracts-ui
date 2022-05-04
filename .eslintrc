@@ -78,7 +78,6 @@
     "import/newline-after-import": "warn",
     "@typescript-eslint/restrict-template-expressions": "off",
     "react/prop-types": "off",
-    "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

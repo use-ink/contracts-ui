@@ -6,8 +6,7 @@ import { NotificationIcon } from './common/NotificationIcon';
 import type { QueuedTxOptions, NotificationsState, NotificationObject, VoidFn } from 'types';
 import { classes, isEmptyObj, truncate } from 'ui/util';
 
-interface NotificationProps {
-  dataCy?: string;
+interface NotificationProps extends React.HTMLAttributes<unknown> {
   icon: React.ReactNode;
   isDismissable?: boolean;
   label?: React.ReactNode;
@@ -25,11 +24,22 @@ function notificationText(type: NotificationObject['type']) {
   }
 }
 
-function Notification({ dataCy, icon, isDismissable, label, onDismiss, text }: NotificationProps) {
+function Notification({
+  className,
+  icon,
+  isDismissable,
+  label,
+  onDismiss,
+  text,
+  ...props
+}: NotificationProps) {
   return (
     <div
-      data-cy={dataCy}
-      className="max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 mb-3 flex items-center"
+      data-cy={(props as Record<string, unknown>)['data-cy']}
+      className={classes(
+        'max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 mb-3 flex items-center',
+        className
+      )}
     >
       {icon}
       <div className="pl-2 flex-grow text-sm">
@@ -53,7 +63,7 @@ export function Notifications({
       {Object.entries(notifications).map(([id, { type, value }]: [string, NotificationObject]) => {
         return (
           <Notification
-            dataCy="notification"
+            data-cy="notification"
             icon={<NotificationIcon type={type} />}
             isDismissable
             key={`notification-${id}`}
@@ -71,7 +81,7 @@ export function Notifications({
         return (
           <>
             <Notification
-              dataCy="transaction-queued"
+              data-cy="transaction-queued"
               icon={<NotificationIcon type={status} />}
               isDismissable={isComplete}
               key={`transaction-${id}`}
@@ -81,7 +91,7 @@ export function Notifications({
             />
             {isComplete && events && !isEmptyObj(events) && (
               <Notification
-                dataCy="transaction-complete"
+                data-cy="transaction-complete"
                 icon={<BellIcon className="text-yellow-400 w-12 h-12" />}
                 isDismissable
                 key={`transaction-complete-${id}`}
