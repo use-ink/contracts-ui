@@ -4,7 +4,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
-import { isNull } from '@polkadot/util';
 import { InteractTab } from '../components/contract/Interact';
 import { MetadataTab } from '../components/contract/Metadata';
 import { CopyButton } from '../components/common/CopyButton';
@@ -52,7 +51,7 @@ export function Contract() {
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
-  const [isOnChain, setIsOnChain] = useState<boolean | null>(null);
+  const [isOnChain, setIsOnChain] = useState<boolean>();
 
   useEffect(() => {
     data &&
@@ -75,7 +74,7 @@ export function Contract() {
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={(!contract && isLoading) || isNull(isOnChain)}>
+    <Loader isLoading={(!contract && isLoading) || isOnChain === undefined}>
       <PageFull
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
