@@ -6,6 +6,8 @@ export * from './Dropdown';
 export * from './HeaderButtons';
 export * from './Loader';
 export * from './Meter';
+export * from './Notification';
+export * from './NotificationIcon';
 export * from './Spinner';
 export * from './Switch';
 export * from './Tabs';

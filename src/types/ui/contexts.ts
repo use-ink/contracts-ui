@@ -115,14 +115,18 @@ export interface NotificationsQueue {
   [id: string]: NotificationObject;
 }
 
+export interface NotificationsState {
+  notifications: NotificationsQueue;
+  notify: (_: NotificationObject) => number;
+  dismiss: (id: number) => void;
+}
+
 export interface TransactionsQueue {
   [id: number]: QueuedTxOptions | undefined;
 }
 
-export interface NotificationsState {
-  notifications: NotificationsQueue;
+export interface TransactionsState {
   txs: TransactionsQueue;
-  notify: (_: NotificationObject) => number;
   process: (_: number) => Promise<void>;
   queue: (_: TxOptions) => number;
   dismiss: (id: number) => void;

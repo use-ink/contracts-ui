@@ -6,3 +6,4 @@ export * from './DatabaseContext';
 export * from './InstantiateContext';
 export * from './NotificationsContext';
 export * from './ThemeContext';
+export * from './TransactionsContext';

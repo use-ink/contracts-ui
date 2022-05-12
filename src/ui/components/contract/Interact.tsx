@@ -16,7 +16,7 @@ import {
 } from 'ui/components/form';
 import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
 import { getBlockHash } from 'api/util';
-import { useApi, useNotifications } from 'ui/contexts';
+import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
@@ -93,7 +93,7 @@ export const InteractTab = ({ contract }: Props) => {
     value: message.isPayable ? value || BN_ZERO : undefined,
   };
 
-  const { queue, process, txs } = useNotifications();
+  const { queue, process, txs } = useTransactions();
 
   const onCallSuccess = ({ status, dispatchInfo, events }: SubmittableResult) => {
     const log = events.map(({ event }) => {
@@ -136,34 +136,36 @@ export const InteractTab = ({ contract }: Props) => {
 
     setNextResultId(nextResultId + 1);
   };
-  const read = async () => {
-    const { result, output } = await sendContractQuery(
+  const read = () => {
+    sendContractQuery(
       contract.query[message.method],
       keyring.getPair(accountId),
       options,
       transformed
-    );
+    )
+      .then(({ result, output }) => {
+        let error: RegistryError | undefined;
 
-    let error: RegistryError | undefined;
+        if (result.isErr && result.asErr.isModule) {
+          error = contract.registry.findMetaError(result.asErr.asModule);
+        }
 
-    if (result.isErr && result.asErr.isModule) {
-      error = contract.registry.findMetaError(result.asErr.asModule);
-    }
+        setCallResults([
+          ...callResults,
+          {
+            id: nextResultId,
+            log: [],
+            message,
+            time: Date.now(),
+            isComplete: true,
+            data: output,
+            error,
+          },
+        ]);
 
-    setCallResults([
-      ...callResults,
-      {
-        id: nextResultId,
-        log: [],
-        message,
-        time: Date.now(),
-        isComplete: true,
-        data: output,
-        error,
-      },
-    ]);
-
-    setNextResultId(nextResultId + 1);
+        setNextResultId(nextResultId + 1);
+      })
+      .catch(console.error);
   };
 
   const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
