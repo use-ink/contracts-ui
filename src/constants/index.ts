@@ -4,7 +4,7 @@
 import BN from 'bn.js';
 import type { ApiState } from 'types';
 
-export enum RPCS {
+export enum RPC {
   LOCAL = 'ws://127.0.0.1:9944',
   CANVAS = 'wss://rococo-canvas-rpc.polkadot.io',
 }
@@ -21,7 +21,7 @@ export const NULL_CHAIN_PROPERTIES = {
 
 export const INIT_STATE: ApiState = {
   ...NULL_CHAIN_PROPERTIES,
-  endpoint: RPCS.LOCAL,
+  endpoint: RPC.LOCAL,
   keyringStatus: null,
   error: null,
   status: 'CONNECT_INIT',

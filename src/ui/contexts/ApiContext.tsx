@@ -3,7 +3,7 @@
 
 import { createContext, useReducer, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { INIT_STATE, RPCS } from '../../constants';
+import { INIT_STATE, RPC } from '../../constants';
 import type { ApiState } from 'types';
 import { loadAccounts, connect, isValidWsUrl } from 'api';
 import { apiReducer } from 'ui/reducers';
@@ -18,7 +18,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const rpcUrl = searchParams.get('rpc');
   const [preferredEndpoint, setPreferredEndpoint] = useLocalStorage<string>(
     'preferredEndpoint',
-    RPCS.LOCAL
+    RPC.LOCAL
   );
   const [state, dispatch] = useReducer(apiReducer, { ...INIT_STATE, endpoint: preferredEndpoint });
   const { endpoint, keyringStatus, status } = state;

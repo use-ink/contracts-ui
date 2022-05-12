@@ -12,3 +12,4 @@ export * from './Spinner';
 export * from './Switch';
 export * from './Tabs';
 export * from './SearchResults';
+export * from './ConnectionError';

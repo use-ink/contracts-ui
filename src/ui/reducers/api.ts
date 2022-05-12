@@ -8,7 +8,7 @@ import type { ApiAction, ApiState } from 'types';
 export const apiReducer: Reducer<ApiState, ApiAction> = (state, action) => {
   switch (action.type) {
     case 'SET_ENDPOINT':
-      return { ...state, endpoint: action.payload };
+      return { ...state, endpoint: action.payload, error: null };
 
     case 'CONNECT_INIT':
       return { ...state, status: 'CONNECT_INIT' };
