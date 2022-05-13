@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Buffer } from 'buffer';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import App from 'ui/components/App';
 import './styles/main.css';
@@ -19,9 +19,13 @@ import {
 
 globalThis.Buffer = Buffer;
 
-const root = document.getElementById('app-root');
+const container = document.getElementById('app-root');
+// non-null assertion encouraged by react 18 upgrade guide
+// https://reactjs.org/blog/2022/03/08/react-18-upgrade-guide.html#updates-to-client-rendering-apis
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = createRoot(container!);
 
-ReactDOM.render(
+root.render(
   <HashRouter>
     <Routes>
       <Route path="/" element={<App />}>
@@ -36,6 +40,5 @@ ReactDOM.render(
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
-  </HashRouter>,
-  root
+  </HashRouter>
 );
