@@ -1,19 +1,21 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { useLiveQuery } from 'dexie-react-hooks';
 import { FolderOpenIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { ContractRow } from '../contract/ContractRow';
-import { useTopContracts } from 'ui/hooks';
+import { useDatabase } from 'ui/contexts';
 
 export function Contracts(): React.ReactElement | null {
-  const { data: contracts, isLoading } = useTopContracts();
+  const { db } = useDatabase();
+  const contracts = useLiveQuery(() => db.contracts.toArray());
 
-  if (isLoading) {
+  if (!contracts) {
     return null;
   }
 
-  if (!contracts || contracts.length === 0) {
+  if (contracts.length === 0) {
     return (
       <div className="flex flex-col items-center space-y-2 text-sm border dark:text-gray-500 dark:border-gray-700  rounded py-7 px-5">
         <FolderOpenIcon className="w-8 h-8" />

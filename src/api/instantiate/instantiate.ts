@@ -8,22 +8,20 @@ import type {
   InstantiateData,
   InstantiateState,
 } from 'types';
-import { createContract } from 'db';
 
 export function onInsantiateFromHash(
-  { db, identity }: DbState,
+  { db }: DbState,
   { accountId, codeHash, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Hash {
   return async function ({ contract, status }): Promise<void> {
     if (accountId && codeHash && contract && (status.isInBlock || status.isFinalized)) {
-      await createContract(db, identity, {
+      await db.contracts.add({
         abi: contract.abi.json,
         address: contract.address.toString(),
-        creator: accountId,
         codeHash,
+        date: new Date().toISOString(),
         name: name,
-        tags: [],
       });
 
       onSuccess && onSuccess(contract);
@@ -32,7 +30,7 @@ export function onInsantiateFromHash(
 }
 
 export function onInstantiateFromCode(
-  { db, identity }: DbState,
+  { db }: DbState,
   { accountId, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Code {
@@ -41,14 +39,14 @@ export function onInstantiateFromCode(
       const { blueprint, contract, status } = result;
 
       if (accountId && contract && (status.isInBlock || status.isFinalized)) {
-        await createContract(db, identity, {
+        await db.contracts.add({
           abi: contract.abi.json,
           address: contract.address.toString(),
-          creator: accountId,
           codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
+          date: new Date().toISOString(),
           name: name,
-          tags: [],
         });
+
         onSuccess && onSuccess(contract, blueprint);
       }
     } catch (e) {

@@ -5,8 +5,9 @@ import type { ReactNode } from 'react';
 import type { Collection, Database } from '@textile/threaddb';
 import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './substrate';
+import { DB, CodeBundleDocument, ContractDocument } from 'db';
 
-export type { Collection, Database, PrivateKey };
+export type { CodeBundleDocument, Collection, ContractDocument, Database, PrivateKey };
 
 interface Document {
   _id?: string;
@@ -19,27 +20,9 @@ export interface UserDocument extends Document {
   name?: string;
 }
 
-export interface CodeBundleDocument extends Document {
-  abi?: Record<string, unknown>;
-  codeHash: string;
-  creator: string;
-  date: string;
-  id: string;
-  instances: number;
-  name: string;
-  owner?: string;
-  tags?: string[];
-}
-
-export interface ContractDocument extends Document {
-  abi: Record<string, unknown>;
-  address: string;
-  codeHash: string;
-  creator: string;
-  date: string;
-  name: string;
-  owner?: string;
-  tags?: string[];
+export interface DbState {
+  db: DB;
+  isDbReady: boolean;
 }
 
 export interface DbQuery<T> {
@@ -55,15 +38,6 @@ export type CodeBundle = {
 };
 export interface UserArtifacts<T> {
   owned: Array<T>;
-}
-
-export interface DbState {
-  db: Database;
-  user: UserDocument | null;
-  myContracts: MyContracts | null;
-  refreshUserData: () => void;
-  identity: PrivateKey | null;
-  isDbReady: boolean;
 }
 
 export interface DbStatistics {

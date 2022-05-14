@@ -3,14 +3,20 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
-import { useApi } from 'ui/contexts';
-import { useStatistics } from 'ui/hooks';
+import { useApi, useDatabase } from 'ui/contexts';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 export function Statistics(): React.ReactElement | null {
   const { api } = useApi();
+  const { db } = useDatabase();
 
   const [blockNumber, setBlockNumber] = useState(0);
-  const { data: statistics } = useStatistics();
+  const statistics = useLiveQuery(() => {
+    return {
+      codeBundlesCount: db.codeBundles.count,
+      contractsCount: db.contracts.count,
+    };
+  });
 
   useEffect(() => {
     async function listenToBlocks() {
