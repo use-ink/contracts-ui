@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { Collection, Database } from '@textile/threaddb';
-import type { CodeBundleDocument, ContractDocument, UserDocument } from 'types';
+import type { CodeBundleDocument, ContractDocument } from 'types';
 
 export function getCodeBundleCollection(db: Database): Collection<CodeBundleDocument> {
   const collection = db.collection<CodeBundleDocument>('CodeBundle');
@@ -16,14 +16,6 @@ export function getContractCollection(db: Database): Collection<ContractDocument
   const collection = db.collection<ContractDocument>('Contract');
 
   if (!collection) throw new Error('Contract collection not found.');
-
-  return collection;
-}
-
-export function getUserCollection(db: Database): Collection<UserDocument> {
-  const collection = db.collection<UserDocument>('User');
-
-  if (!collection) throw new Error('User collection not found.');
 
   return collection;
 }

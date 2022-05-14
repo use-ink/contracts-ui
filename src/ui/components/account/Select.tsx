@@ -60,11 +60,11 @@ export function AddressSelect({ placeholder = 'Select address', ...props }: Prop
         label: 'My Accounts',
         options: createAccountOptions(keyring?.getPairs()),
       },
-      ...(myContracts?.owned && myContracts.owned.length > 0
+      ...(myContracts && myContracts.length > 0
         ? [
             {
               label: 'Uploaded Contracts',
-              options: (myContracts?.owned || []).map(({ name, address }) => ({
+              options: (myContracts || []).map(({ name, address }) => ({
                 label: name,
                 value: address,
               })),
@@ -72,7 +72,7 @@ export function AddressSelect({ placeholder = 'Select address', ...props }: Prop
           ]
         : []),
     ];
-  }, [keyring, myContracts?.owned]);
+  }, [keyring, myContracts]);
 
   return <Select options={options} placeholder={placeholder} {...props} />;
 }

@@ -3,20 +3,12 @@
 
 import type { ReactNode } from 'react';
 import type { Collection, Database } from '@textile/threaddb';
-import type { PrivateKey } from '@textile/crypto';
 import type { VoidFn } from './substrate';
 
-export type { Collection, Database, PrivateKey };
+export type { Collection, Database };
 
 interface Document {
   _id?: string;
-}
-
-export interface UserDocument extends Document {
-  creator?: string;
-  publicKey: string;
-  email?: string;
-  name?: string;
 }
 
 export interface CodeBundleDocument extends Document {
@@ -51,27 +43,17 @@ export interface DbQuery<T> {
   updated: number;
 }
 export type CodeBundle = {
-  document: CodeBundleDocument | null;
+  document?: CodeBundleDocument;
 };
-export interface UserArtifacts<T> {
-  owned: Array<T>;
-}
 
 export interface DbState {
   db: Database;
-  user: UserDocument | null;
-  myContracts: MyContracts | null;
+  myContracts: ContractDocument[] | null;
   refreshUserData: () => void;
-  identity: PrivateKey | null;
   isDbReady: boolean;
 }
 
 export interface DbStatistics {
   codeBundlesCount: number;
   contractsCount: number;
-  mostPopularCodeBundles: CodeBundleDocument[];
 }
-
-export type MyCodeBundles = UserArtifacts<CodeBundleDocument>;
-
-export type MyContracts = UserArtifacts<ContractDocument>;

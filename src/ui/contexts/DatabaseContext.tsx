@@ -5,7 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { useApi } from './ApiContext';
 import { init } from 'db/util';
 import type { DbState } from 'types';
-import { findMyContracts, getUser } from 'db';
+import { getContractCollection } from 'db';
 
 export const DbContext: React.Context<DbState> = createContext({} as unknown as DbState);
 export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
@@ -23,8 +23,8 @@ export function DatabaseContextProvider({
   useEffect((): void => {
     status === 'READY' &&
       init(endpoint)
-        .then(([db, user, identity]): void => {
-          setState(state => ({ ...state, db, user, identity, isDbReady: true }));
+        .then((db): void => {
+          setState(state => ({ ...state, db, isDbReady: true }));
         })
         .catch(e => {
           console.error(e);
@@ -32,15 +32,14 @@ export function DatabaseContextProvider({
   }, [endpoint, status]);
 
   const refreshUserData = useCallback(async (): Promise<void> => {
-    const user = await getUser(state.db, state.identity);
-    const myContracts = await findMyContracts(state.db, state.identity);
+    const myContracts = await getContractCollection(state.db).find().toArray();
 
-    setState(state => ({ ...state, user, myContracts }));
-  }, [state.db, state.identity]);
+    setState(state => ({ ...state, myContracts }));
+  }, [state.db]);
 
   useEffect((): void => {
     if (state.isDbReady) {
-      refreshUserData().then().catch(console.error);
+      refreshUserData().catch(console.error);
     }
   }, [refreshUserData, state.isDbReady]);
 

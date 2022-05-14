@@ -4,7 +4,7 @@
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts/DatabaseContext';
 import { useDbQuery } from './useDbQuery';
-import { findCodeBundleByHash } from 'db/queries';
+import { getCodeBundleCollection } from 'db/queries';
 
 import type { CodeBundle, DbQuery, OrFalsy } from 'types';
 
@@ -18,10 +18,10 @@ export function useCodeBundle(codeHash: string): DbQuery<CodeBundle> {
 
   const query = useCallback(async (): Promise<CodeBundle> => {
     if (isValidHash(codeHash)) {
-      const document = await findCodeBundleByHash(db, codeHash);
+      const document = await getCodeBundleCollection(db).findOne({ codeHash });
       return { document };
     }
-    return { document: null };
+    return { document: undefined };
   }, [codeHash, db]);
 
   return useDbQuery(query, result => !!result);

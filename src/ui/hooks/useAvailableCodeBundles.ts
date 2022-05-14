@@ -15,11 +15,11 @@ function byDate(a: CodeBundleDocument, b: CodeBundleDocument): number {
 }
 
 export function useAvailableCodeBundles(limit = 1): DbQuery<CodeBundleDocument[]> {
-  const { db, identity } = useDatabase();
+  const { db } = useDatabase();
 
   const query = useCallback(async (): Promise<CodeBundleDocument[]> => {
-    return (await findOwnedCodeBundles(db, identity, limit)).sort(byDate);
-  }, [db, identity, limit]);
+    return (await findOwnedCodeBundles(db, limit)).sort(byDate);
+  }, [db, limit]);
 
   return useDbQuery(query);
 }

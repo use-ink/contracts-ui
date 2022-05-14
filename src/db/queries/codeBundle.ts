@@ -1,56 +1,14 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import type { Database, PrivateKey } from '@textile/threaddb';
-import { getNewCodeBundleId, publicKeyHex } from '../util';
-import { findUser } from './user';
-import { getCodeBundleCollection, getContractCollection } from './util';
-import type { CodeBundleDocument, MyCodeBundles } from 'types';
+import type { Database } from '@textile/threaddb';
+import { getNewCodeBundleId } from '../util';
+import { getCodeBundleCollection } from './util';
+import type { CodeBundleDocument } from 'types';
 
-export async function findTopCodeBundles(
-  db: Database,
-  excludeOwnedBy?: PrivateKey | null,
-  limit?: number
-): Promise<(CodeBundleDocument & { instances: number })[]> {
+export async function findOwnedCodeBundles(db: Database, limit = 2): Promise<CodeBundleDocument[]> {
   try {
-    const codeBundles = (
-      await getCodeBundleCollection(db)
-        .find(excludeOwnedBy ? { owner: { $ne: publicKeyHex(excludeOwnedBy) } } : {})
-        .toArray()
-    ).slice(0, limit ? limit : undefined);
-
-    return Promise.all(
-      codeBundles.map(async codeBundle => {
-        const instances = (
-          await getContractCollection(db).find({ codeHash: codeBundle.codeHash }).toArray()
-        ).length;
-
-        return {
-          ...(codeBundle as CodeBundleDocument),
-          instances,
-        };
-      })
-    );
-  } catch (e) {
-    console.error(e);
-
-    return Promise.reject(e);
-  }
-}
-
-export async function findOwnedCodeBundles(
-  db: Database,
-  identity: PrivateKey | null,
-  limit = 2
-): Promise<CodeBundleDocument[]> {
-  try {
-    const user = await findUser(db, identity);
-
-    if (!user) {
-      return [];
-    }
-
-    return (await getCodeBundleCollection(db).find({ owner: user.publicKey }).toArray()).slice(
+    return (await getCodeBundleCollection(db).find({}).toArray()).slice(
       0,
       limit ? limit : undefined
     );
@@ -59,41 +17,6 @@ export async function findOwnedCodeBundles(
 
     return Promise.reject(e);
   }
-}
-
-export async function findMyCodeBundles(
-  db: Database,
-  identity: PrivateKey | null
-): Promise<MyCodeBundles> {
-  try {
-    const user = await findUser(db, identity);
-
-    if (!user) {
-      return { owned: [] };
-    }
-
-    const owned = await findOwnedCodeBundles(db, identity);
-
-    return { owned };
-  } catch (e) {
-    console.error(e);
-
-    return Promise.reject(e);
-  }
-}
-
-export async function findCodeBundleByHash(
-  db: Database,
-  codeHash: string
-): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ codeHash })) || null;
-}
-
-export async function findCodeBundleById(
-  db: Database,
-  id: string
-): Promise<CodeBundleDocument | null> {
-  return (await getCodeBundleCollection(db).findOne({ id })) || null;
 }
 
 export async function searchForCodeBundle(
@@ -119,7 +42,6 @@ export async function searchForCodeBundle(
 
 export async function createCodeBundle(
   db: Database,
-  owner: PrivateKey | null,
   {
     abi,
     codeHash,
@@ -146,7 +68,6 @@ export async function createCodeBundle(
       creator,
       id,
       name,
-      owner: publicKeyHex(owner),
       tags,
       date,
       instances,

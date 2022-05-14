@@ -4,9 +4,16 @@
 import { useCallback } from 'react';
 import { useDatabase } from '../contexts';
 import { useDbQuery } from './useDbQuery';
-import { getStatistics } from 'db/queries';
+import { getCodeBundleCollection, getContractCollection } from 'db/queries';
 
-import type { DbStatistics, DbQuery } from 'types';
+import type { DbStatistics, DbQuery, Database } from 'types';
+
+export async function getStatistics(db: Database): Promise<DbStatistics> {
+  const codeBundles = await getCodeBundleCollection(db).find({}).toArray();
+  const contractsCount = (await getContractCollection(db).find({}).toArray()).length;
+
+  return { codeBundlesCount: codeBundles.length, contractsCount };
+}
 
 export function useStatistics(): DbQuery<DbStatistics> {
   const { db } = useDatabase();
