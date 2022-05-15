@@ -1011,7 +1011,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/types@npm:8.4.2, @polkadot/types@npm:^8.3.2, @polkadot/types@npm:^8.4.2":
+"@polkadot/types@npm:8.4.2, @polkadot/types@npm:^8.4.2":
   version: 8.4.2
   resolution: "@polkadot/types@npm:8.4.2"
   dependencies:
@@ -2562,7 +2562,7 @@ __metadata:
     "@polkadot/api-contract": 8.3.2
     "@polkadot/extension-dapp": ^0.43.1
     "@polkadot/keyring": ^9.1.1
-    "@polkadot/types": ^8.3.2
+    "@polkadot/types": 8.3.2
     "@polkadot/ui-keyring": ^2.1.1
     "@polkadot/ui-shared": ^2.1.1
     "@polkadot/util": ^9.1.1
