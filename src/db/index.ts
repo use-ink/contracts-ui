@@ -21,15 +21,11 @@ export class Database extends Dexie {
   contracts!: Table<ContractDocument, number>;
 
   constructor(genesisHash: string) {
-    super(`canvas-ui__${genesisHash}`);
+    super(`contracts-ui__${genesisHash}`);
 
     this.version(1).stores({
       codeBundles: '++id, codeHash, name, date',
       contracts: '++id, address, codeHash, name, date',
     });
-  }
-
-  public getCodeBundle(codeHash: string) {
-    return this.codeBundles.get({ codeHash });
   }
 }

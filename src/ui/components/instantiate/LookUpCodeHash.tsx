@@ -32,7 +32,7 @@ export function LookUpCodeHash() {
 
     return filterOnChainCode(api, matches);
   }, [api, db, searchString]);
-  const [codeBundle] = useDbQuery(() => db.getCodeBundle(codeHash), [codeHash, db]);
+  const [codeBundle] = useDbQuery(() => db.codeBundles.get({ codeHash }), [codeHash, db]);
 
   useEffect((): void => {
     if (codeHash !== searchString) {
