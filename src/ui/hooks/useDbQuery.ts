@@ -1,73 +1,16 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useCallback, useEffect, useState } from 'react';
-import { useDatabase } from '../contexts/DatabaseContext';
-import type { DbQuery } from 'types';
-
-type ValidateFn<T> = (_?: T | null) => boolean;
-
-type State<T> = Omit<DbQuery<T>, 'refresh'>;
-
-const initialState = {
-  data: null,
-  error: null,
-  isLoading: true,
-  isValid: true,
-  updated: 0,
-};
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useMemo } from 'react';
+import { OrFalsy } from 'types';
 
 export function useDbQuery<T>(
-  query: () => Promise<T | null>,
-  validate: ValidateFn<T> = value => !!value
-): DbQuery<T> {
-  const { isDbReady } = useDatabase();
-  const [state, setState] = useState<State<T>>(initialState);
+  querier: () => T | Promise<T>,
+  deps: unknown[] = []
+): [OrFalsy<T>, boolean] {
+  const liveQuery = useLiveQuery<T, null>(querier, deps, null);
+  const isLoading = useMemo(() => liveQuery === null, [liveQuery]);
 
-  const fetch = useCallback((): void => {
-    if (!isDbReady) return;
-
-    query()
-      .then(result => {
-        setState(state => ({
-          ...state,
-          data: result,
-          error: null,
-          isLoading: false,
-          isValid: validate(result),
-          updated: Date.now(),
-        }));
-      })
-      .catch((e: Error) => {
-        setState(state => ({
-          ...state,
-          data: null,
-          error: e.message || 'Error',
-          isLoading: false,
-          isValid: false,
-          updated: Date.now(),
-        }));
-
-        console.error(e);
-      });
-    // validate updates too often
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDbReady, query]);
-
-  const refresh = useCallback((): void => {
-    setState(state => ({
-      ...state,
-      error: null,
-      isLoading: true,
-      isValid: true,
-    }));
-
-    fetch();
-  }, [fetch]);
-
-  useEffect((): void => {
-    fetch();
-  }, [fetch]);
-
-  return { ...state, refresh };
+  return [liveQuery, isLoading];
 }

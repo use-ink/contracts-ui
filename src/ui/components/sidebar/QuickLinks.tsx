@@ -5,16 +5,18 @@ import { DocumentTextIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { NavLink } from './NavLink';
 import { useDatabase } from 'ui/contexts';
+import { useDbQuery } from 'ui/hooks';
 
 export function QuickLinks() {
-  const { myContracts } = useDatabase();
+  const { db } = useDatabase();
+  const [contracts] = useDbQuery(() => db?.contracts.toArray() || Promise.resolve(null), [db]);
 
   return (
     <div className="quick-links">
       <div className="section your-contracts">
         <div className="header">Your Contracts</div>
-        {myContracts?.owned && myContracts?.owned.length > 0 ? (
-          myContracts?.owned?.map(({ name, address }) => {
+        {contracts && contracts.length > 0 ? (
+          contracts.map(({ name, address }) => {
             return (
               <NavLink icon={DocumentTextIcon} key={address} to={`/contract/${address}`}>
                 {name}

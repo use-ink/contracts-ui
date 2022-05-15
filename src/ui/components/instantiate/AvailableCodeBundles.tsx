@@ -8,7 +8,7 @@ import { CodeHash } from './CodeHash';
 import { CodeBundleDocument } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { filterOnChainCode } from 'api';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useDbQuery } from 'ui/hooks';
 
 const PAGE_SIZE = 5;
 
@@ -53,7 +53,7 @@ function List({ items, label }: ListProps) {
 export function AvailableCodeBundles() {
   const { api } = useApi();
   const { db } = useDatabase();
-  const data = useLiveQuery(() => db.codeBundles.limit(PAGE_SIZE).toArray());
+  const [data, isLoading] = useDbQuery(() => db.codeBundles.limit(PAGE_SIZE).toArray(), [db]);
   const [codes, setCodes] = useState<CodeBundleDocument[]>([]);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export function AvailableCodeBundles() {
         .catch(console.error);
   }, [api, data]);
 
-  if (!data || data.length === 0) {
+  if (isLoading || !data || data.length === 0) {
     return null;
   }
 

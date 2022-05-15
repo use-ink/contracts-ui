@@ -7,7 +7,6 @@ import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { classes, truncate } from 'ui/util';
 import { checkOnChainCode } from 'api/util';
-import { removeCodeBundle } from 'db';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,
@@ -24,8 +23,9 @@ type Props = SimpleSpread<
 
 export function CodeHash({ className, codeHash, error, name, isError, isSuccess, onClick }: Props) {
   const { api } = useApi();
-  const { refreshUserData, db } = useDatabase();
+  const { db } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);
+
   useEffect(() => {
     checkOnChainCode(api, codeHash)
       .then(codeStorageExists => {
@@ -66,8 +66,11 @@ export function CodeHash({ className, codeHash, error, name, isError, isSuccess,
             title="Forget code hash"
             className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-500 hover:text-gray-400 border h-full p-1 rounded"
             onClick={async () => {
-              await removeCodeBundle(db, codeHash).catch(console.error);
-              refreshUserData();
+              const toDelete = await db.codeBundles.get({ codeHash });
+
+              if (toDelete?.id) {
+                await db.codeBundles.delete(toDelete.id);
+              }
             }}
           >
             <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />

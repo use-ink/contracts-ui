@@ -3,47 +3,27 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useApi } from './ApiContext';
-import { DB } from 'db';
+import { Database } from 'db';
+import { DbState } from 'types';
 
 export const DbContext: React.Context<DbState> = createContext({} as unknown as DbState);
 export const DbConsumer: React.Consumer<DbState> = DbContext.Consumer;
 export const DbProvider: React.Provider<DbState> = DbContext.Provider;
 
-const INITIAL = { isDbReady: false } as unknown as DbState;
-
-interface DbState {
-  db: DB;
-  isDbReady: boolean;
-}
+const INITIAL = {} as unknown as DbState;
 
 export function DatabaseContextProvider({
   children,
 }: React.HTMLAttributes<HTMLDivElement>): JSX.Element | null {
-  const { api, status, endpoint } = useApi();
-
+  const { genesisHash } = useApi();
   const [state, setState] = useState<DbState>(INITIAL);
 
   useEffect((): void => {
-    status === 'READY' &&
-      !!api.genesisHash &&
+    genesisHash &&
       setState({
-        isDbReady: true,
-        db: new DB(api.genesisHash.toHex()),
+        db: new Database(genesisHash),
       });
-  }, [api.genesisHash, endpoint, status]);
-
-  // const refreshUserData = useCallback(async (): Promise<void> => {
-  //   const user = await getUser(state.db, state.identity);
-  //   const myContracts = await findMyContracts(state.db, state.identity);
-
-  //   setState(state => ({ ...state, user, myContracts }));
-  // }, [state.db, state.identity]);
-
-  // useEffect((): void => {
-  //   if (state.isDbReady) {
-  //     refreshUserData().then().catch(console.error);
-  //   }
-  // }, [refreshUserData, state.isDbReady]);
+  }, [genesisHash]);
 
   return <DbContext.Provider value={state}>{children}</DbContext.Provider>;
 }

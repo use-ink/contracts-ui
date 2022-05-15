@@ -15,7 +15,7 @@ export function onInsantiateFromHash(
   onSuccess: InstantiateState['onSuccess']
 ): OnInstantiateSuccess$Hash {
   return async function ({ contract, status }): Promise<void> {
-    if (accountId && codeHash && contract && (status.isInBlock || status.isFinalized)) {
+    if (accountId && codeHash && contract?.abi.json && (status.isInBlock || status.isFinalized)) {
       await db.contracts.add({
         abi: contract.abi.json,
         address: contract.address.toString(),
@@ -39,13 +39,19 @@ export function onInstantiateFromCode(
       const { blueprint, contract, status } = result;
 
       if (accountId && contract && (status.isInBlock || status.isFinalized)) {
-        await db.contracts.add({
+        const document = {
           abi: contract.abi.json,
-          address: contract.address.toString(),
           codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
           date: new Date().toISOString(),
-          name: name,
+          name,
+        };
+
+        await db.contracts.add({
+          ...document,
+          address: contract.address.toString(),
         });
+
+        await db.codeBundles.add(document);
 
         onSuccess && onSuccess(contract, blueprint);
       }

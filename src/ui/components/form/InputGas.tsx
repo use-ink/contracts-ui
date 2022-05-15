@@ -14,6 +14,7 @@ interface Props extends UseWeight, React.HTMLAttributes<HTMLDivElement> {
 
 export function InputGas({
   className,
+  defaultWeight,
   estimatedWeight,
   executionTime,
   isActive,

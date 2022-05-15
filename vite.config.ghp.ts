@@ -23,10 +23,6 @@ export default defineConfig({
           if (/[\\/]node_modules[\\/](@polkadot)[\\/]/.test(id)) {
             return 'polkadot';
           }
-
-          if (/[\\/]node_modules[\\/](@textile)[\\/]/.test(id)) {
-            return 'textile';
-          }
         },
       },
     },

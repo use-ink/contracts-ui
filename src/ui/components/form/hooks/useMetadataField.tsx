@@ -5,7 +5,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { FileState, OrFalsy, UseMetadata } from 'types';
 import { useMetadata } from 'ui/hooks/useMetadata';
-import { useCodeBundle } from 'ui/hooks/useCodeBundle';
+import { useDatabase } from 'ui/contexts';
+import { useDbQuery } from 'ui/hooks';
 
 interface UseMetadataField extends UseMetadata {
   file: OrFalsy<FileState>;
@@ -15,33 +16,31 @@ interface UseMetadataField extends UseMetadata {
 
 export const useMetadataField = (): UseMetadataField => {
   const navigate = useNavigate();
+  const { db } = useDatabase();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   const [file, setFile] = useState<OrFalsy<FileState>>(null);
 
-  const codeBundleQuery = useCodeBundle(codeHashUrlParam || '');
-  const codeBundle = codeBundleQuery.data;
-  const metadata = useMetadata(codeBundle?.document?.abi, {
+  const [codeBundle, isLoading] = useDbQuery(
+    () => db.codeBundles.get({ codeHash: codeHashUrlParam || '' }),
+    [codeHashUrlParam, db]
+  );
+  const metadata = useMetadata(codeBundle?.abi, {
     isWasmRequired: !codeBundle,
     onChange: setFile,
   });
 
-  const isLoading = useMemo(
-    () => !!codeHashUrlParam && codeBundleQuery.isLoading,
-    [codeHashUrlParam, codeBundleQuery.isLoading]
-  );
-
-  const isStored = useMemo((): boolean => !!codeBundle?.document, [codeBundle?.document]);
+  const isStored = useMemo((): boolean => !!codeBundle, [codeBundle]);
 
   useEffect((): void => {
-    if (codeHashUrlParam && !codeBundleQuery.isValid) {
+    if (codeHashUrlParam && !codeBundle && !isLoading) {
       navigate(`/instantiate/${codeHashUrlParam}`);
     }
-  }, [codeHashUrlParam, codeBundleQuery.isValid, navigate]);
+  }, [codeBundle, codeHashUrlParam, isLoading, navigate]);
 
   return {
     file,
-    isLoading,
+    isLoading: isLoading && !!codeHashUrlParam,
     isStored,
     ...metadata,
   };

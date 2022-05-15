@@ -46,30 +46,29 @@ export function Contract() {
 
   //TODO: check if address is valid
 
-  const { data, isLoading, isValid } = useContract(address);
+  const [contract, document, isLoading] = useContract(address);
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
   const [isOnChain, setIsOnChain] = useState(true);
 
   useEffect(() => {
-    data &&
-      checkOnChainCode(api, data[1]?.codeHash || '')
+    document &&
+      checkOnChainCode(api, document.codeHash || '')
         .then(isOnChain => setIsOnChain(isOnChain))
         .catch(console.error);
-  }, [api, data]);
+  }, [api, document]);
 
   useEffect((): void => {
-    if (!isLoading && (!isValid || !data || !data[0])) {
+    if (!isLoading && (!document || !contract)) {
       navigate('/');
     }
-  }, [data, isLoading, isValid, navigate]);
+  }, [contract, document, isLoading, navigate]);
 
-  if (!data || !data[0] || !data[1]) {
+  if (!document || !contract) {
     return null;
   }
 
-  const [contract, document] = data;
   const projectName = contract?.abi.info.contract.name;
 
   return (

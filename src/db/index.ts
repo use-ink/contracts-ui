@@ -3,25 +3,20 @@
 
 import Dexie, { Table } from 'dexie';
 
-export * from './util';
-
 export interface CodeBundleDocument {
-  abi?: Record<string, unknown>;
+  abi: Record<string, unknown>;
   codeHash: string;
   date: string;
-  id: string;
+  id?: number;
   name: string;
 }
 
-export interface ContractDocument {
+export interface ContractDocument extends CodeBundleDocument {
   abi: Record<string, unknown>;
   address: string;
-  codeHash: string;
-  date: string;
-  name: string;
 }
 
-export class DB extends Dexie {
+export class Database extends Dexie {
   codeBundles!: Table<CodeBundleDocument, number>;
   contracts!: Table<ContractDocument, number>;
 

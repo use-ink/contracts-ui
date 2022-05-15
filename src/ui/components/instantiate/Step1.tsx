@@ -9,11 +9,16 @@ import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
 import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
-import { useInstantiate } from 'ui/contexts';
-import { useAccountId } from 'ui/hooks';
+import { useDatabase, useInstantiate } from 'ui/contexts';
+import { useAccountId, useDbQuery } from 'ui/hooks';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
+  const { db } = useDatabase();
+  const [codeBundle] = useDbQuery(
+    () => db.codeBundles.get({ codeHash: codeHashUrlParam }),
+    [codeHashUrlParam, db]
+  );
 
   const { stepForward, setData, data, currentStep } = useInstantiate();
 
@@ -80,13 +85,13 @@ export function Step1() {
             onChange={setName}
           />
         </FormField>
-        {codeHashUrlParam && (
+        {codeHashUrlParam && codeBundle && (
           <FormField
             help="The on-chain code hash that will be reinstantiated as a new contract."
             id="metadata"
             label="On-Chain Code"
           >
-            <CodeHash codeHash={codeHashUrlParam} name={name} />
+            <CodeHash codeHash={codeHashUrlParam} name={codeBundle.name} />
           </FormField>
         )}
         {(!codeHashUrlParam || !isStored) && (

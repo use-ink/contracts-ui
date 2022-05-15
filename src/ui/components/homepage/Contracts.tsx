@@ -1,17 +1,17 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useLiveQuery } from 'dexie-react-hooks';
 import { FolderOpenIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { ContractRow } from '../contract/ContractRow';
 import { useDatabase } from 'ui/contexts';
+import { useDbQuery } from 'ui/hooks';
 
 export function Contracts(): React.ReactElement | null {
   const { db } = useDatabase();
-  const contracts = useLiveQuery(() => db.contracts.toArray());
+  const [contracts, isLoading] = useDbQuery(() => db.contracts.toArray(), [db]);
 
-  if (!contracts) {
+  if (isLoading || !contracts) {
     return null;
   }
 
