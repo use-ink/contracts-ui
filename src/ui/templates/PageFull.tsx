@@ -25,7 +25,7 @@ export function PageFull({
               <h1 className="text-2xl font-semibold dark:text-white text-gray-700 capitalize">
                 {header}
               </h1>
-              <p className="dark:text-gray-400 text-gray-500 text-sm">{help}</p>
+              <div className="dark:text-gray-400 text-gray-500 text-sm">{help}</div>
             </div>
             <div className="flex flex-col py-4 h-full">
               <div className="-my-2 h-full overflow-x-auto sm:-mx-6 lg:-mx-8">

@@ -6,12 +6,13 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import { InteractTab } from '../components/contract/Interact';
 import { MetadataTab } from '../components/contract/Metadata';
+import { CopyButton } from '../components/common/CopyButton';
 import { Loader } from '../components/common/Loader';
 import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
-import { displayDate } from 'ui/util';
+import { displayDate, truncate } from 'ui/util';
 import { checkOnChainCode } from 'api';
 import { useApi } from 'ui/contexts';
 
@@ -50,7 +51,7 @@ export function Contract() {
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
-  const [isOnChain, setIsOnChain] = useState(true);
+  const [isOnChain, setIsOnChain] = useState<boolean>();
 
   useEffect(() => {
     data &&
@@ -73,14 +74,21 @@ export function Contract() {
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={!contract && isLoading}>
+    <Loader isLoading={(!contract && isLoading) || isOnChain === undefined}>
       <PageFull
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
         help={
           isOnChain && (
-            <>
-              You instantiated this contract from{' '}
+            <div>
+              You instantiated this contract{' '}
+              <div className="inline-flex items-center">
+                <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded">
+                  {truncate(address, 4)}
+                </span>
+                <CopyButton className="ml-1" iconClassName="-mt-1.5" value={address} />
+              </div>{' '}
+              from{' '}
               <Link
                 to={`/instantiate/${document.codeHash}`}
                 className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 font-mono rounded"
@@ -88,7 +96,7 @@ export function Contract() {
                 {projectName}
               </Link>{' '}
               on {displayDate(document.date)}
-            </>
+            </div>
           )
         }
       >
