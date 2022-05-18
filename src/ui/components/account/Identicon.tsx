@@ -30,6 +30,8 @@ function IdenticonBase({
   const onClick = useCallback(() => {
     if (value) {
       copy(value);
+
+      ref.current && ReactTooltip.show(ref.current);
     }
   }, [value]);
 
@@ -56,7 +58,7 @@ function IdenticonBase({
         </svg>
         <ReactTooltip
           afterShow={() => {
-            setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 3000);
+            setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 1000);
           }}
           id={tooltipId}
         >

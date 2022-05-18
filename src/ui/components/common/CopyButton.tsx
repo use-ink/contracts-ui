@@ -17,6 +17,8 @@ export function CopyButton({ className, iconClassName, value }: Props) {
   const ref = useRef<HTMLButtonElement>(null);
   const onClick = useCallback((): void => {
     copy(value);
+
+    ref.current && ReactTooltip.show(ref.current);
   }, [value]);
 
   const id = `copyButton-${value}`;
@@ -36,9 +38,9 @@ export function CopyButton({ className, iconClassName, value }: Props) {
         />
       </Button>
       <ReactTooltip
-        afterShow={() => setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 5000)}
+        afterShow={() => setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 1000)}
         id={id}
-        event="click"
+        event="none"
       >
         Copied to clipboard
       </ReactTooltip>
