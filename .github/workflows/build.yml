@@ -46,6 +46,15 @@ jobs:
           name: build
           path: dist
 
+      - name: Download latest contracts-node
+        run: |
+        'curl -L "https://gitlab.parity.io/parity/substrate-contracts-node/-/jobs/artifacts/master/raw/artifacts/substrate-contracts-node-linux/substrate-contracts-node?job=build-linux" \
+        -o /usr/local/cargo/bin/substrate-contracts-node && \
+        chmod +x /usr/local/cargo/bin/substrate-contracts-node '
+
+      - name: Start local node
+        run: substrate-contracts-node --dev
+
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
         with:
