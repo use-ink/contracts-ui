@@ -12,6 +12,7 @@
     "lint": "yarn eslint --fix .",
     "format": "yarn prettier --write .",
     "clean": "rm -rf dist",
+    "test": "yarn cypress run",
     "deep-clean": "yarn clean && rm -rf node_modules",
     "regenerate": "yarn deep-clean && yarn && yarn start",
     "postinstall": "husky install"
