@@ -21,7 +21,16 @@ jobs:
           name: build
           if-no-files-found: error
           path: dist
-
+  get-contracts-node:
+    runs-on: ubuntu-latest
+    container: paritytech/contracts-ci-linux:production
+    steps:
+      - name: Save node artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: local-node-artifact
+          if-no-files-found: error
+          path: /usr/local/cargo/bin/substrate-contracts-node
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
@@ -35,7 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         # run copies of the current job in parallel
-        containers: [1, 2, 3, 4, 5]
+        containers: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,12 +54,6 @@ jobs:
         with:
           name: build
           path: dist
-
-      - name: Download latest contracts-node
-        run: |
-        'curl -L "https://gitlab.parity.io/parity/substrate-contracts-node/-/jobs/artifacts/master/raw/artifacts/substrate-contracts-node-linux/substrate-contracts-node?job=build-linux" \
-        -o /usr/local/cargo/bin/substrate-contracts-node && \
-        chmod +x /usr/local/cargo/bin/substrate-contracts-node '
 
       - name: Start local node
         run: substrate-contracts-node --dev
