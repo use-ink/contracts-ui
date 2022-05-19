@@ -21,21 +21,23 @@ jobs:
           name: build
           if-no-files-found: error
           path: dist
-  get-contracts-node:
+
+  contracts-node-binary:
     runs-on: ubuntu-latest
     container: paritytech/contracts-ci-linux:production
     steps:
       - name: Save node artifact
         uses: actions/upload-artifact@v3
         with:
-          name: local-node-artifact
+          name: substrate-contracts-node
           if-no-files-found: error
           path: /usr/local/cargo/bin/substrate-contracts-node
+
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container: cypress/browsers:node14.17.0-chrome88-ff89
-    needs: install
+    needs: [install, contracts-node-binary]
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -55,8 +57,14 @@ jobs:
           name: build
           path: dist
 
+      - name: Download the node binary
+        uses: actions/download-artifact@v3
+        with:
+          name: substrate-contracts-node
+          path: scripts
+
       - name: Start local node
-        run: substrate-contracts-node --dev
+        run: chmod +x -R ./scripts && ./scripts/substrate-contracts-node --dev
 
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
