@@ -10,15 +10,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
-        with:
-          runTests: false
-      # report machine parameters
-      - run: yarn cypress info
-      - run: node -p 'os.cpus()'
-      - run: yarn lint
-      - run: yarn build
+      - name: Install and build
+        run: |
+          yarn
+          yarn build
 
       - name: Save build folder
         uses: actions/upload-artifact@v3
@@ -26,6 +21,7 @@ jobs:
           name: build
           if-no-files-found: error
           path: dist
+
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
