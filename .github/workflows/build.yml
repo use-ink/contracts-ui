@@ -68,7 +68,7 @@ jobs:
       - run: chmod +x ./substrate-contracts-node
 
       - name: Start local node
-        run: ./substrate-contracts-node --dev
+        run: ./substrate-contracts-node --dev &
 
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
