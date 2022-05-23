@@ -26,14 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.15.1/substrate-contracts-node-linux.tar.gz" | tar xvz
+          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.15.1/substrate-contracts-node-linux.tar.gz" -O
           ls -lash
       - name: Save node artifact
         uses: actions/upload-artifact@v3
         with:
           name: substrate-contracts-node
           if-no-files-found: error
-          path: artifacts/substrate-contracts-node-linux
+          path: substrate-contracts-node-linux.tar.gz
 
   ui-chrome-tests:
     timeout-minutes: 15
@@ -59,16 +59,23 @@ jobs:
           name: build
           path: dist
 
-      - name: Download the node binary
+      - name: Download node artifact
         uses: actions/download-artifact@v3
         with:
           name: substrate-contracts-node
           path: ./
+      - run: ls -lash
 
-      - run: chmod +x ./substrate-contracts-node
+      - name: Extract node binary
+        run: |
+          tar -xvzf substrate-contracts-node-linux.tar.gz
+          ls -lash
 
       - name: Start local node
-        run: ./substrate-contracts-node --dev &
+        run: |
+          cd artifacts/substrate-contracts-node-linux/
+          chmod +x ./substrate-contracts-node
+          ./substrate-contracts-node --dev &
 
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
@@ -83,6 +90,4 @@ jobs:
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
