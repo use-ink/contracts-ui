@@ -29,7 +29,11 @@ export function Transactions({
                 <div className="text-gray-400">{status}</div>
               </div>
               {isComplete && (
-                <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
+                <XIcon
+                  className="text-gray-400 w-4 h-4"
+                  onClick={() => dismiss(parseInt(id))}
+                  data-cy="dismiss-notification"
+                />
               )}
             </div>
             {isComplete && events && !isEmptyObj(events) && (
