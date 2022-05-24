@@ -54,24 +54,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download build folder
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: dist
-
-      - name: Download node artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: substrate-contracts-node
-          path: ./
-
-      - name: Start local node
-        run: |
-          tar -xvzf substrate-contracts-node-linux.tar.gz
-          cd artifacts/substrate-contracts-node-linux/
-          chmod +x ./substrate-contracts-node
-          ./substrate-contracts-node --dev &
+      - name: Prepare test environment
+        uses: ./.github/actions/prepare
 
       - name: 'UI Tests - Chrome'
         uses: cypress-io/github-action@v2
@@ -108,24 +92,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download build folder
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: dist
-
-      - name: Download node artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: substrate-contracts-node
-          path: ./
-
-      - name: Start local node
-        run: |
-          tar -xvzf substrate-contracts-node-linux.tar.gz
-          cd artifacts/substrate-contracts-node-linux/
-          chmod +x ./substrate-contracts-node
-          ./substrate-contracts-node --dev &
+      - name: Prepare test environment
+        uses: ./.github/actions/prepare
 
       - name: 'UI Tests - Firefox'
         uses: cypress-io/github-action@v2
