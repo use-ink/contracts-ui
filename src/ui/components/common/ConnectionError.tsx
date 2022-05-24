@@ -30,11 +30,11 @@ function ContractsNodeHelp() {
         <a
           href="#"
           onClick={() => {
-            navigate(`/?rpc=${RPC.CANVAS}`);
+            navigate(`/?rpc=${RPC.CONTRACTS}`);
           }}
           className="text-blue-400"
         >
-          Canvas on Rococo.
+          Contracts parachain on Rococo.
         </a>
       </p>
     </>

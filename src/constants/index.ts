@@ -6,7 +6,7 @@ import type { ApiState } from 'types';
 
 export enum RPC {
   LOCAL = 'ws://127.0.0.1:9944',
-  CANVAS = 'wss://rococo-canvas-rpc.polkadot.io',
+  CONTRACTS = 'wss://rococo-contracts-rpc.polkadot.io',
 }
 export const DEFAULT_DECIMALS = 12;
 
