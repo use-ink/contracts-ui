@@ -13,8 +13,8 @@ const options = [
     value: RPC.LOCAL,
   },
   {
-    label: 'Canvas',
-    value: RPC.CANVAS,
+    label: 'Contracts (Rococo)',
+    value: RPC.CONTRACTS,
   },
 ];
 

@@ -3,12 +3,12 @@
 Substrate Contracts UI is a web application for deploying and interacting with WASM smart contracts on Substrate blockchains that include the FRAME Contracts Pallet.
 
 Supported languages:
+
 - [ink!](https://github.com/paritytech/ink)
 - [ask!](https://github.com/ask-lang/ask)
 - [solang](https://github.com/hyperledger-labs/solang)
 
-
-We recommend running a [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) for local development or using the Canvas parachain on the Rococo Testnet. 
+We recommend running a [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) for local development or using the Contracts parachain on the Rococo Testnet.
 
 ## Features
 
