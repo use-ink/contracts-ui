@@ -53,7 +53,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download the build folders
+      - name: Download build folder
         uses: actions/download-artifact@v3
         with:
           name: build
@@ -64,15 +64,10 @@ jobs:
         with:
           name: substrate-contracts-node
           path: ./
-      - run: ls -lash
-
-      - name: Extract node binary
-        run: |
-          tar -xvzf substrate-contracts-node-linux.tar.gz
-          ls -lash
 
       - name: Start local node
         run: |
+          tar -xvzf substrate-contracts-node-linux.tar.gz
           cd artifacts/substrate-contracts-node-linux/
           chmod +x ./substrate-contracts-node
           ./substrate-contracts-node --dev &
