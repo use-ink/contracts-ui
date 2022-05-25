@@ -16,10 +16,7 @@ export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { db } = useDatabase();
   const [codeBundle] = useDbQuery(
-    () =>
-      codeHashUrlParam
-        ? db.codeBundles.get({ codeHash: codeHashUrlParam })
-        : Promise.resolve(undefined),
+    () => (codeHashUrlParam ? db.codeBundles.get({ codeHash: codeHashUrlParam }) : undefined),
     [codeHashUrlParam, db]
   );
 
