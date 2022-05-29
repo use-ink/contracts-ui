@@ -124,3 +124,5 @@ dist
 *.sqlite-journal
 .fuse_*
 .DS_Store
+cypress/screenshots
+cypress/videos
