@@ -10,6 +10,7 @@ import { SubForm, SubComponent } from './SubForm';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
 import { Option } from './Option';
+import { VecFixed } from './VecFixed';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } from 'types';
 
 // nestingNumber counts the depth of nested components
@@ -27,6 +28,23 @@ export function findComponent(
     return (props: React.PropsWithChildren<ValidFormField<unknown>>) => (
       <Option
         component={findComponent(registry, type.sub as TypeDef)}
+        registry={registry}
+        typeDef={type}
+        {...props}
+      />
+    );
+  }
+
+  if (type.info === TypeDefInfo.VecFixed) {
+    const sub = type.sub as TypeDef;
+
+    if ((type.sub as TypeDef).type === 'u8') {
+      return Input;
+    }
+
+    return (props: React.PropsWithChildren<ValidFormField<unknown[]>>) => (
+      <VecFixed
+        component={findComponent(registry, sub)}
         registry={registry}
         typeDef={type}
         {...props}
