@@ -10,7 +10,7 @@ import { getInitValue } from 'ui/util';
 import { useToggle } from 'ui/hooks/useToggle';
 import { NOOP } from 'api';
 
-type Props = SimpleSpread<React.InputHTMLAttributes<HTMLInputElement>, ValidFormField<unknown>> & {
+interface Props extends ArgComponentProps<unknown> & {
   component: React.ComponentType<ValidFormField<unknown> & React.HTMLAttributes<unknown>>;
   registry: Registry;
   typeDef: TypeDef;
@@ -41,6 +41,7 @@ export function Option({
 
   useEffect((): void => {
     if (isSupplied && value === null) {
+      console.log('set initial value');
       onChange(getInitValue(registry, keyring, typeDef.sub as TypeDef));
     } else {
       if (!isSupplied && value !== null) {

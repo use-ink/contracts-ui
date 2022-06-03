@@ -34,7 +34,7 @@ export const InteractTab = ({ contract }: Props) => {
     onChange: setMessage,
     ...messageValidation
   } = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(message?.args || []);
+  const [argValues, setArgValues] = useArgValues(contract.registry, message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();

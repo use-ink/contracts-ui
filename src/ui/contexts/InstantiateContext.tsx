@@ -29,6 +29,7 @@ import {
   maximumBlockWeight,
 } from 'api';
 import { useApi } from 'ui/contexts/ApiContext';
+import { metadata } from '@polkadot/types/interfaces/essentials';
 
 type TxState = [
   SubmittableExtrinsic<'promise'> | null,
@@ -107,10 +108,16 @@ export function InstantiateContextProvider({
   const onFormChange = useCallback(
     async (formData: Step2FormData) => {
       try {
-        const constructor = data.metadata?.findConstructor(formData.constructorIndex);
+        if (!data.metadata || !data.metadata?.registry) {
+          throw new Error('No metadata present');
+        }
+    
+        const constructor = data.metadata.findConstructor(formData.constructorIndex);
 
+        console.log(formData.argValues);
+        
         const inputData = constructor?.toU8a(
-          transformUserInput(apiState.api.registry, constructor.args, formData.argValues)
+          transformUserInput(data.metadata.registry, constructor.args, formData.argValues)
         );
 
         const params = {
@@ -123,7 +130,7 @@ export function InstantiateContextProvider({
           data: inputData,
           salt: formData.salt || undefined,
           value: formData.value
-            ? apiState.api.registry.createType('Balance', formData.value)
+            ? data.metadata.registry.createType('Balance', formData.value)
             : null,
         };
 

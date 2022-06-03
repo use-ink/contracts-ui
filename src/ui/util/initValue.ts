@@ -18,6 +18,8 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
     return getInitValue(registry, keyring, lookupTypeDef);
   } else if (def.info === TypeDefInfo.Option) {
     return null;
+  } else if (def.info === TypeDefInfo.Tuple) {
+    return (def.sub as TypeDef[]).map((subType) => getInitValue(registry, keyring, subType));
   } else if (def.info === TypeDefInfo.Vec) {
     return [getInitValue(registry, keyring, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.VecFixed) {
@@ -40,6 +42,9 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
         }, {})
       : {};
   } else if (def.info === TypeDefInfo.Enum) {
+
+    console.log(def);
+    console.log(Array.isArray(def.sub) ? getInitValue(registry, keyring, def.sub[0]) : null);
     return Array.isArray(def.sub)
       ? { [def.sub[0].name as string]: getInitValue(registry, keyring, def.sub[0]) }
       : {};

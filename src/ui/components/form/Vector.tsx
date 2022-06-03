@@ -4,11 +4,9 @@
 import { Button, Buttons } from '../common';
 import { TypeDef, ArgComponentProps } from 'types';
 
-type Props = ArgComponentProps<unknown[]> & {
+interface Props extends ArgComponentProps<unknown[]> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Component: React.ComponentType<any>;
-  nestingNumber: number;
-  type: TypeDef;
+  component: React.ComponentType<ArgComponentProps<unknown>>;
 };
 
 type TitleProps = {
@@ -28,26 +26,22 @@ const Title = ({ nestingNumber, count, type }: TitleProps) => {
   );
 };
 
-export function Vector({ Component, value, onChange, nestingNumber, type, ...props }: Props) {
+export function Vector({ component: Component, value, onChange, nestingNumber, registry, typeDef, ...props }: Props) {
   const _rowAdd = () => onChange([...value, '']);
   const _rowRemove = () => onChange(value.slice(0, -1));
   const _onChange = (row: number) => (newEntry: unknown) => {
     const newValue = value.map((entry, index) => (index == row ? newEntry : entry));
     onChange(newValue);
   };
-  const isOddNesting = nestingNumber % 2 != 0;
+
   return (
-    <div
-      className={`p-4 text-left text-sm ${
-        isOddNesting ? 'dark:bg-gray-900 bg-white' : 'dark:bg-elevation-1 bg-gray-100'
-      } rounded border dark:border-gray-500 border-gray-200`}
-    >
+    <>
       <div className="flex justify-between align-middle">
         <div className="table mt-2 mb-4">
           <div className="table-cell align-middle font-mono font-bold dark:text-gray-300 text-gray-400">
             <Title
               nestingNumber={nestingNumber}
-              type={(type?.sub as TypeDef)?.type || ''}
+              type={(typeDef?.sub as TypeDef)?.type || ''}
               count={nestingNumber}
             />
           </div>
@@ -93,11 +87,14 @@ export function Vector({ Component, value, onChange, nestingNumber, type, ...pro
             <Component
               key={`component-${row}`}
               {...props}
+              nestingNumber={nestingNumber}
+              registry={registry}
+              typeDef={typeDef}
               value={entry}
               onChange={_onChange(row)}
             />
           </div>
         ))}
-    </div>
+    </>
   );
 }

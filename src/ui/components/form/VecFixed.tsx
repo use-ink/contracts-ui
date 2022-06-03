@@ -1,8 +1,13 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { encodeTypeDef } from '@polkadot/types';
 import { useCallback } from 'react';
+import { FormField } from './FormField';
 import { OrFalsy, Registry, SimpleSpread, TypeDef, ValidFormField } from 'types';
+// import { useToggle } from 'ui/hooks/useToggle';
+
+// const INTEGER_TYPES = [ 'i8', 'i16', 'i32', 'i64', 'i128', 'u8', 'u16', 'u32', 'u64', 'u128'];
 
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -13,7 +18,10 @@ type Props = SimpleSpread<
   typeDef: TypeDef;
 };
 
-export function VecFixed({ component: Component, onChange: _onChange, typeDef, value }: Props) {
+export function VecFixed({ component: Component, onChange: _onChange, registry, typeDef, value }: Props) {
+  // const isEncodeable = INTEGER_TYPES.includes((typeDef.sub as TypeDef).type);
+  // const [isUsingTextInput, setIsUsingTextInput] = useToggle(false);
+
   const length = typeDef.length as number;
 
   const onChange = useCallback(
@@ -25,10 +33,12 @@ export function VecFixed({ component: Component, onChange: _onChange, typeDef, v
   );
 
   return (
-    <div className="flex items-start">
+    <div>
       {[...Array(length).keys()].map((_, index) => {
         return (
-          <Component key={`VecFixed-${index}`} onChange={onChange(index)} value={value[index]} />
+          <FormField key={`VecFixed-${index}`} label={`${index}: ${encodeTypeDef(registry, typeDef.sub as TypeDef)}`}>
+            <Component onChange={onChange(index)} value={value[index]} />
+          </FormField>
         );
       })}
     </div>
