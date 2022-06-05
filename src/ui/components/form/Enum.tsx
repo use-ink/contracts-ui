@@ -6,21 +6,16 @@ import { isNumber } from '@polkadot/util';
 import { Dropdown } from '../common/Dropdown';
 import { ArgSignature } from '../message/ArgSignature';
 import { FormField, getValidation } from './FormField';
-import { OrFalsy, Registry, SimpleSpread, TypeDef, ValidFormField } from 'types';
+import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
 import { getInitValue } from 'ui/util';
 
-type Props = SimpleSpread<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  ValidFormField<Record<string, unknown>>
-> & {
-  components: React.ComponentType<ValidFormField<unknown>>[];
-  registry: Registry;
-  typeDef: TypeDef;
-};
+interface Props extends ArgComponentProps<Record<string, unknown>> {
+  components: React.ComponentType<ArgComponentProps<unknown>>[];
+}
 
 export function Enum(props: Props) {
-  const { components, typeDef, onChange: _onChange, registry, value = {} } = props;
+  const { components, typeDef, nestingNumber, onChange: _onChange, registry, value = {} } = props;
   const variants = typeDef.sub as TypeDef[];
   const { keyring } = useApi();
   const [variantIndex, _setVariantIndex] = useState<number>(
@@ -62,10 +57,17 @@ export function Enum(props: Props) {
       {variants[variantIndex].type !== 'Null' && (
         <FormField
           className="ml-8 mt-2"
+          isArg
           label={<ArgSignature arg={{ type: variants[variantIndex] }} />}
           {...getValidation(props)}
         >
-          <Component value={Object.values(value)[0]} onChange={onChange} />
+          <Component
+            nestingNumber={nestingNumber + 1}
+            value={Object.values(value)[0]}
+            onChange={onChange}
+            registry={registry}
+            typeDef={variants[variantIndex]}
+          />
         </FormField>
       )}
     </>

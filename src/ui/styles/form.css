@@ -1,17 +1,17 @@
 .form-field {
-  @apply mb-6 peer-last-of-type:mb-8;
+  @apply mb-6 last-of-type:mb-0;
 }
 
 .form-field > label {
   @apply inline-flex items-center mb-1.5 text-sm font-semibold dark:text-white text-gray-600;
 }
 
-.form-field > label > svg {
-  @apply cursor-help ml-1.5 w-4 h-4 dark:text-gray-500;
+.form-field > label.arg-label {
+  @apply text-xs font-mono;
 }
 
-.form-field > label .font-mono {
-  @apply text-xs;
+.form-field > label > svg {
+  @apply cursor-help ml-1.5 w-4 h-4 dark:text-gray-500;
 }
 
 .validation {
@@ -49,5 +49,9 @@
 [multiple]:focus,
 textarea:focus,
 select:focus {
-  @apply border-gray-100 outline-none ring-gray-100;
+  @apply border-gray-300 outline-none ring-gray-300;
+}
+
+.arg-label {
+  @apply font-mono text-xs;
 }

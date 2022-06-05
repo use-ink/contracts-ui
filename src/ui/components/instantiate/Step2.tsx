@@ -21,7 +21,7 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
-import { AbiMessage, OrFalsy } from 'types';
+import { AbiMessage, OrFalsy, Registry } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { useDebounce } from 'ui/hooks';
 
@@ -57,7 +57,10 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
 
-  const [argValues, setArgValues] = useArgValues(deployConstructor?.args || null);
+  const [argValues, setArgValues] = useArgValues(
+    metadata?.registry as Registry,
+    deployConstructor?.args || null
+  );
   const dbArgValues = useDebounce(argValues);
 
   useEffect(() => {
