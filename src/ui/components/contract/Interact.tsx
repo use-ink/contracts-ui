@@ -298,7 +298,7 @@ export const InteractTab = ({ contract }: Props) => {
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
-        <ResultsOutput results={callResults} />
+        <ResultsOutput registry={contract.registry} results={callResults} />
       </div>
     </div>
   );

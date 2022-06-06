@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { encodeTypeDef } from '@polkadot/types/create';
-import { useApi } from 'ui/contexts/ApiContext';
-import { TypeDef } from 'types';
+import { Registry, TypeDef } from 'types';
 import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   arg: { name?: string; type: TypeDef };
+  registry: Registry;
   value?: string;
 }
 
@@ -21,14 +21,19 @@ function truncate(param: string): string {
     : param;
 }
 
-export function ArgSignature({ arg: { name, type }, children, className, value, ...props }: Props) {
-  const { api } = useApi();
-
+export function ArgSignature({
+  arg: { name, type },
+  children,
+  className,
+  registry,
+  value,
+  ...props
+}: Props) {
   return (
     <span className={classes('font-mono', className)} {...props}>
       {name ? `${name}: ` : ''}
       <span>
-        {value ? <b>{truncate(value)}</b> : type.typeName || encodeTypeDef(api.registry, type)}
+        {value ? <b>{truncate(value)}</b> : type.typeName || encodeTypeDef(registry, type)}
       </span>
       {children}
     </span>

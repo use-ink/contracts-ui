@@ -39,8 +39,6 @@ describe('ERC20 Contract ', () => {
       .and('contain', 'balances:Reserved')
       .and('contain', 'balances:Withdraw')
       .and('contain', 'system:ExtrinsicSuccess');
-
-    cy.get('[data-cy="dismiss-notification"]').click();
   });
   it('redirects to contract page after instantiation', () => {
     cy.url().should('contain', '/contract/');

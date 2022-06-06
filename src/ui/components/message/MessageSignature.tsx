@@ -4,22 +4,21 @@
 import { encodeTypeDef } from '@polkadot/types/create';
 import { DatabaseIcon } from '@heroicons/react/outline';
 import { ArgSignature } from './ArgSignature';
-import { useApi } from 'ui/contexts/ApiContext';
-import type { AbiMessage } from 'types';
+import type { AbiMessage, Registry } from 'types';
 import { classes } from 'ui/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   message: Partial<AbiMessage>;
   params?: unknown[];
+  registry: Registry;
 }
 
 export function MessageSignature({
   className,
   message: { args, isConstructor, isMutating, method, returnType },
   params = [],
+  registry,
 }: Props) {
-  const { api } = useApi();
-
   return (
     <div className={classes('font-mono', isConstructor && 'constructor', className)}>
       <span className={isConstructor ? 'dark:text-blue-400' : 'dark:text-yellow-400'}>
@@ -31,6 +30,7 @@ export function MessageSignature({
           <ArgSignature
             arg={arg}
             key={`${name}-args-${index}`}
+            registry={registry}
             value={params[index] ? (params[index] as string) : undefined}
           >
             {index < args.length - 1 && ', '}
@@ -40,7 +40,7 @@ export function MessageSignature({
       )
       {!isConstructor && returnType && (
         <>
-          : <span>{encodeTypeDef(api.registry, returnType)}</span>
+          : <span>{encodeTypeDef(registry, returnType)}</span>
         </>
       )}
       {isMutating && (

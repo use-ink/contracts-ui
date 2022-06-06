@@ -17,7 +17,7 @@ export function Transactions({
         const isComplete = status === 'error' || status === 'success';
 
         return (
-          <>
+          <div key={`notification-${id}`}>
             <div
               data-cy="transaction-queued"
               key={id}
@@ -55,7 +55,7 @@ export function Transactions({
                 <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
               </div>
             )}
-          </>
+          </div>
         );
       })}
     </div>
