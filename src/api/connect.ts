@@ -12,7 +12,15 @@ export const connect = (endpoint: string, dispatch: React.Dispatch<ApiAction>) =
   dispatch({ type: 'CONNECT_INIT' });
 
   const provider = new WsProvider(endpoint);
-  const _api = new ApiPromise({ provider });
+  const _api = new ApiPromise({
+    provider,
+    types: {
+      DispatchErrorModule: {
+        index: 'u8',
+        error: '[u8; 4]',
+      },
+    },
+  });
 
   // Set listeners for disconnection and reconnection event.
   _api.on('connected', async () => {

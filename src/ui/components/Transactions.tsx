@@ -52,11 +52,7 @@ export function Transactions({
                     );
                   })}
                 </div>
-                <XIcon
-                  className="text-gray-400 w-4 h-4"
-                  data-cy="dismiss-notification"
-                  onClick={() => dismiss(parseInt(id))}
-                />
+                <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
               </div>
             )}
           </>
