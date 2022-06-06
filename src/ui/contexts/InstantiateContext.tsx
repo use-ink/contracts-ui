@@ -77,11 +77,9 @@ export function InstantiateContextProvider({
   const onSuccess = useCallback(
     (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
       navigate(`/contract/${contract.address}`);
-
-      dbState.refreshUserData();
     },
 
-    [dbState, navigate]
+    [navigate]
   );
 
   const onFinalize = (formData: Partial<InstantiateData>) => {
