@@ -34,7 +34,7 @@ export const InteractTab = ({ contract }: Props) => {
     onChange: setMessage,
     ...messageValidation
   } = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(contract.registry, message?.args || []);
+  const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
@@ -171,18 +171,17 @@ export const InteractTab = ({ contract }: Props) => {
   const newId = useRef<number>();
 
   const call = () => {
-    const tx = prepareContractTx(contract.tx[message.method], options, transformed);
-
-    if (tx && accountId) {
-      newId.current = queue({
-        extrinsic: tx,
-        accountId,
-        onSuccess: onCallSuccess,
-        onError: onCallError,
-        isValid,
-      });
-      setTxId(newId.current);
-    }
+    // const tx = prepareContractTx(contract.tx[message.method], options, transformed);
+    // if (tx && accountId) {
+    //   newId.current = queue({
+    //     extrinsic: tx,
+    //     accountId,
+    //     onSuccess: onCallSuccess,
+    //     onError: onCallError,
+    //     isValid,
+    //   });
+    //   setTxId(newId.current);
+    // }
   };
 
   useEffect(() => {
