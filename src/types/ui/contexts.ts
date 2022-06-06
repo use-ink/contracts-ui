@@ -22,6 +22,7 @@ type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
 export interface ApiState extends ChainProperties {
   endpoint: string;
+  genesisHash?: string;
   keyring: Keyring;
   keyringStatus: string | null;
   api: ApiPromise;

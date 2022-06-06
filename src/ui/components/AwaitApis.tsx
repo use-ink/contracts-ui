@@ -9,16 +9,16 @@ import { Loader, ConnectionError } from 'ui/components/common';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { error, status, keyringStatus, endpoint } = useApi();
-  const { isDbReady } = useDatabase();
+  const { db } = useDatabase();
   const [message, setMessage] = useState('');
 
-  const isLoading = !isDbReady || keyringStatus !== 'READY' || status !== 'READY';
+  const isLoading = !db || keyringStatus !== 'READY' || status !== 'READY';
 
   useEffect(() => {
-    !isDbReady && setMessage('Loading data...');
+    !db && setMessage('Loading data...');
     keyringStatus !== 'READY' && setMessage('Loading accounts...');
     status !== 'READY' && setMessage(`Connecting to ${endpoint}...`);
-  }, [isDbReady, keyringStatus, status, endpoint]);
+  }, [db, keyringStatus, status, endpoint]);
 
   return (
     <>

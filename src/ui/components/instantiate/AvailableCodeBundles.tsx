@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { FormField } from '../form/FormField';
 import { CodeHash } from './CodeHash';
-import { useAvailableCodeBundles } from 'ui/hooks/useAvailableCodeBundles';
 import { CodeBundleDocument } from 'types';
-import { useApi } from 'ui/contexts';
+import { useApi, useDatabase } from 'ui/contexts';
 import { filterOnChainCode } from 'api';
+import { useDbQuery } from 'ui/hooks';
 
 const PAGE_SIZE = 5;
 
@@ -52,7 +52,8 @@ function List({ items, label }: ListProps) {
 
 export function AvailableCodeBundles() {
   const { api } = useApi();
-  const { data } = useAvailableCodeBundles(PAGE_SIZE * 2);
+  const { db } = useDatabase();
+  const [data, isLoading] = useDbQuery(() => db.codeBundles.limit(PAGE_SIZE).toArray(), [db]);
   const [codes, setCodes] = useState<CodeBundleDocument[]>([]);
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export function AvailableCodeBundles() {
         .catch(console.error);
   }, [api, data]);
 
-  if (!data || data.length === 0) {
+  if (isLoading || !data || data.length === 0) {
     return null;
   }
 

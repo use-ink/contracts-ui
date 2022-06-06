@@ -8,19 +8,32 @@ import { Input } from '../form/Input';
 import { FormField } from '../form/FormField';
 import { SearchResults } from '../common/SearchResults';
 import { CodeHash } from './CodeHash';
-import { useCodeBundle, useCodeBundleSearch } from 'ui/hooks';
 import { classes, isValidCodeHash } from 'ui/util';
-import { checkOnChainCode } from 'api';
-import { useApi } from 'ui/contexts';
+import { checkOnChainCode, filterOnChainCode } from 'api';
+import { useApi, useDatabase } from 'ui/contexts';
+import { useDbQuery } from 'ui/hooks';
 
 export function LookUpCodeHash() {
   const navigate = useNavigate();
   const { api } = useApi();
+  const { db } = useDatabase();
   const [searchString, setSearchString] = useState('');
   const [codeHash, setCodeHash] = useState('');
-  const { data: searchResults } = useCodeBundleSearch(searchString);
-  const { data, error, isLoading, isValid } = useCodeBundle(codeHash);
-  const { document } = data || { document: null };
+
+  const [searchResults] = useDbQuery(async () => {
+    const matches = await db.codeBundles
+      .filter(({ name, codeHash }) => {
+        const regex = new RegExp(searchString);
+
+        return regex.test(name) || regex.test(codeHash);
+      })
+      .limit(10)
+      .toArray();
+
+    return filterOnChainCode(api, matches);
+  }, [api, db, searchString]);
+  const [codeBundle] = useDbQuery(() => db.codeBundles.get({ codeHash }), [codeHash, db]);
+
   useEffect((): void => {
     if (codeHash !== searchString) {
       if (searchString === '' || isValidCodeHash(searchString)) {
@@ -45,7 +58,7 @@ export function LookUpCodeHash() {
         placeholder="Paste a code hash or search for existing code bundles already on-chain"
         value={searchString}
       >
-        {document && (
+        {codeBundle && (
           <button className="absolute right-2" onClick={() => setSearchString('')}>
             <XCircleIcon className="w-5 h-5 text-gray-500" aria-hidden="true" />
           </button>
@@ -58,15 +71,13 @@ export function LookUpCodeHash() {
           setCodeHash(document.codeHash);
         }}
       />
-      {codeHash && !isLoading && document && (
+      {codeHash && !!codeBundle && (
         <CodeHash
           className="mt-1"
           codeHash={codeHash}
-          error={error}
-          isError={!isValid}
-          isSuccess={isValid}
-          name={document?.name || 'On-chain Code Exists'}
-          onClick={isValid ? () => navigate(`/instantiate/${codeHash}`) : undefined}
+          isSuccess
+          name={codeBundle?.name || 'On-chain Code Exists'}
+          onClick={() => navigate(`/instantiate/${codeHash}`)}
         />
       )}
     </FormField>

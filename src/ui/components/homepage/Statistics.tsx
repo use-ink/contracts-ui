@@ -3,14 +3,20 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
-import { useApi } from 'ui/contexts';
-import { useStatistics } from 'ui/hooks';
+import { useApi, useDatabase } from 'ui/contexts';
+import { useDbQuery } from 'ui/hooks';
 
 export function Statistics(): React.ReactElement | null {
   const { api } = useApi();
+  const { db } = useDatabase();
 
   const [blockNumber, setBlockNumber] = useState(0);
-  const { data: statistics } = useStatistics();
+  const [statistics] = useDbQuery(async () => {
+    return {
+      codeBundlesCount: await db.codeBundles.count(),
+      contractsCount: await db.contracts.count(),
+    };
+  }, [db]);
 
   useEffect(() => {
     async function listenToBlocks() {

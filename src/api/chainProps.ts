@@ -21,6 +21,7 @@ export async function getChainProperties(api: ApiPromise): Promise<ChainProperti
     ]);
 
   const result = {
+    genesisHash: api.genesisHash.toHex(),
     systemName: systemName.toString(),
     systemVersion: systemVersion.toString(),
     systemChainType,
