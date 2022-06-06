@@ -31,7 +31,6 @@
     "@polkadot/ui-shared": "^2.1.1",
     "@polkadot/util": "^9.1.1",
     "@polkadot/util-crypto": "^9.1.1",
-    "bcryptjs": "^2.4.3",
     "big.js": "^6.1.1",
     "buffer": "^6.0.3",
     "date-fns": "^2.28.0",
