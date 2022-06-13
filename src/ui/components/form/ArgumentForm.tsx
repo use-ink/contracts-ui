@@ -35,7 +35,13 @@ export function ArgumentForm({ args, argValues, registry, setArgValues, classNam
             className={classes(className, arg.name, 'ml-6 mt-2 mb-4')}
             isArg
             key={`${arg.name}`}
-            label={<ArgSignature arg={arg} className="dark:text-gray-300 text-gray-600" />}
+            label={
+              <ArgSignature
+                arg={arg}
+                className="dark:text-gray-300 text-gray-600"
+                registry={registry}
+              />
+            }
           >
             <Component
               className="w-full dark:bg-gray-900 dark:text-gray-300 text-gray-600 bg-white dark:border-gray-700 border-gray-200 rounded"

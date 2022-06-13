@@ -146,7 +146,7 @@ export function Step2() {
         >
           <Dropdown
             id="constructor"
-            options={createConstructorOptions(metadata.constructors)}
+            options={createConstructorOptions(metadata.registry, metadata.constructors)}
             className="mb-4"
             value={constructorIndex}
             onChange={v => {

@@ -58,7 +58,7 @@ export function Enum(props: Props) {
         <FormField
           className="ml-8 mt-2"
           isArg
-          label={<ArgSignature arg={{ type: variants[variantIndex] }} />}
+          label={<ArgSignature arg={{ type: variants[variantIndex] }} registry={registry} />}
           {...getValidation(props)}
         >
           <Component

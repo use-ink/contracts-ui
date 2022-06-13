@@ -6,18 +6,16 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { useInstantiate } from 'ui/contexts';
-import type { Registry } from 'types';
 
-interface Props {
-  registry: Registry;
-}
-
-export function DryRun({ registry }: Props) {
-  const { dryRunResult } = useInstantiate();
+export function DryRun() {
+  const {
+    data: { metadata },
+    dryRunResult,
+  } = useInstantiate();
 
   const dryRunError =
-    dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
-      ? registry.findMetaError(dryRunResult?.result.asErr.asModule)
+    metadata && dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
+      ? metadata.registry.findMetaError(dryRunResult?.result.asErr.asModule)
       : null;
 
   return (

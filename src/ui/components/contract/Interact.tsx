@@ -171,17 +171,17 @@ export const InteractTab = ({ contract }: Props) => {
   const newId = useRef<number>();
 
   const call = () => {
-    // const tx = prepareContractTx(contract.tx[message.method], options, transformed);
-    // if (tx && accountId) {
-    //   newId.current = queue({
-    //     extrinsic: tx,
-    //     accountId,
-    //     onSuccess: onCallSuccess,
-    //     onError: onCallError,
-    //     isValid,
-    //   });
-    //   setTxId(newId.current);
-    // }
+    const tx = prepareContractTx(contract.tx[message.method], options, transformed);
+    if (tx && accountId) {
+      newId.current = queue({
+        extrinsic: tx,
+        accountId,
+        onSuccess: onCallSuccess,
+        onError: onCallError,
+        isValid,
+      });
+      setTxId(newId.current);
+    }
   };
 
   useEffect(() => {
@@ -219,7 +219,7 @@ export const InteractTab = ({ contract }: Props) => {
           >
             <Dropdown
               id="message"
-              options={createMessageOptions(contract.abi.messages)}
+              options={createMessageOptions(contract.abi.registry, contract.abi.messages)}
               className="constructorDropdown mb-4"
               onChange={setMessage}
               value={message}
