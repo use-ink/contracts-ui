@@ -21,7 +21,7 @@ export function Transactions({
             <div
               data-cy="transaction-queued"
               key={id}
-              className="max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
+              className="max-w-full dark:bg-elevation-2 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
             >
               <NotificationIcon status={status} />
               <div className="pl-2 flex-grow text-sm">
@@ -38,7 +38,7 @@ export function Transactions({
             </div>
             {isComplete && events && !isEmptyObj(events) && (
               <div
-                className="max-w-full dark:bg-elevation-3 dark:text-white bg-gray-200 text-gray-600 p-3 mt-2 flex items-center"
+                className="max-w-full dark:bg-elevation-2 dark:text-white bg-gray-200 text-gray-600 p-3 mt-2 flex items-center"
                 data-cy="transaction-complete"
               >
                 <BellIcon className="text-yellow-400 w-12 h-12" />

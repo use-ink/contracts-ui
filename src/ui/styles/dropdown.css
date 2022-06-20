@@ -57,7 +57,7 @@
 }
 
 .dropdown.chain .dropdown__control {
-  @apply dark:hover:bg-elevation-3;
+  @apply dark:hover:bg-elevation-2;
 }
 
 .dropdown.chain .dropdown__single-value {
