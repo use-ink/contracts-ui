@@ -16,30 +16,16 @@ import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 
-function subComponent(
-  registry: Registry,
-  typeDef: TypeDef,
-  nestingNumber: number
-): React.ComponentType<ArgComponentProps<any>> {
-  assert(
-    !!typeDef.sub && !Array.isArray(typeDef.sub),
-    'Cannot retreive subComponent for type definition'
-  );
-
-  return findComponent(registry, typeDef.sub, nestingNumber);
-}
-
 function subComponents(
   registry: Registry,
   typeDef: TypeDef,
   nestingNumber: number
-): React.ComponentType<ArgComponentProps<any>>[] {
-  assert(
-    !!typeDef.sub && Array.isArray(typeDef.sub),
-    'Cannot retreive subComponent array for type definition'
-  );
+): React.ComponentType<ArgComponentProps<unknown>>[] {
+  assert(!!typeDef.sub, 'Cannot retrieve subComponent array for type definition');
 
-  return typeDef.sub.map(subTypeDef => findComponent(registry, subTypeDef, nestingNumber));
+  return (Array.isArray(typeDef.sub) ? typeDef.sub : [typeDef.sub]).map(subTypeDef =>
+    findComponent(registry, subTypeDef, nestingNumber)
+  );
 }
 
 // nestingNumber counts the depth of nested components
@@ -62,7 +48,7 @@ export function findComponent(
   }
 
   if (type.info === TypeDefInfo.Option) {
-    const component = subComponent(registry, type, nestingNumber);
+    const [component] = subComponents(registry, type, nestingNumber);
 
     return (props: React.PropsWithChildren<ArgComponentProps<unknown>>) => {
       return <Option component={component} {...props} typeDef={type} />;
@@ -98,7 +84,7 @@ export function findComponent(
   }
 
   if (type.info === TypeDefInfo.Vec) {
-    const component = subComponent(registry, type, nestingNumber + 1);
+    const [component] = subComponents(registry, type, nestingNumber + 1);
 
     return (props: ArgComponentProps<unknown[]>) => {
       return (
@@ -110,7 +96,7 @@ export function findComponent(
   }
 
   if (type.info === TypeDefInfo.VecFixed) {
-    const component = subComponent(registry, type, nestingNumber + 1);
+    const [component] = subComponents(registry, type, nestingNumber + 1);
 
     return (props: React.PropsWithChildren<ArgComponentProps<unknown[]>>) => (
       <SubForm nestingNumber={nestingNumber}>
