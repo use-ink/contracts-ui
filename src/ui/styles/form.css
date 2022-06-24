@@ -14,6 +14,10 @@
   @apply cursor-help ml-1.5 w-4 h-4 dark:text-gray-500;
 }
 
+.argument-form .form-field > label {
+  @apply text-xs font-mono;
+}
+
 .validation {
   @apply mt-2 text-sm flex items-center;
 }

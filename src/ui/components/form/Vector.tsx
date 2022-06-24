@@ -56,7 +56,7 @@ export function Vector({
       </div>
       {(value || []).map((element, index) => {
         return (
-          <FormField key={`Vector-${index}`} isArg label={`${index}`}>
+          <FormField key={`Vector-${index}`} label={`${index}`}>
             <Component
               nestingNumber={nestingNumber + 1}
               onChange={onChange(index)}

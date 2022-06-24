@@ -25,7 +25,6 @@ export function Struct({ components, value, nestingNumber, onChange, registry, t
 
           return (
             <FormField
-              isArg
               key={`${typeDef.name}-label-${index}`}
               label={`${name}: ${encodeTypeDef(registry, subType)}`}
             >

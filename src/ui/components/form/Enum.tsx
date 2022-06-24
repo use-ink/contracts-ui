@@ -57,7 +57,6 @@ export function Enum(props: Props) {
       {variants[variantIndex].type !== 'Null' && (
         <FormField
           className="ml-8 mt-2"
-          isArg
           label={<ArgSignature arg={{ type: variants[variantIndex] }} registry={registry} />}
           {...getValidation(props)}
         >
