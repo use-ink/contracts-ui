@@ -7,7 +7,7 @@ import { useApi } from 'ui/contexts/ApiContext';
 import type { OrFalsy, ValidFormField, Validation } from 'types';
 
 export function useAccountId(
-  initialValue: string | undefined,
+  initialValue: string | undefined = undefined,
   isOwned = false
 ): ValidFormField<string> {
   const { keyring } = useApi();
