@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.15.1/substrate-contracts-node-linux.tar.gz" -O
+          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.16.1/substrate-contracts-node-linux.tar.gz" -O
           ls -lash
       - name: Save node artifact
         uses: actions/upload-artifact@v3
