@@ -6,7 +6,10 @@ import { useFormField } from './useFormField';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { OrFalsy, ValidFormField, Validation } from 'types';
 
-export function useAccountId(initialValue = '', isOwned = false): ValidFormField<string> {
+export function useAccountId(
+  initialValue: string | undefined,
+  isOwned = false
+): ValidFormField<string> {
   const { keyring } = useApi();
 
   const validate = useCallback(
@@ -20,5 +23,18 @@ export function useAccountId(initialValue = '', isOwned = false): ValidFormField
     [keyring, isOwned]
   );
 
-  return useFormField<string>(initialValue || keyring?.getAccounts()[0].address || '', validate);
+  let initial;
+  if (!initialValue) {
+    try {
+      const accounts = keyring?.getAccounts();
+
+      initial = accounts[0].address;
+    } catch (e) {
+      initial = '';
+    }
+  } else {
+    initial = initialValue;
+  }
+
+  return useFormField<string>(initial, validate);
 }

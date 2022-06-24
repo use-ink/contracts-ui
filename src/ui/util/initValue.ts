@@ -102,7 +102,13 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
       return '';
 
     case 'AccountId':
-      return keyring.getAccounts()[0].address;
+      try {
+        const accounts = keyring.getAccounts();
+
+        return accounts[0].address;
+      } catch (e) {
+        return '';
+      }
 
     case 'AccountIdOf':
     case 'Address':
