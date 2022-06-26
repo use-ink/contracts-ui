@@ -28,8 +28,7 @@
       "types/*": ["./src/types/*"],
       "ui": ["./src/ui"],
       "ui/*": ["./src/ui/*"]
-    },
-    "types": ["cypress", "cypress-wait-until"]
+    }
   },
   "include": ["src"]
 }
