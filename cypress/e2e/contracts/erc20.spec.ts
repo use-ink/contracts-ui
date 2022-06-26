@@ -4,7 +4,6 @@
 describe('ERC20 Contract ', () => {
   const initialSupply = 77;
   const transferValue = 2;
-  const timeout = 15000;
   const allowance = 25;
 
   it('contract file uploads', () => {
@@ -31,19 +30,7 @@ describe('ERC20 Contract ', () => {
   });
 
   it('submits instantiate transaction', () => {
-    cy.get('[data-cy="submit-btn"]').click();
-    cy.get('[data-cy="transaction-complete"]', { timeout })
-      .should('be.visible')
-      .and('contain', 'contracts:Instantiated')
-      .and('contain', 'system:NewAccount')
-      .and('contain', 'balances:Endowed')
-      .and('contain', 'balances:Transfer')
-      .and('contain', 'balances:Reserved')
-      .and('contain', 'balances:Withdraw')
-      .and('contain', 'transactionPayment:TransactionFeePaid')
-      .and('contain', 'system:ExtrinsicSuccess');
-
-    cy.get('[data-cy="dismiss-notification"]').click();
+    cy.instantiate();
   });
 
   it('redirects to contract page after instantiation', () => {
@@ -51,79 +38,36 @@ describe('ERC20 Contract ', () => {
   });
 
   it(`calling totalSupply() returns ${initialSupply}`, () => {
-    cy.contains('Read').click();
-    cy.get('[data-cy="totalSupply"]').find('.return-value').should('contain', `${initialSupply}`);
+    cy.assertReturnValue('totalSupply', `${initialSupply}`);
   });
 
   it(`transfers ${transferValue} Units to another account`, () => {
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(3).click();
-    cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', 'transfer');
+    cy.selectMessage('transfer', 3);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(3).click();
     cy.get('.form-field.value').find('input[type="text"]').eq(0).type(`${transferValue}`);
-    cy.contains('Call').click();
-    cy.get('[data-cy="transaction-complete"]', { timeout })
-      .should('be.visible')
-      .and('contain', 'system:ExtrinsicSuccess')
-      .and('contain', 'balances:Transfer')
-      .and('contain', 'balances:Reserved')
-      .and('contain', 'balances:Withdraw')
-      .and('contain', 'contracts:ContractEmitted')
-      .and('contain', 'transactionPayment:TransactionFeePaid');
-    cy.get('[data-cy="dismiss-notification"]').click();
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(1).click();
-    cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', 'balanceOf');
-    cy.contains('Read').click();
-    cy.get('[data-cy="balanceOf"]')
-      .find('.return-value')
-      .should('contain', `${initialSupply - transferValue}`);
+    cy.call();
+    cy.selectMessage('balanceOf', 1);
+    cy.assertReturnValue('balanceOf', `${initialSupply - transferValue}`);
   });
 
   it(`successfully approves allowance`, () => {
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(4).click();
-    cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', 'approve');
+    cy.selectMessage('approve', 4);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
     cy.get('.form-field.value').find('input[type="text"]').type(`${allowance}`);
-    cy.contains('Call').click();
-    cy.get('[data-cy="transaction-complete"]', { timeout })
-      .should('be.visible')
-      .and('contain', 'system:ExtrinsicSuccess')
-      .and('contain', 'balances:Transfer')
-      .and('contain', 'balances:Reserved')
-      .and('contain', 'balances:Withdraw')
-      .and('contain', 'contracts:ContractEmitted')
-      .and('contain', 'transactionPayment:TransactionFeePaid');
-    cy.get('[data-cy="dismiss-notification"]').click();
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', 'allowance');
+    cy.call();
+    cy.selectMessage('allowance', 2);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.contains('Read').click();
-    cy.get('[data-cy="allowance"]').find('.return-value').should('contain', `${allowance}`);
+    cy.assertReturnValue('allowance', `${allowance}`);
   });
 
   it(`transfers ${transferValue} on behalf of alice`, () => {
     cy.get('.form-field.caller').click().find('.dropdown__option').eq(2).click();
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(5).click();
-    cy.get('.constructorDropdown')
-      .find('.dropdown__single-value')
-      .should('contain', 'transferFrom');
+    cy.selectMessage('transferFrom', 5);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(2).click();
     cy.get('.form-field.value').find('input[type="text"]').type(`${transferValue}`);
-    cy.contains('Call').click();
-    cy.get('[data-cy="transaction-complete"]', { timeout })
-      .should('be.visible')
-      .and('contain', 'system:ExtrinsicSuccess')
-      .and('contain', 'balances:Transfer')
-      .and('contain', 'balances:Reserved')
-      .and('contain', 'balances:Withdraw')
-      .and('contain', 'contracts:ContractEmitted')
-      .and('contain', 'transactionPayment:TransactionFeePaid');
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', 'allowance');
-    cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.contains('Read').click();
-    cy.get('[data-cy="allowance"]').find('.return-value').should('contain', `${allowance}`);
-    cy.get('.constructorDropdown').click().find('.dropdown__option').eq(1).click();
+    cy.call();
+    cy.selectMessage('balanceOf', 1);
     cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('[data-cy="balanceOf"]').find('.return-value').should('contain', `${transferValue}`);
+    cy.assertReturnValue('balanceOf', `${transferValue}`);
   });
 });
