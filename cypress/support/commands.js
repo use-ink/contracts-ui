@@ -2,4 +2,3 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'cypress-file-upload';
-import 'cypress-wait-until';
