@@ -30,7 +30,6 @@ Cypress.Commands.add('instantiate', () => {
     .and('contain', 'balances:Transfer')
     .and('contain', 'balances:Reserved')
     .and('contain', 'balances:Withdraw')
-    .and('contain', 'transactionPayment:TransactionFeePaid')
     .and('contain', 'system:ExtrinsicSuccess');
   cy.get('[data-cy="dismiss-notification"]').click();
 });
@@ -43,8 +42,7 @@ Cypress.Commands.add('call', () => {
     .and('contain', 'balances:Transfer')
     .and('contain', 'balances:Reserved')
     .and('contain', 'balances:Withdraw')
-    .and('contain', 'contracts:ContractEmitted')
-    .and('contain', 'transactionPayment:TransactionFeePaid');
+    .and('contain', 'contracts:ContractEmitted');
   cy.get('[data-cy="dismiss-notification"]').click();
 });
 
