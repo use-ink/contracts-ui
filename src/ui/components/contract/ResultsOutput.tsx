@@ -4,13 +4,14 @@
 import { SidePanel } from '../common/SidePanel';
 import { QueryResult } from './QueryResult';
 import { TransactionResult } from './TransactionResult';
-import { CallResult } from 'types';
+import { CallResult, Registry } from 'types';
 
 interface Props {
   results: CallResult[];
+  registry: Registry;
 }
 
-export const ResultsOutput = ({ results }: Props) => {
+export const ResultsOutput = ({ registry, results }: Props) => {
   return (
     <SidePanel header="Call Results" emptyView="No results yet.">
       {results
@@ -21,9 +22,9 @@ export const ResultsOutput = ({ results }: Props) => {
           } = result;
           const date = new Date(time).toLocaleString();
           return isMutating || isPayable ? (
-            <TransactionResult key={time} result={result} date={date} />
+            <TransactionResult key={time} result={result} date={date} registry={registry} />
           ) : (
-            <QueryResult key={time} result={result} date={date} />
+            <QueryResult key={time} result={result} date={date} registry={registry} />
           );
         })
         .reverse()}

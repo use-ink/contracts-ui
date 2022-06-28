@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Props as ReactSelectProps } from 'react-select';
+import { Registry, TypeDef } from '../substrate';
 import { ValidFormField } from './hooks';
 import { FileState, OrFalsy, SimpleSpread } from './util';
 
@@ -13,7 +14,11 @@ export interface DropdownOption<T> {
 export type ArgComponentProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
   ValidFormField<T>
->;
+> & {
+  nestingNumber: number;
+  registry: Registry;
+  typeDef: TypeDef;
+};
 
 export type DropdownProps<T> = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,

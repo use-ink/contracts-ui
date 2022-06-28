@@ -7,20 +7,21 @@ import { isBn } from '@polkadot/util';
 import { encodeTypeDef } from '@polkadot/types';
 import { MessageSignature } from '../message/MessageSignature';
 import { CopyButton } from '../common/CopyButton';
-import { CallResult } from 'types';
+import { CallResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 import { fromSats } from 'api';
 
 interface Props {
   result: CallResult;
   date: string;
+  registry: Registry;
 }
 
-export const QueryResult = ({ result: { time, data, message, error }, date }: Props) => {
+export const QueryResult = ({ result: { time, data, message, error }, date, registry }: Props) => {
   const { api } = useApi();
 
   const value =
-    message.returnType && encodeTypeDef(api.registry, message.returnType) === 'u128' && isBn(data)
+    message.returnType && encodeTypeDef(registry, message.returnType) === 'u128' && isBn(data)
       ? fromSats(api, data).toString()
       : data?.toString();
 
@@ -35,7 +36,7 @@ export const QueryResult = ({ result: { time, data, message, error }, date }: Pr
       <div className="mb-2">{date}</div>
       <div>
         <div className="mb-2">
-          <MessageSignature message={message} />
+          <MessageSignature message={message} registry={registry} />
         </div>
         <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono return-value">
           {value}

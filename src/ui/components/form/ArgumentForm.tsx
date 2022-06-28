@@ -21,7 +21,7 @@ export function ArgumentForm({ args, argValues, registry, setArgValues, classNam
     [args, registry]
   );
   return (
-    <Form>
+    <Form className="argument-form">
       {components.map(({ arg, Component }) => {
         const onChange = (value: unknown) => {
           setArgValues(prev => ({
@@ -34,13 +34,22 @@ export function ArgumentForm({ args, argValues, registry, setArgValues, classNam
           <FormField
             className={classes(className, arg.name, 'ml-6 mt-2 mb-4')}
             key={`${arg.name}`}
-            label={<ArgSignature arg={arg} className="dark:text-gray-300 text-gray-600" />}
+            label={
+              <ArgSignature
+                arg={arg}
+                className="dark:text-gray-300 text-gray-600"
+                registry={registry}
+              />
+            }
           >
             <Component
               className="w-full dark:bg-gray-900 dark:text-gray-300 text-gray-600 bg-white dark:border-gray-700 border-gray-200 rounded"
               id={arg.name}
               value={argValues[arg.name]}
+              nestingNumber={0}
               onChange={onChange}
+              registry={registry}
+              typeDef={arg.type}
             />
           </FormField>
         );

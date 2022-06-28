@@ -20,6 +20,15 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
     return null;
   } else if (def.info === TypeDefInfo.Vec) {
     return [getInitValue(registry, keyring, def.sub as TypeDef)];
+  } else if (def.info === TypeDefInfo.VecFixed) {
+    const value = [];
+    const length = def.length as number;
+
+    for (let i = 0; i < length; i++) {
+      value.push(getInitValue(registry, keyring, def.sub as TypeDef));
+    }
+
+    return value;
   } else if (def.info === TypeDefInfo.Tuple) {
     return Array.isArray(def.sub) ? def.sub.map(def => getInitValue(registry, keyring, def)) : [];
   } else if (def.info === TypeDefInfo.Struct) {

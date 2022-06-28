@@ -1,16 +1,32 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { assert } from '@polkadot/util';
 import { AddressSelect } from '../account/Select';
 import { Input } from './Input';
 import { InputBalance } from './InputBalance';
 import { InputNumber } from './InputNumber';
 import { Vector } from './Vector';
-import { SubForm, SubComponent } from './SubForm';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
 import { Option } from './Option';
-import { ArgComponentProps, Registry, TypeDef, TypeDefInfo, ValidFormField } from 'types';
+import { VectorFixed } from './VectorFixed';
+import { Struct } from './Struct';
+import { SubForm } from './SubForm';
+import { Tuple } from './Tuple';
+import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
+
+function subComponents(
+  registry: Registry,
+  typeDef: TypeDef,
+  nestingNumber: number
+): React.ComponentType<ArgComponentProps<unknown>>[] {
+  assert(!!typeDef.sub, 'Cannot retrieve subComponent array for type definition');
+
+  return (Array.isArray(typeDef.sub) ? typeDef.sub : [typeDef.sub]).map(subTypeDef =>
+    findComponent(registry, subTypeDef, nestingNumber)
+  );
+}
 
 // nestingNumber counts the depth of nested components
 export function findComponent(
@@ -19,58 +35,74 @@ export function findComponent(
   nestingNumber = 0
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): React.ComponentType<ArgComponentProps<any>> {
-  if (type.info === TypeDefInfo.Si) {
-    return findComponent(registry, registry.lookup.getTypeDef(type.type));
-  }
-
-  if (type.info === TypeDefInfo.Option) {
-    return (props: React.PropsWithChildren<ValidFormField<unknown>>) => (
-      <Option
-        component={findComponent(registry, type.sub as TypeDef)}
-        registry={registry}
-        typeDef={type}
-        {...props}
-      />
-    );
+  if (type.info === TypeDefInfo.Compact) {
+    return findComponent(registry, type.sub as TypeDef);
   }
 
   if (type.info === TypeDefInfo.Enum) {
-    return (props: React.PropsWithChildren<ValidFormField<Record<string, unknown>>>) => (
-      <Enum
-        components={(type.sub as TypeDef[]).map(enumVariant =>
-          findComponent(registry, enumVariant)
-        )}
-        registry={registry}
-        typeDef={type}
-        {...props}
-      />
+    const components = subComponents(registry, type, nestingNumber);
+
+    return (props: React.PropsWithChildren<ArgComponentProps<Record<string, unknown>>>) => (
+      <Enum components={components} {...props} typeDef={type} />
     );
   }
 
+  if (type.info === TypeDefInfo.Option) {
+    const [component] = subComponents(registry, type, nestingNumber);
+
+    return (props: React.PropsWithChildren<ArgComponentProps<unknown>>) => {
+      return <Option component={component} {...props} typeDef={type} />;
+    };
+  }
+
+  if (type.info === TypeDefInfo.Si) {
+    return findComponent(registry, registry.lookup.getTypeDef(type.type), nestingNumber);
+  }
+
   if (type.info === TypeDefInfo.Struct) {
-    if (Array.isArray(type.sub)) {
-      const components = type.sub.map(
-        subtype =>
-          ({
-            Component: findComponent(registry, subtype, nestingNumber + 1),
-            name: subtype.name,
-          } as SubComponent)
+    const components = subComponents(registry, type, nestingNumber + 1);
+
+    return (props: ArgComponentProps<Record<string, unknown>>) => {
+      return (
+        <SubForm nestingNumber={nestingNumber}>
+          <Struct components={components} {...props} />
+        </SubForm>
       );
-      return (props: ArgComponentProps<Record<string, unknown>>) =>
-        SubForm({ ...props, components, nestingNumber, type });
-    }
+    };
+  }
+
+  if (type.info === TypeDefInfo.Tuple) {
+    const components = subComponents(registry, type, nestingNumber + 1);
+
+    return (props: ArgComponentProps<unknown[]>) => {
+      return (
+        <SubForm nestingNumber={nestingNumber}>
+          <Tuple components={components} {...props} />
+        </SubForm>
+      );
+    };
   }
 
   if (type.info === TypeDefInfo.Vec) {
-    if (type.sub && !Array.isArray(type.sub)) {
-      const Component = findComponent(registry, type.sub, nestingNumber + 1);
-      return (props: ArgComponentProps<unknown[]>) =>
-        Vector({ ...props, Component, nestingNumber, type });
-    }
+    const [component] = subComponents(registry, type, nestingNumber + 1);
+
+    return (props: ArgComponentProps<unknown[]>) => {
+      return (
+        <SubForm nestingNumber={nestingNumber}>
+          <Vector component={component} {...props} />
+        </SubForm>
+      );
+    };
   }
 
-  if (type.info === TypeDefInfo.Compact) {
-    return findComponent(registry, type.sub as TypeDef);
+  if (type.info === TypeDefInfo.VecFixed) {
+    const [component] = subComponents(registry, type, nestingNumber + 1);
+
+    return (props: React.PropsWithChildren<ArgComponentProps<unknown[]>>) => (
+      <SubForm nestingNumber={nestingNumber}>
+        <VectorFixed component={component} {...props} />
+      </SubForm>
+    );
   }
 
   switch (type.type) {

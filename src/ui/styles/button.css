@@ -1,17 +1,13 @@
 .btn {
-  @apply flex items-center justify-center font-semibold text-xs disabled:opacity-60 disabled:cursor-not-allowed;
+  @apply flex py-2 px-4 rounded items-center justify-center font-semibold text-xs disabled:opacity-60 disabled:cursor-not-allowed;
 }
 
-.btn:not(.plain) {
-  @apply py-2 px-4 rounded;
+.btn.plain {
+  @apply rounded-none py-0 px-0;
 }
 
-.btn.default {
-  @apply border dark:text-gray-300 dark:bg-elevation-2 border-gray-200 dark:border-gray-700;
-}
-
-.btn.default:hover:not(:disabled) {
-  @apply dark:bg-elevation-3;
+.btn.default:not(:disabled) {
+  @apply border text-gray-600 bg-gray-100 hover:bg-gray-200 border-gray-200 dark:text-gray-300 dark:bg-elevation-3 dark:border-gray-700 dark:hover:bg-elevation-1;
 }
 
 .btn.primary {

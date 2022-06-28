@@ -3,32 +3,35 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
-import { AbiParam, ApiPromise, Keyring, SetState } from 'types';
+import { AbiParam, Keyring, Registry, SetState } from 'types';
 import { getInitValue } from 'ui/util';
 
 type ArgValues = Record<string, unknown>;
 
-function fromArgs(api: ApiPromise, keyring: Keyring, args: AbiParam[] | null): ArgValues {
+function fromArgs(registry: Registry, keyring: Keyring, args: AbiParam[] | null): ArgValues {
   const result: ArgValues = {};
 
   (args || []).forEach(({ name, type }) => {
-    result[name] = getInitValue(api.registry, keyring, type);
+    result[name] = getInitValue(registry, keyring, type);
   });
 
   return result;
 }
 
-export function useArgValues(args: AbiParam[] | null): [ArgValues, SetState<ArgValues>] {
-  const { api, keyring } = useApi();
-  const [value, setValue] = useState<ArgValues>(fromArgs(api, keyring, args));
+export function useArgValues(
+  registry: Registry,
+  args: AbiParam[] | null
+): [ArgValues, SetState<ArgValues>] {
+  const { keyring } = useApi();
+  const [value, setValue] = useState<ArgValues>(fromArgs(registry, keyring, args));
   const argsRef = useRef(args);
 
   useEffect((): void => {
     if (argsRef.current !== args) {
-      setValue(fromArgs(api, keyring, args));
+      setValue(fromArgs(registry, keyring, args));
       argsRef.current = args;
     }
-  }, [api, keyring, args]);
+  }, [registry, keyring, args]);
 
   return [value, setValue];
 }

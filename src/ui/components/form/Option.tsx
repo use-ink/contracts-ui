@@ -1,31 +1,33 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Switch } from '../common/Switch';
 import { Input } from './Input';
-import { OrFalsy, Registry, SimpleSpread, TypeDef, ValidFormField } from 'types';
+import { ArgComponentProps, OrFalsy, Registry, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
 import { getInitValue } from 'ui/util';
 import { useToggle } from 'ui/hooks/useToggle';
 import { NOOP } from 'api';
 
-type Props = SimpleSpread<React.InputHTMLAttributes<HTMLInputElement>, ValidFormField<unknown>> & {
-  component: React.ComponentType<ValidFormField<unknown> & React.HTMLAttributes<unknown>>;
+interface Props extends ArgComponentProps<unknown> {
+  component: React.ComponentType<ArgComponentProps<unknown>>;
   registry: Registry;
   typeDef: TypeDef;
-};
+}
 
 export function Option({
   component: Component,
   onChange: _onChange,
+  nestingNumber,
   registry,
   typeDef,
   value = null,
 }: Props) {
   const { keyring } = useApi();
+  const [isSupplied, toggleIsSupplied] = useToggle(value !== null);
+  const isSuppliedRef = useRef(isSupplied);
 
-  const [isSupplied, toggleIsSupplied] = useToggle();
   const onChange = useCallback(
     (value: OrFalsy<unknown>): void => {
       if (!isSupplied) {
@@ -40,19 +42,27 @@ export function Option({
   );
 
   useEffect((): void => {
-    if (isSupplied && value === null) {
+    if (isSupplied && !isSuppliedRef.current && value === null) {
       onChange(getInitValue(registry, keyring, typeDef.sub as TypeDef));
-    } else {
-      if (!isSupplied && value !== null) {
-        onChange(null);
-      }
+      isSuppliedRef.current = true;
+    } else if (!isSupplied && isSuppliedRef.current && value !== null) {
+      onChange(null);
+      isSuppliedRef.current = false;
     }
   }, [keyring, registry, onChange, value, isSupplied, typeDef.sub]);
 
   return (
     <div className="flex items-start">
       {isSupplied ? (
-        <Component className="flex-1" onChange={onChange} value={value} />
+        <div className="flex-1">
+          <Component
+            onChange={onChange}
+            value={value}
+            nestingNumber={nestingNumber + 1}
+            registry={registry}
+            typeDef={typeDef.sub as TypeDef}
+          />
+        </div>
       ) : (
         <Input className="flex-1" isDisabled onChange={NOOP} value="" placeholder="Do not supply" />
       )}
