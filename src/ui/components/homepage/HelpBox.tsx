@@ -1,21 +1,21 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useCallback } from 'react';
-import { XIcon } from '@heroicons/react/outline';
+// import { useCallback } from 'react';
+// import { XIcon } from '@heroicons/react/outline';
 import { Button } from '../common/Button';
-import { useLocalStorage } from 'ui/hooks';
+// import { useLocalStorage } from 'ui/hooks';
 
 export function HelpBox(): React.ReactElement | null {
-  const [closedHelpBox, setClosedHelpBox] = useLocalStorage('closedHelpBox', false);
+  // const [closedHelpBox, setClosedHelpBox] = useLocalStorage('closedHelpBox', false);
 
-  const onClose = useCallback(() => {
-    setClosedHelpBox(true);
-  }, [setClosedHelpBox]);
+  // const onClose = useCallback(() => {
+  //   setClosedHelpBox(true);
+  // }, [setClosedHelpBox]);
 
-  if (closedHelpBox) {
-    return null;
-  }
+  // if (closedHelpBox) {
+  //   return null;
+  // }
 
   return (
     <>
@@ -56,11 +56,11 @@ export function HelpBox(): React.ReactElement | null {
     </div> */}
       <div className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
         <div className="relative border p-4 dark:bg-elevation-1 dark:border-gray-800 border-gray-200 rounded w-auto">
-          <XIcon
+          {/* <XIcon
             className="w-5 h-5 absolute right-0 top-0 m-1 text-gray-500 justify-self-end cursor-pointer"
             aria-hidden="true"
             onClick={onClose}
-          />
+          /> */}
           <div className="text-sm font-semibold text-blue-500 pb-1">
             Tell us more about yourself
           </div>
