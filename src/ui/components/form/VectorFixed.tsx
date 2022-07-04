@@ -31,7 +31,12 @@ export function VectorFixed({
     <div>
       {[...Array(length).keys()].map((_, index) => {
         return (
-          <FormField key={`VecFixed-${index}`} label={`${index}`}>
+          <FormField
+            key={`VecFixed-${index}`}
+            label={`${index}: ${
+              (typeDef.sub && !Array.isArray(typeDef.sub) && typeDef.sub.type) || ''
+            }`}
+          >
             <Component
               nestingNumber={nestingNumber + 1}
               onChange={onChange(index)}

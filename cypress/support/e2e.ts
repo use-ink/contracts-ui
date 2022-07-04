@@ -32,6 +32,13 @@ Cypress.Commands.add('selectMessage', (name, index) => {
   cy.get('.constructorDropdown').click().find('.dropdown__option').eq(index).click();
   cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', name);
 });
+Cypress.Commands.add('selectAccount', (name, index) => {
+  cy.get('.account-select').click().find('.dropdown__option').eq(index).click();
+  cy.get('.account-select')
+    .find('.dropdown__single-value')
+    .find('[data-cy="account-name"]')
+    .should('contain', name);
+});
 
 Cypress.Commands.add('assertReturnValue', (messageName, value) => {
   cy.contains('Read').click();

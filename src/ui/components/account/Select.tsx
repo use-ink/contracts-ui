@@ -21,7 +21,7 @@ function Select({
   isDisabled,
   onChange,
   options,
-  placeholder = 'Select Address...',
+  placeholder = 'Select account',
   className,
   value,
 }: DropdownProps<string>) {
@@ -51,7 +51,7 @@ export function AccountSelect({ placeholder = 'Select account', ...props }: Prop
   );
 }
 
-export function AddressSelect({ placeholder = 'Select address', ...props }: Props) {
+export function AddressSelect({ placeholder = 'Select account', ...props }: Props) {
   const { keyring } = useApi();
   const { db } = useDatabase();
   const [contracts] = useDbQuery(() => db.contracts.toArray(), [db]);

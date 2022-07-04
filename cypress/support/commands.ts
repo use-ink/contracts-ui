@@ -7,6 +7,7 @@ declare global {
       instantiate(): Chainable<Element>;
       call(): Chainable<Element>;
       selectMessage(name: string, index: number): Chainable<Element>;
+      selectAccount(name: string, index: number): Chainable<Element>;
       assertReturnValue(messageName: string, value: string): Chainable<Element>;
     }
   }
