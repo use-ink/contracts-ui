@@ -3,3 +3,4 @@ dist
 node_modules
 cypress
 *.config.ts
+*.html
