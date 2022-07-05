@@ -5,17 +5,14 @@ import { formatBalance, formatNumber } from '@polkadot/util';
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
-import { useInstantiate } from 'ui/contexts';
+import { useApi, useInstantiate } from 'ui/contexts';
 
 export function DryRun() {
-  const {
-    data: { metadata },
-    dryRunResult,
-  } = useInstantiate();
-
+  const { dryRunResult } = useInstantiate();
+  const { api } = useApi();
   const dryRunError =
-    metadata && dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
-      ? metadata.registry.findMetaError(dryRunResult?.result.asErr.asModule)
+    api && dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
+      ? api.registry.findMetaError(dryRunResult?.result.asErr.asModule)
       : null;
 
   return (
