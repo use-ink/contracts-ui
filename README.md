@@ -14,7 +14,7 @@ We recommend running a [Substrate Contracts Node](https://github.com/paritytech/
 
 ### Contract instantiation
 
-Once you have a compiled contract and you are connected to a node, you can use the hosted version of Contracts UI to [add a new contract on-chain](https://paritytech.github.io/contracts-ui/#/instantiate).
+Once you have a compiled contract and you are connected to a node, you can use the hosted version of Contracts UI to [add a new contract on-chain](https://contracts-ui.substrate.io/#/add-contract).
 
 There are 2 instantiation methods:
 
