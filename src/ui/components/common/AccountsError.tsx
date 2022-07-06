@@ -6,7 +6,6 @@ import { useApi } from 'ui/contexts';
 
 export function AccountsError() {
   const { isExtension, systemChain } = useApi();
-  console.log(isExtension);
 
   const createAccount = (
     <span>
