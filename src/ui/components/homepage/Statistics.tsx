@@ -3,20 +3,21 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
-import { useApi, useDatabase } from 'ui/contexts';
-import { useDbQuery } from 'ui/hooks';
+import { useApi } from 'ui/contexts';
+import { ChainProperties } from 'types';
+
+function getChainType(systemChainType: ChainProperties['systemChainType']): string {
+  if (systemChainType.isDevelopment) return 'Development';
+  if (systemChainType.isLocal) return 'Local';
+  if (systemChainType.isLive) return 'Live';
+  if (systemChainType.isCustom) return 'Custom';
+  return 'Unknown';
+}
 
 export function Statistics(): React.ReactElement | null {
-  const { api } = useApi();
-  const { db } = useDatabase();
+  const { api, systemChain, systemName, systemChainType, tokenSymbol } = useApi();
 
   const [blockNumber, setBlockNumber] = useState(0);
-  const [statistics] = useDbQuery(async () => {
-    return {
-      codeBundlesCount: await db.codeBundles.count(),
-      contractsCount: await db.contracts.count(),
-    };
-  }, [db]);
 
   useEffect(() => {
     async function listenToBlocks() {
@@ -36,20 +37,19 @@ export function Statistics(): React.ReactElement | null {
 
   const entries = useMemo((): Record<string, React.ReactNode> => {
     return {
+      'Chain Name': systemChainType.isDevelopment ? systemName : systemChain,
+      'Chain Type': getChainType(systemChainType),
       'Highest Block': `#${formatNumber(blockNumber)}`,
-      Nodes: 1,
-      'Code Bundles Uploaded': statistics?.codeBundlesCount || 0,
-      'Contracts Instantiated': statistics?.contractsCount || 0,
+      Token: tokenSymbol,
     };
-  }, [blockNumber, statistics]);
+  }, [blockNumber, systemChain, systemChainType, systemName, tokenSymbol]);
 
   return (
     <>
       <div className="grid grid-cols-4 xl:grid-cols-2 w-full mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
-        <div className="text-sm mb-4 col-span-4 xl:col-span-2 w-full">Chain Metrics</div>
         {Object.entries(entries).map(([label, value], i) => {
           return (
-            <div key={`entry-${i}`} className="mb-4">
+            <div key={`entry-${i}`} className="mb-4 pr-4">
               <div className="text-xs mb-1">{label}</div>
               <div className="dark:text-gray-400">{value}</div>
             </div>
