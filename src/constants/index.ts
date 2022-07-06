@@ -22,6 +22,7 @@ export const NULL_CHAIN_PROPERTIES = {
 export const INIT_STATE: ApiState = {
   ...NULL_CHAIN_PROPERTIES,
   endpoint: RPC.LOCAL,
+  isExtension: false,
   keyringStatus: null,
   error: null,
   status: 'CONNECT_INIT',

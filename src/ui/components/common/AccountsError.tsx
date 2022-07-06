@@ -5,34 +5,47 @@ import { Error } from './Error';
 import { useApi } from 'ui/contexts';
 
 export function AccountsError() {
-  const { systemChain } = useApi();
+  const { isExtension, systemChain } = useApi();
+  console.log(isExtension);
+
+  const createAccount = (
+    <span>
+      Follow{' '}
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        href="https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
+      >
+        this guide
+      </a>{' '}
+      to create a <b>{systemChain}</b> account.
+    </span>
+  );
 
   return (
     <Error>
       <div>No injected accounts found.</div>
-      <div className="text-left">
-        <b>New to {systemChain}?</b>
-        <ol className="list-decimal ml-6">
-          <li>
-            Install the Polkadot.js Extension{' '}
-            <a rel="noopener noreferrer" target="_blank" href="https://polkadot.js.org/extension/">
-              here
-            </a>
-            .
-          </li>
-          <li>
-            Follow{' '}
-            <a
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
-            >
-              this guide
-            </a>{' '}
-            to create a {systemChain} account.
-          </li>
-        </ol>
-      </div>
+      {isExtension ? (
+        createAccount
+      ) : (
+        <div className="text-left">
+          <b>New to {systemChain}?</b>
+          <ol className="list-decimal ml-6">
+            <li>
+              Install the Polkadot.js Extension{' '}
+              <a
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://polkadot.js.org/extension/"
+              >
+                here
+              </a>
+              .
+            </li>
+            <li>{createAccount}</li>
+          </ol>
+        </div>
+      )}
     </Error>
   );
 }

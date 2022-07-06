@@ -22,6 +22,7 @@ type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
 
 export interface ApiState extends ChainProperties {
   endpoint: string;
+  isExtension: boolean;
   genesisHash?: string;
   keyring: Keyring;
   keyringStatus: string | null;
@@ -37,7 +38,7 @@ export type ApiAction =
   | { type: 'CONNECT_ERROR'; payload: unknown }
   | { type: 'LOAD_KEYRING' }
   | { type: 'SET_ENDPOINT'; payload: string }
-  | { type: 'SET_KEYRING'; payload: Keyring }
+  | { type: 'SET_KEYRING'; isExtension: boolean; payload: Keyring }
   | { type: 'KEYRING_ERROR' };
 
 export interface ChainProperties {
