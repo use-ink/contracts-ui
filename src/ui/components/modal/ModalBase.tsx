@@ -22,7 +22,6 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
         <Dialog as="div" className="fixed inset-0 z-99 overflow-y-auto " onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
-              as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0"
               enterTo="opacity-100"

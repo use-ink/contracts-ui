@@ -34,7 +34,7 @@ export const InteractTab = ({ contract }: Props) => {
     onChange: setMessage,
     ...messageValidation
   } = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(message?.args || []);
+  const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
   const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
@@ -172,7 +172,6 @@ export const InteractTab = ({ contract }: Props) => {
 
   const call = () => {
     const tx = prepareContractTx(contract.tx[message.method], options, transformed);
-
     if (tx && accountId) {
       newId.current = queue({
         extrinsic: tx,
@@ -220,7 +219,7 @@ export const InteractTab = ({ contract }: Props) => {
           >
             <Dropdown
               id="message"
-              options={createMessageOptions(contract.abi.messages)}
+              options={createMessageOptions(contract.abi.registry, contract.abi.messages)}
               className="constructorDropdown mb-4"
               onChange={setMessage}
               value={message}
@@ -298,7 +297,7 @@ export const InteractTab = ({ contract }: Props) => {
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
-        <ResultsOutput results={callResults} />
+        <ResultsOutput registry={contract.registry} results={callResults} />
       </div>
     </div>
   );

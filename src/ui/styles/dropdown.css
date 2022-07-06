@@ -3,12 +3,12 @@
 }
 
 .dropdown .dropdown__control {
-  @apply relative flex items-center w-full p-0.5 text-left text-sm bg-transparent rounded border dark:border-gray-700 border-gray-200 focus:outline-none cursor-pointer;
+  @apply relative flex items-center w-full p-0.5 text-left text-sm bg-transparent rounded border dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 focus:outline-none cursor-pointer;
 }
 
 .dropdown__control--is-focused,
 .dropdown__control--menu-is-open {
-  @apply dark:shadow-none dark:border-gray-100 dark:hover:border-gray-100;
+  @apply dark:shadow-none dark:border-gray-300 dark:hover:border-gray-300;
 }
 
 .dropdown .dropdown__single-value {

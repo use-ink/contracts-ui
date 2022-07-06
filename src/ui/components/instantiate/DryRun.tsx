@@ -8,11 +8,10 @@ import { Account } from '../account/Account';
 import { useApi, useInstantiate } from 'ui/contexts';
 
 export function DryRun() {
-  const { api } = useApi();
   const { dryRunResult } = useInstantiate();
-
+  const { api } = useApi();
   const dryRunError =
-    dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
+    api && dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
       ? api.registry.findMetaError(dryRunResult?.result.asErr.asModule)
       : null;
 
