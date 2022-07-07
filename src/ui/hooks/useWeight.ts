@@ -31,7 +31,7 @@ export const useWeight = (estimatedWeight: OrFalsy<BN>): UseWeight => {
   const defaultWeight = useMemo((): BN => maximumBlockWeight(api), [api]);
 
   const setMegaGas = useCallback(
-    (value?: BN | undefined) => {
+    (value: OrFalsy<BN>) => {
       _setMegaGas(value || getDefaultMegaGas(api, null));
     },
     [api]
