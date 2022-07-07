@@ -3,7 +3,7 @@
 
 import { Buffer } from 'buffer';
 import { createRoot } from 'react-dom/client';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from 'ui/components/App';
 import './styles/main.css';
 import '@polkadot/api-augment';
@@ -26,19 +26,19 @@ const container = document.getElementById('app-root');
 const root = createRoot(container!);
 
 root.render(
-  <HashRouter>
+  <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
         <Route index element={<Homepage />} />
         <Route path="add-contract" element={<AddContract />} />
         <Route path="hash-lookup" element={<SelectCodeHash />} />
-        <Route path="/instantiate" element={<Instantiate />}>
+        <Route path="instantiate" element={<Instantiate />}>
           <Route path=":codeHash" />
         </Route>
-        <Route path="/contract/:address/" element={<Contract />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="contract/:address/" element={<Contract />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
-  </HashRouter>
+  </BrowserRouter>
 );
