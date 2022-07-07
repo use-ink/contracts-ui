@@ -13,7 +13,7 @@ export type UseWeight = {
   megaGas: BN;
   percentage: number;
   setIsActive: SetState<boolean>;
-  setMegaGas: React.Dispatch<BN | undefined>;
+  setMegaGas: React.Dispatch<OrFalsy<BN>>;
   weight: BN;
 };
 
