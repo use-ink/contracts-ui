@@ -9,7 +9,7 @@ type Props = React.HTMLProps<HTMLDivElement>;
 export function Error({ children, className }: Props) {
   return (
     <div className={classes('page-error', className)}>
-      <div>
+      <div className="p-6">
         <ExclamationCircleIcon className="w-10 h-10 text-red-400 mb-1" />
         {children}
       </div>
