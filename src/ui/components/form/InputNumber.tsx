@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { BN_ZERO } from '@polkadot/util';
 import { Input } from './Input';
-import { SimpleSpread } from 'types';
+import { OrFalsy, SimpleSpread } from 'types';
 
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
   {
     isDisabled?: boolean;
-    value?: BN;
-    onChange: (_: BN) => void;
+    value: OrFalsy<BN>;
+    onChange: (_: OrFalsy<BN>) => void;
   }
 >;
 
@@ -23,9 +23,22 @@ export function InputNumber({
   value = BN_ZERO,
   ...props
 }: Props) {
+  const [asString, setAsString] = useState(value?.toString() || '');
+
   const onChange = useCallback(
     (value: string) => {
-      _onChange(new BN(value));
+      setAsString(value);
+
+      if (!/^(0|-?[1-9]\d*)$/.test(value)) {
+        _onChange(null);
+        return;
+      }
+
+      try {
+        _onChange(new BN(value));
+      } catch (e) {
+        console.error(e);
+      }
     },
     [_onChange]
   );
@@ -35,8 +48,7 @@ export function InputNumber({
       isDisabled={isDisabled}
       onChange={onChange}
       onFocus={e => e.target.select()}
-      type="number"
-      value={value ? value.toString() : ''}
+      value={asString}
       {...props}
     >
       {children}
