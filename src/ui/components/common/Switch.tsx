@@ -23,6 +23,7 @@ export function Switch({ children, className, onChange, value }: Props) {
         className
       )}
       onChange={onChange}
+      data-cy="switch-button"
     >
       <span className="sr-only">{children}</span>
       <span

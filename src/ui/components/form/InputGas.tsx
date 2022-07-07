@@ -39,6 +39,7 @@ export function InputGas({
           }
         }}
         placeholder="MGas"
+        data-cy="gas-input"
       />
       <Meter
         accessory={
@@ -50,6 +51,7 @@ export function InputGas({
 
                 setIsActive(false);
               }}
+              data-cy="use-estimated-gas"
               className="text-green-500"
             >
               {isCall
@@ -71,6 +73,7 @@ export function InputGas({
                   setIsActive(true);
                 }}
                 className="text-green-500"
+                data-cy="use-custom-gas"
               >
                 Use Custom
               </a>

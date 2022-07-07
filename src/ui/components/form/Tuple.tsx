@@ -33,7 +33,11 @@ export function Tuple({
         const subType = (typeDef.sub as TypeDef[])[index];
 
         return (
-          <FormField key={`Tuple-${index}`} label={`${index}: ${encodeTypeDef(registry, subType)}`}>
+          <FormField
+            key={`Tuple-${index}`}
+            label={`${index}: ${encodeTypeDef(registry, subType)}`}
+            className={`tuple-field-${nestingNumber}`}
+          >
             <Component
               nestingNumber={nestingNumber}
               onChange={onChange(index)}

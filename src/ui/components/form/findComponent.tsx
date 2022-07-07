@@ -121,7 +121,9 @@ export function findComponent(
     case 'i32':
     case 'u32':
     case 'i64':
+    case 'i128':
     case 'u64':
+    case 'u128':
     case 'BN':
       return InputNumber;
 

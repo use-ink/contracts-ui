@@ -21,12 +21,13 @@ export function Struct({ components, value, nestingNumber, onChange, registry, t
         components &&
         components.map((Component, index) => {
           const subType = (typeDef.sub as TypeDef[])[index];
-          const name = subType.name as string;
+          const name = subType.displayName || subType.name || '';
 
           return (
             <FormField
               key={`${typeDef.name}-label-${index}`}
-              label={`${name}: ${encodeTypeDef(registry, subType)}`}
+              label={`${name}: ${subType.typeName || encodeTypeDef(registry, subType)}`}
+              className={name}
             >
               <Component
                 value={value ? value[name] : ''}

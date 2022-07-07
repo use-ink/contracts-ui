@@ -90,7 +90,7 @@ export function InputFile({
   }, [file, propsFile]);
 
   return file ? (
-    <div className={`${className} flex`}>
+    <div className={`${className} flex`} data-cy="upload-confirmation">
       <div className="p-6 border dark:bg-elevation-1 dark:border-gray-700 border-gray-300 inline-flex items-center rounded shadow">
         <DocumentTextIcon
           className="w-7 h-7 mr-2 text-gray-500 justify-self-start"

@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
 
       - name: Install and build
         run: |
@@ -25,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.15.1/substrate-contracts-node-linux.tar.gz" -O
+          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.16.0/substrate-contracts-node-linux.tar.gz" -O
           ls -lash
       - name: Save node artifact
         uses: actions/upload-artifact@v3
@@ -66,6 +70,7 @@ jobs:
           browser: chrome
           record: true
           parallel: true
+          config-file: cypress.config.ts
           group: 'UI - Chrome'
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
@@ -104,6 +109,7 @@ jobs:
           browser: firefox
           record: true
           parallel: true
+          config-file: cypress.config.ts
           group: 'UI - Firefox'
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}

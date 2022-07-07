@@ -23,6 +23,7 @@ export function Input({
   placeholder,
   value,
   onFocus,
+  type = 'text',
 }: Props) {
   function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
     _onChange(e.target.value);
@@ -33,7 +34,7 @@ export function Input({
       <input
         onChange={onChange}
         onFocus={onFocus}
-        type="text"
+        type={type}
         value={value || ''}
         className={classes(
           'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',

@@ -46,17 +46,31 @@ export function Vector({
           {`Vec<${encodeTypeDef(registry, subType)}>`}
         </label>
         <Buttons>
-          <Button className="px-2 dark:text-white" onClick={onAddRow} variant="default">
+          <Button
+            className="px-2 dark:text-white"
+            onClick={onAddRow}
+            variant="default"
+            data-cy={`vector-add-${nestingNumber}`}
+          >
             <PlusIcon className="dark:text-white h-3 w-3" />
           </Button>
-          <Button className="px-2 dark:text-white" onClick={onRemoveRow} variant="default">
+          <Button
+            className="px-2 dark:text-white"
+            onClick={onRemoveRow}
+            variant="default"
+            data-cy={`vector-remove-${nestingNumber}`}
+          >
             <MinusIcon className="dark:text-white h-3 w-3" />
           </Button>
         </Buttons>
       </div>
       {(value || []).map((element, index) => {
         return (
-          <FormField key={`Vector-${index}`} label={`${index}`}>
+          <FormField
+            key={`Vector-${index}`}
+            label={`${index}`}
+            className={`vector-field-${nestingNumber}`}
+          >
             <Component
               nestingNumber={nestingNumber + 1}
               onChange={onChange(index)}

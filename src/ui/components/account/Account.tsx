@@ -25,7 +25,10 @@ export function Account({ className, name: propsName, size = 42, value }: Props)
       <Identicon size={size} value={value} className="pr-2" />
       <div className="flex-1 block truncate">
         {name && (
-          <span className="flex font-semibold text-base dark:text-gray-300 text-gray-700">
+          <span
+            className="flex font-semibold text-base dark:text-gray-300 text-gray-700"
+            data-cy="account-name"
+          >
             {name}
           </span>
         )}

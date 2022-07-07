@@ -52,7 +52,7 @@ export function Option({
   }, [keyring, registry, onChange, value, isSupplied, typeDef.sub]);
 
   return (
-    <div className="flex items-start">
+    <div className="flex items-start" data-cy="option-field">
       {isSupplied ? (
         <div className="flex-1">
           <Component

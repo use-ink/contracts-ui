@@ -198,7 +198,7 @@ export const InteractTab = ({ contract }: Props) => {
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
         <Form>
           <FormField
-            className="mb-8"
+            className="mb-8 caller"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
             label="Account"
