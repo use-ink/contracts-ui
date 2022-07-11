@@ -7,6 +7,8 @@ import type { ApiState } from 'types';
 export enum RPC {
   LOCAL = 'ws://127.0.0.1:9944',
   CONTRACTS = 'wss://rococo-contracts-rpc.polkadot.io',
+  SHIBUYA = 'wss://rpc.shibuya.astar.network',
+  SHIDEN = 'wss://rpc.shiden.astar.network',
 }
 export const DEFAULT_DECIMALS = 12;
 

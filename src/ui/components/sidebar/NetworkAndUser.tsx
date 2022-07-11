@@ -16,6 +16,14 @@ const options = [
     label: 'Contracts (Rococo)',
     value: RPC.CONTRACTS,
   },
+  {
+    label: 'Shibuya',
+    value: RPC.SHIBUYA,
+  },
+  {
+    label: 'Shiden',
+    value: RPC.SHIDEN,
+  },
 ];
 
 export function NetworkAndUser() {
