@@ -36,10 +36,10 @@ export function Step1() {
   } = useMetadataField();
 
   useEffect((): void => {
-    if (metadata && !name) {
-      setName(metadata.info.contract.name.toString());
+    if (metadataValidation.name) {
+      setName(metadataValidation.name);
     }
-  }, [metadata, name, setName]);
+  }, [metadataValidation.name, setName]);
 
   function submitStep1() {
     setData &&
