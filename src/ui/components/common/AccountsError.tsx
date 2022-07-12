@@ -2,14 +2,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Error } from './Error';
-import { useApi } from 'ui/contexts';
 
 export function AccountsError() {
   return (
     <Error>
-      <div>No injected accounts found.</div>
-      <span>
-        Follow{' '}
+      <div>No accounts found.</div>
+      <p className="mb-3">
+        1. Follow{' '}
         <a
           rel="noopener noreferrer"
           target="_blank"
@@ -17,27 +16,45 @@ export function AccountsError() {
         >
           this guide
         </a>{' '}
-        to create your first Substrate account in the extension.
-      </span>
+        to create your first account in the Polkadot.js extension.
+      </p>
+      <p className="mb-3">
+        2. Drip some funds into your account via the faucets of our suported testnets.{' '}
+      </p>
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        href="https://github.com/paritytech/cumulus/blob/master/parachains/runtimes/contracts/contracts-rococo/README.md#rococo-deployment"
+      >
+        Contracts on Rococo
+      </a>{' '}
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        href="https://docs.astar.network/integration/testnet-faucet"
+      >
+        Shiden / Shibuya
+      </a>{' '}
     </Error>
   );
 }
 
 export function ExtensionError() {
-  const { systemChain } = useApi();
-
   return (
     <Error>
       <div>No signer extension found.</div>
-      <div className="text-center">
-        <b>New to {systemChain}?</b>
-
-        <p>
+      <div className="text-center flex flex-col items-center">
+        <b>New to Substrate?</b>
+        <p className="mb-3">
           Install the{' '}
           <a rel="noopener noreferrer" target="_blank" href="https://polkadot.js.org/extension/">
             Polkadot.js Extension
           </a>{' '}
           to create and manage Substrate accounts.
+        </p>
+        <p>
+          If the extension is installed and you are seeing this, make sure the it allows{' '}
+          <span className="whitespace-nowrap">Contracts UI </span> to use your accounts for signing.
         </p>
       </div>
     </Error>
