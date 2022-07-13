@@ -17,6 +17,7 @@ function ContractsNodeHelp() {
             href="https://github.com/paritytech/substrate-contracts-node"
             target="_blank"
             rel="noreferrer"
+            className="whitespace-nowrap"
           >
             substrate-contracts-node
           </a>
@@ -30,6 +31,7 @@ function ContractsNodeHelp() {
         Alternatively, connect to{' '}
         <a
           href="#"
+          className="whitespace-nowrap"
           onClick={() => {
             navigate(`/?rpc=${RPC.CONTRACTS}`);
           }}

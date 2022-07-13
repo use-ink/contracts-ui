@@ -28,7 +28,6 @@ export const apiReducer: Reducer<ApiState, ApiAction> = (state, action) => {
     case 'SET_KEYRING':
       return {
         ...state,
-        isExtension: action.isExtension,
         keyring: action.payload,
         keyringStatus: 'READY',
       };

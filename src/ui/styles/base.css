@@ -65,7 +65,7 @@ a:focus {
 }
 
 .page-error > div {
-  @apply w-7/12 h-60 border dark:border-gray-700 text-gray-500 grid place-content-center justify-items-center rounded-md;
+  @apply py-8 px-12 text-center max-w-lg border dark:border-gray-700 text-gray-500 grid place-content-center justify-items-center rounded-md;
 }
 
 .page-error > div > div {
