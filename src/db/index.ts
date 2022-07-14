@@ -4,6 +4,7 @@
 import Dexie, { Table } from 'dexie';
 
 export interface CodeBundleDocument {
+  abi: Record<string, unknown>;
   codeHash: string;
   date: string;
   id?: number;
@@ -11,7 +12,6 @@ export interface CodeBundleDocument {
 }
 
 export interface ContractDocument extends CodeBundleDocument {
-  abi: Record<string, unknown>;
   address: string;
 }
 

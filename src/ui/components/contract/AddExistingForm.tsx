@@ -100,6 +100,7 @@ export function AddExistingForm() {
     const codeHash = metadata.info.source.wasmHash.toHex();
 
     const document = {
+      abi: metadata.json,
       codeHash,
       date: new Date().toISOString(),
       name,
@@ -109,7 +110,6 @@ export function AddExistingForm() {
 
     await db.contracts.add({
       ...document,
-      abi: metadata.json,
       address,
     });
 
