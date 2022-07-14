@@ -53,7 +53,7 @@ export function ExtensionError() {
           to create and manage Substrate accounts.
         </p>
         <p>
-          If the extension is installed and you are seeing this, make sure the it allows{' '}
+          If the extension is installed and you are seeing this, make sure it allows{' '}
           <span className="whitespace-nowrap">Contracts UI </span> to use your accounts for signing.
         </p>
       </div>
