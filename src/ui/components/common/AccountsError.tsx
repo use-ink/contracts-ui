@@ -19,7 +19,7 @@ export function AccountsError() {
         to create your first account in the Polkadot.js extension.
       </p>
       <p className="mb-3">
-        2. Drip some funds into your account via the faucets of our suported testnets.{' '}
+        2. Drip some funds into your account via the faucets of our supported networks.{' '}
       </p>
       <a
         rel="noopener noreferrer"
