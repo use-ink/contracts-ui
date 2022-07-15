@@ -4,11 +4,12 @@
 import { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
 
+import { AccountsError, ExtensionError } from './common/AccountsError';
 import { useApi, useDatabase } from 'ui/contexts';
 import { Loader, ConnectionError } from 'ui/components/common';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
-  const { error, status, keyringStatus, endpoint } = useApi();
+  const { error, keyring, status, keyringStatus, endpoint } = useApi();
   const { db } = useDatabase();
   const [message, setMessage] = useState('');
 
@@ -20,9 +21,17 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
     status !== 'READY' && setMessage(`Connecting to ${endpoint}...`);
   }, [db, keyringStatus, status, endpoint]);
 
-  return (
-    <>
-      {error ? <ConnectionError /> : isLoading ? <Loader message={message} isLoading /> : children}
-    </>
-  );
+  if (keyringStatus === 'READY' && keyring.getAccounts().length === 0) {
+    return <AccountsError />;
+  }
+
+  if (keyringStatus === 'ERROR') {
+    return <ExtensionError />;
+  }
+
+  if (error) {
+    return <ConnectionError />;
+  }
+
+  return <>{isLoading ? <Loader message={message} isLoading /> : children}</>;
 }

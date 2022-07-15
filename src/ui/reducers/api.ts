@@ -26,7 +26,11 @@ export const apiReducer: Reducer<ApiState, ApiAction> = (state, action) => {
       return { ...state, keyringStatus: 'LOADING' };
 
     case 'SET_KEYRING':
-      return { ...state, keyring: action.payload, keyringStatus: 'READY' };
+      return {
+        ...state,
+        keyring: action.payload,
+        keyringStatus: 'READY',
+      };
 
     case 'KEYRING_ERROR':
       return { ...state, keyringStatus: 'ERROR' };
