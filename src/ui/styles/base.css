@@ -59,3 +59,19 @@ a:focus {
 .markdown h1 {
   @apply font-bold;
 }
+
+.page-error {
+  @apply w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2 flex justify-center items-center;
+}
+
+.page-error > div {
+  @apply py-8 px-12 text-center max-w-lg border dark:border-gray-700 text-gray-500 grid place-content-center justify-items-center rounded-md;
+}
+
+.page-error > div > div {
+  @apply mb-6 last:mb-0;
+}
+
+.page-error > div a {
+  @apply text-blue-400;
+}
