@@ -7,6 +7,8 @@ import {
   assertMoveToStep2,
   assertMoveToStep3,
   assertContractRedirect,
+  assertInstantiate,
+  selectAccount,
 } from '../../support/util';
 
 describe('Mother Contract ', () => {
@@ -78,7 +80,7 @@ describe('Mother Contract ', () => {
             cy.get('.dropdown').should('have.lengthOf', 1);
             cy.contains('1: u128').should('be.visible');
             cy.get("input[type='number']").should('have.lengthOf', 1).type('99999');
-            cy.selectAccount('bob', 2);
+            selectAccount('bob', 2);
           });
       });
   });
@@ -126,7 +128,7 @@ describe('Mother Contract ', () => {
   // todo: find out why gas estimation is too low when the app runs in cypress env
   // and why setting custom gas doesn't work
   it('submits instantiate transaction', () => {
-    cy.instantiate();
+    assertInstantiate();
   });
 
   it('redirects to contract page after instantiation', () => {

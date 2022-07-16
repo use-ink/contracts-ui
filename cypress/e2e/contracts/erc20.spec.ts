@@ -7,6 +7,10 @@ import {
   assertMoveToStep2,
   assertMoveToStep3,
   assertContractRedirect,
+  assertInstantiate,
+  assertCall,
+  assertReturnValue,
+  selectMessage,
 } from '../../support/util';
 
 describe('ERC20 Contract ', () => {
@@ -36,7 +40,7 @@ describe('ERC20 Contract ', () => {
   });
 
   it('submits instantiate transaction', () => {
-    cy.instantiate();
+    assertInstantiate();
   });
 
   it('redirects to contract page after instantiation', () => {
@@ -44,36 +48,36 @@ describe('ERC20 Contract ', () => {
   });
 
   it(`calling totalSupply() returns ${initialSupply}`, () => {
-    cy.assertReturnValue('totalSupply', `${initialSupply}`);
+    assertReturnValue('totalSupply', `${initialSupply}`);
   });
 
   it(`transfers ${transferValue} Units to another account`, () => {
-    cy.selectMessage('transfer', 3);
+    selectMessage('transfer', 3);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(3).click();
     cy.get('.form-field.value').find('input[type="text"]').eq(0).type(`${transferValue}`);
-    cy.call();
-    cy.selectMessage('balanceOf', 1);
-    cy.assertReturnValue('balanceOf', `${initialSupply - transferValue}`);
+    assertCall();
+    selectMessage('balanceOf', 1);
+    assertReturnValue('balanceOf', `${initialSupply - transferValue}`);
   });
 
   it(`successfully approves allowance`, () => {
-    cy.selectMessage('approve', 4);
+    selectMessage('approve', 4);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
     cy.get('.form-field.value').find('input[type="text"]').type(`${allowance}`);
-    cy.call();
-    cy.selectMessage('allowance', 2);
+    assertCall();
+    selectMessage('allowance', 2);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.assertReturnValue('allowance', `${allowance}`);
+    assertReturnValue('allowance', `${allowance}`);
   });
 
   it(`transfers ${transferValue} on behalf of alice`, () => {
     cy.get('.form-field.caller').click().find('.dropdown__option').eq(2).click();
-    cy.selectMessage('transferFrom', 5);
+    selectMessage('transferFrom', 5);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(2).click();
     cy.get('.form-field.value').find('input[type="text"]').type(`${transferValue}`);
-    cy.call();
-    cy.selectMessage('balanceOf', 1);
+    assertCall();
+    selectMessage('balanceOf', 1);
     cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.assertReturnValue('balanceOf', `${transferValue}`);
+    assertReturnValue('balanceOf', `${transferValue}`);
   });
 });

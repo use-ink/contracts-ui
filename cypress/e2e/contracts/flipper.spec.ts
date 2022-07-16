@@ -7,6 +7,9 @@ import {
   assertMoveToStep2,
   assertMoveToStep3,
   assertContractRedirect,
+  assertInstantiate,
+  assertReturnValue,
+  selectMessage,
 } from '../../support/util';
 
 describe('Flipper Contract ', () => {
@@ -34,17 +37,17 @@ describe('Flipper Contract ', () => {
   });
 
   it(`submits instantiate transaction`, () => {
-    cy.instantiate();
+    assertInstantiate();
   });
   it('redirects to contract page after instantiation', () => {
     assertContractRedirect();
   });
   it('calling get() returns true', () => {
-    cy.selectMessage('get', 1);
-    cy.assertReturnValue('get', 'true');
+    selectMessage('get', 1);
+    assertReturnValue('get', 'true');
   });
   it(`submits flip() transaction`, () => {
-    cy.selectMessage('flip', 0);
+    selectMessage('flip', 0);
     cy.contains('Call').click();
     cy.get('[data-cy="transaction-complete"]', { timeout })
       .should('be.visible')
@@ -52,7 +55,7 @@ describe('Flipper Contract ', () => {
       .and('contain', 'balances:Withdraw');
   });
   it('calling get() returns false', () => {
-    cy.selectMessage('get', 1);
-    cy.assertReturnValue('get', 'false');
+    selectMessage('get', 1);
+    assertReturnValue('get', 'false');
   });
 });

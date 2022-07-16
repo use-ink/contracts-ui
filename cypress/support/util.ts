@@ -1,10 +1,12 @@
+const timeout = 25000;
+
 export function beforeAllContracts() {
   cy.visit(`/instantiate/?rpc=ws://127.0.0.1:9944`);
   cy.get('[data-cy="spinner"]').should('not.exist', {
-    timeout: 25000,
+    timeout,
   });
   cy.contains('Upload and Instantiate Contract', {
-    timeout: 25000,
+    timeout,
   }).should('be.visible');
 }
 export function assertUpload(fixture: Cypress.FixtureData) {
@@ -26,4 +28,48 @@ export function assertMoveToStep3() {
 
 export function assertContractRedirect() {
   cy.url().should('contain', '/contract/');
+}
+
+export function assertInstantiate() {
+  cy.get('[data-cy="submit-btn"]').click();
+  cy.get('[data-cy="transaction-complete"]', { timeout })
+    .should('be.visible')
+    .and('contain', 'contracts:Instantiated')
+    .and('contain', 'system:NewAccount')
+    .and('contain', 'balances:Endowed')
+    .and('contain', 'balances:Transfer')
+    .and('contain', 'balances:Reserved')
+    .and('contain', 'balances:Withdraw')
+    .and('contain', 'system:ExtrinsicSuccess');
+  cy.get('[data-cy="dismiss-notification"]').click();
+}
+
+export function assertCall() {
+  cy.contains('Call').click();
+  cy.get('[data-cy="transaction-complete"]', { timeout })
+    .should('be.visible')
+    .and('contain', 'system:ExtrinsicSuccess')
+    .and('contain', 'balances:Transfer')
+    .and('contain', 'balances:Reserved')
+    .and('contain', 'balances:Withdraw')
+    .and('contain', 'contracts:ContractEmitted');
+  cy.get('[data-cy="dismiss-notification"]').click();
+}
+
+export function selectMessage(name: string, index: number) {
+  cy.get('.constructorDropdown').click().find('.dropdown__option').eq(index).click();
+  cy.get('.constructorDropdown').find('.dropdown__single-value').should('contain', name);
+}
+
+export function selectAccount(name: string, index: number) {
+  cy.get('.account-select').click().find('.dropdown__option').eq(index).click();
+  cy.get('.account-select')
+    .find('.dropdown__single-value')
+    .find('[data-cy="account-name"]')
+    .should('contain', name);
+}
+
+export function assertReturnValue(messageName: string, value: string) {
+  cy.contains('Read').click();
+  cy.get(`[data-cy=${messageName}]`).find('.return-value').should('contain', `${value}`);
 }
