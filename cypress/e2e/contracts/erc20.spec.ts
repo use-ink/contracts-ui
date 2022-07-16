@@ -1,22 +1,29 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import {
+  beforeAllContracts,
+  assertUpload,
+  assertMoveToStep2,
+  assertMoveToStep3,
+  assertContractRedirect,
+} from '../../support/util';
+
 describe('ERC20 Contract ', () => {
   const initialSupply = 77;
   const transferValue = 2;
-  const allowance = 25;
+  const allowance = 2;
+
+  before(() => {
+    beforeAllContracts();
+  });
 
   it('contract file uploads', () => {
-    cy.visit('http://localhost:8081/instantiate');
-    cy.get('[data-cy="file-input"]').attachFile('erc20.contract');
-    cy.get('[data-cy="next-btn"]').should('not.be.disabled');
+    assertUpload('erc20.contract');
   });
 
   it('moves to step 2', () => {
-    cy.get('[data-cy="next-btn"]').click();
-    cy.contains('Deployment Constructor').should('be.visible');
-    cy.contains('Deployment Salt').should('be.visible');
-    cy.contains('Max Gas Allowed').should('be.visible');
+    assertMoveToStep2();
   });
 
   it(`types ${initialSupply} in the initialSupply field`, () => {
@@ -25,8 +32,7 @@ describe('ERC20 Contract ', () => {
   });
 
   it('moves to step 3', () => {
-    cy.get('[data-cy="next-btn"]').click();
-    cy.get('[data-cy="transaction-queued"]').should('be.visible');
+    assertMoveToStep3();
   });
 
   it('submits instantiate transaction', () => {
@@ -34,7 +40,7 @@ describe('ERC20 Contract ', () => {
   });
 
   it('redirects to contract page after instantiation', () => {
-    cy.url().should('contain', '/contract/');
+    assertContractRedirect();
   });
 
   it(`calling totalSupply() returns ${initialSupply}`, () => {

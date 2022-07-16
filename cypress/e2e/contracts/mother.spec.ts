@@ -1,21 +1,25 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import {
+  beforeAllContracts,
+  assertUpload,
+  assertMoveToStep2,
+  assertMoveToStep3,
+  assertContractRedirect,
+} from '../../support/util';
+
 describe('Mother Contract ', () => {
+  before(() => {
+    beforeAllContracts();
+  });
+
   it('contract file uploads', () => {
-    cy.visit('http://localhost:8081/instantiate');
-    cy.get('[data-cy="file-input"]').attachFile('mother.contract');
-    cy.get('[data-cy="upload-confirmation"]').should('contain', 'mother.contract');
-    cy.get('.validation.success').should('be.visible').and('contain', 'Valid contract bundle');
+    assertUpload('mother.contract');
   });
 
   it('moves to step 2', () => {
-    cy.get('[data-cy="next-btn"]').should('not.be.disabled');
-    cy.get('[data-cy="next-btn"]').click();
-    cy.contains('Deployment Constructor').should('be.visible');
-    cy.contains('Deployment Salt').scrollIntoView().should('be.visible');
-    cy.contains('Max Gas Allowed').should('be.visible');
-    cy.contains('Storage Deposit Limit').should('be.visible');
+    assertMoveToStep2();
   });
 
   it('displays `name: Text` input correctly', () => {
@@ -116,17 +120,16 @@ describe('Mother Contract ', () => {
       });
   });
 
-  it.skip('moves to step 3', () => {
-    cy.get('[data-cy="next-btn"]').click();
-    cy.get('[data-cy="transaction-queued"]').should('be.visible');
+  it('moves to step 3', () => {
+    assertMoveToStep3();
   });
   // todo: find out why gas estimation is too low when the app runs in cypress env
   // and why setting custom gas doesn't work
-  it.skip('submits instantiate transaction', () => {
+  it('submits instantiate transaction', () => {
     cy.instantiate();
   });
 
-  it.skip('redirects to contract page after instantiation', () => {
-    cy.url().should('contain', '/contract/');
+  it('redirects to contract page after instantiation', () => {
+    assertContractRedirect();
   });
 });

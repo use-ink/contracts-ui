@@ -28,6 +28,7 @@ export function Spinner({
         'border-solid rounded-full animate-spin',
         className
       )}
+      data-cy="spinner"
     />
   );
 }
