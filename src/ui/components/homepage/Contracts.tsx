@@ -19,7 +19,7 @@ export function Contracts(): React.ReactElement | null {
     return (
       <div className="flex flex-col items-center space-y-2 text-sm border dark:text-gray-500 dark:border-gray-700  rounded py-7 px-5">
         <FolderOpenIcon className="w-8 h-8" />
-        <div>No contracts found on this chain.</div>
+        <div>You haven&apos;t uploaded any contracts yet on this browser.</div>
         <Link to={`/instantiate`} className="text-green-500">
           Upload a new contract
         </Link>

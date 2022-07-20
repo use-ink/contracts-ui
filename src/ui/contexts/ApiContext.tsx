@@ -17,8 +17,8 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const [searchParams] = useSearchParams();
   const rpcUrl = searchParams.get('rpc');
   const [preferredEndpoint, setPreferredEndpoint] = useLocalStorage<string>(
-    'preferredEndpoint',
-    RPC.LOCAL
+    'contractsUiPreferredEndpoint',
+    RPC.CONTRACTS
   );
   const [state, dispatch] = useReducer(apiReducer, { ...INIT_STATE, endpoint: preferredEndpoint });
   const { endpoint, keyringStatus, status } = state;
