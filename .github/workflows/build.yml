@@ -51,9 +51,6 @@ jobs:
       # leaving the Dashboard hanging ...
       # https://github.com/cypress-io/github-action/issues/48
       fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -68,10 +65,7 @@ jobs:
           wait-on: 'http://localhost:8081'
           wait-on-timeout: 120
           browser: chrome
-          record: true
-          parallel: true
           config-file: cypress.config.ts
-          group: 'UI - Chrome'
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -90,9 +84,6 @@ jobs:
       # leaving the Dashboard hanging ...
       # https://github.com/cypress-io/github-action/issues/48
       fail-fast: false
-      matrix:
-        # run copies of the current job in parallel
-        containers: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -107,10 +98,7 @@ jobs:
           wait-on: 'http://localhost:8081'
           wait-on-timeout: 120
           browser: firefox
-          record: true
-          parallel: true
           config-file: cypress.config.ts
-          group: 'UI - Firefox'
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
