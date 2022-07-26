@@ -24,10 +24,12 @@ export function QuickLinks() {
             );
           })
         ) : (
-          <div className="none-yet">
+          <div className="none-yet text-gray-400">
             None yet&nbsp;
             {' • '}&nbsp;
-            <Link to={`/instantiate`}>Upload one</Link>
+            <Link className="text-blue-400" to={`/instantiate`}>
+              Upload one
+            </Link>
           </div>
         )}
       </div>
