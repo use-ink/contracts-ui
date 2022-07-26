@@ -23,8 +23,8 @@ export function MobileMenu() {
   };
 
   return (
-    <div className="dark:bg-elevation-1">
-      <div className="mobilemenu flex w-screen justify-center px-4 py-3 md:hidden">
+    <div className="dark:bg-elevation-1 md:hidden">
+      <div className="mobilemenu flex w-screen justify-center px-4 py-3">
         <button className="flex-none text-center w-8 h-8" onClick={toggleMainMenu}>
           <MenuIcon className="w-5 h-5 mx-auto text-gray-300" />
         </button>
