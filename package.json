@@ -47,7 +47,7 @@
     "react-tooltip": "^4.2.21",
     "remark-gfm": "^3.0.1",
     "styled-components": "^5.3.5",
-    "tailwind-merge": "^1.2.1"
+    "tailwind-merge": "^1.5.1"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
