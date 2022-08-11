@@ -36,7 +36,7 @@
     "copy-to-clipboard": "^3.3.2",
     "date-fns": "^2.29.1",
     "dexie": "^3.2.2",
-    "dexie-react-hooks": "1.0.7",
+    "dexie-react-hooks": "1.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.2",
