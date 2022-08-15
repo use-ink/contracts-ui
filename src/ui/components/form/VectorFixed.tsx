@@ -17,7 +17,7 @@ export function VectorFixed({
   typeDef,
   value,
 }: Props) {
-  const length = typeDef.length as number;
+  const length = typeDef.length;
 
   const onChange = useCallback(
     (index: number) =>
@@ -28,25 +28,27 @@ export function VectorFixed({
   );
 
   return (
-    <div>
-      {[...Array(length).keys()].map((_, index) => {
-        return (
-          <FormField
-            key={`VecFixed-${index}`}
-            label={`${index}: ${
-              (typeDef.sub && !Array.isArray(typeDef.sub) && typeDef.sub.type) || ''
-            }`}
-          >
-            <Component
-              nestingNumber={nestingNumber + 1}
-              onChange={onChange(index)}
-              registry={registry}
-              typeDef={typeDef}
-              value={value[index]}
-            />
-          </FormField>
-        );
-      })}
-    </div>
+    value && (
+      <div>
+        {[...Array(length).keys()].map((_, index) => {
+          return (
+            <FormField
+              key={`VecFixed-${index}`}
+              label={`${index}: ${
+                (typeDef.sub && !Array.isArray(typeDef.sub) && typeDef.sub.type) || ''
+              }`}
+            >
+              <Component
+                nestingNumber={nestingNumber + 1}
+                onChange={onChange(index)}
+                registry={registry}
+                typeDef={typeDef}
+                value={value[index]}
+              />
+            </FormField>
+          );
+        })}
+      </div>
+    )
   );
 }
