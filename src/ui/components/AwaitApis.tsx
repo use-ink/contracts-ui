@@ -3,33 +3,32 @@
 
 import { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
-
+import { web3EnablePromise } from '@polkadot/extension-dapp';
 import { AccountsError, ExtensionError } from './common/AccountsError';
 import { useApi, useDatabase } from 'ui/contexts';
 import { Loader, ConnectionError } from 'ui/components/common';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
-  const { error, keyring, status, keyringStatus, endpoint } = useApi();
+  const { accounts, api, endpoint } = useApi();
   const { db } = useDatabase();
   const [message, setMessage] = useState('');
 
-  const isLoading = !db || keyringStatus !== 'READY' || status !== 'READY';
+  const isLoading = !db || !api;
 
   useEffect(() => {
     !db && setMessage('Loading data...');
-    keyringStatus !== 'READY' && setMessage('Loading accounts...');
-    status !== 'READY' && setMessage(`Connecting to ${endpoint}...`);
-  }, [db, keyringStatus, status, endpoint]);
+    !api && setMessage(`Connecting to ${endpoint}...`);
+  }, [db, endpoint, api]);
 
-  if (keyringStatus === 'READY' && keyring.getAccounts().length === 0) {
+  if (web3EnablePromise && accounts?.length === 0) {
     return <AccountsError />;
   }
 
-  if (keyringStatus === 'ERROR') {
+  if (!web3EnablePromise) {
     return <ExtensionError />;
   }
 
-  if (error) {
+  if (api?.errors) {
     return <ConnectionError />;
   }
 

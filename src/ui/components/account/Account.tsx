@@ -4,7 +4,7 @@
 import { Identicon } from './Identicon';
 import { classes, truncate } from 'ui/util';
 import { OrFalsy } from 'types';
-import { useAccount } from 'ui/hooks/useAccount';
+import { useApi } from 'ui/contexts';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   name?: React.ReactNode;
@@ -13,7 +13,9 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Account({ className, name: propsName, size = 42, value }: Props) {
-  const account = useAccount(value);
+  const { accounts } = useApi();
+
+  const account = accounts?.find(a => a.address === value);
   const name = propsName || account?.meta.name;
 
   if (!value) {

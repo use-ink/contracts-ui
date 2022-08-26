@@ -7,8 +7,8 @@ import {
   AbiMessage,
   DropdownOption,
   ContractDocument,
-  KeyringPair,
   Registry,
+  InjectedAccount,
 } from 'types';
 
 export function createConstructorOptions(
@@ -31,7 +31,7 @@ export function createMessageOptions(
   }));
 }
 
-export function createAccountOptions(data: Partial<KeyringPair>[]): DropdownOption<string>[] {
+export function createAccountOptions(data: InjectedAccount[]): DropdownOption<string>[] {
   return data.map(pair => ({
     label: pair.meta?.name as string,
     value: pair.address || '',

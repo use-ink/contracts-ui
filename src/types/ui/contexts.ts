@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { web3Accounts } from '@polkadot/extension-dapp';
 import type {
   Abi,
   ApiPromise,
@@ -18,16 +19,12 @@ import type {
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
 
-type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
-
 export interface ApiState extends ChainProperties {
   endpoint: string;
+  setEndpoint: (e: string) => void;
   genesisHash?: string;
-  keyring: Keyring;
-  keyringStatus: string | null;
-  api: ApiPromise;
-  error: unknown | null;
-  status: Status;
+  accounts?: InjectedAccount[];
+  api?: ApiPromise;
 }
 
 export type ApiAction =
@@ -72,8 +69,8 @@ export interface InstantiateState {
   dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
-  onFinalize?: (_: Partial<InstantiateData>) => void;
-  onFormChange: (_: Step2FormData, __?: boolean, ___?: boolean) => void;
+  onFinalize?: (_: Partial<InstantiateData>, api: ApiPromise) => void;
+  onFormChange: (_: Step2FormData, api: ApiPromise) => void;
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
@@ -114,3 +111,7 @@ export interface TransactionsState {
   queue: (_: TxOptions) => number;
   dismiss: (id: number) => void;
 }
+
+export type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
+
+export type InjectedAccount = Flatten<Awaited<ReturnType<typeof web3Accounts>>>;

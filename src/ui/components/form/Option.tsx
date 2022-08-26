@@ -24,7 +24,7 @@ export function Option({
   typeDef,
   value = null,
 }: Props) {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
   const [isSupplied, toggleIsSupplied] = useToggle(value !== null);
   const isSuppliedRef = useRef(isSupplied);
 
@@ -42,14 +42,14 @@ export function Option({
   );
 
   useEffect((): void => {
-    if (isSupplied && !isSuppliedRef.current && value === null) {
-      onChange(getInitValue(registry, keyring, typeDef.sub as TypeDef));
+    if (isSupplied && !isSuppliedRef.current && value === null && accounts) {
+      onChange(getInitValue(registry, accounts, typeDef.sub as TypeDef));
       isSuppliedRef.current = true;
     } else if (!isSupplied && isSuppliedRef.current && value !== null) {
       onChange(null);
       isSuppliedRef.current = false;
     }
-  }, [keyring, registry, onChange, value, isSupplied, typeDef.sub]);
+  }, [accounts, registry, onChange, value, isSupplied, typeDef.sub]);
 
   return (
     <div className="flex items-start" data-cy="option-field">

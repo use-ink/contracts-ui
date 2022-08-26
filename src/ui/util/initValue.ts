@@ -7,41 +7,45 @@ import type { Registry, TypeDef } from '@polkadot/types/types';
 import { getTypeDef } from '@polkadot/types';
 import { TypeDefInfo } from '@polkadot/types/types';
 import { BN_ZERO, isBn } from '@polkadot/util';
-import { Keyring } from 'types';
+import { InjectedAccount } from 'types';
 
 const warnList: string[] = [];
 
-export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef): unknown {
+export function getInitValue(
+  registry: Registry,
+  accounts: InjectedAccount[],
+  def: TypeDef
+): unknown {
   if (def.info === TypeDefInfo.Si) {
     const lookupTypeDef = registry.lookup.getTypeDef(def.lookupIndex as number);
 
-    return getInitValue(registry, keyring, lookupTypeDef);
+    return getInitValue(registry, accounts, lookupTypeDef);
   } else if (def.info === TypeDefInfo.Option) {
     return null;
   } else if (def.info === TypeDefInfo.Vec) {
-    return [getInitValue(registry, keyring, def.sub as TypeDef)];
+    return [getInitValue(registry, accounts, def.sub as TypeDef)];
   } else if (def.info === TypeDefInfo.VecFixed) {
     const value = [];
     const length = def.length as number;
 
     for (let i = 0; i < length; i++) {
-      value.push(getInitValue(registry, keyring, def.sub as TypeDef));
+      value.push(getInitValue(registry, accounts, def.sub as TypeDef));
     }
 
     return value;
   } else if (def.info === TypeDefInfo.Tuple) {
-    return Array.isArray(def.sub) ? def.sub.map(def => getInitValue(registry, keyring, def)) : [];
+    return Array.isArray(def.sub) ? def.sub.map(def => getInitValue(registry, accounts, def)) : [];
   } else if (def.info === TypeDefInfo.Struct) {
     return Array.isArray(def.sub)
       ? def.sub.reduce((result: Record<string, unknown>, def): Record<string, unknown> => {
-          result[def.name as string] = getInitValue(registry, keyring, def);
+          result[def.name as string] = getInitValue(registry, accounts, def);
 
           return result;
         }, {})
       : {};
   } else if (def.info === TypeDefInfo.Enum) {
     return Array.isArray(def.sub)
-      ? { [def.sub[0].name as string]: getInitValue(registry, keyring, def.sub[0]) }
+      ? { [def.sub[0].name as string]: getInitValue(registry, accounts, def.sub[0]) }
       : {};
   }
 
@@ -112,8 +116,6 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
 
     case 'AccountId':
       try {
-        const accounts = keyring.getAccounts();
-
         return accounts[0].address;
       } catch (e) {
         return '';
@@ -153,7 +155,7 @@ export function getInitValue(registry: Registry, keyring: Keyring, def: TypeDef)
         } else if ([TypeDefInfo.Struct].includes(raw.info)) {
           return undefined;
         } else if ([TypeDefInfo.Enum, TypeDefInfo.Tuple].includes(raw.info)) {
-          return getInitValue(registry, keyring, raw);
+          return getInitValue(registry, accounts, raw);
         }
       } catch (e) {
         error = (e as Error).message;

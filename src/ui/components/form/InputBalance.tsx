@@ -39,15 +39,15 @@ function InputBalanceBase({
 }: Props) {
   const { api, tokenSymbol } = useApi();
 
-  const [stringValue, setStringValue] = useState(getStringValue(api, value));
+  const [stringValue, setStringValue] = useState(api ? getStringValue(api, value) : '');
 
   const onChange = useCallback(
     (value: string): void => {
       setStringValue(value);
 
-      const bn = toBalance(api, value);
+      const bn = api ? toBalance(api, value) : undefined;
 
-      _onChange(bn);
+      bn !== undefined && _onChange(bn);
     },
     [_onChange, api]
   );

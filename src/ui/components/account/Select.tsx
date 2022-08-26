@@ -40,19 +40,15 @@ function Select({
 }
 
 export function AccountSelect({ placeholder = 'Select account', ...props }: Props) {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
 
   return (
-    <Select
-      options={createAccountOptions(keyring?.getPairs())}
-      placeholder={placeholder}
-      {...props}
-    />
+    <Select options={createAccountOptions(accounts || [])} placeholder={placeholder} {...props} />
   );
 }
 
 export function AddressSelect({ placeholder = 'Select account', ...props }: Props) {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
   const { db } = useDatabase();
   const [contracts] = useDbQuery(() => db.contracts.toArray(), [db]);
 
@@ -60,7 +56,7 @@ export function AddressSelect({ placeholder = 'Select account', ...props }: Prop
     return [
       {
         label: 'My Accounts',
-        options: createAccountOptions(keyring?.getPairs()),
+        options: createAccountOptions(accounts || []),
       },
       ...(contracts && contracts.length > 0
         ? [
@@ -74,7 +70,7 @@ export function AddressSelect({ placeholder = 'Select account', ...props }: Prop
           ]
         : []),
     ];
-  }, [keyring, contracts]);
+  }, [accounts, contracts]);
 
   return <Select options={options} placeholder={placeholder} {...props} />;
 }

@@ -19,6 +19,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
   const [isOnChain, setIsOnChain] = useState(true);
 
   useEffect(() => {
+    if (!api) return;
     getContractInfo(api, address)
       .then(info => {
         setIsOnChain(info ? true : false);

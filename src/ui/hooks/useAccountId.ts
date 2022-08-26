@@ -10,31 +10,24 @@ export function useAccountId(
   initialValue: string | undefined = undefined,
   isOwned = false
 ): ValidFormField<string> {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
 
   const validate = useCallback(
     (value: OrFalsy<string>): Validation => {
-      if (!value?.trim() || (isOwned && !keyring?.getAccount(value))) {
+      if (!value?.trim() || (isOwned && accounts?.find(a => a.address === value))) {
         return { isValid: false, message: 'Specified account does not exist' };
       }
 
       return { isValid: true, message: null };
     },
-    [keyring, isOwned]
+    [accounts, isOwned]
   );
 
-  let initial;
-  if (!initialValue) {
-    try {
-      const accounts = keyring?.getAccounts();
-
-      initial = accounts[0].address;
-    } catch (e) {
-      initial = '';
-    }
-  } else {
-    initial = initialValue;
-  }
+  const initial = initialValue
+    ? initialValue
+    : accounts && accounts.length > 0
+    ? accounts[0].address
+    : '';
 
   return useFormField<string>(initial, validate);
 }

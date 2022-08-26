@@ -76,7 +76,7 @@ export function useBalance(
   );
 
   const balance = useFormField<BN>(
-    isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue),
+    api ? (isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue)) : BN_ZERO,
     validate
   );
 

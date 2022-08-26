@@ -3,6 +3,7 @@
 
 import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
+import { Keyring } from '@polkadot/keyring';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
@@ -12,11 +13,11 @@ import { isEmptyObj } from 'ui/util';
 let nextId = 1;
 
 export const TransactionsContext = createContext({} as unknown as TransactionsState);
-
+const keyring = new Keyring();
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { api, keyring, systemChainType } = useApi();
+  const { api, systemChainType } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
@@ -71,8 +72,10 @@ export function TransactionsContextProvider({
                 let message = 'Transaction failed';
 
                 if (result.dispatchError?.isModule) {
-                  const decoded = api.registry.findMetaError(result.dispatchError.asModule);
-                  message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
+                  const decoded = api?.registry.findMetaError(result.dispatchError.asModule);
+                  message = `${decoded?.section.toUpperCase()}.${decoded?.method}: ${
+                    decoded?.docs
+                  }`;
                 }
 
                 onError && onError(result);

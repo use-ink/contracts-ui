@@ -28,7 +28,7 @@ interface Props {
 }
 
 export const InteractTab = ({ contract }: Props) => {
-  const { api, keyring, systemChainType } = useApi();
+  const { api, accounts, systemChainType } = useApi();
   const {
     value: message,
     onChange: setMessage,
@@ -55,23 +55,19 @@ export const InteractTab = ({ contract }: Props) => {
   useEffect((): void => {
     if (!accountId || !message.args || !argValues) return;
 
-    const sender = keyring?.getPair(accountId);
-
     if (message.isMutating !== true) {
       setEstimatedWeight(null);
-
       return;
     }
 
-    sender &&
-      message.isMutating &&
+    message.isMutating &&
       contract.abi.messages[message.index].method === message.method &&
       dryRun({
         contract,
         message,
         argValues,
         payment: value,
-        sender,
+        address: accountId,
       })
         .then(({ gasRequired }) => {
           setEstimatedWeight(gasRequired);
@@ -80,7 +76,7 @@ export const InteractTab = ({ contract }: Props) => {
           console.error(e);
           setEstimatedWeight(null);
         });
-  }, [api, accountId, argValues, keyring, message, value, contract]);
+  }, [api, accountId, argValues, message, value, contract, accounts]);
 
   const weight = useWeight(estimatedWeight);
   const storageDepositLimit = useStorageDepositLimit(accountId);
@@ -139,7 +135,7 @@ export const InteractTab = ({ contract }: Props) => {
   const read = async () => {
     const { result, output } = await sendContractQuery(
       contract.query[message.method],
-      keyring.getPair(accountId),
+      accountId,
       options,
       transformed
     );

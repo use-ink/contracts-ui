@@ -17,7 +17,7 @@ interface Props extends ArgComponentProps<Record<string, unknown>> {
 export function Enum(props: Props) {
   const { components, typeDef, nestingNumber, onChange: _onChange, registry, value = {} } = props;
   const variants = typeDef.sub as TypeDef[];
-  const { keyring } = useApi();
+  const { accounts } = useApi();
   const [variantIndex, _setVariantIndex] = useState<number>(
     Math.max(
       0,
@@ -40,11 +40,11 @@ export function Enum(props: Props) {
         _setVariantIndex(value);
 
         _onChange({
-          [variants[value].name as string]: getInitValue(registry, keyring, variants[value]),
+          [variants[value].name as string]: getInitValue(registry, accounts || [], variants[value]),
         });
       }
     },
-    [registry, keyring, _onChange, variants]
+    [registry, accounts, _onChange, variants]
   );
 
   return (

@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { formatNumber } from '@polkadot/util';
 import { useApi } from 'ui/contexts';
-import { ChainProperties } from 'types';
+import { ApiPromise, ChainProperties } from 'types';
 
 function getChainType(systemChainType: ChainProperties['systemChainType']): string {
   if (systemChainType.isDevelopment) return 'Development';
@@ -20,15 +20,14 @@ export function Statistics(): React.ReactElement | null {
   const [blockNumber, setBlockNumber] = useState(0);
 
   useEffect(() => {
-    async function listenToBlocks() {
-      return api?.rpc.chain.subscribeNewHeads(header => {
+    if (!api) return;
+    async function listenToBlocks(api: ApiPromise) {
+      return api.rpc.chain.subscribeNewHeads(header => {
         setBlockNumber(header.number.toNumber());
       });
     }
-
     let cleanUp: VoidFunction;
-
-    listenToBlocks()
+    listenToBlocks(api)
       .then(unsub => (cleanUp = unsub))
       .catch(console.error);
 

@@ -55,6 +55,7 @@ export function Contract() {
 
   useEffect(() => {
     document &&
+      api &&
       checkOnChainCode(api, document.codeHash || '')
         .then(isOnChain => setIsOnChain(isOnChain))
         .catch(console.error);

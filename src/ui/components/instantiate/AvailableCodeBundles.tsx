@@ -58,6 +58,7 @@ export function AvailableCodeBundles() {
 
   useEffect(() => {
     data &&
+      api &&
       filterOnChainCode(api, data)
         .then(codes => setCodes(codes))
         .catch(console.error);

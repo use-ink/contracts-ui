@@ -7,7 +7,7 @@ import { ChainProperties, ApiPromise } from 'types';
 
 const registry = new TypeRegistry();
 
-export async function getChainProperties(api: ApiPromise): Promise<ChainProperties | null> {
+export async function getChainProperties(api: ApiPromise): Promise<ChainProperties> {
   const [chainProperties, systemName, systemVersion, systemChain, systemChainType] =
     await Promise.all([
       api.rpc.system.properties(),

@@ -14,7 +14,7 @@ import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'ui/util/dropdown';
-import { useInstantiate } from 'ui/contexts';
+import { useApi, useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
@@ -34,7 +34,7 @@ export function Step2() {
     onFinalize,
     onFormChange,
   } = useInstantiate();
-
+  const { api } = useApi();
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
   const dbValue = useDebounce(value);
 
@@ -72,15 +72,19 @@ export function Step2() {
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const onSubmit = () => {
-    onFinalize &&
-      onFinalize({
-        constructorIndex,
-        salt: isUsingSalt ? salt.value : undefined,
-        value,
-        argValues,
-        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-        weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
-      });
+    api &&
+      onFinalize &&
+      onFinalize(
+        {
+          constructorIndex,
+          salt: isUsingSalt ? salt.value : undefined,
+          value,
+          argValues,
+          storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+          weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
+        },
+        api
+      );
   };
 
   useEffect((): void => {
@@ -100,14 +104,18 @@ export function Step2() {
 
   useEffect((): void => {
     onFormChange &&
-      onFormChange({
-        constructorIndex,
-        salt: isUsingSalt ? dbSalt : null,
-        value: dbValue && deployConstructor?.isPayable ? dbValue : null,
-        argValues: dbArgValues,
-        storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
-        weight: weight.isActive ? dbWeight : weight.defaultWeight,
-      });
+      api &&
+      onFormChange(
+        {
+          constructorIndex,
+          salt: isUsingSalt ? dbSalt : null,
+          value: dbValue && deployConstructor?.isPayable ? dbValue : null,
+          argValues: dbArgValues,
+          storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
+          weight: weight.isActive ? dbWeight : weight.defaultWeight,
+        },
+        api
+      );
   }, [
     onFormChange,
     constructorIndex,
@@ -121,6 +129,7 @@ export function Step2() {
     isUsingStorageDepositLimit,
     weight.defaultWeight,
     weight.isActive,
+    api,
   ]);
 
   useEffect(
