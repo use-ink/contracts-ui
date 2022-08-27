@@ -41,10 +41,11 @@ export function TransactionsContextProvider({
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
       const injector = systemChainType.isDevelopment ? undefined : await web3FromAddress(accountId);
+      const account = systemChainType.isDevelopment ? keyring.getPair(accountId) : accountId;
 
       try {
         const unsub = await extrinsic.signAndSend(
-          keyring.getPair(accountId),
+          account,
           { signer: injector?.signer || undefined },
           async result => {
             if (isResultReady(result, systemChainType)) {
