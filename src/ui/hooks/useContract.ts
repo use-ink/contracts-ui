@@ -16,7 +16,7 @@ export function useContract(address: string): ReturnType {
   const [document, isLoading] = useDbQuery(() => db.contracts.get({ address }), [address]);
 
   return [
-    api && document ? new Contract(api, new Abi(document.abi), address) : null,
+    document ? new Contract(api, new Abi(document.abi), address) : null,
     document || null,
     isLoading,
   ];

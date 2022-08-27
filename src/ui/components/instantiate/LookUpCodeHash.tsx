@@ -21,7 +21,6 @@ export function LookUpCodeHash() {
   const [codeHash, setCodeHash] = useState('');
 
   const [searchResults] = useDbQuery(async () => {
-    if (!api) return;
     const matches = await db.codeBundles
       .filter(({ name, codeHash }) => {
         const regex = new RegExp(searchString);
@@ -36,7 +35,6 @@ export function LookUpCodeHash() {
   const [codeBundle] = useDbQuery(() => db.codeBundles.get({ codeHash }), [codeHash, db]);
 
   useEffect((): void => {
-    if (!api) return;
     if (codeHash !== searchString) {
       if (searchString === '' || isValidCodeHash(searchString)) {
         checkOnChainCode(api, searchString)

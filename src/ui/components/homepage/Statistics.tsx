@@ -20,18 +20,17 @@ export function Statistics(): React.ReactElement | null {
   const [blockNumber, setBlockNumber] = useState(0);
 
   useEffect(() => {
-    if (!api) return;
     async function listenToBlocks(api: ApiPromise) {
       return api.rpc.chain.subscribeNewHeads(header => {
         setBlockNumber(header.number.toNumber());
       });
     }
-    let cleanUp: VoidFunction;
+    let cleanUp: VoidFunction | undefined;
     listenToBlocks(api)
       .then(unsub => (cleanUp = unsub))
       .catch(console.error);
 
-    return () => cleanUp();
+    return () => cleanUp && cleanUp();
   }, [api]);
 
   const entries = useMemo((): Record<string, React.ReactNode> => {

@@ -21,10 +21,7 @@ export const QueryResult = ({ result: { time, data, message, error }, date, regi
   const { api } = useApi();
 
   const value =
-    api &&
-    message.returnType &&
-    encodeTypeDef(registry, message.returnType) === 'u128' &&
-    isBn(data)
+    message.returnType && encodeTypeDef(registry, message.returnType) === 'u128' && isBn(data)
       ? fromSats(api, data).toString()
       : data?.toString();
 

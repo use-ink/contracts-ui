@@ -13,8 +13,8 @@ function getEstimatedMegaGas(api: ApiPromise, estimatedWeight: OrFalsy<BN>, with
   return (estimatedWeight || maximumBlockWeight(api)).div(BN_MILLION).addn(withBuffer ? 1 : 0);
 }
 
-function getDefaultMegaGas(api: OrFalsy<ApiPromise>, estimatedWeight?: OrFalsy<BN>): BN {
-  if (api && estimatedWeight) {
+function getDefaultMegaGas(api: ApiPromise, estimatedWeight?: OrFalsy<BN>): BN {
+  if (estimatedWeight) {
     return getEstimatedMegaGas(api, estimatedWeight);
   }
 

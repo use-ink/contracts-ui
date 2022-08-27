@@ -20,7 +20,6 @@ export function useStorageDepositLimit(accountId: OrFalsy<string>): UseStorageDe
 
   useEffect((): void => {
     accountId &&
-      api &&
       api.derive.balances
         .account(accountId)
         .then(({ freeBalance }) => setMaximum(freeBalance))

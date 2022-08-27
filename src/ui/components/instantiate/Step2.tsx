@@ -69,8 +69,7 @@ export function Step2() {
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const onSubmit = () => {
-    api &&
-      onFinalize &&
+    onFinalize &&
       onFinalize(
         {
           constructorIndex,
@@ -101,7 +100,6 @@ export function Step2() {
 
   useEffect((): void => {
     onFormChange &&
-      api &&
       onFormChange(
         {
           constructorIndex,

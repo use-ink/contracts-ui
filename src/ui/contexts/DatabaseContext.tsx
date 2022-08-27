@@ -19,10 +19,9 @@ export function DatabaseContextProvider({
   const [state, setState] = useState<DbState>(INITIAL);
 
   useEffect((): void => {
-    genesisHash &&
-      setState({
-        db: new Database(genesisHash),
-      });
+    setState({
+      db: new Database(genesisHash),
+    });
   }, [genesisHash]);
 
   return <DbContext.Provider value={state}>{children}</DbContext.Provider>;

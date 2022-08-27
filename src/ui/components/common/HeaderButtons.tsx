@@ -28,7 +28,6 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
   };
 
   useEffect(() => {
-    if (!api) return;
     getContractInfo(api, address)
       .then(info => {
         setIsOnChain(info ? true : false);

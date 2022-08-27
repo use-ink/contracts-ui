@@ -27,7 +27,6 @@ export function CodeHash({ className, codeHash, error, name, isError, isSuccess,
   const [isOnChain, setIsOnChain] = useState(true);
 
   useEffect(() => {
-    if (!api) return;
     checkOnChainCode(api, codeHash)
       .then(codeStorageExists => {
         setIsOnChain(codeStorageExists ? true : false);

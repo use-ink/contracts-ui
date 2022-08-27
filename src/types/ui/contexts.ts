@@ -25,9 +25,9 @@ export interface ApiState extends ChainProperties {
   endpoint: string;
   setEndpoint: (e: string) => void;
   status: Status;
-  genesisHash?: string;
+  api: ApiPromise;
+
   accounts?: Account[];
-  api?: ApiPromise;
 }
 
 export interface ChainProperties {
@@ -37,6 +37,7 @@ export interface ChainProperties {
   systemChainType: ChainType;
   systemChain: string;
   tokenSymbol: string;
+  genesisHash: string;
 }
 
 export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;

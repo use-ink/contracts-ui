@@ -21,8 +21,8 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
     'contractsUiPreferredEndpoint',
     RPC.CONTRACTS
   );
-  const [api, setApi] = useState<ApiPromise>();
-  const [endpoint, setEndpoint] = useState<string>(preferredEndpoint);
+  const [api, setApi] = useState({} as ApiPromise);
+  const [endpoint, setEndpoint] = useState(preferredEndpoint);
   const [accounts, setAccounts] = useState<Account[]>();
   const [chainProps, setChainProps] = useState<ChainProperties>();
   const [status, setStatus] = useState<Status>('loading');

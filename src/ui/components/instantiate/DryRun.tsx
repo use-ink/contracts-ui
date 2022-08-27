@@ -11,7 +11,7 @@ export function DryRun() {
   const { dryRunResult } = useInstantiate();
   const { api } = useApi();
   const dryRunError =
-    api && dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
+    dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
       ? api.registry.findMetaError(dryRunResult?.result.asErr.asModule)
       : null;
 

@@ -26,7 +26,7 @@ export function useArgValues(args: AbiParam[] | null): [ArgValues, SetState<ArgV
   const argsRef = useRef(args);
 
   useEffect((): void => {
-    if (api && accounts && argsRef.current !== args) {
+    if (accounts && argsRef.current !== args) {
       setValue(fromArgs(api.registry, accounts, args));
       argsRef.current = args;
     }
