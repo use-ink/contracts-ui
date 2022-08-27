@@ -6,9 +6,8 @@ import { Switch } from '../common/Switch';
 import { Input } from './Input';
 import { ArgComponentProps, OrFalsy, Registry, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
-import { getInitValue } from 'api';
+import { getInitValue, NOOP } from 'api';
 import { useToggle } from 'ui/hooks/useToggle';
-import { NOOP } from 'api';
 
 interface Props extends ArgComponentProps<unknown> {
   component: React.ComponentType<ArgComponentProps<unknown>>;

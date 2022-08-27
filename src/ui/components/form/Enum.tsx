@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback, useState } from 'react';
-import { isNumber, getInitValue } from 'api';
 import { Dropdown } from '../common/Dropdown';
 import { ArgSignature } from '../message/ArgSignature';
 import { FormField, getValidation } from './FormField';
+import { isNumber, getInitValue } from 'api';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
 

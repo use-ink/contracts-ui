@@ -3,8 +3,8 @@
 
 import React, { useCallback, useState } from 'react';
 import BN from 'bn.js';
-import { BN_ZERO, classes } from 'api';
 import { Input } from './Input';
+import { BN_ZERO, classes } from 'api';
 import { fromBalance, fromSats, toBalance } from 'api/util';
 import { ApiPromise, OrFalsy, SimpleSpread } from 'types';
 import { useApi } from 'ui/contexts';

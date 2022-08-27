@@ -3,13 +3,13 @@
 
 import BN from 'bn.js';
 import { useEffect, useState } from 'react';
-import { isNumber } from 'api';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
 import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
+import { isNumber, genRanHex } from 'api';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'ui/util/dropdown';
@@ -23,7 +23,6 @@ import { useToggle } from 'ui/hooks/useToggle';
 import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { useDebounce } from 'ui/hooks';
-import { genRanHex } from 'api';
 
 export function Step2() {
   const {

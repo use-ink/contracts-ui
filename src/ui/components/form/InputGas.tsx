@@ -1,9 +1,9 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { BN_MILLION, BN_ONE, BN_ZERO, classes } from 'api';
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
+import { BN_MILLION, BN_ONE, BN_ZERO, classes } from 'api';
 import type { UseWeight } from 'types';
 
 interface Props extends UseWeight, React.HTMLAttributes<HTMLDivElement> {
