@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
@@ -9,8 +9,8 @@ import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
 import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
-import { useDatabase, useInstantiate } from 'ui/contexts';
-import { useAccountId, useDbQuery } from 'ui/hooks';
+import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
+import { useDbQuery } from 'ui/hooks';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -19,10 +19,10 @@ export function Step1() {
     () => (codeHashUrlParam ? db.codeBundles.get({ codeHash: codeHashUrlParam }) : undefined),
     [codeHashUrlParam, db]
   );
-
+  const { accounts } = useApi();
   const { stepForward, setData, data, currentStep } = useInstantiate();
 
-  const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
+  const [accountId, setAccountId] = useState('');
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
 
   const {
@@ -40,6 +40,11 @@ export function Step1() {
       setName(metadataValidation.name);
     }
   }, [metadataValidation.name, setName]);
+
+  useEffect((): void => {
+    if (!accounts || accounts.length === 0) return;
+    setAccountId(accounts[0].address);
+  }, [accounts]);
 
   function submitStep1() {
     setData &&
@@ -63,7 +68,6 @@ export function Step1() {
           help="The account to use for this instantiation. The fees and storage deposit will be deducted from this account."
           id="accountId"
           label="Account"
-          {...accountIdValidation}
         >
           <AccountSelect
             id="accountId"

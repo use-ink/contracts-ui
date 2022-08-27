@@ -4,7 +4,6 @@
 import BN from 'bn.js';
 import { useEffect, useState } from 'react';
 import { isHex, isNumber } from '@polkadot/util';
-import { randomAsHex } from '@polkadot/util-crypto';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
@@ -21,9 +20,10 @@ import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 
-import { AbiMessage, OrFalsy, Registry } from 'types';
+import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { useDebounce } from 'ui/hooks';
+import { genRanHex } from 'api';
 
 export function Step2() {
   const {
@@ -45,7 +45,7 @@ export function Step2() {
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const dbStorageDepositLimit = useDebounce(storageDepositLimit.value);
 
-  const salt = useFormField<string>(randomAsHex(), value => {
+  const salt = useFormField<string>(genRanHex(64), value => {
     if (!!value && isHex(value) && value.length === 66) {
       return { isValid: true };
     }
@@ -57,10 +57,7 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
 
-  const [argValues, setArgValues] = useArgValues(
-    metadata?.registry as Registry,
-    deployConstructor?.args || null
-  );
+  const [argValues, setArgValues] = useArgValues(deployConstructor?.args || null);
   const dbArgValues = useDebounce(argValues);
 
   useEffect(() => {
@@ -231,7 +228,6 @@ export function Step2() {
             !weight.isValid ||
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
-            !argValues ||
             (dryRunResult && dryRunResult.result.isErr)
           }
           onClick={onSubmit}

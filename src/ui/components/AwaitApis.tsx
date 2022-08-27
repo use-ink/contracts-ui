@@ -7,11 +7,13 @@ import { isWeb3Injected } from '@polkadot/extension-dapp';
 import { AccountsError, ExtensionError } from './common/AccountsError';
 import { useApi, useDatabase } from 'ui/contexts';
 import { Loader, ConnectionError } from 'ui/components/common';
+import { isKeyringLoaded } from 'api';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { accounts, api, endpoint, status, systemChainType } = useApi();
   const { db } = useDatabase();
   const [message, setMessage] = useState('');
+  console.log(accounts);
 
   useEffect(() => {
     !db && setMessage('Loading data...');
@@ -22,7 +24,12 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
     return <AccountsError />;
   }
 
-  if (!isWeb3Injected && !systemChainType.isDevelopment) {
+  if (
+    !isWeb3Injected &&
+    status === 'connected' &&
+    !systemChainType.isDevelopment &&
+    isKeyringLoaded()
+  ) {
     return <ExtensionError />;
   }
 

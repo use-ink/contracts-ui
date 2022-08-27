@@ -8,7 +8,7 @@ import {
   DropdownOption,
   ContractDocument,
   Registry,
-  InjectedAccount,
+  Account,
 } from 'types';
 
 export function createConstructorOptions(
@@ -31,7 +31,7 @@ export function createMessageOptions(
   }));
 }
 
-export function createAccountOptions(data: InjectedAccount[]): DropdownOption<string>[] {
+export function createAccountOptions(data: Account[]): DropdownOption<string>[] {
   return data.map(pair => ({
     label: pair.meta?.name as string,
     value: pair.address || '',

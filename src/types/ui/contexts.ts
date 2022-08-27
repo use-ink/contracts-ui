@@ -1,7 +1,8 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { web3Accounts } from '@polkadot/extension-dapp';
+import { keyring } from '@polkadot/ui-keyring';
+
 import type {
   Abi,
   ApiPromise,
@@ -25,7 +26,7 @@ export interface ApiState extends ChainProperties {
   setEndpoint: (e: string) => void;
   status: Status;
   genesisHash?: string;
-  accounts?: InjectedAccount[];
+  accounts?: Account[];
   api?: ApiPromise;
 }
 
@@ -106,4 +107,4 @@ export interface TransactionsState {
 
 export type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
 
-export type InjectedAccount = Flatten<Awaited<ReturnType<typeof web3Accounts>>>;
+export type Account = Flatten<Awaited<ReturnType<typeof keyring.getAccounts>>>;

@@ -3,7 +3,7 @@
 
 import BN from 'bn.js';
 import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
-import { randomAsU8a } from '@polkadot/util-crypto';
+import { keyring } from '@polkadot/ui-keyring';
 import { MAX_CALL_WEIGHT } from '../../constants';
 import {
   Bytes,
@@ -25,6 +25,10 @@ export function maximumBlockWeight(api: OrFalsy<ApiPromise>): Weight {
   return api?.consts.system.blockWeights
     ? api.consts.system.blockWeights.maxBlock
     : (api?.consts.system.maximumBlockWeight as Weight) || MAX_CALL_WEIGHT;
+}
+
+export function randomAsU8a(length = 32) {
+  return crypto.getRandomValues(new Uint8Array(length));
 }
 
 export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Uint8Array {
@@ -145,4 +149,15 @@ export async function filterOnChainCode(api: ApiPromise, items: CodeBundleDocume
     isOnChain && codes.push(item);
   }
   return codes;
+}
+
+export const genRanHex: (size?: number) => `0x${string}` = (size = 32) =>
+  `0x${[...Array<string>(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+
+export function isKeyringLoaded() {
+  try {
+    return !!keyring.keyring;
+  } catch {
+    return false;
+  }
 }

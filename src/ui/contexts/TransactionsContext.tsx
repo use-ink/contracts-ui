@@ -3,7 +3,7 @@
 
 import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
-import { Keyring } from '@polkadot/keyring';
+import { keyring } from '@polkadot/ui-keyring';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
@@ -13,7 +13,7 @@ import { isEmptyObj } from 'ui/util';
 let nextId = 1;
 
 export const TransactionsContext = createContext({} as unknown as TransactionsState);
-const keyring = new Keyring();
+
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
@@ -40,17 +40,11 @@ export function TransactionsContextProvider({
 
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
-      let injector, accountOrPair;
-      try {
-        injector = await web3FromAddress(accountId);
-        accountOrPair = accountId;
-      } catch (e) {
-        accountOrPair = keyring.getPair(accountId);
-      }
+      const injector = systemChainType.isDevelopment ? undefined : await web3FromAddress(accountId);
 
       try {
         const unsub = await extrinsic.signAndSend(
-          accountOrPair,
+          keyring.getPair(accountId),
           { signer: injector?.signer || undefined },
           async result => {
             if (isResultReady(result, systemChainType)) {

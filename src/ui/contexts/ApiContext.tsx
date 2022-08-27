@@ -5,9 +5,10 @@ import { createContext, useEffect, useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
+import { keyring } from '@polkadot/ui-keyring';
 import { RPC } from '../../constants';
-import { ApiPromise, ApiState, ChainProperties, InjectedAccount, Status } from 'types';
-import { isValidWsUrl } from 'api';
+import { ApiPromise, ApiState, ChainProperties, Account, Status } from 'types';
+import { isValidWsUrl, isKeyringLoaded } from 'api';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 import { getChainProperties } from 'api/chainProps';
 
@@ -22,8 +23,8 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   );
   const [api, setApi] = useState<ApiPromise>();
   const [endpoint, setEndpoint] = useState<string>(preferredEndpoint);
-  const [accounts, setAccounts] = useState<InjectedAccount[]>();
-  const [chainProps, setChainProps] = useState<ChainProperties>({} as ChainProperties);
+  const [accounts, setAccounts] = useState<Account[]>();
+  const [chainProps, setChainProps] = useState<ChainProperties>();
   const [status, setStatus] = useState<Status>('loading');
 
   useEffect(() => {
@@ -52,12 +53,19 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
 
   useEffect(() => {
     const getAccounts = async () => {
-      !web3EnablePromise && (await web3Enable('contracts-ui'));
-      const _acc = await web3Accounts();
-      setAccounts(_acc);
+      if (status === 'connected' && chainProps) {
+        !web3EnablePromise && (await web3Enable('contracts-ui'));
+        const injectedAccounts = await web3Accounts();
+        isKeyringLoaded() ||
+          keyring.loadAll(
+            { isDevelopment: chainProps.systemChainType.isDevelopment },
+            injectedAccounts
+          );
+        setAccounts(keyring.getAccounts());
+      }
     };
     getAccounts().catch(e => console.error(e));
-  }, []);
+  }, [chainProps, status]);
 
   return (
     <ApiContext.Provider
@@ -67,7 +75,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
         setEndpoint,
         endpoint,
         status,
-        ...chainProps,
+        ...(chainProps as ChainProperties),
       }}
     >
       {children}

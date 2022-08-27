@@ -6,14 +6,14 @@ import { GroupBase } from 'react-select';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
 import { createAccountOptions } from 'ui/util/dropdown';
-import type { DropdownOption, DropdownProps, OrFalsy, ValidFormField } from 'types';
+import type { DropdownOption, DropdownProps, ValidFormField } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { classes } from 'ui/util';
 import { useDbQuery } from 'ui/hooks';
 
-type Props = ValidFormField<OrFalsy<string>> & Omit<DropdownProps<string>, 'options'>;
+type Props = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;
 
-function Option({ label, value }: DropdownOption<string>) {
+export function Option({ label, value }: DropdownOption<string>) {
   return <Account className="p-1.5" name={label} value={value} />;
 }
 

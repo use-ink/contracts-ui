@@ -18,7 +18,7 @@ import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from
 import { getBlockHash } from 'api/util';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
-import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
+import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
@@ -34,14 +34,19 @@ export const InteractTab = ({ contract }: Props) => {
     onChange: setMessage,
     ...messageValidation
   } = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
+  const [argValues, setArgValues] = useArgValues(message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
-  const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
+  const [accountId, setAccountId] = useState('');
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
+
+  useEffect((): void => {
+    if (!accounts || accounts.length === 0) return;
+    setAccountId(accounts[0].address);
+  }, [accounts]);
 
   useEffect(() => {
     setCallResults([]);
@@ -198,7 +203,6 @@ export const InteractTab = ({ contract }: Props) => {
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
             label="Account"
-            {...accountIdValidation}
           >
             <AccountSelect
               id="accountId"

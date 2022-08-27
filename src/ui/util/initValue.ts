@@ -7,15 +7,11 @@ import type { Registry, TypeDef } from '@polkadot/types/types';
 import { getTypeDef } from '@polkadot/types';
 import { TypeDefInfo } from '@polkadot/types/types';
 import { BN_ZERO, isBn } from '@polkadot/util';
-import { InjectedAccount } from 'types';
+import { Account } from 'types';
 
 const warnList: string[] = [];
 
-export function getInitValue(
-  registry: Registry,
-  accounts: InjectedAccount[],
-  def: TypeDef
-): unknown {
+export function getInitValue(registry: Registry, accounts: Account[], def: TypeDef): unknown {
   if (def.info === TypeDefInfo.Si) {
     const lookupTypeDef = registry.lookup.getTypeDef(def.lookupIndex as number);
 
