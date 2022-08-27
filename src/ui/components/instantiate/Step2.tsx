@@ -3,7 +3,7 @@
 
 import BN from 'bn.js';
 import { useEffect, useState } from 'react';
-import { isHex, isNumber } from '@polkadot/util';
+import { isNumber } from 'api';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
@@ -46,7 +46,7 @@ export function Step2() {
   const dbStorageDepositLimit = useDebounce(storageDepositLimit.value);
 
   const salt = useFormField<string>(genRanHex(64), value => {
-    if (!!value && isHex(value) && value.length === 66) {
+    if (!!value && value.length === 66) {
       return { isValid: true };
     }
 

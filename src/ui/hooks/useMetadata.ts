@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { isWasm, u8aToString } from '@polkadot/util';
 import { useEffect, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
 import { Abi, ApiPromise, FileState, MetadataState, UseMetadata, Validation, VoidFn } from 'types';
@@ -78,7 +77,7 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
 
   const wasm = metadata.info.source.wasm;
   const isWasmEmpty = wasm.isEmpty;
-  const isWasmInvalid = !isWasm(wasm.toU8a());
+  const isWasmInvalid = !WebAssembly.validate(wasm);
 
   if (isWasmRequired && (isWasmEmpty || isWasmInvalid)) {
     return {
@@ -96,6 +95,8 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
   };
 }
 
+const utf8decoder = new TextDecoder();
+
 export function useMetadata(
   initialValue?: Record<string, unknown>,
   options: Options & Callbacks = {}
@@ -109,7 +110,7 @@ export function useMetadata(
 
   function onChange(file: FileState): void {
     try {
-      const json = JSON.parse(u8aToString(file.data)) as Record<string, unknown>;
+      const json = JSON.parse(utf8decoder.decode(file.data)) as Record<string, unknown>;
       const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
 
       const newState = deriveFromJson({ isWasmRequired, name }, json, api);

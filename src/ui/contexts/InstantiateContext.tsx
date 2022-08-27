@@ -3,8 +3,16 @@
 
 import { createContext, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { BN_THOUSAND } from '@polkadot/util';
 import { ContractInstantiateResult } from '@polkadot/types/interfaces';
+import {
+  BN_THOUSAND,
+  onInsantiateFromHash,
+  onInstantiateFromCode,
+  createInstantiateTx,
+  NOOP,
+  transformUserInput,
+  maximumBlockWeight,
+} from 'api';
 import {
   InstantiateProps,
   InstantiateState,
@@ -21,14 +29,6 @@ import {
 } from 'types';
 import { useStepper } from 'ui/hooks/useStepper';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
-import {
-  onInsantiateFromHash,
-  onInstantiateFromCode,
-  createInstantiateTx,
-  NOOP,
-  transformUserInput,
-  maximumBlockWeight,
-} from 'api';
 
 type TxState = [
   SubmittableExtrinsic<'promise'> | null,

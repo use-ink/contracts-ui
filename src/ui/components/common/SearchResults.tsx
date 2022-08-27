@@ -3,7 +3,7 @@
 
 import { CodeIcon } from '@heroicons/react/outline';
 import { CodeBundleDocument, ContractDocument, VoidFn } from 'types';
-import { classes } from 'ui/util';
+import { classes } from 'api';
 
 interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   name: React.ReactNode;

@@ -5,8 +5,7 @@ import { ChevronRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { useEffect, useState } from 'react';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
-import { classes, truncate } from 'ui/util';
-import { checkOnChainCode } from 'api/util';
+import { checkOnChainCode, classes, truncate } from 'api';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,

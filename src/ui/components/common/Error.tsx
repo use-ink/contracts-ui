@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
-import { classes } from 'ui/util';
+import { classes } from 'api';
 
 type Props = React.HTMLProps<HTMLDivElement>;
 

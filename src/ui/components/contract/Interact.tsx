@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useState, useRef } from 'react';
-import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
@@ -14,8 +13,14 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
-import { getBlockHash } from 'api/util';
+import {
+  dryRun,
+  prepareContractTx,
+  sendContractQuery,
+  transformUserInput,
+  getBlockHash,
+  BN_ZERO,
+} from 'api';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';

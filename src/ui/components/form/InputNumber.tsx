@@ -3,7 +3,7 @@
 
 import BN from 'bn.js';
 import { useCallback } from 'react';
-import { BN_ZERO } from '@polkadot/util';
+import { BN_ZERO } from 'api';
 import { Input } from './Input';
 import { SimpleSpread } from 'types';
 

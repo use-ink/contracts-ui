@@ -3,12 +3,11 @@
 
 import React, { useCallback, useState } from 'react';
 import BN from 'bn.js';
-import { BN_ZERO } from '@polkadot/util';
+import { BN_ZERO, classes } from 'api';
 import { Input } from './Input';
 import { fromBalance, fromSats, toBalance } from 'api/util';
 import { ApiPromise, OrFalsy, SimpleSpread } from 'types';
 import { useApi } from 'ui/contexts';
-import { classes } from 'ui/util';
 
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,

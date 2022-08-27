@@ -6,7 +6,7 @@ import { Switch } from '../common/Switch';
 import { Input } from './Input';
 import { ArgComponentProps, OrFalsy, Registry, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
-import { getInitValue } from 'ui/util';
+import { getInitValue } from 'api';
 import { useToggle } from 'ui/hooks/useToggle';
 import { NOOP } from 'api';
 

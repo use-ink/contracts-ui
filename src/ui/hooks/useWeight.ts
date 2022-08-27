@@ -3,11 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { BN_MILLION, BN_TEN, BN_ZERO } from '@polkadot/util';
 import { useBlockTime } from './useBlockTime';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
-import { maximumBlockWeight } from 'api';
+import { maximumBlockWeight, BN_MILLION, BN_TEN, BN_ZERO } from 'api';
 
 function getEstimatedMegaGas(api: ApiPromise, estimatedWeight: OrFalsy<BN>, withBuffer = true): BN {
   return (estimatedWeight || maximumBlockWeight(api)).div(BN_MILLION).addn(withBuffer ? 1 : 0);

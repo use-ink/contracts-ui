@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { CheckIcon } from '@heroicons/react/outline';
-import { classes } from 'ui/util';
+import { classes } from 'api';
 import { useInstantiate } from 'ui/contexts';
 
 type Step = { name: string; index: number };

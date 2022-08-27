@@ -4,7 +4,7 @@
 import { BellIcon, XIcon } from '@heroicons/react/outline';
 import { NotificationIcon } from './common/NotificationIcon';
 import type { QueuedTxOptions, TransactionsState } from 'types';
-import { classes, isEmptyObj } from 'ui/util';
+import { classes, isEmptyObj } from 'api';
 
 export function Transactions({
   dismiss,

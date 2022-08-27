@@ -1,11 +1,10 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { BN_ONE, BN_TWO, BN_ZERO, formatBalance, isBn } from '@polkadot/util';
 import BN from 'bn.js';
 import { useCallback } from 'react';
 import { useFormField } from './useFormField';
-import { toBalance, toSats } from 'api/util';
+import { toBalance, toSats, BN_ONE, BN_TWO, BN_ZERO, isBn } from 'api';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { UseBalance, Validation } from 'types';
 
@@ -63,7 +62,7 @@ export function useBalance(
 
       if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
         isError = true;
-        message = `Value cannot exceed ${formatBalance(maxValue?.toString())}`;
+        message = `Value cannot exceed ${maxValue?.toNumber().toLocaleString()}`;
       }
 
       return {
@@ -76,7 +75,7 @@ export function useBalance(
   );
 
   const balance = useFormField<BN>(
-    api ? (isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue)) : BN_ZERO,
+    isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue),
     validate
   );
 

@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { assert } from '@polkadot/util';
 import { AddressSelect } from '../account/Select';
 import { Input } from './Input';
 import { InputBalance } from './InputBalance';
@@ -21,7 +20,9 @@ function subComponents(
   typeDef: TypeDef,
   nestingNumber: number
 ): React.ComponentType<ArgComponentProps<unknown>>[] {
-  assert(!!typeDef.sub, 'Cannot retrieve subComponent array for type definition');
+  if (!typeDef.sub) {
+    throw new Error('Cannot retrieve subComponent array for type definition');
+  }
 
   return (Array.isArray(typeDef.sub) ? typeDef.sub : [typeDef.sub]).map(subTypeDef =>
     findComponent(registry, subTypeDef, nestingNumber)

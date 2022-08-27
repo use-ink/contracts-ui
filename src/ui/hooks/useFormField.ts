@@ -3,7 +3,7 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { isNull, isUndefined } from '@polkadot/util';
+import { isNull, isUndefined } from 'api';
 import type { ValidFormField, ValidateFn, Validation } from 'types';
 
 export function useFormField<T>(
