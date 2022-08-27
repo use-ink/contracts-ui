@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
 import { RPC } from '../../constants';
-import { ApiPromise, ApiState, ChainProperties, InjectedAccount } from 'types';
+import { ApiPromise, ApiState, ChainProperties, InjectedAccount, Status } from 'types';
 import { isValidWsUrl } from 'api';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 import { getChainProperties } from 'api/chainProps';
@@ -24,6 +24,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const [endpoint, setEndpoint] = useState<string>(preferredEndpoint);
   const [accounts, setAccounts] = useState<InjectedAccount[]>();
   const [chainProps, setChainProps] = useState<ChainProperties>({} as ChainProperties);
+  const [status, setStatus] = useState<Status>('loading');
 
   useEffect(() => {
     if (rpcUrl && isValidWsUrl(rpcUrl) && rpcUrl !== preferredEndpoint) {
@@ -34,14 +35,19 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   }, [preferredEndpoint, rpcUrl, searchParams, setPreferredEndpoint]);
 
   useEffect((): void => {
-    async function connect() {
-      const wsProvider = new WsProvider(endpoint);
-      const _api = await ApiPromise.create({ provider: wsProvider });
+    setStatus('loading');
+    const wsProvider = new WsProvider(endpoint);
+    const _api = new ApiPromise({ provider: wsProvider });
+    _api.on('connected', async () => {
+      await _api.isReady;
       const _chainProps = await getChainProperties(_api);
       setApi(_api);
       setChainProps(_chainProps);
-    }
-    connect().catch(e => console.error(e));
+      setStatus('connected');
+    });
+    _api.on('disconnected', () => {
+      setStatus('error');
+    });
   }, [endpoint]);
 
   useEffect(() => {
@@ -60,6 +66,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
         accounts,
         setEndpoint,
         endpoint,
+        status,
         ...chainProps,
       }}
     >
@@ -71,7 +78,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
 export const useApi = () => {
   const context = useContext(ApiContext);
   if (context === undefined) {
-    throw new Error('useApi must be used within an ApiProvider');
+    throw new Error('useApi must be used within an ApiContextProvider');
   }
   return context;
 };

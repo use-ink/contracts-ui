@@ -27,7 +27,7 @@ const options = [
 ];
 
 export function NetworkAndUser() {
-  const { endpoint, api } = useApi();
+  const { endpoint, status } = useApi();
   const navigate = useNavigate();
 
   return (
@@ -35,9 +35,9 @@ export function NetworkAndUser() {
       <Dropdown
         className={classes(
           'chain',
-          api?.isReady ? 'isConnected' : '',
-          !api ? 'isConnecting' : '',
-          api?.errors ? 'isError' : ''
+          status === 'connected' ? 'isConnected' : '',
+          status === 'loading' ? 'isConnecting' : '',
+          status === 'error' ? 'isError' : ''
         )}
         onChange={e => {
           navigate(`/?rpc=${e}`);

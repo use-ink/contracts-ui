@@ -10,7 +10,6 @@ import type {
   CodeSubmittableResult,
   ContractInstantiateResult,
   ContractPromise,
-  Keyring,
   SubmittableExtrinsic,
   SubmittableResult,
   VoidFn,
@@ -19,23 +18,16 @@ import type {
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
 
+export type Status = 'loading' | 'connected' | 'error';
+
 export interface ApiState extends ChainProperties {
   endpoint: string;
   setEndpoint: (e: string) => void;
+  status: Status;
   genesisHash?: string;
   accounts?: InjectedAccount[];
   api?: ApiPromise;
 }
-
-export type ApiAction =
-  | { type: 'CONNECT_INIT' }
-  | { type: 'CONNECT'; payload: ApiPromise }
-  | { type: 'CONNECT_READY'; payload: ChainProperties | null }
-  | { type: 'CONNECT_ERROR'; payload: unknown }
-  | { type: 'LOAD_KEYRING' }
-  | { type: 'SET_ENDPOINT'; payload: string }
-  | { type: 'SET_KEYRING'; payload: Keyring }
-  | { type: 'KEYRING_ERROR' };
 
 export interface ChainProperties {
   tokenDecimals: number;

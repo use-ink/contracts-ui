@@ -3,34 +3,32 @@
 
 import { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
-import { web3EnablePromise } from '@polkadot/extension-dapp';
+import { isWeb3Injected } from '@polkadot/extension-dapp';
 import { AccountsError, ExtensionError } from './common/AccountsError';
 import { useApi, useDatabase } from 'ui/contexts';
 import { Loader, ConnectionError } from 'ui/components/common';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
-  const { accounts, api, endpoint } = useApi();
+  const { accounts, api, endpoint, status, systemChainType } = useApi();
   const { db } = useDatabase();
   const [message, setMessage] = useState('');
 
-  const isLoading = !db || !api;
-
   useEffect(() => {
     !db && setMessage('Loading data...');
-    !api && setMessage(`Connecting to ${endpoint}...`);
-  }, [db, endpoint, api]);
+    status === 'loading' && setMessage(`Connecting to ${endpoint}...`);
+  }, [db, endpoint, api, status]);
 
-  if (web3EnablePromise && accounts?.length === 0) {
+  if (isWeb3Injected && accounts?.length === 0) {
     return <AccountsError />;
   }
 
-  if (!web3EnablePromise) {
+  if (!isWeb3Injected && !systemChainType.isDevelopment) {
     return <ExtensionError />;
   }
 
-  if (api?.errors) {
+  if (status === 'error') {
     return <ConnectionError />;
   }
 
-  return <>{isLoading ? <Loader message={message} isLoading /> : children}</>;
+  return <>{status === 'loading' || !db ? <Loader message={message} isLoading /> : children}</>;
 }
