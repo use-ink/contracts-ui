@@ -3,11 +3,11 @@
 
 import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
+import { keyring } from '@polkadot/ui-keyring';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
-import { isResultReady } from 'api/util';
-import { isEmptyObj } from 'ui/util';
+import { isResultReady, isEmptyObj } from 'helpers';
 
 let nextId = 1;
 
@@ -16,7 +16,7 @@ export const TransactionsContext = createContext({} as unknown as TransactionsSt
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { api, keyring, systemChainType } = useApi();
+  const { api, systemChainType } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
@@ -39,17 +39,12 @@ export function TransactionsContextProvider({
 
       setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
 
-      let injector, accountOrPair;
-      try {
-        injector = await web3FromAddress(accountId);
-        accountOrPair = accountId;
-      } catch (e) {
-        accountOrPair = keyring.getPair(accountId);
-      }
+      const injector = systemChainType.isDevelopment ? undefined : await web3FromAddress(accountId);
+      const account = systemChainType.isDevelopment ? keyring.getPair(accountId) : accountId;
 
       try {
         const unsub = await extrinsic.signAndSend(
-          accountOrPair,
+          account,
           { signer: injector?.signer || undefined },
           async result => {
             if (isResultReady(result, systemChainType)) {
@@ -71,8 +66,10 @@ export function TransactionsContextProvider({
                 let message = 'Transaction failed';
 
                 if (result.dispatchError?.isModule) {
-                  const decoded = api.registry.findMetaError(result.dispatchError.asModule);
-                  message = `${decoded.section.toUpperCase()}.${decoded.method}: ${decoded.docs}`;
+                  const decoded = api?.registry.findMetaError(result.dispatchError.asModule);
+                  message = `${decoded?.section.toUpperCase()}.${decoded?.method}: ${
+                    decoded?.docs
+                  }`;
                 }
 
                 onError && onError(result);

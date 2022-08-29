@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useMemo, useState } from 'react';
-import { formatNumber } from '@polkadot/util';
 import { useApi } from 'ui/contexts';
-import { ChainProperties } from 'types';
+import { AnyJson, ApiPromise, ChainProperties } from 'types';
 
 function getChainType(systemChainType: ChainProperties['systemChainType']): string {
   if (systemChainType.isDevelopment) return 'Development';
@@ -17,29 +16,27 @@ function getChainType(systemChainType: ChainProperties['systemChainType']): stri
 export function Statistics(): React.ReactElement | null {
   const { api, systemChain, systemName, systemChainType, tokenSymbol } = useApi();
 
-  const [blockNumber, setBlockNumber] = useState(0);
+  const [blockNumber, setBlockNumber] = useState<AnyJson>('');
 
   useEffect(() => {
-    async function listenToBlocks() {
-      return api?.rpc.chain.subscribeNewHeads(header => {
-        setBlockNumber(header.number.toNumber());
+    async function listenToBlocks(api: ApiPromise) {
+      return api.rpc.chain.subscribeNewHeads(header => {
+        setBlockNumber(header.number.toHuman());
       });
     }
-
-    let cleanUp: VoidFunction;
-
-    listenToBlocks()
+    let cleanUp: VoidFunction | undefined;
+    listenToBlocks(api)
       .then(unsub => (cleanUp = unsub))
       .catch(console.error);
 
-    return () => cleanUp();
+    return () => cleanUp && cleanUp();
   }, [api]);
 
   const entries = useMemo((): Record<string, React.ReactNode> => {
     return {
       'Chain Name': systemChainType.isDevelopment ? systemName : systemChain,
       'Chain Type': getChainType(systemChainType),
-      'Highest Block': `#${formatNumber(blockNumber)}`,
+      'Highest Block': `#${blockNumber}`,
       Token: tokenSymbol,
     };
   }, [blockNumber, systemChain, systemChainType, systemName, tokenSymbol]);

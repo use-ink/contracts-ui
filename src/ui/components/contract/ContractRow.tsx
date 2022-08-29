@@ -6,9 +6,8 @@ import 'styled-components';
 import { Link } from 'react-router-dom';
 import { Identicon } from '../account/Identicon';
 import { ContractDocument } from 'types';
-import { displayDate } from 'ui/util';
 import { useApi } from 'ui/contexts';
-import { getContractInfo } from 'api';
+import { getContractInfo, displayDate } from 'helpers';
 
 interface Props {
   contract: ContractDocument;

@@ -7,7 +7,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
 import { Button, Buttons } from '../common';
 import { FormField } from './FormField';
 import { TypeDef, ArgComponentProps, OrFalsy } from 'types';
-import { getInitValue } from 'ui/util';
+import { getInitValue } from 'helpers';
 import { useApi } from 'ui/contexts';
 
 interface Props extends ArgComponentProps<unknown[]> {
@@ -22,12 +22,12 @@ export function Vector({
   typeDef,
   value = [],
 }: Props) {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
   const subType = typeDef.sub as TypeDef;
 
   const onAddRow = useCallback((): void => {
-    _onChange([...value, getInitValue(registry, keyring, subType)]);
-  }, [_onChange, value, keyring, registry, subType]);
+    _onChange([...value, getInitValue(registry, accounts || [], subType)]);
+  }, [_onChange, value, accounts, registry, subType]);
 
   const onRemoveRow = useCallback(() => _onChange(value.slice(0, -1)), [_onChange, value]);
 

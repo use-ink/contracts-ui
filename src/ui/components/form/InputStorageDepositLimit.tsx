@@ -3,12 +3,11 @@
 
 import Big from 'big.js';
 import { useMemo } from 'react';
-import { isNull, isNumber } from '@polkadot/util';
 import { Meter, Switch } from '../common';
 import { InputBalance } from './InputBalance';
 import { getValidation } from './FormField';
 import type { SimpleSpread } from 'types';
-import { classes } from 'ui/util';
+import { classes, isNull, isNumber } from 'helpers';
 import type { UseStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 
 type Props = SimpleSpread<

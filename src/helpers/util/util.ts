@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import { compactAddLength, u8aToU8a, isNumber, BN_TEN } from '@polkadot/util';
-import { randomAsU8a } from '@polkadot/util-crypto';
+import { keyring } from '@polkadot/ui-keyring';
+import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
+import { twMerge } from 'tailwind-merge';
 import { MAX_CALL_WEIGHT } from '../../constants';
+import { BN_TEN } from './bn';
 import {
-  Bytes,
   ApiPromise,
   AbiParam,
   Registry,
@@ -17,9 +19,32 @@ import {
   Hash,
   CodeBundleDocument,
 } from 'types';
-import { isValidCodeHash } from 'ui/util';
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
-const EMPTY_SALT = new Uint8Array();
+export function classes(...classLists: (string | null | undefined | false)[]) {
+  return twMerge(...classLists.map(classList => (!classList ? null : classList)));
+}
+
+export function truncate(value: string | undefined, sideLength = 6): string {
+  return value
+    ? value.length > sideLength * 2
+      ? `${value.substring(0, sideLength)}...${value.substring(value.length - sideLength)}`
+      : value
+    : '';
+}
+
+export function displayDate(isoDateString: string, formatString = 'd MMM'): string {
+  return format(parseISO(isoDateString), formatString);
+}
+
+export function isValidCodeHash(value: string): boolean {
+  return /^0x[0-9a-fA-F]{64}$/.test(value);
+}
+
+export function isEmptyObj(value: unknown) {
+  return JSON.stringify(value) === '{}';
+}
 
 export function maximumBlockWeight(api: OrFalsy<ApiPromise>): Weight {
   return api?.consts.system.blockWeights
@@ -27,12 +52,15 @@ export function maximumBlockWeight(api: OrFalsy<ApiPromise>): Weight {
     : (api?.consts.system.maximumBlockWeight as Weight) || MAX_CALL_WEIGHT;
 }
 
-export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Uint8Array {
-  return salt instanceof Bytes
-    ? salt
-    : salt && salt.length
-    ? compactAddLength(u8aToU8a(salt))
-    : EMPTY_SALT;
+export function randomAsU8a(length = 32) {
+  return crypto.getRandomValues(new Uint8Array(length));
+}
+
+const encoder = new TextEncoder();
+
+export function encodeSalt(salt: Uint8Array | string = randomAsU8a()): Uint8Array {
+  if (typeof salt === 'string') return encoder.encode(salt);
+  return salt;
 }
 
 export const NOOP = (): void => undefined;
@@ -145,4 +173,27 @@ export async function filterOnChainCode(api: ApiPromise, items: CodeBundleDocume
     isOnChain && codes.push(item);
   }
   return codes;
+}
+
+export const genRanHex: (size?: number) => `0x${string}` = (size = 32) =>
+  `0x${[...Array<string>(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+
+export function isKeyringLoaded() {
+  try {
+    return !!keyring.keyring;
+  } catch {
+    return false;
+  }
+}
+
+export function isNumber(value: unknown): value is number {
+  return typeof value === 'number';
+}
+
+export function isNull(value: unknown): value is null {
+  return value === null;
+}
+
+export function isUndefined(value: unknown): value is undefined {
+  return value === undefined;
 }

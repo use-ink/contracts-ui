@@ -2,13 +2,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback, useState } from 'react';
-import { isNumber } from '@polkadot/util';
 import { Dropdown } from '../common/Dropdown';
 import { ArgSignature } from '../message/ArgSignature';
 import { FormField, getValidation } from './FormField';
+import { isNumber, getInitValue } from 'helpers';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
-import { getInitValue } from 'ui/util';
 
 interface Props extends ArgComponentProps<Record<string, unknown>> {
   components: React.ComponentType<ArgComponentProps<unknown>>[];
@@ -17,7 +16,7 @@ interface Props extends ArgComponentProps<Record<string, unknown>> {
 export function Enum(props: Props) {
   const { components, typeDef, nestingNumber, onChange: _onChange, registry, value = {} } = props;
   const variants = typeDef.sub as TypeDef[];
-  const { keyring } = useApi();
+  const { accounts } = useApi();
   const [variantIndex, _setVariantIndex] = useState<number>(
     Math.max(
       0,
@@ -40,11 +39,11 @@ export function Enum(props: Props) {
         _setVariantIndex(value);
 
         _onChange({
-          [variants[value].name as string]: getInitValue(registry, keyring, variants[value]),
+          [variants[value].name as string]: getInitValue(registry, accounts || [], variants[value]),
         });
       }
     },
-    [registry, keyring, _onChange, variants]
+    [registry, accounts, _onChange, variants]
   );
 
   return (

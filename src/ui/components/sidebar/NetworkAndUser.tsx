@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
 import { RPC } from '../../../constants';
 import { useApi } from 'ui/contexts';
-import { classes } from 'ui/util';
+import { classes } from 'helpers';
 
 const options = [
   {
@@ -35,9 +35,9 @@ export function NetworkAndUser() {
       <Dropdown
         className={classes(
           'chain',
-          status === 'READY' ? 'isConnected' : '',
-          status === 'CONNECTING' ? 'isConnecting' : '',
-          status === 'ERROR' ? 'isError' : ''
+          status === 'connected' ? 'isConnected' : '',
+          status === 'loading' ? 'isConnecting' : '',
+          status === 'error' ? 'isError' : ''
         )}
         onChange={e => {
           navigate(`/?rpc=${e}`);

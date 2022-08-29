@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { SimpleSpread } from 'types';
-import { classes } from 'ui/util';
+import { classes } from 'helpers';
 
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,

@@ -1,6 +1,8 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { keyring } from '@polkadot/ui-keyring';
+
 import type {
   Abi,
   ApiPromise,
@@ -9,7 +11,6 @@ import type {
   CodeSubmittableResult,
   ContractInstantiateResult,
   ContractPromise,
-  Keyring,
   SubmittableExtrinsic,
   SubmittableResult,
   VoidFn,
@@ -18,27 +19,16 @@ import type {
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
 
-type Status = 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | 'LOADING';
+export type Status = 'loading' | 'connected' | 'error';
 
 export interface ApiState extends ChainProperties {
   endpoint: string;
-  genesisHash?: string;
-  keyring: Keyring;
-  keyringStatus: string | null;
-  api: ApiPromise;
-  error: unknown | null;
+  setEndpoint: (e: string) => void;
   status: Status;
-}
+  api: ApiPromise;
 
-export type ApiAction =
-  | { type: 'CONNECT_INIT' }
-  | { type: 'CONNECT'; payload: ApiPromise }
-  | { type: 'CONNECT_READY'; payload: ChainProperties | null }
-  | { type: 'CONNECT_ERROR'; payload: unknown }
-  | { type: 'LOAD_KEYRING' }
-  | { type: 'SET_ENDPOINT'; payload: string }
-  | { type: 'SET_KEYRING'; payload: Keyring }
-  | { type: 'KEYRING_ERROR' };
+  accounts?: Account[];
+}
 
 export interface ChainProperties {
   tokenDecimals: number;
@@ -47,6 +37,7 @@ export interface ChainProperties {
   systemChainType: ChainType;
   systemChain: string;
   tokenSymbol: string;
+  genesisHash: string;
 }
 
 export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;
@@ -72,8 +63,8 @@ export interface InstantiateState {
   dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
-  onFinalize?: (_: Partial<InstantiateData>) => void;
-  onFormChange: (_: Step2FormData, __?: boolean, ___?: boolean) => void;
+  onFinalize?: (_: Partial<InstantiateData>, api: ApiPromise) => void;
+  onFormChange: (_: Step2FormData, api: ApiPromise) => void;
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
   onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
@@ -114,3 +105,7 @@ export interface TransactionsState {
   queue: (_: TxOptions) => number;
   dismiss: (id: number) => void;
 }
+
+export type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
+
+export type Account = Flatten<Awaited<ReturnType<typeof keyring.getAccounts>>>;

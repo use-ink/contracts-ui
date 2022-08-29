@@ -3,13 +3,12 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { isBn } from '@polkadot/util';
 import { encodeTypeDef } from '@polkadot/types';
 import { MessageSignature } from '../message/MessageSignature';
 import { CopyButton } from '../common/CopyButton';
+import { isBn, fromSats } from 'helpers';
 import { CallResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
-import { fromSats } from 'api';
 
 interface Props {
   result: CallResult;

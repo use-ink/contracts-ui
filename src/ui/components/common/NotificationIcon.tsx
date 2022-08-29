@@ -4,7 +4,7 @@
 import { CheckIcon, ClockIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { Spinner } from './Spinner';
 import { TxStatus } from 'types';
-import { classes } from 'ui/util';
+import { classes } from 'helpers';
 
 interface Props {
   status?: TxStatus;

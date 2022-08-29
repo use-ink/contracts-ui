@@ -11,4 +11,3 @@ export * from './useBalance';
 export * from './useQueueTx';
 export * from './useFormField';
 export * from './useArgValues';
-export * from './useAccountId';

@@ -3,8 +3,8 @@
 
 import BN from 'bn.js';
 import { useCallback } from 'react';
-import { BN_ZERO } from '@polkadot/util';
 import { Input } from './Input';
+import { BN_ZERO } from 'helpers';
 import { SimpleSpread } from 'types';
 
 type Props = SimpleSpread<

@@ -7,7 +7,6 @@ import type {
   AnyJson,
   Codec,
   ContractPromise,
-  KeyringPair,
   RegistryError,
   Hash,
 } from '../substrate';
@@ -16,7 +15,7 @@ export interface ContractDryRunParams {
   contract: ContractPromise;
   message: AbiMessage;
   payment: BN;
-  sender: KeyringPair;
+  address: string;
   argValues?: Record<string, unknown>;
 }
 

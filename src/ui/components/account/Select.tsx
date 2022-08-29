@@ -6,14 +6,14 @@ import { GroupBase } from 'react-select';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
 import { createAccountOptions } from 'ui/util/dropdown';
-import type { DropdownOption, DropdownProps, OrFalsy, ValidFormField } from 'types';
+import type { DropdownOption, DropdownProps, ValidFormField } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
-import { classes } from 'ui/util';
+import { classes } from 'helpers';
 import { useDbQuery } from 'ui/hooks';
 
-type Props = ValidFormField<OrFalsy<string>> & Omit<DropdownProps<string>, 'options'>;
+type Props = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;
 
-function Option({ label, value }: DropdownOption<string>) {
+export function Option({ label, value }: DropdownOption<string>) {
   return <Account className="p-1.5" name={label} value={value} />;
 }
 
@@ -40,19 +40,15 @@ function Select({
 }
 
 export function AccountSelect({ placeholder = 'Select account', ...props }: Props) {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
 
   return (
-    <Select
-      options={createAccountOptions(keyring?.getPairs())}
-      placeholder={placeholder}
-      {...props}
-    />
+    <Select options={createAccountOptions(accounts || [])} placeholder={placeholder} {...props} />
   );
 }
 
 export function AddressSelect({ placeholder = 'Select account', ...props }: Props) {
-  const { keyring } = useApi();
+  const { accounts } = useApi();
   const { db } = useDatabase();
   const [contracts] = useDbQuery(() => db.contracts.toArray(), [db]);
 
@@ -60,7 +56,7 @@ export function AddressSelect({ placeholder = 'Select account', ...props }: Prop
     return [
       {
         label: 'My Accounts',
-        options: createAccountOptions(keyring?.getPairs()),
+        options: createAccountOptions(accounts || []),
       },
       ...(contracts && contracts.length > 0
         ? [
@@ -74,7 +70,7 @@ export function AddressSelect({ placeholder = 'Select account', ...props }: Prop
           ]
         : []),
     ];
-  }, [keyring, contracts]);
+  }, [accounts, contracts]);
 
   return <Select options={options} placeholder={placeholder} {...props} />;
 }

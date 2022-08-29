@@ -3,8 +3,16 @@
 
 import { createContext, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { BN_THOUSAND } from '@polkadot/util';
 import { ContractInstantiateResult } from '@polkadot/types/interfaces';
+import {
+  BN_THOUSAND,
+  onInsantiateFromHash,
+  onInstantiateFromCode,
+  createInstantiateTx,
+  NOOP,
+  transformUserInput,
+  maximumBlockWeight,
+} from 'helpers';
 import {
   InstantiateProps,
   InstantiateState,
@@ -17,18 +25,10 @@ import {
   OnInstantiateSuccess$Code,
   OnInstantiateSuccess$Hash,
   Step2FormData,
+  ApiPromise,
 } from 'types';
 import { useStepper } from 'ui/hooks/useStepper';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
-import {
-  onInsantiateFromHash,
-  onInstantiateFromCode,
-  createInstantiateTx,
-  NOOP,
-  transformUserInput,
-  maximumBlockWeight,
-} from 'api';
-import { useApi } from 'ui/contexts/ApiContext';
 
 type TxState = [
   SubmittableExtrinsic<'promise'> | null,
@@ -65,7 +65,6 @@ export function InstantiateContextProvider({
 }: React.PropsWithChildren<Partial<InstantiateProps>>) {
   const navigate = useNavigate();
   const dbState = useDatabase();
-  const apiState = useApi();
   const NOOP = () => Promise.resolve();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const [currentStep, stepForward, stepBackward, setStep] = useStepper(initialState.currentStep);
@@ -82,10 +81,10 @@ export function InstantiateContextProvider({
     [navigate]
   );
 
-  const onFinalize = (formData: Partial<InstantiateData>) => {
+  const onFinalize = (formData: Partial<InstantiateData>, api: ApiPromise) => {
     const newData = { ...data, ...formData };
     try {
-      const tx = createInstantiateTx(apiState.api, newData);
+      const tx = createInstantiateTx(api, newData);
 
       const onInstantiate = (codeHashUrlParam ? onInsantiateFromHash : onInstantiateFromCode)(
         dbState,
@@ -103,30 +102,28 @@ export function InstantiateContextProvider({
   };
 
   const onFormChange = useCallback(
-    async (formData: Step2FormData) => {
+    async (formData: Step2FormData, api: ApiPromise) => {
       try {
         const constructor = data.metadata?.findConstructor(formData.constructorIndex);
 
         const inputData = constructor?.toU8a(
-          transformUserInput(apiState.api.registry, constructor.args, formData.argValues)
+          transformUserInput(api.registry, constructor.args, formData.argValues)
         );
 
         const params = {
           origin: data.accountId,
-          gasLimit: formData.weight || maximumBlockWeight(apiState.api),
+          gasLimit: formData.weight || maximumBlockWeight(api),
           storageDepositLimit: formData.storageDepositLimit,
           code: codeHashUrlParam
             ? { Existing: codeHashUrlParam }
             : { Upload: data.metadata?.info.source.wasm },
           data: inputData,
           salt: formData.salt || undefined,
-          value: formData.value
-            ? apiState.api.registry.createType('Balance', formData.value)
-            : null,
+          value: formData.value ? api.registry.createType('Balance', formData.value) : null,
         };
 
         if (params.origin) {
-          const result = await apiState.api.rpc.contracts.instantiate(params);
+          const result = await api.rpc.contracts.instantiate(params);
 
           setDryRunResult(result);
         }
@@ -134,7 +131,7 @@ export function InstantiateContextProvider({
         console.error(e);
       }
     },
-    [apiState.api, codeHashUrlParam, data.accountId, data.metadata]
+    [codeHashUrlParam, data.accountId, data.metadata]
   );
 
   function onUnFinalize() {

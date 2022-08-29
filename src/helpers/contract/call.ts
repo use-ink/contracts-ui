@@ -1,14 +1,13 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { transformUserInput } from 'api/util';
+import { transformUserInput } from '../util';
 
 import {
   BlueprintOptions,
   ContractQuery,
   ContractOptions,
   ContractTx,
-  KeyringPair,
   ContractDryRunParams,
 } from 'types';
 
@@ -22,20 +21,18 @@ export function prepareContractTx(
 
 export function sendContractQuery(
   query: ContractQuery<'promise'>,
-  sender: KeyringPair,
+  address: string,
   options: ContractOptions,
   args: unknown[]
 ) {
-  return args?.length > 0
-    ? query(sender.address, options, ...args)
-    : query(sender.address, options);
+  return args?.length > 0 ? query(address, options, ...args) : query(address, options);
 }
 
 export function dryRun({
   contract,
   message,
   payment: value,
-  sender,
+  address,
   argValues,
 }: ContractDryRunParams) {
   const { isPayable, method } = message;
@@ -43,7 +40,7 @@ export function dryRun({
 
   return sendContractQuery(
     contract.query[method],
-    sender,
+    address,
     { gasLimit: -1, value: isPayable ? value : 0 },
     transformed
   );

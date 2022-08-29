@@ -8,8 +8,7 @@ import { Input } from '../form/Input';
 import { FormField } from '../form/FormField';
 import { SearchResults } from '../common/SearchResults';
 import { CodeHash } from './CodeHash';
-import { classes, isValidCodeHash } from 'ui/util';
-import { checkOnChainCode, filterOnChainCode } from 'api';
+import { checkOnChainCode, filterOnChainCode, classes, isValidCodeHash } from 'helpers';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
 

@@ -5,7 +5,7 @@ import { encodeTypeDef } from '@polkadot/types/create';
 import { DatabaseIcon } from '@heroicons/react/outline';
 import { ArgSignature } from './ArgSignature';
 import type { AbiMessage, Registry } from 'types';
-import { classes } from 'ui/util';
+import { classes } from 'helpers';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   message: Partial<AbiMessage>;

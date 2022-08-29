@@ -19,7 +19,7 @@ export type UseWeight = {
 
 export interface ValidFormField<T> extends Validation {
   value: T;
-  onChange: (_: OrFalsy<T>) => void;
+  onChange: (_: T) => void;
 }
 
 export type UseBalance = ValidFormField<BN>;

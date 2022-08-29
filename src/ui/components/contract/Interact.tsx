@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useState, useRef } from 'react';
-import { BN_ZERO } from '@polkadot/util';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
@@ -14,11 +13,17 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import { dryRun, prepareContractTx, sendContractQuery, transformUserInput } from 'api';
-import { getBlockHash } from 'api/util';
+import {
+  dryRun,
+  prepareContractTx,
+  sendContractQuery,
+  transformUserInput,
+  getBlockHash,
+  BN_ZERO,
+} from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
-import { useWeight, useBalance, useArgValues, useFormField, useAccountId } from 'ui/hooks';
+import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
@@ -28,20 +33,25 @@ interface Props {
 }
 
 export const InteractTab = ({ contract }: Props) => {
-  const { api, keyring, systemChainType } = useApi();
+  const { api, accounts, systemChainType } = useApi();
   const {
     value: message,
     onChange: setMessage,
     ...messageValidation
   } = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
+  const [argValues, setArgValues] = useArgValues(message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
-  const { value: accountId, onChange: setAccountId, ...accountIdValidation } = useAccountId();
+  const [accountId, setAccountId] = useState('');
   const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
+
+  useEffect((): void => {
+    if (!accounts || accounts.length === 0) return;
+    setAccountId(accounts[0].address);
+  }, [accounts]);
 
   useEffect(() => {
     setCallResults([]);
@@ -55,23 +65,19 @@ export const InteractTab = ({ contract }: Props) => {
   useEffect((): void => {
     if (!accountId || !message.args || !argValues) return;
 
-    const sender = keyring?.getPair(accountId);
-
     if (message.isMutating !== true) {
       setEstimatedWeight(null);
-
       return;
     }
 
-    sender &&
-      message.isMutating &&
+    message.isMutating &&
       contract.abi.messages[message.index].method === message.method &&
       dryRun({
         contract,
         message,
         argValues,
         payment: value,
-        sender,
+        address: accountId,
       })
         .then(({ gasRequired }) => {
           setEstimatedWeight(gasRequired);
@@ -80,7 +86,7 @@ export const InteractTab = ({ contract }: Props) => {
           console.error(e);
           setEstimatedWeight(null);
         });
-  }, [api, accountId, argValues, keyring, message, value, contract]);
+  }, [api, accountId, argValues, message, value, contract, accounts]);
 
   const weight = useWeight(estimatedWeight);
   const storageDepositLimit = useStorageDepositLimit(accountId);
@@ -139,7 +145,7 @@ export const InteractTab = ({ contract }: Props) => {
   const read = async () => {
     const { result, output } = await sendContractQuery(
       contract.query[message.method],
-      keyring.getPair(accountId),
+      accountId,
       options,
       transformed
     );
@@ -202,7 +208,6 @@ export const InteractTab = ({ contract }: Props) => {
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
             label="Account"
-            {...accountIdValidation}
           >
             <AccountSelect
               id="accountId"

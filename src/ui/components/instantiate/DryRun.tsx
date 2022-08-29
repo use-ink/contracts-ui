@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { formatBalance, formatNumber } from '@polkadot/util';
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
@@ -11,7 +10,7 @@ export function DryRun() {
   const { dryRunResult } = useInstantiate();
   const { api } = useApi();
   const dryRunError =
-    api && dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
+    dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
       ? api.registry.findMetaError(dryRunResult?.result.asErr.asModule)
       : null;
 
@@ -21,12 +20,12 @@ export function DryRun() {
         <div className="row">
           <div>Gas Required:</div>
           <div data-cy="estimated-gas">
-            {dryRunResult?.gasRequired && <>{formatNumber(dryRunResult.gasRequired)}</>}
+            {dryRunResult?.gasRequired && <>{dryRunResult.gasRequired.toHuman()}</>}
           </div>
         </div>
         <div className="row">
           <div>Gas Consumed:</div>
-          <div>{dryRunResult?.gasConsumed && <>{formatNumber(dryRunResult.gasConsumed)}</>}</div>
+          <div>{dryRunResult?.gasConsumed && <>{dryRunResult.gasConsumed.toHuman()}</>}</div>
         </div>
         <div className="row">
           <div>Storage Deposit:</div>
@@ -38,7 +37,7 @@ export function DryRun() {
                     return 'None';
                   }
 
-                  return formatBalance(dryRunResult.storageDeposit.asCharge, { decimals: 12 });
+                  return dryRunResult.storageDeposit.asCharge.toHuman();
                 }
 
                 return 'None';
