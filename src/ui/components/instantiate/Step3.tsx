@@ -7,7 +7,7 @@ import { Button, Buttons } from '../common/Button';
 import { useInstantiate, isResultValid } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
 
-import { truncate } from 'api';
+import { truncate } from 'helpers';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();

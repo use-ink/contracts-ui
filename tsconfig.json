@@ -21,8 +21,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "api": ["./src/api"],
-      "api/*": ["./src/api/*"],
+      "helpers": ["src/helpers"],
+      "helpers/*": ["src/helpers/*"],
       "db": ["./src/db"],
       "types": ["./src/types"],
       "types/*": ["./src/types/*"],

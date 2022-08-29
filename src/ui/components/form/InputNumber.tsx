@@ -4,7 +4,7 @@
 import BN from 'bn.js';
 import { useCallback } from 'react';
 import { Input } from './Input';
-import { BN_ZERO } from 'api';
+import { BN_ZERO } from 'helpers';
 import { SimpleSpread } from 'types';
 
 type Props = SimpleSpread<

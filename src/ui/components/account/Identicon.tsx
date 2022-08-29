@@ -7,7 +7,7 @@ import type { Circle } from '@polkadot/ui-shared/icons/types';
 import React, { useCallback, useRef } from 'react';
 import { polkadotIcon } from '@polkadot/ui-shared';
 import { Button } from '../common';
-import { classes } from 'api';
+import { classes } from 'helpers';
 
 export interface Props extends React.HTMLAttributes<HTMLImageElement> {
   value?: string | null;

@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { Dropdown } from '../common/Dropdown';
 import { ArgSignature } from '../message/ArgSignature';
 import { FormField, getValidation } from './FormField';
-import { isNumber, getInitValue } from 'api';
+import { isNumber, getInitValue } from 'helpers';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
 

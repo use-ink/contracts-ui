@@ -4,8 +4,7 @@
 import React, { useCallback, useState } from 'react';
 import BN from 'bn.js';
 import { Input } from './Input';
-import { BN_ZERO, classes } from 'api';
-import { fromBalance, fromSats, toBalance } from 'api/util';
+import { BN_ZERO, classes, fromBalance, fromSats, toBalance } from 'helpers';
 import { ApiPromise, OrFalsy, SimpleSpread } from 'types';
 import { useApi } from 'ui/contexts';
 

@@ -6,7 +6,7 @@ import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmModal } from 'ui/components/modal';
 import { useApi, useDatabase } from 'ui/contexts';
-import { getContractInfo, truncate } from 'api';
+import { getContractInfo, truncate } from 'helpers';
 import type { ContractDocument } from 'types';
 
 interface Props {

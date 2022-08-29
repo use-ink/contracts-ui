@@ -5,7 +5,7 @@
 import { useMemo } from 'react';
 
 import { useApi } from 'ui/contexts/ApiContext';
-import { blockTimeMs } from 'api/util/blockTime';
+import { blockTimeMs } from 'helpers';
 
 type Result = [number];
 

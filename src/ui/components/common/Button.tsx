@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import React from 'react';
-import { classes } from 'api';
+import { classes } from 'helpers';
 
 type Variant = 'default' | 'primary' | 'plain' | 'negative';
 

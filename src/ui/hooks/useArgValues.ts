@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
 import { AbiParam, Account, Registry, SetState } from 'types';
-import { getInitValue } from 'api';
+import { getInitValue } from 'helpers';
 
 type ArgValues = Record<string, unknown>;
 

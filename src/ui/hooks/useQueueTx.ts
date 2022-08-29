@@ -4,7 +4,7 @@
 import { SubmittableResult } from '@polkadot/api';
 import { VoidFn } from '@polkadot/api/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isNull } from 'api';
+import { isNull } from 'helpers';
 import { SubmittableExtrinsic } from 'types';
 import { useTransactions } from 'ui/contexts/TransactionsContext';
 

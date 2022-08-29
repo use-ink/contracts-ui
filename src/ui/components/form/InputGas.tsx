@@ -3,7 +3,7 @@
 
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
-import { BN_MILLION, BN_ONE, BN_ZERO, classes } from 'api';
+import { BN_MILLION, BN_ONE, BN_ZERO, classes } from 'helpers';
 import type { UseWeight } from 'types';
 
 interface Props extends UseWeight, React.HTMLAttributes<HTMLDivElement> {

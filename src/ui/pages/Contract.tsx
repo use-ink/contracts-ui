@@ -12,7 +12,7 @@ import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
 import { useContract } from 'ui/hooks';
-import { checkOnChainCode, displayDate, truncate } from 'api';
+import { checkOnChainCode, displayDate, truncate } from 'helpers';
 import { useApi } from 'ui/contexts';
 
 const TABS = [

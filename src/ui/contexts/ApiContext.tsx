@@ -8,9 +8,8 @@ import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
 import { RPC } from '../../constants';
 import { ApiPromise, ApiState, ChainProperties, Account, Status } from 'types';
-import { isValidWsUrl, isKeyringLoaded } from 'api';
+import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
-import { getChainProperties } from 'api/chainProps';
 
 export const ApiContext = createContext<ApiState | undefined>(undefined);
 

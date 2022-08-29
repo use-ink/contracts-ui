@@ -20,7 +20,7 @@ import {
   transformUserInput,
   getBlockHash,
   BN_ZERO,
-} from 'api';
+} from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';

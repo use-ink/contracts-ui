@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
 import { RPC } from '../../../constants';
 import { useApi } from 'ui/contexts';
-import { classes } from 'api';
+import { classes } from 'helpers';
 
 const options = [
   {

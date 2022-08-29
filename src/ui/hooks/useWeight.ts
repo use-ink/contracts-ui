@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBlockTime } from './useBlockTime';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { ApiPromise, BN, OrFalsy, UseWeight } from 'types';
-import { maximumBlockWeight, BN_MILLION, BN_TEN, BN_ZERO } from 'api';
+import { maximumBlockWeight, BN_MILLION, BN_TEN, BN_ZERO } from 'helpers';
 
 function getEstimatedMegaGas(api: ApiPromise, estimatedWeight: OrFalsy<BN>, withBuffer = true): BN {
   return (estimatedWeight || maximumBlockWeight(api)).div(BN_MILLION).addn(withBuffer ? 1 : 0);

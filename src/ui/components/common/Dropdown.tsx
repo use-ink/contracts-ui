@@ -12,7 +12,7 @@ import Select, {
   Props as ReactSelectProps,
 } from 'react-select';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import { classes } from 'api';
+import { classes } from 'helpers';
 import type { DropdownOption, DropdownProps } from 'types';
 
 function isGroupedOptions<T>(

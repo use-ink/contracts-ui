@@ -7,7 +7,7 @@ import { FormField } from '../form/FormField';
 import { CodeHash } from './CodeHash';
 import { CodeBundleDocument } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
-import { filterOnChainCode } from 'api';
+import { filterOnChainCode } from 'helpers';
 import { useDbQuery } from 'ui/hooks';
 
 const PAGE_SIZE = 5;

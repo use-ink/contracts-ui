@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm';
 import { encodeTypeDef } from '@polkadot/types';
 import { MessageSignature } from '../message/MessageSignature';
 import { CopyButton } from '../common/CopyButton';
-import { isBn, fromSats } from 'api';
+import { isBn, fromSats } from 'helpers';
 import { CallResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 

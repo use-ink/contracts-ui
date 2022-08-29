@@ -12,7 +12,7 @@ import {
   NOOP,
   transformUserInput,
   maximumBlockWeight,
-} from 'api';
+} from 'helpers';
 import {
   InstantiateProps,
   InstantiateState,

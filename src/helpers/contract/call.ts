@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { transformUserInput } from 'api/util';
+import { transformUserInput } from '../util';
 
 import {
   BlueprintOptions,
