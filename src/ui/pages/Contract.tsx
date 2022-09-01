@@ -11,9 +11,9 @@ import { Loader } from '../components/common/Loader';
 import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
-import { useContract } from 'ui/hooks';
 import { checkOnChainCode, displayDate, truncate } from 'helpers';
-import { useApi } from 'ui/contexts';
+import { useApi, useDatabase } from 'ui/contexts';
+import { ContractDocument, ContractPromise } from 'types';
 
 const TABS = [
   {
@@ -39,14 +39,16 @@ const TABS = [
 export function Contract() {
   const navigate = useNavigate();
   const { api } = useApi();
+  const { db } = useDatabase();
 
   const { address, activeTab = 'interact' } = useParams();
+
+  const [contract, setContract] = useState<ContractPromise>();
+  const [document, setDocument] = useState<ContractDocument>();
 
   if (!address) throw new Error('No address in url');
 
   //TODO: check if address is valid
-
-  const [contract, document, isLoading] = useContract(address);
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
@@ -60,10 +62,25 @@ export function Contract() {
   }, [api, document]);
 
   useEffect((): void => {
-    if (!isLoading && (!document || !contract)) {
-      navigate('/');
+    async function getContract() {
+      try {
+        const d = await db.contracts.get({ address });
+        d && setDocument(d);
+      } catch (error) {
+        console.error(error);
+        navigate('/');
+      }
     }
-  }, [contract, document, isLoading, navigate]);
+    getContract().catch(e => {
+      console.error(e);
+    });
+  }, [address, api, db.contracts, navigate]);
+
+  useEffect(() => {
+    if (!document || !address) return;
+    const c = new ContractPromise(api, document.abi, address);
+    setContract(c);
+  }, [address, api, document]);
 
   if (!document || !contract) {
     return null;
@@ -72,7 +89,7 @@ export function Contract() {
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={(!contract && isLoading) || isOnChain === undefined}>
+    <Loader isLoading={isOnChain === undefined}>
       <PageFull
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}
@@ -99,7 +116,7 @@ export function Contract() {
         }
       >
         <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
-          <MetadataTab abi={contract?.abi} />
+          <MetadataTab abi={contract.abi} />
           <InteractTab contract={contract} />
         </Tabs>
       </PageFull>
