@@ -1,62 +1,29 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import type {
-  DbState,
-  OnInstantiateSuccess$Code,
-  OnInstantiateSuccess$Hash,
-  InstantiateData,
-  InstantiateState,
-} from 'types';
+import type { DbState, InstantiateData, InstantiateState, BlueprintSubmittableResult } from 'types';
 
-export function onInsantiateFromHash(
+export function onInsantiateSuccess(
   { db }: DbState,
   { accountId, codeHash, name }: InstantiateData,
   onSuccess: InstantiateState['onSuccess']
-): OnInstantiateSuccess$Hash {
-  return async function ({ contract, status }): Promise<void> {
-    if (accountId && codeHash && contract?.abi.json && (status.isInBlock || status.isFinalized)) {
-      await db.contracts.add({
+) {
+  return async function ({
+    contract,
+    status,
+  }: BlueprintSubmittableResult<'promise'>): Promise<void> {
+    if (accountId && contract?.abi.json && (status.isInBlock || status.isFinalized)) {
+      const document = {
         abi: contract.abi.json,
         address: contract.address.toString(),
-        codeHash,
+        codeHash: codeHash || contract.abi.info.source.wasmHash.toHex(),
         date: new Date().toISOString(),
-        name: name,
-      });
+        name,
+      };
+      await db.contracts.add(document);
+      !codeHash && (await db.codeBundles.add(document));
 
       onSuccess && onSuccess(contract);
-    }
-  };
-}
-
-export function onInstantiateFromCode(
-  { db }: DbState,
-  { accountId, name }: InstantiateData,
-  onSuccess: InstantiateState['onSuccess']
-): OnInstantiateSuccess$Code {
-  return async function (result): Promise<void> {
-    try {
-      const { blueprint, contract, status } = result;
-
-      if (accountId && contract && (status.isInBlock || status.isFinalized)) {
-        const document = {
-          abi: contract.abi.json,
-          codeHash: blueprint?.codeHash.toHex() || contract.abi.info.source.wasmHash.toHex(),
-          date: new Date().toISOString(),
-          name,
-        };
-
-        await db.contracts.add({
-          ...document,
-          address: contract.address.toString(),
-        });
-
-        await db.codeBundles.add(document);
-
-        onSuccess && onSuccess(contract, blueprint);
-      }
-    } catch (e) {
-      console.error(e);
     }
   };
 }

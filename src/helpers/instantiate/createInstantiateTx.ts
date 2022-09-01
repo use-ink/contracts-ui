@@ -17,7 +17,7 @@ export function createInstantiateTx(
     salt,
     storageDepositLimit,
   }: InstantiateData
-): SubmittableExtrinsic<'promise'> | null {
+): SubmittableExtrinsic<'promise'> {
   const wasm = metadata?.info.source.wasm;
   const isValid = codeHash || !!wasm;
 
@@ -41,6 +41,6 @@ export function createInstantiateTx(
       ? codeOrBlueprint.tx[constructor.method](options, ...transformed)
       : codeOrBlueprint.tx[constructor.method](options);
   } else {
-    throw new Error('Unknown error');
+    throw new Error('Error creating instantiate tx');
   }
 }

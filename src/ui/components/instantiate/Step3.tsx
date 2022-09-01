@@ -13,7 +13,6 @@ export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
   const { accountId, value, metadata, weight, name, constructorIndex } = data;
-  const isConstructorPayable = metadata?.constructors[constructorIndex].isPayable;
 
   const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
@@ -41,7 +40,7 @@ export function Step3() {
           <p className="key">Name</p>
           <p className="value">{name}</p>
         </div>
-        {isConstructorPayable && value && (
+        {metadata?.constructors[constructorIndex].isPayable && value && (
           <div className="field">
             <p className="key">Value</p>
             <p className="value">{value.toNumber().toLocaleString()}</p>

@@ -6,9 +6,6 @@ import { keyring } from '@polkadot/ui-keyring';
 import type {
   Abi,
   ApiPromise,
-  BlueprintPromise,
-  BlueprintSubmittableResult,
-  CodeSubmittableResult,
   ContractInstantiateResult,
   ContractPromise,
   SubmittableExtrinsic,
@@ -18,6 +15,7 @@ import type {
 } from '../substrate';
 // import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
 import type { BN } from './util';
+import { onInsantiateSuccess } from 'helpers/instantiate/instantiate';
 
 export type Status = 'loading' | 'connected' | 'error';
 
@@ -26,7 +24,6 @@ export interface ApiState extends ChainProperties {
   setEndpoint: (e: string) => void;
   status: Status;
   api: ApiPromise;
-
   accounts?: Account[];
 }
 
@@ -39,9 +36,6 @@ export interface ChainProperties {
   tokenSymbol: string;
   genesisHash: string;
 }
-
-export type OnInstantiateSuccess$Code = (_: CodeSubmittableResult<'promise'>) => Promise<void>;
-export type OnInstantiateSuccess$Hash = (_: BlueprintSubmittableResult<'promise'>) => Promise<void>;
 
 export interface InstantiateData {
   accountId?: string;
@@ -66,13 +60,13 @@ export interface InstantiateState {
   onFinalize?: (_: Partial<InstantiateData>, api: ApiPromise) => void;
   onFormChange: (_: Step2FormData, api: ApiPromise) => void;
   onUnFinalize?: () => void;
-  onSuccess: (_: ContractPromise, __?: BlueprintPromise | undefined) => void;
-  onInstantiate: OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash;
+  onSuccess: (_: ContractPromise) => void;
+  onInstantiate?: ReturnType<typeof onInsantiateSuccess>;
   currentStep: number;
   stepForward?: VoidFn;
   stepBackward?: VoidFn;
   setStep?: React.Dispatch<number>;
-  tx: SubmittableExtrinsic<'promise'> | null;
+  tx?: SubmittableExtrinsic<'promise'>;
 }
 
 export type InstantiateProps = InstantiateState;
