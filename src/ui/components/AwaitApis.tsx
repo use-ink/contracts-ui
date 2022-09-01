@@ -13,7 +13,6 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
   const { accounts, api, endpoint, status, systemChainType } = useApi();
   const { db } = useDatabase();
   const [message, setMessage] = useState('');
-  console.log(accounts);
 
   useEffect(() => {
     !db && setMessage('Loading data...');
