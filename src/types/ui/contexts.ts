@@ -51,13 +51,11 @@ export type Step2FormData = Omit<InstantiateData, 'accountId' | 'name'>;
 
 export interface InstantiateState {
   data: InstantiateData;
+  setData: React.Dispatch<React.SetStateAction<InstantiateData>>;
   step: 1 | 2 | 3;
   setStep: React.Dispatch<1 | 2 | 3>;
   dryRunResult?: ContractInstantiateResult;
-  setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
-  onFinalize?: (_: Partial<InstantiateData>, api: ApiPromise) => void;
   onFormChange: (_: Step2FormData, api: ApiPromise) => void;
-  onUnFinalize?: () => void;
 }
 
 export type InstantiateProps = InstantiateState;

@@ -16,7 +16,7 @@ export function createInstantiateTx(
     metadata,
     salt,
     storageDepositLimit,
-  }: InstantiateData
+  }: Omit<InstantiateData, 'name'>
 ): SubmittableExtrinsic<'promise'> {
   const wasm = metadata?.info.source.wasm;
   const isValid = codeHash || !!wasm;

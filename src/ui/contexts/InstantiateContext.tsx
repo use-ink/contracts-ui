@@ -32,16 +32,6 @@ export function InstantiateContextProvider({
   const [data, setData] = useState<InstantiateData>({} as InstantiateData);
   const [dryRunResult, setDryRunResult] = useState<ContractInstantiateResult>();
 
-  const onFinalize = (formData: Partial<InstantiateData>) => {
-    const newData = { ...data, ...formData };
-    try {
-      setData(newData);
-      setStep(3);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const onFormChange = useCallback(
     async (formData: Step2FormData, api: ApiPromise) => {
       try {
@@ -75,18 +65,12 @@ export function InstantiateContextProvider({
     [codeHashUrlParam, data.accountId, data.metadata]
   );
 
-  function onUnFinalize() {
-    setStep(2);
-  }
-
   const value: InstantiateState = {
     data,
     setData,
     step,
     dryRunResult,
     setStep,
-    onUnFinalize,
-    onFinalize,
     onFormChange,
   };
 

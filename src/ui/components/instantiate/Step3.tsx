@@ -12,7 +12,7 @@ import { useNewContract } from 'ui/hooks';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
-  const { data, step, onUnFinalize } = useInstantiate();
+  const { data, step, setStep } = useInstantiate();
   const { api } = useApi();
   const { accountId, value, metadata, weight, name, constructorIndex } = data;
   const { queue, process, txs, dismiss } = useTransactions();
@@ -103,7 +103,7 @@ export function Step3() {
           onClick={(): void => {
             dismiss(txId);
             setTxId(0);
-            onUnFinalize && onUnFinalize();
+            setStep(2);
           }}
           isDisabled={txs[txId]?.status === 'processing'}
         >
