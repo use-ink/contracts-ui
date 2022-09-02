@@ -1,13 +1,17 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import type { DbState, InstantiateData, InstantiateState, BlueprintSubmittableResult } from 'types';
+import { useNavigate } from 'react-router';
+import type { BlueprintSubmittableResult } from 'types';
+import { useDatabase, useInstantiate } from 'ui/contexts';
 
-export function onInsantiateSuccess(
-  { db }: DbState,
-  { accountId, codeHash, name }: InstantiateData,
-  onSuccess: InstantiateState['onSuccess']
-) {
+export function useNewContract() {
+  const { db } = useDatabase();
+  const navigate = useNavigate();
+  const {
+    data: { accountId, codeHash, name },
+  } = useInstantiate();
+
   return async function ({
     contract,
     status,
@@ -22,8 +26,7 @@ export function onInsantiateSuccess(
       };
       await db.contracts.add(document);
       !codeHash && (await db.codeBundles.add(document));
-
-      onSuccess && onSuccess(contract);
+      navigate(`/contract/${contract.address}`);
     }
   };
 }

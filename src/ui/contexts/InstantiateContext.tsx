@@ -2,31 +2,18 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { createContext, useState, useContext, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { ContractInstantiateResult } from '@polkadot/types/interfaces';
-import {
-  onInsantiateSuccess,
-  createInstantiateTx,
-  transformUserInput,
-  maximumBlockWeight,
-} from 'helpers';
+import { transformUserInput, maximumBlockWeight } from 'helpers';
 import {
   InstantiateProps,
   InstantiateState,
   CodeSubmittableResult,
   BlueprintSubmittableResult,
   InstantiateData,
-  ContractPromise,
-  BlueprintPromise,
-  SubmittableExtrinsic,
   Step2FormData,
   ApiPromise,
 } from 'types';
-import { useDatabase } from 'ui/contexts/DatabaseContext';
-
-type TxState =
-  | [SubmittableExtrinsic<'promise'>, ReturnType<typeof onInsantiateSuccess>]
-  | undefined;
 
 const InstantiateContext = createContext<InstantiateState | undefined>(undefined);
 
@@ -39,37 +26,19 @@ export function isResultValid({
 export function InstantiateContextProvider({
   children,
 }: React.PropsWithChildren<Partial<InstantiateProps>>) {
-  const navigate = useNavigate();
-  const dbState = useDatabase();
-  const NOOP = () => Promise.resolve();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const [data, setData] = useState<InstantiateData>({} as InstantiateData);
-  const [txState, setTx] = useState<TxState>();
   const [dryRunResult, setDryRunResult] = useState<ContractInstantiateResult>();
 
-  const onSuccess = useCallback(
-    (contract: ContractPromise, _?: BlueprintPromise) => {
-      navigate(`/contract/${contract.address}`);
-    },
-
-    [navigate]
-  );
-
-  const onFinalize = (formData: Partial<InstantiateData>, api: ApiPromise) => {
+  const onFinalize = (formData: Partial<InstantiateData>) => {
     const newData = { ...data, ...formData };
     try {
-      const tx = createInstantiateTx(api, newData);
-
-      const cb = onInsantiateSuccess(dbState, newData, onSuccess);
-      setTx([tx, cb]);
       setData(newData);
       setStep(3);
     } catch (e) {
       console.error(e);
-
-      setTx(undefined);
     }
   };
 
@@ -107,7 +76,6 @@ export function InstantiateContextProvider({
   );
 
   function onUnFinalize() {
-    setTx(undefined);
     setStep(2);
   }
 
@@ -117,13 +85,9 @@ export function InstantiateContextProvider({
     step,
     dryRunResult,
     setStep,
-    onSuccess,
     onUnFinalize,
     onFinalize,
     onFormChange,
-    tx: txState && txState[0],
-    onInstantiate: txState && txState[1],
-    onError: NOOP,
   };
 
   return <InstantiateContext.Provider value={value}>{children}</InstantiateContext.Provider>;

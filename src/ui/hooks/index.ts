@@ -7,6 +7,6 @@ export * from './useDbQuery';
 export * from './useWeight';
 export * from './useBlockTime';
 export * from './useBalance';
-export * from './useQueueTx';
 export * from './useFormField';
 export * from './useArgValues';
+export * from './useNewContract';

@@ -7,14 +7,12 @@ import type {
   Abi,
   ApiPromise,
   ContractInstantiateResult,
-  ContractPromise,
   SubmittableExtrinsic,
   SubmittableResult,
   ChainType,
 } from '../substrate';
 
 import type { BN } from './util';
-import { onInsantiateSuccess } from 'helpers/instantiate/instantiate';
 
 export type Status = 'loading' | 'connected' | 'error';
 
@@ -57,13 +55,9 @@ export interface InstantiateState {
   setStep: React.Dispatch<1 | 2 | 3>;
   dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
-  onError: () => void;
   onFinalize?: (_: Partial<InstantiateData>, api: ApiPromise) => void;
   onFormChange: (_: Step2FormData, api: ApiPromise) => void;
   onUnFinalize?: () => void;
-  onSuccess: (_: ContractPromise) => void;
-  onInstantiate?: ReturnType<typeof onInsantiateSuccess>;
-  tx?: SubmittableExtrinsic<'promise'>;
 }
 
 export type InstantiateProps = InstantiateState;

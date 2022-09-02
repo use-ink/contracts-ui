@@ -18,7 +18,7 @@ export function Wizard() {
       <main className="xs:w-full md:flex-1 p-4 md:mr-2">
         <Step1 />
         {metadata && <Step2 />}
-        <Step3 />
+        {step === 3 && <Step3 />}
       </main>
       {step === 2 && (
         <aside className="xs:w-full md:w-80">
