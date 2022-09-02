@@ -10,10 +10,9 @@ import type {
   ContractPromise,
   SubmittableExtrinsic,
   SubmittableResult,
-  VoidFn,
   ChainType,
 } from '../substrate';
-// import type { UseFormField, UseStepper, UseToggle, UseWeight } from './hooks';
+
 import type { BN } from './util';
 import { onInsantiateSuccess } from 'helpers/instantiate/instantiate';
 
@@ -54,6 +53,8 @@ export type Step2FormData = Omit<InstantiateData, 'accountId' | 'name'>;
 
 export interface InstantiateState {
   data: InstantiateData;
+  step: 1 | 2 | 3;
+  setStep: React.Dispatch<1 | 2 | 3>;
   dryRunResult?: ContractInstantiateResult;
   setData?: React.Dispatch<React.SetStateAction<InstantiateData>>;
   onError: () => void;
@@ -62,10 +63,6 @@ export interface InstantiateState {
   onUnFinalize?: () => void;
   onSuccess: (_: ContractPromise) => void;
   onInstantiate?: ReturnType<typeof onInsantiateSuccess>;
-  currentStep: number;
-  stepForward?: VoidFn;
-  stepBackward?: VoidFn;
-  setStep?: React.Dispatch<number>;
   tx?: SubmittableExtrinsic<'promise'>;
 }
 

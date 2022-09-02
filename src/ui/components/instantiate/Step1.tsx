@@ -20,7 +20,7 @@ export function Step1() {
     [codeHashUrlParam, db]
   );
   const { accounts } = useApi();
-  const { stepForward, setData, data, currentStep } = useInstantiate();
+  const { setStep, setData, data, step } = useInstantiate();
 
   const [accountId, setAccountId] = useState('');
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
@@ -56,10 +56,10 @@ export function Step1() {
         codeHash: codeHashUrlParam,
       });
 
-    stepForward && stepForward();
+    setStep(2);
   }
 
-  if (currentStep !== 1) return null;
+  if (step !== 1) return null;
 
   return (
     <Loader isLoading={isLoading}>

@@ -11,9 +11,9 @@ import { useTransactions } from 'ui/contexts/TransactionsContext';
 export function useQueueTx(
   extrinsic: SubmittableExtrinsic<'promise'> | null,
   accountId: string | null | undefined,
-  onSuccess: (_: SubmittableResult) => Promise<void>,
   onError: VoidFn,
-  isValid: (_: SubmittableResult) => boolean
+  isValid: (_: SubmittableResult) => boolean,
+  onSuccess?: (_: SubmittableResult) => Promise<void>
 ): [VoidFn, VoidFn, boolean, boolean] {
   const { queue, dismiss, process, txs } = useTransactions();
   const [txId, setTxId] = useState<number>(0);

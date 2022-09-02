@@ -28,8 +28,8 @@ export function Step2() {
   const {
     data: { accountId, metadata },
     dryRunResult,
-    stepBackward,
-    currentStep,
+    setStep,
+    step,
     onFinalize,
     onFormChange,
   } = useInstantiate();
@@ -137,7 +137,7 @@ export function Step2() {
     [metadata]
   );
 
-  if (currentStep !== 2) return null;
+  if (step !== 2) return null;
 
   return metadata ? (
     <>
@@ -234,7 +234,12 @@ export function Step2() {
           Next
         </Button>
 
-        <Button onClick={stepBackward} variant="default">
+        <Button
+          onClick={() => {
+            setStep(1);
+          }}
+          variant="default"
+        >
           Go Back
         </Button>
       </Buttons>

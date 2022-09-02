@@ -22,7 +22,6 @@ import {
   Step2FormData,
   ApiPromise,
 } from 'types';
-import { useStepper } from 'ui/hooks/useStepper';
 import { useDatabase } from 'ui/contexts/DatabaseContext';
 
 type TxState =
@@ -44,7 +43,7 @@ export function InstantiateContextProvider({
   const dbState = useDatabase();
   const NOOP = () => Promise.resolve();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
-  const [currentStep, stepForward, stepBackward, setStep] = useStepper(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const [data, setData] = useState<InstantiateData>({} as InstantiateData);
   const [txState, setTx] = useState<TxState>();
@@ -66,7 +65,7 @@ export function InstantiateContextProvider({
       const cb = onInsantiateSuccess(dbState, newData, onSuccess);
       setTx([tx, cb]);
       setData(newData);
-      stepForward();
+      setStep(3);
     } catch (e) {
       console.error(e);
 
@@ -115,11 +114,9 @@ export function InstantiateContextProvider({
   const value: InstantiateState = {
     data,
     setData,
-    currentStep,
+    step,
     dryRunResult,
     setStep,
-    stepForward,
-    stepBackward,
     onSuccess,
     onUnFinalize,
     onFinalize,

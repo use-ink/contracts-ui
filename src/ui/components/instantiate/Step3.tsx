@@ -6,25 +6,24 @@ import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
 import { useInstantiate, isResultValid } from 'ui/contexts';
 import { useQueueTx } from 'ui/hooks/useQueueTx';
-
 import { truncate } from 'helpers';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
-  const { data, currentStep, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
+  const { data, step, onUnFinalize, tx, onError, onInstantiate } = useInstantiate();
   const { accountId, value, metadata, weight, name, constructorIndex } = data;
 
   const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
   const [onSubmit, onCancel, isValid, isProcessing] = useQueueTx(
-    tx,
+    tx ?? null,
     data.accountId,
-    onInstantiate,
     onError,
-    isResultValid
+    isResultValid,
+    onInstantiate
   );
 
-  if (currentStep !== 3) return null;
+  if (step !== 3) return null;
 
   return (
     <>
