@@ -17,10 +17,11 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
   useEffect(() => {
     !db && setMessage('Loading data...');
     status === 'loading' && setMessage(`Connecting to ${endpoint}...`);
+    !isKeyringLoaded() && setMessage(`Loading accounts...`);
   }, [db, endpoint, api, status]);
 
-  if (isWeb3Injected && accounts?.length === 0) {
-    return <AccountsError />;
+  if (status === 'error') {
+    return <ConnectionError />;
   }
 
   if (
@@ -32,9 +33,17 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
     return <ExtensionError />;
   }
 
-  if (status === 'error') {
-    return <ConnectionError />;
+  if (isKeyringLoaded() && accounts?.length === 0) {
+    return <AccountsError />;
   }
 
-  return <>{status === 'loading' || !db ? <Loader message={message} isLoading /> : children}</>;
+  return (
+    <>
+      {status === 'loading' || !db || !isKeyringLoaded() ? (
+        <Loader message={message} isLoading />
+      ) : (
+        children
+      )}
+    </>
+  );
 }
