@@ -2,57 +2,20 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { createContext, useState, useContext, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { ContractInstantiateResult } from '@polkadot/types/interfaces';
-import {
-  BN_THOUSAND,
-  onInsantiateFromHash,
-  onInstantiateFromCode,
-  createInstantiateTx,
-  NOOP,
-  transformUserInput,
-  maximumBlockWeight,
-} from 'helpers';
+import { transformUserInput, maximumBlockWeight } from 'helpers';
 import {
   InstantiateProps,
   InstantiateState,
   CodeSubmittableResult,
   BlueprintSubmittableResult,
   InstantiateData,
-  ContractPromise,
-  BlueprintPromise,
-  SubmittableExtrinsic,
-  OnInstantiateSuccess$Code,
-  OnInstantiateSuccess$Hash,
   Step2FormData,
   ApiPromise,
 } from 'types';
-import { useStepper } from 'ui/hooks/useStepper';
-import { useDatabase } from 'ui/contexts/DatabaseContext';
 
-type TxState = [
-  SubmittableExtrinsic<'promise'> | null,
-  OnInstantiateSuccess$Code | OnInstantiateSuccess$Hash,
-  string | null
-];
-
-const initialData: InstantiateData = {
-  constructorIndex: 0,
-  value: BN_THOUSAND,
-  name: '',
-  weight: BN_THOUSAND,
-};
-
-const initialState = {
-  data: initialData,
-  currentStep: 1,
-  tx: null,
-  onError: NOOP,
-  onSuccess: NOOP,
-  onInstantiate: () => Promise.resolve(),
-} as unknown as InstantiateState;
-
-const InstantiateContext = createContext(initialState);
+const InstantiateContext = createContext<InstantiateState | undefined>(undefined);
 
 export function isResultValid({
   contract,
@@ -63,43 +26,11 @@ export function isResultValid({
 export function InstantiateContextProvider({
   children,
 }: React.PropsWithChildren<Partial<InstantiateProps>>) {
-  const navigate = useNavigate();
-  const dbState = useDatabase();
-  const NOOP = () => Promise.resolve();
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
-  const [currentStep, stepForward, stepBackward, setStep] = useStepper(initialState.currentStep);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
 
-  const [data, setData] = useState<InstantiateData>(initialState.data);
-  const [[tx, onInstantiate], setTx] = useState<TxState>([null, NOOP, null]);
+  const [data, setData] = useState<InstantiateData>({} as InstantiateData);
   const [dryRunResult, setDryRunResult] = useState<ContractInstantiateResult>();
-
-  const onSuccess = useCallback(
-    (contract: ContractPromise, _?: BlueprintPromise | undefined) => {
-      navigate(`/contract/${contract.address}`);
-    },
-
-    [navigate]
-  );
-
-  const onFinalize = (formData: Partial<InstantiateData>, api: ApiPromise) => {
-    const newData = { ...data, ...formData };
-    try {
-      const tx = createInstantiateTx(api, newData);
-
-      const onInstantiate = (codeHashUrlParam ? onInsantiateFromHash : onInstantiateFromCode)(
-        dbState,
-        newData,
-        onSuccess
-      );
-      setTx([tx, onInstantiate, null]);
-      setData(newData);
-      stepForward();
-    } catch (e) {
-      console.error(e);
-
-      setTx([null, NOOP, 'Error creating transaction']);
-    }
-  };
 
   const onFormChange = useCallback(
     async (formData: Step2FormData, api: ApiPromise) => {
@@ -134,29 +65,22 @@ export function InstantiateContextProvider({
     [codeHashUrlParam, data.accountId, data.metadata]
   );
 
-  function onUnFinalize() {
-    setTx([null, NOOP, null]);
-    setStep(2);
-  }
-
   const value: InstantiateState = {
     data,
     setData,
-    currentStep,
+    step,
     dryRunResult,
     setStep,
-    stepForward,
-    stepBackward,
-    onSuccess,
-    onUnFinalize,
-    onFinalize,
     onFormChange,
-    tx,
-    onInstantiate,
-    onError: NOOP,
   };
 
   return <InstantiateContext.Provider value={value}>{children}</InstantiateContext.Provider>;
 }
 
-export const useInstantiate = () => useContext(InstantiateContext);
+export const useInstantiate = () => {
+  const context = useContext(InstantiateContext);
+  if (context === undefined) {
+    throw new Error('useInstantiate must be used within an InstantiateProvider');
+  }
+  return context;
+};

@@ -25,18 +25,11 @@ import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { useDebounce } from 'ui/hooks';
 
 export function Step2() {
-  const {
-    data: { accountId, metadata },
-    dryRunResult,
-    stepBackward,
-    currentStep,
-    onFinalize,
-    onFormChange,
-  } = useInstantiate();
+  const { data, dryRunResult, setStep, step, setData, onFormChange } = useInstantiate();
   const { api } = useApi();
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
   const dbValue = useDebounce(value);
-
+  const { accountId, metadata } = data;
   const [estimatedWeight, setEstimatedWeight] = useState<OrFalsy<BN>>(null);
   const weight = useWeight(estimatedWeight);
   const dbWeight = useDebounce(weight.weight);
@@ -68,18 +61,16 @@ export function Step2() {
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const onSubmit = () => {
-    onFinalize &&
-      onFinalize(
-        {
-          constructorIndex,
-          salt: isUsingSalt ? salt.value : undefined,
-          value,
-          argValues,
-          storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-          weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
-        },
-        api
-      );
+    setData({
+      ...data,
+      constructorIndex,
+      salt: isUsingSalt ? salt.value : undefined,
+      value,
+      argValues,
+      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+      weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
+    });
+    setStep(3);
   };
 
   useEffect((): void => {
@@ -137,7 +128,7 @@ export function Step2() {
     [metadata]
   );
 
-  if (currentStep !== 2) return null;
+  if (step !== 2) return null;
 
   return metadata ? (
     <>
@@ -234,7 +225,12 @@ export function Step2() {
           Next
         </Button>
 
-        <Button onClick={stepBackward} variant="default">
+        <Button
+          onClick={() => {
+            setStep(1);
+          }}
+          variant="default"
+        >
           Go Back
         </Button>
       </Buttons>
