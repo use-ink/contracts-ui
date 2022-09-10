@@ -3,7 +3,6 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { MessageSignature } from '../message/MessageSignature';
 import { Spinner } from '../common/Spinner';
 import type { CallResult, Registry } from 'types';
 
@@ -13,11 +12,7 @@ interface Props {
   registry: Registry;
 }
 
-export const TransactionResult = ({
-  result: { isComplete, time, message, error, log },
-  date,
-  registry,
-}: Props) => {
+export const TransactionResult = ({ result: { isComplete, time, error, log }, date }: Props) => {
   return (
     <div
       key={`${time}`}
@@ -25,18 +20,11 @@ export const TransactionResult = ({
     >
       <div className="flex-col">
         <div className="mb-2">{date}</div>
-        <MessageSignature message={message} registry={registry} />
         {!isComplete && <Spinner width={4} strokeWidth={2} color="gray-600" className="mt-2" />}
         {isComplete && (
           <>
             <div className="flex-col items-start mb-2 mt-4">
-              <div className="event-log">
-                {log.map((line, index) => (
-                  <p key={index} className="mb-2">
-                    {line}
-                  </p>
-                ))}
-              </div>
+              <div className="event-log">{log}</div>
             </div>
           </>
         )}

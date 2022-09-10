@@ -106,13 +106,25 @@ export const InteractTab = ({ contract }: Props) => {
     events,
     contractEvents,
   }: ContractSubmittableResult) => {
-    const log = events.map(({ event }) => {
+    const runtimeEvents = events.map(({ event }) => {
       return `${event.section}:${event.method}`;
     });
-    contractEvents?.forEach(({ event, args }) => {
-      console.log('event', event.identifier);
-      args.forEach((a, i) => console.log(`${event.args[i].name}-`, a.toHuman()));
-    });
+    const log =
+      contractEvents?.map(({ event, args }) => {
+        const a = args.map((a, i) => (
+          <>
+            <div>{event.args[i].name}</div>
+            <div>{`${a.toHuman()}`}</div>
+          </>
+        ));
+        return (
+          <>
+            <div>{event.identifier}</div>
+            {a}
+          </>
+        );
+      }) || [];
+
     setCallResults([
       ...callResults,
       {
@@ -122,6 +134,7 @@ export const InteractTab = ({ contract }: Props) => {
         message,
         time: Date.now(),
         log,
+        events: runtimeEvents,
         blockHash: getBlockHash(status, systemChainType),
         info: dispatchInfo?.toHuman(),
       },
@@ -129,35 +142,41 @@ export const InteractTab = ({ contract }: Props) => {
 
     setNextResultId(nextResultId + 1);
   };
-  const onCallError = ({
-    events,
-    dispatchError,
-    contractEvents,
-    dispatchInfo,
-  }: ContractSubmittableResult) => {
-    const log = events.map(({ event }) => {
-      return `${event.section}:${event.method}`;
-    });
-    contractEvents?.forEach(({ event, args }) => {
-      console.log(event.identifier);
-      args.forEach((a, i) => console.log(`${event.args[i].name}-${a.toHuman()}`));
-    });
-    setCallResults([
-      ...callResults,
-      {
-        id: nextResultId,
-        message,
-        time: Date.now(),
-        isComplete: true,
-        data: null,
-        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
-        log,
-        info: dispatchInfo?.toHuman(),
-      },
-    ]);
+  // const onCallError = ({
+  //   events,
+  //   dispatchError,
+  //   contractEvents,
+  //   dispatchInfo,
+  // }: ContractSubmittableResult) => {
+  //   const runtimeEvents = events.map(({ event }) => {
+  //     return `${event.section}:${event.method}`;
+  //   });
+  //   const log = contractEvents?.map(({ event, args }) => {
+  //     const a = args.map(
+  //       (a, i) =>
+  //         `${event.args[i].name}
+  //       ${a.toHuman()}
+  //     `
+  //     );
+  //     return { eventName: event.identifier, args: a };
+  //   });
+  //   setCallResults([
+  //     ...callResults,
+  //     {
+  //       id: nextResultId,
+  //       message,
+  //       time: Date.now(),
+  //       isComplete: true,
+  //       data: null,
+  //       error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
+  //       log,
+  //       events: runtimeEvents,
+  //       info: dispatchInfo?.toHuman(),
+  //     },
+  //   ]);
 
-    setNextResultId(nextResultId + 1);
-  };
+  //   setNextResultId(nextResultId + 1);
+  // };
 
   const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
@@ -170,7 +189,6 @@ export const InteractTab = ({ contract }: Props) => {
         extrinsic: tx,
         accountId,
         onSuccess: onCallSuccess,
-        onError: onCallError,
         isValid,
       });
       setTxId(newId.current);

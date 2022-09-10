@@ -23,7 +23,8 @@ export interface CallResult {
   data: Codec | null;
   id: number;
   isComplete: boolean;
-  log: string[];
+  events: string[];
+  log: JSX.Element[];
   message: AbiMessage;
   blockHash?: Hash;
   error?: RegistryError;
