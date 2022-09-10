@@ -15,15 +15,9 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import {
-  prepareContractTx,
-  sendContractQuery,
-  transformUserInput,
-  getBlockHash,
-  BN_ZERO,
-} from 'helpers';
+import { prepareContractTx, transformUserInput, getBlockHash, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
-import { CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
+import { CallResult, ContractPromise, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -67,11 +61,6 @@ export const InteractTab = ({ contract }: Props) => {
 
   useEffect((): void => {
     if (contract.abi.messages[message.index].method !== message.method) return;
-
-    if (message.isMutating !== true) {
-      setOutcome(undefined);
-      return;
-    }
 
     async function dryRun() {
       const a = transformUserInput(contract.registry, message.args, argValues);
@@ -164,35 +153,6 @@ export const InteractTab = ({ contract }: Props) => {
         error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
         log,
         info: dispatchInfo?.toHuman(),
-      },
-    ]);
-
-    setNextResultId(nextResultId + 1);
-  };
-  const read = async () => {
-    const { result, output } = await sendContractQuery(
-      contract.query[message.method],
-      accountId,
-      options,
-      transformed
-    );
-
-    let error: RegistryError | undefined;
-
-    if (result.isErr && result.asErr.isModule) {
-      error = contract.registry.findMetaError(result.asErr.asModule);
-    }
-
-    setCallResults([
-      ...callResults,
-      {
-        id: nextResultId,
-        log: [],
-        message,
-        time: Date.now(),
-        isComplete: true,
-        data: output,
-        error,
       },
     ]);
 
@@ -306,7 +266,7 @@ export const InteractTab = ({ contract }: Props) => {
           </FormField>
         </Form>
         <Buttons>
-          {message.isPayable || message.isMutating ? (
+          {(message.isPayable || message.isMutating) && (
             <Button
               isDisabled={
                 !(weight.isValid || !weight.isActive || txs[txId]?.status === 'processing')
@@ -317,19 +277,16 @@ export const InteractTab = ({ contract }: Props) => {
             >
               Call
             </Button>
-          ) : (
-            <Button
-              isDisabled={!(weight.isValid || !weight.isActive)}
-              onClick={read}
-              variant="primary"
-            >
-              Read
-            </Button>
           )}
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
-        <ResultsOutput registry={contract.registry} results={callResults} outcome={outcome} />
+        <ResultsOutput
+          registry={contract.registry}
+          results={callResults}
+          outcome={outcome}
+          message={message}
+        />
       </div>
     </div>
   );

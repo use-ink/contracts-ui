@@ -3,7 +3,7 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ContractCallOutcome } from '@polkadot/api-contract/types';
+import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { SidePanel } from '../common/SidePanel';
 import { QueryResult } from './QueryResult';
 import { TransactionResult } from './TransactionResult';
@@ -12,26 +12,31 @@ import { CallResult, Registry } from 'types';
 interface Props {
   results: CallResult[];
   registry: Registry;
+  message: AbiMessage;
   outcome?: ContractCallOutcome;
 }
 
-export const ResultsOutput = ({ registry, results, outcome }: Props) => {
+export const ResultsOutput = ({ registry, results, outcome, message }: Props) => {
   const output = outcome?.output?.toHuman() ?? undefined;
   const error = outcome?.result.isErr && outcome?.result.asErr.asModule;
   const decodedErr = error && registry.findMetaError(error);
+
   return (
     <>
-      <SidePanel header="Dry Run" emptyView="No results yet.">
+      <SidePanel
+        header={message.isMutating ? 'Dry-run result' : `${message.method}`}
+        emptyView="No results yet."
+      >
         <div className="text-xs p-4">
           <>
             {typeof output === 'object' ? (
               'Err' in output ? (
                 output.Err
               ) : (
-                <pre> output {JSON.stringify(output, null, 2)}</pre>
+                <pre>{JSON.stringify(output, null, 2)}</pre>
               )
             ) : (
-              output
+              <div>{`${output ?? ''}`}</div>
             )}
             {decodedErr && (
               <div>
