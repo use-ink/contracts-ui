@@ -28,7 +28,6 @@ export function InstantiateContextProvider({
 }: React.PropsWithChildren<Partial<InstantiateProps>>) {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const [step, setStep] = useState<1 | 2 | 3>(1);
-
   const [data, setData] = useState<InstantiateData>({} as InstantiateData);
   const [dryRunResult, setDryRunResult] = useState<ContractInstantiateResult>();
 
@@ -55,7 +54,6 @@ export function InstantiateContextProvider({
 
         if (params.origin) {
           const result = await api.rpc.contracts.instantiate(params);
-
           setDryRunResult(result);
         }
       } catch (e) {

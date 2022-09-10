@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useState, useRef } from 'react';
+import { ContractSubmittableResult } from '@polkadot/api-contract/base/Contract';
+import { ContractCallOutcome } from '@polkadot/api-contract/types';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
@@ -14,7 +16,6 @@ import {
   FormField,
 } from 'ui/components/form';
 import {
-  dryRun,
   prepareContractTx,
   sendContractQuery,
   transformUserInput,
@@ -22,7 +23,7 @@ import {
   BN_ZERO,
 } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
-import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
+import { CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -33,7 +34,7 @@ interface Props {
 }
 
 export const InteractTab = ({ contract }: Props) => {
-  const { api, accounts, systemChainType } = useApi();
+  const { accounts, systemChainType } = useApi();
   const {
     value: message,
     onChange: setMessage,
@@ -43,10 +44,12 @@ export const InteractTab = ({ contract }: Props) => {
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(100);
   const [accountId, setAccountId] = useState('');
-  const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
+  const [outcome, setOutcome] = useState<ContractCallOutcome>();
+  const storageDepositLimit = useStorageDepositLimit(accountId);
+  const weight = useWeight(null);
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -63,33 +66,40 @@ export const InteractTab = ({ contract }: Props) => {
   }, [contract.address]);
 
   useEffect((): void => {
-    if (!accountId || !message.args || !argValues) return;
+    if (contract.abi.messages[message.index].method !== message.method) return;
 
     if (message.isMutating !== true) {
-      setEstimatedWeight(null);
+      setOutcome(undefined);
       return;
     }
 
-    message.isMutating &&
-      contract.abi.messages[message.index].method === message.method &&
-      dryRun({
-        contract,
-        message,
-        argValues,
-        payment: value,
-        address: accountId,
-      })
-        .then(({ gasRequired }) => {
-          setEstimatedWeight(gasRequired);
-        })
-        .catch(e => {
-          console.error(e);
-          setEstimatedWeight(null);
-        });
-  }, [api, accountId, argValues, message, value, contract, accounts]);
+    async function dryRun() {
+      const a = transformUserInput(contract.registry, message.args, argValues);
 
-  const weight = useWeight(estimatedWeight);
-  const storageDepositLimit = useStorageDepositLimit(accountId);
+      const o = await contract.query[message.method](
+        accountId,
+        {
+          gasLimit: weight.isActive ? weight.megaGas : -1,
+          storageDepositLimit: storageDepositLimit.value ?? null,
+        },
+        ...a
+      );
+
+      setOutcome(o);
+    }
+
+    dryRun().catch(e => console.error(e));
+  }, [
+    accountId,
+    argValues,
+    contract.abi.messages,
+    contract.query,
+    contract.registry,
+    message,
+    storageDepositLimit.value,
+    weight.isActive,
+    weight.megaGas,
+  ]);
 
   const transformed = transformUserInput(contract.registry, message.args, argValues);
 
@@ -101,11 +111,19 @@ export const InteractTab = ({ contract }: Props) => {
 
   const { queue, process, txs } = useTransactions();
 
-  const onCallSuccess = ({ status, dispatchInfo, events }: SubmittableResult) => {
+  const onCallSuccess = ({
+    status,
+    dispatchInfo,
+    events,
+    contractEvents,
+  }: ContractSubmittableResult) => {
     const log = events.map(({ event }) => {
       return `${event.section}:${event.method}`;
     });
-
+    contractEvents?.forEach(({ event, args }) => {
+      console.log('event', event.identifier);
+      args.forEach((a, i) => console.log(`${event.args[i].name}-`, a.toHuman()));
+    });
     setCallResults([
       ...callResults,
       {
@@ -122,9 +140,18 @@ export const InteractTab = ({ contract }: Props) => {
 
     setNextResultId(nextResultId + 1);
   };
-  const onCallError = ({ events, dispatchError, dispatchInfo }: SubmittableResult) => {
+  const onCallError = ({
+    events,
+    dispatchError,
+    contractEvents,
+    dispatchInfo,
+  }: ContractSubmittableResult) => {
     const log = events.map(({ event }) => {
       return `${event.section}:${event.method}`;
+    });
+    contractEvents?.forEach(({ event, args }) => {
+      console.log(event.identifier);
+      args.forEach((a, i) => console.log(`${event.args[i].name}-${a.toHuman()}`));
     });
     setCallResults([
       ...callResults,
@@ -302,7 +329,7 @@ export const InteractTab = ({ contract }: Props) => {
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
-        <ResultsOutput registry={contract.registry} results={callResults} />
+        <ResultsOutput registry={contract.registry} results={callResults} outcome={outcome} />
       </div>
     </div>
   );
