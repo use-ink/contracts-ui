@@ -36,7 +36,7 @@ export function InputStorageDepositLimit({
 
   return (
     <div className={classes(className)}>
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <InputBalance
           className="flex-1"
           value={isActive ? value : undefined}
@@ -47,7 +47,7 @@ export function InputStorageDepositLimit({
           withUnits={isActive}
           {...getValidation(props)}
         />
-        <div className="flex justify-center items-center w-18">
+        <div className="flex justify-end items-center w-11">
           <Switch value={isActive} onChange={toggleIsActive} />
         </div>
       </div>

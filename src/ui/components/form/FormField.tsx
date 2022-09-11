@@ -76,7 +76,7 @@ export function FormField({
 
 export function Form({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={classes('mb-10', className)} {...props}>
+    <div className={classes('mb-6', className)} {...props}>
       {children}
     </div>
   );

@@ -221,32 +221,36 @@ export const InteractTab = ({ contract }: Props) => {
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
-          <FormField
-            help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
-            id="maxGas"
-            label="Max Gas Allowed"
-            isError={!weight.isValid}
-            message={!weight.isValid ? 'Invalid gas limit' : null}
-          >
-            <InputGas isCall={message.isMutating} withEstimate {...weight} />
-          </FormField>
-          <FormField
-            help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
-            id="storageDepositLimit"
-            label="Storage Deposit Limit"
-            isError={!storageDepositLimit.isValid}
-            message={
-              !storageDepositLimit.isValid
-                ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                : null
-            }
-          >
-            <InputStorageDepositLimit
-              isActive={isUsingStorageDepositLimit}
-              toggleIsActive={toggleIsUsingStorageDepositLimit}
-              {...storageDepositLimit}
-            />
-          </FormField>
+          <div className="flex justify-between">
+            <FormField
+              help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
+              id="maxGas"
+              label="Max Gas Allowed"
+              isError={!weight.isValid}
+              message={!weight.isValid ? 'Invalid gas limit' : null}
+              className=" basis-2/4 mr-4"
+            >
+              <InputGas isCall={message.isMutating} withEstimate {...weight} />
+            </FormField>
+            <FormField
+              help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
+              id="storageDepositLimit"
+              label="Storage Deposit Limit"
+              isError={!storageDepositLimit.isValid}
+              message={
+                !storageDepositLimit.isValid
+                  ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                  : null
+              }
+              className=" basis-2/4 shrink-0"
+            >
+              <InputStorageDepositLimit
+                isActive={isUsingStorageDepositLimit}
+                toggleIsActive={toggleIsUsingStorageDepositLimit}
+                {...storageDepositLimit}
+              />
+            </FormField>
+          </div>
         </Form>
         <Buttons>
           {(message.isPayable || message.isMutating) && (

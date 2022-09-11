@@ -181,32 +181,35 @@ export function Step2() {
         >
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
-        <FormField
-          help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-          id="maxGas"
-          label="Max Gas Allowed"
-          isError={!weight.isValid}
-          message={!weight.isValid ? 'Invalid gas limit' : null}
-        >
-          <InputGas isCall withEstimate {...weight} />
-        </FormField>
-        <FormField
-          help="The maximum balance allowed to be deducted for the new contract's storage deposit."
-          id="storageDepositLimit"
-          label="Storage Deposit Limit"
-          isError={!storageDepositLimit.isValid}
-          message={
-            !storageDepositLimit.isValid
-              ? storageDepositLimit.message || 'Invalid storage deposit limit'
-              : null
-          }
-        >
-          <InputStorageDepositLimit
-            isActive={isUsingStorageDepositLimit}
-            toggleIsActive={toggleIsUsingStorageDepositLimit}
-            {...storageDepositLimit}
-          />
-        </FormField>
+
+        <div className="flex">
+          <FormField
+            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
+            id="maxGas"
+            label="Max Gas Allowed"
+            isError={!weight.isValid}
+            message={!weight.isValid ? 'Invalid gas limit' : null}
+          >
+            <InputGas isCall withEstimate {...weight} />
+          </FormField>
+          <FormField
+            help="The maximum balance allowed to be deducted for the new contract's storage deposit."
+            id="storageDepositLimit"
+            label="Storage Deposit Limit"
+            isError={!storageDepositLimit.isValid}
+            message={
+              !storageDepositLimit.isValid
+                ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                : null
+            }
+          >
+            <InputStorageDepositLimit
+              isActive={isUsingStorageDepositLimit}
+              toggleIsActive={toggleIsUsingStorageDepositLimit}
+              {...storageDepositLimit}
+            />
+          </FormField>
+        </div>
       </Form>
       <Buttons>
         <Button
