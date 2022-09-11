@@ -36,7 +36,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
                 <pre>{JSON.stringify(output, null, 2)}</pre>
               )
             ) : (
-              <div>{`${output ?? ''}`}</div>
+              <div>{`${output ?? 'None'}`}</div>
             )}
             {decodedErr && (
               <div>
