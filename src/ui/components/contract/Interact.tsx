@@ -113,16 +113,16 @@ export const InteractTab = ({ contract }: Props) => {
     const log =
       contractEvents?.map(({ event, args }) => {
         const a = args.map((a, i) => (
-          <>
+          <div key={`${event.identifier}-${event.args[i].name}`}>
             <div>{event.args[i].name}</div>
             <pre>{JSON.stringify(a.toHuman(), null, 2)}</pre>
-          </>
+          </div>
         ));
         return (
-          <>
+          <div key={event.identifier}>
             <div>{event.identifier}</div>
             {a}
-          </>
+          </div>
         );
       }) || [];
 
