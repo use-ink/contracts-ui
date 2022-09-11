@@ -114,7 +114,7 @@ export const InteractTab = ({ contract }: Props) => {
         const a = args.map((a, i) => (
           <>
             <div>{event.args[i].name}</div>
-            <div>{`${a.toHuman()}`}</div>
+            <pre>{JSON.stringify(a.toHuman(), null, 2)}</pre>
           </>
         ));
         return (
@@ -142,41 +142,6 @@ export const InteractTab = ({ contract }: Props) => {
 
     setNextResultId(nextResultId + 1);
   };
-  // const onCallError = ({
-  //   events,
-  //   dispatchError,
-  //   contractEvents,
-  //   dispatchInfo,
-  // }: ContractSubmittableResult) => {
-  //   const runtimeEvents = events.map(({ event }) => {
-  //     return `${event.section}:${event.method}`;
-  //   });
-  //   const log = contractEvents?.map(({ event, args }) => {
-  //     const a = args.map(
-  //       (a, i) =>
-  //         `${event.args[i].name}
-  //       ${a.toHuman()}
-  //     `
-  //     );
-  //     return { eventName: event.identifier, args: a };
-  //   });
-  //   setCallResults([
-  //     ...callResults,
-  //     {
-  //       id: nextResultId,
-  //       message,
-  //       time: Date.now(),
-  //       isComplete: true,
-  //       data: null,
-  //       error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
-  //       log,
-  //       events: runtimeEvents,
-  //       info: dispatchInfo?.toHuman(),
-  //     },
-  //   ]);
-
-  //   setNextResultId(nextResultId + 1);
-  // };
 
   const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
