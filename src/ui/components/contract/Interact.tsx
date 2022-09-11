@@ -43,7 +43,7 @@ export const InteractTab = ({ contract }: Props) => {
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
   const [outcome, setOutcome] = useState<ContractCallOutcome>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
-  const weight = useWeight(null);
+  const weight = useWeight(outcome?.gasRequired);
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -68,7 +68,7 @@ export const InteractTab = ({ contract }: Props) => {
       const o = await contract.query[message.method](
         accountId,
         {
-          gasLimit: weight.isActive ? weight.megaGas : -1,
+          gasLimit: weight.mode === 'custom' ? weight.megaGas : -1,
           storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
         },
         ...a
@@ -87,7 +87,7 @@ export const InteractTab = ({ contract }: Props) => {
     isUsingStorageDepositLimit,
     message,
     storageDepositLimit.value,
-    weight.isActive,
+    weight.mode,
     weight.megaGas,
   ]);
 
@@ -222,43 +222,50 @@ export const InteractTab = ({ contract }: Props) => {
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
-          <div className="flex justify-between">
-            <FormField
-              help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
-              id="maxGas"
-              label="Max Gas Allowed"
-              isError={!weight.isValid}
-              message={!weight.isValid ? 'Invalid gas limit' : null}
-              className="basis-2/4 mr-4"
-            >
-              <InputGas isCall={message.isMutating} withEstimate {...weight} />
-            </FormField>
-            <FormField
-              help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
-              id="storageDepositLimit"
-              label="Storage Deposit Limit"
-              isError={!storageDepositLimit.isValid}
-              message={
-                !storageDepositLimit.isValid
-                  ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                  : null
-              }
-              className="basis-2/4 shrink-0"
-            >
-              <InputStorageDepositLimit
-                isActive={isUsingStorageDepositLimit}
-                toggleIsActive={toggleIsUsingStorageDepositLimit}
-                {...storageDepositLimit}
-              />
-            </FormField>
-          </div>
+          {message.isMutating && (
+            <div className="flex justify-between">
+              <FormField
+                help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
+                id="maxGas"
+                label="Max Gas Allowed"
+                isError={!weight.isValid}
+                message={!weight.isValid ? 'Invalid gas limit' : null}
+                className="basis-2/4 mr-4"
+              >
+                <InputGas
+                  estimatedWeight={weight.estimatedWeight}
+                  megaGas={weight.megaGas}
+                  setMegaGas={weight.setMegaGas}
+                  defaultWeight={weight.defaultWeight}
+                  isValid={weight.isValid}
+                  weight={weight.weight}
+                />
+              </FormField>
+              <FormField
+                help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
+                id="storageDepositLimit"
+                label="Storage Deposit Limit"
+                isError={!storageDepositLimit.isValid}
+                message={
+                  !storageDepositLimit.isValid
+                    ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                    : null
+                }
+                className="basis-2/4 shrink-0"
+              >
+                <InputStorageDepositLimit
+                  isActive={isUsingStorageDepositLimit}
+                  toggleIsActive={toggleIsUsingStorageDepositLimit}
+                  {...storageDepositLimit}
+                />
+              </FormField>
+            </div>
+          )}
         </Form>
         <Buttons>
           {(message.isPayable || message.isMutating) && (
             <Button
-              isDisabled={
-                !(weight.isValid || !weight.isActive || txs[txId]?.status === 'processing')
-              }
+              isDisabled={!(weight.isValid || txs[txId]?.status === 'processing')}
               isLoading={txs[txId]?.status === 'processing'}
               onClick={call}
               variant="primary"

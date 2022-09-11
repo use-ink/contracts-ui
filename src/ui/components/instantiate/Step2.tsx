@@ -9,7 +9,7 @@ import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
 import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
-import { isNumber, genRanHex } from 'helpers';
+import { isNumber, genRanHex, BN_ZERO } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'ui/util/dropdown';
@@ -19,8 +19,7 @@ import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
-
-import { AbiMessage, OrFalsy } from 'types';
+import { AbiMessage } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { useDebounce } from 'ui/hooks';
 
@@ -30,7 +29,7 @@ export function Step2() {
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
   const dbValue = useDebounce(value);
   const { accountId, metadata } = data;
-  const [estimatedWeight, setEstimatedWeight] = useState<OrFalsy<BN>>(null);
+  const [estimatedWeight, setEstimatedWeight] = useState<BN>();
   const weight = useWeight(estimatedWeight);
   const dbWeight = useDebounce(weight.weight);
 
@@ -68,7 +67,7 @@ export function Step2() {
       value,
       argValues,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-      weight: weight.isActive ? weight.weight : estimatedWeight || weight.defaultWeight,
+      weight: weight.mode === 'custom' ? weight.weight : estimatedWeight || BN_ZERO,
     });
     setStep(3);
   };
@@ -97,31 +96,31 @@ export function Step2() {
           value: dbValue && deployConstructor?.isPayable ? dbValue : null,
           argValues: dbArgValues,
           storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
-          weight: weight.isActive ? dbWeight : weight.defaultWeight,
+          weight: weight.mode === 'custom' ? dbWeight : weight.defaultWeight,
         },
         api
       );
   }, [
-    onFormChange,
+    api,
     constructorIndex,
-    deployConstructor,
-    dbSalt,
-    dbValue,
     dbArgValues,
+    dbSalt,
     dbStorageDepositLimit,
+    dbValue,
     dbWeight,
+    deployConstructor?.isPayable,
     isUsingSalt,
     isUsingStorageDepositLimit,
+    onFormChange,
     weight.defaultWeight,
-    weight.isActive,
-    api,
+    weight.mode,
   ]);
 
   useEffect(
     (): void => {
       if (!metadata) {
-        setEstimatedWeight(null);
-        weight.setIsActive(false);
+        setEstimatedWeight(undefined);
+        // weight.setIsActive(false);
       }
     },
     // eslint-disable-next-line
@@ -191,7 +190,7 @@ export function Step2() {
             message={!weight.isValid ? 'Invalid gas limit' : null}
             className="basis-2/4 mr-4"
           >
-            <InputGas isCall withEstimate {...weight} />
+            <InputGas {...weight} />
           </FormField>
           <FormField
             help="The maximum balance allowed to be deducted for the new contract's storage deposit."

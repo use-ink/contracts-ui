@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 interface Props {
-  label: React.ReactNode;
+  label?: React.ReactNode;
   accessory?: React.ReactNode;
   withAccessory?: boolean;
 }
