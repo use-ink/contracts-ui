@@ -182,13 +182,14 @@ export function Step2() {
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
 
-        <div className="flex">
+        <div className="flex justify-between">
           <FormField
             help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
             id="maxGas"
             label="Max Gas Allowed"
             isError={!weight.isValid}
             message={!weight.isValid ? 'Invalid gas limit' : null}
+            className="basis-2/4 mr-4"
           >
             <InputGas isCall withEstimate {...weight} />
           </FormField>
@@ -202,6 +203,7 @@ export function Step2() {
                 ? storageDepositLimit.message || 'Invalid storage deposit limit'
                 : null
             }
+            className="basis-2/4 shrink-0"
           >
             <InputStorageDepositLimit
               isActive={isUsingStorageDepositLimit}

@@ -229,7 +229,7 @@ export const InteractTab = ({ contract }: Props) => {
               label="Max Gas Allowed"
               isError={!weight.isValid}
               message={!weight.isValid ? 'Invalid gas limit' : null}
-              className=" basis-2/4 mr-4"
+              className="basis-2/4 mr-4"
             >
               <InputGas isCall={message.isMutating} withEstimate {...weight} />
             </FormField>
@@ -243,7 +243,7 @@ export const InteractTab = ({ contract }: Props) => {
                   ? storageDepositLimit.message || 'Invalid storage deposit limit'
                   : null
               }
-              className=" basis-2/4 shrink-0"
+              className="basis-2/4 shrink-0"
             >
               <InputStorageDepositLimit
                 isActive={isUsingStorageDepositLimit}
