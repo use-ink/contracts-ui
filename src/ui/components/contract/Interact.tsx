@@ -69,7 +69,7 @@ export const InteractTab = ({ contract }: Props) => {
         accountId,
         {
           gasLimit: weight.isActive ? weight.megaGas : -1,
-          storageDepositLimit: storageDepositLimit.value ?? null,
+          storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
         },
         ...a
       );
@@ -84,6 +84,7 @@ export const InteractTab = ({ contract }: Props) => {
     contract.abi.messages,
     contract.query,
     contract.registry,
+    isUsingStorageDepositLimit,
     message,
     storageDepositLimit.value,
     weight.isActive,

@@ -62,7 +62,7 @@ export function useBalance(
 
       if (maxValue && maxValue.gtn(0) && value?.gt(maxValue)) {
         isError = true;
-        message = `Value cannot exceed ${maxValue?.toNumber().toLocaleString()}`;
+        message = `Value exceeds available balance`;
       }
 
       return {

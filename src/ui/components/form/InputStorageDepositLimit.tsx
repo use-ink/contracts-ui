@@ -31,6 +31,7 @@ export function InputStorageDepositLimit({
     if (!maximum || maximum.eqn(0)) {
       return null;
     }
+
     return 100 * new Big(value.toString()).div(new Big(maximum.toString())).toNumber();
   }, [maximum, value]);
 
@@ -52,10 +53,7 @@ export function InputStorageDepositLimit({
         </div>
       </div>
       {isActive && !isNull(percentage) && (
-        <Meter
-          label={isNumber(percentage) ? `${percentage.toFixed(2)}% of free balance` : null}
-          percentage={isNumber(percentage) ? percentage : 100}
-        />
+        <Meter label={isNumber(percentage) ? `${percentage.toFixed(2)}% of free balance` : null} />
       )}
     </div>
   );

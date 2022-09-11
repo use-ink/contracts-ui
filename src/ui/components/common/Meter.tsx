@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 interface Props {
-  percentage: number;
   label: React.ReactNode;
   accessory?: React.ReactNode;
   withAccessory?: boolean;
