@@ -7,9 +7,28 @@ import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
 import { RPC } from '../../constants';
-import { ApiPromise, ApiState, ChainProperties, Account, Status } from 'types';
+import { ApiPromise, ApiState, ChainProperties, Account, Status, NetworkOptionType } from 'types';
 import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
+
+const options = [
+  {
+    label: 'Contracts (Rococo)',
+    value: RPC.CONTRACTS,
+  },
+  {
+    label: 'Shibuya',
+    value: RPC.SHIBUYA,
+  },
+  {
+    label: 'Shiden',
+    value: RPC.SHIDEN,
+  },
+  {
+    label: 'Local Node',
+    value: RPC.LOCAL,
+  },
+];
 
 export const ApiContext = createContext<ApiState | undefined>(undefined);
 
@@ -25,6 +44,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const [accounts, setAccounts] = useState<Account[]>();
   const [chainProps, setChainProps] = useState<ChainProperties>();
   const [status, setStatus] = useState<Status>('loading');
+  const [networkOptions, setNetworkOptions] = useState<NetworkOptionType[]>(options);
 
   useEffect(() => {
     if (rpcUrl && isValidWsUrl(rpcUrl) && rpcUrl !== preferredEndpoint) {
@@ -75,6 +95,8 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
         endpoint,
         status,
         ...(chainProps as ChainProperties),
+        networkOptions,
+        setNetworkOptions,
       }}
     >
       {children}

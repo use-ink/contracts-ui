@@ -7,27 +7,8 @@ import { RPC } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'helpers';
 
-const options = [
-  {
-    label: 'Contracts (Rococo)',
-    value: RPC.CONTRACTS,
-  },
-  {
-    label: 'Shibuya',
-    value: RPC.SHIBUYA,
-  },
-  {
-    label: 'Shiden',
-    value: RPC.SHIDEN,
-  },
-  {
-    label: 'Local Node',
-    value: RPC.LOCAL,
-  },
-];
-
 export function NetworkAndUser() {
-  const { endpoint, status } = useApi();
+  const { endpoint, status, networkOptions } = useApi();
   const navigate = useNavigate();
 
   return (
@@ -42,8 +23,8 @@ export function NetworkAndUser() {
         onChange={e => {
           navigate(`/?rpc=${e}`);
         }}
-        options={options}
-        value={options.find(o => o.value === endpoint)?.value || RPC.CONTRACTS}
+        options={networkOptions}
+        value={networkOptions?.find(o => o.value === endpoint)?.value || RPC.CONTRACTS}
       />
     </div>
   );

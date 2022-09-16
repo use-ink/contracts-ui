@@ -16,12 +16,19 @@ import type { BN } from './util';
 
 export type Status = 'loading' | 'connected' | 'error';
 
+export type NetworkOptionType = {
+  label: string;
+  value: string;
+};
+
 export interface ApiState extends ChainProperties {
   endpoint: string;
   setEndpoint: (e: string) => void;
   status: Status;
   api: ApiPromise;
   accounts?: Account[];
+  networkOptions: { label: string; value: string }[];
+  setNetworkOptions: (networkOptions: networkOptionType[]) => void;
 }
 
 export interface ChainProperties {
