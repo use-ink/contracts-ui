@@ -53,19 +53,12 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
           </>
         </div>
       </SidePanel>
-      <SidePanel header="Call Log" emptyView="No results yet.">
+      <SidePanel header="Transactions Log" emptyView="No transactions yet.">
         {results
           .map(result => {
-            const {
-              message: { isMutating, isPayable },
-              time,
-            } = result;
+            const { time } = result;
             const date = new Date(time).toLocaleString();
-            return isMutating || isPayable ? (
-              <TransactionResult key={time} result={result} date={date} registry={registry} />
-            ) : (
-              <QueryResult key={time} result={result} date={date} registry={registry} />
-            );
+            return <TransactionResult key={time} result={result} date={date} registry={registry} />;
           })
           .reverse()}
       </SidePanel>
