@@ -1,24 +1,32 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
 import { BN_MILLION, BN_ONE, BN_ZERO } from 'helpers';
-import type { InputMode, UseWeight } from 'types';
+import type { UseWeight } from 'types';
 
-export function InputGas({ estimatedWeight, megaGas, setMegaGas }: UseWeight) {
-  const [mode, setMode] = useState<InputMode>('estimation');
-  console.log(mode);
+export function InputGas({ estimatedWeight, setMegaGas, mode, setMode }: UseWeight) {
+  const [value, setValue] = useState(BN_ZERO);
+
+  useEffect(() => {
+    if (mode === 'estimation') {
+      estimatedWeight && setValue(estimatedWeight);
+    }
+    if (mode === 'custom') {
+      setMegaGas(value);
+    }
+  }, [estimatedWeight, mode, setMegaGas, value]);
 
   return (
     <div>
       <InputNumber
-        value={megaGas}
+        value={value}
         isDisabled={mode === 'estimation'}
         onChange={value => {
           if (mode === 'custom') {
-            setMegaGas(value);
+            setValue(value);
           }
         }}
         placeholder="MGas"
@@ -32,7 +40,6 @@ export function InputGas({ estimatedWeight, megaGas, setMegaGas }: UseWeight) {
               onClick={e => {
                 e.preventDefault();
                 setMode('estimation');
-                estimatedWeight && setMegaGas(estimatedWeight);
               }}
               data-cy="use-estimated-gas"
               className="text-green-500"

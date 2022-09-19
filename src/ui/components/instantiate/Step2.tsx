@@ -3,13 +3,14 @@
 
 import BN from 'bn.js';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
 import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
-import { isNumber, genRanHex, BN_ZERO } from 'helpers';
+import { isNumber, genRanHex, transformUserInput } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'ui/util/dropdown';
@@ -19,37 +20,30 @@ import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
 import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
-import { AbiMessage } from 'types';
+import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
-import { useDebounce } from 'ui/hooks';
+
+function validateSalt(value: OrFalsy<string>) {
+  if (!!value && value.length === 66) {
+    return { isValid: true };
+  }
+
+  return { isValid: false, isError: true, message: 'Invalid hex string' };
+}
 
 export function Step2() {
-  const { data, dryRunResult, setStep, step, setData, onFormChange } = useInstantiate();
   const { api } = useApi();
-  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
-  const dbValue = useDebounce(value);
+  const { data, setStep, step, setData, dryRunResult, setDryRunResult } = useInstantiate();
   const { accountId, metadata } = data;
-  const [estimatedWeight, setEstimatedWeight] = useState<BN>();
-  const weight = useWeight(estimatedWeight);
-  const dbWeight = useDebounce(weight.weight);
-
-  const storageDepositLimit = useStorageDepositLimit(accountId);
-  const dbStorageDepositLimit = useDebounce(storageDepositLimit.value);
-
-  const salt = useFormField<string>(genRanHex(64), value => {
-    if (!!value && value.length === 66) {
-      return { isValid: true };
-    }
-
-    return { isValid: false, isError: true, message: 'Invalid hex string' };
-  });
-  const dbSalt = useDebounce(salt.value);
-
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
-
+  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
+  const [estimatedWeight, setEstimatedWeight] = useState<BN>();
+  const weight = useWeight(estimatedWeight);
+  const storageDepositLimit = useStorageDepositLimit(accountId);
+  const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args || null);
-  const dbArgValues = useDebounce(argValues);
+  const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   useEffect(() => {
     setConstructorIndex(0);
@@ -67,7 +61,7 @@ export function Step2() {
       value,
       argValues,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-      weight: weight.mode === 'custom' ? weight.weight : estimatedWeight || BN_ZERO,
+      weight: weight.mode === 'custom' ? weight.megaGas : estimatedWeight ?? weight.defaultWeight,
     });
     setStep(3);
   };
@@ -88,31 +82,51 @@ export function Step2() {
   ]);
 
   useEffect((): void => {
-    onFormChange &&
-      onFormChange(
-        {
-          constructorIndex,
-          salt: isUsingSalt ? dbSalt : null,
-          value: dbValue && deployConstructor?.isPayable ? dbValue : null,
-          argValues: dbArgValues,
-          storageDepositLimit: isUsingStorageDepositLimit ? dbStorageDepositLimit : null,
-          weight: weight.mode === 'custom' ? dbWeight : weight.defaultWeight,
-        },
-        api
-      );
+    async function dryRun() {
+      try {
+        const constructor = metadata?.findConstructor(constructorIndex);
+
+        const inputData = constructor?.toU8a(
+          transformUserInput(api.registry, constructor.args, argValues)
+        );
+
+        const params = {
+          origin: accountId,
+          gasLimit: weight.mode === 'custom' ? weight.megaGas : weight.defaultWeight,
+          storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+          code: codeHashUrlParam
+            ? { Existing: codeHashUrlParam }
+            : { Upload: metadata?.info.source.wasm },
+          data: inputData,
+          salt: salt.value || undefined,
+          value:
+            deployConstructor?.isPayable && value
+              ? api.registry.createType('Balance', value)
+              : null,
+        };
+        const result = await api.rpc.contracts.instantiate(params);
+        setDryRunResult(result);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    dryRun().catch(e => console.error(e));
   }, [
-    api,
+    accountId,
+    api.registry,
+    api.rpc.contracts,
+    argValues,
+    codeHashUrlParam,
     constructorIndex,
-    dbArgValues,
-    dbSalt,
-    dbStorageDepositLimit,
-    dbValue,
-    dbWeight,
     deployConstructor?.isPayable,
-    isUsingSalt,
     isUsingStorageDepositLimit,
-    onFormChange,
+    metadata,
+    salt.value,
+    setDryRunResult,
+    storageDepositLimit.value,
+    value,
     weight.defaultWeight,
+    weight.megaGas,
     weight.mode,
   ]);
 
@@ -120,7 +134,6 @@ export function Step2() {
     (): void => {
       if (!metadata) {
         setEstimatedWeight(undefined);
-        // weight.setIsActive(false);
       }
     },
     // eslint-disable-next-line

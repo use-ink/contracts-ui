@@ -61,10 +61,8 @@ export const InteractTab = ({ contract }: Props) => {
 
   useEffect((): void => {
     if (contract.abi.messages[message.index].method !== message.method) return;
-
     async function dryRun() {
       const a = transformUserInput(contract.registry, message.args, argValues);
-
       const o = await contract.query[message.method](
         accountId,
         {
@@ -73,10 +71,8 @@ export const InteractTab = ({ contract }: Props) => {
         },
         ...a
       );
-
       setOutcome(o);
     }
-
     dryRun().catch(e => console.error(e));
   }, [
     accountId,
@@ -94,7 +90,7 @@ export const InteractTab = ({ contract }: Props) => {
   const transformed = transformUserInput(contract.registry, message.args, argValues);
 
   const options = {
-    gasLimit: weight.weight.addn(1),
+    gasLimit: outcome?.gasRequired,
     storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
     value: message.isPayable ? value || BN_ZERO : undefined,
   };
@@ -239,6 +235,8 @@ export const InteractTab = ({ contract }: Props) => {
                   defaultWeight={weight.defaultWeight}
                   isValid={weight.isValid}
                   weight={weight.weight}
+                  mode={weight.mode}
+                  setMode={weight.setMode}
                 />
               </FormField>
               <FormField

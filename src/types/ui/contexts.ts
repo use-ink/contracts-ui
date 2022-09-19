@@ -35,14 +35,14 @@ export interface ChainProperties {
 }
 
 export interface InstantiateData {
-  accountId?: string;
+  accountId: string;
   argValues?: Record<string, unknown>;
-  value?: BN | null;
+  value?: BN;
   metadata?: Abi;
   name: string;
   constructorIndex: number;
-  salt?: string | null;
-  storageDepositLimit?: BN | null;
+  salt?: string;
+  storageDepositLimit?: BN;
   weight: BN;
   codeHash?: string;
 }
@@ -55,7 +55,7 @@ export interface InstantiateState {
   step: 1 | 2 | 3;
   setStep: React.Dispatch<1 | 2 | 3>;
   dryRunResult?: ContractInstantiateResult;
-  onFormChange: (_: Step2FormData, api: ApiPromise) => void;
+  setDryRunResult: (_: ContractInstantiateResult) => void;
 }
 
 export type InstantiateProps = InstantiateState;

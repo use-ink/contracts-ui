@@ -4,20 +4,22 @@
 
 import { useMemo, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
-import type { BN, UseWeight } from 'types';
+import type { BN, UseWeight, InputMode } from 'types';
 import { maximumBlockWeight, BN_MILLION, BN_ZERO } from 'helpers';
 
 export const useWeight = (estimatedWeight?: BN): UseWeight => {
   const { api } = useApi();
   const [megaGas, setMegaGas] = useState<BN>(BN_ZERO);
+  const [mode, setMode] = useState<InputMode>('estimation');
   const defaultWeight = useMemo((): BN => maximumBlockWeight(api), [api]);
-
   return {
     defaultWeight,
     estimatedWeight,
     isValid: !!estimatedWeight || !megaGas.isZero(),
-    megaGas: megaGas,
+    megaGas,
     setMegaGas,
     weight: megaGas.mul(BN_MILLION),
+    mode,
+    setMode,
   };
 };

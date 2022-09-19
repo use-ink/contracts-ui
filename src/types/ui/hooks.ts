@@ -14,6 +14,7 @@ export type UseWeight = {
   setMegaGas: React.Dispatch<BN>;
   weight: BN;
   mode?: InputMode;
+  setMode: (m: InputMode) => void;
 };
 
 export interface ValidFormField<T> extends Validation {
