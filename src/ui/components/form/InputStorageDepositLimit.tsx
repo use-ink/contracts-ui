@@ -53,7 +53,7 @@ export function InputStorageDepositLimit({
         </div>
       </div>
       {isActive && !isNull(percentage) && (
-        <Meter label={isNumber(percentage) ? `${percentage.toFixed(2)}% of free balance` : null} />
+        <Meter label={isNumber(percentage) ? `${percentage.toFixed(4)}% of free balance` : null} />
       )}
     </div>
   );

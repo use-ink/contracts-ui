@@ -3,11 +3,14 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { encodeTypeDef } from '@polkadot/types';
 import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { SidePanel } from '../common/SidePanel';
-import { QueryResult } from './QueryResult';
+import { CopyButton } from '../common/CopyButton';
 import { TransactionResult } from './TransactionResult';
+import { isBn, fromSats } from 'helpers';
 import { CallResult, Registry } from 'types';
+import { useApi } from 'ui/contexts';
 
 interface Props {
   results: CallResult[];
@@ -17,14 +20,22 @@ interface Props {
 }
 
 export const ResultsOutput = ({ registry, results, outcome, message }: Props) => {
+  const { api, tokenSymbol } = useApi();
   const output = outcome?.output?.toHuman() ?? undefined;
+  const rawOutput = outcome?.output;
   const error = outcome?.result.isErr && outcome?.result.asErr.asModule;
   const decodedErr = error && registry.findMetaError(error);
+  const formattedBallance =
+    !!message.returnType &&
+    encodeTypeDef(registry, message.returnType) === 'u128' &&
+    isBn(rawOutput)
+      ? `${fromSats(api, rawOutput)} ${tokenSymbol}`
+      : undefined;
 
   return (
     <>
       <SidePanel
-        header={message.isMutating ? 'Dry-run result' : `${message.method}`}
+        header={message.isMutating ? 'Dry-run result' : 'Return value'}
         emptyView="No results yet."
       >
         <div className="text-xs p-4">
@@ -36,7 +47,41 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
                 <pre>{JSON.stringify(output, null, 2)}</pre>
               )
             ) : (
-              <div>{`${output ?? 'None'}`}</div>
+              !decodedErr && (
+                <>
+                  {typeof output !== 'undefined' && output !== 'Ok' && (
+                    <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600">
+                      {formattedBallance ?? output.toLocaleString()}
+                      <CopyButton
+                        className="float-right"
+                        value={formattedBallance ?? output?.toLocaleString() ?? ''}
+                      />
+                    </div>
+                  )}
+                  {message.isMutating && (
+                    <>
+                      <div className="mb-1">GasRequired</div>
+                      <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2">
+                        {outcome?.gasRequired.toHuman()}
+                        <CopyButton
+                          className="float-right"
+                          value={outcome?.gasRequired.toString() ?? ''}
+                        />
+                      </div>
+                      <div className="mb-1">StorageDeposit</div>
+                      <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600">
+                        <>
+                          {outcome?.storageDeposit.asCharge.toHuman()}
+                          <CopyButton
+                            className="float-right"
+                            value={outcome?.storageDeposit.asCharge.toString() ?? ''}
+                          />
+                        </>
+                      </div>
+                    </>
+                  )}
+                </>
+              )
             )}
             {decodedErr && (
               <div>

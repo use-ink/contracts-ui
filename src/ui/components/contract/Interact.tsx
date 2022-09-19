@@ -36,7 +36,7 @@ export const InteractTab = ({ contract }: Props) => {
   } = useFormField(contract.abi.messages[0]);
   const [argValues, setArgValues] = useArgValues(message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
-  const { value, onChange: setValue, ...valueValidation } = useBalance(100);
+  const { value, onChange: setValue, ...valueValidation } = useBalance(0);
   const [accountId, setAccountId] = useState('');
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
@@ -110,13 +110,13 @@ export const InteractTab = ({ contract }: Props) => {
       contractEvents?.map(({ event, args }) => {
         const a = args.map((a, i) => (
           <div key={`${event.identifier}-${event.args[i].name}`}>
-            <div>{event.args[i].name}</div>
-            <pre>{JSON.stringify(a.toHuman(), null, 2)}</pre>
+            <div className="text-gray-200">{event.args[i].name}</div>
+            {JSON.stringify(a.toHuman(), null, 2)}
           </div>
         ));
         return (
           <div key={event.identifier}>
-            <div>{event.identifier}</div>
+            <div className="mb-2 text-sm">{event.identifier}</div>
             {a}
           </div>
         );
