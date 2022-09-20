@@ -17,12 +17,7 @@ export function Enum(props: Props) {
   const { components, typeDef, nestingNumber, onChange: _onChange, registry, value = {} } = props;
   const variants = typeDef.sub as TypeDef[];
   const { accounts } = useApi();
-  const [variantIndex, _setVariantIndex] = useState<number>(
-    Math.max(
-      0,
-      variants.findIndex(({ name }) => name === Object.keys(value)[0])
-    )
-  );
+  const [variantIndex, _setVariantIndex] = useState<number>(0);
 
   const Component = components[variantIndex];
 
