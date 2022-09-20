@@ -162,6 +162,14 @@ export const InteractTab = ({ contract }: Props) => {
     processTx().catch(e => console.error(e));
   }, [process, txId, txs]);
 
+  const decodedOutput = outcome?.output?.toHuman();
+
+  const callDisabled =
+    !weight.isValid ||
+    txs[txId]?.status === 'processing' ||
+    !!outcome?.result.isErr ||
+    (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
+
   if (!contract) return null;
 
   return (
@@ -262,7 +270,7 @@ export const InteractTab = ({ contract }: Props) => {
         <Buttons>
           {(message?.isPayable || message?.isMutating) && (
             <Button
-              isDisabled={!(weight.isValid || txs[txId]?.status === 'processing')}
+              isDisabled={callDisabled}
               isLoading={txs[txId]?.status === 'processing'}
               onClick={call}
               variant="primary"
