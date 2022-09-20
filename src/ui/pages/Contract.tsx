@@ -89,7 +89,7 @@ export function Contract() {
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={isOnChain === undefined}>
+    <Loader isLoading={isOnChain === undefined} message="Loading contract...">
       <PageFull
         accessory={<HeaderButtons contract={document} />}
         header={document.name || projectName}

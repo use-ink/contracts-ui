@@ -2,14 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import type {
-  AbiMessage,
-  AnyJson,
-  Codec,
-  ContractPromise,
-  RegistryError,
-  Hash,
-} from '../substrate';
+import type { AbiMessage, AnyJson, ContractPromise, RegistryError } from '../substrate';
 
 export interface ContractDryRunParams {
   contract: ContractPromise;
@@ -20,13 +13,10 @@ export interface ContractDryRunParams {
 }
 
 export interface CallResult {
-  data: Codec | null;
   id: number;
-  isComplete: boolean;
   events: string[];
   log: JSX.Element[];
   message: AbiMessage;
-  blockHash?: Hash;
   error?: RegistryError;
   info?: Record<string, AnyJson>;
   time: number;

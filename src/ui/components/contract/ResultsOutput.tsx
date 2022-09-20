@@ -47,25 +47,26 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
                 <pre>{JSON.stringify(output, null, 2)}</pre>
               )
             ) : (
-              !decodedErr && (
+              !decodedErr &&
+              outcome && (
                 <>
                   {typeof output !== 'undefined' && output !== 'Ok' && (
                     <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600">
-                      {formattedBallance ?? output.toLocaleString()}
+                      {formattedBallance ?? output?.toLocaleString()}
                       <CopyButton
                         className="float-right"
-                        value={formattedBallance ?? output?.toLocaleString() ?? ''}
+                        value={outcome.output?.toString() ?? ''}
                       />
                     </div>
                   )}
-                  {message.isMutating && (
+                  {typeof outcome !== 'undefined' && message.isMutating && (
                     <>
                       <div className="mb-1">GasRequired</div>
                       <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2">
                         {outcome?.gasRequired.toHuman()}
                         <CopyButton
                           className="float-right"
-                          value={outcome?.gasRequired.toString() ?? ''}
+                          value={outcome.gasRequired.toString() ?? ''}
                         />
                       </div>
                       <div className="mb-1">StorageDeposit</div>
@@ -74,7 +75,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
                           {outcome?.storageDeposit.asCharge.toHuman()}
                           <CopyButton
                             className="float-right"
-                            value={outcome?.storageDeposit.asCharge.toString() ?? ''}
+                            value={outcome.storageDeposit.asCharge.toString() ?? ''}
                           />
                         </>
                       </div>
@@ -92,7 +93,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
                   remarkPlugins={[remarkGfm]}
                   className="markdown mt-2"
                 />
-                {outcome?.debugMessage.toHuman()}
+                {outcome.debugMessage.toHuman()}
               </div>
             )}
           </>

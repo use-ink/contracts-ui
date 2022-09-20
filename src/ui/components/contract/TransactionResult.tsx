@@ -3,7 +3,6 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Spinner } from '../common/Spinner';
 import type { CallResult, Registry } from 'types';
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
   registry: Registry;
 }
 
-export const TransactionResult = ({ result: { isComplete, time, error, log }, date }: Props) => {
+export const TransactionResult = ({ result: { time, error, log }, date }: Props) => {
   return (
     <div
       key={`${time}`}
@@ -20,14 +19,9 @@ export const TransactionResult = ({ result: { isComplete, time, error, log }, da
     >
       <div className="flex-col">
         <div className="mb-2">{date}</div>
-        {!isComplete && <Spinner width={4} strokeWidth={2} color="gray-600" className="mt-2" />}
-        {isComplete && (
-          <>
-            <div className="flex-col items-start mb-2 mt-4">
-              <div className="event-log">{log}</div>
-            </div>
-          </>
-        )}
+        <div className="flex-col items-start mb-2 mt-4">
+          <div className="event-log">{log}</div>
+        </div>
         {error && (
           <>
             <span className="mb-2">{`${error.section}:${error.method}`}</span>
