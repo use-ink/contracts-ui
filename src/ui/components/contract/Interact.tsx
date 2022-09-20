@@ -28,7 +28,7 @@ interface Props {
 }
 
 export const InteractTab = ({ contract }: Props) => {
-  const { accounts } = useApi();
+  const { accounts, api } = useApi();
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
@@ -102,26 +102,7 @@ export const InteractTab = ({ contract }: Props) => {
 
   const { queue, process, txs } = useTransactions();
 
-  const onCallSuccess = ({ dispatchInfo, events, contractEvents }: ContractSubmittableResult) => {
-    const runtimeEvents = events.map(({ event }) => {
-      return `${event.section}:${event.method}`;
-    });
-    const log =
-      contractEvents?.map(({ event, args }) => {
-        const a = args.map((a, i) => (
-          <div key={`${event.identifier}-${event.args[i].name}`}>
-            <div className="text-gray-200">{event.args[i].name}</div>
-            {JSON.stringify(a.toHuman(), null, 2)}
-          </div>
-        ));
-        return (
-          <div key={event.identifier}>
-            <div className="mb-2 text-sm">{event.identifier}</div>
-            {a}
-          </div>
-        );
-      }) || [];
-
+  const onCallSuccess = ({ events, contractEvents, dispatchError }: ContractSubmittableResult) => {
     message &&
       setCallResults([
         ...callResults,
@@ -129,9 +110,11 @@ export const InteractTab = ({ contract }: Props) => {
           id: nextResultId,
           message,
           time: Date.now(),
-          log,
-          events: runtimeEvents,
-          info: dispatchInfo?.toHuman(),
+          contractEvents,
+          events,
+          error: dispatchError?.isModule
+            ? api.registry.findMetaError(dispatchError.asModule)
+            : undefined,
         },
       ]);
 
