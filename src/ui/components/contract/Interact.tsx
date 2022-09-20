@@ -234,7 +234,6 @@ export const InteractTab = ({ contract }: Props) => {
                   setMegaGas={weight.setMegaGas}
                   defaultWeight={weight.defaultWeight}
                   isValid={weight.isValid}
-                  weight={weight.weight}
                   mode={weight.mode}
                   setMode={weight.setMode}
                 />

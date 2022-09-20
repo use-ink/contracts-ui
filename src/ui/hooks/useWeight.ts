@@ -5,7 +5,7 @@
 import { useMemo, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { BN, UseWeight, InputMode } from 'types';
-import { maximumBlockWeight, BN_MILLION, BN_ZERO } from 'helpers';
+import { maximumBlockWeight, BN_ZERO } from 'helpers';
 
 export const useWeight = (estimatedWeight?: BN): UseWeight => {
   const { api } = useApi();
@@ -15,10 +15,9 @@ export const useWeight = (estimatedWeight?: BN): UseWeight => {
   return {
     defaultWeight,
     estimatedWeight,
-    isValid: !!estimatedWeight || !megaGas.isZero(),
+    isValid: mode === 'estimation' || (mode === 'custom' && !megaGas.isZero()),
     megaGas,
     setMegaGas,
-    weight: megaGas.mul(BN_MILLION),
     mode,
     setMode,
   };

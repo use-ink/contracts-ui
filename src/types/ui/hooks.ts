@@ -12,7 +12,6 @@ export type UseWeight = {
   isValid: boolean;
   megaGas: BN;
   setMegaGas: React.Dispatch<BN>;
-  weight: BN;
   mode?: InputMode;
   setMode: (m: InputMode) => void;
 };
