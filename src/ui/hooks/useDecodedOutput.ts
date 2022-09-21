@@ -26,7 +26,9 @@ export function useDecodedOutput(
   const isError = o !== null && typeof o === 'object' && 'Err' in o;
 
   const decodedOutput = isError
-    ? o?.Err?.toString() ?? ''
+    ? typeof o.Err === 'string'
+      ? o.Err
+      : JSON.stringify(o.Err, null, 2)
     : typeof o === 'object'
     ? JSON.stringify(o)
     : formattedBallance ?? o?.toString() ?? '';

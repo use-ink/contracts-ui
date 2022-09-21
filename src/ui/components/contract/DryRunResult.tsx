@@ -11,14 +11,20 @@ interface Props {
   message: AbiMessage;
 }
 
-export function DryRunResult({ outcome: { output, gasRequired, storageDeposit }, message }: Props) {
+export function DryRunResult({
+  outcome: { output, gasRequired, storageDeposit, debugMessage },
+  message,
+}: Props) {
   const { decodedOutput, isError } = useDecodedOutput(output, message.returnType);
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
 
   return (
     <div data-cy={`dryRun-${message.method}`}>
       {isError ? (
-        <div className="text-red-400">{decodedOutput}</div>
+        <div className="text-red-400">
+          <div>{decodedOutput}</div>
+          <div>{debugMessage}</div>
+        </div>
       ) : (
         <>
           {decodedOutput !== 'Ok' && decodedOutput.trim() !== '' && (
