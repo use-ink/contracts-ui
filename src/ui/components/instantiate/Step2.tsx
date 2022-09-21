@@ -42,7 +42,7 @@ export function Step2() {
   const weight = useWeight(estimatedWeight);
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
-  const [argValues, setArgValues] = useArgValues(api.registry, deployConstructor?.args ?? []);
+  const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   useEffect(() => {

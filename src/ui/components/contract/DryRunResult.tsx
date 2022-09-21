@@ -16,13 +16,16 @@ export function DryRunResult({ outcome: { output, gasRequired, storageDeposit },
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
 
   return (
-    <>
+    <div data-cy={`dryRun-${message.method}`}>
       {isError ? (
         <div className="text-red-400">{decodedOutput}</div>
       ) : (
         <>
           {decodedOutput !== 'Ok' && decodedOutput.trim() !== '' && (
-            <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all">
+            <div
+              className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all"
+              data-cy="output"
+            >
               {decodedOutput}
               <CopyButton className="float-right" value={output?.toString() ?? ''} />
             </div>
@@ -48,6 +51,6 @@ export function DryRunResult({ outcome: { output, gasRequired, storageDeposit },
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

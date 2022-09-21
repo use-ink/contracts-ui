@@ -31,7 +31,7 @@ export const InteractTab = ({ contract }: Props) => {
   const { accounts, api } = useApi();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
-  const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
+  const [argValues, setArgValues] = useArgValues(message?.args || [], contract.abi.registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(0);
   const [accountId, setAccountId] = useState('');
@@ -259,7 +259,7 @@ export const InteractTab = ({ contract }: Props) => {
               onClick={call}
               variant="primary"
             >
-              Call
+              Call contract
             </Button>
           )}
         </Buttons>

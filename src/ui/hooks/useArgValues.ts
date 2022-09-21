@@ -19,16 +19,18 @@ function fromArgs(registry: Registry, accounts: Account[], args: AbiParam[] | nu
 }
 
 export function useArgValues(
-  registry: Registry,
-  args: AbiParam[]
+  args: AbiParam[],
+  registry?: Registry
 ): [ArgValues, SetState<ArgValues>] {
   const { accounts } = useApi();
-  const [value, setValue] = useState<ArgValues>(accounts ? fromArgs(registry, accounts, args) : {});
+  const [value, setValue] = useState<ArgValues>(
+    accounts && registry ? fromArgs(registry, accounts, args) : {}
+  );
   const argsRef = useRef(args);
 
   useEffect((): void => {
     if (accounts && argsRef.current !== args) {
-      setValue(fromArgs(registry, accounts, args));
+      registry && setValue(fromArgs(registry, accounts, args));
       argsRef.current = args;
     }
   }, [accounts, args, registry]);

@@ -13,19 +13,20 @@ interface Props {
 }
 function Events({ events }: { events: EventRecord[] }) {
   return (
-    <>
+    <div data-cy="generic-events">
       <div className="text-sm mb-1">Generic events</div>
       {events.map(({ event }) =>
         event.method === 'ContractEmitted' ? null : (
           <div key={event.method} className="capitalize">{`${event.section}::${event.method}`}</div>
         )
       )}
-    </>
+    </div>
   );
 }
 function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) {
   return (
-    <div className="mb-3">
+    <div className="mb-3" data-cy="contract-events">
+      <div className="text-sm mb-2">Contract emitted</div>
       {contractEvents.map(({ event, args }) => {
         const a = args.map((a, i) => (
           <div key={`${event.identifier}-${event.args[i].name}`}>
@@ -35,8 +36,8 @@ function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) 
         ));
         return (
           <div key={event.identifier}>
-            <div className="mb-2 text-sm">{event.identifier}</div>
-            {a}
+            <div className="mb-1 uppercase">{event.identifier}</div>
+            <div className="pl-2">{a}</div>
           </div>
         );
       })}
@@ -45,16 +46,20 @@ function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) 
 }
 
 export const TransactionResult = ({
-  result: { time, error, events, contractEvents },
+  result: { time, error, events, contractEvents, message },
   date,
 }: Props) => {
   return (
     <div
       key={`${time}`}
       className="text-xs dark:text-gray-400 text-gray-600 break-all p-4 border-b border-gray-200 dark:border-gray-700"
+      data-cy={`${message.method}-result}`}
     >
       <div className="flex-col">
         <div className="mb-2">{date}</div>
+        <div className="text-yellow-400 dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs">
+          {message.identifier}()
+        </div>
         <div className="flex-col items-start mb-2 mt-4">
           <div className="event-log">
             {contractEvents && <ContractEvents contractEvents={contractEvents} />}
