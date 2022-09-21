@@ -56,7 +56,7 @@ export function Enum(props: Props) {
         >
           <Component
             nestingNumber={nestingNumber + 1}
-            value={Object.values(value)[0] ?? {}}
+            value={!!value && typeof value === 'object' ? Object.values(value)[0] : {}}
             onChange={onChange}
             registry={registry}
             typeDef={variants[variantIndex]}
