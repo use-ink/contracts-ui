@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 export * from './useDebounce';
+export * from './useDecodedOutput';
 export * from './useLocalStorage';
 export * from './useDbQuery';
 export * from './useWeight';

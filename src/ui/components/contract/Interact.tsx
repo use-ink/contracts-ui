@@ -29,6 +29,7 @@ interface Props {
 
 export const InteractTab = ({ contract }: Props) => {
   const { accounts, api } = useApi();
+  const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues] = useArgValues(contract.abi.registry, message?.args || []);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
@@ -50,6 +51,7 @@ export const InteractTab = ({ contract }: Props) => {
   useEffect(() => {
     setMessage(contract.abi.messages[0]);
     setOutcome(undefined);
+    // todo: call results storage
     setCallResults([]);
   }, [contract.abi.messages]);
 
@@ -66,7 +68,6 @@ export const InteractTab = ({ contract }: Props) => {
         },
         ...params
       );
-
       setOutcome(o);
     }
 
@@ -77,6 +78,7 @@ export const InteractTab = ({ contract }: Props) => {
         timeoutId.current = null;
       }, 300);
     }
+
     debouncedDryRun();
   }, [
     accountId,
@@ -85,22 +87,10 @@ export const InteractTab = ({ contract }: Props) => {
     contract.registry,
     isUsingStorageDepositLimit,
     message,
-    message?.args,
-    message?.method,
     storageDepositLimit.value,
     weight.megaGas,
     weight.mode,
   ]);
-
-  const transformed = message ? transformUserInput(contract.registry, message.args, argValues) : [];
-
-  const options = {
-    gasLimit: outcome?.gasRequired,
-    storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-    value: message?.isPayable ? value || BN_ZERO : undefined,
-  };
-
-  const { queue, process, txs } = useTransactions();
 
   const onCallSuccess = ({ events, contractEvents, dispatchError }: ContractSubmittableResult) => {
     message &&
@@ -121,12 +111,23 @@ export const InteractTab = ({ contract }: Props) => {
     setNextResultId(nextResultId + 1);
   };
 
-  const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
-
   const newId = useRef<number>();
 
   const call = () => {
+    const options = {
+      gasLimit: outcome?.gasRequired,
+      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+      value: message?.isPayable ? value || BN_ZERO : undefined,
+    };
+
+    const transformed = message
+      ? transformUserInput(contract.registry, message.args, argValues)
+      : [];
+
+    const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
+
     const tx = message && prepareContractTx(contract.tx[message.method], options, transformed);
+
     if (tx && accountId) {
       newId.current = queue({
         extrinsic: tx,

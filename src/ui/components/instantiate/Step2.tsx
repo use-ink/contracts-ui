@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
@@ -74,36 +74,44 @@ export function Step2() {
     ) {
       setEstimatedWeight(dryRunResult.gasRequired);
     }
+  }, [dryRunResult?.gasRequired, dryRunResult?.result.isOk, estimatedWeight]);
+
+  const params = useMemo(() => {
+    const inputData = deployConstructor?.toU8a(
+      transformUserInput(api.registry, deployConstructor.args, argValues)
+    );
+
+    return {
+      origin: accountId,
+      gasLimit: weight.mode === 'custom' ? weight.megaGas : weight.defaultWeight,
+      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+      code: codeHashUrlParam
+        ? { Existing: codeHashUrlParam }
+        : { Upload: metadata?.info.source.wasm },
+      data: inputData,
+      salt: salt.value || undefined,
+      value:
+        deployConstructor?.isPayable && value ? api.registry.createType('Balance', value) : null,
+    };
   }, [
-    dryRunResult?.result.isOk,
-    dryRunResult?.result.isErr,
-    dryRunResult?.gasRequired,
-    estimatedWeight,
+    accountId,
+    api.registry,
+    argValues,
+    codeHashUrlParam,
+    deployConstructor,
+    isUsingStorageDepositLimit,
+    metadata?.info.source.wasm,
+    salt.value,
+    storageDepositLimit.value,
+    value,
+    weight.defaultWeight,
+    weight.megaGas,
+    weight.mode,
   ]);
 
   useEffect((): void => {
     async function dryRun() {
       try {
-        const constructor = metadata?.findConstructor(constructorIndex);
-
-        const inputData = constructor?.toU8a(
-          transformUserInput(api.registry, constructor.args, argValues)
-        );
-
-        const params = {
-          origin: accountId,
-          gasLimit: weight.mode === 'custom' ? weight.megaGas : weight.defaultWeight,
-          storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-          code: codeHashUrlParam
-            ? { Existing: codeHashUrlParam }
-            : { Upload: metadata?.info.source.wasm },
-          data: inputData,
-          salt: salt.value || undefined,
-          value:
-            deployConstructor?.isPayable && value
-              ? api.registry.createType('Balance', value)
-              : null,
-        };
         const result = await api.rpc.contracts.instantiate(params);
         setDryRunResult(result);
       } catch (e) {
@@ -111,24 +119,7 @@ export function Step2() {
       }
     }
     dryRun().catch(e => console.error(e));
-  }, [
-    accountId,
-    api.registry,
-    api.rpc.contracts,
-    argValues,
-    codeHashUrlParam,
-    constructorIndex,
-    deployConstructor?.isPayable,
-    isUsingStorageDepositLimit,
-    metadata,
-    salt.value,
-    setDryRunResult,
-    storageDepositLimit.value,
-    value,
-    weight.defaultWeight,
-    weight.megaGas,
-    weight.mode,
-  ]);
+  }, [api.rpc.contracts, params, setDryRunResult]);
 
   useEffect(
     (): void => {

@@ -13,7 +13,7 @@ export function DryRunError({
   error: RegistryError;
 }) {
   return (
-    <div>
+    <div className="text-red-400">
       {error.name}
       <ReactMarkdown
         // eslint-disable-next-line react/no-children-prop

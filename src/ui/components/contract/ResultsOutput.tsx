@@ -16,20 +16,25 @@ interface Props {
 }
 
 export const ResultsOutput = ({ registry, results, outcome, message }: Props) => {
-  const error = outcome?.result.isErr ? outcome?.result.asErr.asModule : undefined;
-  const decodedErr = error && registry.findMetaError(error);
-  const debugMessage = outcome?.debugMessage.toHuman() ?? '';
+  const error = outcome?.result.isErr
+    ? registry.findMetaError(outcome?.result.asErr.asModule)
+    : undefined;
+
+  const debugMessage = JSON.stringify(outcome?.debugMessage.toHuman() ?? '');
   return (
     <>
       <SidePanel
         header={message.isMutating ? 'Dry-run result' : 'Returned value'}
         emptyView="No results yet."
       >
-        <div className="text-xs p-4">
+        <div className="text-xs p-4 break-all">
           {
             <>
-              {outcome && !error && <DryRunResult outcome={outcome} message={message} />}
-              {decodedErr && <DryRunError debugMessage={debugMessage} error={decodedErr} />}
+              {error ? (
+                <DryRunError debugMessage={debugMessage} error={error} />
+              ) : (
+                outcome && <DryRunResult outcome={outcome} message={message} />
+              )}
             </>
           }
         </div>
