@@ -3,5 +3,4 @@
 
 export * from './instantiate';
 export * from './util';
-export * from './contract';
 export * from './chainProps';

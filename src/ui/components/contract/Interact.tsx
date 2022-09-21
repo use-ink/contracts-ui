@@ -15,7 +15,7 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import { prepareContractTx, transformUserInput, BN_ZERO } from 'helpers';
+import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { CallResult, ContractPromise, SubmittableResult } from 'types';
 import { useWeight, useBalance, useArgValues } from 'ui/hooks';
@@ -92,6 +92,13 @@ export const InteractTab = ({ contract }: Props) => {
     weight.mode,
   ]);
 
+  useEffect(() => {
+    async function processTx() {
+      txs[txId]?.status === 'queued' && (await process(txId));
+    }
+    processTx().catch(e => console.error(e));
+  }, [process, txId, txs]);
+
   const onCallSuccess = ({ events, contractEvents, dispatchError }: ContractSubmittableResult) => {
     message &&
       setCallResults([
@@ -126,7 +133,7 @@ export const InteractTab = ({ contract }: Props) => {
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const tx = message && prepareContractTx(contract.tx[message.method], options, transformed);
+    const tx = message && contract.tx[message.method](options, ...transformed);
 
     if (tx && accountId) {
       newId.current = queue({
@@ -138,13 +145,6 @@ export const InteractTab = ({ contract }: Props) => {
       setTxId(newId.current);
     }
   };
-
-  useEffect(() => {
-    async function processTx() {
-      txs[txId]?.status === 'queued' && (await process(txId));
-    }
-    processTx().catch(e => console.error(e));
-  }, [process, txId, txs]);
 
   const decodedOutput = outcome?.output?.toHuman();
 

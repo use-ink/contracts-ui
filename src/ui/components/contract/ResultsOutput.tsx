@@ -39,7 +39,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
           }
         </div>
       </SidePanel>
-      <SidePanel header="Transactions Log" emptyView="No transactions yet.">
+      <SidePanel header="Transactions log" emptyView="No transactions yet.">
         {results
           .map(result => {
             const { time } = result;
