@@ -10,7 +10,7 @@ import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
 import { InputGas } from '../form/InputGas';
 import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
-import { isNumber, genRanHex, transformUserInput } from 'helpers';
+import { isNumber, genRanHex, transformUserInput, BN_ZERO } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
 import { createConstructorOptions } from 'ui/util/dropdown';
@@ -37,7 +37,7 @@ export function Step2() {
   const { accountId, metadata } = data;
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
-  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(10000);
+  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
   const [estimatedWeight, setEstimatedWeight] = useState<BN>();
   const weight = useWeight(estimatedWeight);
   const storageDepositLimit = useStorageDepositLimit(accountId);
@@ -58,7 +58,7 @@ export function Step2() {
       ...data,
       constructorIndex,
       salt: isUsingSalt ? salt.value : undefined,
-      value,
+      value: deployConstructor?.isPayable ? value : undefined,
       argValues,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       weight: weight.mode === 'custom' ? weight.megaGas : estimatedWeight ?? weight.defaultWeight,
@@ -90,8 +90,7 @@ export function Step2() {
         : { Upload: metadata?.info.source.wasm },
       data: inputData,
       salt: salt.value || undefined,
-      value:
-        deployConstructor?.isPayable && value ? api.registry.createType('Balance', value) : null,
+      value: deployConstructor?.isPayable ? value : null,
     };
   }, [
     accountId,
@@ -120,16 +119,6 @@ export function Step2() {
     }
     dryRun().catch(e => console.error(e));
   }, [api.rpc.contracts, params, setDryRunResult]);
-
-  useEffect(
-    (): void => {
-      if (!metadata) {
-        setEstimatedWeight(undefined);
-      }
-    },
-    // eslint-disable-next-line
-    [metadata]
-  );
 
   if (step !== 2) return null;
 

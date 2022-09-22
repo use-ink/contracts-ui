@@ -210,7 +210,7 @@ export const InteractTab = ({ contract }: Props) => {
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
-          {message?.isMutating && (
+          {(message?.isMutating || message?.isPayable) && (
             <div className="flex justify-between">
               <FormField
                 help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."

@@ -36,7 +36,7 @@ export function DryRunResult({
               <CopyButton className="float-right" value={output?.toString() ?? ''} />
             </div>
           )}
-          {message.isMutating && (
+          {(message.isMutating || message.isPayable) && (
             <>
               <div className="mb-1">GasRequired</div>
               <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2">
