@@ -14,10 +14,10 @@ interface Props {
 function Events({ events }: { events: EventRecord[] }) {
   return (
     <div data-cy="generic-events">
-      <div className="text-sm mb-1">Generic events</div>
+      <div className="mb-2 uppercase">Generic events</div>
       {events.map(({ event }) =>
         event.method === 'ContractEmitted' ? null : (
-          <div key={event.method} className="capitalize">{`${event.section}::${event.method}`}</div>
+          <div key={event.method}>{`${event.section}::${event.method}`}</div>
         )
       )}
     </div>
@@ -25,18 +25,18 @@ function Events({ events }: { events: EventRecord[] }) {
 }
 function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) {
   return (
-    <div className="mb-3" data-cy="contract-events">
-      <div className="text-sm mb-2">Contract emitted</div>
+    <div className="mb-4" data-cy="contract-events">
+      <div className="mb-2 uppercase">Contract events</div>
       {contractEvents.map(({ event, args }) => {
         const a = args.map((a, i) => (
-          <div key={`${event.identifier}-${event.args[i].name}`}>
+          <div key={`${event.identifier}-${event.args[i].name}`} className="mb-1">
             <div className="text-gray-200">{event.args[i].name}</div>
             {JSON.stringify(a.toHuman(), null, 2)}
           </div>
         ));
         return (
           <div key={event.identifier}>
-            <div className="mb-1 uppercase">{event.identifier}</div>
+            <div className="mb-1 text-sm">{event.identifier}</div>
             <div className="pl-2">{a}</div>
           </div>
         );
