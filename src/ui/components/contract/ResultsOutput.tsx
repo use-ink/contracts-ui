@@ -21,7 +21,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
         header={message.isMutating || message.isPayable ? 'Dry-run outcome' : 'Outcome'}
         emptyView="No results yet."
       >
-        <div className="text-xs p-4 break-all overflow-x-hidden">
+        <div className="text-xs p-4 break-all whitespace-pre-wrap">
           {outcome && <DryRunResult outcome={outcome} message={message} />}
         </div>
       </SidePanel>

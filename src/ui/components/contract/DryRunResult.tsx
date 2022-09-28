@@ -18,7 +18,7 @@ export function DryRunResult({
   message,
 }: Props) {
   const { api } = useApi();
-  const { decodedOutput, isError } = useDecodedOutput(output, message.returnType);
+  const { decodedOutput, isError } = useDecodedOutput(output);
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
   const error = result.isErr ? api.registry.findMetaError(result.asErr.asModule) : undefined;
 
@@ -49,7 +49,7 @@ export function DryRunResult({
               className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all"
               data-cy="output"
             >
-              {JSON.stringify(debugMessage.trim())}
+              <pre className="whitespace-pre-wrap">{debugMessage.toHuman()}</pre>
               <CopyButton className="float-right" value={JSON.stringify(debugMessage.toHuman())} />
             </div>
           </>
@@ -58,12 +58,12 @@ export function DryRunResult({
           <>
             <div className="mb-1">Return value</div>
             <div
-              className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all"
+              className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all relative"
               data-cy="output"
             >
-              {decodedOutput}
+              <pre className="whitespace-pre-wrap">{decodedOutput}</pre>
 
-              <CopyButton className="float-right" value={output?.toString() ?? ''} />
+              <CopyButton className="absolute right-2 bottom-2" value={output?.toString() ?? ''} />
             </div>
           </>
         )}
