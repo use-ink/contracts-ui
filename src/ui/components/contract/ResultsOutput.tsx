@@ -24,7 +24,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
   return (
     <>
       <SidePanel
-        header={message.isMutating || message.isPayable ? 'Dry-run result' : 'Returned value'}
+        header={message.isMutating || message.isPayable ? 'Dry-run outcome' : 'Outcome'}
         emptyView="No results yet."
       >
         <div className="text-xs p-4 break-all">
