@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { ContractSubmittableResult } from '@polkadot/api-contract/base/Contract';
 import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { ResultsOutput } from './ResultsOutput';
@@ -43,6 +43,10 @@ export const InteractTab = ({ contract }: Props) => {
   const weight = useWeight(outcome?.gasRequired);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
+  const params = useMemo(() => {
+    return message ? transformUserInput(contract.registry, message.args, argValues) : [];
+  }, [argValues, contract.registry, message]);
+
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
     setAccountId(accounts[0].address);
@@ -59,7 +63,6 @@ export const InteractTab = ({ contract }: Props) => {
     async function dryRun() {
       if (!message || typeof contract.query[message.method] !== 'function') return;
 
-      const params = transformUserInput(contract.registry, message.args, argValues);
       const o = await contract.query[message.method](
         accountId,
         {
@@ -82,11 +85,10 @@ export const InteractTab = ({ contract }: Props) => {
     debouncedDryRun();
   }, [
     accountId,
-    argValues,
     contract.query,
-    contract.registry,
     isUsingStorageDepositLimit,
     message,
+    params,
     storageDepositLimit.value,
     weight.megaGas,
     weight.mode,
@@ -121,19 +123,20 @@ export const InteractTab = ({ contract }: Props) => {
   const newId = useRef<number>();
 
   const call = () => {
+    const { storageDeposit, gasRequired } = outcome ?? {};
     const options = {
-      gasLimit: outcome?.gasRequired,
-      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+      gasLimit: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.defaultWeight,
+      storageDepositLimit: isUsingStorageDepositLimit
+        ? storageDepositLimit.value
+        : storageDeposit?.isCharge
+        ? storageDeposit?.asCharge
+        : undefined,
       value: message?.isPayable ? value || BN_ZERO : undefined,
     };
 
-    const transformed = message
-      ? transformUserInput(contract.registry, message.args, argValues)
-      : [];
-
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const tx = message && contract.tx[message.method](options, ...transformed);
+    const tx = message && contract.tx[message.method](options, ...params);
 
     if (tx && accountId) {
       newId.current = queue({

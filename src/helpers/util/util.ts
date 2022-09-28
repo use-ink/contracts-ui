@@ -119,7 +119,7 @@ export function transformUserInput(
   registry: Registry,
   messageArgs: AbiParam[],
   values?: Record<string, unknown>
-) {
+): unknown[] {
   return messageArgs.map(({ name, type: { type } }) => {
     const value = values ? values[name] : null;
 

@@ -23,7 +23,7 @@ export function DryRunResult({
       {isError ? (
         <div className="text-red-400">
           <div>{decodedOutput}</div>
-          <div>{debugMessage}</div>
+          <div>{debugMessage.toHuman()}</div>
         </div>
       ) : (
         <>

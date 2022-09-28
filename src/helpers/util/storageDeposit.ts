@@ -5,23 +5,19 @@ import { Balance } from '@polkadot/types/interfaces';
 import { ContractCallOutcome } from '@polkadot/api-contract/types';
 
 type UIStorageDeposit = {
-  storageDepositValue: Balance | undefined;
+  storageDepositValue?: Balance;
   storageDepositType: 'charge' | 'refund' | 'empty';
 };
 
 export function decodeStorageDeposit(
   storageDeposit: ContractCallOutcome['storageDeposit']
 ): UIStorageDeposit {
-  const x = {} as UIStorageDeposit;
   if (storageDeposit.isCharge) {
-    x.storageDepositValue = storageDeposit.asCharge;
-    x.storageDepositType = 'charge';
+    return { storageDepositValue: storageDeposit.asCharge, storageDepositType: 'charge' };
   } else if (storageDeposit.isRefund) {
-    x.storageDepositValue = storageDeposit.asRefund;
-    x.storageDepositType = 'refund';
-  } else {
-    x.storageDepositType = 'empty';
+    return { storageDepositValue: storageDeposit.asRefund, storageDepositType: 'refund' };
   }
-
-  return x;
+  return {
+    storageDepositType: 'empty',
+  };
 }

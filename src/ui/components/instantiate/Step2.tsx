@@ -1,7 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import BN from 'bn.js';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
@@ -38,8 +37,7 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
-  const [estimatedWeight, setEstimatedWeight] = useState<BN>();
-  const weight = useWeight(estimatedWeight);
+  const weight = useWeight(dryRunResult?.gasRequired);
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
@@ -52,29 +50,6 @@ export function Step2() {
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
-
-  const onSubmit = () => {
-    setData({
-      ...data,
-      constructorIndex,
-      salt: isUsingSalt ? salt.value : undefined,
-      value: deployConstructor?.isPayable ? value : undefined,
-      argValues,
-      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-      weight: weight.mode === 'custom' ? weight.megaGas : estimatedWeight ?? weight.defaultWeight,
-    });
-    setStep(3);
-  };
-
-  useEffect((): void => {
-    if (
-      dryRunResult?.result.isOk &&
-      dryRunResult.gasRequired &&
-      !estimatedWeight?.eq(dryRunResult.gasRequired)
-    ) {
-      setEstimatedWeight(dryRunResult.gasRequired);
-    }
-  }, [dryRunResult?.gasRequired, dryRunResult?.result.isOk, estimatedWeight]);
 
   const params = useMemo(() => {
     const inputData = deployConstructor?.toU8a(
@@ -90,7 +65,7 @@ export function Step2() {
         : { Upload: metadata?.info.source.wasm },
       data: inputData,
       salt: salt.value || undefined,
-      value: deployConstructor?.isPayable ? value : null,
+      value: deployConstructor?.isPayable ? value : undefined,
     };
   }, [
     accountId,
@@ -119,6 +94,25 @@ export function Step2() {
     }
     dryRun().catch(e => console.error(e));
   }, [api.rpc.contracts, params, setDryRunResult]);
+
+  const onSubmit = () => {
+    const { salt, storageDepositLimit, value } = params;
+    const { storageDeposit, gasRequired } = dryRunResult ?? {};
+    setData({
+      ...data,
+      constructorIndex,
+      salt,
+      value,
+      argValues,
+      storageDepositLimit: isUsingStorageDepositLimit
+        ? storageDepositLimit
+        : storageDeposit?.isCharge
+        ? storageDeposit?.asCharge
+        : undefined,
+      weight: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.defaultWeight,
+    });
+    setStep(3);
+  };
 
   if (step !== 2) return null;
 
