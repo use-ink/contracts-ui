@@ -17,7 +17,7 @@ import { useApi, useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
-import { useWeight } from 'ui/hooks/useWeight';
+import { useGas } from 'ui/hooks/useGas';
 import { useToggle } from 'ui/hooks/useToggle';
 import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -37,7 +37,7 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
-  const weight = useWeight(dryRunResult?.gasRequired);
+  const gas = useGas(dryRunResult?.gasRequired);
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
@@ -58,7 +58,7 @@ export function Step2() {
 
     return {
       origin: accountId,
-      gasLimit: weight.mode === 'custom' ? weight.megaGas : weight.maxWeight,
+      gasLimit: gas.mode === 'custom' ? gas.limit : gas.max,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
@@ -78,9 +78,9 @@ export function Step2() {
     salt.value,
     storageDepositLimit.value,
     value,
-    weight.maxWeight,
-    weight.megaGas,
-    weight.mode,
+    gas.max,
+    gas.limit,
+    gas.mode,
   ]);
 
   useEffect((): void => {
@@ -109,7 +109,7 @@ export function Step2() {
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      weight: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.maxWeight,
+      weight: gas.mode === 'custom' ? gas.limit : gasRequired ?? gas.max,
     });
     setStep(3);
   };
@@ -173,11 +173,11 @@ export function Step2() {
             help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
             id="maxGas"
             label="Max Gas Allowed"
-            isError={!weight.isValid}
-            message={!weight.isValid && weight.errorMsg}
+            isError={!gas.isValid}
+            message={!gas.isValid && gas.errorMsg}
             className="basis-2/4 mr-4"
           >
-            <InputGas {...weight} />
+            <InputGas {...gas} estimatedWeight={dryRunResult?.gasRequired} />
           </FormField>
           <FormField
             help="The maximum balance allowed to be deducted for the new contract's storage deposit."
@@ -204,7 +204,7 @@ export function Step2() {
           isDisabled={
             (deployConstructor?.isPayable && !valueValidation.isValid) ||
             (isUsingSalt && !salt.isValid) ||
-            !weight.isValid ||
+            !gas.isValid ||
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
             (dryRunResult && dryRunResult.result.isErr)

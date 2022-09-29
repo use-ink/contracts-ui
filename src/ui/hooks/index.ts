@@ -5,7 +5,7 @@ export * from './useDebounce';
 export * from './useDecodedOutput';
 export * from './useLocalStorage';
 export * from './useDbQuery';
-export * from './useWeight';
+export * from './useGas';
 export * from './useBlockTime';
 export * from './useBalance';
 export * from './useFormField';

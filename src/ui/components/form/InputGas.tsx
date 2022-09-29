@@ -5,24 +5,24 @@ import { useEffect, useState } from 'react';
 import BN from 'bn.js';
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
-import { UseWeight } from 'types';
+import { UIGas } from 'types';
 
 export function InputGas({
   estimatedWeight,
-  setMegaGas,
+  setLimit,
   mode,
   setMode,
-  maxWeight,
+  max,
   setErrorMsg,
   setIsValid,
-}: UseWeight) {
+}: UIGas & { estimatedWeight: BN | undefined }) {
   const [displayValue, setDisplayValue] = useState('0');
 
   useEffect(() => {
     if (mode === 'estimation') {
       estimatedWeight && setDisplayValue(estimatedWeight.toString());
     }
-  }, [estimatedWeight, mode, setMegaGas]);
+  }, [estimatedWeight, mode]);
 
   return (
     <div>
@@ -32,9 +32,9 @@ export function InputGas({
         onChange={e => {
           if (mode === 'custom') {
             const bn = new BN(e.target.value);
-            if (bn.lte(maxWeight)) {
+            if (bn.lte(max)) {
               setDisplayValue(e.target.value);
-              setMegaGas(bn);
+              setLimit(bn);
               setErrorMsg('');
               setIsValid(true);
             } else {
@@ -46,7 +46,7 @@ export function InputGas({
         placeholder="MGas"
         data-cy="gas-input"
         min="0"
-        max={maxWeight.toString()}
+        max={max.toString()}
       />
       <Meter
         accessory={
@@ -71,7 +71,7 @@ export function InputGas({
                 onClick={e => {
                   e.preventDefault();
                   setMode('custom');
-                  estimatedWeight && setMegaGas(estimatedWeight);
+                  estimatedWeight && setLimit(estimatedWeight);
                 }}
                 className="text-green-500"
                 data-cy="use-custom-gas"

@@ -6,13 +6,12 @@ import { BN, FileState, MetadataState, Validation } from './util';
 
 export type InputMode = 'estimation' | 'custom';
 
-export type UseWeight = {
-  maxWeight: BN;
-  estimatedWeight?: BN;
+export type UIGas = {
+  max: BN;
   isValid: boolean;
   setIsValid: (value: boolean) => void;
-  megaGas: BN;
-  setMegaGas: React.Dispatch<BN>;
+  limit: BN;
+  setLimit: React.Dispatch<BN>;
   mode?: InputMode;
   setMode: (m: InputMode) => void;
   errorMsg: string;

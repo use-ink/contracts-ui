@@ -5,19 +5,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { useApi } from 'ui/contexts/ApiContext';
-import type { BN, UseWeight, InputMode } from 'types';
+import type { BN, UIGas, InputMode } from 'types';
 import { maximumBlockWeight, BN_ZERO } from 'helpers';
 
 const weightSchema = Yup.number().positive('Value must be positive').min(1).required();
 
-export const useWeight = (estimatedWeight?: BN): UseWeight => {
+export const useGas = (estimatedGas?: BN): UIGas => {
   const { api } = useApi();
-  const [megaGas, setMegaGas] = useState<BN>(estimatedWeight ?? BN_ZERO);
+  const [limit, setLimit] = useState<BN>(estimatedGas ?? BN_ZERO);
   const [mode, setMode] = useState<InputMode>('estimation');
-  const maxWeight = useMemo((): BN => maximumBlockWeight(api), [api]);
+  const max = useMemo((): BN => maximumBlockWeight(api), [api]);
   const [errorMsg, setErrorMsg] = useState('');
   const [isValid, setIsValid] = useState(true);
-  const displayGas = megaGas.toString();
+  const displayGas = limit.toString();
 
   useEffect(() => {
     async function validate() {
@@ -37,11 +37,10 @@ export const useWeight = (estimatedWeight?: BN): UseWeight => {
   }, [displayGas]);
 
   return {
-    maxWeight,
-    estimatedWeight,
+    max,
     isValid,
-    megaGas,
-    setMegaGas,
+    limit,
+    setLimit,
     mode,
     setMode,
     errorMsg: mode === 'custom' ? errorMsg : '',

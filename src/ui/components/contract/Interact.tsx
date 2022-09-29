@@ -18,7 +18,7 @@ import {
 import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { CallResult, ContractPromise, SubmittableResult } from 'types';
-import { useWeight, useBalance, useArgValues } from 'ui/hooks';
+import { useGas, useBalance, useArgValues } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
@@ -40,7 +40,7 @@ export const InteractTab = ({ contract }: Props) => {
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
   const [outcome, setOutcome] = useState<ContractCallOutcome>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
-  const weight = useWeight(outcome?.gasRequired);
+  const gas = useGas(outcome?.gasRequired);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const inputData = useMemo(() => {
@@ -63,12 +63,7 @@ export const InteractTab = ({ contract }: Props) => {
     async function dryRun() {
       if (!message || typeof contract.query[message.method] !== 'function') return;
       const options = {
-        gasLimit:
-          weight.mode === 'custom'
-            ? weight.megaGas.isZero()
-              ? weight.megaGas.addn(1)
-              : weight.megaGas
-            : -1,
+        gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
         storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
       };
 
@@ -92,8 +87,8 @@ export const InteractTab = ({ contract }: Props) => {
     message,
     inputData,
     storageDepositLimit.value,
-    weight.megaGas,
-    weight.mode,
+    gas.limit,
+    gas.mode,
   ]);
 
   useEffect(() => {
@@ -127,7 +122,7 @@ export const InteractTab = ({ contract }: Props) => {
   const call = () => {
     const { storageDeposit, gasRequired } = outcome ?? {};
     const options = {
-      gasLimit: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.maxWeight,
+      gasLimit: gas.mode === 'custom' ? gas.limit : gasRequired ?? gas.max,
       storageDepositLimit: isUsingStorageDepositLimit
         ? storageDepositLimit.value
         : storageDeposit?.isCharge
@@ -154,7 +149,7 @@ export const InteractTab = ({ contract }: Props) => {
   const decodedOutput = outcome?.output?.toHuman();
 
   const callDisabled =
-    !weight.isValid ||
+    !gas.isValid ||
     txs[txId]?.status === 'processing' ||
     !!outcome?.result.isErr ||
     (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
@@ -223,11 +218,11 @@ export const InteractTab = ({ contract }: Props) => {
                 help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
                 id="maxGas"
                 label="Max Gas Allowed"
-                isError={!weight.isValid}
-                message={!weight.isValid ? weight.errorMsg : null}
+                isError={!gas.isValid}
+                message={!gas.isValid ? gas.errorMsg : null}
                 className="basis-2/4 mr-4"
               >
-                <InputGas {...weight} />
+                <InputGas {...gas} estimatedWeight={outcome?.gasRequired} />
               </FormField>
               <FormField
                 help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
