@@ -16,7 +16,7 @@ export function useDecodedOutput(output: ContractCallOutcome['output']): {
       : JSON.stringify(o.Err, null, 2)
     : typeof o === 'object'
     ? JSON.stringify(o, null, '\t')
-    : o?.toString() ?? '';
+    : o?.toString() ?? '()';
 
   return {
     decodedOutput,

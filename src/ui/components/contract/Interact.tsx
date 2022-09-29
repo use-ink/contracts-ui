@@ -43,7 +43,7 @@ export const InteractTab = ({ contract }: Props) => {
   const weight = useWeight(outcome?.gasRequired);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
-  const params = useMemo(() => {
+  const inputData = useMemo(() => {
     return message ? transformUserInput(contract.registry, message.args, argValues) : [];
   }, [argValues, contract.registry, message]);
 
@@ -69,7 +69,7 @@ export const InteractTab = ({ contract }: Props) => {
           gasLimit: weight.mode === 'custom' ? weight.megaGas : -1,
           storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
         },
-        ...params
+        ...inputData
       );
       setOutcome(o);
     }
@@ -88,7 +88,7 @@ export const InteractTab = ({ contract }: Props) => {
     contract.query,
     isUsingStorageDepositLimit,
     message,
-    params,
+    inputData,
     storageDepositLimit.value,
     weight.megaGas,
     weight.mode,
@@ -136,7 +136,7 @@ export const InteractTab = ({ contract }: Props) => {
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const tx = message && contract.tx[message.method](options, ...params);
+    const tx = message && contract.tx[message.method](options, ...inputData);
 
     if (tx && accountId) {
       newId.current = queue({

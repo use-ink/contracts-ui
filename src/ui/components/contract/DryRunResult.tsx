@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
-import { CopyButton } from '../common/CopyButton';
 import { DryRunError } from './DryRunError';
+import { OutcomeItem } from './OutcomeItem';
 import { useDecodedOutput } from 'ui/hooks';
-import { classes, decodeStorageDeposit } from 'helpers';
+import { classes, decodeStorageDeposit, genRanHex } from 'helpers';
 import { useApi } from 'ui/contexts';
 
 interface Props {
@@ -14,73 +14,74 @@ interface Props {
 }
 
 export function DryRunResult({
-  outcome: { output, gasRequired, storageDeposit, debugMessage, result },
+  outcome: { output, gasRequired, gasConsumed, storageDeposit, debugMessage, result },
   message,
 }: Props) {
   const { api } = useApi();
   const { decodedOutput, isError } = useDecodedOutput(output);
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
-  const error = result.isErr ? api.registry.findMetaError(result.asErr.asModule) : undefined;
+  const dispatchError = result.isErr
+    ? api.registry.findMetaError(result.asErr.asModule)
+    : undefined;
+  const shouldDisplayRequired = !gasConsumed.eq(gasRequired);
+  const prediction = result.isErr
+    ? 'Contract Reverted!'
+    : isError
+    ? 'Contract Reverted!'
+    : message.isMutating || message.isPayable
+    ? 'Contract call will be successful!'
+    : '';
+  const isDispatchable = message.isMutating || message.isPayable;
 
   return (
-    <div data-cy={`dryRun-${message.method}`}>
+    <div data-cy={`dryRun-${message.method}`} className="flex-col flex">
       <>
-        <div
-          className={classes(
-            result.isErr || isError ? 'text-red-500' : 'text-green-500',
-            'font-mono mb-2 text-sm'
-          )}
-        >{`${
-          result.isErr
-            ? 'Panic!'
-            : isError
-            ? 'Contract Reverted!'
-            : message.isMutating || message.isPayable
-            ? 'Contract call will be successful!'
-            : ''
-        }`}</div>
-        {error && <DryRunError error={error} />}
+        {isDispatchable && (
+          <div
+            className={classes(
+              result.isErr || isError ? 'text-red-500' : 'text-green-500',
+              'font-mono mb-2 text-sm'
+            )}
+          >
+            {prediction}
+          </div>
+        )}
+        {dispatchError && <DryRunError error={dispatchError} key={genRanHex(8)} />}
 
         {!debugMessage.isEmpty && (
-          <>
-            {' '}
-            <div className="mb-1">Debug message</div>
-            <div
-              className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all"
-              data-cy="output"
-            >
-              <pre className="whitespace-pre-wrap">{debugMessage.toHuman()}</pre>
-              <CopyButton className="float-right" value={JSON.stringify(debugMessage.toHuman())} />
-            </div>
-          </>
+          <OutcomeItem
+            title="Debug message"
+            displayValue={debugMessage.toHuman()}
+            key={genRanHex(8)}
+          />
         )}
-        {decodedOutput !== 'Ok' && decodedOutput.trim() !== '' && (
-          <>
-            <div className="mb-1">Return value</div>
-            <div
-              className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2 break-all relative"
-              data-cy="output"
-            >
-              <pre className="whitespace-pre-wrap">{decodedOutput}</pre>
-
-              <CopyButton className="absolute right-2 bottom-2" value={output?.toString() ?? ''} />
-            </div>
-          </>
+        {!dispatchError && (
+          <OutcomeItem
+            title={isDispatchable ? 'Execution result' : 'Return value'}
+            displayValue={decodedOutput}
+            copyValue={output?.toString() ?? ''}
+          />
         )}
-        {(message.isMutating || message.isPayable) && (
+        {isDispatchable && (
           <>
-            <div className="mb-1">GasRequired</div>
-            <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600 mb-2">
-              {gasRequired.toHuman()}
-              <CopyButton className="float-right" value={gasRequired.toString() ?? ''} />
-            </div>
-            <div className="mb-1">{`StorageDeposit`}</div>
-            <div className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs return-value dark:text-gray-400 text-gray-600">
-              <>
-                {storageDepositType}: {storageDepositValue?.toHuman() ?? 'none'}
-                <CopyButton className="float-right" value={storageDepositValue?.toString() ?? ''} />
-              </>
-            </div>
+            <OutcomeItem
+              title="GasConsumed"
+              displayValue={gasConsumed.toHuman()}
+              key={genRanHex(8)}
+            />
+            {shouldDisplayRequired && (
+              <OutcomeItem
+                title="GasRequired"
+                displayValue={gasRequired.toHuman()}
+                key={genRanHex(8)}
+              />
+            )}
+            <OutcomeItem
+              title="StorageDeposit"
+              displayValue={`${storageDepositType}: ${storageDepositValue?.toHuman() ?? 'none'}`}
+              copyValue={storageDepositValue?.toString() ?? ''}
+              key={genRanHex(8)}
+            />
           </>
         )}
       </>
