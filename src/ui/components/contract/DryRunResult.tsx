@@ -20,18 +20,21 @@ export function DryRunResult({
   const { api } = useApi();
   const { decodedOutput, isError } = useDecodedOutput(output);
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
-  const dispatchError = result.isErr
-    ? api.registry.findMetaError(result.asErr.asModule)
-    : undefined;
+  const isDispatchable = message.isMutating || message.isPayable;
+
+  const dispatchError =
+    result.isErr && result.asErr.isModule
+      ? api.registry.findMetaError(result.asErr.asModule)
+      : undefined;
+
   const shouldDisplayRequired = !gasConsumed.eq(gasRequired);
   const prediction = result.isErr
     ? 'Contract Reverted!'
     : isError
     ? 'Contract Reverted!'
-    : message.isMutating || message.isPayable
+    : isDispatchable
     ? 'Contract call will be successful!'
     : '';
-  const isDispatchable = message.isMutating || message.isPayable;
 
   return (
     <div data-cy={`dryRun-${message.method}`} className="flex-col flex">
@@ -60,6 +63,7 @@ export function DryRunResult({
             title={isDispatchable ? 'Execution result' : 'Return value'}
             displayValue={decodedOutput}
             copyValue={output?.toString() ?? ''}
+            key={genRanHex(8)}
           />
         )}
         {isDispatchable && (

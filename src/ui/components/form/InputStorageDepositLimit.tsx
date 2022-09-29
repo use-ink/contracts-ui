@@ -42,7 +42,7 @@ export function InputStorageDepositLimit({
           className="flex-1"
           value={isActive ? value : undefined}
           id="storageDepositLimit"
-          isDisabled={!isActive}
+          disabled={!isActive}
           onChange={onChange}
           placeholder={isActive ? undefined : 'Do not use'}
           withUnits={isActive}

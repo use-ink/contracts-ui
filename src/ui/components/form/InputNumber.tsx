@@ -1,45 +1,41 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import BN from 'bn.js';
-import { useCallback } from 'react';
-import { Input } from './Input';
-import { BN_ZERO } from 'helpers';
-import { SimpleSpread } from 'types';
+import { classes } from 'helpers';
 
-type Props = SimpleSpread<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  {
-    isDisabled?: boolean;
-    value?: BN;
-    onChange: (_: BN) => void;
-  }
->;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  isError?: boolean;
+}
 
 export function InputNumber({
   children,
-  isDisabled,
-  onChange: _onChange,
-  value = BN_ZERO,
-  ...props
+  isError,
+  className,
+  onChange,
+  value,
+  disabled,
+  min,
+  max,
+  placeholder,
+  step,
 }: Props) {
-  const onChange = useCallback(
-    (value: string) => {
-      _onChange(new BN(value));
-    },
-    [_onChange]
-  );
-
   return (
-    <Input
-      isDisabled={isDisabled}
-      onChange={onChange}
-      onFocus={e => e.target.select()}
-      type="number"
-      value={value ? value.toString() : ''}
-      {...props}
-    >
+    <div className={classes(isError && 'isError', className)}>
+      <input
+        onChange={onChange}
+        type="number"
+        value={value?.toString() || ''}
+        className={classes(
+          'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
+          disabled && 'dark:text-gray-500'
+        )}
+        disabled={disabled}
+        min={min}
+        max={max}
+        placeholder={placeholder}
+        step={step}
+      />
       {children}
-    </Input>
+    </div>
   );
 }

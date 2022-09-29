@@ -7,13 +7,16 @@ import { BN, FileState, MetadataState, Validation } from './util';
 export type InputMode = 'estimation' | 'custom';
 
 export type UseWeight = {
-  defaultWeight: BN;
+  maxWeight: BN;
   estimatedWeight?: BN;
   isValid: boolean;
+  setIsValid: (value: boolean) => void;
   megaGas: BN;
   setMegaGas: React.Dispatch<BN>;
   mode?: InputMode;
   setMode: (m: InputMode) => void;
+  errorMsg: string;
+  setErrorMsg: (m: string) => void;
 };
 
 export interface ValidFormField<T> extends Validation {

@@ -62,15 +62,17 @@ export const InteractTab = ({ contract }: Props) => {
   useEffect((): void => {
     async function dryRun() {
       if (!message || typeof contract.query[message.method] !== 'function') return;
+      const options = {
+        gasLimit:
+          weight.mode === 'custom'
+            ? weight.megaGas.isZero()
+              ? weight.megaGas.addn(1)
+              : weight.megaGas
+            : -1,
+        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
+      };
 
-      const o = await contract.query[message.method](
-        accountId,
-        {
-          gasLimit: weight.mode === 'custom' ? weight.megaGas : -1,
-          storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
-        },
-        ...inputData
-      );
+      const o = await contract.query[message.method](accountId, options, ...inputData);
       setOutcome(o);
     }
 
@@ -125,7 +127,7 @@ export const InteractTab = ({ contract }: Props) => {
   const call = () => {
     const { storageDeposit, gasRequired } = outcome ?? {};
     const options = {
-      gasLimit: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.defaultWeight,
+      gasLimit: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.maxWeight,
       storageDepositLimit: isUsingStorageDepositLimit
         ? storageDepositLimit.value
         : storageDeposit?.isCharge
@@ -156,6 +158,8 @@ export const InteractTab = ({ contract }: Props) => {
     txs[txId]?.status === 'processing' ||
     !!outcome?.result.isErr ||
     (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
+
+  const isDispatchable = message?.isMutating || message?.isPayable;
 
   if (!contract) return null;
 
@@ -213,25 +217,17 @@ export const InteractTab = ({ contract }: Props) => {
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
-          {(message?.isMutating || message?.isPayable) && (
+          {isDispatchable && (
             <div className="flex justify-between">
               <FormField
                 help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
                 id="maxGas"
                 label="Max Gas Allowed"
                 isError={!weight.isValid}
-                message={!weight.isValid ? 'Invalid gas limit' : null}
+                message={!weight.isValid ? weight.errorMsg : null}
                 className="basis-2/4 mr-4"
               >
-                <InputGas
-                  estimatedWeight={weight.estimatedWeight}
-                  megaGas={weight.megaGas}
-                  setMegaGas={weight.setMegaGas}
-                  defaultWeight={weight.defaultWeight}
-                  isValid={weight.isValid}
-                  mode={weight.mode}
-                  setMode={weight.setMode}
-                />
+                <InputGas {...weight} />
               </FormField>
               <FormField
                 help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
@@ -255,7 +251,7 @@ export const InteractTab = ({ contract }: Props) => {
           )}
         </Form>
         <Buttons>
-          {(message?.isPayable || message?.isMutating) && (
+          {isDispatchable && (
             <Button
               isDisabled={callDisabled}
               isLoading={txs[txId]?.status === 'processing'}

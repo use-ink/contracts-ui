@@ -58,7 +58,7 @@ export function Step2() {
 
     return {
       origin: accountId,
-      gasLimit: weight.mode === 'custom' ? weight.megaGas : weight.defaultWeight,
+      gasLimit: weight.mode === 'custom' ? weight.megaGas : weight.maxWeight,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
@@ -78,7 +78,7 @@ export function Step2() {
     salt.value,
     storageDepositLimit.value,
     value,
-    weight.defaultWeight,
+    weight.maxWeight,
     weight.megaGas,
     weight.mode,
   ]);
@@ -109,7 +109,7 @@ export function Step2() {
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      weight: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.defaultWeight,
+      weight: weight.mode === 'custom' ? weight.megaGas : gasRequired ?? weight.maxWeight,
     });
     setStep(3);
   };
@@ -174,7 +174,7 @@ export function Step2() {
             id="maxGas"
             label="Max Gas Allowed"
             isError={!weight.isValid}
-            message={!weight.isValid ? 'Invalid gas limit' : null}
+            message={!weight.isValid && weight.errorMsg}
             className="basis-2/4 mr-4"
           >
             <InputGas {...weight} />
