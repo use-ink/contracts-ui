@@ -30,7 +30,7 @@ function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) 
       {contractEvents.map(({ event, args }) => {
         const a = args.map((a, i) => (
           <div key={`${event.identifier}-${event.args[i].name}`} className="mb-1">
-            <div className="text-gray-200">{event.args[i].name}</div>
+            <div className="dark:text-gray-200 text-gray-400">{event.args[i].name}</div>
             {JSON.stringify(a.toHuman(), null, 2)}
           </div>
         ));
@@ -57,7 +57,7 @@ export const TransactionResult = ({
     >
       <div className="flex-col">
         <div className="mb-2">{date}</div>
-        <div className="text-yellow-400 dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs">
+        <div className="dark:text-yellow-400 text-grey-600 dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs">
           {message.identifier}()
         </div>
         <div className="flex-col items-start mb-2 mt-4">
