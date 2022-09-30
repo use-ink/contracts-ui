@@ -21,6 +21,7 @@ export default defineConfig({
   ],
   server: { port: 8081 },
   build: {
+    target: 'esnext',
     rollupOptions: {
       output: {
         dir: './dist',

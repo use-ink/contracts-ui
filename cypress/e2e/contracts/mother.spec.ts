@@ -115,7 +115,6 @@ describe('Mother Contract ', () => {
         cy.get("input[type='number']").should('have.lengthOf', 1).type('99999');
         cy.get('.dropdown').click().find('.dropdown__option').eq(3).click();
         cy.get('.dropdown').should('have.lengthOf', 2);
-
         cy.get('.dropdown').first().find('.dropdown__single-value').should('contain', 'Ended');
         cy.contains('Outline').should('exist');
         cy.get('.dropdown').eq(1).find('.dropdown__single-value').should('contain', 'NoWinner');
@@ -125,13 +124,12 @@ describe('Mother Contract ', () => {
   it('moves to step 3', () => {
     assertMoveToStep3();
   });
-  // todo: find out why gas estimation is too low when the app runs in cypress env
-  // and why setting custom gas doesn't work
-  it.skip('submits instantiate transaction', () => {
+
+  it('submits instantiate transaction', () => {
     assertInstantiate();
   });
 
-  it.skip('redirects to contract page after instantiation', () => {
+  it('redirects to contract page after instantiation', () => {
     assertContractRedirect();
   });
 });

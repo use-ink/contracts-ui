@@ -7,16 +7,17 @@ import { useEffect, useState } from 'react';
 import { useBalance } from './useBalance';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { OrFalsy, ValidFormField } from 'types';
+import { BN_ZERO } from 'helpers';
 
 export interface UseStorageDepositLimit extends ValidFormField<BN> {
-  maximum: BN | null;
+  maximum: BN | undefined;
 }
 
 export function useStorageDepositLimit(accountId: OrFalsy<string>): UseStorageDepositLimit {
   const { api } = useApi();
-  const [maximum, setMaximum] = useState<BN | null>(null);
+  const [maximum, setMaximum] = useState<BN>();
 
-  const storageDepositLimit = useBalance(0, { maxValue: maximum || undefined });
+  const storageDepositLimit = useBalance(BN_ZERO, { maxValue: maximum });
 
   useEffect((): void => {
     accountId &&

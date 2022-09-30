@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
 import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
-import { createInstantiateTx, truncate } from 'helpers';
+import { createInstantiateTx, truncate, printBN } from 'helpers';
 import { SubmittableResult } from 'types';
 import { useNewContract } from 'ui/hooks';
 
@@ -65,13 +65,13 @@ export function Step3() {
         {metadata?.constructors[constructorIndex].isPayable && value && (
           <div className="field">
             <p className="key">Value</p>
-            <p className="value">{value.toNumber().toLocaleString()}</p>
+            <p className="value">{printBN(value)}</p>
           </div>
         )}
 
         <div className="field">
           <p className="key">Weight</p>
-          <p className="value">{weight.toNumber().toLocaleString()}</p>
+          <p className="value">{printBN(weight)}</p>
         </div>
 
         {displayHash && (

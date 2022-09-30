@@ -2,19 +2,20 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { VoidFn } from '../substrate';
-import { BN, FileState, MetadataState, OrFalsy, SetState, Validation } from './util';
+import { BN, FileState, MetadataState, Validation } from './util';
 
-export type UseWeight = {
-  defaultWeight: BN;
-  estimatedWeight: OrFalsy<BN>;
-  executionTime: number;
-  isActive: boolean;
+export type InputMode = 'estimation' | 'custom';
+
+export type UIGas = {
+  max: BN;
   isValid: boolean;
-  megaGas: BN;
-  percentage: number;
-  setIsActive: SetState<boolean>;
-  setMegaGas: React.Dispatch<BN | undefined>;
-  weight: BN;
+  setIsValid: (value: boolean) => void;
+  limit: BN;
+  setLimit: React.Dispatch<BN>;
+  mode?: InputMode;
+  setMode: (m: InputMode) => void;
+  errorMsg: string;
+  setErrorMsg: (m: string) => void;
 };
 
 export interface ValidFormField<T> extends Validation {

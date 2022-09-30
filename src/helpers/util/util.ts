@@ -119,7 +119,7 @@ export function transformUserInput(
   registry: Registry,
   messageArgs: AbiParam[],
   values?: Record<string, unknown>
-) {
+): unknown[] {
   return messageArgs.map(({ name, type: { type } }) => {
     const value = values ? values[name] : null;
 
@@ -196,4 +196,8 @@ export function isNull(value: unknown): value is null {
 
 export function isUndefined(value: unknown): value is undefined {
   return value === undefined;
+}
+
+export function printBN(num: number | BN | bigint) {
+  return new Intl.NumberFormat('en-US').format(num as bigint);
 }

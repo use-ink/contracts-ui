@@ -4,7 +4,6 @@
 import { AddressSelect } from '../account/Select';
 import { Input } from './Input';
 import { InputBalance } from './InputBalance';
-import { InputNumber } from './InputNumber';
 import { Vector } from './Vector';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
@@ -13,6 +12,7 @@ import { VectorFixed } from './VectorFixed';
 import { Struct } from './Struct';
 import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
+import { InputBn } from './InputBn';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 
 function subComponents(
@@ -126,7 +126,7 @@ export function findComponent(
     case 'u64':
     case 'u128':
     case 'BN':
-      return InputNumber;
+      return InputBn;
 
     default:
       return Input;

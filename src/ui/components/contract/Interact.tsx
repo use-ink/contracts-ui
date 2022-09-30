@@ -1,7 +1,9 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
+import { ContractSubmittableResult } from '@polkadot/api-contract/base/Contract';
+import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { ResultsOutput } from './ResultsOutput';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
@@ -13,17 +15,10 @@ import {
   Form,
   FormField,
 } from 'ui/components/form';
-import {
-  dryRun,
-  prepareContractTx,
-  sendContractQuery,
-  transformUserInput,
-  getBlockHash,
-  BN_ZERO,
-} from 'helpers';
+import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
-import { BN, CallResult, ContractPromise, RegistryError, SubmittableResult } from 'types';
-import { useWeight, useBalance, useArgValues, useFormField } from 'ui/hooks';
+import { CallResult, ContractPromise, SubmittableResult } from 'types';
+import { useGas, useBalance, useArgValues } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
@@ -32,21 +27,25 @@ interface Props {
   contract: ContractPromise;
 }
 
-export const InteractTab = ({ contract }: Props) => {
-  const { api, accounts, systemChainType } = useApi();
-  const {
-    value: message,
-    onChange: setMessage,
-    ...messageValidation
-  } = useFormField(contract.abi.messages[0]);
-  const [argValues, setArgValues] = useArgValues(message?.args || []);
+export const InteractTab = ({ contract: { abi, query, registry, tx, address } }: Props) => {
+  const { accounts, api } = useApi();
+  const { queue, process, txs } = useTransactions();
+  const [message, setMessage] = useState<AbiMessage>();
+  const [argValues, setArgValues] = useArgValues(message?.args || [], registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
-  const { value, onChange: setValue, ...valueValidation } = useBalance(100);
+  const { value, onChange: setValue, ...valueValidation } = useBalance(BN_ZERO);
   const [accountId, setAccountId] = useState('');
-  const [estimatedWeight, setEstimatedWeight] = useState<BN | null>(null);
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
+  const [outcome, setOutcome] = useState<ContractCallOutcome>();
+  const storageDepositLimit = useStorageDepositLimit(accountId);
+  const gas = useGas(outcome?.gasRequired);
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
+
+  const inputData = useMemo(() => {
+    return message ? transformUserInput(registry, message.args, argValues) : [];
+  }, [argValues, registry, message]);
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -54,141 +53,44 @@ export const InteractTab = ({ contract }: Props) => {
   }, [accounts]);
 
   useEffect(() => {
+    setMessage(abi.messages[0]);
+    setOutcome(undefined);
+    // todo: call results storage
     setCallResults([]);
-    setNextResultId(1);
-    setMessage(contract.abi.messages[0]);
-    // clears call results and resets data when navigating to another contract page
-    // to do: storage for call results
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contract.address]);
+  }, [abi.messages]);
 
   useEffect((): void => {
-    if (!accountId || !message.args || !argValues) return;
-
-    if (message.isMutating !== true) {
-      setEstimatedWeight(null);
-      return;
+    async function dryRun() {
+      if (!message || typeof query[message.method] !== 'function') return;
+      const options = {
+        gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
+        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+        value: message?.isPayable ? value : undefined,
+      };
+      const o = await query[message.method](accountId, options, ...inputData);
+      setOutcome(o);
     }
 
-    message.isMutating &&
-      contract.abi.messages[message.index].method === message.method &&
-      dryRun({
-        contract,
-        message,
-        argValues,
-        payment: value,
-        address: accountId,
-      })
-        .then(({ gasRequired }) => {
-          setEstimatedWeight(gasRequired);
-        })
-        .catch(e => {
-          console.error(e);
-          setEstimatedWeight(null);
-        });
-  }, [api, accountId, argValues, message, value, contract, accounts]);
-
-  const weight = useWeight(estimatedWeight);
-  const storageDepositLimit = useStorageDepositLimit(accountId);
-
-  const transformed = transformUserInput(contract.registry, message.args, argValues);
-
-  const options = {
-    gasLimit: weight.weight.addn(1),
-    storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
-    value: message.isPayable ? value || BN_ZERO : undefined,
-  };
-
-  const { queue, process, txs } = useTransactions();
-
-  const onCallSuccess = ({ status, dispatchInfo, events }: SubmittableResult) => {
-    const log = events.map(({ event }) => {
-      return `${event.section}:${event.method}`;
-    });
-
-    setCallResults([
-      ...callResults,
-      {
-        id: nextResultId,
-        data: null,
-        isComplete: true,
-        message,
-        time: Date.now(),
-        log,
-        blockHash: getBlockHash(status, systemChainType),
-        info: dispatchInfo?.toHuman(),
-      },
-    ]);
-
-    setNextResultId(nextResultId + 1);
-  };
-  const onCallError = ({ events, dispatchError, dispatchInfo }: SubmittableResult) => {
-    const log = events.map(({ event }) => {
-      return `${event.section}:${event.method}`;
-    });
-    setCallResults([
-      ...callResults,
-      {
-        id: nextResultId,
-        message,
-        time: Date.now(),
-        isComplete: true,
-        data: null,
-        error: dispatchError ? contract.registry.findMetaError(dispatchError.asModule) : undefined,
-        log,
-        info: dispatchInfo?.toHuman(),
-      },
-    ]);
-
-    setNextResultId(nextResultId + 1);
-  };
-  const read = async () => {
-    const { result, output } = await sendContractQuery(
-      contract.query[message.method],
-      accountId,
-      options,
-      transformed
-    );
-
-    let error: RegistryError | undefined;
-
-    if (result.isErr && result.asErr.isModule) {
-      error = contract.registry.findMetaError(result.asErr.asModule);
+    function debouncedDryRun() {
+      if (timeoutId.current) clearTimeout(timeoutId.current);
+      timeoutId.current = setTimeout(() => {
+        dryRun().catch(err => console.error(err));
+        timeoutId.current = null;
+      }, 300);
     }
 
-    setCallResults([
-      ...callResults,
-      {
-        id: nextResultId,
-        log: [],
-        message,
-        time: Date.now(),
-        isComplete: true,
-        data: output,
-        error,
-      },
-    ]);
-
-    setNextResultId(nextResultId + 1);
-  };
-
-  const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
-
-  const newId = useRef<number>();
-
-  const call = () => {
-    const tx = prepareContractTx(contract.tx[message.method], options, transformed);
-    if (tx && accountId) {
-      newId.current = queue({
-        extrinsic: tx,
-        accountId,
-        onSuccess: onCallSuccess,
-        onError: onCallError,
-        isValid,
-      });
-      setTxId(newId.current);
-    }
-  };
+    debouncedDryRun();
+  }, [
+    accountId,
+    query,
+    isUsingStorageDepositLimit,
+    message,
+    inputData,
+    storageDepositLimit.value,
+    gas.limit,
+    gas.mode,
+    value,
+  ]);
 
   useEffect(() => {
     async function processTx() {
@@ -197,17 +99,76 @@ export const InteractTab = ({ contract }: Props) => {
     processTx().catch(e => console.error(e));
   }, [process, txId, txs]);
 
-  if (!contract) return null;
+  const onSuccess = ({ events, contractEvents, dispatchError }: ContractSubmittableResult) => {
+    message &&
+      setCallResults([
+        ...callResults,
+        {
+          id: nextResultId,
+          message,
+          time: Date.now(),
+          contractEvents,
+          events,
+          error: dispatchError?.isModule
+            ? api.registry.findMetaError(dispatchError.asModule)
+            : undefined,
+        },
+      ]);
+
+    setNextResultId(nextResultId + 1);
+  };
+
+  const newId = useRef<number>();
+
+  const call = () => {
+    const { storageDeposit, gasRequired } = outcome ?? {};
+
+    const options = {
+      gasLimit: gas.mode === 'custom' ? gas.limit : gasRequired,
+      storageDepositLimit: isUsingStorageDepositLimit
+        ? storageDepositLimit.value
+        : storageDeposit?.isCharge
+        ? !storageDeposit?.asCharge.eq(BN_ZERO)
+          ? storageDeposit?.asCharge
+          : undefined
+        : undefined,
+      value: message?.isPayable ? value : undefined,
+    };
+
+    const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
+
+    const extrinsic = message && tx[message.method](options, ...inputData);
+
+    if (extrinsic && accountId) {
+      newId.current = queue({
+        extrinsic,
+        accountId,
+        onSuccess,
+        isValid,
+      });
+      setTxId(newId.current);
+    }
+  };
+
+  const decodedOutput = outcome?.output?.toHuman();
+
+  const callDisabled =
+    !gas.isValid ||
+    txs[txId]?.status === 'processing' ||
+    !!outcome?.result.isErr ||
+    (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
+
+  const isDispatchable = message?.isMutating || message?.isPayable;
 
   return (
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
-        <Form>
+        <Form key={`${address}`}>
           <FormField
             className="mb-8 caller"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
-            label="Account"
+            label="Caller"
           >
             <AccountSelect
               id="accountId"
@@ -220,89 +181,94 @@ export const InteractTab = ({ contract }: Props) => {
             help="The message to send to this contract. Parameters are adjusted based on the stored contract metadata."
             id="message"
             label="Message to Send"
-            {...messageValidation}
           >
             <Dropdown
               id="message"
-              options={createMessageOptions(contract.abi.registry, contract.abi.messages)}
+              options={createMessageOptions(registry, abi.messages)}
               className="constructorDropdown mb-4"
-              onChange={setMessage}
+              onChange={(m?: AbiMessage) => {
+                m?.identifier !== message?.identifier && setOutcome(undefined);
+                setMessage(m);
+              }}
               value={message}
             >
               No messages found
             </Dropdown>
             {argValues && (
               <ArgumentForm
-                args={message.args || []}
-                registry={contract.abi.registry}
+                args={message?.args ?? []}
+                registry={registry}
                 setArgValues={setArgValues}
                 argValues={argValues}
               />
             )}
           </FormField>
 
-          {message.isPayable && (
+          {message?.isPayable && (
             <FormField
               help="The balance to transfer to the contract as part of this call."
               id="value"
-              label="Payment"
+              label="Value"
               {...valueValidation}
             >
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
             </FormField>
           )}
-          <FormField
-            help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
-            id="maxGas"
-            label="Max Gas Allowed"
-            isError={!weight.isValid}
-            message={!weight.isValid ? 'Invalid gas limit' : null}
-          >
-            <InputGas isCall={message.isMutating} withEstimate {...weight} />
-          </FormField>
-          <FormField
-            help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
-            id="storageDepositLimit"
-            label="Storage Deposit Limit"
-            isError={!storageDepositLimit.isValid}
-            message={
-              !storageDepositLimit.isValid
-                ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                : null
-            }
-          >
-            <InputStorageDepositLimit
-              isActive={isUsingStorageDepositLimit}
-              toggleIsActive={toggleIsUsingStorageDepositLimit}
-              {...storageDepositLimit}
-            />
-          </FormField>
+          {isDispatchable && (
+            <div className="flex justify-between">
+              <FormField
+                help="The maximum amount of gas to use for this contract call. If the call requires more, it will fail."
+                id="maxGas"
+                label="Gas Limit"
+                isError={!gas.isValid}
+                message={!gas.isValid ? gas.errorMsg : null}
+                className="basis-2/4 mr-4"
+              >
+                <InputGas {...gas} estimatedWeight={outcome?.gasRequired} />
+              </FormField>
+              <FormField
+                help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
+                id="storageDepositLimit"
+                label="Storage Deposit Limit"
+                isError={!storageDepositLimit.isValid}
+                message={
+                  !storageDepositLimit.isValid
+                    ? storageDepositLimit.message || 'Invalid storage deposit limit'
+                    : null
+                }
+                className="basis-2/4 shrink-0"
+              >
+                <InputStorageDepositLimit
+                  isActive={isUsingStorageDepositLimit}
+                  toggleIsActive={toggleIsUsingStorageDepositLimit}
+                  {...storageDepositLimit}
+                />
+              </FormField>
+            </div>
+          )}
         </Form>
         <Buttons>
-          {message.isPayable || message.isMutating ? (
+          {isDispatchable && (
             <Button
-              isDisabled={
-                !(weight.isValid || !weight.isActive || txs[txId]?.status === 'processing')
-              }
+              isDisabled={callDisabled}
               isLoading={txs[txId]?.status === 'processing'}
               onClick={call}
               variant="primary"
             >
-              Call
-            </Button>
-          ) : (
-            <Button
-              isDisabled={!(weight.isValid || !weight.isActive)}
-              onClick={read}
-              variant="primary"
-            >
-              Read
+              Call contract
             </Button>
           )}
         </Buttons>
       </div>
       <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
-        <ResultsOutput registry={contract.registry} results={callResults} />
+        {message && (
+          <ResultsOutput
+            registry={registry}
+            results={callResults}
+            outcome={outcome}
+            message={message}
+          />
+        )}
       </div>
     </div>
   );

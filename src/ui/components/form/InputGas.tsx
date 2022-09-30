@@ -1,75 +1,81 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { useEffect, useState } from 'react';
+import BN from 'bn.js';
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
-import { BN_MILLION, BN_ONE, BN_ZERO, classes } from 'helpers';
-import type { UseWeight } from 'types';
-
-interface Props extends UseWeight, React.HTMLAttributes<HTMLDivElement> {
-  isCall?: boolean;
-  withEstimate?: boolean;
-}
+import { UIGas } from 'types';
+import { BN_ZERO } from 'helpers';
 
 export function InputGas({
-  className,
-  defaultWeight,
   estimatedWeight,
-  executionTime,
-  isActive,
-  isCall,
-  isValid,
-  megaGas,
-  percentage,
-  setIsActive,
-  setMegaGas,
-  weight,
-  withEstimate,
-  ...props
-}: Props) {
+  setLimit,
+  mode,
+  setMode,
+  max,
+  setErrorMsg,
+  setIsValid,
+  limit,
+}: UIGas & { estimatedWeight: BN | undefined }) {
+  const [displayValue, setDisplayValue] = useState(limit.toString() ?? '0');
+
+  useEffect(() => {
+    if (mode === 'estimation' && estimatedWeight) {
+      setDisplayValue(estimatedWeight.toString());
+      if (limit.eq(BN_ZERO)) setLimit(estimatedWeight);
+    }
+  }, [estimatedWeight, limit, mode, setLimit]);
+
   return (
-    <div className={classes(className)} {...props}>
+    <div>
       <InputNumber
-        value={megaGas}
-        isDisabled={!isActive}
-        onChange={value => {
-          if (isActive) {
-            setMegaGas(value);
+        value={displayValue}
+        disabled={mode === 'estimation'}
+        onChange={e => {
+          if (mode === 'custom') {
+            const bn = new BN(e.target.value);
+            if (bn.lte(max)) {
+              setDisplayValue(e.target.value);
+              setLimit(bn);
+              setErrorMsg('');
+              setIsValid(true);
+            } else {
+              setErrorMsg('Value exceeds maximum block weight');
+              setIsValid(false);
+            }
           }
         }}
         placeholder="MGas"
         data-cy="gas-input"
+        min="0"
+        max={max.toString()}
+        className="disabled:opacity-60"
       />
       <Meter
         accessory={
-          isActive ? (
+          mode === 'custom' ? (
             <a
               href="#"
               onClick={e => {
                 e.preventDefault();
-
-                setIsActive(false);
+                setMode('estimation');
               }}
               data-cy="use-estimated-gas"
               className="text-green-500"
             >
-              {isCall
-                ? `Use Estimated Gas (${(estimatedWeight || BN_ZERO)
-                    .div(BN_MILLION)
-                    .add(BN_ONE)
-                    .toString()}M)`
-                : 'Use Maximum Query Gas'}
+              Use Estimated Gas
             </a>
           ) : (
             <>
-              {isCall ? 'Using Estimated Gas' : 'Using Maximum Query Gas'}
+              {'Using Estimated Gas'}
               &nbsp;{' · '}&nbsp;
               <a
                 href="#"
                 onClick={e => {
                   e.preventDefault();
-
-                  setIsActive(true);
+                  setMode('custom');
+                  estimatedWeight && setLimit(estimatedWeight);
                 }}
                 className="text-green-500"
                 data-cy="use-custom-gas"
@@ -79,11 +85,7 @@ export function InputGas({
             </>
           )
         }
-        label={`${
-          executionTime < 0.001 ? '<0.001' : executionTime.toFixed(3)
-        }s execution time (${percentage.toFixed(2)}% of block time)}`}
-        percentage={percentage}
-        withAccessory={withEstimate}
+        withAccessory={true}
       />
     </div>
   );

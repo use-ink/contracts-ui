@@ -11,8 +11,8 @@ export interface DropdownOption<T> {
   label: React.ReactNode;
 }
 
-export type ArgComponentProps<T> = SimpleSpread<
-  React.HTMLAttributes<HTMLDivElement>,
+export type ArgComponentProps<T, C = HTMLDivElement> = SimpleSpread<
+  React.HTMLAttributes<C>,
   ValidFormField<T>
 > & {
   nestingNumber: number;

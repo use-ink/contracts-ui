@@ -45,7 +45,7 @@ export function assertInstantiate() {
 }
 
 export function assertCall() {
-  cy.contains('Call').click();
+  cy.contains('Call contract').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
     .should('be.visible')
     .and('contain', 'system:ExtrinsicSuccess')
@@ -70,6 +70,7 @@ export function selectAccount(name: string, index: number) {
 }
 
 export function assertReturnValue(messageName: string, value: string) {
-  cy.contains('Read').click();
-  cy.get(`[data-cy=${messageName}]`).find('.return-value').should('contain', `${value}`);
+  cy.get(`[data-cy="dryRun-${messageName}"]`)
+    .find(`[data-cy="output"]`)
+    .should('contain', `${value}`);
 }

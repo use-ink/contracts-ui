@@ -1,15 +1,9 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { DecodedEvent } from '@polkadot/api-contract/types';
 import BN from 'bn.js';
-import type {
-  AbiMessage,
-  AnyJson,
-  Codec,
-  ContractPromise,
-  RegistryError,
-  Hash,
-} from '../substrate';
+import type { AbiMessage, ContractPromise, EventRecord, RegistryError } from '../substrate';
 
 export interface ContractDryRunParams {
   contract: ContractPromise;
@@ -20,13 +14,10 @@ export interface ContractDryRunParams {
 }
 
 export interface CallResult {
-  data: Codec | null;
   id: number;
-  isComplete: boolean;
-  log: string[];
+  events: EventRecord[];
+  contractEvents?: DecodedEvent[];
   message: AbiMessage;
-  blockHash?: Hash;
   error?: RegistryError;
-  info?: Record<string, AnyJson>;
   time: number;
 }

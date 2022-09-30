@@ -38,7 +38,7 @@ export function CopyButton({ className, iconClassName, value }: Props) {
         />
       </Button>
       <ReactTooltip
-        afterShow={() => setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 1000)}
+        afterShow={() => setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 300)}
         id={id}
         event="none"
       >

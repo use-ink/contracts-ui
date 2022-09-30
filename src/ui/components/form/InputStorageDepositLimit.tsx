@@ -31,31 +31,29 @@ export function InputStorageDepositLimit({
     if (!maximum || maximum.eqn(0)) {
       return null;
     }
+
     return 100 * new Big(value.toString()).div(new Big(maximum.toString())).toNumber();
   }, [maximum, value]);
 
   return (
     <div className={classes(className)}>
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <InputBalance
           className="flex-1"
           value={isActive ? value : undefined}
           id="storageDepositLimit"
-          isDisabled={!isActive}
+          disabled={!isActive}
           onChange={onChange}
           placeholder={isActive ? undefined : 'Do not use'}
           withUnits={isActive}
           {...getValidation(props)}
         />
-        <div className="flex justify-center items-center w-18">
+        <div className="flex justify-end items-center w-11">
           <Switch value={isActive} onChange={toggleIsActive} />
         </div>
       </div>
       {isActive && !isNull(percentage) && (
-        <Meter
-          label={isNumber(percentage) ? `${percentage.toFixed(2)}% of free balance` : null}
-          percentage={isNumber(percentage) ? percentage : 100}
-        />
+        <Meter label={isNumber(percentage) ? `${percentage.toFixed(4)}% of free balance` : null} />
       )}
     </div>
   );

@@ -52,7 +52,8 @@
     "react-tooltip": "^4.2.21",
     "remark-gfm": "^3.0.1",
     "styled-components": "^5.3.5",
-    "tailwind-merge": "^1.2.1"
+    "tailwind-merge": "^1.2.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
