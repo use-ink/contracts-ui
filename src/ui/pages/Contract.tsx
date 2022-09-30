@@ -48,8 +48,6 @@ export function Contract() {
 
   if (!address) throw new Error('No address in url');
 
-  //TODO: check if address is valid
-
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
   const [isOnChain, setIsOnChain] = useState<boolean>();
@@ -63,13 +61,8 @@ export function Contract() {
 
   useEffect((): void => {
     async function getContract() {
-      try {
-        const d = await db.contracts.get({ address });
-        d && setDocument(d);
-      } catch (error) {
-        console.error(error);
-        navigate('/');
-      }
+      const d = await db.contracts.get({ address });
+      d ? setDocument(d) : navigate('/');
     }
     getContract().catch(e => {
       console.error(e);

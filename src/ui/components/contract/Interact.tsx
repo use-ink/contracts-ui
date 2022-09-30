@@ -27,11 +27,11 @@ interface Props {
   contract: ContractPromise;
 }
 
-export const InteractTab = ({ contract }: Props) => {
+export const InteractTab = ({ contract: { abi, query, registry, tx, address } }: Props) => {
   const { accounts, api } = useApi();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
-  const [argValues, setArgValues] = useArgValues(message?.args || [], contract.abi.registry);
+  const [argValues, setArgValues] = useArgValues(message?.args || [], registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const { value, onChange: setValue, ...valueValidation } = useBalance(0);
   const [accountId, setAccountId] = useState('');
@@ -44,8 +44,8 @@ export const InteractTab = ({ contract }: Props) => {
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const inputData = useMemo(() => {
-    return message ? transformUserInput(contract.registry, message.args, argValues) : [];
-  }, [argValues, contract.registry, message]);
+    return message ? transformUserInput(registry, message.args, argValues) : [];
+  }, [argValues, registry, message]);
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -53,20 +53,20 @@ export const InteractTab = ({ contract }: Props) => {
   }, [accounts]);
 
   useEffect(() => {
-    setMessage(contract.abi.messages[0]);
+    setMessage(abi.messages[0]);
     setOutcome(undefined);
     // todo: call results storage
     setCallResults([]);
-  }, [contract.abi.messages]);
+  }, [abi.messages]);
 
   useEffect((): void => {
     async function dryRun() {
-      if (!message || typeof contract.query[message.method] !== 'function') return;
+      if (!message || typeof query[message.method] !== 'function') return;
       const options = {
         gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
         storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
       };
-      const o = await contract.query[message.method](accountId, options, ...inputData);
+      const o = await query[message.method](accountId, options, ...inputData);
       setOutcome(o);
     }
 
@@ -81,7 +81,7 @@ export const InteractTab = ({ contract }: Props) => {
     debouncedDryRun();
   }, [
     accountId,
-    contract.query,
+    query,
     isUsingStorageDepositLimit,
     message,
     inputData,
@@ -132,11 +132,11 @@ export const InteractTab = ({ contract }: Props) => {
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const tx = message && contract.tx[message.method](options, ...inputData);
+    const extrinsic = message && tx[message.method](options, ...inputData);
 
-    if (tx && accountId) {
+    if (extrinsic && accountId) {
       newId.current = queue({
-        extrinsic: tx,
+        extrinsic,
         accountId,
         onSuccess,
         isValid,
@@ -155,12 +155,10 @@ export const InteractTab = ({ contract }: Props) => {
 
   const isDispatchable = message?.isMutating || message?.isPayable;
 
-  if (!contract) return null;
-
   return (
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
-        <Form key={`${contract.address}`}>
+        <Form key={`${address}`}>
           <FormField
             className="mb-8 caller"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
@@ -181,7 +179,7 @@ export const InteractTab = ({ contract }: Props) => {
           >
             <Dropdown
               id="message"
-              options={createMessageOptions(contract.abi.registry, contract.abi.messages)}
+              options={createMessageOptions(registry, abi.messages)}
               className="constructorDropdown mb-4"
               onChange={(m?: AbiMessage) => {
                 m?.identifier !== message?.identifier && setOutcome(undefined);
@@ -194,7 +192,7 @@ export const InteractTab = ({ contract }: Props) => {
             {argValues && (
               <ArgumentForm
                 args={message?.args ?? []}
-                registry={contract.abi.registry}
+                registry={registry}
                 setArgValues={setArgValues}
                 argValues={argValues}
               />
@@ -260,7 +258,7 @@ export const InteractTab = ({ contract }: Props) => {
       <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
         {message && (
           <ResultsOutput
-            registry={contract.registry}
+            registry={registry}
             results={callResults}
             outcome={outcome}
             message={message}
