@@ -3,13 +3,8 @@
 
 import { classes } from 'helpers';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  isError?: boolean;
-}
-
 export function InputNumber({
   children,
-  isError,
   className,
   onChange,
   value,
@@ -18,14 +13,15 @@ export function InputNumber({
   max,
   placeholder,
   step,
-}: Props) {
+}: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className={classes(isError && 'isError', className)}>
+    <div>
       <input
         onChange={onChange}
         type="number"
-        value={value?.toString()}
+        value={value?.toString() ?? ''}
         className={classes(
+          className,
           'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
           disabled && 'dark:text-gray-500'
         )}

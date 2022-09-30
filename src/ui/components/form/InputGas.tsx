@@ -49,6 +49,7 @@ export function InputGas({
         data-cy="gas-input"
         min="0"
         max={max.toString()}
+        className="disabled:opacity-60"
       />
       <Meter
         accessory={

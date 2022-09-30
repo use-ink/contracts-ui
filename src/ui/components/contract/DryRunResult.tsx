@@ -37,7 +37,11 @@ export function DryRunResult({
     : '';
 
   return (
-    <div data-cy={`dryRun-${message.method}`} className="flex-col flex">
+    <div
+      data-cy={`dryRun-${message.method}`}
+      className="flex-col flex"
+      key={`dryRun-${message.method}`}
+    >
       <>
         {isDispatchable && (
           <div
@@ -55,7 +59,7 @@ export function DryRunResult({
           <OutcomeItem
             title="Debug message"
             displayValue={debugMessage.toHuman()}
-            key={genRanHex(8)}
+            key={`debug-${message.method}`}
           />
         )}
         {!dispatchError && (
@@ -63,7 +67,7 @@ export function DryRunResult({
             title={isDispatchable ? 'Execution result' : 'Return value'}
             displayValue={decodedOutput}
             copyValue={output?.toString() ?? ''}
-            key={genRanHex(8)}
+            key={`err-${message.method}`}
           />
         )}
         {isDispatchable && (
@@ -71,20 +75,20 @@ export function DryRunResult({
             <OutcomeItem
               title="GasConsumed"
               displayValue={gasConsumed.toHuman()}
-              key={genRanHex(8)}
+              key={`gc-${message.method}`}
             />
             {shouldDisplayRequired && (
               <OutcomeItem
                 title="GasRequired"
                 displayValue={gasRequired.toHuman()}
-                key={genRanHex(8)}
+                key={`gr-${message.method}`}
               />
             )}
             <OutcomeItem
               title="StorageDeposit"
               displayValue={`${storageDepositType}: ${storageDepositValue?.toHuman() ?? 'none'}`}
               copyValue={storageDepositValue?.toString() ?? ''}
-              key={genRanHex(8)}
+              key={`sd-${message.method}`}
             />
           </>
         )}
