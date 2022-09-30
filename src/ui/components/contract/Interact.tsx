@@ -33,7 +33,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues] = useArgValues(message?.args || [], registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
-  const { value, onChange: setValue, ...valueValidation } = useBalance(0);
+  const { value, onChange: setValue, ...valueValidation } = useBalance(BN_ZERO);
   const [accountId, setAccountId] = useState('');
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
@@ -65,6 +65,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
       const options = {
         gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
         storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
+        value: message?.isPayable ? value : undefined,
       };
       const o = await query[message.method](accountId, options, ...inputData);
       setOutcome(o);
@@ -88,6 +89,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     storageDepositLimit.value,
     gas.limit,
     gas.mode,
+    value,
   ]);
 
   useEffect(() => {
@@ -127,7 +129,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      value: message?.isPayable ? value ?? BN_ZERO : undefined,
+      value: message?.isPayable ? value : undefined,
     };
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
