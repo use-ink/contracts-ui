@@ -5,7 +5,7 @@ import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
 import { useDecodedOutput } from 'ui/hooks';
-import { classes, decodeStorageDeposit, genRanHex } from 'helpers';
+import { classes, decodeStorageDeposit } from 'helpers';
 import { useApi } from 'ui/contexts';
 
 interface Props {
@@ -53,7 +53,7 @@ export function DryRunResult({
             {prediction}
           </div>
         )}
-        {dispatchError && <DryRunError error={dispatchError} key={genRanHex(8)} />}
+        {dispatchError && <DryRunError error={dispatchError} />}
 
         {!debugMessage.isEmpty && (
           <OutcomeItem
