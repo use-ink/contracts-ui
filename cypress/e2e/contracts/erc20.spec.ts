@@ -31,7 +31,7 @@ describe('ERC20 Contract ', () => {
   });
 
   it(`types ${initialSupply} in the initialSupply field`, () => {
-    cy.get('.form-field.initialSupply').find('input[type="text"]').eq(0).type(`${initialSupply}`);
+    cy.get('.form-field.initialSupply').find('input[type="number"]').eq(0).type(`${initialSupply}`);
     cy.get('[data-cy="next-btn"]').should('not.be.disabled');
   });
 
@@ -54,7 +54,7 @@ describe('ERC20 Contract ', () => {
   it(`transfers ${transferValue} Units to another account`, () => {
     selectMessage('transfer', 3);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(3).click();
-    cy.get('.form-field.value').find('input[type="text"]').eq(0).type(`${transferValue}`);
+    cy.get('.form-field.value').find('input[type="number"]').eq(0).type(`${transferValue}`);
     assertCall();
     selectMessage('balanceOf', 1);
     assertReturnValue('balanceOf', `${initialSupply - transferValue}`);
@@ -63,7 +63,7 @@ describe('ERC20 Contract ', () => {
   it(`successfully approves allowance`, () => {
     selectMessage('approve', 4);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('.form-field.value').find('input[type="text"]').type(`${allowance}`);
+    cy.get('.form-field.value').find('input[type="number"]').type(`${allowance}`);
     assertCall();
     selectMessage('allowance', 2);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
@@ -74,7 +74,7 @@ describe('ERC20 Contract ', () => {
     cy.get('.form-field.caller').click().find('.dropdown__option').eq(2).click();
     selectMessage('transferFrom', 5);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('.form-field.value').find('input[type="text"]').type(`${transferValue}`);
+    cy.get('.form-field.value').find('input[type="number"]').type(`${transferValue}`);
     assertCall();
     selectMessage('balanceOf', 1);
     cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(2).click();

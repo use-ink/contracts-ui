@@ -16,7 +16,7 @@ export const useGas = (estimatedGas?: BN): UIGas => {
   const [mode, setMode] = useState<InputMode>('estimation');
   const max = useMemo((): BN => maximumBlockWeight(api), [api]);
   const [errorMsg, setErrorMsg] = useState('');
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(false);
   const displayGas = limit.toString();
 
   useEffect(() => {

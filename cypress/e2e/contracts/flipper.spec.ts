@@ -48,7 +48,7 @@ describe('Flipper Contract ', () => {
   });
   it(`submits flip() transaction`, () => {
     selectMessage('flip', 0);
-    cy.contains('Call').click();
+    cy.contains('Call contract').click();
     cy.get('[data-cy="transaction-complete"]', { timeout })
       .should('be.visible')
       .and('contain', 'system:ExtrinsicSuccess')

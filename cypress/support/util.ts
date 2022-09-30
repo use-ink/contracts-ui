@@ -45,7 +45,7 @@ export function assertInstantiate() {
 }
 
 export function assertCall() {
-  cy.contains('Call').click();
+  cy.contains('Call contract').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
     .should('be.visible')
     .and('contain', 'system:ExtrinsicSuccess')

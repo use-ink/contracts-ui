@@ -64,7 +64,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
       if (!message || typeof query[message.method] !== 'function') return;
       const options = {
         gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
-        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
+        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
         value: message?.isPayable ? value : undefined,
       };
       const o = await query[message.method](accountId, options, ...inputData);
@@ -122,12 +122,15 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
 
   const call = () => {
     const { storageDeposit, gasRequired } = outcome ?? {};
+
     const options = {
-      gasLimit: gas.mode === 'custom' ? gas.limit : gasRequired ?? gas.max,
+      gasLimit: gas.mode === 'custom' ? gas.limit : gasRequired,
       storageDepositLimit: isUsingStorageDepositLimit
         ? storageDepositLimit.value
         : storageDeposit?.isCharge
-        ? storageDeposit?.asCharge
+        ? !storageDeposit?.asCharge.eq(BN_ZERO)
+          ? storageDeposit?.asCharge
+          : undefined
         : undefined,
       value: message?.isPayable ? value : undefined,
     };

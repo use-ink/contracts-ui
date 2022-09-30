@@ -6,6 +6,7 @@ import BN from 'bn.js';
 import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
 import { UIGas } from 'types';
+import { BN_ZERO } from 'helpers';
 
 export function InputGas({
   estimatedWeight,
@@ -22,9 +23,9 @@ export function InputGas({
   useEffect(() => {
     if (mode === 'estimation' && estimatedWeight) {
       setDisplayValue(estimatedWeight.toString());
-      setLimit(estimatedWeight);
+      if (limit.eq(BN_ZERO)) setLimit(estimatedWeight);
     }
-  }, [estimatedWeight, mode, setLimit]);
+  }, [estimatedWeight, limit, mode, setLimit]);
 
   return (
     <div>
