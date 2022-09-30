@@ -66,7 +66,6 @@ export const InteractTab = ({ contract }: Props) => {
         gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
         storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
       };
-
       const o = await contract.query[message.method](accountId, options, ...inputData);
       setOutcome(o);
     }
@@ -98,7 +97,7 @@ export const InteractTab = ({ contract }: Props) => {
     processTx().catch(e => console.error(e));
   }, [process, txId, txs]);
 
-  const onCallSuccess = ({ events, contractEvents, dispatchError }: ContractSubmittableResult) => {
+  const onSuccess = ({ events, contractEvents, dispatchError }: ContractSubmittableResult) => {
     message &&
       setCallResults([
         ...callResults,
@@ -128,7 +127,7 @@ export const InteractTab = ({ contract }: Props) => {
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      value: message?.isPayable ? value || BN_ZERO : undefined,
+      value: message?.isPayable ? value ?? BN_ZERO : undefined,
     };
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
@@ -139,7 +138,7 @@ export const InteractTab = ({ contract }: Props) => {
       newId.current = queue({
         extrinsic: tx,
         accountId,
-        onSuccess: onCallSuccess,
+        onSuccess,
         isValid,
       });
       setTxId(newId.current);
@@ -166,7 +165,7 @@ export const InteractTab = ({ contract }: Props) => {
             className="mb-8 caller"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
-            label="Account"
+            label="Caller"
           >
             <AccountSelect
               id="accountId"
@@ -206,7 +205,7 @@ export const InteractTab = ({ contract }: Props) => {
             <FormField
               help="The balance to transfer to the contract as part of this call."
               id="value"
-              label="Payment"
+              label="Value"
               {...valueValidation}
             >
               <InputBalance value={value} onChange={setValue} placeholder="Value" />
@@ -215,9 +214,9 @@ export const InteractTab = ({ contract }: Props) => {
           {isDispatchable && (
             <div className="flex justify-between">
               <FormField
-                help="The maximum amount of gas (in millions of units) to use for this contract call. If the call requires more, it will fail."
+                help="The maximum amount of gas to use for this contract call. If the call requires more, it will fail."
                 id="maxGas"
-                label="Max Gas Allowed"
+                label="Gas Limit"
                 isError={!gas.isValid}
                 message={!gas.isValid ? gas.errorMsg : null}
                 className="basis-2/4 mr-4"

@@ -24,7 +24,7 @@ export function InputNumber({
       <input
         onChange={onChange}
         type="number"
-        value={value?.toString() || ''}
+        value={value?.toString()}
         className={classes(
           'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
           disabled && 'dark:text-gray-500'

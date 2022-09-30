@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 export * from './hooks';
-
 export * from './FormField';
 export * from './Input';
 export * from './InputBalance';
+export * from './InputBn';
 export * from './InputFile';
 export * from './InputNumber';
 export * from './InputSalt';
