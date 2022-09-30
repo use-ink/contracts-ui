@@ -15,14 +15,16 @@ export function InputGas({
   max,
   setErrorMsg,
   setIsValid,
+  limit,
 }: UIGas & { estimatedWeight: BN | undefined }) {
-  const [displayValue, setDisplayValue] = useState('0');
+  const [displayValue, setDisplayValue] = useState(limit.toString() ?? '0');
 
   useEffect(() => {
-    if (mode === 'estimation') {
-      estimatedWeight && setDisplayValue(estimatedWeight.toString());
+    if (mode === 'estimation' && estimatedWeight) {
+      setDisplayValue(estimatedWeight.toString());
+      setLimit(estimatedWeight);
     }
-  }, [estimatedWeight, mode]);
+  }, [estimatedWeight, mode, setLimit]);
 
   return (
     <div>

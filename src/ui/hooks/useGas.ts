@@ -43,7 +43,7 @@ export const useGas = (estimatedGas?: BN): UIGas => {
     setLimit,
     mode,
     setMode,
-    errorMsg: mode === 'custom' ? errorMsg : '',
+    errorMsg,
     setErrorMsg,
     setIsValid,
   };
