@@ -58,14 +58,14 @@ export function Step2() {
 
     return {
       origin: accountId,
+      value: deployConstructor?.isPayable ? value : BN_ZERO,
       gasLimit: gas.mode === 'custom' ? gas.limit : gas.max,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
         : { Upload: metadata?.info.source.wasm },
       data: inputData,
-      salt: salt.value || undefined,
-      value: deployConstructor?.isPayable ? value : undefined,
+      salt: salt.value ?? null,
     };
   }, [
     accountId,
@@ -86,14 +86,22 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await api.rpc.contracts.instantiate(params);
+        const result = await api.call.contractsApi.instantiate(
+          params.origin,
+          params.value ?? 0,
+          params.gasLimit,
+          params.storageDepositLimit ?? null,
+          params.code,
+          params.data ?? '',
+          params.salt
+        );
         setDryRunResult(result);
       } catch (e) {
         console.error(e);
       }
     }
     dryRun().catch(e => console.error(e));
-  }, [api.rpc.contracts, params, setDryRunResult]);
+  }, [api.call.contractsApi, params, setDryRunResult]);
 
   const onSubmit = () => {
     const { salt, storageDepositLimit, value } = params;
