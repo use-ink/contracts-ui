@@ -7,7 +7,7 @@ import { keyring } from '@polkadot/ui-keyring';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
 import { Transactions } from 'ui/components/Transactions';
-import { isResultReady, isEmptyObj } from 'helpers';
+import { isEmptyObj } from 'helpers';
 
 let nextId = 1;
 
@@ -47,7 +47,7 @@ export function TransactionsContextProvider({
           account,
           { signer: injector?.signer || undefined },
           async result => {
-            if (isResultReady(result, systemChainType)) {
+            if (result.isInBlock) {
               const events: Record<string, number> = {};
 
               result.events.forEach(record => {

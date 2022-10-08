@@ -8,19 +8,7 @@ import parseISO from 'date-fns/parseISO';
 import { twMerge } from 'tailwind-merge';
 import { MAX_CALL_WEIGHT } from '../../constants';
 import { BN_TEN } from './bn';
-import {
-  ApiPromise,
-  AbiParam,
-  Registry,
-  OrFalsy,
-  Weight,
-  ChainType,
-  SubmittableResult,
-  Hash,
-  CodeBundleDocument,
-} from 'types';
-// Copyright 2022 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: GPL-3.0-only
+import { ApiPromise, AbiParam, Registry, OrFalsy, Weight, CodeBundleDocument } from 'types';
 
 export function classes(...classLists: (string | null | undefined | false)[]) {
   return twMerge(...classLists.map(classList => (!classList ? null : classList)));
@@ -111,10 +99,6 @@ export function fromSats(api: ApiPromise, sats: BN): string {
   return `${div.toString()}${!mod.eqn(0) ? `.${mod.toString()}` : ''}`;
 }
 
-export function convertToNumber(value: string) {
-  return value.includes('.') ? parseFloat(value) : parseInt(value);
-}
-
 export function transformUserInput(
   registry: Registry,
   messageArgs: AbiParam[],
@@ -143,17 +127,6 @@ export function isValidWsUrl(s: unknown) {
     return url.protocol === 'ws:' || url.protocol === 'wss:';
   }
   return false;
-}
-
-export function isResultReady(result: SubmittableResult, systemChainType: ChainType): boolean {
-  return systemChainType.isDevelopment ? result.isInBlock : result.isFinalized;
-}
-
-export function getBlockHash(
-  status: SubmittableResult['status'],
-  systemChainType: ChainType
-): Hash {
-  return systemChainType.isDevelopment ? status.asInBlock : status.asFinalized;
 }
 
 export async function getContractInfo(api: ApiPromise, address: string) {
