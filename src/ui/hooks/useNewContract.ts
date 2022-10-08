@@ -12,11 +12,8 @@ export function useNewContract() {
     data: { accountId, codeHash, name },
   } = useInstantiate();
 
-  return async function ({
-    contract,
-    status,
-  }: BlueprintSubmittableResult<'promise'>): Promise<void> {
-    if (accountId && contract?.abi.json && (status.isInBlock || status.isFinalized)) {
+  return async function ({ contract }: BlueprintSubmittableResult<'promise'>): Promise<void> {
+    if (accountId && contract?.abi.json) {
       const document = {
         abi: contract.abi.json,
         address: contract.address.toString(),
