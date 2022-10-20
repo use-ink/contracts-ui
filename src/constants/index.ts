@@ -9,6 +9,7 @@ export enum RPC {
   CONTRACTS = 'wss://rococo-contracts-rpc.polkadot.io',
   SHIBUYA = 'wss://rpc.shibuya.astar.network',
   SHIDEN = 'wss://rpc.shiden.astar.network',
+  ALEPHZEROTESTNET = 'wss://ws.test.azero.dev',
 }
 export const DEFAULT_DECIMALS = 12;
 
