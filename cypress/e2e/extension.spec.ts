@@ -52,6 +52,7 @@ describe('Signer extension flow on live networks', () => {
       ).should('be.visible');
       cy.contains('Contracts on Rococo').should('be.visible');
       cy.contains('Shiden / Shibuya').should('be.visible');
+      cy.contains('Aleph Zero Testnet').should('be.visible');
     });
   });
 });

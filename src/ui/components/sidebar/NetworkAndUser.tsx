@@ -21,6 +21,10 @@ const options = [
     value: RPC.SHIDEN,
   },
   {
+    label: 'Aleph Zero Testnet',
+    value: RPC.ALEPHZEROTESTNET,
+  },
+  {
     label: 'Local Node',
     value: RPC.LOCAL,
   },

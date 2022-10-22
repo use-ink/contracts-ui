@@ -35,6 +35,13 @@ export function AccountsError() {
       >
         Shiden / Shibuya
       </a>{' '}
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        href="https://docs.alephzero.org/smart-contracts-tutorial/deploying-your-contract-to-aleph-zero-testnet#deploying-contracts"
+      >
+        Aleph Zero Testnet
+      </a>{' '}
     </Error>
   );
 }
