@@ -14,7 +14,7 @@ export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, step, setStep } = useInstantiate();
   const { api } = useApi();
-  const { accountId, value, metadata, weight, name, constructorIndex } = data;
+  const { accountId, value, metadata, gasLimit, name, constructorIndex } = data;
   const { queue, process, txs, dismiss } = useTransactions();
   const [txId, setTxId] = useState<number>(0);
   const onSuccess = useNewContract();
@@ -71,7 +71,7 @@ export function Step3() {
 
         <div className="field">
           <p className="key">Weight</p>
-          <p className="value">{printBN(weight)}</p>
+          <p className="value">{gasLimit && printBN(gasLimit.refTime.toBn())}</p>
         </div>
 
         {displayHash && (

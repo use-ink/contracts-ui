@@ -20,12 +20,14 @@ export function DryRun() {
         <div className="row">
           <div>Gas Required:</div>
           <div data-cy="estimated-gas">
-            {dryRunResult?.gasRequired && <>{dryRunResult.gasRequired.toHuman()}</>}
+            {dryRunResult?.gasRequired && <>{dryRunResult.gasRequired.refTime.toHuman()}</>}
           </div>
         </div>
         <div className="row">
           <div>Gas Consumed:</div>
-          <div>{dryRunResult?.gasConsumed && <>{dryRunResult.gasConsumed.toHuman()}</>}</div>
+          <div>
+            {dryRunResult?.gasConsumed && <>{dryRunResult.gasConsumed.refTime.toHuman()}</>}
+          </div>
         </div>
         <div className="row">
           <div>Storage Deposit:</div>

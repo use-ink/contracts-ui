@@ -18,7 +18,7 @@ import {
 import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { CallResult, ContractPromise, SubmittableResult } from 'types';
-import { useGas, useBalance, useArgValues } from 'ui/hooks';
+import { useRefTime, useBalance, useArgValues } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
@@ -40,7 +40,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
   const [outcome, setOutcome] = useState<ContractCallOutcome>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
-  const gas = useGas(outcome?.gasRequired);
+  const gas = useRefTime(outcome?.gasRequired);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const inputData = useMemo(() => {

@@ -10,6 +10,7 @@ import type {
   SubmittableExtrinsic,
   SubmittableResult,
   ChainType,
+  WeightV2,
 } from '../substrate';
 
 import type { BN } from './util';
@@ -43,7 +44,7 @@ export interface InstantiateData {
   constructorIndex: number;
   salt?: string;
   storageDepositLimit?: BN;
-  weight: BN;
+  gasLimit: WeightV2 | null;
   codeHash?: string;
 }
 

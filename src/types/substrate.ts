@@ -8,6 +8,7 @@ export type {
   DispatchError,
   EventRecord,
   Weight,
+  WeightV2,
   ChainType,
   Hash,
 } from '@polkadot/types/interfaces';

@@ -17,11 +17,10 @@ import { useApi, useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
-import { useGas } from 'ui/hooks/useGas';
+import { useRefTime } from 'ui/hooks/useGas';
 import { useToggle } from 'ui/hooks/useToggle';
 import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
-import { MAX_CALL_WEIGHT } from 'src/constants';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -38,7 +37,7 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
-  const gas = useGas(dryRunResult?.gasRequired);
+  const refTime = useRefTime(dryRunResult?.gasRequired.refTime.toBn());
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
@@ -60,7 +59,10 @@ export function Step2() {
     return {
       origin: accountId,
       value: deployConstructor?.isPayable ? value : BN_ZERO,
-      gasLimit: gas.mode === 'custom' ? gas.limit : dryRunResult?.gasRequired ?? MAX_CALL_WEIGHT,
+      gasLimit:
+        refTime.mode === 'custom'
+          ? api.registry.createType('WeightV2', { refTime: refTime.limit, proofSize: BN_ZERO })
+          : null,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
@@ -74,9 +76,8 @@ export function Step2() {
     argValues,
     accountId,
     value,
-    gas.mode,
-    gas.limit,
-    dryRunResult?.gasRequired,
+    refTime.mode,
+    refTime.limit,
     isUsingStorageDepositLimit,
     storageDepositLimit.value,
     codeHashUrlParam,
@@ -96,17 +97,20 @@ export function Step2() {
           params.data ?? '',
           params.salt
         );
-        setDryRunResult(result);
+
+        if (JSON.stringify(dryRunResult) !== JSON.stringify(result)) {
+          setDryRunResult(result);
+        }
       } catch (e) {
         console.error(e);
       }
     }
     dryRun().catch(e => console.error(e));
-  }, [api.call.contractsApi, params, setDryRunResult]);
+  }, [api.call.contractsApi, dryRunResult, params, setDryRunResult]);
 
   const onSubmit = () => {
-    const { salt, storageDepositLimit, value } = params;
-    const { storageDeposit, gasRequired } = dryRunResult ?? {};
+    const { salt, storageDepositLimit, value, gasLimit } = params;
+    const { storageDeposit } = dryRunResult ?? {};
     setData({
       ...data,
       constructorIndex,
@@ -118,7 +122,7 @@ export function Step2() {
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      weight: gas.mode === 'custom' ? gas.limit : gasRequired ?? BN_ZERO,
+      gasLimit: refTime.mode === 'custom' ? gasLimit : dryRunResult?.gasRequired ?? null,
     });
     setStep(3);
   };
@@ -182,11 +186,11 @@ export function Step2() {
             help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
             id="maxGas"
             label="Max Gas Allowed"
-            isError={!gas.isValid}
-            message={!gas.isValid && gas.errorMsg}
+            isError={!refTime.isValid}
+            message={!refTime.isValid && refTime.errorMsg}
             className="basis-2/4 mr-4"
           >
-            <InputGas {...gas} estimatedWeight={dryRunResult?.gasRequired} />
+            <InputGas {...refTime} estimatedWeight={dryRunResult?.gasRequired.refTime.toBn()} />
           </FormField>
           <FormField
             help="The maximum balance allowed to be deducted for the new contract's storage deposit."
@@ -213,7 +217,7 @@ export function Step2() {
           isDisabled={
             (deployConstructor?.isPayable && !valueValidation.isValid) ||
             (isUsingSalt && !salt.isValid) ||
-            !gas.isValid ||
+            !refTime.isValid ||
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
             (dryRunResult && dryRunResult.result.isErr)
