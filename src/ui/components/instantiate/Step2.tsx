@@ -21,6 +21,7 @@ import { useGas } from 'ui/hooks/useGas';
 import { useToggle } from 'ui/hooks/useToggle';
 import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
+import { MAX_CALL_WEIGHT } from 'src/constants';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -59,7 +60,7 @@ export function Step2() {
     return {
       origin: accountId,
       value: deployConstructor?.isPayable ? value : BN_ZERO,
-      gasLimit: gas.mode === 'custom' ? gas.limit : gas.max,
+      gasLimit: gas.mode === 'custom' ? gas.limit : dryRunResult?.gasRequired ?? MAX_CALL_WEIGHT,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
@@ -68,19 +69,19 @@ export function Step2() {
       salt: salt.value ?? null,
     };
   }, [
-    accountId,
+    deployConstructor,
     api.registry,
     argValues,
-    codeHashUrlParam,
-    deployConstructor,
+    accountId,
+    value,
+    gas.mode,
+    gas.limit,
+    dryRunResult?.gasRequired,
     isUsingStorageDepositLimit,
+    storageDepositLimit.value,
+    codeHashUrlParam,
     metadata?.info.source.wasm,
     salt.value,
-    storageDepositLimit.value,
-    value,
-    gas.max,
-    gas.limit,
-    gas.mode,
   ]);
 
   useEffect((): void => {
@@ -117,7 +118,7 @@ export function Step2() {
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      weight: gas.mode === 'custom' ? gas.limit : gasRequired ?? gas.max,
+      weight: gas.mode === 'custom' ? gas.limit : gasRequired ?? BN_ZERO,
     });
     setStep(3);
   };

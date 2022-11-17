@@ -7,7 +7,6 @@ import { BN, FileState, MetadataState, Validation } from './util';
 export type InputMode = 'estimation' | 'custom';
 
 export type UIGas = {
-  max: BN;
   isValid: boolean;
   setIsValid: (value: boolean) => void;
   limit: BN;

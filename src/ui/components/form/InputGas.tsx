@@ -7,13 +7,13 @@ import { Meter } from '../common/Meter';
 import { InputNumber } from './InputNumber';
 import { UIGas } from 'types';
 import { BN_ZERO } from 'helpers';
+import { MAX_CALL_WEIGHT } from 'src/constants';
 
 export function InputGas({
   estimatedWeight,
   setLimit,
   mode,
   setMode,
-  max,
   setErrorMsg,
   setIsValid,
   limit,
@@ -35,7 +35,7 @@ export function InputGas({
         onChange={e => {
           if (mode === 'custom') {
             const bn = new BN(e.target.value);
-            if (bn.lte(max)) {
+            if (bn.lte(MAX_CALL_WEIGHT)) {
               setDisplayValue(e.target.value);
               setLimit(bn);
               setErrorMsg('');
@@ -49,7 +49,6 @@ export function InputGas({
         placeholder="MGas"
         data-cy="gas-input"
         min="0"
-        max={max.toString()}
         className="disabled:opacity-60"
       />
       <Meter

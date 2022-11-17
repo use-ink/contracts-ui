@@ -6,9 +6,8 @@ import { keyring } from '@polkadot/ui-keyring';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { twMerge } from 'tailwind-merge';
-import { MAX_CALL_WEIGHT } from '../../constants';
 import { BN_TEN } from './bn';
-import { ApiPromise, AbiParam, Registry, OrFalsy, Weight, CodeBundleDocument } from 'types';
+import { ApiPromise, AbiParam, Registry, CodeBundleDocument } from 'types';
 
 export function classes(...classLists: (string | null | undefined | false)[]) {
   return twMerge(...classLists.map(classList => (!classList ? null : classList)));
@@ -32,12 +31,6 @@ export function isValidCodeHash(value: string): boolean {
 
 export function isEmptyObj(value: unknown) {
   return JSON.stringify(value) === '{}';
-}
-
-export function maximumBlockWeight(api: OrFalsy<ApiPromise>): Weight {
-  return api?.consts.system.blockWeights
-    ? api.consts.system.blockWeights.maxBlock
-    : (api?.consts.system.maximumBlockWeight as Weight) || MAX_CALL_WEIGHT;
 }
 
 export function randomAsU8a(length = 32) {
