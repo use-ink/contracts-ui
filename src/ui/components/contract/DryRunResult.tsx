@@ -1,24 +1,27 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
+import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
 import { useDecodedOutput } from 'ui/hooks';
 import { classes, decodeStorageDeposit } from 'helpers';
+import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 
 interface Props {
-  outcome: ContractCallOutcome;
+  outcome: ContractExecResult;
   message: AbiMessage;
+  registry: Registry;
 }
 
 export function DryRunResult({
-  outcome: { output, gasRequired, gasConsumed, storageDeposit, debugMessage, result },
+  outcome: { gasRequired, gasConsumed, storageDeposit, debugMessage, result },
   message,
+  registry,
 }: Props) {
+  const { decodedOutput, isError } = useDecodedOutput(result, message, registry);
   const { api } = useApi();
-  const { decodedOutput, isError } = useDecodedOutput(output);
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
   const isDispatchable = message.isMutating || message.isPayable;
 
@@ -27,7 +30,7 @@ export function DryRunResult({
       ? api.registry.findMetaError(result.asErr.asModule)
       : undefined;
 
-  const shouldDisplayRequired = !gasConsumed.eq(gasRequired);
+  const shouldDisplayRequired = !gasConsumed.refTime.toBn().eq(gasRequired.refTime.toBn());
   const prediction = result.isErr
     ? 'Contract Reverted!'
     : isError
@@ -66,7 +69,7 @@ export function DryRunResult({
           <OutcomeItem
             title={isDispatchable ? 'Execution result' : 'Return value'}
             displayValue={decodedOutput}
-            copyValue={output?.toString() ?? ''}
+            // copyValue={decodedOutput.toString() ?? ''}
             key={`err-${message.method}`}
           />
         )}
@@ -74,13 +77,13 @@ export function DryRunResult({
           <>
             <OutcomeItem
               title="GasConsumed"
-              displayValue={gasConsumed.toHuman()}
+              displayValue={gasConsumed.refTime.toString()}
               key={`gc-${message.method}`}
             />
             {shouldDisplayRequired && (
               <OutcomeItem
                 title="GasRequired"
-                displayValue={gasRequired.toHuman()}
+                displayValue={gasRequired.refTime.toString()}
                 key={`gr-${message.method}`}
               />
             )}

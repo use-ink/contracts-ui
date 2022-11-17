@@ -1,17 +1,16 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { SidePanel } from '../common/SidePanel';
 import { TransactionResult } from './TransactionResult';
 import { DryRunResult } from './DryRunResult';
-import { CallResult, Registry } from 'types';
+import { CallResult, ContractExecResult, Registry, AbiMessage } from 'types';
 
 interface Props {
   results: CallResult[];
   registry: Registry;
   message: AbiMessage;
-  outcome?: ContractCallOutcome;
+  outcome?: ContractExecResult;
 }
 
 export const ResultsOutput = ({ registry, results, outcome, message }: Props) => {
@@ -22,7 +21,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
         emptyView="No results yet."
       >
         <div className="text-xs p-4 break-all whitespace-pre-wrap">
-          {outcome && <DryRunResult outcome={outcome} message={message} />}
+          {outcome && <DryRunResult outcome={outcome} message={message} registry={registry} />}
         </div>
       </SidePanel>
       <SidePanel header="Transactions log" emptyView="No transactions yet.">

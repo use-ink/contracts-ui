@@ -2,9 +2,15 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { ContractSubmittableResult } from '@polkadot/api-contract/base/Contract';
-import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { ResultsOutput } from './ResultsOutput';
+import {
+  AbiMessage,
+  ContractExecResult,
+  ContractSubmittableResult,
+  CallResult,
+  ContractPromise,
+  SubmittableResult,
+} from 'types';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
 import {
@@ -17,7 +23,6 @@ import {
 } from 'ui/components/form';
 import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
-import { CallResult, ContractPromise, SubmittableResult } from 'types';
 import { useRefTime, useBalance, useArgValues } from 'ui/hooks';
 import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -27,7 +32,15 @@ interface Props {
   contract: ContractPromise;
 }
 
-export const InteractTab = ({ contract: { abi, query, registry, tx, address } }: Props) => {
+export const InteractTab = ({
+  contract: {
+    abi,
+    abi: { registry },
+    query,
+    tx,
+    address,
+  },
+}: Props) => {
   const { accounts, api } = useApi();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
@@ -38,13 +51,13 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
-  const [outcome, setOutcome] = useState<ContractCallOutcome>();
+  const [outcome, setOutcome] = useState<ContractExecResult>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
-  const gas = useRefTime(outcome?.gasRequired);
+  const refTime = useRefTime(outcome?.gasRequired.refTime.toBn());
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const inputData = useMemo(() => {
-    return message ? transformUserInput(registry, message.args, argValues) : [];
+    return message?.toU8a(transformUserInput(registry, message.args, argValues));
   }, [argValues, registry, message]);
 
   useEffect((): void => {
@@ -57,17 +70,27 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     setOutcome(undefined);
     // todo: call results storage
     setCallResults([]);
-  }, [abi.messages]);
+  }, [abi.messages, setArgValues, address]);
 
   useEffect((): void => {
     async function dryRun() {
       if (!message || typeof query[message.method] !== 'function') return;
       const options = {
-        gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
-        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+        gasLimit:
+          refTime.mode === 'custom'
+            ? api.registry.createType('WeightV2', { refTime: refTime.limit, proofSize: BN_ZERO })
+            : null,
+        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
         value: message?.isPayable ? value : undefined,
       };
-      const o = await query[message.method](accountId, options, ...inputData);
+      const o = await api.call.contractsApi.call(
+        accountId,
+        address,
+        options.value ?? BN_ZERO,
+        options.gasLimit,
+        options.storageDepositLimit,
+        inputData ?? ''
+      );
       setOutcome(o);
     }
 
@@ -87,9 +110,12 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     message,
     inputData,
     storageDepositLimit.value,
-    gas.limit,
-    gas.mode,
+    refTime.limit,
+    refTime.mode,
     value,
+    api.registry,
+    api.call.contractsApi,
+    address,
   ]);
 
   useEffect(() => {
@@ -124,7 +150,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     const { storageDeposit, gasRequired } = outcome ?? {};
 
     const options = {
-      gasLimit: gas.mode === 'custom' ? gas.limit : gasRequired,
+      gasLimit: refTime.mode === 'custom' ? refTime.limit : gasRequired,
       storageDepositLimit: isUsingStorageDepositLimit
         ? storageDepositLimit.value
         : storageDeposit?.isCharge
@@ -137,7 +163,7 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const extrinsic = message && tx[message.method](options, ...inputData);
+    const extrinsic = message && tx[message.method](options, inputData);
 
     if (extrinsic && accountId) {
       newId.current = queue({
@@ -150,10 +176,10 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     }
   };
 
-  const decodedOutput = outcome?.output?.toHuman();
+  const decodedOutput = outcome?.result?.toHuman();
 
   const callDisabled =
-    !gas.isValid ||
+    !refTime.isValid ||
     txs[txId]?.status === 'processing' ||
     !!outcome?.result.isErr ||
     (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
@@ -220,11 +246,11 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
                 help="The maximum amount of gas to use for this contract call. If the call requires more, it will fail."
                 id="maxGas"
                 label="Gas Limit"
-                isError={!gas.isValid}
-                message={!gas.isValid ? gas.errorMsg : null}
+                isError={!refTime.isValid}
+                message={!refTime.isValid ? refTime.errorMsg : null}
                 className="basis-2/4 mr-4"
               >
-                <InputGas {...gas} estimatedWeight={outcome?.gasRequired} />
+                <InputGas {...refTime} estimatedWeight={outcome?.gasRequired.refTime.toBn()} />
               </FormField>
               <FormField
                 help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."

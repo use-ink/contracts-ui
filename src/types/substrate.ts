@@ -11,6 +11,7 @@ export type {
   WeightV2,
   ChainType,
   Hash,
+  ContractExecResult,
 } from '@polkadot/types/interfaces';
 export type { KeyringPair } from '@polkadot/keyring/types';
 export type {
@@ -28,4 +29,5 @@ export { Bytes, Raw, TypeDefInfo } from '@polkadot/types';
 export { Keyring } from '@polkadot/ui-keyring';
 export { Abi, ContractPromise, BlueprintPromise } from '@polkadot/api-contract';
 export { BlueprintSubmittableResult, CodeSubmittableResult } from '@polkadot/api-contract/base';
+export { ContractSubmittableResult } from '@polkadot/api-contract/base/Contract';
 export { ApiPromise, SubmittableResult } from '@polkadot/api';
