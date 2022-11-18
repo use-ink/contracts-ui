@@ -7,7 +7,7 @@ import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
-import { InputGas } from '../form/InputGas';
+import { InputRefTime } from '../form/InputRefTime';
 import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
 import { isNumber, genRanHex, transformUserInput, BN_ZERO } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
@@ -190,7 +190,7 @@ export function Step2() {
             message={!refTime.isValid && refTime.errorMsg}
             className="basis-2/4 mr-4"
           >
-            <InputGas {...refTime} estimatedWeight={dryRunResult?.gasRequired.refTime.toBn()} />
+            <InputRefTime {...refTime} estimation={dryRunResult?.gasRequired.refTime.toBn()} />
           </FormField>
           <FormField
             help="The maximum balance allowed to be deducted for the new contract's storage deposit."

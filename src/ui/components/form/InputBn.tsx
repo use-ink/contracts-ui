@@ -29,7 +29,7 @@ export function InputBn({ onChange, typeDef }: Props): JSX.Element {
         value={displayValue}
         onChange={handleChage}
         placeholder="Input a number"
-        data-cy="gas-input"
+        data-cy="bn-input"
         min={min}
       />
     </>

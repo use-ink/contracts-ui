@@ -22,7 +22,7 @@ import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
 import {
   ArgumentForm,
-  InputGas,
+  InputRefTime,
   InputBalance,
   InputStorageDepositLimit,
   Form,
@@ -259,7 +259,7 @@ export const InteractTab = ({
                 className="basis-2/4 mr-4"
               >
                 {/* @ts-ignore */}
-                <InputGas {...refTime} estimatedWeight={outcome?.gasRequired.refTime.toBn()} />
+                <InputRefTime {...refTime} estimation={outcome?.gasRequired.refTime.toBn()} />
               </FormField>
               <FormField
                 help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."

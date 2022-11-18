@@ -7,19 +7,19 @@ import * as Yup from 'yup';
 import type { BN, UIGas, InputMode } from 'types';
 import { BN_ONE } from 'helpers';
 
-const weightSchema = Yup.number().positive('Value must be positive').min(1).required();
+const schema = Yup.number().positive('Value must be positive').min(1).required();
 
 export const useRefTime = (estimatedValue?: BN): UIGas => {
   const [limit, setLimit] = useState<BN>(estimatedValue ?? BN_ONE);
   const [mode, setMode] = useState<InputMode>('estimation');
   const [errorMsg, setErrorMsg] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const displayGas = limit.toString();
+  const displayValue = limit.toString();
 
   useEffect(() => {
     async function validate() {
       try {
-        const valid = await weightSchema.validate(displayGas);
+        const valid = await schema.validate(displayValue);
         if (valid) {
           setIsValid(true);
           setErrorMsg('');
@@ -31,7 +31,7 @@ export const useRefTime = (estimatedValue?: BN): UIGas => {
       }
     }
     validate().catch(e => console.error(e));
-  }, [displayGas]);
+  }, [displayValue]);
 
   return {
     isValid,

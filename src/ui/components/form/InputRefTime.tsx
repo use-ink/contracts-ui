@@ -9,23 +9,23 @@ import { UIGas } from 'types';
 import { BN_ZERO } from 'helpers';
 import { MAX_CALL_WEIGHT } from 'src/constants';
 
-export function InputGas({
-  estimatedWeight,
+export function InputRefTime({
+  estimation,
   setLimit,
   mode,
   setMode,
   setErrorMsg,
   setIsValid,
   limit,
-}: UIGas & { estimatedWeight: BN | undefined }) {
+}: UIGas & { estimation: BN | undefined }) {
   const [displayValue, setDisplayValue] = useState(limit.toString() ?? '0');
 
   useEffect(() => {
-    if (mode === 'estimation' && estimatedWeight) {
-      setDisplayValue(estimatedWeight.toString());
-      if (limit.eq(BN_ZERO)) setLimit(estimatedWeight);
+    if (mode === 'estimation' && estimation) {
+      setDisplayValue(estimation.toString());
+      if (limit.eq(BN_ZERO)) setLimit(estimation);
     }
-  }, [estimatedWeight, limit, mode, setLimit]);
+  }, [estimation, limit, mode, setLimit]);
 
   return (
     <div>
@@ -47,7 +47,7 @@ export function InputGas({
           }
         }}
         placeholder="MGas"
-        data-cy="gas-input"
+        data-cy="refTime-input"
         min="0"
         className="disabled:opacity-60"
       />
@@ -60,24 +60,24 @@ export function InputGas({
                 e.preventDefault();
                 setMode('estimation');
               }}
-              data-cy="use-estimated-gas"
+              data-cy="use-estimated-refTime"
               className="text-green-500"
             >
-              Use Estimated Gas
+              Use Estimated RefTime
             </a>
           ) : (
             <>
-              {'Using Estimated Gas'}
+              {'Using Estimated RefTime'}
               &nbsp;{' · '}&nbsp;
               <a
                 href="#"
                 onClick={e => {
                   e.preventDefault();
                   setMode('custom');
-                  estimatedWeight && setLimit(estimatedWeight);
+                  estimation && setLimit(estimation);
                 }}
                 className="text-green-500"
-                data-cy="use-custom-gas"
+                data-cy="use-custom-refTime"
               >
                 Use Custom
               </a>
