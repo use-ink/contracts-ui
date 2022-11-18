@@ -1,6 +1,13 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+// temporary disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { ResultsOutput } from './ResultsOutput';
 import {
@@ -53,6 +60,7 @@ export const InteractTab = ({
   const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
   const [outcome, setOutcome] = useState<ContractExecResult>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
+  //@ts-ignore
   const refTime = useRefTime(outcome?.gasRequired.refTime.toBn());
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
@@ -250,6 +258,7 @@ export const InteractTab = ({
                 message={!refTime.isValid ? refTime.errorMsg : null}
                 className="basis-2/4 mr-4"
               >
+                {/* @ts-ignore */}
                 <InputGas {...refTime} estimatedWeight={outcome?.gasRequired.refTime.toBn()} />
               </FormField>
               <FormField

@@ -1,6 +1,12 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+// temporary disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
@@ -29,7 +35,7 @@ export function DryRunResult({
     result.isErr && result.asErr.isModule
       ? api.registry.findMetaError(result.asErr.asModule)
       : undefined;
-
+  // @ts-ignore
   const shouldDisplayRequired = !gasConsumed.refTime.toBn().eq(gasRequired.refTime.toBn());
   const prediction = result.isErr
     ? 'Contract Reverted!'
@@ -68,8 +74,9 @@ export function DryRunResult({
         {!dispatchError && (
           <OutcomeItem
             title={isDispatchable ? 'Execution result' : 'Return value'}
+            // @ts-ignore
             displayValue={decodedOutput}
-            // copyValue={decodedOutput.toString() ?? ''}
+            copyValue={decodedOutput}
             key={`err-${message.method}`}
           />
         )}
@@ -77,12 +84,14 @@ export function DryRunResult({
           <>
             <OutcomeItem
               title="GasConsumed"
+              // @ts-ignore
               displayValue={gasConsumed.refTime.toString()}
               key={`gc-${message.method}`}
             />
             {shouldDisplayRequired && (
               <OutcomeItem
                 title="GasRequired"
+                // @ts-ignore
                 displayValue={gasRequired.refTime.toString()}
                 key={`gr-${message.method}`}
               />
