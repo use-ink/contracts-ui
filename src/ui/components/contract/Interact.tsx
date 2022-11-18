@@ -171,7 +171,9 @@ export const InteractTab = ({
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const extrinsic = message && tx[message.method](options, inputData);
+    const extrinsic =
+      message &&
+      tx[message.method](options, ...transformUserInput(registry, message.args, argValues));
 
     if (extrinsic && accountId) {
       newId.current = queue({
