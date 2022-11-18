@@ -14,7 +14,7 @@ export const useRefTime = (estimatedValue?: BN): UIGas => {
   const [mode, setMode] = useState<InputMode>('estimation');
   const [errorMsg, setErrorMsg] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const displayValue = limit.toString();
+  const displayValue = mode === 'estimation' ? estimatedValue?.toString() : limit.toString();
 
   useEffect(() => {
     async function validate() {
