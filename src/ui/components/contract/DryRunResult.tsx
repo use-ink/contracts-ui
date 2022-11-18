@@ -76,7 +76,6 @@ export function DryRunResult({
             title={isDispatchable ? 'Execution result' : 'Return value'}
             // @ts-ignore
             displayValue={decodedOutput}
-            copyValue={decodedOutput}
             key={`err-${message.method}`}
           />
         )}
