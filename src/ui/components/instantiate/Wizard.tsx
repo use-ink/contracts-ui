@@ -21,7 +21,7 @@ export function Wizard() {
         {step === 3 && <Step3 />}
       </main>
       {step === 2 && (
-        <aside className="xs:w-full md:w-80">
+        <aside className="xs:w-full md:w-1/3">
           <DryRun />
         </aside>
       )}

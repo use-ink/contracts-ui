@@ -81,19 +81,48 @@ export function DryRunResult({
         )}
         {isDispatchable && (
           <>
-            <OutcomeItem
-              title="GasConsumed"
-              // @ts-ignore
-              displayValue={gasConsumed.refTime.toString()}
-              key={`gc-${message.method}`}
-            />
+            <span>GasConsumed</span>
+            <div className="flex">
+              <div className="basis-1/2 pr-2">
+                <OutcomeItem
+                  title=""
+                  // @ts-ignore
+                  displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
+                  key={`gcr-${message.method}`}
+                />
+              </div>
+              <div className="basis-1/2 pl-2">
+                <OutcomeItem
+                  title=""
+                  // @ts-ignore
+                  displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
+                  key={`gcp-${message.method}`}
+                />
+              </div>
+            </div>
+
             {shouldDisplayRequired && (
-              <OutcomeItem
-                title="GasRequired"
-                // @ts-ignore
-                displayValue={gasRequired.refTime.toString()}
-                key={`gr-${message.method}`}
-              />
+              <>
+                <span>GasRequired</span>
+                <div className="flex">
+                  <div className="basis-1/2 pr-2">
+                    <OutcomeItem
+                      title=""
+                      // @ts-ignore
+                      displayValue={`refTime: ${gasRequired.refTime.toString()}`}
+                      key={`grr-${message.method}`}
+                    />
+                  </div>
+                  <div className="basis-1/2 pl-2">
+                    <OutcomeItem
+                      title=""
+                      // @ts-ignore
+                      displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
+                      key={`grp-${message.method}`}
+                    />
+                  </div>
+                </div>
+              </>
             )}
             <OutcomeItem
               title="StorageDeposit"

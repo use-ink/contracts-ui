@@ -4,10 +4,14 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
+import { OutcomeItem } from '../contract/OutcomeItem';
 import { useApi, useInstantiate } from 'ui/contexts';
 
 export function DryRun() {
-  const { dryRunResult } = useInstantiate();
+  const {
+    dryRunResult,
+    data: { constructorIndex },
+  } = useInstantiate();
   const { api } = useApi();
   const dryRunError =
     dryRunResult?.result.isErr && dryRunResult?.result.asErr.isModule
@@ -17,18 +21,53 @@ export function DryRun() {
   return (
     <SidePanel className="instantiate-outcome" header="Predicted Outcome">
       <div className="body" data-cy="dry-run-result">
-        <div className="row">
-          <div>Gas Required:</div>
+        <div>
           <div data-cy="estimated-gas">
-            {dryRunResult?.gasRequired && <>{dryRunResult.gasRequired.refTime.toHuman()}</>}
+            {dryRunResult?.gasConsumed && (
+              <>
+                <span>GasConsumed</span>
+                <div className="flex">
+                  <div className="basis-1/2 pr-2">
+                    <OutcomeItem
+                      title=""
+                      displayValue={`refTime: ${dryRunResult.gasConsumed.refTime.toString()}`}
+                      key={`gcr-${constructorIndex}`}
+                    />
+                  </div>
+                  <div className="basis-1/2 pl-2">
+                    <OutcomeItem
+                      title=""
+                      displayValue={`proofSize: ${dryRunResult.gasConsumed.proofSize.toString()}`}
+                      key={`gcp-${constructorIndex}`}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {dryRunResult?.gasRequired && (
+              <>
+                <span>GasRequired</span>
+                <div className="flex">
+                  <div className="basis-1/2 pr-2">
+                    <OutcomeItem
+                      title=""
+                      displayValue={`refTime: ${dryRunResult.gasRequired.refTime.toString()}`}
+                      key={`grr-${constructorIndex}`}
+                    />
+                  </div>
+                  <div className="basis-1/2 pl-2">
+                    <OutcomeItem
+                      title=""
+                      displayValue={`proofSize: ${dryRunResult.gasRequired.proofSize.toString()}`}
+                      key={`grp-${constructorIndex}`}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
-        <div className="row">
-          <div>Gas Consumed:</div>
-          <div>
-            {dryRunResult?.gasConsumed && <>{dryRunResult.gasConsumed.refTime.toHuman()}</>}
-          </div>
-        </div>
+
         <div className="row">
           <div>Storage Deposit:</div>
           <div data-cy="estimated-storage-deposit">
