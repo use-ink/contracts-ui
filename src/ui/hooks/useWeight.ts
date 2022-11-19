@@ -5,12 +5,12 @@
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import type { BN, UIGas, InputMode } from 'types';
-import { BN_ONE } from 'helpers';
+import { BN_HUNDRED } from 'helpers';
 
 const schema = Yup.number().positive('Value must be positive').min(2).required();
 
 export const useWeight = (estimation?: BN): UIGas => {
-  const [limit, setLimit] = useState<BN>(estimation ?? BN_ONE);
+  const [limit, setLimit] = useState<BN>(estimation ?? BN_HUNDRED);
   const [mode, setMode] = useState<InputMode>('estimation');
   const [errorMsg, setErrorMsg] = useState('');
   const [isValid, setIsValid] = useState(false);

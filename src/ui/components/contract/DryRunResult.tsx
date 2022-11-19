@@ -79,7 +79,7 @@ export function DryRunResult({
           />
         )}
         {isDispatchable && (
-          <>
+          <div data-cy="dry-run-estimations">
             <span>GasConsumed</span>
             <div className="flex">
               <div className="basis-1/2 pr-2">
@@ -129,7 +129,7 @@ export function DryRunResult({
               copyValue={storageDepositValue?.toString() ?? ''}
               key={`sd-${message.method}`}
             />
-          </>
+          </div>
         )}
       </>
     </div>
