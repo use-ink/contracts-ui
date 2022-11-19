@@ -20,18 +20,10 @@ import {
 } from 'types';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
-import {
-  ArgumentForm,
-  InputWeight,
-  InputBalance,
-  InputStorageDepositLimit,
-  Form,
-  FormField,
-} from 'ui/components/form';
+import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
 import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { useWeight, useBalance, useArgValues } from 'ui/hooks';
-import { useToggle } from 'ui/hooks/useToggle';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
 
@@ -53,11 +45,11 @@ export const InteractTab = ({
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues] = useArgValues(message?.args || [], registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
-  const { value, onChange: setValue, ...valueValidation } = useBalance(BN_ZERO);
+  const valueState = useBalance(BN_ZERO);
+  const { value } = valueState;
   const [accountId, setAccountId] = useState('');
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
-  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
   const [outcome, setOutcome] = useState<ContractExecResult>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
   //@ts-ignore
@@ -93,7 +85,7 @@ export const InteractTab = ({
                 proofSize: proofSize.limit,
               })
             : null,
-        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : null,
+        storageDepositLimit: storageDepositLimit.isActive ? storageDepositLimit.value : null,
         value: message?.isPayable ? value : undefined,
       };
       const o = await api.call.contractsApi.call(
@@ -119,7 +111,6 @@ export const InteractTab = ({
   }, [
     accountId,
     query,
-    isUsingStorageDepositLimit,
     message,
     inputData,
     storageDepositLimit.value,
@@ -131,6 +122,7 @@ export const InteractTab = ({
     address,
     proofSize.limit,
     proofSize.mode,
+    storageDepositLimit.isActive,
   ]);
 
   useEffect(() => {
@@ -172,7 +164,7 @@ export const InteractTab = ({
               proofSize: proofSize.limit,
             })
           : gasRequired,
-      storageDepositLimit: isUsingStorageDepositLimit
+      storageDepositLimit: storageDepositLimit.isActive
         ? storageDepositLimit.value
         : storageDeposit?.isCharge
         ? !storageDeposit?.asCharge.eq(BN_ZERO)
@@ -255,61 +247,13 @@ export const InteractTab = ({
           </FormField>
 
           {isDispatchable && (
-            <>
-              <div className="flex justify-between">
-                <FormField
-                  help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-                  id="maxRefTime"
-                  label="RefTime Limit"
-                  isError={!refTime.isValid}
-                  message={!refTime.isValid && refTime.errorMsg}
-                  className="basis-2/4 mr-4"
-                >
-                  <InputWeight {...refTime} name="RefTime" />
-                </FormField>
-                <FormField
-                  help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-                  id="maxProofSize"
-                  label="ProofSize Limit"
-                  isError={!proofSize.isValid}
-                  message={!proofSize.isValid && proofSize.errorMsg}
-                  className="basis-2/4 ml-4"
-                >
-                  <InputWeight {...proofSize} name="ProofSize" />
-                </FormField>
-              </div>
-              <div className="flex justify-between">
-                <FormField
-                  help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
-                  id="storageDepositLimit"
-                  label="Storage Deposit Limit"
-                  isError={!storageDepositLimit.isValid}
-                  message={
-                    !storageDepositLimit.isValid
-                      ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                      : null
-                  }
-                  className="basis-2/4 mr-4"
-                >
-                  <InputStorageDepositLimit
-                    isActive={isUsingStorageDepositLimit}
-                    toggleIsActive={toggleIsUsingStorageDepositLimit}
-                    {...storageDepositLimit}
-                  />
-                </FormField>
-                {message?.isPayable && (
-                  <FormField
-                    help="The balance to transfer to the contract as part of this call."
-                    id="value"
-                    label="Value"
-                    {...valueValidation}
-                    className="basis-2/4 ml-4"
-                  >
-                    <InputBalance value={value} onChange={setValue} placeholder="Value" />
-                  </FormField>
-                )}
-              </div>
-            </>
+            <OptionsForm
+              isPayable={!!message.isPayable}
+              refTime={refTime}
+              proofSize={proofSize}
+              value={valueState}
+              storageDepositLimit={storageDepositLimit}
+            />
           )}
         </Form>
         <Buttons>

@@ -12,4 +12,5 @@ export * from './InputSalt';
 export * from './InputWeight';
 export * from './InputStorageDepositLimit';
 export * from './ArgumentForm';
+export * from './OptionsForm';
 export * from './Bool';

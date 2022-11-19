@@ -5,10 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
-import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
-import { InputWeight } from '../form/InputWeight';
-import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
+import { OptionsForm } from '../form';
 import { isNumber, genRanHex, transformUserInput, BN_ZERO } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
@@ -36,7 +34,8 @@ export function Step2() {
   const { accountId, metadata } = data;
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
-  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
+  const valueState = useBalance(BN_ZERO);
+  const { value } = valueState;
   const refTime = useWeight(dryRunResult?.gasRequired.refTime.toBn());
   const proofSize = useWeight(dryRunResult?.gasRequired.proofSize.toBn());
   const storageDepositLimit = useStorageDepositLimit(accountId);
@@ -50,7 +49,6 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
-  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const params = useMemo(() => {
     const inputData = deployConstructor?.toU8a(
@@ -66,12 +64,12 @@ export function Step2() {
               proofSize: proofSize.limit,
             })
           : null,
-      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+      storageDepositLimit: storageDepositLimit.isActive ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
         : { Upload: metadata?.info.source.wasm },
       data: inputData,
-      salt: salt.value ?? null,
+      salt: isUsingSalt ? salt.value : undefined,
     };
   }, [
     deployConstructor,
@@ -83,10 +81,11 @@ export function Step2() {
     refTime.limit,
     proofSize.mode,
     proofSize.limit,
-    isUsingStorageDepositLimit,
+    storageDepositLimit.isActive,
     storageDepositLimit.value,
     codeHashUrlParam,
     metadata?.info.source.wasm,
+    isUsingSalt,
     salt.value,
   ]);
 
@@ -100,7 +99,7 @@ export function Step2() {
           params.storageDepositLimit ?? null,
           params.code,
           params.data ?? '',
-          params.salt
+          params.salt ?? ''
         );
 
         if (JSON.stringify(dryRunResult) !== JSON.stringify(result)) {
@@ -114,7 +113,7 @@ export function Step2() {
   }, [api.call.contractsApi, dryRunResult, params, setDryRunResult]);
 
   const onSubmit = () => {
-    const { salt, storageDepositLimit, value, gasLimit } = params;
+    const { salt, value, gasLimit } = params;
     const { storageDeposit } = dryRunResult ?? {};
     setData({
       ...data,
@@ -122,8 +121,8 @@ export function Step2() {
       salt,
       value,
       argValues,
-      storageDepositLimit: isUsingStorageDepositLimit
-        ? storageDepositLimit
+      storageDepositLimit: storageDepositLimit.isActive
+        ? storageDepositLimit.value
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
@@ -170,73 +169,27 @@ export function Step2() {
             />
           )}
         </FormField>
-        {deployConstructor?.isPayable && (
-          <FormField
-            help="The balance to transfer from the `origin` to the newly created contract."
-            id="value"
-            label="Value"
-            {...valueValidation}
-          >
-            <InputBalance id="value" value={value} onChange={onChangeValue} />
-          </FormField>
-        )}
-        <div className="flex justify-between">
-          <FormField
-            help="The maximum balance allowed to be deducted for the new contract's storage deposit."
-            id="storageDepositLimit"
-            label="Storage Deposit Limit"
-            isError={!storageDepositLimit.isValid}
-            message={
-              !storageDepositLimit.isValid
-                ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                : null
-            }
-            className="basis-2/4 mr-4"
-          >
-            <InputStorageDepositLimit
-              isActive={isUsingStorageDepositLimit}
-              toggleIsActive={toggleIsUsingStorageDepositLimit}
-              {...storageDepositLimit}
-            />
-          </FormField>
-          <FormField
-            help="A hex or string value that acts as a salt for this deployment."
-            id="salt"
-            label="Deployment Salt"
-            {...getValidation(salt)}
-            className="basis-2/4 ml-4"
-          >
-            <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
-          </FormField>
-        </div>
-        <div className="flex justify-between">
-          <FormField
-            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-            id="maxRefTime"
-            label="RefTime Limit"
-            isError={!refTime.isValid}
-            message={!refTime.isValid && refTime.errorMsg}
-            className="basis-2/4 mr-4"
-          >
-            <InputWeight {...refTime} name="RefTime" />
-          </FormField>
-          <FormField
-            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-            id="maxProofSize"
-            label="ProofSize Limit"
-            isError={!proofSize.isValid}
-            message={!proofSize.isValid && proofSize.errorMsg}
-            className="basis-2/4 ml-4"
-          >
-            <InputWeight {...proofSize} name="ProofSize" />
-          </FormField>
-        </div>
+        <FormField
+          help="A hex or string value that acts as a salt for this deployment."
+          id="salt"
+          label="Deployment Salt"
+          {...getValidation(salt)}
+        >
+          <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
+        </FormField>
+        <OptionsForm
+          isPayable={!!deployConstructor?.isPayable}
+          refTime={refTime}
+          proofSize={proofSize}
+          value={valueState}
+          storageDepositLimit={storageDepositLimit}
+        />
       </Form>
       <Buttons>
         <Button
           isDisabled={
-            (deployConstructor?.isPayable && !valueValidation.isValid) ||
-            (isUsingSalt && !salt.isValid) ||
+            (deployConstructor?.isPayable && !valueState.isValid) ||
+            !salt.isValid ||
             !refTime.isValid ||
             !proofSize.isValid ||
             !storageDepositLimit.isValid ||
