@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-// temporary disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
+// temporarily disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
