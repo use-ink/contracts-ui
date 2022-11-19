@@ -7,7 +7,7 @@ import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
 import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
-import { InputRefTime } from '../form/InputRefTime';
+import { InputWeight } from '../form/InputWeight';
 import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
 import { isNumber, genRanHex, transformUserInput, BN_ZERO } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
@@ -17,7 +17,7 @@ import { useApi, useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
-import { useRefTime } from 'ui/hooks/useGas';
+import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -37,7 +37,8 @@ export function Step2() {
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
   const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
-  const refTime = useRefTime(dryRunResult?.gasRequired.refTime.toBn());
+  const refTime = useWeight(dryRunResult?.gasRequired.refTime.toBn());
+  const proofSize = useWeight(dryRunResult?.gasRequired.proofSize.toBn());
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
@@ -55,13 +56,15 @@ export function Step2() {
     const inputData = deployConstructor?.toU8a(
       transformUserInput(api.registry, deployConstructor.args, argValues)
     );
-
     return {
       origin: accountId,
       value: deployConstructor?.isPayable ? value : BN_ZERO,
       gasLimit:
-        refTime.mode === 'custom'
-          ? api.registry.createType('WeightV2', { refTime: refTime.limit, proofSize: BN_ZERO })
+        refTime.mode === 'custom' || proofSize.mode === 'custom'
+          ? api.registry.createType('WeightV2', {
+              refTime: refTime.limit,
+              proofSize: proofSize.limit,
+            })
           : null,
       storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
@@ -78,6 +81,8 @@ export function Step2() {
     value,
     refTime.mode,
     refTime.limit,
+    proofSize.mode,
+    proofSize.limit,
     isUsingStorageDepositLimit,
     storageDepositLimit.value,
     codeHashUrlParam,
@@ -122,7 +127,10 @@ export function Step2() {
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      gasLimit: refTime.mode === 'custom' ? gasLimit : dryRunResult?.gasRequired ?? null,
+      gasLimit:
+        refTime.mode === 'custom' || proofSize.mode === 'custom'
+          ? gasLimit
+          : dryRunResult?.gasRequired ?? null,
     });
     setStep(3);
   };
@@ -172,26 +180,7 @@ export function Step2() {
             <InputBalance id="value" value={value} onChange={onChangeValue} />
           </FormField>
         )}
-        <FormField
-          help="A hex or string value that acts as a salt for this deployment."
-          id="salt"
-          label="Deployment Salt"
-          {...getValidation(salt)}
-        >
-          <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
-        </FormField>
-
         <div className="flex justify-between">
-          <FormField
-            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-            id="maxGas"
-            label="Max Gas Allowed"
-            isError={!refTime.isValid}
-            message={!refTime.isValid && refTime.errorMsg}
-            className="basis-2/4 mr-4"
-          >
-            <InputRefTime {...refTime} estimation={dryRunResult?.gasRequired.refTime.toBn()} />
-          </FormField>
           <FormField
             help="The maximum balance allowed to be deducted for the new contract's storage deposit."
             id="storageDepositLimit"
@@ -202,13 +191,44 @@ export function Step2() {
                 ? storageDepositLimit.message || 'Invalid storage deposit limit'
                 : null
             }
-            className="basis-2/4 shrink-0"
+            className="basis-2/4 mr-4"
           >
             <InputStorageDepositLimit
               isActive={isUsingStorageDepositLimit}
               toggleIsActive={toggleIsUsingStorageDepositLimit}
               {...storageDepositLimit}
             />
+          </FormField>
+          <FormField
+            help="A hex or string value that acts as a salt for this deployment."
+            id="salt"
+            label="Deployment Salt"
+            {...getValidation(salt)}
+            className="basis-2/4 ml-4"
+          >
+            <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
+          </FormField>
+        </div>
+        <div className="flex justify-between">
+          <FormField
+            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
+            id="maxRefTime"
+            label="RefTime Limit"
+            isError={!refTime.isValid}
+            message={!refTime.isValid && refTime.errorMsg}
+            className="basis-2/4 mr-4"
+          >
+            <InputWeight {...refTime} name="RefTime" />
+          </FormField>
+          <FormField
+            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
+            id="maxProofSize"
+            label="ProofSize Limit"
+            isError={!proofSize.isValid}
+            message={!proofSize.isValid && proofSize.errorMsg}
+            className="basis-2/4 ml-4"
+          >
+            <InputWeight {...proofSize} name="ProofSize" />
           </FormField>
         </div>
       </Form>
@@ -218,9 +238,11 @@ export function Step2() {
             (deployConstructor?.isPayable && !valueValidation.isValid) ||
             (isUsingSalt && !salt.isValid) ||
             !refTime.isValid ||
+            !proofSize.isValid ||
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
-            (dryRunResult && dryRunResult.result.isErr)
+            !!dryRunResult?.result.isErr ||
+            !dryRunResult
           }
           onClick={onSubmit}
           variant="primary"

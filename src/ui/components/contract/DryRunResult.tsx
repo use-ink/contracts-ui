@@ -74,7 +74,6 @@ export function DryRunResult({
         {!dispatchError && (
           <OutcomeItem
             title={isDispatchable ? 'Execution result' : 'Return value'}
-            // @ts-ignore
             displayValue={decodedOutput}
             key={`err-${message.method}`}
           />

@@ -19,7 +19,7 @@ export function DryRun() {
       : null;
 
   return (
-    <SidePanel className="instantiate-outcome" header="Predicted Outcome">
+    <SidePanel className="instantiate-outcome" header="Dry-run outcome">
       <div className="body" data-cy="dry-run-result">
         <div>
           <div data-cy="estimated-gas">

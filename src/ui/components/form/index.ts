@@ -9,7 +9,7 @@ export * from './InputBn';
 export * from './InputFile';
 export * from './InputNumber';
 export * from './InputSalt';
-export * from './InputRefTime';
+export * from './InputWeight';
 export * from './InputStorageDepositLimit';
 export * from './ArgumentForm';
 export * from './Bool';

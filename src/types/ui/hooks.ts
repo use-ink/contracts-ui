@@ -15,6 +15,8 @@ export type UIGas = {
   setMode: (m: InputMode) => void;
   errorMsg: string;
   setErrorMsg: (m: string) => void;
+  text: string;
+  setText: (m: string) => void;
 };
 
 export interface ValidFormField<T> extends Validation {
