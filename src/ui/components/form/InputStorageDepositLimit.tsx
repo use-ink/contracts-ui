@@ -39,7 +39,7 @@ export function InputStorageDepositLimit({
     <div className={classes(className)}>
       <div className="flex items-center justify-between">
         <InputBalance
-          className="flex-1"
+          className={`flex-1 ${!isActive && 'text-gray-300 dark:text-gray-500'}`}
           value={isActive ? value : undefined}
           id="storageDepositLimit"
           disabled={!isActive}

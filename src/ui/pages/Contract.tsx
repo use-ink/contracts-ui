@@ -50,7 +50,7 @@ export function Contract() {
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
-  const [isOnChain, setIsOnChain] = useState<boolean>();
+  const [isOnChain, setIsOnChain] = useState<boolean>(false);
 
   useEffect(() => {
     document &&
@@ -61,58 +61,59 @@ export function Contract() {
 
   useEffect((): void => {
     async function getContract() {
+      if (!address) return;
+      setContract(undefined);
+      setDocument(undefined);
       const d = await db.contracts.get({ address });
-      d ? setDocument(d) : navigate('/');
+      if (!d) {
+        navigate('/');
+      } else {
+        const c = new ContractPromise(api, d.abi, address);
+        setDocument(d);
+        setContract(c);
+      }
     }
     getContract().catch(e => {
       console.error(e);
     });
   }, [address, api, db.contracts, navigate]);
 
-  useEffect(() => {
-    if (!document || !address) return;
-    const c = new ContractPromise(api, document.abi, address);
-    setContract(c);
-  }, [address, api, document]);
-
-  if (!document || !contract) {
-    return null;
-  }
-
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={isOnChain === undefined} message="Loading contract...">
-      <PageFull
-        accessory={<HeaderButtons contract={document} />}
-        header={document.name || projectName}
-        help={
-          isOnChain && (
-            <div>
-              You instantiated this contract{' '}
-              <div className="inline-flex items-center">
-                <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded">
-                  {truncate(address, 4)}
-                </span>
-                <CopyButton className="ml-1" value={address} />
-              </div>{' '}
-              from{' '}
-              <Link
-                to={`/instantiate/${document.codeHash}`}
-                className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded"
-              >
-                {projectName}
-              </Link>{' '}
-              on {displayDate(document.date)}
-            </div>
-          )
-        }
-      >
-        <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
-          <MetadataTab abi={contract.abi} />
-          <InteractTab contract={contract} />
-        </Tabs>
-      </PageFull>
+    <Loader isLoading={!document} message="Loading contract...">
+      {document && contract && (
+        <PageFull
+          accessory={<HeaderButtons contract={document} />}
+          header={document?.name || projectName}
+          help={
+            isOnChain && (
+              <div>
+                You instantiated this contract{' '}
+                <div className="inline-flex items-center">
+                  <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded">
+                    {truncate(address, 4)}
+                  </span>
+                  <CopyButton className="ml-1" value={address} />
+                </div>{' '}
+                from{' '}
+                <Link
+                  to={`/instantiate/${document.codeHash}`}
+                  className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded"
+                >
+                  {projectName}
+                </Link>{' '}
+                on {displayDate(document.date)}
+              </div>
+            )
+          }
+        >
+          <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
+            <MetadataTab abi={contract.abi} />
+            <InteractTab contract={contract} />
+          </Tabs>
+        </PageFull>
+      )}
     </Loader>
   );
 }

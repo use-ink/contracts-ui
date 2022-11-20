@@ -2,27 +2,31 @@
 // Copyright 2017-2021 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { useApi } from 'ui/contexts/ApiContext';
 import type { BN, UIGas, InputMode } from 'types';
-import { maximumBlockWeight, BN_ZERO } from 'helpers';
+import { BN_HUNDRED } from 'helpers';
 
-const weightSchema = Yup.number().positive('Value must be positive').min(1).required();
+const schema = Yup.number().positive('Value must be positive').min(2).required();
 
-export const useGas = (estimatedGas?: BN): UIGas => {
-  const { api } = useApi();
-  const [limit, setLimit] = useState<BN>(estimatedGas ?? BN_ZERO);
+export const useWeight = (estimation?: BN): UIGas => {
+  const [limit, setLimit] = useState<BN>(estimation ?? BN_HUNDRED);
   const [mode, setMode] = useState<InputMode>('estimation');
-  const max = useMemo((): BN => maximumBlockWeight(api), [api]);
   const [errorMsg, setErrorMsg] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const displayGas = limit.toString();
+  const [text, setText] = useState(limit.toString());
+
+  useEffect(() => {
+    if (mode === 'estimation' && estimation && !estimation.eq(limit) && !estimation.isZero()) {
+      setText(estimation.toString());
+      setLimit(estimation);
+    }
+  }, [estimation, limit, mode, setLimit]);
 
   useEffect(() => {
     async function validate() {
       try {
-        const valid = await weightSchema.validate(displayGas);
+        const valid = await schema.validate(text);
         if (valid) {
           setIsValid(true);
           setErrorMsg('');
@@ -34,10 +38,9 @@ export const useGas = (estimatedGas?: BN): UIGas => {
       }
     }
     validate().catch(e => console.error(e));
-  }, [displayGas]);
+  }, [text]);
 
   return {
-    max,
     isValid,
     limit,
     setLimit,
@@ -46,5 +49,7 @@ export const useGas = (estimatedGas?: BN): UIGas => {
     errorMsg,
     setErrorMsg,
     setIsValid,
+    text,
+    setText,
   };
 };

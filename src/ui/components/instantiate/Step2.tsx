@@ -5,10 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../common/Button';
 import { Form, FormField, getValidation } from '../form/FormField';
-import { InputBalance } from '../form/InputBalance';
 import { InputSalt } from '../form/InputSalt';
-import { InputGas } from '../form/InputGas';
-import { InputStorageDepositLimit } from '../form/InputStorageDepositLimit';
+import { OptionsForm } from '../form';
 import { isNumber, genRanHex, transformUserInput, BN_ZERO } from 'helpers';
 import { ArgumentForm } from 'ui/components/form/ArgumentForm';
 import { Dropdown } from 'ui/components/common/Dropdown';
@@ -17,7 +15,7 @@ import { useApi, useInstantiate } from 'ui/contexts';
 import { useBalance } from 'ui/hooks/useBalance';
 import { useArgValues } from 'ui/hooks/useArgValues';
 import { useFormField } from 'ui/hooks/useFormField';
-import { useGas } from 'ui/hooks/useGas';
+import { useWeight } from 'ui/hooks/useWeight';
 import { useToggle } from 'ui/hooks/useToggle';
 import { AbiMessage, OrFalsy } from 'types';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -36,8 +34,10 @@ export function Step2() {
   const { accountId, metadata } = data;
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
-  const { value, onChange: onChangeValue, ...valueValidation } = useBalance(BN_ZERO);
-  const gas = useGas(dryRunResult?.gasRequired);
+  const valueState = useBalance(BN_ZERO);
+  const { value } = valueState;
+  const refTime = useWeight(dryRunResult?.gasRequired.refTime.toBn());
+  const proofSize = useWeight(dryRunResult?.gasRequired.proofSize.toBn());
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
@@ -49,38 +49,44 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
-  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
 
   const params = useMemo(() => {
     const inputData = deployConstructor?.toU8a(
       transformUserInput(api.registry, deployConstructor.args, argValues)
     );
-
     return {
       origin: accountId,
       value: deployConstructor?.isPayable ? value : BN_ZERO,
-      gasLimit: gas.mode === 'custom' ? gas.limit : gas.max,
-      storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+      gasLimit:
+        refTime.mode === 'custom' || proofSize.mode === 'custom'
+          ? api.registry.createType('WeightV2', {
+              refTime: refTime.limit,
+              proofSize: proofSize.limit,
+            })
+          : null,
+      storageDepositLimit: storageDepositLimit.isActive ? storageDepositLimit.value : undefined,
       code: codeHashUrlParam
         ? { Existing: codeHashUrlParam }
         : { Upload: metadata?.info.source.wasm },
       data: inputData,
-      salt: salt.value ?? null,
+      salt: isUsingSalt ? salt.value : undefined,
     };
   }, [
-    accountId,
+    deployConstructor,
     api.registry,
     argValues,
-    codeHashUrlParam,
-    deployConstructor,
-    isUsingStorageDepositLimit,
-    metadata?.info.source.wasm,
-    salt.value,
-    storageDepositLimit.value,
+    accountId,
     value,
-    gas.max,
-    gas.limit,
-    gas.mode,
+    refTime.mode,
+    refTime.limit,
+    proofSize.mode,
+    proofSize.limit,
+    storageDepositLimit.isActive,
+    storageDepositLimit.value,
+    codeHashUrlParam,
+    metadata?.info.source.wasm,
+    isUsingSalt,
+    salt.value,
   ]);
 
   useEffect((): void => {
@@ -93,31 +99,37 @@ export function Step2() {
           params.storageDepositLimit ?? null,
           params.code,
           params.data ?? '',
-          params.salt
+          params.salt ?? ''
         );
-        setDryRunResult(result);
+
+        if (JSON.stringify(dryRunResult) !== JSON.stringify(result)) {
+          setDryRunResult(result);
+        }
       } catch (e) {
         console.error(e);
       }
     }
     dryRun().catch(e => console.error(e));
-  }, [api.call.contractsApi, params, setDryRunResult]);
+  }, [api.call.contractsApi, dryRunResult, params, setDryRunResult]);
 
   const onSubmit = () => {
-    const { salt, storageDepositLimit, value } = params;
-    const { storageDeposit, gasRequired } = dryRunResult ?? {};
+    const { salt, value, gasLimit } = params;
+    const { storageDeposit } = dryRunResult ?? {};
     setData({
       ...data,
       constructorIndex,
       salt,
       value,
       argValues,
-      storageDepositLimit: isUsingStorageDepositLimit
-        ? storageDepositLimit
+      storageDepositLimit: storageDepositLimit.isActive
+        ? storageDepositLimit.value
         : storageDeposit?.isCharge
         ? storageDeposit?.asCharge
         : undefined,
-      weight: gas.mode === 'custom' ? gas.limit : gasRequired ?? gas.max,
+      gasLimit:
+        refTime.mode === 'custom' || proofSize.mode === 'custom'
+          ? gasLimit
+          : dryRunResult?.gasRequired ?? null,
     });
     setStep(3);
   };
@@ -157,16 +169,6 @@ export function Step2() {
             />
           )}
         </FormField>
-        {deployConstructor?.isPayable && (
-          <FormField
-            help="The balance to transfer from the `origin` to the newly created contract."
-            id="value"
-            label="Value"
-            {...valueValidation}
-          >
-            <InputBalance id="value" value={value} onChange={onChangeValue} />
-          </FormField>
-        )}
         <FormField
           help="A hex or string value that acts as a salt for this deployment."
           id="salt"
@@ -175,47 +177,25 @@ export function Step2() {
         >
           <InputSalt isActive={isUsingSalt} toggleIsActive={toggleIsUsingSalt} {...salt} />
         </FormField>
-
-        <div className="flex justify-between">
-          <FormField
-            help="The maximum amount of gas (in millions of units) to use for this instantiation. If the transaction requires more, it will fail."
-            id="maxGas"
-            label="Max Gas Allowed"
-            isError={!gas.isValid}
-            message={!gas.isValid && gas.errorMsg}
-            className="basis-2/4 mr-4"
-          >
-            <InputGas {...gas} estimatedWeight={dryRunResult?.gasRequired} />
-          </FormField>
-          <FormField
-            help="The maximum balance allowed to be deducted for the new contract's storage deposit."
-            id="storageDepositLimit"
-            label="Storage Deposit Limit"
-            isError={!storageDepositLimit.isValid}
-            message={
-              !storageDepositLimit.isValid
-                ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                : null
-            }
-            className="basis-2/4 shrink-0"
-          >
-            <InputStorageDepositLimit
-              isActive={isUsingStorageDepositLimit}
-              toggleIsActive={toggleIsUsingStorageDepositLimit}
-              {...storageDepositLimit}
-            />
-          </FormField>
-        </div>
+        <OptionsForm
+          isPayable={!!deployConstructor?.isPayable}
+          refTime={refTime}
+          proofSize={proofSize}
+          value={valueState}
+          storageDepositLimit={storageDepositLimit}
+        />
       </Form>
       <Buttons>
         <Button
           isDisabled={
-            (deployConstructor?.isPayable && !valueValidation.isValid) ||
-            (isUsingSalt && !salt.isValid) ||
-            !gas.isValid ||
+            (deployConstructor?.isPayable && !valueState.isValid) ||
+            !salt.isValid ||
+            !refTime.isValid ||
+            !proofSize.isValid ||
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
-            (dryRunResult && dryRunResult.result.isErr)
+            !!dryRunResult?.result.isErr ||
+            !dryRunResult
           }
           onClick={onSubmit}
           variant="primary"

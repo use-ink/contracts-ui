@@ -37,7 +37,7 @@ describe('Instantiate dry run', () => {
       cy.get('[data-cy="estimated-storage-deposit"]')
         .should('not.contain', 'None')
         .and('not.be.empty');
-      cy.get('[data-cy="estimated-gas"]').should('not.contain', 'None').and('not.be.empty');
+      cy.get('[data-cy="dry-run-estimations"]').should('not.contain', 'None').and('not.be.empty');
       cy.get('[data-cy="dry-run-account"]')
         .find('[data-cy="identicon"]')
         .should('have.lengthOf', 1);

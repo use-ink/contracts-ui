@@ -5,17 +5,21 @@
 import type BN from 'bn.js';
 import { useEffect, useState } from 'react';
 import { useBalance } from './useBalance';
+import { useToggle } from './useToggle';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { OrFalsy, ValidFormField } from 'types';
 import { BN_ZERO } from 'helpers';
 
 export interface UseStorageDepositLimit extends ValidFormField<BN> {
   maximum: BN | undefined;
+  isActive: boolean;
+  toggleIsActive: () => void;
 }
 
 export function useStorageDepositLimit(accountId: OrFalsy<string>): UseStorageDepositLimit {
   const { api } = useApi();
   const [maximum, setMaximum] = useState<BN>();
+  const [isActive, toggleIsActive] = useToggle(false);
 
   const storageDepositLimit = useBalance(BN_ZERO, { maxValue: maximum });
 
@@ -30,5 +34,7 @@ export function useStorageDepositLimit(accountId: OrFalsy<string>): UseStorageDe
   return {
     ...storageDepositLimit,
     maximum,
+    isActive,
+    toggleIsActive,
   };
 }

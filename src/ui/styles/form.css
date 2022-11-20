@@ -57,5 +57,5 @@ select:focus {
 }
 
 .arg-label {
-  @apply font-mono text-xs;
+  @apply font-mono text-xs font-semibold dark:text-white text-gray-600;
 }

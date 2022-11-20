@@ -1,24 +1,33 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
+// temporarily disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
 import { useDecodedOutput } from 'ui/hooks';
 import { classes, decodeStorageDeposit } from 'helpers';
+import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 
 interface Props {
-  outcome: ContractCallOutcome;
+  outcome: ContractExecResult;
   message: AbiMessage;
+  registry: Registry;
 }
 
 export function DryRunResult({
-  outcome: { output, gasRequired, gasConsumed, storageDeposit, debugMessage, result },
+  outcome: { gasRequired, gasConsumed, storageDeposit, debugMessage, result },
   message,
+  registry,
 }: Props) {
+  const { decodedOutput, isError } = useDecodedOutput(result, message, registry);
   const { api } = useApi();
-  const { decodedOutput, isError } = useDecodedOutput(output);
   const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
   const isDispatchable = message.isMutating || message.isPayable;
 
@@ -26,8 +35,8 @@ export function DryRunResult({
     result.isErr && result.asErr.isModule
       ? api.registry.findMetaError(result.asErr.asModule)
       : undefined;
-
-  const shouldDisplayRequired = !gasConsumed.eq(gasRequired);
+  // @ts-ignore
+  const shouldDisplayRequired = !gasConsumed.refTime.toBn().eq(gasRequired.refTime.toBn());
   const prediction = result.isErr
     ? 'Contract Reverted!'
     : isError
@@ -66,23 +75,53 @@ export function DryRunResult({
           <OutcomeItem
             title={isDispatchable ? 'Execution result' : 'Return value'}
             displayValue={decodedOutput}
-            copyValue={output?.toString() ?? ''}
             key={`err-${message.method}`}
           />
         )}
         {isDispatchable && (
-          <>
-            <OutcomeItem
-              title="GasConsumed"
-              displayValue={gasConsumed.toHuman()}
-              key={`gc-${message.method}`}
-            />
+          <div data-cy="dry-run-estimations">
+            <span>GasConsumed</span>
+            <div className="flex">
+              <div className="basis-1/2 pr-2">
+                <OutcomeItem
+                  title=""
+                  // @ts-ignore
+                  displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
+                  key={`gcr-${message.method}`}
+                />
+              </div>
+              <div className="basis-1/2 pl-2">
+                <OutcomeItem
+                  title=""
+                  // @ts-ignore
+                  displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
+                  key={`gcp-${message.method}`}
+                />
+              </div>
+            </div>
+
             {shouldDisplayRequired && (
-              <OutcomeItem
-                title="GasRequired"
-                displayValue={gasRequired.toHuman()}
-                key={`gr-${message.method}`}
-              />
+              <>
+                <span>GasRequired</span>
+                <div className="flex">
+                  <div className="basis-1/2 pr-2">
+                    <OutcomeItem
+                      title=""
+                      // @ts-ignore
+                      displayValue={`refTime: ${gasRequired.refTime.toString()}`}
+                      key={`grr-${message.method}`}
+                    />
+                  </div>
+                  <div className="basis-1/2 pl-2">
+                    <OutcomeItem
+                      title=""
+                      // @ts-ignore
+                      displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
+                      key={`grp-${message.method}`}
+                    />
+                  </div>
+                </div>
+              </>
             )}
             <OutcomeItem
               title="StorageDeposit"
@@ -90,7 +129,7 @@ export function DryRunResult({
               copyValue={storageDepositValue?.toString() ?? ''}
               key={`sd-${message.method}`}
             />
-          </>
+          </div>
         )}
       </>
     </div>

@@ -7,7 +7,6 @@ import { BN, FileState, MetadataState, Validation } from './util';
 export type InputMode = 'estimation' | 'custom';
 
 export type UIGas = {
-  max: BN;
   isValid: boolean;
   setIsValid: (value: boolean) => void;
   limit: BN;
@@ -16,6 +15,8 @@ export type UIGas = {
   setMode: (m: InputMode) => void;
   errorMsg: string;
   setErrorMsg: (m: string) => void;
+  text: string;
+  setText: (m: string) => void;
 };
 
 export interface ValidFormField<T> extends Validation {

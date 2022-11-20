@@ -1,13 +1,25 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { ContractCallOutcome } from '@polkadot/api-contract/types';
+import { AbiMessage, ContractExecResult, Registry } from 'types';
 
-export function useDecodedOutput(output: ContractCallOutcome['output']): {
+export function useDecodedOutput(
+  result: ContractExecResult['result'],
+  message: AbiMessage,
+  registry: Registry
+): {
   decodedOutput: string;
   isError: boolean;
 } {
-  const o = output?.toHuman();
+  const r =
+    result.isOk && message.returnType
+      ? registry.createTypeUnsafe(
+          message.returnType.lookupName || message.returnType.type,
+          [result.asOk.data.toU8a(true)],
+          { isPedantic: true }
+        )
+      : null;
+  const o = r?.toHuman();
   const isError = o !== null && typeof o === 'object' && 'Err' in o;
 
   const decodedOutput = isError

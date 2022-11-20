@@ -1,25 +1,29 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+// temporarily disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { ContractSubmittableResult } from '@polkadot/api-contract/base/Contract';
-import { AbiMessage, ContractCallOutcome } from '@polkadot/api-contract/types';
 import { ResultsOutput } from './ResultsOutput';
+import {
+  AbiMessage,
+  ContractExecResult,
+  ContractSubmittableResult,
+  CallResult,
+  ContractPromise,
+  SubmittableResult,
+} from 'types';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
-import {
-  ArgumentForm,
-  InputGas,
-  InputBalance,
-  InputStorageDepositLimit,
-  Form,
-  FormField,
-} from 'ui/components/form';
+import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
 import { transformUserInput, BN_ZERO } from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
-import { CallResult, ContractPromise, SubmittableResult } from 'types';
-import { useGas, useBalance, useArgValues } from 'ui/hooks';
-import { useToggle } from 'ui/hooks/useToggle';
+import { useWeight, useBalance, useArgValues } from 'ui/hooks';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
 
@@ -27,24 +31,35 @@ interface Props {
   contract: ContractPromise;
 }
 
-export const InteractTab = ({ contract: { abi, query, registry, tx, address } }: Props) => {
+export const InteractTab = ({
+  contract: {
+    abi,
+    abi: { registry },
+    query,
+    tx,
+    address,
+  },
+}: Props) => {
   const { accounts, api } = useApi();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues] = useArgValues(message?.args || [], registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
-  const { value, onChange: setValue, ...valueValidation } = useBalance(BN_ZERO);
+  const valueState = useBalance(BN_ZERO);
+  const { value } = valueState;
   const [accountId, setAccountId] = useState('');
   const [txId, setTxId] = useState<number>(0);
   const [nextResultId, setNextResultId] = useState(1);
-  const [isUsingStorageDepositLimit, toggleIsUsingStorageDepositLimit] = useToggle();
-  const [outcome, setOutcome] = useState<ContractCallOutcome>();
+  const [outcome, setOutcome] = useState<ContractExecResult>();
   const storageDepositLimit = useStorageDepositLimit(accountId);
-  const gas = useGas(outcome?.gasRequired);
+  //@ts-ignore
+  const refTime = useWeight(outcome?.gasRequired.refTime.toBn());
+  //@ts-ignore
+  const proofSize = useWeight(outcome?.gasRequired.proofSize.toBn());
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const inputData = useMemo(() => {
-    return message ? transformUserInput(registry, message.args, argValues) : [];
+    return message?.toU8a(transformUserInput(registry, message.args, argValues));
   }, [argValues, registry, message]);
 
   useEffect((): void => {
@@ -57,17 +72,30 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     setOutcome(undefined);
     // todo: call results storage
     setCallResults([]);
-  }, [abi.messages]);
+  }, [abi.messages, setArgValues, address]);
 
   useEffect((): void => {
     async function dryRun() {
       if (!message || typeof query[message.method] !== 'function') return;
       const options = {
-        gasLimit: gas.mode === 'custom' ? (gas.limit.isZero() ? gas.limit.addn(1) : gas.limit) : -1,
-        storageDepositLimit: isUsingStorageDepositLimit ? storageDepositLimit.value : undefined,
+        gasLimit:
+          refTime.mode === 'custom' || proofSize.mode === 'custom'
+            ? api.registry.createType('WeightV2', {
+                refTime: refTime.limit,
+                proofSize: proofSize.limit,
+              })
+            : null,
+        storageDepositLimit: storageDepositLimit.isActive ? storageDepositLimit.value : null,
         value: message?.isPayable ? value : undefined,
       };
-      const o = await query[message.method](accountId, options, ...inputData);
+      const o = await api.call.contractsApi.call(
+        accountId,
+        address,
+        options.value ?? BN_ZERO,
+        options.gasLimit,
+        options.storageDepositLimit,
+        inputData ?? ''
+      );
       setOutcome(o);
     }
 
@@ -83,13 +111,18 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
   }, [
     accountId,
     query,
-    isUsingStorageDepositLimit,
     message,
     inputData,
     storageDepositLimit.value,
-    gas.limit,
-    gas.mode,
+    refTime.limit,
+    refTime.mode,
     value,
+    api.registry,
+    api.call.contractsApi,
+    address,
+    proofSize.limit,
+    proofSize.mode,
+    storageDepositLimit.isActive,
   ]);
 
   useEffect(() => {
@@ -124,8 +157,14 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     const { storageDeposit, gasRequired } = outcome ?? {};
 
     const options = {
-      gasLimit: gas.mode === 'custom' ? gas.limit : gasRequired,
-      storageDepositLimit: isUsingStorageDepositLimit
+      gasLimit:
+        refTime.mode === 'custom' || proofSize.mode === 'custom'
+          ? api.registry.createType('WeightV2', {
+              refTime: refTime.limit,
+              proofSize: proofSize.limit,
+            })
+          : gasRequired,
+      storageDepositLimit: storageDepositLimit.isActive
         ? storageDepositLimit.value
         : storageDeposit?.isCharge
         ? !storageDeposit?.asCharge.eq(BN_ZERO)
@@ -137,7 +176,9 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const extrinsic = message && tx[message.method](options, ...inputData);
+    const extrinsic =
+      message &&
+      tx[message.method](options, ...transformUserInput(registry, message.args, argValues));
 
     if (extrinsic && accountId) {
       newId.current = queue({
@@ -150,10 +191,11 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
     }
   };
 
-  const decodedOutput = outcome?.output?.toHuman();
+  const decodedOutput = outcome?.result?.toHuman();
 
   const callDisabled =
-    !gas.isValid ||
+    !refTime.isValid ||
+    !proofSize.isValid ||
     txs[txId]?.status === 'processing' ||
     !!outcome?.result.isErr ||
     (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
@@ -204,47 +246,14 @@ export const InteractTab = ({ contract: { abi, query, registry, tx, address } }:
             )}
           </FormField>
 
-          {message?.isPayable && (
-            <FormField
-              help="The balance to transfer to the contract as part of this call."
-              id="value"
-              label="Value"
-              {...valueValidation}
-            >
-              <InputBalance value={value} onChange={setValue} placeholder="Value" />
-            </FormField>
-          )}
           {isDispatchable && (
-            <div className="flex justify-between">
-              <FormField
-                help="The maximum amount of gas to use for this contract call. If the call requires more, it will fail."
-                id="maxGas"
-                label="Gas Limit"
-                isError={!gas.isValid}
-                message={!gas.isValid ? gas.errorMsg : null}
-                className="basis-2/4 mr-4"
-              >
-                <InputGas {...gas} estimatedWeight={outcome?.gasRequired} />
-              </FormField>
-              <FormField
-                help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
-                id="storageDepositLimit"
-                label="Storage Deposit Limit"
-                isError={!storageDepositLimit.isValid}
-                message={
-                  !storageDepositLimit.isValid
-                    ? storageDepositLimit.message || 'Invalid storage deposit limit'
-                    : null
-                }
-                className="basis-2/4 shrink-0"
-              >
-                <InputStorageDepositLimit
-                  isActive={isUsingStorageDepositLimit}
-                  toggleIsActive={toggleIsUsingStorageDepositLimit}
-                  {...storageDepositLimit}
-                />
-              </FormField>
-            </div>
+            <OptionsForm
+              isPayable={!!message.isPayable}
+              refTime={refTime}
+              proofSize={proofSize}
+              value={valueState}
+              storageDepositLimit={storageDepositLimit}
+            />
           )}
         </Form>
         <Buttons>

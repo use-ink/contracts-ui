@@ -11,7 +11,7 @@ export function createInstantiateTx(
     argValues,
     codeHash,
     constructorIndex,
-    weight: gasLimit,
+    gasLimit,
     value,
     metadata,
     salt,
@@ -25,7 +25,7 @@ export function createInstantiateTx(
     const constructor = metadata.findConstructor(constructorIndex);
 
     const options = {
-      gasLimit,
+      gasLimit: api.registry.createType('WeightV2', gasLimit),
       salt: salt ? encodeSalt(salt) : null,
       storageDepositLimit: storageDepositLimit || undefined,
       value: value && constructor.isPayable ? api.registry.createType('Balance', value) : undefined,

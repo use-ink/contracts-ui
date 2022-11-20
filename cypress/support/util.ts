@@ -18,12 +18,21 @@ export function assertMoveToStep2() {
   cy.get('[data-cy="next-btn"]').click();
   cy.contains('Deployment Constructor').scrollIntoView().should('be.visible');
   cy.contains('Deployment Salt').scrollIntoView().should('be.visible');
-  cy.contains('Max Gas Allowed').scrollIntoView().should('be.visible');
+  cy.contains('RefTime Limit').scrollIntoView().should('be.visible');
+  cy.contains('ProofSize Limit').scrollIntoView().should('be.visible');
+  assertDryRun();
 }
 
 export function assertMoveToStep3() {
   cy.get('[data-cy="next-btn"]').scrollIntoView().click();
   cy.get('[data-cy="transaction-queued"]').should('be.visible');
+}
+
+export function assertDryRun() {
+  cy.get('[data-cy="dry-run-estimations"]', { timeout })
+    .scrollIntoView()
+    .should('be.visible')
+    .and('contain', 'GasConsumed');
 }
 
 export function assertContractRedirect() {
@@ -45,6 +54,7 @@ export function assertInstantiate() {
 }
 
 export function assertCall() {
+  assertDryRun();
   cy.contains('Call contract').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
     .should('be.visible')

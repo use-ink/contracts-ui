@@ -10,6 +10,7 @@ import {
   assertInstantiate,
   assertReturnValue,
   selectMessage,
+  assertDryRun,
 } from '../../support/util';
 
 describe('Flipper Contract ', () => {
@@ -48,6 +49,7 @@ describe('Flipper Contract ', () => {
   });
   it(`submits flip() transaction`, () => {
     selectMessage('flip', 0);
+    assertDryRun();
     cy.contains('Call contract').click();
     cy.get('[data-cy="transaction-complete"]', { timeout })
       .should('be.visible')
