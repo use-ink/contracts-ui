@@ -81,7 +81,7 @@ export function Contract() {
   const projectName = contract?.abi.info.contract.name;
 
   return (
-    <Loader isLoading={!isOnChain || !contract || !document} message="Loading contract...">
+    <Loader isLoading={!document} message="Loading contract...">
       {document && contract && (
         <PageFull
           accessory={<HeaderButtons contract={document} />}
@@ -108,12 +108,10 @@ export function Contract() {
             )
           }
         >
-          {isOnChain && (
-            <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
-              <MetadataTab abi={contract.abi} />
-              <InteractTab contract={contract} />
-            </Tabs>
-          )}
+          <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
+            <MetadataTab abi={contract.abi} />
+            <InteractTab contract={contract} />
+          </Tabs>
         </PageFull>
       )}
     </Loader>

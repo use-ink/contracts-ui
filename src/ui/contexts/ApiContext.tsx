@@ -7,9 +7,10 @@ import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
 import { RPC } from '../../constants';
-import { ApiPromise, ApiState, ChainProperties, Account, Status } from 'types';
+import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from 'types';
 import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
+import { NoticeBanner } from 'ui/components/common/NoticeBanner';
 
 export const ApiContext = createContext<ApiState | undefined>(undefined);
 
@@ -25,6 +26,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const [accounts, setAccounts] = useState<Account[]>();
   const [chainProps, setChainProps] = useState<ChainProperties>();
   const [status, setStatus] = useState<Status>('loading');
+  const [isSupported, setIsSupported] = useState(true);
 
   useEffect(() => {
     if (rpcUrl && isValidWsUrl(rpcUrl) && rpcUrl !== preferredEndpoint) {
@@ -41,8 +43,10 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
     _api.on('connected', async () => {
       await _api.isReady;
       const _chainProps = await getChainProperties(_api);
+      const w2 = _api.registry.createType<WeightV2>('Weight').proofSize;
       setApi(_api);
       setChainProps(_chainProps);
+      setIsSupported(!!w2);
       setStatus('connected');
     });
     _api.on('disconnected', () => {
@@ -77,6 +81,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
         ...(chainProps as ChainProperties),
       }}
     >
+      <NoticeBanner isVisible={!isSupported} endpoint={endpoint} />
       {children}
     </ApiContext.Provider>
   );
