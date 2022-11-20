@@ -2,6 +2,8 @@
 
 Substrate Contracts UI is a web application for deploying and interacting with WASM smart contracts on Substrate blockchains that include the FRAME Contracts Pallet.
 
+❗Only compatible with nodes that use `WeightV2`. For older nodes use [this deployment](https://weightv1--contracts-ui.netlify.app/)❗
+
 Supported smart contracts:
 
 - [ink!](https://github.com/paritytech/ink)
