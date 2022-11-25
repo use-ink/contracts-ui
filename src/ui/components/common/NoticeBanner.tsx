@@ -13,13 +13,14 @@ export function NoticeBanner({ isVisible, endpoint }: { isVisible: boolean; endp
         Looks like your node does not support <span>WeigthV2</span>.
       </p>
       <p>
-        Upgrade your node or use an{' '}
+        Upgrade your node or{' '}
         <a
           href={`https://weightv1--contracts-ui.netlify.app/?rpc=${endpoint}`}
-          className="text-blue-400"
+          className="text-blue-400 underline"
         >
-          older version of Contracts UI.
-        </a>
+          click here
+        </a>{' '}
+        to use an older version of Contracts UI.
       </p>
     </div>
   ) : null;
