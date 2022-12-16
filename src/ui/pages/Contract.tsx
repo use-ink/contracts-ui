@@ -94,7 +94,7 @@ export function Contract() {
                   <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded">
                     {truncate(address, 4)}
                   </span>
-                  <CopyButton className="ml-1" value={address} />
+                  <CopyButton className="ml-1" value={address} id="header-address" />
                 </div>{' '}
                 from{' '}
                 <Link

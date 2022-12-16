@@ -88,6 +88,7 @@ export function DryRunResult({
                   // @ts-ignore
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
                   key={`gcr-${message.method}`}
+                  id={`gcr-${message.method}`}
                 />
               </div>
               <div className="basis-1/2 pl-2">
@@ -96,6 +97,7 @@ export function DryRunResult({
                   // @ts-ignore
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
                   key={`gcp-${message.method}`}
+                  id={`gcp-${message.method}`}
                 />
               </div>
             </div>
@@ -110,6 +112,7 @@ export function DryRunResult({
                       // @ts-ignore
                       displayValue={`refTime: ${gasRequired.refTime.toString()}`}
                       key={`grr-${message.method}`}
+                      id={`grr-${message.method}`}
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
@@ -118,6 +121,7 @@ export function DryRunResult({
                       // @ts-ignore
                       displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
                       key={`grp-${message.method}`}
+                      id={`grp-${message.method}`}
                     />
                   </div>
                 </div>

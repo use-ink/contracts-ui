@@ -11,17 +11,16 @@ import { classes } from 'helpers';
 interface Props extends React.HTMLAttributes<unknown> {
   iconClassName?: string;
   value: string;
+  id: string;
 }
 
-export function CopyButton({ className, iconClassName, value }: Props) {
+export function CopyButton({ className, iconClassName, value, id }: Props) {
   const ref = useRef<HTMLButtonElement>(null);
   const onClick = useCallback((): void => {
     copy(value);
 
     ref.current && ReactTooltip.show(ref.current);
   }, [value]);
-
-  const id = `copyButton-${value}`;
 
   return (
     <>
