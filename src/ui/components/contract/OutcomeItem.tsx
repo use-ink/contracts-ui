@@ -7,10 +7,12 @@ export function OutcomeItem({
   displayValue,
   copyValue = JSON.stringify(displayValue),
   title,
+  id,
 }: {
   title: string;
   displayValue: string;
   copyValue?: string;
+  id?: string;
 }): JSX.Element {
   return (
     <div className="mb-4 event-log">
@@ -20,7 +22,11 @@ export function OutcomeItem({
         data-cy="output"
       >
         <pre className="whitespace-pre-wrap">{displayValue}</pre>
-        <CopyButton className="absolute right-2 bottom-2" value={copyValue} />
+        <CopyButton
+          className="absolute right-2 bottom-2"
+          value={copyValue}
+          id={title ? title.toLowerCase().replace(/\s+/g, '-') : id ?? ''}
+        />
       </div>
     </div>
   );

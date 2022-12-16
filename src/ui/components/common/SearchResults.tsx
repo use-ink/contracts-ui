@@ -71,12 +71,12 @@ export function SearchResults({
           <div className="header">Code Bundles</div>
           {codeBundles &&
             codeBundles?.length > 0 &&
-            codeBundles.map(codeBundle => {
+            codeBundles.map((codeBundle, index) => {
               return (
                 <SearchResultItem
                   icon={CodeIcon}
                   identifier={codeBundle.codeHash}
-                  key={codeBundle.codeHash}
+                  key={`search-result-${codeBundle.codeHash}-${index}`}
                   name={codeBundle.name}
                   onMouseDown={e => {
                     e.preventDefault();

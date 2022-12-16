@@ -35,9 +35,11 @@ export function LookUpCodeHash() {
 
   useEffect((): void => {
     if (codeHash !== searchString) {
-      if (searchString === '' || isValidCodeHash(searchString)) {
+      if (isValidCodeHash(searchString)) {
         checkOnChainCode(api, searchString)
-          .then(isOnChain => (isOnChain ? setCodeHash(searchString) : setCodeHash('')))
+          .then(isOnChain => {
+            isOnChain ? setCodeHash(searchString) : setCodeHash('');
+          })
           .catch(console.error);
       } else {
         setCodeHash('');
@@ -70,7 +72,7 @@ export function LookUpCodeHash() {
           setCodeHash(document.codeHash);
         }}
       />
-      {codeHash && !!codeBundle && (
+      {codeHash && (
         <CodeHash
           className="mt-1"
           codeHash={codeHash}
