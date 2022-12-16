@@ -26,7 +26,7 @@ export const useMetadataField = (): UseMetadataField => {
     [codeHashUrlParam, db]
   );
   const metadata = useMetadata(codeBundle?.abi, {
-    isWasmRequired: !codeBundle,
+    isWasmRequired: !codeHashUrlParam,
     onChange: setFile,
   });
 
