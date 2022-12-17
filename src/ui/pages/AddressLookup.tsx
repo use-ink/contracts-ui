@@ -125,6 +125,7 @@ export function AddressLookup() {
                   codeHash: metadata.info.source.wasmHash.toHex(),
                   date: new Date().toISOString(),
                   name,
+                  external: true,
                 };
                 await db.contracts.add(document);
                 navigate(`/contract/${address}`);

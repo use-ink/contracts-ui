@@ -87,7 +87,19 @@ export function Contract() {
           accessory={<HeaderButtons contract={document} />}
           header={document?.name || projectName}
           help={
-            isOnChain && (
+            isOnChain &&
+            (document.external ? (
+              <div>
+                You added this contract from{' '}
+                <div className="inline-flex items-center">
+                  <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded">
+                    {truncate(address, 4)}
+                  </span>
+                  <CopyButton className="ml-1" value={address} id="header-address" />
+                </div>{' '}
+                on {displayDate(document.date)}
+              </div>
+            ) : (
               <div>
                 You instantiated this contract{' '}
                 <div className="inline-flex items-center">
@@ -105,7 +117,7 @@ export function Contract() {
                 </Link>{' '}
                 on {displayDate(document.date)}
               </div>
-            )
+            ))
           }
         >
           <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
