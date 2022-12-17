@@ -39,18 +39,23 @@ export function AddressLookup() {
   const { db } = useDatabase();
 
   useEffect((): void => {
-    if (address !== searchString) {
-      if (isValidAddress(searchString)) {
-        getContractInfo(api, searchString)
-          .then(isOnChain => {
-            isOnChain ? setAddress(searchString) : setAddress('');
-          })
-          .catch(console.error);
-      } else {
-        setAddress('');
+    async function validate() {
+      if (address !== searchString) {
+        if (isValidAddress(searchString)) {
+          const isOnChain = await getContractInfo(api, searchString);
+          if (isOnChain) {
+            const contract = await db.contracts.get({ address: searchString });
+            contract ? navigate(`/contract/${searchString}`) : setAddress(searchString);
+          } else {
+            setAddress('');
+          }
+        } else {
+          setAddress('');
+        }
       }
     }
-  }, [api, address, searchString]);
+    validate().catch(e => console.error(e));
+  }, [api, address, searchString, db.contracts, navigate]);
   return (
     <Page
       header="Add contract from address"
@@ -116,7 +121,7 @@ export function AddressLookup() {
                 if (!metadata) return;
                 const document = {
                   abi: metadata.json,
-                  address: address,
+                  address,
                   codeHash: metadata.info.source.wasmHash.toHex(),
                   date: new Date().toISOString(),
                   name,
