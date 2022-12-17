@@ -15,6 +15,7 @@ import {
   SelectCodeHash,
   Settings,
   NotFound,
+  AddressLookup,
 } from 'ui/pages';
 
 globalThis.Buffer = Buffer;
@@ -31,6 +32,7 @@ root.render(
       <Route path="/" element={<App />}>
         <Route index element={<Homepage />} />
         <Route path="add-contract" element={<AddContract />} />
+        <Route path="address-lookup" element={<AddressLookup />} />
         <Route path="hash-lookup" element={<SelectCodeHash />} />
         <Route path="instantiate" element={<Instantiate />}>
           <Route path=":codeHash" />

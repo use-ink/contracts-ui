@@ -123,7 +123,9 @@ export function isValidWsUrl(s: unknown) {
 }
 
 export async function getContractInfo(api: ApiPromise, address: string) {
-  return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
+  if (isValidAddress(address)) {
+    return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
+  }
 }
 
 export async function checkOnChainCode(api: ApiPromise, codeHash: string): Promise<boolean> {
@@ -166,4 +168,11 @@ export function isUndefined(value: unknown): value is undefined {
 
 export function printBN(num: number | BN | bigint) {
   return new Intl.NumberFormat('en-US').format(num as bigint);
+}
+
+export function isValidAddress(addr: unknown) {
+  if (typeof addr === 'string') {
+    return /^[0-9a-zA-Z]{48}/.test(addr);
+  }
+  return false;
 }
