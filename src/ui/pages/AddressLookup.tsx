@@ -34,7 +34,7 @@ export function AddressLookup() {
     ...metadataValidation
   } = useMetadataField();
 
-  const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
+  const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString('New Contract');
 
   const { db } = useDatabase();
 
@@ -65,6 +65,8 @@ export function AddressLookup() {
         help="The address of the contract you want to interact with"
         id="address"
         label="Contract Address"
+        isError={!!searchString && !address}
+        message={isValidAddress(searchString) ? 'Address is not on-chain ' : 'Address is not valid'}
       >
         {' '}
         <Input
@@ -74,7 +76,10 @@ export function AddressLookup() {
           value={searchString}
         >
           {address ? (
-            <CheckCircleIcon className="w-5 h-5 text-green-500 -ml-8" aria-hidden="true" />
+            <div className="flex items-center absolute right-2  text-green-500">
+              <span className="text-xs w-22 mr-1">on-chain</span>
+              <CheckCircleIcon className="w-4 h-4" aria-hidden="true" />
+            </div>
           ) : (
             searchString && (
               <XCircleIcon className="w-5 h-5 text-red-500 -ml-8" aria-hidden="true" />
@@ -133,7 +138,7 @@ export function AddressLookup() {
               variant="primary"
               data-cy="next-btn"
             >
-              Next
+              Add contract
             </Button>
           </Buttons>
         </>
