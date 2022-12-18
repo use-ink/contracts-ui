@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Link } from 'react-router-dom';
-import { ChevronRightIcon, CodeIcon, UploadIcon } from '@heroicons/react/outline';
+import { ChevronRightIcon, CodeIcon, UploadIcon, DocumentAddIcon } from '@heroicons/react/outline';
 import { Page } from 'ui/templates';
 
 export function AddContract() {
@@ -24,7 +24,7 @@ export function AddContract() {
                 <div className="mt-4">
                   <Link
                     to="/instantiate"
-                    className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
@@ -32,14 +32,23 @@ export function AddContract() {
                     </div>
                     <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                   </Link>
-                  <p className="text-center text-sm text-gray-500 py-6">Or</p>
                   <Link
                     to="/hash-lookup"
-                    className="flex justify-between items-center px-6 py-4 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <CodeIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
                       <span>Use Existing Contract Code</span>
+                    </div>
+                    <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
+                  </Link>
+                  <Link
+                    to="/address-lookup"
+                    className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                  >
+                    <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
+                      <DocumentAddIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
+                      <span>Use Existing Contract Address</span>
                     </div>
                     <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                   </Link>

@@ -26,7 +26,7 @@ export const useMetadataField = (): UseMetadataField => {
     [codeHashUrlParam, db]
   );
   const metadata = useMetadata(codeBundle?.abi, {
-    isWasmRequired: !codeHashUrlParam,
+    isWasmRequired: !codeHashUrlParam && window.location.pathname.includes('instantiate'),
     onChange: setFile,
   });
 
