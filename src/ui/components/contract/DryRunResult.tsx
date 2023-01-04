@@ -10,8 +10,7 @@
 import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
-import { useDecodedOutput } from 'ui/hooks';
-import { classes, decodeStorageDeposit } from 'helpers';
+import { classes, decodeStorageDeposit, getDecodedOutput } from 'helpers';
 import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 
@@ -26,9 +25,10 @@ export function DryRunResult({
   message,
   registry,
 }: Props) {
-  const { decodedOutput, isError } = useDecodedOutput(result, message, registry);
+  const { decodedOutput, isError } = getDecodedOutput({ result, debugMessage }, message, registry);
   const { api } = useApi();
-  const { storageDepositValue, storageDepositType } = decodeStorageDeposit(storageDeposit);
+  const { value: storageDepositValue, type: storageDepositType } =
+    decodeStorageDeposit(storageDeposit);
   const isDispatchable = message.isMutating || message.isPayable;
 
   const dispatchError =

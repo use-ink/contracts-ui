@@ -17,11 +17,20 @@ import {
   CallResult,
   ContractPromise,
   SubmittableResult,
+  ContractOptions,
+  Balance,
 } from 'types';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
-import { transformUserInput, BN_ZERO } from 'helpers';
+import {
+  transformUserInput,
+  BN_ZERO,
+  getGasLimit,
+  getStorageDepositLimit,
+  decodeStorageDeposit,
+  getDecodedOutput,
+} from 'helpers';
 import { useApi, useTransactions } from 'ui/contexts';
 import { useWeight, useBalance, useArgValues } from 'ui/hooks';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -35,7 +44,6 @@ export const InteractTab = ({
   contract: {
     abi,
     abi: { registry },
-    query,
     tx,
     address,
   },
@@ -43,7 +51,7 @@ export const InteractTab = ({
   const { accounts, api } = useApi();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
-  const [argValues, setArgValues] = useArgValues(message?.args || [], registry);
+  const [argValues, setArgValues, inputData] = useArgValues(message, registry);
   const [callResults, setCallResults] = useState<CallResult[]>([]);
   const valueState = useBalance(BN_ZERO);
   const { value } = valueState;
@@ -57,10 +65,7 @@ export const InteractTab = ({
   //@ts-ignore
   const proofSize = useWeight(outcome?.gasRequired.proofSize.toBn());
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
-
-  const inputData = useMemo(() => {
-    return message?.toU8a(transformUserInput(registry, message.args, argValues));
-  }, [argValues, registry, message]);
+  const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -74,28 +79,35 @@ export const InteractTab = ({
     setCallResults([]);
   }, [abi.messages, setArgValues, address]);
 
+  const params: Parameters<typeof api.call.contractsApi.call> = useMemo(() => {
+    return [
+      accountId,
+      address,
+      message?.isPayable
+        ? api.registry.createType('Balance', value)
+        : api.registry.createType('Balance', BN_ZERO),
+      getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry),
+      getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
+      inputData ?? '',
+    ];
+  }, [
+    accountId,
+    address,
+    api.registry,
+    inputData,
+    isCustom,
+    message?.isPayable,
+    proofSize.limit,
+    refTime.limit,
+    storageDepositLimit.isActive,
+    storageDepositLimit.value,
+    value,
+  ]);
+
   useEffect((): void => {
     async function dryRun() {
-      if (!message || typeof query[message.method] !== 'function') return;
-      const options = {
-        gasLimit:
-          refTime.mode === 'custom' || proofSize.mode === 'custom'
-            ? api.registry.createType('WeightV2', {
-                refTime: refTime.limit,
-                proofSize: proofSize.limit,
-              })
-            : null,
-        storageDepositLimit: storageDepositLimit.isActive ? storageDepositLimit.value : null,
-        value: message?.isPayable ? value : undefined,
-      };
-      const o = await api.call.contractsApi.call(
-        accountId,
-        address,
-        options.value ?? BN_ZERO,
-        options.gasLimit,
-        options.storageDepositLimit,
-        inputData ?? ''
-      );
+      if (!message) return;
+      const o = await api.call.contractsApi.call(...params);
       setOutcome(o);
     }
 
@@ -108,22 +120,7 @@ export const InteractTab = ({
     }
 
     debouncedDryRun();
-  }, [
-    accountId,
-    query,
-    message,
-    inputData,
-    storageDepositLimit.value,
-    refTime.limit,
-    refTime.mode,
-    value,
-    api.registry,
-    api.call.contractsApi,
-    address,
-    proofSize.limit,
-    proofSize.mode,
-    storageDepositLimit.isActive,
-  ]);
+  }, [api.call.contractsApi, message, params]);
 
   useEffect(() => {
     async function processTx() {
@@ -154,51 +151,46 @@ export const InteractTab = ({
   const newId = useRef<number>();
 
   const call = () => {
-    const { storageDeposit, gasRequired } = outcome ?? {};
+    if (!outcome || !message || !accountId) throw new Error('Unable to call contract.');
 
-    const options = {
-      gasLimit:
-        refTime.mode === 'custom' || proofSize.mode === 'custom'
-          ? api.registry.createType('WeightV2', {
-              refTime: refTime.limit,
-              proofSize: proofSize.limit,
-            })
-          : gasRequired,
-      storageDepositLimit: storageDepositLimit.isActive
-        ? storageDepositLimit.value
-        : storageDeposit?.isCharge
-        ? !storageDeposit?.asCharge.eq(BN_ZERO)
-          ? storageDeposit?.asCharge
-          : undefined
-        : undefined,
-      value: message?.isPayable ? value : undefined,
+    const { storageDeposit, gasRequired } = outcome;
+    const { isActive, value: userInput } = storageDepositLimit;
+    const predictedStorageDeposit = decodeStorageDeposit(storageDeposit);
+    const options: ContractOptions = {
+      gasLimit: getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry) ?? gasRequired,
+      storageDepositLimit: getStorageDepositLimit(
+        isActive,
+        userInput,
+        api.registry,
+        predictedStorageDeposit
+      ),
+      value: message.isPayable ? (params[2] as Balance) : undefined,
     };
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    const extrinsic =
-      message &&
-      tx[message.method](options, ...transformUserInput(registry, message.args, argValues));
+    const extrinsic = tx[message.method](
+      options,
+      ...transformUserInput(registry, message.args, argValues)
+    );
 
-    if (extrinsic && accountId) {
-      newId.current = queue({
-        extrinsic,
-        accountId,
-        onSuccess,
-        isValid,
-      });
-      setTxId(newId.current);
-    }
+    newId.current = queue({
+      extrinsic,
+      accountId,
+      onSuccess,
+      isValid,
+    });
+    setTxId(newId.current);
   };
 
-  const decodedOutput = outcome?.result?.toHuman();
+  const decodedOutput = outcome && message && getDecodedOutput(outcome, message, registry);
 
   const callDisabled =
     !refTime.isValid ||
     !proofSize.isValid ||
     txs[txId]?.status === 'processing' ||
     !!outcome?.result.isErr ||
-    (!!decodedOutput && typeof decodedOutput === 'object' && 'Err' in decodedOutput);
+    !!decodedOutput?.isError;
 
   const isDispatchable = message?.isMutating || message?.isPayable;
 

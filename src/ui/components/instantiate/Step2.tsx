@@ -3,22 +3,35 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Buttons } from '../common/Button';
-import { Form, FormField, getValidation } from '../form/FormField';
-import { InputSalt } from '../form/InputSalt';
-import { OptionsForm } from '../form';
-import { isNumber, genRanHex, transformUserInput, BN_ZERO } from 'helpers';
-import { ArgumentForm } from 'ui/components/form/ArgumentForm';
-import { Dropdown } from 'ui/components/common/Dropdown';
+import { Button, Buttons, Dropdown } from 'ui/components/common';
+import {
+  InputSalt,
+  OptionsForm,
+  Form,
+  FormField,
+  getValidation,
+  ArgumentForm,
+} from 'ui/components/form';
+import {
+  isNumber,
+  genRanHex,
+  encodeSalt,
+  BN_ZERO,
+  getGasLimit,
+  getStorageDepositLimit,
+  decodeStorageDeposit,
+} from 'helpers';
 import { createConstructorOptions } from 'ui/util/dropdown';
 import { useApi, useInstantiate } from 'ui/contexts';
-import { useBalance } from 'ui/hooks/useBalance';
-import { useArgValues } from 'ui/hooks/useArgValues';
-import { useFormField } from 'ui/hooks/useFormField';
-import { useWeight } from 'ui/hooks/useWeight';
-import { useToggle } from 'ui/hooks/useToggle';
-import { AbiMessage, OrFalsy } from 'types';
-import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
+import {
+  useArgValues,
+  useFormField,
+  useWeight,
+  useToggle,
+  useStorageDepositLimit,
+  useBalance,
+} from 'ui/hooks';
+import { AbiMessage, Balance, OrFalsy } from 'types';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -40,8 +53,9 @@ export function Step2() {
   const proofSize = useWeight(dryRunResult?.gasRequired.proofSize.toBn());
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
-  const [argValues, setArgValues] = useArgValues(deployConstructor?.args ?? [], metadata?.registry);
+  const [argValues, setArgValues, inputData] = useArgValues(deployConstructor, metadata?.registry);
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
+  const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
 
   useEffect(() => {
     setConstructorIndex(0);
@@ -50,41 +64,31 @@ export function Step2() {
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
 
-  const params = useMemo(() => {
-    const inputData = deployConstructor?.toU8a(
-      transformUserInput(api.registry, deployConstructor.args, argValues)
-    );
-    return {
-      origin: accountId,
-      value: deployConstructor?.isPayable ? value : BN_ZERO,
-      gasLimit:
-        refTime.mode === 'custom' || proofSize.mode === 'custom'
-          ? api.registry.createType('WeightV2', {
-              refTime: refTime.limit,
-              proofSize: proofSize.limit,
-            })
-          : null,
-      storageDepositLimit: storageDepositLimit.isActive ? storageDepositLimit.value : undefined,
-      code: codeHashUrlParam
-        ? { Existing: codeHashUrlParam }
-        : { Upload: metadata?.info.source.wasm },
-      data: inputData,
-      salt: isUsingSalt ? salt.value : undefined,
-    };
+  const params: Parameters<typeof api.call.contractsApi.instantiate> = useMemo(() => {
+    return [
+      accountId,
+      deployConstructor?.isPayable
+        ? api.registry.createType('Balance', value)
+        : api.registry.createType('Balance', BN_ZERO),
+      getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry),
+      getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
+      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: metadata?.info.source.wasm },
+      inputData ?? '',
+      isUsingSalt ? encodeSalt(salt.value) : '',
+    ];
   }, [
-    deployConstructor,
-    api.registry,
-    argValues,
     accountId,
+    deployConstructor?.isPayable,
     value,
-    refTime.mode,
+    isCustom,
     refTime.limit,
-    proofSize.mode,
     proofSize.limit,
+    api.registry,
     storageDepositLimit.isActive,
     storageDepositLimit.value,
     codeHashUrlParam,
     metadata?.info.source.wasm,
+    inputData,
     isUsingSalt,
     salt.value,
   ]);
@@ -92,15 +96,7 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await api.call.contractsApi.instantiate(
-          params.origin,
-          params.value ?? 0,
-          params.gasLimit,
-          params.storageDepositLimit ?? null,
-          params.code,
-          params.data ?? '',
-          params.salt ?? ''
-        );
+        const result = await api.call.contractsApi.instantiate(...params);
 
         if (JSON.stringify(dryRunResult) !== JSON.stringify(result)) {
           setDryRunResult(result);
@@ -113,23 +109,24 @@ export function Step2() {
   }, [api.call.contractsApi, dryRunResult, params, setDryRunResult]);
 
   const onSubmit = () => {
-    const { salt, value, gasLimit } = params;
-    const { storageDeposit } = dryRunResult ?? {};
+    if (!dryRunResult) return;
+
+    const { storageDeposit, gasRequired } = dryRunResult;
+    const { isActive, value: userInput } = storageDepositLimit;
+    const predictedStorageDeposit = decodeStorageDeposit(storageDeposit);
     setData({
       ...data,
       constructorIndex,
-      salt,
-      value,
+      salt: params[6] || null,
+      value: deployConstructor?.isPayable ? (params[1] as Balance) : undefined,
       argValues,
-      storageDepositLimit: storageDepositLimit.isActive
-        ? storageDepositLimit.value
-        : storageDeposit?.isCharge
-        ? storageDeposit?.asCharge
-        : undefined,
-      gasLimit:
-        refTime.mode === 'custom' || proofSize.mode === 'custom'
-          ? gasLimit
-          : dryRunResult?.gasRequired ?? null,
+      storageDepositLimit: getStorageDepositLimit(
+        isActive,
+        userInput,
+        api.registry,
+        predictedStorageDeposit
+      ),
+      gasLimit: getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry) ?? gasRequired,
     });
     setStep(3);
   };

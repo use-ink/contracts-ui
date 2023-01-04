@@ -2,8 +2,15 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
-import { encodeSalt, transformUserInput, isNumber } from '../util';
-import type { ApiPromise, InstantiateData, SubmittableExtrinsic } from 'types';
+import { isValidAddress, isValidCodeHash, isNumber } from './util';
+import { transformUserInput } from './callOptions';
+import {
+  ApiPromise,
+  CodeBundleDocument,
+  BlueprintOptions,
+  InstantiateData,
+  SubmittableExtrinsic,
+} from 'types';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -24,11 +31,11 @@ export function createInstantiateTx(
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
     const constructor = metadata.findConstructor(constructorIndex);
 
-    const options = {
-      gasLimit: api.registry.createType('WeightV2', gasLimit),
-      salt: salt ? encodeSalt(salt) : null,
-      storageDepositLimit: storageDepositLimit || undefined,
-      value: value && constructor.isPayable ? api.registry.createType('Balance', value) : undefined,
+    const options: BlueprintOptions = {
+      gasLimit,
+      salt: salt || null,
+      storageDepositLimit,
+      value,
     };
 
     const codeOrBlueprint = codeHash
@@ -43,4 +50,25 @@ export function createInstantiateTx(
   } else {
     throw new Error('Error creating instantiate tx');
   }
+}
+
+export async function getContractInfo(api: ApiPromise, address: string) {
+  if (isValidAddress(address)) {
+    return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
+  }
+}
+
+export async function checkOnChainCode(api: ApiPromise, codeHash: string): Promise<boolean> {
+  return isValidCodeHash(codeHash)
+    ? (await api.query.contracts.codeStorage(codeHash)).isSome
+    : false;
+}
+
+export async function filterOnChainCode(api: ApiPromise, items: CodeBundleDocument[]) {
+  const codes: CodeBundleDocument[] = [];
+  for (const item of items) {
+    const isOnChain = await checkOnChainCode(api, item.codeHash);
+    isOnChain && codes.push(item);
+  }
+  return codes;
 }
