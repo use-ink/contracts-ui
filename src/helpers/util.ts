@@ -1,6 +1,8 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { decodeAddress, encodeAddress } from '@polkadot/keyring';
+import { hexToU8a, isHex } from '@polkadot/util';
 import { keyring } from '@polkadot/ui-keyring';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
@@ -72,9 +74,11 @@ export function isUndefined(value: unknown): value is undefined {
   return value === undefined;
 }
 
-export function isValidAddress(addr: unknown) {
-  if (typeof addr === 'string') {
-    return /^[0-9a-zA-Z]{48}/.test(addr);
+export function isValidAddress(address: string | Uint8Array | null | undefined) {
+  try {
+    encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
+    return true;
+  } catch (error) {
+    return false;
   }
-  return false;
 }
