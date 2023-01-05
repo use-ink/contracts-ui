@@ -74,7 +74,7 @@ export function isUndefined(value: unknown): value is undefined {
 
 export function isValidAddress(addr: unknown) {
   if (typeof addr === 'string') {
-    return /^[0-9a-zA-Z]{48}/.test(addr);
+    return /^[0-9a-zA-Z]{47}/.test(addr);
   }
   return false;
 }
