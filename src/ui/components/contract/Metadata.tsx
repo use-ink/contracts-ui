@@ -27,6 +27,8 @@ export const MetadataTab = () => {
     isStored,
     onChange,
     onRemove,
+    isSupplied,
+    isValid,
     ...metadataValidation
   } = useMetadataField();
 
@@ -53,6 +55,7 @@ export const MetadataTab = () => {
           id="metadata"
           label={'Update Metadata'}
           {...getValidation(metadataValidation)}
+          className="pb-5"
         >
           <InputFile
             placeholder="Click to select or drag and drop to upload file."
@@ -64,9 +67,10 @@ export const MetadataTab = () => {
           />
         </FormField>
         <Button
-          className="flex justify-between items-center px-3 py-2 border text-gray-500 dark:text-gray-300 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+          className="flex justify-between items-center px-3 py-2 border text-gray-500 dark:text-gray-300 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:enabled:hover:bg-elevation-2"
+          isDisabled={!isSupplied || !isValid}
           onClick={async () => {
-            if (!metadata || !document?.id) throw new Error('Unable to update metadata. ');
+            if (!metadata || !document?.id) throw new Error('Unable to update metadata.');
             await db.contracts.update(document.id, { abi: metadata.json });
             onRemove();
           }}
