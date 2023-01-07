@@ -41,7 +41,7 @@ export const MetadataTab = () => {
   return (
     <div className="grid grid-cols-12 w-full">
       <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
-        <div className="mb-10">
+        <div className="mb-10" data-cy="contract-docs">
           {abi.constructors.concat(abi.messages).map(message => (
             <MessageDocs key={message.identifier} message={message} registry={abi.registry} />
           ))}
