@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
+      image: cypress/browsers:node16.16.0-chrome107-ff107
       options: --user 1001
     needs: [contracts-node-binary]
     strategy:
@@ -29,6 +29,9 @@ jobs:
       # leaving the Dashboard hanging ...
       # https://github.com/cypress-io/github-action/issues/48
       fail-fast: false
+      matrix:
+        # run copies of the current job in parallel
+        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -37,13 +40,16 @@ jobs:
         uses: ./.github/actions/prepare
 
       - name: 'UI Tests - Chrome'
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5.0.5
         with:
           start: yarn start
           wait-on: 'http://localhost:8081'
           wait-on-timeout: 120
           browser: chrome
           config-file: cypress.config.ts
+          record: true
+          parallel: true
+          group: 'UI - Chrome'
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -53,7 +59,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.14.2-slim-chrome100-ff99-edge
+      image: cypress/browsers:node16.16.0-chrome107-ff107
       options: --user 1001
     needs: [contracts-node-binary]
     strategy:
@@ -62,6 +68,9 @@ jobs:
       # leaving the Dashboard hanging ...
       # https://github.com/cypress-io/github-action/issues/48
       fail-fast: false
+      matrix:
+        # run copies of the current job in parallel
+        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -70,13 +79,16 @@ jobs:
         uses: ./.github/actions/prepare
 
       - name: 'UI Tests - Firefox'
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5.0.5
         with:
           start: yarn start
           wait-on: 'http://localhost:8081'
           wait-on-timeout: 120
           browser: firefox
           config-file: cypress.config.ts
+          record: true
+          parallel: true
+          group: 'UI - Firefox'
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

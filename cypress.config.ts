@@ -6,10 +6,10 @@ import task from '@cypress/code-coverage/task';
 
 export default defineConfig({
   projectId: 'eup7bh',
-
   e2e: {
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
     baseUrl: 'http://localhost:8081/',
+    testIsolation: false,
     setupNodeEvents(on, config) {
       task(on, config);
       return config;
