@@ -37,7 +37,7 @@ jobs:
         uses: ./.github/actions/prepare
 
       - name: 'UI Tests - Chrome'
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5.0.5
         with:
           start: yarn start
           wait-on: 'http://localhost:8081'
@@ -70,7 +70,7 @@ jobs:
         uses: ./.github/actions/prepare
 
       - name: 'UI Tests - Firefox'
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5.0.5
         with:
           start: yarn start
           wait-on: 'http://localhost:8081'
