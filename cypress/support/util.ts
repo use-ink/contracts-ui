@@ -88,6 +88,7 @@ export function assertReturnValue(messageName: string, value: string) {
 export function deploy(fixture: Cypress.FixtureData) {
   assertUpload(fixture);
   assertMoveToStep2();
+  cy.wait(500);
   assertMoveToStep3();
   assertInstantiate();
   assertContractRedirect();
