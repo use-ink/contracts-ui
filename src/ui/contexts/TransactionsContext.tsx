@@ -45,7 +45,7 @@ export function TransactionsContextProvider({
         account,
         { signer: injector?.signer || undefined },
         async result => {
-          if (result.isInBlock) {
+          if (result.isInBlock || result.isFinalized) {
             const events: Record<string, number> = {};
 
             result.events.forEach(record => {
