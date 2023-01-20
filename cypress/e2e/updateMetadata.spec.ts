@@ -22,10 +22,11 @@ describe('Update contract metadata', () => {
     cy.contains('No documentation provided').should('be.visible');
     cy.contains('Demonstrates the ability to fail a constructor safely').should('be.visible');
     cy.contains('Takes an auction data struct as input and returns it back.').should('be.visible');
+    cy.contains('Update metadata').should('be.disabled');
   });
   it('uploads a different metadata file', () => {
     cy.get('[data-cy="file-input"]').attachFile('flipper.contract');
-    cy.contains('Update metadata').click();
+    cy.contains('Update metadata').should('not.be.disabled').click();
   });
   it('displays the docs for the new metadata', () => {
     cy.get('[data-cy="message-docs"]').each((item, i, list) => {
@@ -34,6 +35,8 @@ describe('Update contract metadata', () => {
     });
   });
   it('clears the file input', () => {
-    cy.contains('Click to select or drag and drop to upload file.').should('be.visible');
+    cy.contains('Click to select or drag and drop to upload file.')
+      .scrollIntoView()
+      .should('be.visible');
   });
 });
