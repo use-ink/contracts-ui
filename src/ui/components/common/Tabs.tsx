@@ -21,7 +21,10 @@ export function Tabs({ children, index, setIndex, tabs }: Props) {
   return (
     <>
       <div className="grid grid-cols-12 w-full">
-        <ul className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8">
+        <ul
+          className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8"
+          data-cy="contract-page-tabs"
+        >
           {tabs.map(({ id, label }, tabIndex) => {
             return (
               <li key={id} className="mr-1">

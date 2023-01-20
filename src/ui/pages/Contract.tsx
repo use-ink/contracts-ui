@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { InteractTab } from '../components/contract/Interact';
 import { MetadataTab } from '../components/contract/Metadata';
 import { CopyButton } from '../components/common/CopyButton';
@@ -59,24 +60,19 @@ export function Contract() {
         .catch(console.error);
   }, [api, document]);
 
-  useEffect((): void => {
-    async function getContract() {
-      if (!address) return;
-      setContract(undefined);
-      setDocument(undefined);
-      const d = await db.contracts.get({ address });
-      if (!d) {
-        navigate('/');
-      } else {
-        const c = new ContractPromise(api, d.abi, address);
-        setDocument(d);
-        setContract(c);
-      }
+  useLiveQuery(async () => {
+    if (!address) return;
+    setContract(undefined);
+    setDocument(undefined);
+    const d = await db.contracts.get({ address });
+    if (!d) {
+      navigate('/');
+    } else {
+      const c = new ContractPromise(api, d.abi, address);
+      setDocument(d);
+      setContract(c);
     }
-    getContract().catch(e => {
-      console.error(e);
-    });
-  }, [address, api, db.contracts, navigate]);
+  }, [address]);
 
   const projectName = contract?.abi.info.contract.name;
 
@@ -121,7 +117,7 @@ export function Contract() {
           }
         >
           <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
-            <MetadataTab abi={contract.abi} />
+            <MetadataTab />
             <InteractTab contract={contract} />
           </Tabs>
         </PageFull>
