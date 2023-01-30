@@ -31,14 +31,14 @@ export function AccountsError() {
       <a
         rel="noopener noreferrer"
         target="_blank"
-        href="https://docs.astar.network/integration/testnet-faucet"
+        href="https://docs.astar.network/docs/quickstart/faucet/"
       >
         Shiden / Shibuya
       </a>{' '}
       <a
         rel="noopener noreferrer"
         target="_blank"
-        href="https://docs.alephzero.org/smart-contracts-tutorial/deploying-your-contract-to-aleph-zero-testnet#deploying-contracts"
+        href="https://docs.alephzero.org/aleph-zero/build/setting-up-testnet-account"
       >
         Aleph Zero Testnet
       </a>{' '}
