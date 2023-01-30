@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -12,7 +12,7 @@ import { Loader } from '../components/common/Loader';
 import { Tabs } from '../components/common/Tabs';
 import { HeaderButtons } from '../components/common/HeaderButtons';
 import { PageFull } from 'ui/templates';
-import { checkOnChainCode, displayDate, truncate } from 'helpers';
+import { displayDate, truncate } from 'helpers';
 import { useApi, useDatabase } from 'ui/contexts';
 import { ContractDocument, ContractPromise } from 'types';
 
@@ -51,15 +51,6 @@ export function Contract() {
 
   const [tabIndex, setTabIndex] = useState(TABS.findIndex(({ id }) => id === activeTab) || 1);
 
-  const [isOnChain, setIsOnChain] = useState<boolean>(false);
-
-  useEffect(() => {
-    document &&
-      checkOnChainCode(api, document.codeHash || '')
-        .then(isOnChain => setIsOnChain(isOnChain))
-        .catch(console.error);
-  }, [api, document]);
-
   useLiveQuery(async () => {
     if (!address) return;
     setContract(undefined);
@@ -83,8 +74,7 @@ export function Contract() {
           accessory={<HeaderButtons contract={document} />}
           header={document?.name || projectName}
           help={
-            isOnChain &&
-            (document.external ? (
+            document.external ? (
               <div>
                 You added this contract from{' '}
                 <div className="inline-flex items-center">
@@ -113,7 +103,7 @@ export function Contract() {
                 </Link>{' '}
                 on {displayDate(document.date)}
               </div>
-            ))
+            )
           }
         >
           <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
