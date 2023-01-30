@@ -1,25 +1,19 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { Abi } from 'types';
 import { MessageDocs } from 'ui/components/message/MessageDocs';
 import { Button } from 'ui/components/common';
 import { FormField, getValidation, InputFile, useMetadataField } from 'ui/components/form';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useDatabase } from 'ui/contexts';
 
-export const MetadataTab = () => {
+interface Props {
+  abi: Abi;
+  id: number | undefined;
+}
+
+export const MetadataTab = ({ id, abi }: Props) => {
   const { db } = useDatabase();
-  const { api } = useApi();
-  const { address } = useParams();
-  const [abi, setAbi] = useState<Abi>();
-
-  const document = useLiveQuery(() => {
-    return db.contracts.get({ address });
-  });
-
   const {
     file,
     value: metadata,
@@ -31,12 +25,6 @@ export const MetadataTab = () => {
     isValid,
     ...metadataValidation
   } = useMetadataField();
-
-  useEffect(() => {
-    if (!document) return;
-    const newAbi = new Abi(document?.abi, api?.registry.getChainProperties());
-    setAbi(newAbi);
-  }, [api?.registry, document]);
 
   if (!abi) return null;
 
@@ -70,8 +58,8 @@ export const MetadataTab = () => {
           className="flex justify-between items-center px-3 py-2 border text-gray-500 dark:text-gray-300 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:enabled:hover:bg-elevation-2"
           isDisabled={!isSupplied || !isValid}
           onClick={async () => {
-            if (!metadata || !document?.id) throw new Error('Unable to update metadata.');
-            await db.contracts.update(document.id, { abi: metadata.json });
+            if (!metadata || !id) throw new Error('Unable to update metadata.');
+            await db.contracts.update(id, { abi: metadata.json });
             onRemove();
           }}
         >

@@ -107,7 +107,7 @@ export function Contract() {
           }
         >
           <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
-            <MetadataTab />
+            <MetadataTab abi={contract.abi} id={document.id} />
             <InteractTab contract={contract} />
           </Tabs>
         </PageFull>
