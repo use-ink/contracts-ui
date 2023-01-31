@@ -36,6 +36,10 @@ body {
   width: calc(100vw - 14rem);
 }
 
+.scroll {
+  overflow: scroll;
+}
+
 .content main {
   width: 100%;
 }
