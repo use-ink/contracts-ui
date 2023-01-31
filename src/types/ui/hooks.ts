@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { VoidFn } from '../substrate';
+import { ContractPromise, VoidFn } from '../substrate';
 import { BN, FileState, MetadataState, Validation } from './util';
 
 export type InputMode = 'estimation' | 'custom';
@@ -39,4 +39,14 @@ export interface UseStorageDepositLimit extends ValidFormField<BN> {
   maximum: BN | undefined;
   isActive: boolean;
   toggleIsActive: () => void;
+}
+
+export interface UIContract extends Pick<ContractPromise, 'abi' | 'tx'> {
+  name: string;
+  displayName: string;
+  date: string;
+  id: number | undefined;
+  type: 'added' | 'instantiated';
+  codeHash: string;
+  address: string;
 }
