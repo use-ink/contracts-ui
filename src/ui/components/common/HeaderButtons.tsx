@@ -7,10 +7,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmModal } from 'ui/components/modal';
 import { useApi, useDatabase } from 'ui/contexts';
 import { getContractInfo, truncate } from 'helpers';
-import type { ContractDocument } from 'types';
+import type { UIContract } from 'types';
 
 interface Props {
-  contract: ContractDocument;
+  contract: UIContract;
 }
 
 export function HeaderButtons({ contract: { address, codeHash } }: Props) {

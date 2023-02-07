@@ -15,10 +15,10 @@ import {
   ContractExecResult,
   ContractSubmittableResult,
   CallResult,
-  ContractPromise,
   SubmittableResult,
   ContractOptions,
   Balance,
+  UIContract,
 } from 'types';
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
@@ -37,7 +37,7 @@ import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
 
 interface Props {
-  contract: ContractPromise;
+  contract: UIContract;
 }
 
 export const InteractTab = ({
