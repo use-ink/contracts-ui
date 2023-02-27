@@ -10,6 +10,10 @@ export enum RPC {
   SHIBUYA = 'wss://rpc.shibuya.astar.network',
   SHIDEN = 'wss://rpc.shiden.astar.network',
   ALEPHZEROTESTNET = 'wss://ws.test.azero.dev',
+  PEAQ = 'wss://wss.agung.peaq.network',
+  PENDULAM = 'wss://ws.pendulum.network',
+  T3RN = 'wss://ws.t3rn.network',
+  PHALA = 'wss://khala.phala.network/ws',
 }
 export const DEFAULT_DECIMALS = 12;
 

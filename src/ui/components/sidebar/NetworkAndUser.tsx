@@ -7,26 +7,44 @@ import { RPC } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'helpers';
 
-const options = [
+const data = [
   {
-    label: 'Contracts (Rococo)',
-    value: RPC.CONTRACTS,
+    label: 'Test Networks',
+    options: [
+      {
+        label: 'Aleph Zero',
+        value: RPC.ALEPHZEROTESTNET,
+      },
+      {
+        label: 'Pendulum',
+        value: RPC.PENDULAM,
+      },
+      {
+        label: 'Phala',
+        value: RPC.PHALA,
+      },
+      {
+        label: 'Peaq network',
+        value: RPC.PEAQ,
+      },
+      {
+        label: 'Shibuya',
+        value: RPC.SHIDEN,
+      },
+      {
+        label: 't3rn',
+        value: RPC.T3RN,
+      },
+    ],
   },
   {
-    label: 'Shibuya',
-    value: RPC.SHIBUYA,
-  },
-  {
-    label: 'Shiden',
-    value: RPC.SHIDEN,
-  },
-  {
-    label: 'Aleph Zero Testnet',
-    value: RPC.ALEPHZEROTESTNET,
-  },
-  {
-    label: 'Local Node',
-    value: RPC.LOCAL,
+    label: 'Production Networks',
+    options: [
+      {
+        label: 'Shiden',
+        value: RPC.SHIBUYA,
+      },
+    ],
   },
 ];
 
@@ -46,8 +64,8 @@ export function NetworkAndUser() {
         onChange={e => {
           navigate(`/?rpc=${e}`);
         }}
-        options={options}
-        value={options.find(o => o.value === endpoint)?.value || RPC.CONTRACTS}
+        options={data}
+        value={endpoint}
       />
     </div>
   );
