@@ -198,7 +198,8 @@ export function Step2() {
           variant="primary"
           data-cy="next-btn"
         >
-          Next
+
+          Go Back
         </Button>
 
         <Button
@@ -207,7 +208,7 @@ export function Step2() {
           }}
           variant="default"
         >
-          Go Back
+          Next
         </Button>
       </Buttons>
     </>
