@@ -9,12 +9,13 @@ import {
   GroupBase,
   InputProps,
   OptionProps,
+  OptionsOrGroups,
   Props as ReactSelectProps,
 } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import { classes } from 'helpers';
+import { classes, isValidAddress } from 'helpers';
 import type { DropdownOption, DropdownProps } from 'types';
 
 function isGroupedOptions<T>(
@@ -57,6 +58,19 @@ function DropdownIndicator<T>(props: DropdownIndicatorProps<DropdownOption<T>, f
   );
 }
 
+function getOption<T>(
+  options: OptionsOrGroups<DropdownOption<T>, GroupBase<DropdownOption<T>>>,
+  val: T
+) {
+  if (isGroupedOptions(options)) {
+    return options
+      .reduce((result: DropdownOption<T>[], { options }) => [...result, ...options], [])
+      .find(({ value }) => value === val);
+  }
+
+  return (options as DropdownOption<T>[]).find(({ value }) => value === val);
+}
+
 export function Dropdown<T>({
   className = '',
   components = {},
@@ -76,15 +90,7 @@ export function Dropdown<T>({
     [_onChange]
   );
 
-  const value = useMemo(() => {
-    if (isGroupedOptions(options)) {
-      return options
-        .reduce((result: DropdownOption<T>[], { options }) => [...result, ...options], [])
-        .find(({ value }) => value === _value);
-    }
-
-    return (options as DropdownOption<T>[]).find(({ value }) => value === _value);
-  }, [options, _value]);
+  const value = useMemo(() => getOption(options, _value), [options, _value]);
 
   return (
     <CreatableSelect
@@ -104,6 +110,10 @@ export function Dropdown<T>({
         option: () => ({}),
       }}
       value={value}
+      formatCreateLabel={() => undefined}
+      isValidNewOption={inputValue =>
+        isValidAddress(inputValue) && !getOption(options, inputValue as T)
+      }
     />
   );
 }
