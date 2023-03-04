@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback, useMemo } from 'react';
-import Select, {
+import {
   components,
   ControlProps,
   DropdownIndicatorProps,
@@ -11,6 +11,8 @@ import Select, {
   OptionProps,
   Props as ReactSelectProps,
 } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import { classes } from 'helpers';
 import type { DropdownOption, DropdownProps } from 'types';
@@ -65,6 +67,7 @@ export function Dropdown<T>({
   options = [],
   placeholder,
   value: _value,
+  onCreate,
 }: DropdownProps<T>) {
   const onChange = useCallback(
     (option: DropdownOption<T> | null): void => {
@@ -84,7 +87,7 @@ export function Dropdown<T>({
   }, [options, _value]);
 
   return (
-    <Select
+    <CreatableSelect
       className={classes('dropdown', className)}
       classNamePrefix="dropdown"
       components={{ Control, DropdownIndicator, Input, Option, ...components }}
@@ -92,6 +95,7 @@ export function Dropdown<T>({
       isDisabled={isDisabled}
       isSearchable={isSearchable}
       onChange={onChange}
+      onCreateOption={onCreate}
       options={options}
       placeholder={placeholder}
       styles={{

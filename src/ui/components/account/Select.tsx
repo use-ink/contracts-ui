@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { GroupBase } from 'react-select';
 import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
@@ -24,6 +24,7 @@ function Select({
   placeholder = 'Select account',
   className,
   value,
+  onCreate,
 }: DropdownProps<string>) {
   return (
     <Dropdown
@@ -35,6 +36,7 @@ function Select({
       placeholder={placeholder}
       isSearchable
       value={value}
+      onCreate={onCreate}
     />
   );
 }
@@ -47,30 +49,44 @@ export function AccountSelect({ placeholder = 'Select account', ...props }: Prop
   );
 }
 
-export function AddressSelect({ placeholder = 'Select account', ...props }: Props) {
+export function AddressSelect({ placeholder = 'Select account', onChange, ...props }: Props) {
   const { accounts } = useApi();
   const { db } = useDatabase();
   const [contracts] = useDbQuery(() => db.contracts.toArray(), [db]);
+  const [recent, setRecent] = useState<DropdownOption<string>[]>([]);
 
   const options = useMemo((): GroupBase<DropdownOption<string>>[] => {
     return [
       {
+        label: 'Recent',
+        options: recent,
+      },
+      {
         label: 'My Accounts',
         options: createAccountOptions(accounts || []),
       },
-      ...(contracts && contracts.length > 0
-        ? [
-            {
-              label: 'Uploaded Contracts',
-              options: (contracts || []).map(({ name, address }) => ({
-                label: name,
-                value: address,
-              })),
-            },
-          ]
-        : []),
+      {
+        label: 'Uploaded Contracts',
+        options: (contracts || []).map(({ name, address }) => ({
+          label: name,
+          value: address,
+        })),
+      },
     ];
-  }, [accounts, contracts]);
+  }, [accounts, contracts, recent]);
 
-  return <Select options={options} placeholder={placeholder} {...props} />;
+  const handleCreate = (inputValue: string) => {
+    setRecent([...recent, { label: inputValue, value: inputValue }]);
+    onChange(inputValue);
+  };
+
+  return (
+    <Select
+      options={options}
+      placeholder={placeholder}
+      onChange={onChange}
+      {...props}
+      onCreate={handleCreate}
+    />
+  );
 }
