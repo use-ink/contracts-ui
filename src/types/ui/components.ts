@@ -26,7 +26,7 @@ export type DropdownProps<T> = SimpleSpread<
     Pick<
       ReactSelectProps<DropdownOption<T>, false>,
       'components' | 'formatOptionLabel' | 'isDisabled' | 'isSearchable' | 'options' | 'placeholder'
-    >
+    > & { onCreate?: (input: string) => void }
 >;
 
 export type InputFileProps = SimpleSpread<
