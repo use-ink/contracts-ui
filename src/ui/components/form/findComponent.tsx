@@ -57,7 +57,11 @@ export function findComponent(
   }
 
   if (type.info === TypeDefInfo.Si) {
-    return findComponent(registry, registry.lookup.getTypeDef(type.type), nestingNumber);
+    return findComponent(
+      registry,
+      registry.lookup.getTypeDef(type.type as `Lookup${number}`),
+      nestingNumber
+    );
   }
 
   if (type.info === TypeDefInfo.Struct) {
