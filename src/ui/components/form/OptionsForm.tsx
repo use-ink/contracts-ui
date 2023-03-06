@@ -27,7 +27,7 @@ export function OptionsForm({
     <>
       <div className="flex justify-between">
         <FormField
-          help="The maximum amount of gas to use for execution (the old gas limit). If the transaction requires more, it will fail."
+          help="The maximum amount of computational time that can be used for execution, in picoseconds. If the transaction requires more, it will fail."
           id="maxRefTime"
           label="RefTime Limit"
           isError={!refTime.isValid}
@@ -37,7 +37,7 @@ export function OptionsForm({
           <InputWeight {...refTime} name="RefTime" />
         </FormField>
         <FormField
-          help="The maximum amount of gas to use for PoV. If the transaction requires more, it will fail."
+          help="The maximum amount of storage space that can be used, in bytes. If the transaction requires more, it will fail."
           id="maxProofSize"
           label="ProofSize Limit"
           isError={!proofSize.isValid}
