@@ -13,6 +13,7 @@ export function useFormField<T>(
   const [value, setValue] = useState<T>(defaultValue);
   const [validation, setValidation] = useState<Omit<Validation, 'isError'>>(validate(value));
   const isTouched = useRef(false);
+  const isEmpty = useRef(isUndefined(defaultValue) || isNull(defaultValue) || defaultValue === '');
 
   const isError = useMemo(() => {
     if (!isTouched.current) {
@@ -28,6 +29,9 @@ export function useFormField<T>(
         setValue(value);
         setValidation(validate(value));
         isTouched.current = true;
+        isEmpty.current = false;
+      } else {
+        isEmpty.current = true;
       }
     },
     [validate]
@@ -35,13 +39,14 @@ export function useFormField<T>(
 
   return useMemo(
     () => ({
-      value,
-      onChange,
-      isValid: validation.isValid,
+      isEmpty: isEmpty.current,
+      isError,
       isTouched: isTouched.current,
+      isValid: validation.isValid,
       isWarning: validation.isWarning || false,
       message: validation.message,
-      isError,
+      onChange,
+      value,
     }),
     [value, onChange, isError, validation.isValid, validation.isWarning, validation.message]
   );

@@ -21,6 +21,7 @@ export type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 export type ValidateFn<T> = (_: OrFalsy<T>) => Validation;
 
 export interface Validation {
+  isEmpty?: boolean;
   isError?: boolean;
   isSuccess?: boolean;
   isTouched?: boolean;
