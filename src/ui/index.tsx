@@ -5,6 +5,7 @@ import { Buffer } from 'buffer';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from 'ui/components/App';
+import 'react-tooltip/dist/react-tooltip.css';
 import './styles/main.css';
 import '@polkadot/api-augment';
 import {

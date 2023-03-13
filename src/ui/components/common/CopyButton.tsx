@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import copy from 'copy-to-clipboard';
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { Button } from './Button';
 import { classes } from 'helpers';
 
@@ -16,18 +16,22 @@ interface Props extends React.HTMLAttributes<unknown> {
 
 export function CopyButton({ className, iconClassName, value, id }: Props) {
   const ref = useRef<HTMLButtonElement>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
   const onClick = useCallback((): void => {
     copy(value);
 
-    ref.current && ReactTooltip.show(ref.current);
+    setShowTooltip(true);
+    setTimeout(() => {
+      setShowTooltip(false);
+    }, 1500);
   }, [value]);
 
   return (
     <>
       <Button
         className={classes('', className)}
-        data-for={id}
-        data-tip
+        data-tooltip-id={id}
+        data-tooltip-content="Copied to clipboard"
         onClick={onClick}
         ref={ref}
         variant="plain"
@@ -36,13 +40,7 @@ export function CopyButton({ className, iconClassName, value, id }: Props) {
           className={classes('w-4 h-4 hover:text-gray-600 dark:hover:text-gray-300', iconClassName)}
         />
       </Button>
-      <ReactTooltip
-        afterShow={() => setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 300)}
-        id={id}
-        event="none"
-      >
-        Copied to clipboard
-      </ReactTooltip>
+      <Tooltip id={id} place="top" isOpen={showTooltip} />
     </>
   );
 }

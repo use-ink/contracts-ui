@@ -7,7 +7,7 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/outline';
 import { useMemo } from 'react';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import type { Validation } from 'types';
 import { classes } from 'helpers';
 
@@ -56,8 +56,8 @@ export function FormField({
           {label}
           {help && (
             <>
-              <InformationCircleIcon data-tip data-for={`formFieldHelp-${id}`} />
-              <ReactTooltip id={`formFieldHelp-${id}`}>{help}</ReactTooltip>
+              <InformationCircleIcon data-tip data-tooltip-id={`formFieldHelp-${id}`} />
+              <Tooltip id={`formFieldHelp-${id}`}>{help}</Tooltip>
             </>
           )}
         </label>
