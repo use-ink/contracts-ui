@@ -35,11 +35,14 @@ export function Step1() {
     ...metadataValidation
   } = useMetadataField();
 
-  useEffect((): void => {
-    if (metadataValidation.name) {
-      setName(metadataValidation.name);
-    }
-  }, [metadataValidation.name, setName]);
+  useEffect(
+    function updateNameFromMetadata(): void {
+      if (metadataValidation.name && nameValidation.isEmpty) {
+        setName(metadataValidation.name);
+      }
+    },
+    [metadataValidation.name, nameValidation.isEmpty, setName]
+  );
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
