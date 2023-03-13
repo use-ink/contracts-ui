@@ -9,7 +9,7 @@ interface Props extends ModalProps {
   confirm: () => void;
 }
 
-export const ConfirmModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 'title'>) => {
+export const ForgetContractModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 'title'>) => {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Confirm action">
       <div className="py-8 dark:text-gray-500 text-gray-400 text-sm">
@@ -20,7 +20,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 'title'
         </p>
         <button
           title="Forget contract"
-          className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
+          className="font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
           onClick={() => confirm()}
         >
           <p className="mr-2 text-xs">Forget contract</p>
