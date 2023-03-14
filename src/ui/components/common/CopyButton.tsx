@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import copy from 'copy-to-clipboard';
-import { useCallback, useRef, useState } from 'react';
+import { MouseEventHandler, useCallback, useRef, useState } from 'react';
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { Tooltip } from 'react-tooltip';
 import { Button } from './Button';
@@ -17,14 +17,19 @@ interface Props extends React.HTMLAttributes<unknown> {
 export function CopyButton({ className, iconClassName, value, id }: Props) {
   const ref = useRef<HTMLButtonElement>(null);
   const [showTooltip, setShowTooltip] = useState(false);
-  const onClick = useCallback((): void => {
-    copy(value);
+  const onClick: MouseEventHandler = useCallback(
+    (event): void => {
+      event.stopPropagation();
 
-    setShowTooltip(true);
-    setTimeout(() => {
-      setShowTooltip(false);
-    }, 1500);
-  }, [value]);
+      copy(value);
+
+      setShowTooltip(true);
+      setTimeout(() => {
+        setShowTooltip(false);
+      }, 1000);
+    },
+    [value]
+  );
 
   return (
     <>
