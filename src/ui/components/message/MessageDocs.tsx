@@ -1,21 +1,21 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/solid';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { MessageSignature } from './MessageSignature';
 import type { AbiConstructor, AbiMessage, Registry } from 'types';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface Props extends React.ComponentProps<typeof Disclosure> {
   message: AbiMessage | AbiConstructor;
   registry: Registry;
 }
 
-export const MessageDocs = ({ message, message: { docs }, registry }: Props) => {
+export const MessageDocs = ({ message, message: { docs }, registry, ...restOfProps }: Props) => {
   return (
-    <Disclosure defaultOpen>
+    <Disclosure defaultOpen {...restOfProps}>
       {({ open }) => (
         <div className="collapsible-panel">
           <Disclosure.Button
