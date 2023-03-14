@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
-import { RPC } from '../../constants';
+import { ROCOCO_CONTRACTS } from '../../constants';
 import { ApiPromise, ApiState, ChainProperties, Account, Status } from 'types';
 import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
@@ -18,7 +18,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const rpcUrl = searchParams.get('rpc');
   const [preferredEndpoint, setPreferredEndpoint] = useLocalStorage<string>(
     'contractsUiPreferredEndpoint',
-    RPC.CONTRACTS
+    ROCOCO_CONTRACTS.rpc
   );
   const [api, setApi] = useState({} as ApiPromise);
   const [endpoint, setEndpoint] = useState(preferredEndpoint);
