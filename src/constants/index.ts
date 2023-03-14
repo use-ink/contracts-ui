@@ -6,7 +6,7 @@ import type { ApiState } from 'types';
 
 export const ROCOCO_CONTRACTS = {
   relay: 'Rococo',
-  name: 'Rococo Contracts',
+  name: 'Contracts (Rococo)',
   rpc: 'wss://rococo-contracts-rpc.polkadot.io',
 };
 
