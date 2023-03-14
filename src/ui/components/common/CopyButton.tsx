@@ -20,9 +20,7 @@ export function CopyButton({ className, iconClassName, value, id }: Props) {
   const onClick: MouseEventHandler = useCallback(
     (event): void => {
       event.stopPropagation();
-
       copy(value);
-
       setShowTooltip(true);
       setTimeout(() => {
         setShowTooltip(false);
