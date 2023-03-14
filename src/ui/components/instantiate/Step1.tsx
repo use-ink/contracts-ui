@@ -11,6 +11,7 @@ import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
+import { MessageDocs } from '../message';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -34,6 +35,8 @@ export function Step1() {
     onRemove,
     ...metadataValidation
   } = useMetadataField();
+
+  console.log({ metadata });
 
   useEffect((): void => {
     if (metadataValidation.name) {
@@ -119,6 +122,22 @@ export function Step1() {
           </FormField>
         )}
       </Form>
+
+      {metadata && (
+        <>
+          <div>Metadata</div>
+
+          {metadata.constructors.concat(metadata.messages).map(message => (
+            <MessageDocs
+              defaultOpen={false}
+              key={message.identifier}
+              message={message}
+              registry={metadata.registry}
+            />
+          ))}
+        </>
+      )}
+
       <Buttons>
         <Button
           isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
