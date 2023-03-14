@@ -23,7 +23,7 @@ export const MessageDocs = ({ message, message: { docs }, registry }: Props) => 
             data-cy="message-docs"
           >
             <ChevronUpIcon
-              className={`${open ? 'transform rotate-180' : ''} w-5 h-5 mr-1 border-gray-500`}
+              className={`${!open ? 'transform rotate-180' : ''} w-5 h-5 mr-1 border-gray-500`}
             />
             <MessageSignature message={message} registry={registry} />
           </Disclosure.Button>
