@@ -7,11 +7,11 @@ import { Button, Buttons } from '../common/Button';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
 import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
+import { MessageDocs } from '../message';
 import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
-import { MessageDocs } from '../message';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -35,8 +35,6 @@ export function Step1() {
     onRemove,
     ...metadataValidation
   } = useMetadataField();
-
-  console.log({ metadata });
 
   useEffect((): void => {
     if (metadataValidation.name) {
@@ -127,6 +125,27 @@ export function Step1() {
         <>
           <div>Metadata</div>
 
+          <div className="flex flex-column">
+            {/* <div>Hash:{metadata.info.contract.hash} </div> */}
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <div>Language</div>
+                <div>{metadata.info.source.language}</div>
+              </div>
+              <div>
+                <div>Compiler</div>
+                <div>{metadata.info.source.compiler}</div>
+              </div>
+              <div>
+                <div>Version</div>
+                <div>{metadata.info.contract.version}</div>
+              </div>
+              <div>
+                <div>Authors</div>
+                <div>{metadata.info.contract.authors}</div>
+              </div>
+            </div>
+          </div>
           {metadata.constructors.concat(metadata.messages).map(message => (
             <MessageDocs
               defaultOpen={false}
