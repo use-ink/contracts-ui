@@ -40,7 +40,7 @@ export function Contracts(): React.ReactElement | null {
             return <ContractRow contract={contract} key={`contract-${contract.address}`} />;
           })}
         </div>
-        <div className="grid pt-2 justify-items-end">
+        <div className="grid pt-4 justify-items-end">
           <button
             title="Forget All Contracts"
             className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
