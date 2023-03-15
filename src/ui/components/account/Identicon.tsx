@@ -1,11 +1,11 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import ReactTooltip from 'react-tooltip';
-import copy from 'copy-to-clipboard';
-import type { Circle } from '@polkadot/ui-shared/icons/types';
-import React, { useCallback, useRef } from 'react';
 import { polkadotIcon } from '@polkadot/ui-shared';
+import type { Circle } from '@polkadot/ui-shared/icons/types';
+import copy from 'copy-to-clipboard';
+import React, { useCallback } from 'react';
+import { Tooltip } from 'react-tooltip';
 import { Button } from '../common';
 import { classes } from 'helpers';
 
@@ -26,13 +26,9 @@ function IdenticonBase({
   size,
   style,
 }: Props): React.ReactElement<Props> | null {
-  const ref = useRef<HTMLButtonElement>(null);
-
   const onClick = useCallback(() => {
     if (value) {
       copy(value);
-
-      ref.current && ReactTooltip.show(ref.current);
     }
   }, [value]);
 
@@ -43,9 +39,8 @@ function IdenticonBase({
       <>
         <Button
           data-tip
-          data-for={tooltipId}
+          data-tooltip-id={tooltipId}
           onClick={onClick}
-          ref={ref}
           variant="plain"
           data-cy="identicon"
         >
@@ -61,15 +56,9 @@ function IdenticonBase({
             {polkadotIcon(value || '', { isAlternative }).map(renderCircle)}
           </svg>
         </Button>
-        <ReactTooltip
-          afterShow={() => {
-            setTimeout(() => ref.current && ReactTooltip.hide(ref.current), 1000);
-          }}
-          id={tooltipId}
-          event="none"
-        >
+        <Tooltip openOnClick id={tooltipId}>
           Copied to clipboard
-        </ReactTooltip>
+        </Tooltip>
       </>
     );
   } catch (e) {

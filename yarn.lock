@@ -886,6 +886,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/core@npm:^1.2.2":
+  version: 1.2.3
+  resolution: "@floating-ui/core@npm:1.2.3"
+  checksum: dbaff1b454314facc62d3e70955e7ce4f8ccd8530d08b8c508df588ea775674d3d4048de6c1424074f0659f7dc88bbda8ff7a5c8e17e86daa5fad34e40c7f7d3
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:1.2.3":
+  version: 1.2.3
+  resolution: "@floating-ui/dom@npm:1.2.3"
+  dependencies:
+    "@floating-ui/core": ^1.2.2
+  checksum: b2428e1fda01d5cba59960bb8c04d7a5f2400200855f206267589533a67303a62fbdf85dc7747fe83c21bb15f4eda67feaaf51ef4a41bb132fd2b785612f1bb4
+  languageName: node
+  linkType: hard
+
 "@floating-ui/dom@npm:^1.0.1":
   version: 1.0.12
   resolution: "@floating-ui/dom@npm:1.0.12"
@@ -2840,6 +2856,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -3087,7 +3110,7 @@ __metadata:
     react-router: ^6.8.2
     react-router-dom: ^6.8.2
     react-select: ^5.7.0
-    react-tooltip: ^4.5.0
+    react-tooltip: ^5.10.0
     remark-gfm: ^3.0.1
     source-map-support: ^0.5.21
     styled-components: ^5.3.8
@@ -7476,16 +7499,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^4.5.0":
-  version: 4.5.1
-  resolution: "react-tooltip@npm:4.5.1"
+"react-tooltip@npm:^5.10.0":
+  version: 5.10.0
+  resolution: "react-tooltip@npm:5.10.0"
   dependencies:
-    prop-types: ^15.8.1
-    uuid: ^7.0.3
+    "@floating-ui/dom": 1.2.3
+    classnames: ^2.3.2
   peerDependencies:
-    react: ">=16.0.0"
-    react-dom: ">=16.0.0"
-  checksum: bb2065b6aec5d860627e1459cd193889a236093c484f32a021b7b3c8c36c2144d1077932b5d74bc0262f1e24a3e0fd8251df2107c348a913a9b236467ed2185d
+    react: ">=16.14.0"
+    react-dom: ">=16.14.0"
+  checksum: b1fdfa27cecc632afb418e1deb2f3184f69ca61e007bae28b43d91ea45857cf640f3754ba6e8148a35fc6f6ed0e0572d36a4f79e0865d0ea6940b9ddaaeaede9
   languageName: node
   linkType: hard
 
@@ -8799,15 +8822,6 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "uuid@npm:7.0.3"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: f5b7b5cc28accac68d5c083fd51cca64896639ebd4cca88c6cfb363801aaa83aa439c86dfc8446ea250a7a98d17afd2ad9e88d9d4958c79a412eccb93bae29de
   languageName: node
   linkType: hard
 

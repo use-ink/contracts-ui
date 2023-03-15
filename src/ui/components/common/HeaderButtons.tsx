@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
-import { ConfirmModal } from 'ui/components/modal';
+import { ForgetContractModal } from 'ui/components/modal';
 import { useApi, useDatabase } from 'ui/contexts';
 import { getContractInfo, truncate } from 'helpers';
 import type { UIContract } from 'types';
@@ -63,7 +63,7 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
           <TrashIcon className="w-4 dark:text-gray-500 " />
         </button>
       </div>
-      <ConfirmModal setIsOpen={setIsOpen} isOpen={isOpen} confirm={forgetContract} />
+      <ForgetContractModal setIsOpen={setIsOpen} isOpen={isOpen} confirm={forgetContract} />
     </div>
   );
 }

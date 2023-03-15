@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { checkOnChainCode, classes, truncate } from 'helpers';
+import { CopyButton } from '../common/CopyButton';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,
@@ -51,7 +52,10 @@ export function CodeHash({ className, codeHash, error, name, isError, isSuccess,
           {!isError ? name || 'On-chain Code Hash' : 'Invalid Code Hash'}
         </div>
         {codeHash && !isError && (
-          <div className="dark:text-gray-500 text-sm">Code hash: {truncate(codeHash)}</div>
+          <div className="flex gap-1 dark:text-gray-500 text-sm">
+            Code hash: {truncate(codeHash)}
+            <CopyButton id={codeHash} value={codeHash} />
+          </div>
         )}
         {isError && <div className="dark:text-gray-500 text-sm">{error}</div>}
       </div>
