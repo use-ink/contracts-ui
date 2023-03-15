@@ -4,16 +4,21 @@
 import BN from 'bn.js';
 import type { ApiState } from 'types';
 
+export enum LOCAL_STORAGE_KEY {
+  CUSTOM_ENDPOINT = 'contractsUiCustomEndpoint',
+}
+
 export const ROCOCO_CONTRACTS = {
   relay: 'Rococo',
   name: 'Contracts (Rococo)',
   rpc: 'wss://rococo-contracts-rpc.polkadot.io',
 };
 
+const CUSTOM_ENDPOINT = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOM_ENDPOINT);
 export const LOCAL = {
   relay: undefined,
   name: 'Local Node',
-  rpc: 'ws://127.0.0.1:9944',
+  rpc: CUSTOM_ENDPOINT ? (JSON.parse(CUSTOM_ENDPOINT) as string) : 'ws://127.0.0.1:9944',
 };
 
 // https://docs.peaq.network/networks-overview
