@@ -7,17 +7,24 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { MessageSignature } from './MessageSignature';
 import type { AbiConstructor, AbiMessage, Registry } from 'types';
+import { classes } from 'helpers';
 
 interface Props extends React.ComponentProps<typeof Disclosure> {
   message: AbiMessage | AbiConstructor;
   registry: Registry;
 }
 
-export const MessageDocs = ({ message, message: { docs }, registry, ...restOfProps }: Props) => {
+export const MessageDocs = ({
+  message,
+  message: { docs },
+  registry,
+  className,
+  ...restOfProps
+}: Props) => {
   return (
     <Disclosure defaultOpen {...restOfProps}>
       {({ open }) => (
-        <div className="collapsible-panel">
+        <div className={classes('collapsible-panel', className)}>
           <Disclosure.Button
             className="panel-title text-xs leading-normal text-left p-3 dark:bg-elevation-1 text-mono flex w-full"
             data-cy="message-docs"
