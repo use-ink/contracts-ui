@@ -124,18 +124,22 @@ export function Step1() {
 
       {metadata && (
         <>
-          <div>Metadata</div>
+          <label className="inline-flex items-center mb-1.5 text-sm font-semibold dark:text-white text-gray-600">
+            Metadata
+          </label>
 
-          <Metadata metadata={metadata} className="mb-4" />
+          <div className="grid gap-4 mb-4">
+            <Metadata metadata={metadata} />
 
-          {metadata.constructors.concat(metadata.messages).map(message => (
-            <MessageDocs
-              defaultOpen={false}
-              key={message.identifier}
-              message={message}
-              registry={metadata.registry}
-            />
-          ))}
+            {metadata.constructors.concat(metadata.messages).map(message => (
+              <MessageDocs
+                defaultOpen={false}
+                key={message.identifier}
+                message={message}
+                registry={metadata.registry}
+              />
+            ))}
+          </div>
         </>
       )}
 
