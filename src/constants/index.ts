@@ -26,7 +26,7 @@ const PEAQ_AGUNG = {
 const PHALA_TESTNET = {
   relay: undefined,
   name: 'Phala PoC-5',
-  rpc: 'wss://poc5.phala.network',
+  rpc: 'wss://poc5.phala.network/ws',
 };
 
 // https://docs.astar.network/docs/build/environment/endpoints
