@@ -51,7 +51,6 @@
     "react-select": "^5.7.0",
     "react-tooltip": "^5.10.0",
     "remark-gfm": "^3.0.1",
-    "styled-components": "^5.3.8",
     "tailwind-merge": "^1.10.0",
     "yup": "^0.32.11"
   },
