@@ -37,11 +37,11 @@ export function Step1() {
 
   useEffect(
     function updateNameFromMetadata(): void {
-      if (metadataValidation.name && nameValidation.isEmpty) {
+      if (metadataValidation.name && !name && !nameValidation.isTouched) {
         setName(metadataValidation.name);
       }
     },
-    [metadataValidation.name, nameValidation.isEmpty, setName]
+    [metadataValidation.name, name, nameValidation, setName]
   );
 
   useEffect((): void => {
