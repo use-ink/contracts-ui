@@ -8,7 +8,6 @@ import { LOCAL, LOCAL_STORAGE_KEY } from '../../../constants';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Button } from '../common/Button';
 import { Input } from '../form/Input';
-import { Setting } from './Setting';
 import { isValidWsUrl } from 'helpers';
 
 export function CustomEndpoint() {
@@ -27,13 +26,20 @@ export function CustomEndpoint() {
   }, [value, setCustomEndpoint, navigate]);
 
   return (
-    <Setting label="Custom Endpoint" description="Use a custom endpoint for the local nodes">
-      <div className="flex flex-row items-center justify-end">
-        <Input onChange={setValue} value={value} />
+    <div className="flex flex-col w-full gap-2">
+      <div className="flex flex-col text-sm">
+        <span className="font-semibold">Custom Endpoint</span>
+        <span className="dark:text-gray-400 text-gray-500">
+          Use a custom endpoint for the local nodes
+        </span>
+      </div>
+
+      <div className="flex flex-row items-center justify-between">
+        <Input onChange={setValue} value={value} className="w-full" />
         <Button isDisabled={!isValidWsUrl(value)} onClick={useNow}>
-          Use Now
+          Apply
         </Button>
       </div>
-    </Setting>
+    </div>
   );
 }
