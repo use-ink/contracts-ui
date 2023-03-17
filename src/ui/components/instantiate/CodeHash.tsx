@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/outline';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { checkOnChainCode, classes, truncate } from 'helpers';
@@ -12,19 +12,30 @@ type Props = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,
   {
     codeHash: string;
-    name?: string;
+    date?: string;
     error?: React.ReactNode;
     isError?: boolean;
     isSuccess?: boolean;
+    name?: string;
     onClick?: VoidFn;
     onDelete?: VoidFn;
   }
 >;
 
-export function CodeHash({ className, codeHash, error, name, isError, isSuccess, onClick }: Props) {
+export function CodeHash({
+  className,
+  codeHash,
+  date,
+  error,
+  isError,
+  isSuccess,
+  name,
+  onClick,
+}: Props) {
   const { api } = useApi();
   const { db } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);
+  const parsedDate = useMemo(() => (date ? new Date(date) : undefined), [date]);
 
   useEffect(() => {
     checkOnChainCode(api, codeHash)
@@ -51,12 +62,19 @@ export function CodeHash({ className, codeHash, error, name, isError, isSuccess,
         <div className="dark:text-white mb-1">
           {!isError ? name || 'On-chain Code Hash' : 'Invalid Code Hash'}
         </div>
-        {codeHash && !isError && (
-          <div className="flex gap-1 dark:text-gray-500 text-sm">
-            Code hash: {truncate(codeHash)}
-            <CopyButton id={codeHash} value={codeHash} />
-          </div>
-        )}
+        <div className="flex gap-4 dark:text-gray-500 text-sm">
+          {codeHash && !isError && (
+            <div className="flex gap-1">
+              Code hash: {truncate(codeHash)}
+              <CopyButton id={codeHash} value={codeHash} />
+            </div>
+          )}
+          {parsedDate && !isError && (
+            <div>
+              Uploaded: {`${parsedDate.toLocaleDateString()} ${parsedDate.toLocaleTimeString()}`}
+            </div>
+          )}
+        </div>
         {isError && <div className="dark:text-gray-500 text-sm">{error}</div>}
       </div>
       {onClick && isOnChain && (

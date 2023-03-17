@@ -32,6 +32,7 @@ function List({ items, label }: ListProps) {
           <CodeHash
             className="mb-2 last:mb-0"
             name={codeBundle.name}
+            date={codeBundle.date}
             codeHash={codeBundle.codeHash}
             key={codeBundle.codeHash}
             onClick={() => navigate(`/instantiate/${codeBundle.codeHash}`)}
