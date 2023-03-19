@@ -3,7 +3,7 @@
 
 import { encodeTypeDef } from '@polkadot/types';
 import { FormField } from './FormField';
-import { TypeDef, ArgComponentProps } from 'types';
+import { TypeDefInfo, ArgComponentProps } from 'types';
 
 type Props = ArgComponentProps<Record<string, unknown>> & {
   components: React.ComponentType<ArgComponentProps<unknown>>[];
@@ -14,13 +14,16 @@ export function Struct({ components, value, nestingNumber, onChange, registry, t
     const newValue = { ...value, [name]: newEntry };
     onChange(newValue);
   };
-
+  const subTypes =
+    typeDef.info === TypeDefInfo.Si
+      ? registry.lookup.getTypeDef(typeDef.type as `Lookup${number}`).sub
+      : typeDef.sub;
   return (
     <div>
-      {typeDef?.sub &&
+      {subTypes &&
         components &&
         components.map((Component, index) => {
-          const subType = (typeDef.sub as TypeDef[])[index];
+          const subType = Array.isArray(subTypes) ? subTypes[index] : subTypes;
           const name = subType.displayName || subType.name || '';
 
           return (
