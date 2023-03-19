@@ -23,6 +23,10 @@ function getReturnTypeName(type: TypeDef | null | undefined) {
   return type?.lookupName || type?.type || '';
 }
 
+function stringify(o: unknown) {
+  return JSON.stringify(o, null, 2).replace(/["']/g, '');
+}
+
 export function getDecodedOutput(
   { result }: Pick<ContractExecResult, 'result' | 'debugMessage'>,
   { returnType }: AbiMessage,
@@ -44,7 +48,7 @@ export function getDecodedOutput(
 
     const errorText = isErr(o)
       ? typeof o.Err === 'object'
-        ? JSON.stringify(o.Err, null, 2)
+        ? stringify(o.Err)
         : o.Err?.toString() ?? 'Error'
       : o !== 'Ok'
       ? o?.toString() || 'Error'
@@ -52,9 +56,9 @@ export function getDecodedOutput(
 
     const okText = isOk(r)
       ? typeof o === 'object'
-        ? JSON.stringify(o, null, '\t')
+        ? stringify(o)
         : o?.toString() ?? '()'
-      : JSON.stringify(o, null, '\t') ?? '()';
+      : o?.toString() ?? '()';
 
     decodedOutput = isError ? errorText : okText;
   }
