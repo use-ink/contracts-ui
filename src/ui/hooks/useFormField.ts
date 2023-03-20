@@ -35,13 +35,13 @@ export function useFormField<T>(
 
   return useMemo(
     () => ({
-      value,
-      onChange,
-      isValid: validation.isValid,
+      isError,
       isTouched: isTouched.current,
+      isValid: validation.isValid,
       isWarning: validation.isWarning || false,
       message: validation.message,
-      isError,
+      onChange,
+      value,
     }),
     [value, onChange, isError, validation.isValid, validation.isWarning, validation.message]
   );

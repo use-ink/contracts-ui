@@ -37,11 +37,14 @@ export function Step1() {
     ...metadataValidation
   } = useMetadataField();
 
-  useEffect((): void => {
-    if (metadataValidation.name) {
-      setName(metadataValidation.name);
-    }
-  }, [metadataValidation.name, setName]);
+  useEffect(
+    function updateNameFromMetadata(): void {
+      if (metadataValidation.name && !name && !nameValidation.isTouched) {
+        setName(metadataValidation.name);
+      }
+    },
+    [metadataValidation.name, name, nameValidation, setName]
+  );
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;

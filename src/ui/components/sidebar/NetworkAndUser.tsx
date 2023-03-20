@@ -3,36 +3,37 @@
 
 import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
-import { RPC } from '../../../constants';
+import { TESTNETS, MAINNETS } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'helpers';
 
-const options = [
+const testnetOptions = TESTNETS.map(network => ({
+  label: network.name,
+  value: network.rpc,
+}));
+
+const mainnetOptions = MAINNETS.map(network => ({
+  label: network.name,
+  value: network.rpc,
+}));
+
+const allOptions = [...testnetOptions, ...mainnetOptions];
+
+const dropdownOptions = [
   {
-    label: 'Contracts (Rococo)',
-    value: RPC.CONTRACTS,
+    label: 'Live Networks',
+    options: mainnetOptions,
   },
   {
-    label: 'Shibuya',
-    value: RPC.SHIBUYA,
-  },
-  {
-    label: 'Shiden',
-    value: RPC.SHIDEN,
-  },
-  {
-    label: 'Aleph Zero Testnet',
-    value: RPC.ALEPHZEROTESTNET,
-  },
-  {
-    label: 'Local Node',
-    value: RPC.LOCAL,
+    label: 'Test Networks',
+    options: testnetOptions,
   },
 ];
 
 export function NetworkAndUser() {
   const { endpoint, status } = useApi();
   const navigate = useNavigate();
+  console.log({ endpoint });
 
   return (
     <div className="network-and-user">
@@ -46,8 +47,8 @@ export function NetworkAndUser() {
         onChange={e => {
           navigate(`/?rpc=${e}`);
         }}
-        options={options}
-        value={options.find(o => o.value === endpoint)?.value || RPC.CONTRACTS}
+        options={dropdownOptions}
+        value={allOptions.find(o => o.value === endpoint)?.value || allOptions[0].value}
       />
     </div>
   );

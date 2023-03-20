@@ -4,7 +4,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Error } from './Error';
 import { useApi } from 'ui/contexts';
-import { RPC } from 'src/constants';
+import { ROCOCO_CONTRACTS, LOCAL } from 'src/constants';
 
 function ContractsNodeHelp() {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ function ContractsNodeHelp() {
           href="#"
           className="whitespace-nowrap"
           onClick={() => {
-            navigate(`/?rpc=${RPC.CONTRACTS}`);
+            navigate(`/?rpc=${ROCOCO_CONTRACTS.rpc}`);
           }}
         >
           Contracts parachain on Rococo.
@@ -49,7 +49,7 @@ export function ConnectionError() {
   return (
     <Error>
       <div>Could not connect to {endpoint}</div>
-      {endpoint === RPC.LOCAL && <ContractsNodeHelp />}
+      {endpoint === LOCAL.rpc && <ContractsNodeHelp />}
     </Error>
   );
 }
