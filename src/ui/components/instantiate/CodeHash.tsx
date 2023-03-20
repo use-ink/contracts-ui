@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { checkOnChainCode, classes, truncate } from 'helpers';
-import { CopyButton } from '../common/CopyButton';
+import { CopyButton } from 'ui/components/common/CopyButton';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,
