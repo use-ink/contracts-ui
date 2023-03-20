@@ -21,7 +21,7 @@ export function Instantiate() {
             <p className="dark:text-gray-400 text-gray-500 text-sm">
               {codeHashUrlParam ? (
                 <>
-                  You can upload and instantate new contract code{' '}
+                  You can upload and instantiate new contract code{' '}
                   <Link to="/instantiate" className="text-blue-500">
                     here
                   </Link>
