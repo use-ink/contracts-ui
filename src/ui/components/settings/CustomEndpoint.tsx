@@ -18,7 +18,7 @@ export function CustomEndpoint() {
   const [value, setValue] = useState(customEndpoint);
   const navigate = useNavigate();
 
-  const useNow = useCallback(() => {
+  const onApply = useCallback(() => {
     if (isValidWsUrl(value)) {
       setCustomEndpoint(value);
       navigate(`/?rpc=${value}`);
@@ -36,7 +36,7 @@ export function CustomEndpoint() {
 
       <div className="flex flex-row items-center justify-between">
         <Input onChange={setValue} value={value} className="w-full" />
-        <Button isDisabled={!isValidWsUrl(value)} onClick={useNow}>
+        <Button isDisabled={!isValidWsUrl(value)} onClick={onApply}>
           Apply
         </Button>
       </div>
