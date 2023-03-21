@@ -27,11 +27,12 @@ function List({ items, label }: ListProps) {
 
   return (
     <FormField label={label}>
-      {items.slice(0, (isExpanded ? 2 : 1) * PAGE_SIZE).map(codeBundle => {
+      {items.slice(0, isExpanded ? undefined : PAGE_SIZE).map(codeBundle => {
         return (
           <CodeHash
             className="mb-2 last:mb-0"
             name={codeBundle.name}
+            date={codeBundle.date}
             codeHash={codeBundle.codeHash}
             key={codeBundle.codeHash}
             onClick={() => navigate(`/instantiate/${codeBundle.codeHash}`)}
@@ -53,7 +54,10 @@ function List({ items, label }: ListProps) {
 export function AvailableCodeBundles() {
   const { api } = useApi();
   const { db } = useDatabase();
-  const [data, isLoading] = useDbQuery(() => db.codeBundles.limit(PAGE_SIZE).toArray(), [db]);
+  const [data, isLoading] = useDbQuery(
+    () => db.codeBundles.orderBy('date').reverse().toArray(),
+    [db]
+  );
   const [codes, setCodes] = useState<CodeBundleDocument[]>([]);
 
   useEffect(() => {

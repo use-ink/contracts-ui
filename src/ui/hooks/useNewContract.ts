@@ -9,20 +9,29 @@ export function useNewContract() {
   const { db } = useDatabase();
   const navigate = useNavigate();
   const {
-    data: { accountId, codeHash, name },
+    data: { accountId, name },
   } = useInstantiate();
 
   return async function ({ contract }: BlueprintSubmittableResult<'promise'>): Promise<void> {
     if (accountId && contract?.abi.json) {
+      const codeHash = contract.abi.info.source.wasmHash.toHex();
       const document = {
         abi: contract.abi.json,
         address: contract.address.toString(),
-        codeHash: codeHash || contract.abi.info.source.wasmHash.toHex(),
+        codeHash,
         date: new Date().toISOString(),
         name,
       };
-      await db.contracts.add(document);
-      !codeHash && (await db.codeBundles.add(document));
+
+      await Promise.all([
+        db.contracts.add(document),
+        db.codeBundles.get({ codeHash }).then(codeBundle => {
+          if (!codeBundle) {
+            return db.codeBundles.add(document);
+          }
+        }),
+      ]);
+
       navigate(`/contract/${contract.address}`);
     }
   };
