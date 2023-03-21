@@ -29,7 +29,7 @@ export function Metadata({ metadata, className = "", ...restOfProps }: Props) {
       </div>
       <div>
         <div>Compiler</div>
-        <div className="text-gray-400">{metadata.info.source.compiler}</div>
+        <div className="dark:text-gray-400 text-gray-500">{metadata.info.source.compiler}</div>
       </div>
       <div>
         <div>Contract version</div>
