@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ContractHeader } from './ContractHeader';
 import { InteractTab } from 'ui/components/contract/Interact';
-import { MetadataTab } from 'ui/components/contract/Metadata';
+import { MetadataTab } from 'ui/components/contract/MetadataTab';
 import { Loader } from 'ui/components/common/Loader';
 import { Tabs } from 'ui/components/common/Tabs';
 import { HeaderButtons } from 'ui/components/common/HeaderButtons';

@@ -8,9 +8,7 @@ import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { twMerge } from 'tailwind-merge';
 
-export function classes(...classLists: (string | null | undefined | false)[]) {
-  return twMerge(...classLists.map(classList => (!classList ? null : classList)));
-}
+export const classes = twMerge;
 
 export function truncate(value: string | undefined, sideLength = 6): string {
   return value
