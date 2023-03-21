@@ -37,7 +37,7 @@ export function Metadata({ metadata, className = "", ...restOfProps }: Props) {
       </div>
       <div>
         <div>Authors</div>
-        <div className="text-gray-400">{metadata.info.contract.authors}</div>
+        <div className="dark:text-gray-400 text-gray-500">{metadata.info.contract.authors}</div>
       </div>
     </div>
   );
