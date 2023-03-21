@@ -13,6 +13,7 @@ export type {
   Hash,
   ContractExecResult,
   Balance,
+  ContractReturnFlags,
 } from '@polkadot/types/interfaces';
 export type { KeyringPair } from '@polkadot/keyring/types';
 export type {
