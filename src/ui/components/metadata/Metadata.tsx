@@ -18,7 +18,7 @@ export function Metadata({ metadata, className = "", ...restOfProps }: Props) {
       {...restOfProps}
     >
       <div className="col-span-2">
-        <div>Hash</div>
+        <div>Contract Hash</div>
        <div className="dark:text-gray-400 text-gray-500">
           {metadata.info.contract.hash.toHex()}
         </div>
