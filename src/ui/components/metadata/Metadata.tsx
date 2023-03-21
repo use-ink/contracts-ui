@@ -1,7 +1,7 @@
 // Copyright 2023 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Abi } from "@polkadot/api-contract/Abi";
+import { Abi } from "types";
 import { classes } from "helpers";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
