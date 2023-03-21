@@ -7,10 +7,12 @@ import { Button, Buttons } from '../common/Button';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
 import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
+import { MessageDocs } from '../message';
 import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
+import { Metadata } from '../metadata';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -35,11 +37,14 @@ export function Step1() {
     ...metadataValidation
   } = useMetadataField();
 
-  useEffect((): void => {
-    if (metadataValidation.name) {
-      setName(metadataValidation.name);
-    }
-  }, [metadataValidation.name, setName]);
+  useEffect(
+    function updateNameFromMetadata(): void {
+      if (metadataValidation.name && !name && !nameValidation.isTouched) {
+        setName(metadataValidation.name);
+      }
+    },
+    [metadataValidation.name, name, nameValidation, setName]
+  );
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -119,6 +124,28 @@ export function Step1() {
           </FormField>
         )}
       </Form>
+
+      {metadata && (
+        <>
+          <label className="inline-flex items-center mb-1.5 text-sm font-semibold dark:text-white text-gray-600">
+            Metadata
+          </label>
+
+          <div className="grid gap-4 mb-4">
+            <Metadata metadata={metadata} />
+
+            {metadata.constructors.concat(metadata.messages).map(message => (
+              <MessageDocs
+                defaultOpen={false}
+                key={message.identifier}
+                message={message}
+                registry={metadata.registry}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
       <Buttons>
         <Button
           isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}

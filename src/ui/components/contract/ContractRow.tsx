@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useState } from 'react';
-import 'styled-components';
 import { Link } from 'react-router-dom';
 import { Identicon } from '../account/Identicon';
 import { ContractDocument } from 'types';

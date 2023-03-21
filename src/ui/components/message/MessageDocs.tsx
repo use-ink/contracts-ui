@@ -1,29 +1,36 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/solid';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { MessageSignature } from './MessageSignature';
 import type { AbiConstructor, AbiMessage, Registry } from 'types';
+import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface Props extends React.ComponentProps<typeof Disclosure> {
   message: AbiMessage | AbiConstructor;
   registry: Registry;
 }
 
-export const MessageDocs = ({ message, message: { docs }, registry }: Props) => {
+export const MessageDocs = ({
+  message,
+  message: { docs },
+  registry,
+  className,
+  ...restOfProps
+}: Props) => {
   return (
-    <Disclosure defaultOpen>
+    <Disclosure defaultOpen {...restOfProps}>
       {({ open }) => (
-        <div className="collapsible-panel">
+        <div className={classes('collapsible-panel', className)}>
           <Disclosure.Button
             className="panel-title text-xs leading-normal text-left p-3 dark:bg-elevation-1 text-mono flex w-full"
             data-cy="message-docs"
           >
             <ChevronUpIcon
-              className={`${open ? 'transform rotate-180' : ''} w-5 h-5 mr-1 border-gray-500`}
+              className={`${!open ? 'transform rotate-180' : ''} w-5 h-5 mr-1 border-gray-500`}
             />
             <MessageSignature message={message} registry={registry} />
           </Disclosure.Button>

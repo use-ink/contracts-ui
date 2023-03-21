@@ -3,6 +3,6 @@
 
 export * from './ContractRow';
 export * from './Interact';
-export * from './Metadata';
+export * from './MetadataTab';
 export * from './ResultsOutput';
 export * from './TransactionResult';

@@ -60,7 +60,7 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
             setIsOpen(true);
           }}
         >
-          <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
+          <TrashIcon className="w-4 dark:text-gray-500 " />
         </button>
       </div>
       <ForgetContractModal setIsOpen={setIsOpen} isOpen={isOpen} confirm={forgetContract} />
