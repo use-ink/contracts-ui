@@ -6,6 +6,8 @@ import type { ApiState } from 'types';
 
 export enum LOCAL_STORAGE_KEY {
   CUSTOM_ENDPOINT = 'contractsUiCustomEndpoint',
+  PREFERRED_ENDPOINT = 'contractsUiPreferredEndpoint',
+  THEME = 'theme',
 }
 
 export const ROCOCO_CONTRACTS = {

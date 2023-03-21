@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useState } from 'react';
+import { LOCAL_STORAGE_KEY } from '../../constants';
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (_: T) => void] {
+export function useLocalStorage<T>(key: LOCAL_STORAGE_KEY, initialValue: T): [T, (_: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
