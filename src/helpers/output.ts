@@ -37,9 +37,16 @@ export function getDecodedOutput(
     const flags = result.asOk.flags.toHuman();
     isError = flags.includes('Revert');
     const returnTypeName = getReturnTypeName(returnType);
-    const r = returnType
-      ? registry.createTypeUnsafe(returnTypeName, [result.asOk.data]).toHuman()
-      : '()';
+
+    let r: AnyJson = 'Decoding error';
+    try {
+      r = returnType
+        ? registry.createTypeUnsafe(returnTypeName, [result.asOk.data]).toHuman()
+        : '()';
+    } catch (exception) {
+      console.error(exception);
+    }
+
     const o = isOk(r) ? r.Ok : isErr(r) ? r.Err : r;
 
     const errorText = isErr(o)
