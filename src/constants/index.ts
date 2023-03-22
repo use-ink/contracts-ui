@@ -4,11 +4,13 @@
 import BN from 'bn.js';
 import type { ApiState } from 'types';
 
-export enum LOCAL_STORAGE_KEY {
-  CUSTOM_ENDPOINT = 'contractsUiCustomEndpoint',
-  PREFERRED_ENDPOINT = 'contractsUiPreferredEndpoint',
-  THEME = 'theme',
-}
+export const LOCAL_STORAGE_KEY = {
+  CUSTOM_ENDPOINT: 'contractsUiCustomEndpoint',
+  PREFERRED_ENDPOINT: 'contractsUiPreferredEndpoint',
+  THEME: 'theme',
+} as const;
+
+export type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
 
 export const ROCOCO_CONTRACTS = {
   relay: 'Rococo',
