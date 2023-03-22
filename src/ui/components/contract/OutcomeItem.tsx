@@ -21,7 +21,9 @@ export function OutcomeItem({
         className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-xs return-value dark:text-gray-400 text-gray-600  break-all relative"
         data-cy="output"
       >
-        <pre className="whitespace-pre-wrap">{displayValue}</pre>
+        <pre className="whitespace-pre-wrap">
+          <code>{displayValue}</code>
+        </pre>
         <CopyButton
           className="absolute right-2 bottom-2"
           value={copyValue}

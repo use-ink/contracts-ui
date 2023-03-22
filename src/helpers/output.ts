@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import JSON5 from 'json5';
 import { AbiMessage, AnyJson, ContractExecResult, Registry, TypeDef } from 'types';
 
 type ContractResultErr = {
@@ -21,6 +22,10 @@ function isOk(o: ContractResultErr | ContractResultOk | AnyJson): o is ContractR
 
 function getReturnTypeName(type: TypeDef | null | undefined) {
   return type?.lookupName || type?.type || '';
+}
+
+function stringify(o: unknown) {
+  return JSON5.stringify(o, null, 2);
 }
 
 export function getDecodedOutput(
@@ -51,7 +56,7 @@ export function getDecodedOutput(
 
     const errorText = isErr(o)
       ? typeof o.Err === 'object'
-        ? JSON.stringify(o.Err, null, 2)
+        ? stringify(o.Err)
         : o.Err?.toString() ?? 'Error'
       : o !== 'Ok'
       ? o?.toString() || 'Error'
@@ -59,9 +64,9 @@ export function getDecodedOutput(
 
     const okText = isOk(r)
       ? typeof o === 'object'
-        ? JSON.stringify(o, null, '\t')
+        ? stringify(o)
         : o?.toString() ?? '()'
-      : JSON.stringify(o, null, '\t') ?? '()';
+      : o?.toString() ?? '()';
 
     decodedOutput = isError ? errorText : okText;
   }
