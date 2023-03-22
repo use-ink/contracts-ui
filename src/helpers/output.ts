@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import JSON5 from 'json5';
 import {
   AbiMessage,
   AnyJson,
@@ -31,6 +32,10 @@ function getReturnTypeName(type: TypeDef | null | undefined) {
   return type?.lookupName || type?.type || '';
 }
 
+function stringify(o: unknown) {
+  return JSON5.stringify(o, null, 2);
+}
+
 function decodeReturnValue(
   returnType: TypeDef | null | undefined,
   data: Bytes,
@@ -52,7 +57,7 @@ function extractOutcome(returnValue: AnyJson): AnyJson {
 function getErrorText(outcome: AnyJson): string {
   return isErr(outcome)
     ? typeof outcome.Err === 'object'
-      ? JSON.stringify(outcome.Err, null, 2)
+      ? stringify(outcome.Err)
       : outcome.Err?.toString() ?? 'Error'
     : outcome !== 'Ok'
     ? outcome?.toString() || 'Error'
@@ -62,9 +67,9 @@ function getErrorText(outcome: AnyJson): string {
 function getOkText(outcome: AnyJson, returnValue: AnyJson) {
   return isOk(returnValue)
     ? typeof outcome === 'object'
-      ? JSON.stringify(outcome, null, '\t')
+      ? stringify(outcome)
       : outcome?.toString() ?? '()'
-    : JSON.stringify(outcome, null, '\t') ?? '()';
+    : outcome?.toString() ?? '()';
 }
 
 export function getDecodedOutput(

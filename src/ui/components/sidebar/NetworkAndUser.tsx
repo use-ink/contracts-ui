@@ -3,7 +3,7 @@
 
 import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
-import { TESTNETS, MAINNETS } from '../../../constants';
+import { MAINNETS, TESTNETS } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'helpers';
 
@@ -33,7 +33,6 @@ const dropdownOptions = [
 export function NetworkAndUser() {
   const { endpoint, status } = useApi();
   const navigate = useNavigate();
-  console.log({ endpoint });
 
   return (
     <div className="network-and-user">
