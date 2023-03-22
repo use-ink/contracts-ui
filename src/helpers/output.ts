@@ -1,6 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import JSON5 from 'json5';
 import { AbiMessage, AnyJson, ContractExecResult, Registry, TypeDef } from 'types';
 
 type ContractResultErr = {
@@ -24,7 +25,7 @@ function getReturnTypeName(type: TypeDef | null | undefined) {
 }
 
 function stringify(o: unknown) {
-  return JSON.stringify(o, null, 2).replace(/["']/g, '');
+  return JSON5.stringify(o, null, 2);
 }
 
 export function getDecodedOutput(
