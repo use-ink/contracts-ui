@@ -85,7 +85,6 @@ export function DryRunResult({
               <div className="basis-1/2 pr-2">
                 <OutcomeItem
                   title=""
-                  // @ts-ignore
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
                   key={`gcr-${message.method}`}
                   id={`gcr-${message.method}`}
@@ -94,7 +93,6 @@ export function DryRunResult({
               <div className="basis-1/2 pl-2">
                 <OutcomeItem
                   title=""
-                  // @ts-ignore
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
                   key={`gcp-${message.method}`}
                   id={`gcp-${message.method}`}
