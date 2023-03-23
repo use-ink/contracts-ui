@@ -11,7 +11,7 @@ import {
   selectAccount,
 } from '../../support/util';
 
-describe('Mother Contract ', () => {
+describe('Mother Contract', () => {
   before(() => {
     beforeAllContracts();
   });
@@ -40,7 +40,7 @@ describe('Mother Contract ', () => {
     });
   });
 
-  it('displays `bids: Auction` input correctly ', () => {
+  it('displays `bids: Auction` input correctly', () => {
     cy.get('.form-field.bids').within(() => {
       cy.contains('Vec<Vec<Option<(AccountId,u128)>>>').should('be.visible');
       cy.contains('Vec<Option<(AccountId,u128)>>').should('be.visible');
