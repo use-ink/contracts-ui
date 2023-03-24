@@ -14,6 +14,7 @@ import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
 import { InputBn } from './InputBn';
 import { InputBytes } from './InputBytes';
+import { InputHash } from './InputHash';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 
 function subComponents(
@@ -122,6 +123,9 @@ export function findComponent(
 
     case 'Balance':
       return InputBalance;
+
+    case 'Hash':
+      return InputHash;
 
     case 'bool':
       return Bool;
