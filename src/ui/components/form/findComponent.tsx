@@ -112,7 +112,7 @@ export function findComponent(
   }
 
   if (type.type.startsWith('Bytes')) {
-    return (props: ArgComponentProps<string>) => <InputBytes {...props} />;
+    return (props: ArgComponentProps<Uint8Array>) => <InputBytes {...props} />;
   }
 
   switch (type.type) {

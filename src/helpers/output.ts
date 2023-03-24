@@ -86,7 +86,7 @@ export function getDecodedOutput(
     isError = checkRevertFlag(result.asOk.flags);
     const r = decodeReturnValue(returnType, result.asOk.data, registry);
     const o = extractOutcome(r);
-    decodedOutput = isError ? getErrorText(o) : getOkText(o, r);
+    decodedOutput = isError ? getErrorText(o) : getOkText(o, r) || '<empty>';
   }
   return {
     decodedOutput,
