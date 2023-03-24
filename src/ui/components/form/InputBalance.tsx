@@ -44,9 +44,12 @@ function InputBalanceBase({
         <InputNumber
           value={stringValue ?? 0}
           onChange={e => {
-            const bn = toBalance(api, e.target.value);
-            onChange(bn);
-            setStringValue(e.target.value);
+            const val = e.target.value;
+            if (val.length < 26) {
+              const bn = toBalance(api, val);
+              onChange(bn);
+              setStringValue(val);
+            }
           }}
           className="input-balance"
           min="0"
