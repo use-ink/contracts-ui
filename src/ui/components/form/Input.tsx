@@ -30,7 +30,7 @@ export function Input({
   }
 
   return (
-    <div className={classes(isError && 'isError', className)}>
+    <div className={classes(isError && 'isError', 'w-full')}>
       <input
         onChange={onChange}
         onFocus={onFocus}
@@ -38,7 +38,8 @@ export function Input({
         value={value || ''}
         className={classes(
           'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
-          isDisabled && 'dark:text-gray-500'
+          isDisabled && 'dark:text-gray-500',
+          className
         )}
         placeholder={placeholder}
         {...(isDisabled ? { disabled: true } : {})}
