@@ -79,7 +79,7 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
       return false;
 
     case 'Bytes':
-      return '0x00';
+      return undefined;
 
     case 'String':
     case 'Text':
@@ -161,7 +161,7 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
       if (!warnList.includes(type)) {
         warnList.push(type);
         error && console.error(`params: initValue: ${error}`);
-        console.info(
+        console.warn(
           `params: initValue: No default value for type ${type} from ${JSON.stringify(
             def
           )}, using defaults`
