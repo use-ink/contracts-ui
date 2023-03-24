@@ -26,11 +26,11 @@ export const LOCAL = {
 };
 
 // https://docs.peaq.network/networks-overview
-const PEAQ_AGUNG = {
-  relay: 'Rococo',
-  name: 'Peaq Agung',
-  rpc: 'wss://wss.agung.peaq.network',
-};
+// const PEAQ_AGUNG = {
+//   relay: 'Rococo',
+//   name: 'Peaq Agung',
+//   rpc: 'wss://wss.agung.peaq.network',
+// };
 
 const PHALA_TESTNET = {
   relay: undefined,
@@ -74,7 +74,7 @@ const PENDULUM_TESTNET = {
 
 export const TESTNETS = [
   ROCOCO_CONTRACTS,
-  PEAQ_AGUNG,
+  // PEAQ_AGUNG,
   PHALA_TESTNET,
   ASTAR_SHIBUYA,
   ALEPH_ZERO_TESTNET,
