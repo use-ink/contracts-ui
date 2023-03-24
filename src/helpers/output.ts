@@ -42,7 +42,13 @@ function decodeReturnValue(
   registry: Registry
 ): AnyJson {
   const returnTypeName = getReturnTypeName(returnType);
-  return returnType ? registry.createTypeUnsafe(returnTypeName, [data]).toHuman() : '()';
+  let r: AnyJson = 'Decoding error';
+  try {
+    r = returnType ? registry.createTypeUnsafe(returnTypeName, [data]).toHuman() : '()';
+  } catch (exception) {
+    console.error(exception);
+  }
+  return r;
 }
 
 function checkRevertFlag(flags: ContractReturnFlags): boolean {
