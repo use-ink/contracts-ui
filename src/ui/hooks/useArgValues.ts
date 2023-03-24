@@ -20,21 +20,27 @@ function fromArgs(registry: Registry, accounts: Account[], args: AbiParam[]): Ar
 
 export function useArgValues(
   message: AbiMessage | undefined,
-  registry: Registry | undefined
+  registry: Registry
 ): [ArgValues, SetState<ArgValues>, Uint8Array | undefined] {
   const { accounts } = useApi();
   const [value, setValue] = useState<ArgValues>(
-    accounts && registry && message ? fromArgs(registry, accounts, message.args) : {}
+    accounts && message ? fromArgs(registry, accounts, message.args) : {}
   );
   const argsRef = useRef(message?.args ?? []);
 
   const inputData = useMemo(() => {
-    return registry && message?.toU8a(transformUserInput(registry, message.args, value));
+    let data: Uint8Array | undefined;
+    try {
+      data = message?.toU8a(transformUserInput(registry, message.args, value));
+    } catch (e) {
+      console.error(e);
+    }
+    return data;
   }, [value, registry, message]);
 
   useEffect((): void => {
     if (accounts && message && argsRef.current !== message.args) {
-      registry && setValue(fromArgs(registry, accounts, message.args));
+      setValue(fromArgs(registry, accounts, message.args));
       argsRef.current = message.args;
     }
   }, [accounts, message, registry]);
