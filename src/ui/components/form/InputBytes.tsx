@@ -28,15 +28,21 @@ export function InputBytes({ onChange, className }: Props): React.ReactElement<P
   );
 
   return (
-    <div className="flex items-center relative w-full">
-      <span className="text-gray-400 absolute text-sm left-3">0x</span>
-      <Input
-        className={classes('pl-8 flex-1', className)}
-        value={displayValue}
-        onChange={handleChange}
-        placeholder="hexadecimal representation of Bytes"
-        type="text"
-      />
-    </div>
+    <>
+      <div className="flex items-center relative w-full">
+        <span className="text-gray-400 absolute text-sm left-3">0x</span>
+        <Input
+          className={classes('pl-8 flex-1', className)}
+          value={displayValue}
+          onChange={handleChange}
+          placeholder="hexadecimal representation of Bytes"
+          type="text"
+        />
+      </div>
+      <div className="text-xs text-red-600 basis-full mt-1">
+        {displayValue.length % 2 !== 0 &&
+          'A trailing zero will be added. Please input an even number of bytes.'}
+      </div>
+    </>
   );
 }
