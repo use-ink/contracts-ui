@@ -9,9 +9,10 @@ interface Props {
   onChange: (_: string) => void;
   className?: string;
   defaultValue?: string;
+  error?: string;
 }
 
-export function InputHex({ onChange, className, defaultValue }: Props) {
+export function InputHex({ onChange, className, defaultValue, error }: Props) {
   const [value, setValue] = useState(defaultValue ?? '');
 
   const handleChange = useCallback(
@@ -32,14 +33,11 @@ export function InputHex({ onChange, className, defaultValue }: Props) {
           className={classes('pl-8 flex-1', className)}
           value={value}
           onChange={handleChange}
-          placeholder="hexadecimal representation of Bytes"
+          placeholder="hexadecimal text"
           type="text"
         />
       </div>
-      <div className="text-xs text-red-600 basis-full mt-1">
-        {value.length % 2 !== 0 &&
-          'A trailing zero will be added. Please input an even number of bytes.'}
-      </div>
+      <div className="text-xs text-red-600 basis-full mt-1">{error}</div>
     </>
   );
 }
