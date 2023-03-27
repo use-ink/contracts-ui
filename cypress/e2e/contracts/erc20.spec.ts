@@ -13,7 +13,7 @@ import {
   selectMessage,
 } from '../../support/util';
 
-describe('ERC20 Contract ', () => {
+describe('ERC20 Contract', () => {
   const initialSupply = 77;
   const transferValue = 2;
   const allowance = 2;
