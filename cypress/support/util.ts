@@ -1,6 +1,13 @@
 const timeout = 25000;
 
+export function dropAllIndexedDBs() {
+  return indexedDB.databases().then(dbs => {
+    indexedDB.deleteDatabase(dbs[0].name);
+  });
+}
+
 export function beforeAllContracts() {
+  dropAllIndexedDBs();
   cy.visit(`/instantiate/?rpc=ws://127.0.0.1:9944`);
   cy.get('[data-cy="spinner"]').should('not.exist', {
     timeout,
@@ -9,6 +16,7 @@ export function beforeAllContracts() {
     timeout,
   }).should('be.visible');
 }
+
 export function assertUpload(fixture: Cypress.FixtureData) {
   cy.get('[data-cy="file-input"]').attachFile(fixture);
   cy.get('[data-cy="next-btn"]').should('not.be.disabled');
