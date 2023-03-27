@@ -8,7 +8,6 @@ import {
   assertMoveToStep3,
   assertContractRedirect,
   assertInstantiate,
-  selectAccount,
 } from '../../support/util';
 export function assertFormField(argument: string, type: string, inputType = 'text') {
   cy.get(`.form-field.${argument}`)
