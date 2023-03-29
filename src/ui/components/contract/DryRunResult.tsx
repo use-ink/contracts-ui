@@ -1,12 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-// temporarily disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
@@ -35,7 +29,7 @@ export function DryRunResult({
     result.isErr && result.asErr.isModule
       ? api.registry.findMetaError(result.asErr.asModule)
       : undefined;
-  // @ts-ignore
+
   const shouldDisplayRequired = !gasConsumed.refTime.toBn().eq(gasRequired.refTime.toBn());
   const prediction = result.isErr
     ? 'Contract Reverted!'
@@ -85,7 +79,6 @@ export function DryRunResult({
               <div className="basis-1/2 pr-2">
                 <OutcomeItem
                   title=""
-                  // @ts-ignore
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
                   key={`gcr-${message.method}`}
                   id={`gcr-${message.method}`}
@@ -94,7 +87,6 @@ export function DryRunResult({
               <div className="basis-1/2 pl-2">
                 <OutcomeItem
                   title=""
-                  // @ts-ignore
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
                   key={`gcp-${message.method}`}
                   id={`gcp-${message.method}`}
@@ -109,7 +101,6 @@ export function DryRunResult({
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
                       title=""
-                      // @ts-ignore
                       displayValue={`refTime: ${gasRequired.refTime.toString()}`}
                       key={`grr-${message.method}`}
                       id={`grr-${message.method}`}
@@ -118,7 +109,6 @@ export function DryRunResult({
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
                       title=""
-                      // @ts-ignore
                       displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
                       key={`grp-${message.method}`}
                       id={`grp-${message.method}`}
