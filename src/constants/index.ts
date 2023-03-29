@@ -58,6 +58,12 @@ const ALEPH_ZERO_TESTNET = {
   rpc: 'wss://ws.test.azero.dev',
 };
 
+const ALEPH_ZERO = {
+  relay: undefined,
+  name: 'Aleph Zero',
+  rpc: 'wss://ws.azero.dev',
+};
+
 // https://docs.t3rn.io/collator/testnet/testnet-collator
 const T3RN_T0RN = {
   relay: undefined,
@@ -73,17 +79,19 @@ const PENDULUM_TESTNET = {
 };
 
 export const TESTNETS = [
-  ROCOCO_CONTRACTS,
-  // PEAQ_AGUNG,
-  PHALA_TESTNET,
-  ASTAR_SHIBUYA,
-  ALEPH_ZERO_TESTNET,
-  T3RN_T0RN,
-  PENDULUM_TESTNET,
+  ...[
+    ROCOCO_CONTRACTS,
+    // PEAQ_AGUNG,
+    PHALA_TESTNET,
+    ASTAR_SHIBUYA,
+    ALEPH_ZERO_TESTNET,
+    T3RN_T0RN,
+    PENDULUM_TESTNET,
+  ].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
 ];
 
-export const MAINNETS = [ASTAR_SHIDEN];
+export const MAINNETS = [ASTAR_SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
 
 export const DEFAULT_DECIMALS = 12;
 
