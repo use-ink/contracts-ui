@@ -78,8 +78,9 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
     case 'bool':
       return false;
 
-    case 'Bytes':
-      return '0x0000';
+    // TODO: refactor InputBytes to accept strings
+    // case 'Bytes':
+    //   return '0x0000';
 
     case 'String':
     case 'Text':
