@@ -13,6 +13,7 @@ import { Struct } from './Struct';
 import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
 import { InputBn } from './InputBn';
+import { InputBytes } from './InputBytes';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 
 function subComponents(
@@ -108,6 +109,10 @@ export function findComponent(
         <VectorFixed component={component} {...props} />
       </SubForm>
     );
+  }
+
+  if (type.type.startsWith('Bytes')) {
+    return (props: ArgComponentProps<Uint8Array>) => <InputBytes {...props} />;
   }
 
   switch (type.type) {

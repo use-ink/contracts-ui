@@ -3026,6 +3026,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     husky: ^8.0.3
     istanbul-lib-coverage: ^3.2.0
+    json5: ^2.2.3
     lint-staged: ">=13.2.0"
     nyc: ^15.1.0
     postcss: ^8.4.21
@@ -5380,7 +5381,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.2.2":
+"json5@npm:^2.2.2, json5@npm:^2.2.3":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:

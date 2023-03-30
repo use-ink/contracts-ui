@@ -4,24 +4,33 @@
 import BN from 'bn.js';
 import type { ApiState } from 'types';
 
+export const LOCAL_STORAGE_KEY = {
+  CUSTOM_ENDPOINT: 'contractsUiCustomEndpoint',
+  PREFERRED_ENDPOINT: 'contractsUiPreferredEndpoint',
+  THEME: 'theme',
+} as const;
+
+export type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
+
 export const ROCOCO_CONTRACTS = {
   relay: 'Rococo',
   name: 'Contracts (Rococo)',
   rpc: 'wss://rococo-contracts-rpc.polkadot.io',
 };
 
+const CUSTOM_ENDPOINT = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOM_ENDPOINT);
 export const LOCAL = {
   relay: undefined,
   name: 'Local Node',
-  rpc: 'ws://127.0.0.1:9944',
+  rpc: CUSTOM_ENDPOINT ? (JSON.parse(CUSTOM_ENDPOINT) as string) : 'ws://127.0.0.1:9944',
 };
 
 // https://docs.peaq.network/networks-overview
-const PEAQ_AGUNG = {
-  relay: 'Rococo',
-  name: 'Peaq Agung',
-  rpc: 'wss://wss.agung.peaq.network',
-};
+// const PEAQ_AGUNG = {
+//   relay: 'Rococo',
+//   name: 'Peaq Agung',
+//   rpc: 'wss://wss.agung.peaq.network',
+// };
 
 const PHALA_TESTNET = {
   relay: undefined,
@@ -65,7 +74,7 @@ const PENDULUM_TESTNET = {
 
 export const TESTNETS = [
   ROCOCO_CONTRACTS,
-  PEAQ_AGUNG,
+  // PEAQ_AGUNG,
   PHALA_TESTNET,
   ASTAR_SHIBUYA,
   ALEPH_ZERO_TESTNET,

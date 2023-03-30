@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
+import { LOCAL_STORAGE_KEY } from '../../constants';
 
 type Theme = 'light' | 'dark';
 type Props = {
@@ -24,7 +25,7 @@ const INIT_STATE: Props = {
 export const ThemeContext = createContext(INIT_STATE);
 
 export const ThemeContextProvider = ({ children }: React.PropsWithChildren<Partial<Props>>) => {
-  const [theme, setTheme] = useLocalStorage<Theme>('theme', INIT_STATE.theme);
+  const [theme, setTheme] = useLocalStorage<Theme>(LOCAL_STORAGE_KEY.THEME, INIT_STATE.theme);
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');

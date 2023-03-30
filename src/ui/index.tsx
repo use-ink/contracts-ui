@@ -14,7 +14,6 @@ import {
   Homepage,
   Instantiate,
   SelectCodeHash,
-  Settings,
   NotFound,
   AddressLookup,
 } from 'ui/pages';
@@ -39,7 +38,6 @@ root.render(
           <Route path=":codeHash" />
         </Route>
         <Route path="contract/:address/" element={<Contract />} />
-        <Route path="settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
