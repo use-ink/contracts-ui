@@ -1,9 +1,14 @@
 const timeout = 25000;
 
 export function dropAllIndexedDBs() {
-  return indexedDB.databases().then(dbs => {
-    indexedDB.deleteDatabase(dbs[0].name);
-  });
+  return indexedDB
+    .databases()
+    .then(dbs => {
+      indexedDB.deleteDatabase(dbs[0].name);
+    })
+    .catch(exception => {
+      console.warn('No indexedDBs databases deleted', exception);
+    });
 }
 
 export function beforeAllContracts() {
