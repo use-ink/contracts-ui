@@ -53,7 +53,10 @@ export function Step2() {
   const proofSize = useWeight(dryRunResult?.gasRequired.proofSize.toBn());
   const storageDepositLimit = useStorageDepositLimit(accountId);
   const salt = useFormField<string>(genRanHex(64), validateSalt);
-  const [argValues, setArgValues, inputData] = useArgValues(deployConstructor, metadata?.registry);
+  const [argValues, setArgValues, inputData] = useArgValues(
+    deployConstructor,
+    metadata?.registry ?? api.registry
+  );
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
 
