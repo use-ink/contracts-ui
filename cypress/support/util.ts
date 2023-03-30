@@ -1,6 +1,11 @@
 const timeout = 25000;
 
 export function dropAllIndexedDBs() {
+  if (!indexedDB || !indexedDB.databases) {
+    console.warn('indexedDB.databases() not supported, skipping');
+    return Promise.resolve();
+  }
+
   return indexedDB
     .databases()
     .then(dbs => {
