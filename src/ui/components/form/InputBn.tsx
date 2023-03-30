@@ -31,7 +31,7 @@ function getMinMax(type: string): [bigint, bigint] {
     case 'u128':
       return [0n, 340282366920938463463374607431768211455n];
     default:
-      return [0n, BigInt(Number.MAX_SAFE_INTEGER)];
+      return [-BigInt(Number.MAX_SAFE_INTEGER), BigInt(Number.MAX_SAFE_INTEGER)];
   }
 }
 
@@ -43,7 +43,7 @@ export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
     ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
       if (value.trim()) {
         const val = Number(value);
-        if (min <= val && val <= max) {
+        if (!Number.isNaN(val) && min <= val && val <= max) {
           const bn = new BN(value);
           setDisplayValue(value);
           onChange(bn);
