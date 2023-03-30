@@ -39,7 +39,7 @@ export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
   const [displayValue, setDisplayValue] = useState('0');
   const [min, max] = getMinMax(type);
 
-  const handleChage = useCallback(
+  const handleChange = useCallback(
     ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
       if (value.trim()) {
         const val = Number(value);
@@ -57,7 +57,7 @@ export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
     <>
       <InputNumber
         value={displayValue}
-        onChange={handleChage}
+        onChange={handleChange}
         placeholder="Input a number"
         data-cy="bn-input"
       />
