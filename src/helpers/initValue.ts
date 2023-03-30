@@ -79,7 +79,7 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
       return false;
 
     case 'Bytes':
-      return '0x0000';
+      return undefined;
 
     case 'String':
     case 'Text':
