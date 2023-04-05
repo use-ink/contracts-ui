@@ -39,7 +39,7 @@ const PHALA_TESTNET = {
 };
 
 // https://docs.astar.network/docs/build/environment/endpoints
-const ASTAR_SHIDEN = {
+const SHIDEN = {
   relay: 'Kusama',
   name: 'Astar Shiden',
   rpc: 'wss://rpc.shiden.astar.network',
@@ -50,6 +50,13 @@ const ASTAR_SHIBUYA = {
   relay: 'Tokyo',
   name: 'Astar Shibuya',
   rpc: 'wss://rpc.shibuya.astar.network',
+};
+
+// https://docs.astar.network/docs/build/environment/endpoints
+const ASTAR = {
+  relay: 'Polkadot',
+  name: 'Astar',
+  rpc: 'wss://rpc.astar.network',
 };
 
 const ALEPH_ZERO_TESTNET = {
@@ -91,7 +98,7 @@ export const TESTNETS = [
   LOCAL,
 ];
 
-export const MAINNETS = [ASTAR_SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
+export const MAINNETS = [ASTAR, SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
 
 export const DEFAULT_DECIMALS = 12;
 
