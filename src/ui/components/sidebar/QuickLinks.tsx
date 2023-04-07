@@ -14,6 +14,11 @@ export function QuickLinks() {
   return (
     <div className="quick-links">
       <div className="section your-contracts">
+        <div className="header text-gray-400">WASM Contract Explorers</div>
+          <Link className="text-blue-400" to={`https://analytics.polkaholic.io/superset/dashboard/021154ed-efe1-4538-a177-30ae5ef59911/?standalone=1`}>
+            Polkaholic.io
+          </Link>
+        </div>
         <div className="header text-gray-400">Your Contracts</div>
         {contracts && contracts.length > 0 ? (
           contracts.map(({ name, address }) => {
