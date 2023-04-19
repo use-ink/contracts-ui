@@ -49,7 +49,7 @@ export function Statistics(): React.ReactElement | null {
       >
         {Object.entries(entries).map(([label, value], i) => {
           return (
-            <div key={`entry-${i}`} className="">
+            <div key={`entry-${i}`}>
               <div className="text-xs mb-1">{label}</div>
               <div className="dark:text-gray-400">{value}</div>
             </div>
