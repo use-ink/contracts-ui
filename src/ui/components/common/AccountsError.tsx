@@ -40,7 +40,7 @@ export function ExtensionError() {
           </a>{' '}
           to create and manage Substrate accounts.
         </p>
-        <p>
+        <p className="mb-3">
           You can find out more about compatible wallets on the{' '}
           <a href="https://wiki.polkadot.network/docs/wallets">Polkadot documentation</a> about
           wallets.
