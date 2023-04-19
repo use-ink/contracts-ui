@@ -2,11 +2,15 @@
 
 Rococo:
 
+- https://github.com/paritytech/cumulus/blob/master/parachains/runtimes/contracts/contracts-rococo/README.md#rococo-deployment
+
 - https://app.element.io/#/room/#rococo-faucet:matrix.org
 
 Aleph Zero Testnet:
 
 - https://faucet.test.azero.dev/
+
+- https://docs.alephzero.org/aleph-zero/build/setting-up-testnet-account
 
 Shibuya:
 

@@ -19,29 +19,10 @@ export function AccountsError() {
         to create your first account in the Polkadot.js extension.
       </p>
       <p className="mb-3">
-        2. Drip some funds into your account via the faucets of our supported networks.{' '}
+        2. Drip some funds into your account via the faucets of our supported networks. You can find
+        a faucets for supported testnets{' '}
+        <a href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md">here</a>.
       </p>
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-        href="https://github.com/paritytech/cumulus/blob/master/parachains/runtimes/contracts/contracts-rococo/README.md#rococo-deployment"
-      >
-        Contracts on Rococo
-      </a>{' '}
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-        href="https://docs.astar.network/docs/quickstart/faucet/"
-      >
-        Shiden / Shibuya
-      </a>{' '}
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-        href="https://docs.alephzero.org/aleph-zero/build/setting-up-testnet-account"
-      >
-        Aleph Zero Testnet
-      </a>{' '}
     </Error>
   );
 }
@@ -53,11 +34,16 @@ export function ExtensionError() {
       <div className="text-center flex flex-col items-center">
         <b>New to Substrate?</b>
         <p className="mb-3">
-          Install the{' '}
+          Install the a compatible wallet like{' '}
           <a rel="noopener noreferrer" target="_blank" href="https://polkadot.js.org/extension/">
             Polkadot.js Extension
           </a>{' '}
           to create and manage Substrate accounts.
+        </p>
+        <p>
+          You can find out more about compatible wallets on the{' '}
+          <a href="https://wiki.polkadot.network/docs/wallets">Polkadot documentation</a> about
+          wallets.
         </p>
         <p>
           If the extension is installed and you are seeing this, make sure it allows{' '}
