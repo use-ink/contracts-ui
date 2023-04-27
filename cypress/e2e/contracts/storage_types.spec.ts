@@ -11,7 +11,7 @@ import {
   selectMessage,
 } from '../../support/util';
 
-describe.only('Storage Types Contract', () => {
+describe('Storage Types Contract', () => {
   before(() => {
     beforeAllContracts();
   });
