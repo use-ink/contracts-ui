@@ -8,9 +8,9 @@ export function NoticeBanner({ isVisible, endpoint }: { isVisible: boolean; endp
     <div className="fixed top-10 left-1/3 right-1/3 z-50 flex h-2/5 w-2/5 flex-col items-center justify-center bg-gray-200 p-6 text-center text-gray-400 dark:bg-gray-800">
       <EmojiSadIcon className="mb-1 h-10 w-10 justify-self-center text-red-400" />
 
-      <h2 className="mb-3 text-2xl text-red-400">Unsuported node version. </h2>
+      <h1 className="mb-3 text-red-400">Unsupported node version.</h1>
       <p>
-        Looks like your node does not support <span>WeigthV2</span>.
+        Looks like your node does not support <span>WeightV2</span>.
       </p>
       <p>
         Upgrade your node or{' '}
