@@ -23,8 +23,8 @@ export function AddContract() {
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="mt-4">
                   <Link
-                    to="/instantiate"
                     className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    to="/instantiate"
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
@@ -33,8 +33,8 @@ export function AddContract() {
                     <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                   </Link>
                   <Link
-                    to="/hash-lookup"
                     className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    to="/hash-lookup"
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <CodeIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
@@ -43,8 +43,8 @@ export function AddContract() {
                     <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
                   </Link>
                   <Link
-                    to="/address-lookup"
                     className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    to="/address-lookup"
                   >
                     <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
                       <DocumentAddIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />

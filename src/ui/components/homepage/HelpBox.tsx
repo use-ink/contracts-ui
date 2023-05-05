@@ -12,7 +12,7 @@ export function HelpBox(): React.ReactElement | null {
           We would love to know more about you so we can make our products better.
         </div>
         <div>
-          <a href="https://forms.gle/hif9sHBr3bYPZjt38" target="_blank" rel="noreferrer">
+          <a href="https://forms.gle/hif9sHBr3bYPZjt38" rel="noreferrer" target="_blank">
             <Button className="border-2 py-1.5 px-3" variant="default">
               Take quick survey
             </Button>

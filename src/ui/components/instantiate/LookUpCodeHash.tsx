@@ -61,7 +61,7 @@ export function LookUpCodeHash() {
       >
         {codeBundle && (
           <button className="absolute right-2" onClick={() => setSearchString('')}>
-            <XCircleIcon className="w-5 h-5 text-gray-500" aria-hidden="true" />
+            <XCircleIcon aria-hidden="true" className="w-5 h-5 text-gray-500" />
           </button>
         )}
       </Input>

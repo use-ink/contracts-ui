@@ -34,9 +34,9 @@ export function Tuple({
 
         return (
           <FormField
+            className={`tuple-field-${nestingNumber}`}
             key={`Tuple-${index}`}
             label={`${index}: ${encodeTypeDef(registry, subType)}`}
-            className={`tuple-field-${nestingNumber}`}
           >
             <Component
               nestingNumber={nestingNumber}

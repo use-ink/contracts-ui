@@ -15,12 +15,12 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
           <a
             className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
             href="https://paritytech.github.io/ink-docs/"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             <div className="flex py-4">
               <div className="w-5 mr-2" style={{ position: 'relative', top: 2 }}>
-                <BookOpenIcon className="h-5 w-5 text-indigo-400" aria-hidden="true" />
+                <BookOpenIcon aria-hidden="true" className="h-5 w-5 text-indigo-400" />
               </div>
               <div className="flex flex-col">
                 <strong>ink! Docs</strong>
@@ -36,8 +36,8 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
           <a
             className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
             href="https://substrate.stackexchange.com/questions/tagged/smart-contract?sort=Newest"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             <div className="flex py-4">
               <div className="w-5 mr-2" style={{ position: 'relative', top: 2 }}>
@@ -57,8 +57,8 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
           <a
             className="group flex w-full justify-between items-center"
             href="https://github.com/paritytech/contracts-ui"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             <div className="flex py-4">
               <div className="w-5 mr-2 relative" style={{ position: 'relative', top: 1 }}>

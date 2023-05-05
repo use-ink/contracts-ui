@@ -70,8 +70,8 @@ export function InputFile({
     <div className={`${className} flex`} data-cy="upload-confirmation">
       <div className="p-6 border dark:bg-elevation-1 dark:border-gray-700 border-gray-300 inline-flex items-center rounded shadow">
         <DocumentTextIcon
-          className="w-7 h-7 mr-2 text-gray-500 justify-self-start"
           aria-hidden="true"
+          className="w-7 h-7 mr-2 text-gray-500 justify-self-start"
         />
         <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
           {file.name} ({(file.size / 1000).toFixed(2)}kb)
@@ -82,8 +82,8 @@ export function InputFile({
           </span>
         )}
         <XIcon
-          className="w-5 h-5 mr-2 text-gray-500 justify-self-end cursor-pointer"
           aria-hidden="true"
+          className="w-5 h-5 mr-2 text-gray-500 justify-self-end cursor-pointer"
           onClick={removeHandler}
         />
       </div>
@@ -98,17 +98,17 @@ export function InputFile({
               htmlFor="file"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
                 className="h-8 mb-2 dark:text-gray-500"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                 />
               </svg>
               <span className="text-sm dark:text-gray-500 text-gray-400">{placeholder}</span>

@@ -17,19 +17,19 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
   return (
     <>
       <SidePanel
-        header={message.isMutating || message.isPayable ? 'Dry-run outcome' : 'Outcome'}
         emptyView="No results yet."
+        header={message.isMutating || message.isPayable ? 'Dry-run outcome' : 'Outcome'}
       >
         <div className="text-xs p-4 break-all whitespace-pre-wrap">
-          {outcome && <DryRunResult outcome={outcome} message={message} registry={registry} />}
+          {outcome && <DryRunResult message={message} outcome={outcome} registry={registry} />}
         </div>
       </SidePanel>
-      <SidePanel header="Transactions log" emptyView="No transactions yet.">
+      <SidePanel emptyView="No transactions yet." header="Transactions log">
         {results
           .map(result => {
             const { time } = result;
             const date = new Date(time).toLocaleString();
-            return <TransactionResult key={time} result={result} date={date} registry={registry} />;
+            return <TransactionResult date={date} key={time} registry={registry} result={result} />;
           })
           .reverse()}
       </SidePanel>

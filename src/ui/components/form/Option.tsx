@@ -55,20 +55,20 @@ export function Option({
       {isSupplied ? (
         <div className="flex-1">
           <Component
-            onChange={onChange}
-            value={value}
             nestingNumber={nestingNumber + 1}
+            onChange={onChange}
             registry={registry}
             typeDef={typeDef.sub as TypeDef}
+            value={value}
           />
         </div>
       ) : (
         <div className="flex-1">
-          <Input isDisabled onChange={NOOP} value="" placeholder="Do not supply" />
+          <Input isDisabled onChange={NOOP} placeholder="Do not supply" value="" />
         </div>
       )}
       <div className="flex justify-center items-center w-18 my-2.5">
-        <Switch value={isSupplied} onChange={toggleIsSupplied} />
+        <Switch onChange={toggleIsSupplied} value={isSupplied} />
       </div>
     </div>
   );

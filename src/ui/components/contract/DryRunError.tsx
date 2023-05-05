@@ -7,11 +7,11 @@ import { RegistryError } from 'types';
 export function DryRunError({ error }: { error: RegistryError }) {
   return (
     <div className="mb-1 text-xs  break-normal">
-      <OutcomeItem title="DispatchError" displayValue={error.name} key="outcome-err-name" />
+      <OutcomeItem displayValue={error.name} key="outcome-err-name" title="DispatchError" />
       <OutcomeItem
-        title="DispatchError docs"
         displayValue={error?.docs.join('\r\n')}
         key="outcome-err-docs"
+        title="DispatchError docs"
       />
     </div>
   );

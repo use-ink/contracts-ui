@@ -81,7 +81,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
         ...(chainProps as ChainProperties),
       }}
     >
-      <NoticeBanner isVisible={!isSupported} endpoint={endpoint} />
+      <NoticeBanner endpoint={endpoint} isVisible={!isSupported} />
       {children}
     </ApiContext.Provider>
   );

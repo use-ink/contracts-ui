@@ -84,7 +84,6 @@ export function CodeHash({
         <>
           <span className="text-red-400 text-xs font-semibold mr-3">Not on-chain</span>
           <button
-            title="Forget code hash"
             className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-500 hover:text-gray-400 border h-full p-1 rounded"
             onClick={async () => {
               const toDelete = await db.codeBundles.get({ codeHash });
@@ -93,6 +92,7 @@ export function CodeHash({
                 await db.codeBundles.delete(toDelete.id);
               }
             }}
+            title="Forget code hash"
           >
             <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
           </button>

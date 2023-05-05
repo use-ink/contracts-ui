@@ -14,10 +14,10 @@ function ContractsNodeHelp() {
         <div>
           Make sure you are running a local{' '}
           <a
-            href="https://github.com/paritytech/substrate-contracts-node"
-            target="_blank"
-            rel="noreferrer"
             className="whitespace-nowrap"
+            href="https://github.com/paritytech/substrate-contracts-node"
+            rel="noreferrer"
+            target="_blank"
           >
             substrate-contracts-node
           </a>
@@ -30,8 +30,8 @@ function ContractsNodeHelp() {
       <div>
         Alternatively, connect to{' '}
         <a
-          href="#"
           className="whitespace-nowrap"
+          href="#"
           onClick={() => {
             navigate(`/?rpc=${ROCOCO_CONTRACTS.rpc}`);
           }}

@@ -41,8 +41,8 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
           <Link to={`/instantiate/${codeHash}`}>
             <button className="flex font-semibold items-center mr-2 dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full px-3 rounded">
               <ArrowCircleRightIcon
-                className="w-4 dark:text-gray-500 mr-1 justify-self-end"
                 aria-hidden="true"
+                className="w-4 dark:text-gray-500 mr-1 justify-self-end"
                 fontSize="1.5rem"
               />
               Reinstantiate
@@ -54,16 +54,16 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
           )}`}</p>
         )}
         <button
-          title="Forget contract"
           className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full px-3 rounded"
           onClick={() => {
             setIsOpen(true);
           }}
+          title="Forget contract"
         >
           <TrashIcon className="w-4 dark:text-gray-500 " />
         </button>
       </div>
-      <ForgetContractModal setIsOpen={setIsOpen} isOpen={isOpen} confirm={forgetContract} />
+      <ForgetContractModal confirm={forgetContract} isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

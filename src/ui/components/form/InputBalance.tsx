@@ -42,7 +42,8 @@ function InputBalanceBase({
     <>
       <div className={classes('relative rounded-md shadow-sm', className)}>
         <InputNumber
-          value={stringValue ?? 0}
+          className="input-balance"
+          min="0"
           onChange={e => {
             const val = e.target.value;
             if (val.length < 26) {
@@ -51,8 +52,7 @@ function InputBalanceBase({
               setStringValue(val);
             }
           }}
-          className="input-balance"
-          min="0"
+          value={stringValue ?? 0}
           {...inputProps}
         />
         {withUnits && (
