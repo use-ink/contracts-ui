@@ -45,7 +45,7 @@ export function MessageSignature({
       )}
       {isMutating && (
         <>
-          <DatabaseIcon className="inline-block ml-2 w-4 h-4 text-yellow-400" />
+          <DatabaseIcon className="ml-2 inline-block h-4 w-4 text-yellow-400" />
         </>
       )}
     </div>

@@ -50,7 +50,7 @@ export function ExtensionError() {
   return (
     <Error>
       <div>No signer extension found.</div>
-      <div className="text-center flex flex-col items-center">
+      <div className="flex flex-col items-center text-center">
         <b>New to Substrate?</b>
         <p className="mb-3">
           Install the{' '}

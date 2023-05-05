@@ -23,7 +23,7 @@ function ContractsNodeHelp() {
           </a>
           .
         </div>
-        <div className="py-1 px-3 dark:bg-slate-800 bg-slate-200 dark:text-gray-400 font-mono text-sm mt-1 rounded">
+        <div className="mt-1 rounded bg-slate-200 py-1 px-3 font-mono text-sm dark:bg-slate-800 dark:text-gray-400">
           substrate-contracts-node --dev
         </div>
       </div>

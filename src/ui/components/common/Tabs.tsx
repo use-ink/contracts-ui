@@ -20,7 +20,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 export function Tabs({ children, index, setIndex, tabs }: Props) {
   return (
     <>
-      <div className="grid grid-cols-12 w-full">
+      <div className="grid w-full grid-cols-12">
         <ul
           className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8"
           data-cy="contract-page-tabs"

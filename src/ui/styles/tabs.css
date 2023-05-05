@@ -1,13 +1,13 @@
 .routed-tabs {
-  @apply flex border-b dark:border-gray-800 border-gray-200 text-xs pb-2 mb-6 dark:text-white;
+  @apply mb-6 flex border-b border-gray-200 pb-2 text-xs dark:border-gray-800 dark:text-white;
 }
 .routed-tabs .tab {
-  @apply text-xs py-2 px-4 border-0  dark:text-gray-300 text-gray-600 border-transparent dark:hover:text-white flex items-center font-medium rounded-md;
+  @apply flex items-center rounded-md border-0  border-transparent py-2 px-4 text-xs font-medium text-gray-600 dark:text-gray-300 dark:hover:text-white;
 }
 .routed-tabs .tab svg {
-  @apply h-4 w-4 mr-1;
+  @apply mr-1 h-4 w-4;
 }
 
 .routed-tabs .tab.active {
-  @apply dark:bg-elevation-2 dark:border-gray-stroke border-gray-200 bg-gray-200;
+  @apply border-gray-200 bg-gray-200 dark:border-gray-stroke dark:bg-elevation-2;
 }

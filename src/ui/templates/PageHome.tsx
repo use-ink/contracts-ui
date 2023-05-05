@@ -14,21 +14,21 @@ export function PageHome({
 }: Props): React.ReactElement<Props> {
   return (
     <>
-      <div className="content w-full mx-auto overflow-y-auto">
-        <div className="flex flex-col xl:flex-row px-5 py-3 m-2">
+      <div className="content mx-auto w-full overflow-y-auto">
+        <div className="m-2 flex flex-col px-5 py-3 xl:flex-row">
           <main className="main order-2 lg:pr-8 xl:order-1">
             <div className="space-y-1 pb-1">
-              <h1 className="text-lg font-semibold pb-2 dark:text-white text-gray-700">{header}</h1>
+              <h1 className="pb-2 text-lg font-semibold text-gray-700 dark:text-white">{header}</h1>
             </div>
             <div className="flex flex-col">
               <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 xl:px-8">
+                <div className="inline-block min-w-full py-2 align-middle sm:px-6 xl:px-8">
                   {content}
                 </div>
               </div>
             </div>
           </main>
-          <aside className="aside flex-none order-1 xl:order-2">{aside}</aside>
+          <aside className="aside order-1 flex-none xl:order-2">{aside}</aside>
         </div>
       </div>
     </>

@@ -32,7 +32,7 @@ export function OptionsForm({
           label="RefTime Limit"
           isError={!refTime.isValid}
           message={!refTime.isValid && refTime.errorMsg}
-          className="basis-2/4 mr-4"
+          className="mr-4 basis-2/4"
         >
           <InputWeight {...refTime} name="RefTime" />
         </FormField>
@@ -42,7 +42,7 @@ export function OptionsForm({
           label="ProofSize Limit"
           isError={!proofSize.isValid}
           message={!proofSize.isValid && proofSize.errorMsg}
-          className="basis-2/4 ml-4"
+          className="ml-4 basis-2/4"
         >
           <InputWeight {...proofSize} name="ProofSize" />
         </FormField>
@@ -58,7 +58,7 @@ export function OptionsForm({
               ? storageDepositLimit.message || 'Invalid storage deposit limit'
               : null
           }
-          className="basis-2/4 mr-4"
+          className="mr-4 basis-2/4"
         >
           <InputStorageDepositLimit {...storageDepositLimit} />
         </FormField>
@@ -68,7 +68,7 @@ export function OptionsForm({
             id="value"
             label="Value"
             {...valueValidation}
-            className="basis-2/4 ml-4"
+            className="ml-4 basis-2/4"
           >
             <InputBalance value={value} onChange={setValue} placeholder="Value" />
           </FormField>

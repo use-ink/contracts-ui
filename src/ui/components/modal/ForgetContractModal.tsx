@@ -12,7 +12,7 @@ interface Props extends ModalProps {
 export const ForgetContractModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 'title'>) => {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Confirm action">
-      <div className="py-8 dark:text-gray-500 text-gray-400 text-sm">
+      <div className="py-8 text-sm text-gray-400 dark:text-gray-500">
         <p className="mb-8">
           You will remove the metadata for this contract instance from browser storage. This
           operation has no on-chain consequences. <br /> The forget operation only limits your
@@ -20,11 +20,11 @@ export const ForgetContractModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 
         </p>
         <button
           title="Forget contract"
-          className="font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
+          className="h-full items-center rounded border p-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
           onClick={() => confirm()}
         >
           <p className="mr-2 text-xs">Forget contract</p>
-          <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
+          <TrashIcon className="mr-1 w-4 justify-self-end dark:text-gray-500" />
         </button>
       </div>
     </Modal>

@@ -22,7 +22,7 @@ export const ForgetAllContractsModal = ({ isOpen, setIsOpen, confirm }: Omit<Pro
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Forget All Contracts">
-      <div className="py-8 dark:text-gray-500 text-gray-400 text-sm">
+      <div className="py-8 text-sm text-gray-400 dark:text-gray-500">
         <p className="mb-2">
           You will remove the metadata for all contract instances from browser storage.
         </p>
@@ -32,12 +32,12 @@ export const ForgetAllContractsModal = ({ isOpen, setIsOpen, confirm }: Omit<Pro
         </p>
         <button
           title="Forget contract"
-          className="flex font-semibold items-center dark:text-gray-300 justify-self-end dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
+          className="flex h-full items-center justify-self-end rounded border p-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
           onClick={onConfirm}
           disabled={isBusy}
         >
           <p className="mr-2 text-xs">Forget All Contracts</p>
-          <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
+          <TrashIcon className="mr-1 w-4 justify-self-end dark:text-gray-500" />
         </button>
       </div>
     </Modal>

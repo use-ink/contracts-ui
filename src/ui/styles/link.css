@@ -1,9 +1,9 @@
 .nav-link {
-  @apply dark:text-gray-300 text-gray-600 border border-transparent dark:hover:text-white hover:text-gray-400 flex items-center px-2 py-2 md:py-1 text-base md:text-sm font-medium rounded-md capitalize;
+  @apply flex items-center rounded-md border border-transparent px-2 py-2 text-base font-medium capitalize text-gray-600 hover:text-gray-400 dark:text-gray-300 dark:hover:text-white md:py-1 md:text-sm;
 }
 
 .nav-link.active {
-  @apply dark:bg-elevation-2 dark:border-gray-stroke border-gray-200;
+  @apply border-gray-200 dark:border-gray-stroke dark:bg-elevation-2;
 }
 
 .nav-link svg {

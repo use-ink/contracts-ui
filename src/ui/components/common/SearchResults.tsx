@@ -22,7 +22,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 function SearchResultItem({ icon: Icon, name, identifier, onClick }: ItemProps) {
   return (
-    <div className="group item" onClick={onClick}>
+    <div className="item group" onClick={onClick}>
       <div>
         <Icon className="dark:group-hover:text-white" />
       </div>

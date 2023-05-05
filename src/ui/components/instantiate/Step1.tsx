@@ -127,11 +127,11 @@ export function Step1() {
 
       {metadata && (
         <>
-          <label className="inline-flex items-center mb-1.5 text-sm font-semibold dark:text-white text-gray-600">
+          <label className="mb-1.5 inline-flex items-center text-sm font-semibold text-gray-600 dark:text-white">
             Metadata
           </label>
 
-          <div className="grid gap-4 mb-4">
+          <div className="mb-4 grid gap-4">
             <Metadata metadata={metadata} />
 
             {metadata.constructors.concat(metadata.messages).map(message => (

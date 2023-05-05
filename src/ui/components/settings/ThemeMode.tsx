@@ -18,10 +18,10 @@ const options = [
 export function ThemeMode() {
   const { theme, setTheme } = useTheme();
   return (
-    <div className="grid grid-cols-12 w-full">
-      <div className="flex flex-col col-span-6 lg:col-span-7 2xl:col-span-8 text-sm">
+    <div className="grid w-full grid-cols-12">
+      <div className="col-span-6 flex flex-col text-sm lg:col-span-7 2xl:col-span-8">
         <span className="font-semibold">Theme mode</span>
-        <span className="dark:text-gray-400 text-gray-500">Select a display theme</span>
+        <span className="text-gray-500 dark:text-gray-400">Select a display theme</span>
       </div>
       <div className="col-span-6 lg:col-span-5 2xl:col-span-4">
         <Dropdown

@@ -17,7 +17,7 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
         <div>
           You added this contract from{' '}
           <div className="inline-flex items-center">
-            <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded">
+            <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
               {truncate(address, 4)}
             </span>
             <CopyButton className="ml-1" value={address} id="header-address" />
@@ -30,7 +30,7 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
         <div>
           You instantiated this contract{' '}
           <div className="inline-flex items-center">
-            <span className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded">
+            <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
               {truncate(address, 4)}
             </span>
             <CopyButton className="ml-1" value={address} id="header-address" />
@@ -38,7 +38,7 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
           from{' '}
           <Link
             to={`/instantiate/${codeHash}`}
-            className="inline-block relative bg-blue-500 text-blue-400 bg-opacity-20 text-xs px-1.5 py-1 font-mono rounded"
+            className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400"
           >
             {name}
           </Link>{' '}

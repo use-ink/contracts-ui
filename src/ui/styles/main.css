@@ -79,19 +79,19 @@ body {
   }
 
   .react-tabs__tab-list {
-    @apply flex border-b dark:border-gray-700 mb-8;
+    @apply mb-8 flex border-b dark:border-gray-700;
   }
 
   .react-tabs__tab {
-    @apply flex items-center -bottom-0 relative list-none p-4 cursor-pointer text-gray-400;
+    @apply relative -bottom-0 flex cursor-pointer list-none items-center p-4 text-gray-400;
   }
 
   .react-tabs__tab--selected {
-    @apply border-b-2 dark:border-blue-400 border-blue-500 dark:text-blue-400 text-blue-500;
+    @apply border-b-2 border-blue-500 text-blue-500 dark:border-blue-400 dark:text-blue-400;
   }
 
   .react-tabs__tab--disabled {
-    @apply text-gray-600 cursor-default;
+    @apply cursor-default text-gray-600;
   }
 
   .react-tabs__tab:focus {
@@ -110,19 +110,19 @@ body {
 
   /* SIDEBAR */
   .sidebar-link-item {
-    @apply dark:text-gray-300 text-gray-600 border w-full dark:border-gray-stroke border-gray-200 dark:bg-elevation-2 dark:hover:bg-elevation-2 hover:bg-gray-100 dark:hover:text-gray-300 group flex items-center px-2 py-2 text-base font-medium rounded-md;
+    @apply group flex w-full items-center rounded-md border border-gray-200 px-2 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 dark:border-gray-stroke dark:bg-elevation-2 dark:text-gray-300 dark:hover:bg-elevation-2 dark:hover:text-gray-300;
   }
 
   .sidebar-link-icon {
-    @apply mr-3 h-6 w-6 dark:text-gray-500 dark:group-hover:text-gray-300 group-hover:text-gray-500;
+    @apply mr-3 h-6 w-6 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300;
   }
 
   .btn-primary {
-    @apply text-xs bg-green-500 hover:bg-green-600 mr-4 text-gray-100 font-bold py-2 px-4 rounded mt-8 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply mr-4 mt-8 rounded bg-green-500 py-2 px-4 text-xs font-bold text-gray-100 hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply text-xs hover:underline text-gray-100 font-bold py-2 px-4 rounded mt-4 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply mt-4 rounded py-2 px-4 text-xs font-bold text-gray-100 hover:underline disabled:cursor-not-allowed disabled:opacity-50;
   }
 }
 /* Chrome, Safari, Edge, Opera */

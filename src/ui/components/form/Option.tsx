@@ -67,7 +67,7 @@ export function Option({
           <Input isDisabled onChange={NOOP} value="" placeholder="Do not supply" />
         </div>
       )}
-      <div className="flex justify-center items-center w-18 my-2.5">
+      <div className="my-2.5 flex w-18 items-center justify-center">
         <Switch value={isSupplied} onChange={toggleIsSupplied} />
       </div>
     </div>

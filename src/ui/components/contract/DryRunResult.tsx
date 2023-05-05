@@ -42,7 +42,7 @@ export function DryRunResult({
   return (
     <div
       data-cy={`dryRun-${message.method}`}
-      className="flex-col flex"
+      className="flex flex-col"
       key={`dryRun-${message.method}`}
     >
       <>
@@ -50,7 +50,7 @@ export function DryRunResult({
           <div
             className={classes(
               result.isErr || isError ? 'text-red-500' : 'text-green-500',
-              'font-mono mb-2 text-sm'
+              'mb-2 font-mono text-sm'
             )}
           >
             {prediction}
