@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&display=swap');
 
 @import './base.css';
+@import './base-typography.css';
 @import './button.css';
 @import './dropdown.css';
 @import './sidebar.css';

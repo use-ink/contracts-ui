@@ -13,7 +13,7 @@ export function Instantiate() {
       <div className="grid gap-5 md:grid-cols-12">
         <div className="p-4 md:col-span-9">
           <div className="space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
-            <h1 className="text-2.5xl font-semibold text-gray-700 dark:text-white">
+            <h1>
               {codeHashUrlParam
                 ? 'Instantiate Contract from Code Hash'
                 : 'Upload and Instantiate Contract'}

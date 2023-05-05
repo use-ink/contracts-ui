@@ -15,7 +15,7 @@ export function Page({ header, help, children }: PageProps): React.ReactElement<
         <div className="m-2 grid gap-5 px-5 py-3 md:grid-cols-12">
           <main className="p-4 md:col-span-8">
             <div className="space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
-              <h1 className="text-2.5xl font-semibold text-gray-700 dark:text-white">{header}</h1>
+              <h1>{header}</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">{help}</p>
             </div>
             <div className="flex flex-col py-4">
