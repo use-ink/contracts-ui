@@ -12,6 +12,7 @@ import { classes } from 'helpers';
 interface Props extends React.ComponentProps<typeof Disclosure> {
   message: AbiMessage | AbiConstructor;
   registry: Registry;
+  className?: string;
 }
 
 export const MessageDocs = ({
