@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome107-ff107
+      image: cypress/browsers:latest
       options: --user 1001
     needs: [contracts-node-binary]
     strategy:
@@ -53,7 +53,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome107-ff107
+      image: cypress/browsers:latest
       options: --user 1001
     needs: [contracts-node-binary]
     strategy:
