@@ -51,12 +51,12 @@ export const MetadataTab = ({ id, abi }: Props) => {
           className="pb-5"
         >
           <InputFile
-            placeholder="Click to select or drag and drop to upload file."
+            className="mb-5"
+            isError={metadataValidation.isError}
             onChange={onChange}
             onRemove={onRemove}
-            isError={metadataValidation.isError}
+            placeholder="Click to select or drag and drop to upload file."
             value={file}
-            className="mb-5"
           />
         </FormField>
         <Button

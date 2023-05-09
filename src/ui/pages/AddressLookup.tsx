@@ -64,8 +64,8 @@ export function AddressLookup() {
       <FormField
         help="The address of the contract you want to interact with"
         id="address"
-        label="Contract Address"
         isError={!!searchString && !address}
+        label="Contract Address"
         message={isValidAddress(searchString) ? 'Address is not on-chain ' : 'Address is not valid'}
       >
         {' '}
@@ -78,11 +78,11 @@ export function AddressLookup() {
           {address ? (
             <div className="flex items-center absolute right-2  text-green-500">
               <span className="text-xs w-22 mr-1">on-chain</span>
-              <CheckCircleIcon className="w-4 h-4" aria-hidden="true" />
+              <CheckCircleIcon aria-hidden="true" className="w-4 h-4" />
             </div>
           ) : (
             searchString && (
-              <XCircleIcon className="w-5 h-5 text-red-500 -ml-8" aria-hidden="true" />
+              <XCircleIcon aria-hidden="true" className="w-5 h-5 text-red-500 -ml-8" />
             )
           )}
         </Input>
@@ -98,9 +98,9 @@ export function AddressLookup() {
           >
             <Input
               id="contractName"
+              onChange={setName}
               placeholder="Give your contract a descriptive name"
               value={name}
-              onChange={setName}
             />
           </FormField>
           <FormField
@@ -112,15 +112,16 @@ export function AddressLookup() {
             {...getValidation(metadataValidation)}
           >
             <InputFile
-              placeholder="Click to select or drag and drop to upload file."
+              isError={metadataValidation.isError}
               onChange={onChange}
               onRemove={onRemove}
-              isError={metadataValidation.isError}
+              placeholder="Click to select or drag and drop to upload file."
               value={file}
             />
           </FormField>
           <Buttons>
             <Button
+              data-cy="next-btn"
               isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
               onClick={async () => {
                 if (!metadata) return;
@@ -136,7 +137,6 @@ export function AddressLookup() {
                 navigate(`/contract/${address}`);
               }}
               variant="primary"
-              data-cy="next-btn"
             >
               Add contract
             </Button>

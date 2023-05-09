@@ -27,10 +27,10 @@ export function Tabs({ children, index, setIndex, tabs }: Props) {
         >
           {tabs.map(({ id, label }, tabIndex) => {
             return (
-              <li key={id} className="mr-1">
+              <li className="mr-1" key={id}>
                 <button
-                  onClick={() => setIndex(tabIndex)}
                   className={classes('tab', index === tabIndex && 'active')}
+                  onClick={() => setIndex(tabIndex)}
                 >
                   {label}
                 </button>
@@ -41,7 +41,7 @@ export function Tabs({ children, index, setIndex, tabs }: Props) {
       </div>
       {children.map((child, i) => {
         return (
-          <div key={`child-${i}`} className={index !== i ? 'hidden' : 'block'}>
+          <div className={index !== i ? 'hidden' : 'block'} key={`child-${i}`}>
             {child}
           </div>
         );

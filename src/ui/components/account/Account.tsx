@@ -24,7 +24,7 @@ export function Account({ className, name: propsName, size = 42, value }: Props)
 
   return (
     <div className={classes('inline-flex items-center', className)}>
-      <Identicon size={size} value={value} className="pr-2" />
+      <Identicon className="pr-2" size={size} value={value} />
       <div className="flex-1 block truncate">
         {name && (
           <span
@@ -34,7 +34,7 @@ export function Account({ className, name: propsName, size = 42, value }: Props)
             {name}
           </span>
         )}
-        <p data-cy="account-address" className="text-gray-500 text-xs">
+        <p className="text-gray-500 text-xs" data-cy="account-address">
           {truncate(value, 4)}
         </p>
       </div>

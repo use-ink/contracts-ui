@@ -15,8 +15,8 @@ export function NoticeBanner({ isVisible, endpoint }: { isVisible: boolean; endp
       <p>
         Upgrade your node or{' '}
         <a
-          href={`https://weightv1--contracts-ui.netlify.app/?rpc=${endpoint}`}
           className="text-blue-400 underline"
+          href={`https://weightv1--contracts-ui.netlify.app/?rpc=${endpoint}`}
         >
           click here
         </a>{' '}
