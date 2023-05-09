@@ -10,9 +10,9 @@ export function AccountsError() {
       <p className="mb-3">
         1. Follow{' '}
         <a
+          href="https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
           rel="noopener noreferrer"
           target="_blank"
-          href="https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
         >
           this guide
         </a>{' '}
@@ -22,23 +22,23 @@ export function AccountsError() {
         2. Drip some funds into your account via the faucets of our supported networks.{' '}
       </p>
       <a
+        href="https://github.com/paritytech/cumulus/blob/master/parachains/runtimes/contracts/contracts-rococo/README.md#rococo-deployment"
         rel="noopener noreferrer"
         target="_blank"
-        href="https://github.com/paritytech/cumulus/blob/master/parachains/runtimes/contracts/contracts-rococo/README.md#rococo-deployment"
       >
         Contracts on Rococo
       </a>{' '}
       <a
+        href="https://docs.astar.network/docs/quickstart/faucet/"
         rel="noopener noreferrer"
         target="_blank"
-        href="https://docs.astar.network/docs/quickstart/faucet/"
       >
         Shiden / Shibuya
       </a>{' '}
       <a
+        href="https://docs.alephzero.org/aleph-zero/build/setting-up-testnet-account"
         rel="noopener noreferrer"
         target="_blank"
-        href="https://docs.alephzero.org/aleph-zero/build/setting-up-testnet-account"
       >
         Aleph Zero Testnet
       </a>{' '}
@@ -54,7 +54,7 @@ export function ExtensionError() {
         <b>New to Substrate?</b>
         <p className="mb-3">
           Install the{' '}
-          <a rel="noopener noreferrer" target="_blank" href="https://polkadot.js.org/extension/">
+          <a href="https://polkadot.js.org/extension/" rel="noopener noreferrer" target="_blank">
             Polkadot.js Extension
           </a>{' '}
           to create and manage Substrate accounts.

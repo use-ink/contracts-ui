@@ -21,12 +21,12 @@ export function InputSalt({ isError, onChange, value, isActive = false, toggleIs
         id="salt"
         isDisabled={!isActive}
         isError={isError}
-        value={isActive ? value : ''}
         onChange={onChange}
         placeholder={isActive ? '0x' : 'Do not use'}
+        value={isActive ? value : ''}
       />
       <div className="flex justify-center items-center w-18">
-        <Switch value={isActive} onChange={toggleIsActive} />
+        <Switch onChange={toggleIsActive} value={isActive} />
       </div>
     </div>
   );

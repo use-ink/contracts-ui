@@ -28,16 +28,16 @@ export function Struct({ components, value, nestingNumber, onChange, registry, t
 
           return (
             <FormField
+              className={name}
               key={`${typeDef.name}-label-${index}`}
               label={`${name}: ${subType.typeName || encodeTypeDef(registry, subType)}`}
-              className={name}
             >
               <Component
-                value={value ? value[name] : ''}
                 nestingNumber={nestingNumber + 1}
                 onChange={_onChange(name)}
                 registry={registry}
                 typeDef={subType}
+                value={value ? value[name] : ''}
               />
             </FormField>
           );

@@ -22,8 +22,8 @@ export function Switch({ children, className, onChange, value }: Props) {
         'relative inline-flex flex-shrink-0 w-8 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75',
         className
       )}
-      onChange={onChange}
       data-cy="switch-button"
+      onChange={onChange}
     >
       <span className="sr-only">{children}</span>
       <span

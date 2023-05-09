@@ -45,11 +45,11 @@ export function ArgumentForm({ args, argValues, registry, setArgValues, classNam
             <Component
               className="w-full dark:bg-gray-900 dark:text-gray-300 text-gray-600 bg-white dark:border-gray-700 border-gray-200 rounded"
               id={arg.name}
-              value={argValues[arg.name]}
               nestingNumber={0}
               onChange={onChange}
               registry={registry}
               typeDef={arg.type}
+              value={argValues[arg.name]}
             />
           </FormField>
         );

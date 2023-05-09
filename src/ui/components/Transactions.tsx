@@ -19,9 +19,9 @@ export function Transactions({
         return (
           <div key={`notification-${id}`}>
             <div
+              className="max-w-full dark:bg-elevation-2 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
               data-cy="transaction-queued"
               key={id}
-              className="max-w-full dark:bg-elevation-2 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
             >
               <NotificationIcon status={status} />
               <div className="pl-2 flex-grow text-sm">
@@ -31,8 +31,8 @@ export function Transactions({
               {isComplete && (
                 <XIcon
                   className="text-gray-400 w-4 h-4"
-                  onClick={() => dismiss(parseInt(id))}
                   data-cy="dismiss-notification"
+                  onClick={() => dismiss(parseInt(id))}
                 />
               )}
             </div>
@@ -46,7 +46,7 @@ export function Transactions({
                   {Object.keys(events).map(eventName => {
                     const times = events[eventName] > 1 ? ` (x${events[eventName]})` : '';
                     return (
-                      <div key={eventName} className="dark:text-gray-400">
+                      <div className="dark:text-gray-400" key={eventName}>
                         {`${eventName}${times}`}
                       </div>
                     );

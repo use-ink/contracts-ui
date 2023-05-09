@@ -48,17 +48,17 @@ export function Vector({
         <Buttons>
           <Button
             className="px-2 dark:text-white"
+            data-cy={`vector-add-${nestingNumber}`}
             onClick={onAddRow}
             variant="default"
-            data-cy={`vector-add-${nestingNumber}`}
           >
             <PlusIcon className="dark:text-white h-3 w-3" />
           </Button>
           <Button
             className="px-2 dark:text-white"
+            data-cy={`vector-remove-${nestingNumber}`}
             onClick={onRemoveRow}
             variant="default"
-            data-cy={`vector-remove-${nestingNumber}`}
           >
             <MinusIcon className="dark:text-white h-3 w-3" />
           </Button>
@@ -67,9 +67,9 @@ export function Vector({
       {(value || []).map((element, index) => {
         return (
           <FormField
+            className={`vector-field-${nestingNumber}`}
             key={`Vector-${index}`}
             label={`${index}`}
-            className={`vector-field-${nestingNumber}`}
           >
             <Component
               nestingNumber={nestingNumber + 1}

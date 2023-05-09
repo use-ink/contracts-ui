@@ -31,10 +31,10 @@ export const ForgetAllContractsModal = ({ isOpen, setIsOpen, confirm }: Omit<Pro
           to these contracts from your browser.
         </p>
         <button
-          title="Forget contract"
           className="flex font-semibold items-center dark:text-gray-300 justify-self-end dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
-          onClick={onConfirm}
           disabled={isBusy}
+          onClick={onConfirm}
+          title="Forget contract"
         >
           <p className="mr-2 text-xs">Forget All Contracts</p>
           <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />

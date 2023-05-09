@@ -90,22 +90,22 @@ export function Step3() {
       </div>
       <Buttons>
         <Button
-          variant="primary"
+          data-cy="submit-btn"
           isDisabled={!txs[txId]?.isValid}
           isLoading={txs[txId]?.status === 'processing'}
           onClick={() => call()}
-          data-cy="submit-btn"
+          variant="primary"
         >
           Upload and Instantiate
         </Button>
 
         <Button
+          isDisabled={txs[txId]?.status === 'processing'}
           onClick={(): void => {
             dismiss(txId);
             setTxId(0);
             setStep(2);
           }}
-          isDisabled={txs[txId]?.status === 'processing'}
         >
           Go Back
         </Button>

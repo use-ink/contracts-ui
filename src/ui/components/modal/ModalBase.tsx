@@ -18,7 +18,7 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
   }
   return (
     <>
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear as={Fragment} show={isOpen}>
         <Dialog as="div" className="fixed inset-0 z-99 overflow-y-auto " onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
@@ -33,7 +33,7 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
-            <span className="inline-block h-screen align-middle" aria-hidden="true">
+            <span aria-hidden="true" className="inline-block h-screen align-middle">
               &#8203;
             </span>
             <Transition.Child
@@ -54,8 +54,8 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
                     {title}
                   </Dialog.Title>
                   <XIcon
-                    className="w-4 h-4 mx-6 mt-7 text-gray-500 cursor-pointer"
                     aria-hidden="true"
+                    className="w-4 h-4 mx-6 mt-7 text-gray-500 cursor-pointer"
                     onClick={closeModal}
                   />
                 </div>

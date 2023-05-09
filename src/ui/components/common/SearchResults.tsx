@@ -54,10 +54,10 @@ export function SearchResults({
                   identifier={contract.address}
                   key={contract.address}
                   name={contract.name}
+                  onClick={() => onSelectContract(contract)}
                   onMouseDown={e => {
                     e.preventDefault();
                   }}
-                  onClick={() => onSelectContract(contract)}
                 />
               );
             })}
@@ -78,11 +78,11 @@ export function SearchResults({
                   identifier={codeBundle.codeHash}
                   key={`search-result-${codeBundle.codeHash}-${index}`}
                   name={codeBundle.name}
-                  onMouseDown={e => {
-                    e.preventDefault();
-                  }}
                   onClick={() => {
                     onSelectCodeBundle(codeBundle);
+                  }}
+                  onMouseDown={e => {
+                    e.preventDefault();
                   }}
                 />
               );
