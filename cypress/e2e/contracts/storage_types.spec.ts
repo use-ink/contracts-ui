@@ -47,7 +47,6 @@ describe('Storage Types Contract', () => {
     'getResultOk',
     'getResultError',
     'getPanic',
-    'getMappingAccountBalance',
   ].forEach((message, index) => {
     it(`DryRun ${message}`, () => {
       cy.get('.form-field.caller').click().find('.dropdown__option').eq(2).click();

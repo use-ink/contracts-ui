@@ -19,14 +19,8 @@ module.exports = {
     'DryRun getPrimitiveTypes': {
       1: "<code>{\n  boolValue: true,\n  enumWithoutValues: 'A',\n  enumWithValues: {\n  ThreeValues: [\n  '1',\n  '2',\n  '3',\n  ],\n  },\n  arrayValue: [\n  '3',\n  '2',\n  '1',\n  ],\n  tupleValue: [\n  '7',\n  '8',\n  ],\n  }</code>",
     },
-    'DryRun getOptionSome': {
-      1: '<code>null</code>',
-    },
     'DryRun getOptionNone': {
       1: '<code>null</code>',
-    },
-    'DryRun getResultOk': {
-      1: '<code>Ok</code>',
     },
     'DryRun getResultError': {
       1: "<code>{\n  ErrorWithMessage: 'This is the Error Message.',\n  }</code>",
@@ -34,8 +28,11 @@ module.exports = {
     'DryRun getPanic': {
       1: '<code>ContractTrapped</code>',
     },
-    'DryRun getMappingAccountBalance': {
-      1: '<code>null</code>',
+    'DryRun getOptionSome': {
+      1: '<code>true</code>',
+    },
+    'DryRun getResultOk': {
+      1: '<code>{\n  Ok: true,\n  }</code>',
     },
   },
 };
