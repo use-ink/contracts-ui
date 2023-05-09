@@ -13,10 +13,10 @@ interface Props {
 export const NotificationIcon = ({ status }: Props) => {
   switch (status) {
     case 'success':
-      return <CheckIcon className="text-green-400 w-12 h-12" key="success" />;
+      return <CheckIcon className="h-12 w-12 text-green-400" key="success" />;
 
     case 'error':
-      return <ExclamationCircleIcon className="text-red-400 w-12 h-12" key="error" />;
+      return <ExclamationCircleIcon className="h-12 w-12 text-red-400" key="error" />;
 
     case 'processing':
       return (
@@ -29,7 +29,7 @@ export const NotificationIcon = ({ status }: Props) => {
       );
 
     case 'queued':
-      return <ClockIcon className={classes('text-blue-500 w-12 h-12')} key="queued" />;
+      return <ClockIcon className={classes('h-12 w-12 text-blue-500')} key="queued" />;
 
     default:
       return null;

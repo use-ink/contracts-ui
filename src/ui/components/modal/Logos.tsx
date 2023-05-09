@@ -4,7 +4,7 @@
 export const GithubLogo = () => {
   return (
     <svg
-      className="dark:fill-white fill-black"
+      className="fill-black dark:fill-white"
       height="20px"
       viewBox="0 0 30 30"
       width="20px"

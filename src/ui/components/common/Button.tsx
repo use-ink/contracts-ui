@@ -30,7 +30,7 @@ export const Button = React.forwardRef<HTMLButtonElement, Props>((props, ref) =>
     >
       {isLoading && (
         <div
-          className="w-3.5 h-3.5 absolute border dark:border-white border-solid rounded-full animate-spin"
+          className="absolute h-3.5 w-3.5 animate-spin rounded-full border border-solid dark:border-white"
           style={{
             borderTopColor: 'transparent',
             left: 'calc(50% - 7px)',
