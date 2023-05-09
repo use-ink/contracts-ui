@@ -12,7 +12,7 @@ import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
-import { Metadata } from '../metadata';
+import { Environment, Metadata } from '../metadata';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -65,6 +65,9 @@ export function Step1() {
   }
 
   if (step !== 1) return null;
+  if (metadata) {
+    console.log(metadata.json.spec.environment);
+  }
 
   return (
     <Loader isLoading={isLoading}>
@@ -124,6 +127,7 @@ export function Step1() {
           </FormField>
         )}
       </Form>
+      {metadata && <Environment metadata={metadata} />}
 
       {metadata && (
         <>
