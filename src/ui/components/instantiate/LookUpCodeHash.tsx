@@ -52,7 +52,7 @@ export function LookUpCodeHash() {
   }, [codeHash]);
 
   return (
-    <FormField className="relative h-36" label="Look Up Code Hash">
+    <FormField className="h-36 relative" label="Look Up Code Hash">
       <Input
         className={classes('relative flex items-center')}
         onChange={setSearchString}
@@ -61,7 +61,7 @@ export function LookUpCodeHash() {
       >
         {codeBundle && (
           <button className="absolute right-2" onClick={() => setSearchString('')}>
-            <XCircleIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+            <XCircleIcon aria-hidden="true" className="w-5 h-5 text-gray-500" />
           </button>
         )}
       </Input>

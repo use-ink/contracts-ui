@@ -27,38 +27,38 @@ export function OptionsForm({
     <>
       <div className="flex justify-between">
         <FormField
+          className="basis-2/4 mr-4"
           help="The maximum amount of computational time that can be used for execution, in picoseconds. If the transaction requires more, it will fail."
           id="maxRefTime"
-          label="RefTime Limit"
           isError={!refTime.isValid}
+          label="RefTime Limit"
           message={!refTime.isValid && refTime.errorMsg}
-          className="mr-4 basis-2/4"
         >
           <InputWeight {...refTime} name="RefTime" />
         </FormField>
         <FormField
+          className="basis-2/4 ml-4"
           help="The maximum amount of storage space that can be used, in bytes. If the transaction requires more, it will fail."
           id="maxProofSize"
-          label="ProofSize Limit"
           isError={!proofSize.isValid}
+          label="ProofSize Limit"
           message={!proofSize.isValid && proofSize.errorMsg}
-          className="ml-4 basis-2/4"
         >
           <InputWeight {...proofSize} name="ProofSize" />
         </FormField>
       </div>
       <div className="flex justify-between">
         <FormField
+          className="basis-2/4 mr-4"
           help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
           id="storageDepositLimit"
-          label="Storage Deposit Limit"
           isError={!storageDepositLimit.isValid}
+          label="Storage Deposit Limit"
           message={
             !storageDepositLimit.isValid
               ? storageDepositLimit.message || 'Invalid storage deposit limit'
               : null
           }
-          className="mr-4 basis-2/4"
         >
           <InputStorageDepositLimit {...storageDepositLimit} />
         </FormField>
@@ -68,9 +68,9 @@ export function OptionsForm({
             id="value"
             label="Value"
             {...valueValidation}
-            className="ml-4 basis-2/4"
+            className="basis-2/4 ml-4"
           >
-            <InputBalance value={value} onChange={setValue} placeholder="Value" />
+            <InputBalance onChange={setValue} placeholder="Value" value={value} />
           </FormField>
         )}
       </div>

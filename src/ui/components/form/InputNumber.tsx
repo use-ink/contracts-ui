@@ -17,19 +17,19 @@ export function InputNumber({
   return (
     <div>
       <input
-        onChange={onChange}
-        type="number"
-        value={value?.toString() ?? ''}
         className={classes(
           className,
           'w-full rounded border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
           disabled && 'dark:text-gray-500'
         )}
         disabled={disabled}
-        min={min}
         max={max}
+        min={min}
+        onChange={onChange}
         placeholder={placeholder}
         step={step}
+        type="number"
+        value={value?.toString() ?? ''}
       />
       {children}
     </div>

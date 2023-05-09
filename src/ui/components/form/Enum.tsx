@@ -44,9 +44,9 @@ export function Enum(props: Props) {
   return (
     <>
       <Dropdown
+        onChange={setVariantIndex}
         options={variants.map(({ name }, index) => ({ label: name, value: index }))}
         value={variantIndex}
-        onChange={setVariantIndex}
       />
       {variants[variantIndex].type !== 'Null' && (
         <FormField
@@ -56,10 +56,10 @@ export function Enum(props: Props) {
         >
           <Component
             nestingNumber={nestingNumber + 1}
-            value={!!value && typeof value === 'object' ? Object.values(value)[0] : {}}
             onChange={onChange}
             registry={registry}
             typeDef={variants[variantIndex]}
+            value={!!value && typeof value === 'object' ? Object.values(value)[0] : {}}
           />
         </FormField>
       )}

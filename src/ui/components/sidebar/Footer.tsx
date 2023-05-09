@@ -26,27 +26,27 @@ export function Footer() {
     <footer className="footer">
       <div>
         <a
-          className="text-md flex cursor-pointer content-center items-center py-2 font-medium text-gray-600 hover:text-gray-400 dark:text-gray-300 dark:hover:text-gray-300 md:py-0 md:text-xs md:dark:text-gray-400"
+          className="flex content-center items-center py-2 md:py-0 text-md md:text-xs font-medium dark:text-gray-300 md:dark:text-gray-400 text-gray-600 dark:hover:text-gray-300 hover:text-gray-400 cursor-pointer"
           onClick={() => setVisibleModal('help')}
         >
-          <ChatAltIcon className="mr-2 h-4 w-4 dark:text-gray-500" aria-hidden="true" />
+          <ChatAltIcon aria-hidden="true" className="h-4 w-4 mr-2 dark:text-gray-500" />
           Help &amp; Feedback
         </a>
         <a
-          className="text-md flex cursor-pointer content-center items-center py-2 font-medium text-gray-600 hover:text-gray-400 dark:text-gray-300 dark:hover:text-gray-300 md:py-0 md:text-xs md:dark:text-gray-400"
+          className="flex content-center items-center py-2 md:py-0 text-md md:text-xs font-medium dark:text-gray-300 md:dark:text-gray-400 text-gray-600 dark:hover:text-gray-300 hover:text-gray-400 cursor-pointer"
           onClick={() => setVisibleModal('settings')}
         >
           <CogIcon
-            className="mr-2 h-4 w-4 text-gray-600 hover:text-gray-400 dark:text-gray-500 dark:hover:text-gray-300"
             aria-hidden="true"
+            className="h-4 w-4 mr-2 dark:text-gray-500 dark:hover:text-gray-300 text-gray-600 hover:text-gray-400"
           />
-          <div className="text-md dark:text-gray-300 md:hidden">Settings</div>
+          <div className="text-md md:hidden dark:text-gray-300">Settings</div>
         </a>
       </div>
-      <HelpModal setIsOpen={createSetVisibleModal('help')} isOpen={visibleModal === 'help'} />
+      <HelpModal isOpen={visibleModal === 'help'} setIsOpen={createSetVisibleModal('help')} />
       <SettingsModal
-        setIsOpen={createSetVisibleModal('settings')}
         isOpen={visibleModal === 'settings'}
+        setIsOpen={createSetVisibleModal('settings')}
       />
     </footer>
   );

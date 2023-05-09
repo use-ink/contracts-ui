@@ -35,7 +35,7 @@ export function CustomEndpoint() {
       </div>
 
       <div className="flex flex-row items-center justify-between">
-        <Input onChange={setValue} value={value} className="w-full" />
+        <Input className="w-full" onChange={setValue} value={value} />
         <Button isDisabled={!isValidWsUrl(value)} onClick={onApply}>
           Apply
         </Button>

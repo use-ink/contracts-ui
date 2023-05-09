@@ -35,35 +35,35 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
   }, [api, address]);
 
   return (
-    <div className="relative right-0 inline-flex h-8 text-xs dark:text-gray-300">
+    <div className="inline-flex dark:text-gray-300 relative h-8 text-xs right-0">
       <div className="inline-flex h-8">
         {isOnChain ? (
           <Link to={`/instantiate/${codeHash}`}>
-            <button className="mr-2 flex h-full items-center rounded border px-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2">
+            <button className="flex font-semibold items-center mr-2 dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full px-3 rounded">
               <ArrowCircleRightIcon
-                className="mr-1 w-4 justify-self-end dark:text-gray-500"
                 aria-hidden="true"
+                className="w-4 dark:text-gray-500 mr-1 justify-self-end"
                 fontSize="1.5rem"
               />
               Reinstantiate
             </button>
           </Link>
         ) : (
-          <p className="mr-3 flex items-center font-semibold text-red-400">{`Not found at ${truncate(
+          <p className="flex font-semibold items-center mr-3 text-red-400">{`Not found at ${truncate(
             address
           )}`}</p>
         )}
         <button
-          title="Forget contract"
-          className="flex h-full items-center rounded border px-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
+          className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full px-3 rounded"
           onClick={() => {
             setIsOpen(true);
           }}
+          title="Forget contract"
         >
           <TrashIcon className="w-4 dark:text-gray-500 " />
         </button>
       </div>
-      <ForgetContractModal setIsOpen={setIsOpen} isOpen={isOpen} confirm={forgetContract} />
+      <ForgetContractModal confirm={forgetContract} isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

@@ -41,8 +41,8 @@ export function DryRunResult({
 
   return (
     <div
+      className="flex-col flex"
       data-cy={`dryRun-${message.method}`}
-      className="flex flex-col"
       key={`dryRun-${message.method}`}
     >
       <>
@@ -50,7 +50,7 @@ export function DryRunResult({
           <div
             className={classes(
               result.isErr || isError ? 'text-red-500' : 'text-green-500',
-              'mb-2 font-mono text-sm'
+              'font-mono mb-2 text-sm'
             )}
           >
             {prediction}
@@ -60,16 +60,16 @@ export function DryRunResult({
 
         {!debugMessage.isEmpty && (
           <OutcomeItem
-            title="Debug message"
             displayValue={debugMessage.toHuman()}
             key={`debug-${message.method}`}
+            title="Debug message"
           />
         )}
         {!dispatchError && (
           <OutcomeItem
-            title={isDispatchable ? 'Execution result' : 'Return value'}
             displayValue={decodedOutput}
             key={`err-${message.method}`}
+            title={isDispatchable ? 'Execution result' : 'Return value'}
           />
         )}
         {isDispatchable && (
@@ -78,18 +78,18 @@ export function DryRunResult({
             <div className="flex">
               <div className="basis-1/2 pr-2">
                 <OutcomeItem
-                  title=""
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
-                  key={`gcr-${message.method}`}
                   id={`gcr-${message.method}`}
+                  key={`gcr-${message.method}`}
+                  title=""
                 />
               </div>
               <div className="basis-1/2 pl-2">
                 <OutcomeItem
-                  title=""
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
-                  key={`gcp-${message.method}`}
                   id={`gcp-${message.method}`}
+                  key={`gcp-${message.method}`}
+                  title=""
                 />
               </div>
             </div>
@@ -100,28 +100,28 @@ export function DryRunResult({
                 <div className="flex">
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`refTime: ${gasRequired.refTime.toString()}`}
-                      key={`grr-${message.method}`}
                       id={`grr-${message.method}`}
+                      key={`grr-${message.method}`}
+                      title=""
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
-                      key={`grp-${message.method}`}
                       id={`grp-${message.method}`}
+                      key={`grp-${message.method}`}
+                      title=""
                     />
                   </div>
                 </div>
               </>
             )}
             <OutcomeItem
-              title="StorageDeposit"
-              displayValue={`${storageDepositType}: ${storageDepositValue?.toHuman() ?? 'none'}`}
               copyValue={storageDepositValue?.toString() ?? ''}
+              displayValue={`${storageDepositType}: ${storageDepositValue?.toHuman() ?? 'none'}`}
               key={`sd-${message.method}`}
+              title="StorageDeposit"
             />
           </div>
         )}

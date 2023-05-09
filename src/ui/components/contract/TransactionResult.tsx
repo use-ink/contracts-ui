@@ -29,8 +29,8 @@ function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) 
       <div className="mb-2 uppercase">Contract events</div>
       {contractEvents.map(({ event, args }) => {
         const a = args.map((a, i) => (
-          <div key={`${event.identifier}-${event.args[i].name}`} className="mb-1">
-            <div className="text-gray-400 dark:text-gray-200">{event.args[i].name}</div>
+          <div className="mb-1" key={`${event.identifier}-${event.args[i].name}`}>
+            <div className="dark:text-gray-200 text-gray-400">{event.args[i].name}</div>
             {JSON.stringify(a.toHuman(), null, 2)}
           </div>
         ));
@@ -51,16 +51,16 @@ export const TransactionResult = ({
 }: Props) => {
   return (
     <div
-      key={`${time}`}
-      className="break-all border-b border-gray-200 p-4 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-400"
+      className="text-xs dark:text-gray-400 text-gray-600 break-all p-4 border-b border-gray-200 dark:border-gray-700"
       data-cy={`${message.method}-result}`}
+      key={`${time}`}
     >
       <div className="flex-col">
         <div className="mb-2">{date}</div>
-        <div className="text-grey-600 text-mono rounded-sm bg-gray-200 p-2 text-xs dark:bg-elevation-1 dark:text-yellow-400">
+        <div className="dark:text-yellow-400 text-grey-600 dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-mono text-xs">
           {message.identifier}()
         </div>
-        <div className="mb-2 mt-4 flex-col items-start">
+        <div className="flex-col items-start mb-2 mt-4">
           <div className="event-log">
             {contractEvents && <ContractEvents contractEvents={contractEvents} />}
             <Events events={events} />
@@ -72,8 +72,8 @@ export const TransactionResult = ({
             <ReactMarkdown
               // eslint-disable-next-line react/no-children-prop
               children={error.docs.join('\r\n')}
-              remarkPlugins={[remarkGfm]}
               className="markdown mt-2"
+              remarkPlugins={[remarkGfm]}
             />
           </>
         )}

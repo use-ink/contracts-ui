@@ -26,8 +26,8 @@ export function OutcomeItem({
         </pre>
         <CopyButton
           className="absolute right-2 bottom-2"
-          value={copyValue}
           id={title ? title.toLowerCase().replace(/\s+/g, '-') : id ?? ''}
+          value={copyValue}
         />
       </div>
     </div>

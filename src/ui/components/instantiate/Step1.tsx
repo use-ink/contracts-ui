@@ -8,11 +8,11 @@ import { Input, InputFile, Form, FormField, useMetadataField, getValidation } fr
 import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
 import { MessageDocs } from '../message';
+import { Metadata } from '../metadata';
 import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
-import { Metadata } from '../metadata';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -75,10 +75,10 @@ export function Step1() {
           label="Account"
         >
           <AccountSelect
-            id="accountId"
             className="mb-2"
-            value={accountId}
+            id="accountId"
             onChange={setAccountId}
+            value={accountId}
           />
         </FormField>
         <FormField
@@ -89,9 +89,9 @@ export function Step1() {
         >
           <Input
             id="contractName"
+            onChange={setName}
             placeholder="Give your contract a descriptive name"
             value={name}
-            onChange={setName}
           />
         </FormField>
         {codeHashUrlParam && codeBundle && (
@@ -115,10 +115,10 @@ export function Step1() {
             {...getValidation(metadataValidation)}
           >
             <InputFile
-              placeholder="Click to select or drag and drop to upload file."
+              isError={metadataValidation.isError}
               onChange={onChange}
               onRemove={onRemove}
-              isError={metadataValidation.isError}
+              placeholder="Click to select or drag and drop to upload file."
               value={file}
             />
           </FormField>
@@ -148,10 +148,10 @@ export function Step1() {
 
       <Buttons>
         <Button
+          data-cy="next-btn"
           isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
           onClick={submitStep1}
           variant="primary"
-          data-cy="next-btn"
         >
           Next
         </Button>

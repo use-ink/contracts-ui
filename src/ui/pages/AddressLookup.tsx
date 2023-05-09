@@ -64,25 +64,25 @@ export function AddressLookup() {
       <FormField
         help="The address of the contract you want to interact with"
         id="address"
-        label="Contract Address"
         isError={!!searchString && !address}
+        label="Contract Address"
         message={isValidAddress(searchString) ? 'Address is not on-chain ' : 'Address is not valid'}
       >
         {' '}
         <Input
-          className={classes('relative mb-4 flex items-center')}
+          className={classes('relative flex items-center mb-4')}
           onChange={setSearchString}
           placeholder="Paste an on-chain contract address"
           value={searchString}
         >
           {address ? (
-            <div className="absolute right-2 flex items-center  text-green-500">
-              <span className="w-22 mr-1 text-xs">on-chain</span>
-              <CheckCircleIcon className="h-4 w-4" aria-hidden="true" />
+            <div className="flex items-center absolute right-2  text-green-500">
+              <span className="text-xs w-22 mr-1">on-chain</span>
+              <CheckCircleIcon aria-hidden="true" className="w-4 h-4" />
             </div>
           ) : (
             searchString && (
-              <XCircleIcon className="-ml-8 h-5 w-5 text-red-500" aria-hidden="true" />
+              <XCircleIcon aria-hidden="true" className="w-5 h-5 text-red-500 -ml-8" />
             )
           )}
         </Input>
@@ -98,9 +98,9 @@ export function AddressLookup() {
           >
             <Input
               id="contractName"
+              onChange={setName}
               placeholder="Give your contract a descriptive name"
               value={name}
-              onChange={setName}
             />
           </FormField>
           <FormField
@@ -112,15 +112,16 @@ export function AddressLookup() {
             {...getValidation(metadataValidation)}
           >
             <InputFile
-              placeholder="Click to select or drag and drop to upload file."
+              isError={metadataValidation.isError}
               onChange={onChange}
               onRemove={onRemove}
-              isError={metadataValidation.isError}
+              placeholder="Click to select or drag and drop to upload file."
               value={file}
             />
           </FormField>
           <Buttons>
             <Button
+              data-cy="next-btn"
               isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
               onClick={async () => {
                 if (!metadata) return;
@@ -136,7 +137,6 @@ export function AddressLookup() {
                 navigate(`/contract/${address}`);
               }}
               variant="primary"
-              data-cy="next-btn"
             >
               Add contract
             </Button>

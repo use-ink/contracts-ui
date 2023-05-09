@@ -29,16 +29,16 @@ export function DryRun() {
                 <div className="flex">
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`refTime: ${dryRunResult.gasConsumed.refTime.toString()}`}
                       key={`gcr-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`proofSize: ${dryRunResult.gasConsumed.proofSize.toString()}`}
                       key={`gcp-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                 </div>
@@ -50,16 +50,16 @@ export function DryRun() {
                 <div className="flex">
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`refTime: ${dryRunResult.gasRequired.refTime.toString()}`}
                       key={`grr-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`proofSize: ${dryRunResult.gasRequired.proofSize.toString()}`}
                       key={`grp-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                 </div>

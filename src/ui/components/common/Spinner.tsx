@@ -19,7 +19,6 @@ export function Spinner({
 }: Props) {
   return (
     <div
-      style={{ borderTopColor: 'transparent' }}
       className={classes(
         `w-${width} h-${width}`,
         `border-${strokeWidth}`,
@@ -29,6 +28,7 @@ export function Spinner({
         className
       )}
       data-cy="spinner"
+      style={{ borderTopColor: 'transparent' }}
     />
   );
 }

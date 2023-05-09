@@ -196,10 +196,10 @@ export const InteractTab = ({
             label="Caller"
           >
             <AccountSelect
-              id="accountId"
               className="mb-2"
-              value={accountId}
+              id="accountId"
               onChange={setAccountId}
+              value={accountId}
             />
           </FormField>
           <FormField
@@ -208,23 +208,23 @@ export const InteractTab = ({
             label="Message to Send"
           >
             <Dropdown
-              id="message"
-              options={createMessageOptions(registry, abi.messages)}
               className="constructorDropdown mb-4"
+              id="message"
               onChange={(m?: AbiMessage) => {
                 m?.identifier !== message?.identifier && setOutcome(undefined);
                 setMessage(m);
               }}
+              options={createMessageOptions(registry, abi.messages)}
               value={message}
             >
               No messages found
             </Dropdown>
             {argValues && (
               <ArgumentForm
+                argValues={argValues}
                 args={message?.args ?? []}
                 registry={registry}
                 setArgValues={setArgValues}
-                argValues={argValues}
               />
             )}
           </FormField>
@@ -232,10 +232,10 @@ export const InteractTab = ({
           {isDispatchable && (
             <OptionsForm
               isPayable={!!message.isPayable}
-              refTime={refTime}
               proofSize={proofSize}
-              value={valueState}
+              refTime={refTime}
               storageDepositLimit={storageDepositLimit}
+              value={valueState}
             />
           )}
         </Form>
@@ -255,10 +255,10 @@ export const InteractTab = ({
       <div className="col-span-6 w-full pl-10 lg:col-span-6 lg:pl-20 2xl:col-span-5">
         {message && (
           <ResultsOutput
+            message={message}
+            outcome={outcome}
             registry={registry}
             results={callResults}
-            outcome={outcome}
-            message={message}
           />
         )}
       </div>
