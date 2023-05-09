@@ -85,11 +85,10 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
               <div className="w-5 mr-2 relative" style={{ position: 'relative', top: 1 }}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  fill="rgb(154 159 169)"
                   viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  className="rotate-180"
-                  stroke="currentColor"
+                  className="rotate-180 "
+                  stroke="none"
                   width={20}
                   height={20}
                 >
