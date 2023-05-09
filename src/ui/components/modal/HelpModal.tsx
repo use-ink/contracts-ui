@@ -101,7 +101,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <strong>Faucet</strong>
+                <strong>Faucets</strong>
                 <span className="dark:text-gray-400 text-gray-500">Get testnet tokens.</span>
               </div>
             </div>
