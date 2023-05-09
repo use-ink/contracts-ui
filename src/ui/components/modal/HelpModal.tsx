@@ -55,7 +55,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
         </li>
         <li>
           <a
-            className="group flex w-full justify-between items-center"
+            className="group flex w-full justify-between items-center border-b dark:border-gray-800 border-gray-200 dark:text-white text-gray-600"
             href="https://github.com/paritytech/contracts-ui"
             target="_blank"
             rel="noopener noreferrer"
@@ -69,6 +69,40 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
                 <span className="dark:text-gray-400 text-gray-500">
                   Let us know if there is an issue.{' '}
                 </span>
+              </div>
+            </div>
+            <ChevronRightIcon className="h-4 w-4 dark:text-gray-400 text-gray-500 group-hover:opacity-50" />
+          </a>
+        </li>
+        <li>
+          <a
+            className="group flex w-full justify-between items-center"
+            href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="flex py-4">
+              <div className="w-5 mr-2 relative" style={{ position: 'relative', top: 1 }}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  className="rotate-180"
+                  stroke="currentColor"
+                  width={20}
+                  height={20}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                  />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <strong>Faucet</strong>
+                <span className="dark:text-gray-400 text-gray-500">Get testnet tokens.</span>
               </div>
             </div>
             <ChevronRightIcon className="h-4 w-4 dark:text-gray-400 text-gray-500 group-hover:opacity-50" />
