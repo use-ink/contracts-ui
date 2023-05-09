@@ -20,7 +20,7 @@ export function AccountsError() {
       </p>
       <p className="mb-3">
         2. Drip some funds into your account via the faucets of our supported networks. You can find
-        a faucets for supported testnets{' '}
+        a faucets list {' '}
         <a href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md">here</a>.
       </p>
     </Error>
