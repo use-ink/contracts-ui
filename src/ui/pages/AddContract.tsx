@@ -17,40 +17,40 @@ export function AddContract() {
       }
     >
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div className="mt-4">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                 <div className="mt-4">
                   <Link
-                    className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="mb-10 flex items-center justify-between rounded-md border border-gray-200 px-6 py-4 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:bg-elevation-1 dark:hover:bg-elevation-2"
                     to="/instantiate"
                   >
-                    <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
-                      <UploadIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
+                    <div className="flex items-center space-x-2 text-base text-gray-500 dark:text-gray-300">
+                      <UploadIcon className="h-8 w-8 text-gray-400 group-hover:text-gray-500 dark:text-gray-500" />
                       <span>Upload New Contract Code</span>
                     </div>
-                    <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
+                    <ChevronRightIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
                   </Link>
                   <Link
-                    className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="mb-10 flex items-center justify-between rounded-md border border-gray-200 px-6 py-4 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:bg-elevation-1 dark:hover:bg-elevation-2"
                     to="/hash-lookup"
                   >
-                    <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
-                      <CodeIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
+                    <div className="flex items-center space-x-2 text-base text-gray-500 dark:text-gray-300">
+                      <CodeIcon className="h-8 w-8 text-gray-400 group-hover:text-gray-500 dark:text-gray-500" />
                       <span>Use On-Chain Contract Code</span>
                     </div>
-                    <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
+                    <ChevronRightIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
                   </Link>
                   <Link
-                    className="flex justify-between items-center px-6 py-4 mb-10 border text-gray-500 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:hover:bg-elevation-2 hover:bg-gray-100"
+                    className="mb-10 flex items-center justify-between rounded-md border border-gray-200 px-6 py-4 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:bg-elevation-1 dark:hover:bg-elevation-2"
                     to="/address-lookup"
                   >
-                    <div className="flex items-center text-base dark:text-gray-300 text-gray-500 space-x-2">
-                      <DocumentAddIcon className="h-8 w-8 dark:text-gray-500 text-gray-400 group-hover:text-gray-500" />
+                    <div className="flex items-center space-x-2 text-base text-gray-500 dark:text-gray-300">
+                      <DocumentAddIcon className="h-8 w-8 text-gray-400 group-hover:text-gray-500 dark:text-gray-500" />
                       <span>Use On-Chain Contract Address</span>
                     </div>
-                    <ChevronRightIcon className="h-6 w-6 dark:text-gray-500 text-gray-400" />
+                    <ChevronRightIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
                   </Link>
                 </div>
               </div>

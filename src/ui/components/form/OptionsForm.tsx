@@ -27,7 +27,7 @@ export function OptionsForm({
     <>
       <div className="flex justify-between">
         <FormField
-          className="basis-2/4 mr-4"
+          className="mr-4 basis-2/4"
           help="The maximum amount of computational time that can be used for execution, in picoseconds. If the transaction requires more, it will fail."
           id="maxRefTime"
           isError={!refTime.isValid}
@@ -37,7 +37,7 @@ export function OptionsForm({
           <InputWeight {...refTime} name="RefTime" />
         </FormField>
         <FormField
-          className="basis-2/4 ml-4"
+          className="ml-4 basis-2/4"
           help="The maximum amount of storage space that can be used, in bytes. If the transaction requires more, it will fail."
           id="maxProofSize"
           isError={!proofSize.isValid}
@@ -49,7 +49,7 @@ export function OptionsForm({
       </div>
       <div className="flex justify-between">
         <FormField
-          className="basis-2/4 mr-4"
+          className="mr-4 basis-2/4"
           help="The maximum balance allowed to be deducted from the sender account for any additional storage deposit."
           id="storageDepositLimit"
           isError={!storageDepositLimit.isValid}
@@ -68,7 +68,7 @@ export function OptionsForm({
             id="value"
             label="Value"
             {...valueValidation}
-            className="basis-2/4 ml-4"
+            className="ml-4 basis-2/4"
           >
             <InputBalance onChange={setValue} placeholder="Value" value={value} />
           </FormField>

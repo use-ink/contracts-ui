@@ -1,5 +1,5 @@
 .review {
-  @apply flex flex-wrap text-sm dark:text-gray-300 text-gray-700 dark:bg-elevation-1 bg-white p-8 mb-10 space-y-7 border dark:border-gray-700 border-gray-200 rounded-md;
+  @apply mb-10 flex flex-wrap space-y-7 rounded-md border border-gray-200 bg-white p-8 text-sm text-gray-700 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300;
 }
 
 .review .field {
@@ -11,7 +11,7 @@
 }
 
 .review .field .key {
-  @apply dark:text-gray-300 text-gray-700 font-semibold mb-2;
+  @apply mb-2 font-semibold text-gray-700 dark:text-gray-300;
 }
 
 .review .field .value {
@@ -23,7 +23,7 @@
 }
 
 .instantiate-outcome .body {
-  @apply text-xs p-4;
+  @apply p-4 text-xs;
 }
 
 .instantiate-outcome .row {

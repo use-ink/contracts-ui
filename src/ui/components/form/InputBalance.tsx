@@ -57,7 +57,7 @@ function InputBalanceBase({
         />
         {withUnits && (
           <div className="absolute inset-y-0 right-0 flex items-center">
-            <span className="text-gray-500 sm:text-sm mr-7">{tokenSymbol}</span>
+            <span className="mr-7 text-gray-500 sm:text-sm">{tokenSymbol}</span>
           </div>
         )}
         {children}

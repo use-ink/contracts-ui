@@ -40,7 +40,7 @@ export function CopyButton({ className, iconClassName, value, id }: Props) {
         variant="plain"
       >
         <DocumentDuplicateIcon
-          className={classes('w-4 h-4 hover:text-gray-600 dark:hover:text-gray-300', iconClassName)}
+          className={classes('h-4 w-4 hover:text-gray-600 dark:hover:text-gray-300', iconClassName)}
         />
       </Button>
       <Tooltip id={id} isOpen={showTooltip} place="top" />

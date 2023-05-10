@@ -104,7 +104,7 @@ export function DryRun() {
           )}
           {dryRunError && dryRunResult && (
             <>
-              <div className="validation error text-mono font-bold items-start">
+              <div className="validation error text-mono items-start font-bold">
                 <ExclamationCircleIcon className="mr-3" style={{ marginTop: 1 }} />
                 <div>
                   <p>{dryRunError.name}</p>
@@ -112,7 +112,7 @@ export function DryRun() {
                 </div>
               </div>
               {dryRunResult.debugMessage.length > 0 && (
-                <div className="validation error block text-mono break-words pl-4 mt-1">
+                <div className="validation error text-mono mt-1 block break-words pl-4">
                   {dryRunResult.debugMessage.toString()}
                 </div>
               )}

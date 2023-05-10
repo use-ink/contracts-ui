@@ -186,11 +186,11 @@ export const InteractTab = ({
   const isDispatchable = message?.isMutating || message?.isPayable;
 
   return (
-    <div className="grid grid-cols-12 w-full">
-      <div className="col-span-6 lg:col-span-6 2xl:col-span-7 rounded-lg w-full">
+    <div className="grid w-full grid-cols-12">
+      <div className="col-span-6 w-full rounded-lg lg:col-span-6 2xl:col-span-7">
         <Form key={`${address}`}>
           <FormField
-            className="mb-8 caller"
+            className="caller mb-8"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
             label="Caller"
@@ -252,7 +252,7 @@ export const InteractTab = ({
           )}
         </Buttons>
       </div>
-      <div className="col-span-6 lg:col-span-6 2xl:col-span-5 pl-10 lg:pl-20 w-full">
+      <div className="col-span-6 w-full pl-10 lg:col-span-6 lg:pl-20 2xl:col-span-5">
         {message && (
           <ResultsOutput
             message={message}

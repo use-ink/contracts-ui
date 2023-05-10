@@ -39,7 +39,7 @@ a:focus {
   @apply leading-relaxed;
 }
 .markdown code {
-  @apply dark:bg-elevation-2 bg-gray-200 text-xs rounded-sm;
+  @apply rounded-sm bg-gray-200 text-xs dark:bg-elevation-2;
   padding: 2px 4px;
 }
 .markdown :last-child {
@@ -61,11 +61,11 @@ a:focus {
 }
 
 .page-error {
-  @apply w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2 flex justify-center items-center;
+  @apply m-2 flex w-full items-center justify-center overflow-y-auto overflow-x-hidden px-5 py-3;
 }
 
 .page-error > div {
-  @apply py-8 px-12 text-center max-w-lg border dark:border-gray-700 text-gray-500 grid place-content-center justify-items-center rounded-md;
+  @apply grid max-w-lg place-content-center justify-items-center rounded-md border py-8 px-12 text-center text-gray-500 dark:border-gray-700;
 }
 
 .page-error > div > div {

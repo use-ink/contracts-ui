@@ -24,7 +24,7 @@ export function Spinner({
         `border-${strokeWidth}`,
         `border-${color}`,
         `dark:border-${darkColor}`,
-        'border-solid rounded-full animate-spin',
+        'animate-spin rounded-full border-solid',
         className
       )}
       data-cy="spinner"

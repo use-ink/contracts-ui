@@ -70,19 +70,19 @@ export function AddressLookup() {
       >
         {' '}
         <Input
-          className={classes('relative flex items-center mb-4')}
+          className={classes('relative mb-4 flex items-center')}
           onChange={setSearchString}
           placeholder="Paste an on-chain contract address"
           value={searchString}
         >
           {address ? (
-            <div className="flex items-center absolute right-2  text-green-500">
-              <span className="text-xs w-22 mr-1">on-chain</span>
-              <CheckCircleIcon aria-hidden="true" className="w-4 h-4" />
+            <div className="absolute right-2 flex items-center  text-green-500">
+              <span className="w-22 mr-1 text-xs">on-chain</span>
+              <CheckCircleIcon aria-hidden="true" className="h-4 w-4" />
             </div>
           ) : (
             searchString && (
-              <XCircleIcon aria-hidden="true" className="w-5 h-5 text-red-500 -ml-8" />
+              <XCircleIcon aria-hidden="true" className="-ml-8 h-5 w-5 text-red-500" />
             )
           )}
         </Input>

@@ -8,10 +8,10 @@ import { Button } from 'ui/components';
 export function NotFound() {
   const navigate = useNavigate();
   return (
-    <div className="w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2 flex justify-center items-center">
-      <div className=" w-7/12 h-60 border dark:border-gray-700 grid place-content-center">
-        <EmojiSadIcon className="w-10 h-10 text-green-400 mb-1 justify-self-center" />
-        <p className="text-sm text-gray-300 mb-6">This page does not exist.</p>
+    <div className="m-2 flex w-full items-center justify-center overflow-y-auto overflow-x-hidden px-5 py-3">
+      <div className=" grid h-60 w-7/12 place-content-center border dark:border-gray-700">
+        <EmojiSadIcon className="mb-1 h-10 w-10 justify-self-center text-green-400" />
+        <p className="mb-6 text-sm text-gray-300">This page does not exist.</p>
         <Button className="justify-self-center" onClick={() => navigate('/')} variant="primary">
           Go Home
         </Button>

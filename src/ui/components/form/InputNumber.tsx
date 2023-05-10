@@ -19,7 +19,7 @@ export function InputNumber({
       <input
         className={classes(
           className,
-          'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
+          'w-full rounded border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
           disabled && 'dark:text-gray-500'
         )}
         disabled={disabled}

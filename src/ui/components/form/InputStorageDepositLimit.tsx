@@ -47,7 +47,7 @@ export function InputStorageDepositLimit({
           withUnits={isActive}
           {...getValidation(props)}
         />
-        <div className="flex justify-end items-center w-11">
+        <div className="flex w-11 items-center justify-end">
           <Switch onChange={toggleIsActive} value={isActive} />
         </div>
       </div>
