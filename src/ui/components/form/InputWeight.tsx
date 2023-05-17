@@ -21,8 +21,10 @@ export function InputWeight({
   return (
     <>
       <InputNumber
-        value={text}
+        className="disabled:opacity-60"
+        data-cy="refTime-input"
         disabled={mode === 'estimation'}
+        min="0"
         onChange={e => {
           if (mode === 'custom') {
             const bn = new BN(e.target.value);
@@ -40,21 +42,19 @@ export function InputWeight({
           }
         }}
         placeholder="MGas"
-        data-cy="refTime-input"
-        min="0"
-        className="disabled:opacity-60"
+        value={text}
       />
       <Meter
         accessory={
           mode === 'custom' ? (
             <a
+              className="text-green-500"
+              data-cy={`use-estimated-${name}`}
               href="#"
               onClick={e => {
                 e.preventDefault();
                 setMode('estimation');
               }}
-              data-cy={`use-estimated-${name}`}
-              className="text-green-500"
             >
               <span> {`Use Estimation`}</span>
             </a>
@@ -63,13 +63,13 @@ export function InputWeight({
               <span> {`Using Estimation`}</span>
               &nbsp;{' · '}&nbsp;
               <a
+                className="text-green-500"
+                data-cy="use-custom-refTime"
                 href="#"
                 onClick={e => {
                   e.preventDefault();
                   setMode('custom');
                 }}
-                className="text-green-500"
-                data-cy="use-custom-refTime"
               >
                 Use Custom
               </a>

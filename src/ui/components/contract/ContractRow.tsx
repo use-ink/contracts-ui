@@ -26,10 +26,10 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
 
   return (
     <Link
+      className={`inline-flex w-full cursor-pointer items-center border border-t-0 border-r-0 border-l-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
       to={`/contract/${address}`}
-      className={`text-sm inline-flex items-center cursor-pointer w-full hover:bg-gray-50 dark:hover:bg-elevation-1 border p-3 border-t-0 border-r-0 border-l-0 last:border-b-0 dark:text-white dark:border-gray-700 border-gray-200`}
     >
-      <Identicon size={18} value={address} className="pr-2" />
+      <Identicon className="pr-2" size={18} value={address} />
       <div className="w-36">{name}</div>
 
       {isOnChain ? (
@@ -37,7 +37,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
           {address.slice(0, 4)}...{address.slice(-4)}
         </div>
       ) : (
-        <div className="text-gray-500 dark:text-gray-400 text-xs flex-grow mr-3">not on-chain</div>
+        <div className="mr-3 flex-grow text-xs text-gray-500 dark:text-gray-400">not on-chain</div>
       )}
       <div className="w-14 text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
     </Link>

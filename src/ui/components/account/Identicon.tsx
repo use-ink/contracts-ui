@@ -38,11 +38,11 @@ function IdenticonBase({
     return (
       <>
         <Button
+          data-cy="identicon"
           data-tip
           data-tooltip-id={tooltipId}
           onClick={onClick}
           variant="plain"
-          data-cy="identicon"
         >
           <svg
             className={classes('cursor-copy', className)}
@@ -56,7 +56,7 @@ function IdenticonBase({
             {polkadotIcon(value || '', { isAlternative }).map(renderCircle)}
           </svg>
         </Button>
-        <Tooltip openOnClick id={tooltipId}>
+        <Tooltip id={tooltipId} openOnClick>
           Copied to clipboard
         </Tooltip>
       </>

@@ -10,9 +10,9 @@ export function AccountsError() {
       <p className="mb-3">
         1. Follow{' '}
         <a
+          href="https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
           rel="noopener noreferrer"
           target="_blank"
-          href="https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
         >
           this guide
         </a>{' '}
@@ -20,7 +20,7 @@ export function AccountsError() {
       </p>
       <p className="mb-3">
         2. Drip some funds into your account via the faucets of our supported networks. You can find
-        a faucets list {' '}
+        a faucets list{' '}
         <a href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md">here</a>.
       </p>
     </Error>
@@ -31,7 +31,7 @@ export function ExtensionError() {
   return (
     <Error>
       <div>No signer extension found.</div>
-      <div className="text-center flex flex-col items-center">
+      <div className="flex flex-col items-center text-center">
         <b>New to Substrate?</b>
         <p className="mb-3">
           Install the a compatible wallet like{' '}

@@ -37,19 +37,19 @@ export function ArgumentForm({ args, argValues, registry, setArgValues, classNam
             label={
               <ArgSignature
                 arg={arg}
-                className="dark:text-gray-300 text-gray-600"
+                className="text-gray-600 dark:text-gray-300"
                 registry={registry}
               />
             }
           >
             <Component
-              className="w-full dark:bg-gray-900 dark:text-gray-300 text-gray-600 bg-white dark:border-gray-700 border-gray-200 rounded"
+              className="w-full rounded border-gray-200 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
               id={arg.name}
-              value={argValues[arg.name]}
               nestingNumber={0}
               onChange={onChange}
               registry={registry}
               typeDef={arg.type}
+              value={argValues[arg.name]}
             />
           </FormField>
         );

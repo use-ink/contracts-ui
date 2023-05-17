@@ -24,17 +24,17 @@ export function Account({ className, name: propsName, size = 42, value }: Props)
 
   return (
     <div className={classes('inline-flex items-center', className)}>
-      <Identicon size={size} value={value} className="pr-2" />
-      <div className="flex-1 block truncate">
+      <Identicon className="pr-2" size={size} value={value} />
+      <div className="block flex-1 truncate">
         {name && (
           <span
-            className="flex font-semibold text-base dark:text-gray-300 text-gray-700"
+            className="flex text-base font-semibold text-gray-700 dark:text-gray-300"
             data-cy="account-name"
           >
             {name}
           </span>
         )}
-        <p data-cy="account-address" className="text-gray-500 text-xs">
+        <p className="text-xs text-gray-500" data-cy="account-address">
           {truncate(value, 4)}
         </p>
       </div>

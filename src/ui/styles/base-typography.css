@@ -1,0 +1,11 @@
+@tailwind base;
+
+@layer base {
+  h1 {
+    @apply text-2.5xl font-semibold text-gray-700 dark:text-white;
+  }
+
+  h2 {
+    @apply text-lg font-semibold text-gray-700 dark:text-white;
+  }
+}

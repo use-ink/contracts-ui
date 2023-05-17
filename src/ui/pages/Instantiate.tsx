@@ -9,20 +9,20 @@ export function Instantiate() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   return (
-    <div className="w-full overflow-y-auto overflow-x-hidden px-5 py-3 m-2">
-      <div className="grid md:grid-cols-12 gap-5">
-        <div className="md:col-span-9 p-4">
-          <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
-            <h1 className="text-2.5xl font-semibold dark:text-white text-gray-700">
+    <div className="m-2 w-full overflow-y-auto overflow-x-hidden px-5 py-3">
+      <div className="grid gap-5 md:grid-cols-12">
+        <div className="p-4 md:col-span-9">
+          <div className="space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
+            <h1>
               {codeHashUrlParam
                 ? 'Instantiate Contract from Code Hash'
                 : 'Upload and Instantiate Contract'}
             </h1>
-            <p className="dark:text-gray-400 text-gray-500 text-sm">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {codeHashUrlParam ? (
                 <>
                   You can upload and instantiate new contract code{' '}
-                  <Link to="/instantiate" className="text-blue-500">
+                  <Link className="text-blue-500" to="/instantiate">
                     here
                   </Link>
                   .
@@ -30,7 +30,7 @@ export function Instantiate() {
               ) : (
                 <>
                   You can instantiate a new contract from an existing code bundle{' '}
-                  <Link to="/hash-lookup" className="text-blue-500">
+                  <Link className="text-blue-500" to="/hash-lookup">
                     here
                   </Link>
                   .

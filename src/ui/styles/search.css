@@ -1,5 +1,5 @@
 .search-results {
-  @apply absolute mt-2 dark:bg-gray-800 w-80 max-w-xs rounded flex flex-col shadow;
+  @apply absolute mt-2 flex w-80 max-w-xs flex-col rounded shadow dark:bg-gray-800;
 }
 
 .search-results > * {
@@ -7,11 +7,11 @@
 }
 
 .search-results .header {
-  @apply dark:text-gray-500 text-xs;
+  @apply text-xs dark:text-gray-500;
 }
 
 .search-results .item {
-  @apply flex items-center cursor-pointer text-sm dark:hover:bg-purple-500;
+  @apply flex cursor-pointer items-center text-sm dark:hover:bg-purple-500;
 }
 
 .search-results .item > * {
@@ -19,9 +19,9 @@
 }
 
 .search-results .item svg {
-  @apply dark:text-gray-500 w-5 h-5;
+  @apply h-5 w-5 dark:text-gray-500;
 }
 
 .search-results .item .identifier {
-  @apply text-gray-500 overflow-hidden overflow-ellipsis;
+  @apply overflow-hidden overflow-ellipsis text-gray-500;
 }

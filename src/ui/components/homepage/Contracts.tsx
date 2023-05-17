@@ -21,10 +21,10 @@ export function Contracts(): React.ReactElement | null {
 
   if (contracts.length === 0) {
     return (
-      <div className="flex flex-col items-center space-y-2 text-sm border dark:text-gray-500 dark:border-gray-700  rounded py-7 px-5">
-        <FolderOpenIcon className="w-8 h-8" />
+      <div className="flex flex-col items-center space-y-2 rounded border py-7 px-5  text-sm dark:border-gray-700 dark:text-gray-500">
+        <FolderOpenIcon className="h-8 w-8" />
         <div>You haven&apos;t uploaded any contracts yet on this browser.</div>
-        <Link to={`/instantiate`} className="text-green-500">
+        <Link className="text-green-500" to={`/instantiate`}>
           Upload a new contract
         </Link>
       </div>
@@ -33,21 +33,21 @@ export function Contracts(): React.ReactElement | null {
 
   return (
     <>
-      <ForgetAllContractsModal isOpen={isOpen} setIsOpen={setIsOpen} confirm={forgetAllContracts} />
+      <ForgetAllContractsModal confirm={forgetAllContracts} isOpen={isOpen} setIsOpen={setIsOpen} />
       <div>
-        <div className="border border-collapse overflow-hidden dark:border-gray-700 border-gray-200 rounded w-auto">
+        <div className="w-auto border-collapse overflow-hidden rounded border border-gray-200 dark:border-gray-700">
           {contracts?.map(contract => {
             return <ContractRow contract={contract} key={`contract-${contract.address}`} />;
           })}
         </div>
-        <div className="grid pt-4 justify-items-end">
+        <div className="grid justify-items-end pt-4">
           <button
-            title="Forget All Contracts"
-            className="flex font-semibold items-center dark:text-gray-300 dark:bg-elevation-1 dark:hover:bg-elevation-2 dark:border-gray-700 text-gray-600 hover:text-gray-400 border h-full p-3 rounded"
+            className="flex h-full items-center rounded border p-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
             onClick={() => setIsOpen(true)}
+            title="Forget All Contracts"
           >
             <p className="mr-2 text-xs">Forget All Contracts</p>
-            <TrashIcon className="w-4 dark:text-gray-500 mr-1 justify-self-end" />
+            <TrashIcon className="mr-1 w-4 justify-self-end dark:text-gray-500" />
           </button>
         </div>
       </div>
