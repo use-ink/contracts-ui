@@ -16,6 +16,7 @@ interface EnvironmentValue<T extends string> {
 }
 
 const isEnvironmentValue = (value: unknown): value is EnvironmentValue<string> => {
+  if (typeof value !== 'object') return false;
   if ('displayName' in (value as object)) {
     return true;
   }
@@ -36,7 +37,10 @@ export function Environment({ metadata, className = '', ...restOfProps }: Props)
   const { api } = useApi();
 
   const environment = useMemo(() => {
-    if (!metadata.json['spec'] || !(metadata.json['spec'] as Record<string, string>)['environment'])
+    if (
+      !metadata.json['spec'] ||
+      !(metadata.json['spec'] as Record<string, unknown>)['environment']
+    )
       return undefined;
     return (metadata.json['spec'] as Record<string, unknown>)['environment'] as ContractEnvironment;
   }, [metadata]);
@@ -46,17 +50,24 @@ export function Environment({ metadata, className = '', ...restOfProps }: Props)
 
     Object.entries(environment).forEach(([key, value]) => {
       if (isEnvironmentValue(value)) {
-        const abiType = metadata.registry.createType(value.displayName[0]);
-        const chainType = api.createType(value.displayName[0]);
-        console.log({
-          abiType: abiType.toRawType(),
-          chainType: chainType.toRawType(),
-        });
+        try {
+          const abiTypeCreateType = metadata.registry.createType(value.displayName[0]);
+          const abiType = metadata.registry.lookup.getTypeDef(value.type).type;
+          const chainType = api.registry.createType(value.displayName[0]);
+          metadata.json;
+          console.log({
+            displayName: value.displayName[0],
+            abiType: abiType,
+            abiTypeCreateType: abiTypeCreateType.toRawType(),
+            chainType: chainType.toRawType(),
+            primitive: chainType.toPrimitive(),
+          });
+        } catch (exception) {
+          console.log(`Unable to create type ${value.displayName[0]}`);
+        }
       }
     });
   }, [api, environment]);
-
-  console.log({ environment });
 
   return (
     <div
