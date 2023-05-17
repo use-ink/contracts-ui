@@ -78,24 +78,24 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
           <a
             className="group flex w-full items-center justify-between"
             href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             <div className="flex py-4">
               <div className="relative mr-2 w-5" style={{ position: 'relative', top: 1 }}>
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="rgb(154 159 169)"
-                  viewBox="0 0 24 24"
                   className="rotate-180 "
-                  stroke="none"
-                  width={20}
+                  fill="rgb(154 159 169)"
                   height={20}
+                  stroke="none"
+                  viewBox="0 0 24 24"
+                  width={20}
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                   />
                 </svg>
               </div>

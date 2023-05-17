@@ -35,7 +35,7 @@ export function ExtensionError() {
         <b>New to Substrate?</b>
         <p className="mb-3">
           Install the a compatible wallet like{' '}
-          <a rel="noopener noreferrer" target="_blank" href="https://polkadot.js.org/extension/">
+          <a href="https://polkadot.js.org/extension/" rel="noopener noreferrer" target="_blank">
             Polkadot.js Extension
           </a>{' '}
           to create and manage Substrate accounts.
