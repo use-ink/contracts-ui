@@ -2,6 +2,8 @@
 
 Rococo:
 
+- https://paritytech.github.io/polkadot-testnet-faucet/
+
 - https://github.com/paritytech/cumulus/blob/master/parachains/runtimes/contracts/contracts-rococo/README.md#rococo-deployment
 
 - https://app.element.io/#/room/#rococo-faucet:matrix.org
