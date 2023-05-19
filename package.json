@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
+    "@cypress/snapshot": "^2.1.7",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@nabla/vite-plugin-eslint": "^1.5.0",
