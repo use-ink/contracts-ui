@@ -27,6 +27,7 @@ export const useMetadataField = (): UseMetadataField => {
   );
   const metadata = useMetadata(codeBundle?.abi, {
     isWasmRequired: !codeHashUrlParam && window.location.pathname.includes('instantiate'),
+    revertOnFileRemove: true,
     onChange: setFile,
   });
 
