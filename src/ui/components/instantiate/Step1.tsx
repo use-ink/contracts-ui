@@ -143,21 +143,23 @@ export function Step1() {
               />
             ))}
 
-            <FormField
-              help="Change the metadata associated with this contract."
-              id="metadata"
-              label="Update Metadata"
-              {...getValidation(metadataValidation)}
-              className="mt-1.5"
-            >
-              <InputFile
-                isError={metadataValidation.isError}
-                onChange={onChange}
-                onRemove={onRemove}
-                placeholder="Click to select or drag and drop to upload file."
-                value={file}
-              />
-            </FormField>
+            {codeHashUrlParam && (
+              <FormField
+                help="Change the metadata associated with this contract."
+                id="metadata"
+                label="Update Metadata"
+                {...getValidation(metadataValidation)}
+                className="mt-1.5"
+              >
+                <InputFile
+                  isError={metadataValidation.isError}
+                  onChange={onChange}
+                  onRemove={onRemove}
+                  placeholder="Click to select or drag and drop to upload file."
+                  value={file}
+                />
+              </FormField>
+            )}
           </div>
         </>
       )}
