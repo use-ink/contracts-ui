@@ -42,34 +42,34 @@ export function Vector({
   return (
     <div>
       <div className={'flex justify-start'}>
-        <label className="arg-label flex-1 font-bold dark:text-white text-gray-600">
+        <label className="arg-label flex-1 font-bold text-gray-600 dark:text-white">
           {`Vec<${encodeTypeDef(registry, subType)}>`}
         </label>
         <Buttons>
           <Button
             className="px-2 dark:text-white"
+            data-cy={`vector-add-${nestingNumber}`}
             onClick={onAddRow}
             variant="default"
-            data-cy={`vector-add-${nestingNumber}`}
           >
-            <PlusIcon className="dark:text-white h-3 w-3" />
+            <PlusIcon className="h-3 w-3 dark:text-white" />
           </Button>
           <Button
             className="px-2 dark:text-white"
+            data-cy={`vector-remove-${nestingNumber}`}
             onClick={onRemoveRow}
             variant="default"
-            data-cy={`vector-remove-${nestingNumber}`}
           >
-            <MinusIcon className="dark:text-white h-3 w-3" />
+            <MinusIcon className="h-3 w-3 dark:text-white" />
           </Button>
         </Buttons>
       </div>
       {(value || []).map((element, index) => {
         return (
           <FormField
+            className={`vector-field-${nestingNumber}`}
             key={`Vector-${index}`}
             label={`${index}`}
-            className={`vector-field-${nestingNumber}`}
           >
             <Component
               nestingNumber={nestingNumber + 1}

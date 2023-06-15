@@ -15,19 +15,19 @@ export function OutcomeItem({
   id?: string;
 }): JSX.Element {
   return (
-    <div className="mb-4 event-log">
+    <div className="event-log mb-4">
       <div className="mb-1 leading-5">{title}</div>
       <div
-        className="dark:bg-elevation-1 bg-gray-200 p-2 rounded-sm text-xs return-value dark:text-gray-400 text-gray-600  break-all relative"
+        className="return-value relative break-all rounded-sm bg-gray-200 p-2 text-xs text-gray-600  dark:bg-elevation-1 dark:text-gray-400"
         data-cy="output"
       >
         <pre className="whitespace-pre-wrap">
           <code>{displayValue}</code>
         </pre>
         <CopyButton
-          className="absolute right-2 bottom-2"
-          value={copyValue}
+          className="absolute bottom-2 right-2"
           id={title ? title.toLowerCase().replace(/\s+/g, '-') : id ?? ''}
+          value={copyValue}
         />
       </div>
     </div>

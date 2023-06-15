@@ -40,7 +40,7 @@ export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.R
   return (
     <>
       {status === 'loading' || !db || !isKeyringLoaded() ? (
-        <Loader message={message} isLoading />
+        <Loader isLoading message={message} />
       ) : (
         children
       )}

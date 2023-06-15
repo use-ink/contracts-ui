@@ -17,19 +17,17 @@ export function PageFull({
 }: PageProps): React.ReactElement<PageProps> {
   return (
     <>
-      <div className="w-full mx-auto overflow-y-auto">
-        <div className="grid md:grid-cols-12 h-full gap-5 px-5 py-3 m-2">
-          <main className="md:col-span-12 p-4">
-            <div className="space-y-1 border-b pb-6 dark:border-gray-800 border-gray-200">
+      <div className="mx-auto w-full overflow-y-auto">
+        <div className="m-2 grid h-full gap-5 px-5 py-3 md:grid-cols-12">
+          <main className="p-4 md:col-span-12">
+            <div className="space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
               {accessory && <div className="float-right">{accessory}</div>}
-              <h1 className="text-2xl font-semibold dark:text-white text-gray-700 capitalize">
-                {header}
-              </h1>
-              <div className="dark:text-gray-400 text-gray-500 text-sm">{help}</div>
+              <h1 className="capitalize">{header}</h1>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{help}</div>
             </div>
-            <div className="flex flex-col py-4 h-full">
+            <div className="flex h-full flex-col py-4">
               <div className="-my-2 h-full overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full h-full sm:px-6 lg:px-8">
+                <div className="inline-block h-full min-w-full py-2 align-middle sm:px-6 lg:px-8">
                   <div className="mt-4">{children}</div>
                 </div>
               </div>

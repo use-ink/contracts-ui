@@ -1,12 +1,6 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-// temporarily disabled until polkadot-js types `ContractCallOutcome` and `ContractExecResult` transition to WeightV2
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
@@ -35,7 +29,7 @@ export function DryRunResult({
     result.isErr && result.asErr.isModule
       ? api.registry.findMetaError(result.asErr.asModule)
       : undefined;
-  // @ts-ignore
+
   const shouldDisplayRequired = !gasConsumed.refTime.toBn().eq(gasRequired.refTime.toBn());
   const prediction = result.isErr
     ? 'Contract Reverted!'
@@ -47,8 +41,8 @@ export function DryRunResult({
 
   return (
     <div
+      className="flex flex-col"
       data-cy={`dryRun-${message.method}`}
-      className="flex-col flex"
       key={`dryRun-${message.method}`}
     >
       <>
@@ -56,7 +50,7 @@ export function DryRunResult({
           <div
             className={classes(
               result.isErr || isError ? 'text-red-500' : 'text-green-500',
-              'font-mono mb-2 text-sm'
+              'mb-2 font-mono text-sm'
             )}
           >
             {prediction}
@@ -66,16 +60,16 @@ export function DryRunResult({
 
         {!debugMessage.isEmpty && (
           <OutcomeItem
-            title="Debug message"
             displayValue={debugMessage.toHuman()}
             key={`debug-${message.method}`}
+            title="Debug message"
           />
         )}
         {!dispatchError && (
           <OutcomeItem
-            title={isDispatchable ? 'Execution result' : 'Return value'}
             displayValue={decodedOutput}
             key={`err-${message.method}`}
+            title={isDispatchable ? 'Execution result' : 'Return value'}
           />
         )}
         {isDispatchable && (
@@ -84,20 +78,18 @@ export function DryRunResult({
             <div className="flex">
               <div className="basis-1/2 pr-2">
                 <OutcomeItem
-                  title=""
-                  // @ts-ignore
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
-                  key={`gcr-${message.method}`}
                   id={`gcr-${message.method}`}
+                  key={`gcr-${message.method}`}
+                  title=""
                 />
               </div>
               <div className="basis-1/2 pl-2">
                 <OutcomeItem
-                  title=""
-                  // @ts-ignore
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
-                  key={`gcp-${message.method}`}
                   id={`gcp-${message.method}`}
+                  key={`gcp-${message.method}`}
+                  title=""
                 />
               </div>
             </div>
@@ -108,30 +100,28 @@ export function DryRunResult({
                 <div className="flex">
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
-                      title=""
-                      // @ts-ignore
                       displayValue={`refTime: ${gasRequired.refTime.toString()}`}
-                      key={`grr-${message.method}`}
                       id={`grr-${message.method}`}
+                      key={`grr-${message.method}`}
+                      title=""
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
-                      title=""
-                      // @ts-ignore
                       displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
-                      key={`grp-${message.method}`}
                       id={`grp-${message.method}`}
+                      key={`grp-${message.method}`}
+                      title=""
                     />
                   </div>
                 </div>
               </>
             )}
             <OutcomeItem
-              title="StorageDeposit"
-              displayValue={`${storageDepositType}: ${storageDepositValue?.toHuman() ?? 'none'}`}
               copyValue={storageDepositValue?.toString() ?? ''}
+              displayValue={`${storageDepositType}: ${storageDepositValue?.toHuman() ?? 'none'}`}
               key={`sd-${message.method}`}
+              title="StorageDeposit"
             />
           </div>
         )}

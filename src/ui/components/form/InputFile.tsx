@@ -68,22 +68,22 @@ export function InputFile({
 
   return file ? (
     <div className={`${className} flex`} data-cy="upload-confirmation">
-      <div className="p-6 border dark:bg-elevation-1 dark:border-gray-700 border-gray-300 inline-flex items-center rounded shadow">
+      <div className="inline-flex items-center rounded border border-gray-300 p-6 shadow dark:border-gray-700 dark:bg-elevation-1">
         <DocumentTextIcon
-          className="w-7 h-7 mr-2 text-gray-500 justify-self-start"
           aria-hidden="true"
+          className="mr-2 h-7 w-7 justify-self-start text-gray-500"
         />
-        <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
+        <span className="min-w-600 mr-20 justify-self-start text-xs text-gray-500 dark:text-gray-300">
           {file.name} ({(file.size / 1000).toFixed(2)}kb)
         </span>
         {errorMessage && isError && (
-          <span className="dark:text-gray-300 text-gray-500 text-xs min-w-600 justify-self-start mr-20">
+          <span className="min-w-600 mr-20 justify-self-start text-xs text-gray-500 dark:text-gray-300">
             {errorMessage}
           </span>
         )}
         <XIcon
-          className="w-5 h-5 mr-2 text-gray-500 justify-self-end cursor-pointer"
           aria-hidden="true"
+          className="mr-2 h-5 w-5 cursor-pointer justify-self-end text-gray-500"
           onClick={removeHandler}
         />
       </div>
@@ -94,24 +94,24 @@ export function InputFile({
         return (
           <div className={className} {...getRootProps()}>
             <label
-              className="dark:text-gray-700 text-gray-400 font-normal py-2 px-4 border dark:border-gray-700 border-gray-200 rounded flex flex-col h-36 items-center cursor-pointer justify-center"
+              className="flex h-36 cursor-pointer flex-col items-center justify-center rounded border border-gray-200 px-4 py-2 font-normal text-gray-400 dark:border-gray-700 dark:text-gray-700"
               htmlFor="file"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 mb-2 dark:text-gray-500"
+                className="mb-2 h-8 dark:text-gray-500"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                 />
               </svg>
-              <span className="text-sm dark:text-gray-500 text-gray-400">{placeholder}</span>
+              <span className="text-sm text-gray-400 dark:text-gray-500">{placeholder}</span>
             </label>
             <input {...getInputProps()} data-cy="file-input" />
           </div>

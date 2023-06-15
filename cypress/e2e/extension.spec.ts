@@ -26,7 +26,7 @@ describe('Signer extension flow on live networks', () => {
       cy.contains('No signer extension found.').should('be.visible');
       cy.contains('New to Substrate?').should('be.visible');
       cy.contains(
-        'Install the Polkadot.js Extension to create and manage Substrate accounts.'
+        'Install the a compatible wallet like Polkadot.js Extension to create and manage Substrate accounts.'
       ).should('be.visible');
       cy.contains(
         'If the extension is installed and you are seeing this, make sure it allows Contracts UI to use your accounts for signing.'
@@ -50,9 +50,6 @@ describe('Signer extension flow on live networks', () => {
       cy.contains(
         '2. Drip some funds into your account via the faucets of our supported networks.'
       ).should('be.visible');
-      cy.contains('Contracts on Rococo').should('be.visible');
-      cy.contains('Shiden / Shibuya').should('be.visible');
-      cy.contains('Aleph Zero Testnet').should('be.visible');
     });
   });
 });

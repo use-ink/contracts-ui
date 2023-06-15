@@ -29,14 +29,14 @@ function Select({
   return (
     <Dropdown
       className={classes('account-select', className)}
-      isDisabled={isDisabled}
       formatOptionLabel={Option}
+      isDisabled={isDisabled}
+      isSearchable
       onChange={onChange}
+      onCreate={onCreate}
       options={options}
       placeholder={placeholder}
-      isSearchable
       value={value}
-      onCreate={onCreate}
     />
   );
 }
@@ -82,9 +82,9 @@ export function AddressSelect({ placeholder = 'Select account', onChange, ...pro
 
   return (
     <Select
+      onChange={onChange}
       options={options}
       placeholder={placeholder}
-      onChange={onChange}
       {...props}
       onCreate={handleCreate}
     />
