@@ -8,11 +8,11 @@ import { Input, InputFile, Form, FormField, useMetadataField, getValidation } fr
 import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
 import { MessageDocs } from '../message';
+import { Metadata } from '../metadata';
 import { CodeHash } from './CodeHash';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
-import { Metadata } from '../metadata';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
