@@ -1,19 +1,19 @@
 .btn {
-  @apply flex py-2 px-4 rounded items-center justify-center font-semibold text-xs disabled:opacity-60 disabled:cursor-not-allowed;
+  @apply flex items-center justify-center rounded px-4 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 .btn.plain {
-  @apply rounded-none py-0 px-0;
+  @apply rounded-none px-0 py-0;
 }
 
 .btn.default:not(:disabled) {
-  @apply border text-gray-600 bg-gray-100 hover:bg-gray-200 border-gray-200 dark:text-gray-300 dark:bg-elevation-3 dark:border-gray-700 dark:hover:bg-elevation-1;
+  @apply border border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-200 dark:border-gray-700 dark:bg-elevation-3 dark:text-gray-300 dark:hover:bg-elevation-1;
 }
 
 .btn.primary {
-  @apply bg-green-500 text-gray-100 border border-green-500;
+  @apply border border-green-500 bg-green-500 text-gray-100;
 }
 
 .btn.primary:hover:not(:disabled) {
-  @apply bg-green-450 border border-green-450;
+  @apply border border-green-450 bg-green-450;
 }

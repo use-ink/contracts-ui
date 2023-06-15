@@ -11,7 +11,7 @@ export function Transactions({
   txs,
 }: React.HTMLAttributes<HTMLDivElement> & TransactionsState) {
   return (
-    <div className={classes('z-10 fixed right-3 top-3 w-80')}>
+    <div className={classes('fixed right-3 top-3 z-10 w-80')}>
       {Object.entries(txs).map(([id, tx]: [string, QueuedTxOptions | undefined]) => {
         const { status, events, extrinsic } = tx || {};
         const isComplete = status === 'error' || status === 'success';
@@ -19,40 +19,40 @@ export function Transactions({
         return (
           <div key={`notification-${id}`}>
             <div
+              className="flex max-w-full items-center bg-gray-200 p-3 text-gray-600 dark:bg-elevation-2 dark:text-white"
               data-cy="transaction-queued"
               key={id}
-              className="max-w-full dark:bg-elevation-2 dark:text-white bg-gray-200 text-gray-600 p-3 flex items-center"
             >
               <NotificationIcon status={status} />
-              <div className="pl-2 flex-grow text-sm">
+              <div className="flex-grow pl-2 text-sm">
                 <div>{extrinsic?.registry.findMetaCall(extrinsic.callIndex).method}</div>
                 <div className="text-gray-400">{status}</div>
               </div>
               {isComplete && (
                 <XIcon
-                  className="text-gray-400 w-4 h-4"
-                  onClick={() => dismiss(parseInt(id))}
+                  className="h-4 w-4 text-gray-400"
                   data-cy="dismiss-notification"
+                  onClick={() => dismiss(parseInt(id))}
                 />
               )}
             </div>
             {isComplete && events && !isEmptyObj(events) && (
               <div
-                className="max-w-full dark:bg-elevation-2 dark:text-white bg-gray-200 text-gray-600 p-3 mt-2 flex items-center"
+                className="mt-2 flex max-w-full items-center bg-gray-200 p-3 text-gray-600 dark:bg-elevation-2 dark:text-white"
                 data-cy="transaction-complete"
               >
-                <BellIcon className="text-yellow-400 w-12 h-12" />
-                <div className="pl-2 flex-grow text-sm">
+                <BellIcon className="h-12 w-12 text-yellow-400" />
+                <div className="flex-grow pl-2 text-sm">
                   {Object.keys(events).map(eventName => {
                     const times = events[eventName] > 1 ? ` (x${events[eventName]})` : '';
                     return (
-                      <div key={eventName} className="dark:text-gray-400">
+                      <div className="dark:text-gray-400" key={eventName}>
                         {`${eventName}${times}`}
                       </div>
                     );
                   })}
                 </div>
-                <XIcon className="text-gray-400 w-4 h-4" onClick={() => dismiss(parseInt(id))} />
+                <XIcon className="h-4 w-4 text-gray-400" onClick={() => dismiss(parseInt(id))} />
               </div>
             )}
           </div>

@@ -10,7 +10,7 @@ export function Error({ children, className }: Props) {
   return (
     <div className={classes('page-error', className)} data-cy="error-card">
       <div>
-        <ExclamationCircleIcon className="w-10 h-10 text-red-400 mb-1" />
+        <ExclamationCircleIcon className="mb-1 h-10 w-10 text-red-400" />
         {children}
       </div>
     </div>

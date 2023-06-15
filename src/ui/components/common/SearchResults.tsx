@@ -22,7 +22,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 function SearchResultItem({ icon: Icon, name, identifier, onClick }: ItemProps) {
   return (
-    <div className="group item" onClick={onClick}>
+    <div className="item group" onClick={onClick}>
       <div>
         <Icon className="dark:group-hover:text-white" />
       </div>
@@ -54,10 +54,10 @@ export function SearchResults({
                   identifier={contract.address}
                   key={contract.address}
                   name={contract.name}
+                  onClick={() => onSelectContract(contract)}
                   onMouseDown={e => {
                     e.preventDefault();
                   }}
-                  onClick={() => onSelectContract(contract)}
                 />
               );
             })}
@@ -78,11 +78,11 @@ export function SearchResults({
                   identifier={codeBundle.codeHash}
                   key={`search-result-${codeBundle.codeHash}-${index}`}
                   name={codeBundle.name}
-                  onMouseDown={e => {
-                    e.preventDefault();
-                  }}
                   onClick={() => {
                     onSelectCodeBundle(codeBundle);
+                  }}
+                  onMouseDown={e => {
+                    e.preventDefault();
                   }}
                 />
               );

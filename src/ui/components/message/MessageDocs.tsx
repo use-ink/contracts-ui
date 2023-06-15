@@ -12,6 +12,7 @@ import { classes } from 'helpers';
 interface Props extends React.ComponentProps<typeof Disclosure> {
   message: AbiMessage | AbiConstructor;
   registry: Registry;
+  className?: string;
 }
 
 export const MessageDocs = ({
@@ -26,15 +27,15 @@ export const MessageDocs = ({
       {({ open }) => (
         <div className={classes('collapsible-panel', className)}>
           <Disclosure.Button
-            className="panel-title text-xs leading-normal text-left p-3 dark:bg-elevation-1 text-mono flex w-full"
+            className="panel-title text-mono flex w-full p-3 text-left text-xs leading-normal dark:bg-elevation-1"
             data-cy="message-docs"
           >
             <ChevronUpIcon
-              className={`${!open ? 'transform rotate-180' : ''} w-5 h-5 mr-1 border-gray-500`}
+              className={`${!open ? 'rotate-180 transform' : ''} mr-1 h-5 w-5 border-gray-500`}
             />
             <MessageSignature message={message} registry={registry} />
           </Disclosure.Button>
-          <Disclosure.Panel className="panel-body p-4 markdown border-t dark:border-gray-700 border-gray-200">
+          <Disclosure.Panel className="panel-body markdown border-t border-gray-200 p-4 dark:border-gray-700">
             {/* eslint-disable-next-line react/no-children-prop */}
             {docs.length ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{docs.join('\r\n')}</ReactMarkdown>

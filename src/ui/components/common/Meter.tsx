@@ -10,7 +10,7 @@ interface Props {
 export function Meter({ accessory, label, withAccessory }: Props) {
   return (
     <div className="relative pt-2">
-      <div className="text-gray-500 text-xs pb-2">
+      <div className="pb-2 text-xs text-gray-500">
         {label}
         {withAccessory && <div className="float-right">{accessory}</div>}
       </div>

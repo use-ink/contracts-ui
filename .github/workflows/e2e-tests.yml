@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome107-ff107
+      image: cypress/browsers:latest
       options: --user 1001
     needs: [contracts-node-binary]
     strategy:
@@ -44,6 +44,7 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           config-file: cypress.config.ts
+          record: true
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
@@ -53,7 +54,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.16.0-chrome107-ff107
+      image: cypress/browsers:latest
       options: --user 1001
     needs: [contracts-node-binary]
     strategy:
@@ -77,6 +78,7 @@ jobs:
           wait-on-timeout: 120
           browser: firefox
           config-file: cypress.config.ts
+          record: true
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
