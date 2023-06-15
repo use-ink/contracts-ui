@@ -67,6 +67,7 @@ export function AddressLookup() {
         isError={!!searchString && !address}
         label="Contract Address"
         message={isValidAddress(searchString) ? 'Address is not on-chain ' : 'Address is not valid'}
+        className="relative"
       >
         {' '}
         <Input

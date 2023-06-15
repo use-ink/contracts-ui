@@ -119,11 +119,11 @@ body {
   }
 
   .btn-primary {
-    @apply mr-4 mt-8 rounded bg-green-500 py-2 px-4 text-xs font-bold text-gray-100 hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply mr-4 mt-8 rounded bg-green-500 px-4 py-2 text-xs font-bold text-gray-100 hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply mt-4 rounded py-2 px-4 text-xs font-bold text-gray-100 hover:underline disabled:cursor-not-allowed disabled:opacity-50;
+    @apply mt-4 rounded px-4 py-2 text-xs font-bold text-gray-100 hover:underline disabled:cursor-not-allowed disabled:opacity-50;
   }
 }
 /* Chrome, Safari, Edge, Opera */

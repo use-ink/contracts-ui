@@ -21,7 +21,7 @@ export function Contracts(): React.ReactElement | null {
 
   if (contracts.length === 0) {
     return (
-      <div className="flex flex-col items-center space-y-2 rounded border py-7 px-5  text-sm dark:border-gray-700 dark:text-gray-500">
+      <div className="flex flex-col items-center space-y-2 rounded border px-5 py-7  text-sm dark:border-gray-700 dark:text-gray-500">
         <FolderOpenIcon className="h-8 w-8" />
         <div>You haven&apos;t uploaded any contracts yet on this browser.</div>
         <Link className="text-green-500" to={`/instantiate`}>

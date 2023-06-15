@@ -26,7 +26,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
 
   return (
     <Link
-      className={`inline-flex w-full cursor-pointer items-center border border-t-0 border-r-0 border-l-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
+      className={`inline-flex w-full cursor-pointer items-center border border-l-0 border-r-0 border-t-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
       to={`/contract/${address}`}
     >
       <Identicon className="pr-2" size={18} value={address} />

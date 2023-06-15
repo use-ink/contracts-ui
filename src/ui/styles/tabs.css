@@ -2,7 +2,7 @@
   @apply mb-6 flex border-b border-gray-200 pb-2 text-xs dark:border-gray-800 dark:text-white;
 }
 .routed-tabs .tab {
-  @apply flex items-center rounded-md border-0  border-transparent py-2 px-4 text-xs font-medium text-gray-600 dark:text-gray-300 dark:hover:text-white;
+  @apply flex items-center rounded-md border-0  border-transparent px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300 dark:hover:text-white;
 }
 .routed-tabs .tab svg {
   @apply mr-1 h-4 w-4;

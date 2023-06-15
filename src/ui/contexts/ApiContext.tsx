@@ -12,6 +12,16 @@ import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 import { NoticeBanner } from 'ui/components/common/NoticeBanner';
 
+// fixes internal pjs type mismatch `Type 'string' is not assignable to type '`0x${string}`'`
+export interface InjectedAccountWithMetaOverride {
+  address: string;
+  meta: {
+    genesisHash?: `0x{string}` | null;
+    name?: string;
+    source: string;
+  };
+}
+
 export const ApiContext = createContext<ApiState | undefined>(undefined);
 
 export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial<ApiState>>) => {
@@ -58,11 +68,12 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
     const getAccounts = async () => {
       if (status === 'connected' && chainProps) {
         !web3EnablePromise && (await web3Enable('contracts-ui'));
-        const injectedAccounts = await web3Accounts();
+        const accounts = await web3Accounts();
+
         isKeyringLoaded() ||
           keyring.loadAll(
             { isDevelopment: chainProps.systemChainType.isDevelopment },
-            injectedAccounts
+            accounts as InjectedAccountWithMetaOverride[]
           );
         setAccounts(keyring.getAccounts());
       }

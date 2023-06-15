@@ -3,7 +3,7 @@
 }
 
 .search-results > * {
-  @apply py-2 px-4;
+  @apply px-4 py-2;
 }
 
 .search-results .header {

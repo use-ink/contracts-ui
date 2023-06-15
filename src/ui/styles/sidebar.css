@@ -9,7 +9,7 @@
 }
 
 .sidebar .sidebar-inner .upper {
-  @apply flex flex-1 flex-col overflow-y-auto pt-3 pb-4;
+  @apply flex flex-1 flex-col overflow-y-auto pb-4 pt-3;
 }
 
 .sidebar .sidebar-inner .upper nav {
