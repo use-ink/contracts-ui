@@ -26,16 +26,16 @@ export function CustomEndpoint() {
   }, [value, setCustomEndpoint, navigate]);
 
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className="flex w-full flex-col gap-2">
       <div className="flex flex-col text-sm">
         <span className="font-semibold">Custom Endpoint</span>
-        <span className="dark:text-gray-400 text-gray-500">
+        <span className="text-gray-500 dark:text-gray-400">
           Use a custom endpoint for the local nodes
         </span>
       </div>
 
       <div className="flex flex-row items-center justify-between">
-        <Input onChange={setValue} value={value} className="w-full" />
+        <Input className="w-full" onChange={setValue} value={value} />
         <Button isDisabled={!isValidWsUrl(value)} onClick={onApply}>
           Apply
         </Button>

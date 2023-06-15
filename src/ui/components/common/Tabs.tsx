@@ -20,17 +20,17 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 export function Tabs({ children, index, setIndex, tabs }: Props) {
   return (
     <>
-      <div className="grid grid-cols-12 w-full">
+      <div className="grid w-full grid-cols-12">
         <ul
           className="routed-tabs col-span-6 lg:col-span-7 2xl:col-span-8"
           data-cy="contract-page-tabs"
         >
           {tabs.map(({ id, label }, tabIndex) => {
             return (
-              <li key={id} className="mr-1">
+              <li className="mr-1" key={id}>
                 <button
-                  onClick={() => setIndex(tabIndex)}
                   className={classes('tab', index === tabIndex && 'active')}
+                  onClick={() => setIndex(tabIndex)}
                 >
                   {label}
                 </button>
@@ -41,7 +41,7 @@ export function Tabs({ children, index, setIndex, tabs }: Props) {
       </div>
       {children.map((child, i) => {
         return (
-          <div key={`child-${i}`} className={index !== i ? 'hidden' : 'block'}>
+          <div className={index !== i ? 'hidden' : 'block'} key={`child-${i}`}>
             {child}
           </div>
         );

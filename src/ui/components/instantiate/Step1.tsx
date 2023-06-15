@@ -75,10 +75,10 @@ export function Step1() {
           label="Account"
         >
           <AccountSelect
-            id="accountId"
             className="mb-2"
-            value={accountId}
+            id="accountId"
             onChange={setAccountId}
+            value={accountId}
           />
         </FormField>
         <FormField
@@ -89,9 +89,9 @@ export function Step1() {
         >
           <Input
             id="contractName"
+            onChange={setName}
             placeholder="Give your contract a descriptive name"
             value={name}
-            onChange={setName}
           />
         </FormField>
         {codeHashUrlParam && codeBundle && (
@@ -115,10 +115,10 @@ export function Step1() {
             {...getValidation(metadataValidation)}
           >
             <InputFile
-              placeholder="Click to select or drag and drop to upload file."
+              isError={metadataValidation.isError}
               onChange={onChange}
               onRemove={onRemove}
-              isError={metadataValidation.isError}
+              placeholder="Click to select or drag and drop to upload file."
               value={file}
             />
           </FormField>
@@ -127,11 +127,11 @@ export function Step1() {
 
       {metadata && (
         <>
-          <label className="inline-flex items-center mb-1.5 text-sm font-semibold dark:text-white text-gray-600">
+          <label className="mb-1.5 inline-flex items-center text-sm font-semibold text-gray-600 dark:text-white">
             Metadata
           </label>
 
-          <div className="grid gap-4 mb-4">
+          <div className="mb-4 grid gap-4">
             <Metadata metadata={metadata} />
 
             {metadata.constructors.concat(metadata.messages).map(message => (
@@ -148,10 +148,10 @@ export function Step1() {
 
       <Buttons>
         <Button
+          data-cy="next-btn"
           isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
           onClick={submitStep1}
           variant="primary"
-          data-cy="next-btn"
         >
           Next
         </Button>

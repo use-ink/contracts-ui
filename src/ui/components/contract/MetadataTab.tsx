@@ -29,8 +29,8 @@ export const MetadataTab = ({ id, abi }: Props) => {
   if (!abi) return null;
 
   return (
-    <div className="grid grid-cols-12 w-full">
-      <div className="col-span-6 lg:col-span-7 2xl:col-span-8 rounded-lg w-full">
+    <div className="grid w-full grid-cols-12">
+      <div className="col-span-6 w-full rounded-lg lg:col-span-7 2xl:col-span-8">
         <div className="mb-10" data-cy="contract-docs">
           {abi.constructors.concat(abi.messages).map(message => (
             <MessageDocs
@@ -51,16 +51,16 @@ export const MetadataTab = ({ id, abi }: Props) => {
           className="pb-5"
         >
           <InputFile
-            placeholder="Click to select or drag and drop to upload file."
+            className="mb-5"
+            isError={metadataValidation.isError}
             onChange={onChange}
             onRemove={onRemove}
-            isError={metadataValidation.isError}
+            placeholder="Click to select or drag and drop to upload file."
             value={file}
-            className="mb-5"
           />
         </FormField>
         <Button
-          className="flex justify-between items-center px-3 py-2 border text-gray-500 dark:text-gray-300 dark:border-gray-700 border-gray-200 rounded-md dark:bg-elevation-1 dark:enabled:hover:bg-elevation-2"
+          className="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:enabled:hover:bg-elevation-2"
           isDisabled={!isSupplied || !isValid}
           onClick={async () => {
             if (!metadata || !id) throw new Error('Unable to update metadata.');

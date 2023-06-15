@@ -29,16 +29,16 @@ const root = createRoot(container!);
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App />}>
-        <Route index element={<Homepage />} />
-        <Route path="add-contract" element={<AddContract />} />
-        <Route path="address-lookup" element={<AddressLookup />} />
-        <Route path="hash-lookup" element={<SelectCodeHash />} />
-        <Route path="instantiate" element={<Instantiate />}>
+      <Route element={<App />} path="/">
+        <Route element={<Homepage />} index />
+        <Route element={<AddContract />} path="add-contract" />
+        <Route element={<AddressLookup />} path="address-lookup" />
+        <Route element={<SelectCodeHash />} path="hash-lookup" />
+        <Route element={<Instantiate />} path="instantiate">
           <Route path=":codeHash" />
         </Route>
-        <Route path="contract/:address/" element={<Contract />} />
-        <Route path="*" element={<NotFound />} />
+        <Route element={<Contract />} path="contract/:address/" />
+        <Route element={<NotFound />} path="*" />
       </Route>
     </Routes>
   </BrowserRouter>

@@ -5,18 +5,18 @@ import { EmojiSadIcon } from '@heroicons/react/outline';
 
 export function NoticeBanner({ isVisible, endpoint }: { isVisible: boolean; endpoint: string }) {
   return isVisible ? (
-    <div className="bg-gray-200 dark:bg-gray-800 text-gray-400 fixed top-10 left-1/3 right-1/3 p-6 z-50 text-center h-2/5 w-2/5 flex flex-col justify-center items-center">
-      <EmojiSadIcon className="w-10 h-10 text-red-400 mb-1 justify-self-center" />
+    <div className="fixed left-1/3 right-1/3 top-10 z-50 flex h-2/5 w-2/5 flex-col items-center justify-center bg-gray-200 p-6 text-center text-gray-400 dark:bg-gray-800">
+      <EmojiSadIcon className="mb-1 h-10 w-10 justify-self-center text-red-400" />
 
-      <h2 className="text-red-400 text-2xl mb-3">Unsuported node version. </h2>
+      <h1 className="mb-3 text-red-400">Unsupported node version.</h1>
       <p>
-        Looks like your node does not support <span>WeigthV2</span>.
+        Looks like your node does not support <span>WeightV2</span>.
       </p>
       <p>
         Upgrade your node or{' '}
         <a
-          href={`https://weightv1--contracts-ui.netlify.app/?rpc=${endpoint}`}
           className="text-blue-400 underline"
+          href={`https://weightv1--contracts-ui.netlify.app/?rpc=${endpoint}`}
         >
           click here
         </a>{' '}

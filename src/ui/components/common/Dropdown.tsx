@@ -97,9 +97,13 @@ export function Dropdown<T>({
       className={classes('dropdown', className)}
       classNamePrefix="dropdown"
       components={{ Control, DropdownIndicator, Input, Option, ...components }}
+      formatCreateLabel={() => undefined}
       formatOptionLabel={formatOptionLabel}
       isDisabled={isDisabled}
       isSearchable={isSearchable}
+      isValidNewOption={inputValue =>
+        isValidAddress(inputValue) && !getOption(options, inputValue as T)
+      }
       onChange={onChange}
       onCreateOption={onCreate}
       options={options}
@@ -110,10 +114,6 @@ export function Dropdown<T>({
         option: () => ({}),
       }}
       value={value}
-      formatCreateLabel={() => undefined}
-      isValidNewOption={inputValue =>
-        isValidAddress(inputValue) && !getOption(options, inputValue as T)
-      }
     />
   );
 }

@@ -44,13 +44,13 @@ export function Statistics(): React.ReactElement | null {
   return (
     <>
       <div
-        className="grid grid-cols-4 xl:grid-cols-2 w-full mb-8 pb-8 border-b border-gray-200 dark:border-gray-800"
+        className="mb-8 grid w-full grid-cols-4 gap-4 border-b border-gray-200 pb-8 dark:border-gray-800 xl:grid-cols-2"
         data-cy="chain-info"
       >
         {Object.entries(entries).map(([label, value], i) => {
           return (
-            <div key={`entry-${i}`} className="mb-4 pr-4">
-              <div className="text-xs mb-1">{label}</div>
+            <div key={`entry-${i}`}>
+              <div className="mb-1 text-xs">{label}</div>
               <div className="dark:text-gray-400">{value}</div>
             </div>
           );

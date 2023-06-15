@@ -145,27 +145,27 @@ export function Step2() {
           label="Deployment Constructor"
         >
           <Dropdown
-            id="constructor"
-            options={createConstructorOptions(metadata.registry, metadata.constructors)}
             className="mb-4"
-            value={constructorIndex}
+            id="constructor"
             onChange={v => {
               if (isNumber(v)) {
                 setConstructorIndex(v);
                 setDeployConstructor(metadata.constructors[v]);
               }
             }}
+            options={createConstructorOptions(metadata.registry, metadata.constructors)}
+            value={constructorIndex}
           >
             No constructors found
           </Dropdown>
           {deployConstructor && argValues && (
             <ArgumentForm
-              key={`args-${deployConstructor.method}`}
+              argValues={argValues}
               args={deployConstructor.args}
+              className="argument-form"
+              key={`args-${deployConstructor.method}`}
               registry={metadata.registry}
               setArgValues={setArgValues}
-              argValues={argValues}
-              className="argument-form"
             />
           )}
         </FormField>
@@ -179,14 +179,15 @@ export function Step2() {
         </FormField>
         <OptionsForm
           isPayable={!!deployConstructor?.isPayable}
-          refTime={refTime}
           proofSize={proofSize}
-          value={valueState}
+          refTime={refTime}
           storageDepositLimit={storageDepositLimit}
+          value={valueState}
         />
       </Form>
       <Buttons>
         <Button
+          data-cy="next-btn"
           isDisabled={
             (deployConstructor?.isPayable && !valueState.isValid) ||
             !salt.isValid ||
@@ -199,7 +200,6 @@ export function Step2() {
           }
           onClick={onSubmit}
           variant="primary"
-          data-cy="next-btn"
         >
           Next
         </Button>

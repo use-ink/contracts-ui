@@ -11,7 +11,7 @@ export function NavLink({ children, icon: Icon, ...props }: Props): React.ReactE
   return (
     <NavLinkBase className="nav-link group" {...props}>
       <>
-        <Icon className="dark:group-hover:text-gray-300 group-hover:text-gray-400" />
+        <Icon className="group-hover:text-gray-400 dark:group-hover:text-gray-300" />
         {children}
       </>
     </NavLinkBase>

@@ -12,6 +12,8 @@ Supported smart contracts:
 
 We recommend running a [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) for local development or using the Contracts parachain on the Rococo Testnet.
 
+See [`FAUCETS.md`](https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md) to learn about how to obtain free testnet tokens of supported chains.
+
 ## Features
 
 ### Contract instantiation
