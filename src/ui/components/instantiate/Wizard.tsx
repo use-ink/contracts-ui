@@ -14,8 +14,8 @@ export function Wizard() {
   } = useInstantiate();
 
   return (
-    <div className="flex w-full m-1">
-      <main className="xs:w-full md:flex-1 p-4 md:mr-2">
+    <div className="m-1 flex w-full">
+      <main className="xs:w-full p-4 md:mr-2 md:flex-1">
         <Step1 />
         {metadata && <Step2 />}
         {step === 3 && <Step3 />}

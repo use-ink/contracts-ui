@@ -56,10 +56,10 @@ export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
   return (
     <>
       <InputNumber
-        value={displayValue}
+        data-cy="bn-input"
         onChange={handleChange}
         placeholder="Input a number"
-        data-cy="bn-input"
+        value={displayValue}
       />
     </>
   );

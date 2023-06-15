@@ -14,24 +14,24 @@ function ContractsNodeHelp() {
         <div>
           Make sure you are running a local{' '}
           <a
-            href="https://github.com/paritytech/substrate-contracts-node"
-            target="_blank"
-            rel="noreferrer"
             className="whitespace-nowrap"
+            href="https://github.com/paritytech/substrate-contracts-node"
+            rel="noreferrer"
+            target="_blank"
           >
             substrate-contracts-node
           </a>
           .
         </div>
-        <div className="py-1 px-3 dark:bg-slate-800 bg-slate-200 dark:text-gray-400 font-mono text-sm mt-1 rounded">
+        <div className="mt-1 rounded bg-slate-200 px-3 py-1 font-mono text-sm dark:bg-slate-800 dark:text-gray-400">
           substrate-contracts-node --dev
         </div>
       </div>
       <div>
         Alternatively, connect to{' '}
         <a
-          href="#"
           className="whitespace-nowrap"
+          href="#"
           onClick={() => {
             navigate(`/?rpc=${ROCOCO_CONTRACTS.rpc}`);
           }}

@@ -83,6 +83,7 @@
     "indent": "off",
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "react/display-name": "off",
+    "react/jsx-sort-props":"warn",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off"
   }

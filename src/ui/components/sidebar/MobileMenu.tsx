@@ -25,23 +25,23 @@ export function MobileMenu() {
   return (
     <div className="dark:bg-elevation-1 md:hidden">
       <div className="mobilemenu flex w-screen justify-center px-4 py-3">
-        <button className="flex-none text-center w-8 h-8" onClick={toggleMainMenu}>
-          <MenuIcon className="w-7 h-7 mx-auto text-gray-300" />
+        <button className="h-8 w-8 flex-none text-center" onClick={toggleMainMenu}>
+          <MenuIcon className="mx-auto h-7 w-7 text-gray-300" />
         </button>
-        <div className="flex flex-1 justify-center items-center">
-          <h1 className="font-medium text-lg">Contracts UI</h1>
+        <div className="flex flex-1 items-center justify-center">
+          <h1 className="text-lg font-medium">Contracts UI</h1>
         </div>
         <button
-          className="flex-none text-center w-8 h-8 border border-gray-700 rounded"
+          className="h-8 w-8 flex-none rounded border border-gray-700 text-center"
           onClick={toggleNetworkMenu}
         >
-          <ShareIcon className="w-5 h-5 mx-auto text-gray-300" />
+          <ShareIcon className="mx-auto h-5 w-5 text-gray-300" />
         </button>
       </div>
       {mainMenuOpen && (
         <>
-          <hr className="border border-gray-700 mx-4" />
-          <div className="px-4 py-3 space-y-4">
+          <hr className="mx-4 border border-gray-700" />
+          <div className="space-y-4 px-4 py-3">
             <Navigation />
             <QuickLinks />
             <hr className="border border-gray-700" />
@@ -51,7 +51,7 @@ export function MobileMenu() {
       )}
       {networkMenuOpen && (
         <>
-          <hr className="border border-gray-700 mx-4" />
+          <hr className="mx-4 border border-gray-700" />
           <div className="px-4 py-3">
             <NetworkAndUser />
           </div>

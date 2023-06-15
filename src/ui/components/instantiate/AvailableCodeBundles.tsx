@@ -31,17 +31,17 @@ function List({ items, label }: ListProps) {
         return (
           <CodeHash
             className="mb-2 last:mb-0"
-            name={codeBundle.name}
-            date={codeBundle.date}
             codeHash={codeBundle.codeHash}
+            date={codeBundle.date}
             key={codeBundle.codeHash}
+            name={codeBundle.name}
             onClick={() => navigate(`/instantiate/${codeBundle.codeHash}`)}
           />
         );
       })}
       {!isExpanded && items.length > PAGE_SIZE && (
         <a
-          className="text-xs cursor-pointer dark:text-gray-500 dark:hover:text-gray-300"
+          className="cursor-pointer text-xs dark:text-gray-500 dark:hover:text-gray-300"
           onClick={() => setIsExpanded(true)}
         >
           → Show More
@@ -74,7 +74,7 @@ export function AvailableCodeBundles() {
   return (
     <>
       {codes.length > 0 && (
-        <div className="text-sm py-4 text-center dark:text-gray-500">
+        <div className="py-4 text-center text-sm dark:text-gray-500">
           Or choose from a code hash below
         </div>
       )}

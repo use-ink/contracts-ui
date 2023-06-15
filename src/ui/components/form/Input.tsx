@@ -32,16 +32,16 @@ export function Input({
   return (
     <div className={classes(isError && 'isError', 'w-full')}>
       <input
-        onChange={onChange}
-        onFocus={onFocus}
-        type={type}
-        value={value || ''}
         className={classes(
-          'w-full dark:bg-gray-900 dark:text-gray-300 bg-white dark:border-gray-700 border-gray-200 rounded text-sm',
+          'w-full rounded border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
           isDisabled && 'dark:text-gray-500',
           className
         )}
+        onChange={onChange}
+        onFocus={onFocus}
         placeholder={placeholder}
+        type={type}
+        value={value || ''}
         {...(isDisabled ? { disabled: true } : {})}
       />
       {children}

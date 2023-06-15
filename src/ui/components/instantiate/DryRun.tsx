@@ -29,16 +29,16 @@ export function DryRun() {
                 <div className="flex">
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`refTime: ${dryRunResult.gasConsumed.refTime.toString()}`}
                       key={`gcr-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`proofSize: ${dryRunResult.gasConsumed.proofSize.toString()}`}
                       key={`gcp-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                 </div>
@@ -50,16 +50,16 @@ export function DryRun() {
                 <div className="flex">
                   <div className="basis-1/2 pr-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`refTime: ${dryRunResult.gasRequired.refTime.toString()}`}
                       key={`grr-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                   <div className="basis-1/2 pl-2">
                     <OutcomeItem
-                      title=""
                       displayValue={`proofSize: ${dryRunResult.gasRequired.proofSize.toString()}`}
                       key={`grp-${constructorIndex}`}
+                      title=""
                     />
                   </div>
                 </div>
@@ -104,7 +104,7 @@ export function DryRun() {
           )}
           {dryRunError && dryRunResult && (
             <>
-              <div className="validation error text-mono font-bold items-start">
+              <div className="validation error text-mono items-start font-bold">
                 <ExclamationCircleIcon className="mr-3" style={{ marginTop: 1 }} />
                 <div>
                   <p>{dryRunError.name}</p>
@@ -112,7 +112,7 @@ export function DryRun() {
                 </div>
               </div>
               {dryRunResult.debugMessage.length > 0 && (
-                <div className="validation error block text-mono break-words pl-4 mt-1">
+                <div className="validation error text-mono mt-1 block break-words pl-4">
                   {dryRunResult.debugMessage.toString()}
                 </div>
               )}

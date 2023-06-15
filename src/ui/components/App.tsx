@@ -16,7 +16,7 @@ const App = (): JSX.Element => {
       <ApiContextProvider>
         <DatabaseContextProvider>
           <TransactionsContextProvider>
-            <div className="relative flex-col md:flex-row md:fixed flex min-h-screen inset-0 overflow-hidden dark:bg-gray-900 dark:text-white text-black">
+            <div className="relative inset-0 flex min-h-screen flex-col overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
               <Sidebar />
               <AwaitApis>
                 <Outlet />
