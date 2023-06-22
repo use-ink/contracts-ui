@@ -76,18 +76,6 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
     };
   }
 
-  const wasm = metadata.info.source.wasm;
-  const isWasmEmpty = wasm.isEmpty;
-  const isWasmInvalid = !WebAssembly.validate(wasm);
-
-  if (isWasmRequired && (isWasmEmpty || isWasmInvalid)) {
-    return {
-      isValid: false,
-      isError: true,
-      message: 'This contract bundle has an empty or invalid WASM field.',
-    };
-  }
-
   return {
     isValid: true,
     isError: false,

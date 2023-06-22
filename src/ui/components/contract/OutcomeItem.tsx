@@ -25,7 +25,7 @@ export function OutcomeItem({
           <code>{displayValue}</code>
         </pre>
         <CopyButton
-          className="absolute right-2 bottom-2"
+          className="absolute bottom-2 right-2"
           id={title ? title.toLowerCase().replace(/\s+/g, '-') : id ?? ''}
           value={copyValue}
         />

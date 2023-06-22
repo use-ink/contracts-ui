@@ -94,7 +94,7 @@ export function InputFile({
         return (
           <div className={className} {...getRootProps()}>
             <label
-              className="flex h-36 cursor-pointer flex-col items-center justify-center rounded border border-gray-200 py-2 px-4 font-normal text-gray-400 dark:border-gray-700 dark:text-gray-700"
+              className="flex h-36 cursor-pointer flex-col items-center justify-center rounded border border-gray-200 px-4 py-2 font-normal text-gray-400 dark:border-gray-700 dark:text-gray-700"
               htmlFor="file"
             >
               <svg

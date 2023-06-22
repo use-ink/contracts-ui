@@ -1,9 +1,9 @@
 .btn {
-  @apply flex items-center justify-center rounded py-2 px-4 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-60;
+  @apply flex items-center justify-center rounded px-4 py-2 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 .btn.plain {
-  @apply rounded-none py-0 px-0;
+  @apply rounded-none px-0 py-0;
 }
 
 .btn.default:not(:disabled) {

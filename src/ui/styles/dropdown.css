@@ -37,7 +37,7 @@
 }
 
 .dropdown .dropdown__option {
-  @apply relative flex cursor-pointer select-none items-center py-2 px-3 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-elevation-2;
+  @apply relative flex cursor-pointer select-none items-center px-3 py-2 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-elevation-2;
 }
 
 .dropdown__option > span {

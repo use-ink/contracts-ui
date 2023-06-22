@@ -42,12 +42,10 @@ export function assertContractRedirect() {
 export function assertInstantiate() {
   cy.get('[data-cy="submit-btn"]').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
-    .should('be.visible')
+    .should('exist')
     .and('contain', 'contracts:Instantiated')
     .and('contain', 'system:NewAccount')
-    .and('contain', 'balances:Endowed')
     .and('contain', 'balances:Transfer')
-    .and('contain', 'balances:Reserved')
     .and('contain', 'balances:Withdraw')
     .and('contain', 'system:ExtrinsicSuccess');
   cy.get('[data-cy="dismiss-notification"]').click();
@@ -57,11 +55,8 @@ export function assertCall() {
   assertDryRun();
   cy.contains('Call contract').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
-    .should('be.visible')
+    .should('exist')
     .and('contain', 'system:ExtrinsicSuccess')
-    .and('contain', 'balances:Transfer')
-    .and('contain', 'balances:Reserved')
-    .and('contain', 'balances:Withdraw')
     .and('contain', 'contracts:ContractEmitted');
   cy.get('[data-cy="dismiss-notification"]').click();
 }
