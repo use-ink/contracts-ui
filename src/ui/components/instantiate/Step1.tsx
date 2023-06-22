@@ -148,7 +148,7 @@ export function Step1() {
                 help="Change the metadata associated with this contract."
                 id="metadata"
                 label="Update Metadata"
-                {...getValidation(metadataValidation)}
+                {...(file ? getValidation(metadataValidation) : { message: '' })}
                 className="mt-1.5"
               >
                 <InputFile
