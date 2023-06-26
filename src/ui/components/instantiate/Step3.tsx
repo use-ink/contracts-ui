@@ -90,16 +90,6 @@ export function Step3() {
       </div>
       <Buttons>
         <Button
-          data-cy="submit-btn"
-          isDisabled={!txs[txId]?.isValid}
-          isLoading={txs[txId]?.status === 'processing'}
-          onClick={() => call()}
-          variant="primary"
-        >
-          Upload and Instantiate
-        </Button>
-
-        <Button
           isDisabled={txs[txId]?.status === 'processing'}
           onClick={(): void => {
             dismiss(txId);
@@ -108,6 +98,15 @@ export function Step3() {
           }}
         >
           Go Back
+        </Button>
+        <Button
+          data-cy="submit-btn"
+          isDisabled={!txs[txId]?.isValid}
+          isLoading={txs[txId]?.status === 'processing'}
+          onClick={() => call()}
+          variant="primary"
+        >
+          Upload and Instantiate
         </Button>
       </Buttons>
     </>
