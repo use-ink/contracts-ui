@@ -72,7 +72,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
 
         isKeyringLoaded() ||
           keyring.loadAll(
-            { isDevelopment: chainProps.systemChainType.isDevelopment },
+            { isDevelopment: chainProps.systemChainType.isDevelopment, type: 'ethereum' },
             accounts as InjectedAccountWithMetaOverride[]
           );
         setAccounts(keyring.getAccounts());
