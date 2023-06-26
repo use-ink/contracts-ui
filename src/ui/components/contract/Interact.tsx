@@ -111,7 +111,7 @@ export const InteractTab = ({
     }
 
     debouncedDryRun();
-  }, [api.call.contractsApi, message, params]);
+  }, [api.call.contractsApi, message, params, nextResultId]);
 
   useEffect(() => {
     async function processTx() {
