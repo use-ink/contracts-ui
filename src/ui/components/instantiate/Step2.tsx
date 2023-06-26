@@ -187,6 +187,15 @@ export function Step2() {
       </Form>
       <Buttons>
         <Button
+          onClick={() => {
+            setStep(1);
+          }}
+          variant="default"
+        >
+          Go Back
+        </Button>
+
+        <Button
           data-cy="next-btn"
           isDisabled={
             (deployConstructor?.isPayable && !valueState.isValid) ||
@@ -202,15 +211,6 @@ export function Step2() {
           variant="primary"
         >
           Next
-        </Button>
-
-        <Button
-          onClick={() => {
-            setStep(1);
-          }}
-          variant="default"
-        >
-          Go Back
         </Button>
       </Buttons>
     </>
