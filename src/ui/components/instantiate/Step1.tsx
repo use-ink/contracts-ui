@@ -142,6 +142,24 @@ export function Step1() {
                 registry={metadata.registry}
               />
             ))}
+
+            {codeHashUrlParam && (
+              <FormField
+                help="Change the metadata associated with this contract."
+                id="metadata"
+                label="Update Metadata"
+                {...(file ? getValidation(metadataValidation) : { message: '' })}
+                className="mt-1.5"
+              >
+                <InputFile
+                  isError={metadataValidation.isError}
+                  onChange={onChange}
+                  onRemove={onRemove}
+                  placeholder="Click to select or drag and drop to upload file."
+                  value={file}
+                />
+              </FormField>
+            )}
           </div>
         </>
       )}

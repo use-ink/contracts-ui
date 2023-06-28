@@ -10,6 +10,7 @@ type OnRemove = VoidFn;
 
 interface Options {
   isWasmRequired?: boolean;
+  revertOnFileRemove?: boolean;
 }
 
 interface DeriveOptions extends Options {
@@ -91,7 +92,7 @@ export function useMetadata(
 ): UseMetadata {
   const { api } = useApi();
 
-  const { isWasmRequired = false, ...callbacks } = options;
+  const { isWasmRequired = false, revertOnFileRemove = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
     deriveFromJson({ isWasmRequired }, initialValue, api)
   );
@@ -120,7 +121,11 @@ export function useMetadata(
   }
 
   function onRemove(): void {
-    setState(EMPTY);
+    const newState = options.revertOnFileRemove
+      ? deriveFromJson({ isWasmRequired }, initialValue, api)
+      : EMPTY;
+
+    setState(newState);
 
     callbacks.onChange && callbacks.onChange(undefined);
     callbacks.onRemove && callbacks.onRemove();
