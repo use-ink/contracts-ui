@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
-import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '../../constants';
+import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS, ethereumChains } from '../../constants';
 import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from 'types';
 import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
@@ -67,19 +67,22 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   useEffect(() => {
     const getAccounts = async () => {
       if (status === 'connected' && chainProps) {
+        const isEthereum = ethereumChains.includes(api.runtimeVersion.specName.toString());
         !web3EnablePromise && (await web3Enable('contracts-ui'));
         const accounts = await web3Accounts();
-
         isKeyringLoaded() ||
           keyring.loadAll(
-            { isDevelopment: chainProps.systemChainType.isDevelopment, type: 'ethereum' },
+            {
+              isDevelopment: chainProps.systemChainType.isDevelopment,
+              type: isEthereum ? 'ethereum' : 'ed25519',
+            },
             accounts as InjectedAccountWithMetaOverride[]
           );
         setAccounts(keyring.getAccounts());
       }
     };
     getAccounts().catch(e => console.error(e));
-  }, [chainProps, status]);
+  }, [api.runtimeVersion.specName, chainProps, status]);
 
   return (
     <ApiContext.Provider
