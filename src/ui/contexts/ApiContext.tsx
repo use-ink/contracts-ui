@@ -37,6 +37,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const [chainProps, setChainProps] = useState<ChainProperties>();
   const [status, setStatus] = useState<Status>('loading');
   const [isSupported, setIsSupported] = useState(true);
+  const [isEthereumChain, setIsEthereumChain] = useState(false);
 
   useEffect(() => {
     if (rpcUrl && isValidWsUrl(rpcUrl) && rpcUrl !== preferredEndpoint) {
@@ -54,10 +55,12 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
       await _api.isReady;
       const _chainProps = await getChainProperties(_api);
       const w2 = _api.registry.createType<WeightV2>('Weight').proofSize;
+      const isEth = ethereumChains.includes(_api.runtimeVersion.specName.toString());
       setApi(_api);
       setChainProps(_chainProps);
       setIsSupported(!!w2);
       setStatus('connected');
+      setIsEthereumChain(isEth);
     });
     _api.on('disconnected', () => {
       setStatus('error');
@@ -67,14 +70,13 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   useEffect(() => {
     const getAccounts = async () => {
       if (status === 'connected' && chainProps) {
-        const isEthereum = ethereumChains.includes(api.runtimeVersion.specName.toString());
         !web3EnablePromise && (await web3Enable('contracts-ui'));
         const accounts = await web3Accounts();
         isKeyringLoaded() ||
           keyring.loadAll(
             {
               isDevelopment: chainProps.systemChainType.isDevelopment,
-              type: isEthereum ? 'ethereum' : 'ed25519',
+              type: isEthereumChain ? 'ethereum' : 'ed25519',
             },
             accounts as InjectedAccountWithMetaOverride[]
           );
@@ -82,7 +84,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
       }
     };
     getAccounts().catch(e => console.error(e));
-  }, [api.runtimeVersion.specName, chainProps, status]);
+  }, [chainProps, isEthereumChain, status]);
 
   return (
     <ApiContext.Provider
