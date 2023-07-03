@@ -21,7 +21,13 @@ export function MessageSignature({
 }: Props) {
   return (
     <div className={classes('font-mono', isConstructor && 'constructor', className)}>
-      <span className={isConstructor ? 'dark:text-blue-400' : 'dark:text-yellow-400'}>
+      <span
+        className={
+          isConstructor
+            ? 'text-purple-700 dark:text-blue-400'
+            : 'text-yellow-700 dark:text-yellow-400'
+        }
+      >
         {method}
       </span>
       (
