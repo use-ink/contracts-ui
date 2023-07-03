@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
-import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS, ethereumChains } from '../../constants';
+import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '../../constants';
 import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from 'types';
 import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
@@ -55,7 +55,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
       await _api.isReady;
       const _chainProps = await getChainProperties(_api);
       const w2 = _api.registry.createType<WeightV2>('Weight').proofSize;
-      const isEth = ethereumChains.includes(_api.runtimeVersion.specName.toString());
+      const isEth = _api.runtimeVersion.specName.toString() === 'frontier-template';
       setApi(_api);
       setChainProps(_chainProps);
       setIsSupported(!!w2);
