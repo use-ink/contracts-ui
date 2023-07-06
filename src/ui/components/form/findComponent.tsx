@@ -2,21 +2,20 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { AddressSelect } from '../account/Select';
-import { Input } from './Input';
-import { InputBalance } from './InputBalance';
-import { Vector } from './Vector';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
+import { Input } from './Input';
+import { InputBalance } from './InputBalance';
+import { InputBn } from './InputBn';
+import { InputBytes } from './InputBytes';
+import { InputHash } from './InputHash';
 import { Option } from './Option';
-import { VectorFixed } from './VectorFixed';
 import { Struct } from './Struct';
 import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
-import { InputBn } from './InputBn';
-import { InputHash } from './InputHash';
-import { ArgComponentProps, Hash, Registry, TypeDef, TypeDefInfo } from 'types';
-import { InputHex } from './InputHex';
-import { InputBytes } from './InputBytes';
+import { Vector } from './Vector';
+import { VectorFixed } from './VectorFixed';
+import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 
 function subComponents(
   registry: Registry,
