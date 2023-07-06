@@ -14,7 +14,9 @@ import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
 import { InputBn } from './InputBn';
 import { InputHash } from './InputHash';
-import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
+import { ArgComponentProps, Hash, Registry, TypeDef, TypeDefInfo } from 'types';
+import { InputHex } from './InputHex';
+import { InputBytes } from './InputBytes';
 
 function subComponents(
   registry: Registry,
@@ -102,6 +104,18 @@ export function findComponent(
   }
 
   if (type.info === TypeDefInfo.VecFixed) {
+    if (type.sub && !Array.isArray(type.sub)) {
+      switch (type.sub.type) {
+        case 'u8':
+          return (props: ArgComponentProps<Uint8Array>) => {
+            if (!type.length) throw new Error('Fixed Vector has no length');
+            return <InputBytes {...props} length={type.length * 2} />; // 2 hex chars per byte
+          };
+        default:
+          break;
+      }
+    }
+
     const [component] = subComponents(registry, type, nestingNumber + 1);
 
     return (props: React.PropsWithChildren<ArgComponentProps<unknown[]>>) => (
