@@ -2,18 +2,19 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { AddressSelect } from '../account/Select';
-import { Input } from './Input';
-import { InputBalance } from './InputBalance';
-import { Vector } from './Vector';
 import { Bool } from './Bool';
 import { Enum } from './Enum';
+import { Input } from './Input';
+import { InputBalance } from './InputBalance';
+import { InputBn } from './InputBn';
+import { InputBytes } from './InputBytes';
+import { InputHash } from './InputHash';
 import { Option } from './Option';
-import { VectorFixed } from './VectorFixed';
 import { Struct } from './Struct';
 import { SubForm } from './SubForm';
 import { Tuple } from './Tuple';
-import { InputBn } from './InputBn';
-import { InputHash } from './InputHash';
+import { Vector } from './Vector';
+import { VectorFixed } from './VectorFixed';
 import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 
 function subComponents(
@@ -102,6 +103,18 @@ export function findComponent(
   }
 
   if (type.info === TypeDefInfo.VecFixed) {
+    if (type.sub && !Array.isArray(type.sub)) {
+      switch (type.sub.type) {
+        case 'u8':
+          return (props: ArgComponentProps<Uint8Array>) => {
+            if (!type.length) throw new Error('Fixed Vector has no length');
+            return <InputBytes {...props} length={type.length * 2} />; // 2 hex chars per byte
+          };
+        default:
+          break;
+      }
+    }
+
     const [component] = subComponents(registry, type, nestingNumber + 1);
 
     return (props: React.PropsWithChildren<ArgComponentProps<unknown[]>>) => (
