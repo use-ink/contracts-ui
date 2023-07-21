@@ -41,10 +41,10 @@ export function InputHash({ registry, onChange, className }: Props) {
   );
   return (
     <InputHex
-      onChange={handleChange}
       className={className}
       defaultValue={registry.createType('H256').toString().slice(2)}
       error={!isValid ? message : undefined}
+      onChange={handleChange}
     />
   );
 }

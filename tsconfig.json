@@ -30,5 +30,5 @@
       "ui/*": ["./src/ui/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "./snapshots.ts"]
 }
