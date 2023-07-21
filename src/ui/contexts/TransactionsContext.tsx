@@ -81,7 +81,7 @@ export function TransactionsContextProvider({
 
             nextId++;
           }
-        }
+        },
       );
     } catch (error) {
       setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error } });

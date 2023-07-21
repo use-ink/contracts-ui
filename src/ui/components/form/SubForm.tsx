@@ -15,7 +15,7 @@ export function SubForm({ children, className, nestingNumber }: Props) {
       className={classes(
         'rounded border border-gray-200 p-4 text-left text-sm dark:border-gray-500',
         isOddNesting ? 'bg-white dark:bg-gray-900' : 'bg-gray-100 dark:bg-elevation-1',
-        className
+        className,
       )}
     >
       {children}

@@ -39,7 +39,7 @@ function stringify(o: unknown) {
 function decodeReturnValue(
   returnType: TypeDef | null | undefined,
   data: Bytes,
-  registry: Registry
+  registry: Registry,
 ): AnyJson {
   const returnTypeName = getReturnTypeName(returnType);
   let r: AnyJson = 'Decoding error';
@@ -81,7 +81,7 @@ function getOkText(outcome: AnyJson, returnValue: AnyJson) {
 export function getDecodedOutput(
   { result }: Pick<ContractExecResult, 'result' | 'debugMessage'>,
   { returnType }: AbiMessage,
-  registry: Registry
+  registry: Registry,
 ): {
   decodedOutput: string;
   isError: boolean;

@@ -13,7 +13,7 @@ import {
 
 export function createConstructorOptions(
   registry: Registry,
-  data?: AbiConstructor[]
+  data?: AbiConstructor[],
 ): DropdownOption<number>[] {
   return (data || []).map((constructor, index) => ({
     label: <MessageSignature message={constructor} registry={registry} />,
@@ -23,7 +23,7 @@ export function createConstructorOptions(
 
 export function createMessageOptions(
   registry: Registry,
-  data?: AbiMessage[]
+  data?: AbiMessage[],
 ): DropdownOption<AbiMessage>[] {
   return (data || []).map(message => ({
     label: <MessageSignature message={message} registry={registry} />,

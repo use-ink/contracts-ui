@@ -25,7 +25,7 @@ export function Spinner({
         `border-${color}`,
         `dark:border-${darkColor}`,
         'animate-spin rounded-full border-solid',
-        className
+        className,
       )}
       data-cy="spinner"
       style={{ borderTopColor: 'transparent' }}

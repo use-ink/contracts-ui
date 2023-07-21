@@ -163,8 +163,8 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
         error && console.error(`params: initValue: ${error}`);
         console.warn(
           `params: initValue: No default value for type ${type} from ${JSON.stringify(
-            def
-          )}, using defaults`
+            def,
+          )}, using defaults`,
         );
       }
 

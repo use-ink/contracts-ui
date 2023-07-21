@@ -24,7 +24,7 @@ function getGlobalMaxValue(bitLength?: number): BN {
 
 export function useBalance(
   initialValue: BN | string | number = 0,
-  { bitLength = DEFAULT_BITLENGTH, isZeroable = true, maxValue }: ValidateOptions = {}
+  { bitLength = DEFAULT_BITLENGTH, isZeroable = true, maxValue }: ValidateOptions = {},
 ): UseBalance {
   const { api } = useApi();
 
@@ -71,12 +71,12 @@ export function useBalance(
         message,
       };
     },
-    [bitLength, isZeroable, maxValue]
+    [bitLength, isZeroable, maxValue],
   );
 
   const balance = useFormField<BN>(
     isBn(initialValue) ? toSats(api, initialValue) : toBalance(api, initialValue),
-    validate
+    validate,
   );
 
   return balance;

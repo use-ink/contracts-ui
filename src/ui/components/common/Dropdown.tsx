@@ -19,7 +19,7 @@ import { classes, isValidAddress } from 'helpers';
 import type { DropdownOption, DropdownProps } from 'types';
 
 function isGroupedOptions<T>(
-  options: ReactSelectProps<DropdownOption<T>, false>['options']
+  options: ReactSelectProps<DropdownOption<T>, false>['options'],
 ): options is GroupBase<DropdownOption<T>>[] {
   try {
     return !!options && (options as GroupBase<DropdownOption<T>>[])[0].options !== undefined;
@@ -60,7 +60,7 @@ function DropdownIndicator<T>(props: DropdownIndicatorProps<DropdownOption<T>, f
 
 function getOption<T>(
   options: OptionsOrGroups<DropdownOption<T>, GroupBase<DropdownOption<T>>>,
-  val: T
+  val: T,
 ) {
   if (isGroupedOptions(options)) {
     return options
@@ -87,7 +87,7 @@ export function Dropdown<T>({
     (option: DropdownOption<T> | null): void => {
       option && _onChange(option.value);
     },
-    [_onChange]
+    [_onChange],
   );
 
   const value = useMemo(() => getOption(options, _value), [options, _value]);

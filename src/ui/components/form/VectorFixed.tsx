@@ -24,7 +24,7 @@ export function VectorFixed({
       (newValue: OrFalsy<unknown>): void => {
         _onChange(value.map((argAtIndex, atIndex) => (atIndex === index ? newValue : argAtIndex)));
       },
-    [_onChange, value]
+    [_onChange, value],
   );
 
   return (

@@ -25,7 +25,7 @@ interface Callbacks {
 function deriveFromJson(
   options: DeriveOptions,
   source?: Record<string, unknown>,
-  api?: ApiPromise | null
+  api?: ApiPromise | null,
 ): MetadataState {
   if (!source) {
     return EMPTY;
@@ -88,13 +88,13 @@ const utf8decoder = new TextDecoder();
 
 export function useMetadata(
   initialValue?: Record<string, unknown>,
-  options: Options & Callbacks = {}
+  options: Options & Callbacks = {},
 ): UseMetadata {
   const { api } = useApi();
 
   const { isWasmRequired = false, revertOnFileRemove = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
-    deriveFromJson({ isWasmRequired }, initialValue, api)
+    deriveFromJson({ isWasmRequired }, initialValue, api),
   );
 
   function onChange(file: FileState): void {

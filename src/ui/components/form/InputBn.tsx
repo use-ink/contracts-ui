@@ -50,7 +50,7 @@ export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
         }
       }
     },
-    [max, min, onChange]
+    [max, min, onChange],
   );
 
   return (

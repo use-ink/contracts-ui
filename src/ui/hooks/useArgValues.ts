@@ -20,11 +20,11 @@ function fromArgs(registry: Registry, accounts: Account[], args: AbiParam[]): Ar
 
 export function useArgValues(
   message: AbiMessage | undefined,
-  registry: Registry
+  registry: Registry,
 ): [ArgValues, SetState<ArgValues>, Uint8Array | undefined] {
   const { accounts } = useApi();
   const [value, setValue] = useState<ArgValues>(
-    accounts && message ? fromArgs(registry, accounts, message.args) : {}
+    accounts && message ? fromArgs(registry, accounts, message.args) : {},
   );
   const argsRef = useRef(message?.args ?? []);
 

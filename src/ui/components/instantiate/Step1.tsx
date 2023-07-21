@@ -19,7 +19,7 @@ export function Step1() {
   const { db } = useDatabase();
   const [codeBundle] = useDbQuery(
     () => (codeHashUrlParam ? db.codeBundles.get({ codeHash: codeHashUrlParam }) : undefined),
-    [codeHashUrlParam, db]
+    [codeHashUrlParam, db],
   );
   const { accounts } = useApi();
   const { setStep, setData, data, step } = useInstantiate();
@@ -43,7 +43,7 @@ export function Step1() {
         setName(metadataValidation.name);
       }
     },
-    [metadataValidation.name, name, nameValidation, setName]
+    [metadataValidation.name, name, nameValidation, setName],
   );
 
   useEffect((): void => {

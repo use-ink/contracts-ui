@@ -50,7 +50,7 @@ export function DryRunResult({
           <div
             className={classes(
               result.isErr || isError ? 'text-red-500' : 'text-green-500',
-              'mb-2 font-mono text-sm'
+              'mb-2 font-mono text-sm',
             )}
           >
             {prediction}

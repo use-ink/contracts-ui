@@ -23,7 +23,7 @@ export function InputHex({ onChange, className, defaultValue, error }: Props) {
         onChange(d);
       }
     },
-    [onChange]
+    [onChange],
   );
   return (
     <>

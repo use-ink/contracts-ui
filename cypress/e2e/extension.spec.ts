@@ -26,10 +26,10 @@ describe('Signer extension flow on live networks', () => {
       cy.contains('No signer extension found.').should('be.visible');
       cy.contains('New to Substrate?').should('be.visible');
       cy.contains(
-        'Install the a compatible wallet like Polkadot.js Extension to create and manage Substrate accounts.'
+        'Install the a compatible wallet like Polkadot.js Extension to create and manage Substrate accounts.',
       ).should('be.visible');
       cy.contains(
-        'If the extension is installed and you are seeing this, make sure it allows Contracts UI to use your accounts for signing.'
+        'If the extension is installed and you are seeing this, make sure it allows Contracts UI to use your accounts for signing.',
       ).should('be.visible');
     });
   });
@@ -45,10 +45,10 @@ describe('Signer extension flow on live networks', () => {
     cy.get('[data-cy="error-card"]').within(() => {
       cy.contains('No accounts found.').should('be.visible');
       cy.contains(
-        '1. Follow this guide to create your first account in the Polkadot.js extension.'
+        '1. Follow this guide to create your first account in the Polkadot.js extension.',
       ).should('be.visible');
       cy.contains(
-        '2. Drip some funds into your account via the faucets of our supported networks.'
+        '2. Drip some funds into your account via the faucets of our supported networks.',
       ).should('be.visible');
     });
   });

@@ -23,7 +23,7 @@ export function createInstantiateTx(
     metadata,
     salt,
     storageDepositLimit,
-  }: Omit<InstantiateData, 'name'>
+  }: Omit<InstantiateData, 'name'>,
 ): SubmittableExtrinsic<'promise'> {
   const wasm = metadata?.info.source.wasm;
   const isValid = codeHash || !!wasm;

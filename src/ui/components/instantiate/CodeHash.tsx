@@ -54,7 +54,7 @@ export function CodeHash({
           'cursor-pointer dark:hover:border-blue-500 dark:hover:bg-blue-700 dark:hover:bg-opacity-10',
         isError && 'dark:border-red-500 dark:bg-red-900 dark:bg-opacity-20',
         isSuccess && isOnChain && 'dark:border-green-500 dark:bg-green-900 dark:bg-opacity-20',
-        className
+        className,
       )}
       onClick={isOnChain && onClick ? onClick : undefined}
     >

@@ -51,7 +51,7 @@ export function InputFile({
         reader.readAsArrayBuffer(file);
       });
     },
-    [ref, onChange, propsFile]
+    [ref, onChange, propsFile],
   );
 
   const removeHandler = useCallback((): void => {

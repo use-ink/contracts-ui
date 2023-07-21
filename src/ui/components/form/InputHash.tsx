@@ -37,7 +37,7 @@ export function InputHash({ registry, onChange, className }: Props) {
         }
       }
     },
-    [onChange, registry]
+    [onChange, registry],
   );
   return (
     <InputHex

@@ -25,7 +25,7 @@ export function Enum(props: Props) {
     (value: unknown): void => {
       _onChange({ [variants[variantIndex].name as string]: value });
     },
-    [_onChange, variants, variantIndex]
+    [_onChange, variants, variantIndex],
   );
 
   const setVariantIndex = useCallback(
@@ -38,7 +38,7 @@ export function Enum(props: Props) {
         });
       }
     },
-    [registry, accounts, _onChange, variants]
+    [registry, accounts, _onChange, variants],
   );
 
   return (

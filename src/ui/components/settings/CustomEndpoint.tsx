@@ -13,7 +13,7 @@ import { isValidWsUrl } from 'helpers';
 export function CustomEndpoint() {
   const [customEndpoint, setCustomEndpoint] = useLocalStorage<string>(
     LOCAL_STORAGE_KEY.CUSTOM_ENDPOINT,
-    LOCAL.rpc
+    LOCAL.rpc,
   );
   const [value, setValue] = useState(customEndpoint);
   const navigate = useNavigate();

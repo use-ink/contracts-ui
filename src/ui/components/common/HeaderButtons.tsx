@@ -50,7 +50,7 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
           </Link>
         ) : (
           <p className="mr-3 flex items-center font-semibold text-red-400">{`Not found at ${truncate(
-            address
+            address,
           )}`}</p>
         )}
         <button
