@@ -6,22 +6,22 @@ import { ChevronUpIcon } from '@heroicons/react/solid';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { MessageSignature } from './MessageSignature';
-import type { AbiConstructor, AbiMessage, Registry } from 'types';
+import type { AbiMessage, Registry } from 'types';
 import { classes } from 'helpers';
 
-interface Props extends React.ComponentProps<typeof Disclosure> {
-  message: AbiMessage | AbiConstructor;
+interface MessageDocsProps extends React.ComponentProps<typeof Disclosure> {
+  message: AbiMessage;
   registry: Registry;
   className?: string;
 }
 
-export const MessageDocs = ({
+export function MessageDocs({
   message,
   message: { docs },
   registry,
   className,
   ...restOfProps
-}: Props) => {
+}: MessageDocsProps) {
   return (
     <Disclosure defaultOpen {...restOfProps}>
       {({ open }) => (
@@ -47,4 +47,4 @@ export const MessageDocs = ({
       )}
     </Disclosure>
   );
-};
+}

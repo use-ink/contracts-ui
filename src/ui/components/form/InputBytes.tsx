@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { hexToU8a } from '@polkadot/util';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Input } from './Input';
 import { classes } from 'helpers';
 import { ArgComponentProps } from 'types';
 
-type Props = ArgComponentProps<Uint8Array> & { length?: number };
+type InputBytesProps = ArgComponentProps<Uint8Array> & { length?: number };
 type Validation = { isValid: boolean; message?: string };
 
 const isHexRegex = /^0x[A-F0-9]+$/i;
@@ -32,7 +32,7 @@ const validateFn =
     };
   };
 
-export function InputBytes({ onChange, className, length }: Props): React.ReactElement<Props> {
+export function InputBytes({ onChange, className, length }: InputBytesProps) {
   const [value, setValue] = useState('');
   const [{ isValid, message }, setValidation] = useState<Validation>({ isValid: true });
   const validate = useMemo(() => validateFn(length), [length]);

@@ -5,11 +5,18 @@ import { encodeTypeDef } from '@polkadot/types';
 import { FormField } from './FormField';
 import { TypeDefInfo, ArgComponentProps } from 'types';
 
-type Props = ArgComponentProps<Record<string, unknown>> & {
+type StructProps = ArgComponentProps<Record<string, unknown>> & {
   components: React.ComponentType<ArgComponentProps<unknown>>[];
 };
 
-export function Struct({ components, value, nestingNumber, onChange, registry, typeDef }: Props) {
+export function Struct({
+  components,
+  value,
+  nestingNumber,
+  onChange,
+  registry,
+  typeDef,
+}: StructProps) {
   const _onChange = (name: string) => (newEntry: unknown) => {
     const newValue = { ...value, [name]: newEntry };
     onChange(newValue);

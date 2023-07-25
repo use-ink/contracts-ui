@@ -6,13 +6,13 @@ import { classes, truncate } from 'helpers';
 import { OrFalsy } from 'types';
 import { useApi } from 'ui/contexts';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface AccountProps extends React.HTMLAttributes<HTMLDivElement> {
   name?: React.ReactNode;
   value: OrFalsy<string>;
   size?: number;
 }
 
-export function Account({ className, name: propsName, size = 42, value }: Props) {
+export function Account({ className, name: propsName, size = 42, value }: AccountProps) {
   const { accounts } = useApi();
 
   const account = accounts?.find(a => a.address === value);

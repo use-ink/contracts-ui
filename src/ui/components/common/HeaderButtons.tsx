@@ -9,11 +9,11 @@ import { useApi, useDatabase } from 'ui/contexts';
 import { getContractInfo, truncate } from 'helpers';
 import type { UIContract } from 'types';
 
-interface Props {
+interface HeaderButtonsProps {
   contract: UIContract;
 }
 
-export function HeaderButtons({ contract: { address, codeHash } }: Props) {
+export function HeaderButtons({ contract: { address, codeHash } }: HeaderButtonsProps) {
   const { api } = useApi();
   const { db } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);

@@ -3,11 +3,11 @@
 
 import { NavLink as NavLinkBase, NavLinkProps } from 'react-router-dom';
 
-interface Props extends NavLinkProps {
+interface UINavLinkProps extends NavLinkProps {
   icon: (_: React.ComponentProps<'svg'>) => JSX.Element;
 }
 
-export function NavLink({ children, icon: Icon, ...props }: Props): React.ReactElement<Props> {
+export function NavLink({ children, icon: Icon, ...props }: UINavLinkProps) {
   return (
     <NavLinkBase className="nav-link group" {...props}>
       <>

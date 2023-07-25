@@ -19,16 +19,12 @@ export function Input({
   className,
   isDisabled = false,
   isError = false,
-  onChange: _onChange,
+  onChange,
   placeholder,
   value,
   onFocus,
   type = 'text',
 }: Props) {
-  function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    _onChange(e.target.value);
-  }
-
   return (
     <div className={classes(isError && 'isError', 'w-full')}>
       <input
@@ -37,7 +33,7 @@ export function Input({
           isDisabled && 'dark:text-gray-500',
           className
         )}
-        onChange={onChange}
+        onChange={e => onChange(e.target.value)}
         onFocus={onFocus}
         placeholder={placeholder}
         type={type}

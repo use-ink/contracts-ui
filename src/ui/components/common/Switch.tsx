@@ -5,7 +5,7 @@ import { Switch as HUISwitch } from '@headlessui/react';
 import { classes } from 'helpers';
 import { SimpleSpread } from 'types';
 
-type Props = SimpleSpread<
+type SwitchProps = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
   {
     value: boolean;
@@ -13,7 +13,7 @@ type Props = SimpleSpread<
   }
 >;
 
-export function Switch({ children, className, onChange, value }: Props) {
+export function Switch({ children, className, onChange, value }: SwitchProps) {
   return (
     <HUISwitch
       checked={value}

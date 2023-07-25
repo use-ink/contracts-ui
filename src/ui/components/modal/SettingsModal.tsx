@@ -6,7 +6,7 @@ import { ThemeMode } from '../settings/ThemeMode';
 import type { ModalProps } from './ModalBase';
 import { ModalBase as Modal } from './ModalBase';
 
-export const SettingsModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
+export function SettingsModal({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Settings">
       <div className="mt-4 grid gap-4 border-b border-gray-200 pb-10 text-gray-600 dark:border-gray-800 dark:text-white">
@@ -20,4 +20,4 @@ export const SettingsModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) 
       </div>
     </Modal>
   );
-};
+}

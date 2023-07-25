@@ -6,14 +6,14 @@ import { TransactionResult } from './TransactionResult';
 import { DryRunResult } from './DryRunResult';
 import { CallResult, ContractExecResult, Registry, AbiMessage } from 'types';
 
-interface Props {
+interface ResultsOutputProps {
   results: CallResult[];
   registry: Registry;
   message: AbiMessage;
   outcome?: ContractExecResult;
 }
 
-export const ResultsOutput = ({ registry, results, outcome, message }: Props) => {
+export function ResultsOutput({ registry, results, outcome, message }: ResultsOutputProps) {
   return (
     <>
       <SidePanel
@@ -35,4 +35,4 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
       </SidePanel>
     </>
   );
-};
+}

@@ -11,7 +11,7 @@ import { useApi, useDatabase } from 'ui/contexts';
 import { classes } from 'helpers';
 import { useDbQuery } from 'ui/hooks';
 
-type Props = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;
+type AccountProps = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;
 
 export function Option({ label, value }: DropdownOption<string>) {
   return <Account className="p-1.5" name={label} value={value} />;
@@ -41,7 +41,7 @@ function Select({
   );
 }
 
-export function AccountSelect({ placeholder = 'Select account', ...props }: Props) {
+export function AccountSelect({ placeholder = 'Select account', ...props }: AccountProps) {
   const { accounts } = useApi();
 
   return (
@@ -49,7 +49,11 @@ export function AccountSelect({ placeholder = 'Select account', ...props }: Prop
   );
 }
 
-export function AddressSelect({ placeholder = 'Select account', onChange, ...props }: Props) {
+export function AddressSelect({
+  placeholder = 'Select account',
+  onChange,
+  ...props
+}: AccountProps) {
   const { accounts } = useApi();
   const { db } = useDatabase();
   const [contracts] = useDbQuery(() => db.contracts.toArray(), [db]);

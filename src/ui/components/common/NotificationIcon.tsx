@@ -6,11 +6,11 @@ import { Spinner } from './Spinner';
 import { TxStatus } from 'types';
 import { classes } from 'helpers';
 
-interface Props {
+interface NotificationIconProps {
   status?: TxStatus;
 }
 
-export const NotificationIcon = ({ status }: Props) => {
+export const NotificationIcon = ({ status }: NotificationIconProps) => {
   switch (status) {
     case 'success':
       return <CheckIcon className="h-12 w-12 text-green-400" key="success" />;

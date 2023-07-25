@@ -62,12 +62,12 @@ export function AddressLookup() {
       help={<>Add metadata to an existing contract instance in order to interact with it.</>}
     >
       <FormField
+        className="relative"
         help="The address of the contract you want to interact with"
         id="address"
         isError={!!searchString && !address}
         label="Contract Address"
         message={isValidAddress(searchString) ? 'Address is not on-chain ' : 'Address is not valid'}
-        className="relative"
       >
         {' '}
         <Input

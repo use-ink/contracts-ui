@@ -12,14 +12,6 @@ interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick: VoidFn;
 }
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  contracts?: ContractDocument[] | null;
-  codeBundles?: CodeBundleDocument[] | null;
-  isOpen?: boolean;
-  onSelectCodeBundle?: (_: CodeBundleDocument) => void;
-  onSelectContract?: (_: ContractDocument) => void;
-}
-
 function SearchResultItem({ icon: Icon, name, identifier, onClick }: ItemProps) {
   return (
     <div className="item group" onClick={onClick}>
@@ -32,6 +24,14 @@ function SearchResultItem({ icon: Icon, name, identifier, onClick }: ItemProps) 
   );
 }
 
+interface SearchResultsProps extends React.HTMLAttributes<HTMLDivElement> {
+  contracts?: ContractDocument[] | null;
+  codeBundles?: CodeBundleDocument[] | null;
+  isOpen?: boolean;
+  onSelectCodeBundle?: (_: CodeBundleDocument) => void;
+  onSelectContract?: (_: ContractDocument) => void;
+}
+
 export function SearchResults({
   className,
   contracts,
@@ -39,7 +39,7 @@ export function SearchResults({
   isOpen,
   onSelectCodeBundle,
   onSelectContract,
-}: Props) {
+}: SearchResultsProps) {
   return (
     <div className={classes('search-results', !isOpen && 'invisible', className)}>
       {onSelectContract && (

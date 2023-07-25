@@ -8,14 +8,20 @@ import { findComponent } from './findComponent';
 import { AbiParam, Registry, SetState } from 'types';
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLFormElement> {
+interface ArgumentFormProps extends React.HTMLAttributes<HTMLFormElement> {
   args: AbiParam[];
   argValues: Record<string, unknown>;
   registry: Registry;
   setArgValues: SetState<Record<string, unknown>>;
 }
 
-export function ArgumentForm({ args, argValues, registry, setArgValues, className }: Props) {
+export function ArgumentForm({
+  args,
+  argValues,
+  registry,
+  setArgValues,
+  className,
+}: ArgumentFormProps) {
   const components = useMemo(
     () => args.map(arg => ({ arg, Component: findComponent(registry, arg.type) })),
     [args, registry]

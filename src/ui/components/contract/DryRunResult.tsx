@@ -8,7 +8,7 @@ import { classes, decodeStorageDeposit, getDecodedOutput } from 'helpers';
 import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 
-interface Props {
+interface DryRunResultProps {
   outcome: ContractExecResult;
   message: AbiMessage;
   registry: Registry;
@@ -18,7 +18,7 @@ export function DryRunResult({
   outcome: { gasRequired, gasConsumed, storageDeposit, debugMessage, result },
   message,
   registry,
-}: Props) {
+}: DryRunResultProps) {
   const { decodedOutput, isError } = getDecodedOutput({ result, debugMessage }, message, registry);
   const { api } = useApi();
   const { value: storageDepositValue, type: storageDepositType } =

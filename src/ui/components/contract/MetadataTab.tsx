@@ -7,12 +7,7 @@ import { Button } from 'ui/components/common';
 import { FormField, getValidation, InputFile, useMetadataField } from 'ui/components/form';
 import { useDatabase } from 'ui/contexts';
 
-interface Props {
-  abi: Abi;
-  id: number | undefined;
-}
-
-export const MetadataTab = ({ id, abi }: Props) => {
+export function MetadataTab({ id, abi }: { abi: Abi; id: number | undefined }) {
   const { db } = useDatabase();
   const {
     file,
@@ -73,4 +68,4 @@ export const MetadataTab = ({ id, abi }: Props) => {
       </div>
     </div>
   );
-};
+}

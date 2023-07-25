@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 import { FormField } from './FormField';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 
-interface Props extends ArgComponentProps<unknown[]> {
+interface TupleProps extends ArgComponentProps<unknown[]> {
   components: React.ComponentType<ArgComponentProps<unknown>>[];
 }
 
@@ -18,7 +18,7 @@ export function Tuple({
   registry,
   typeDef,
   value,
-}: Props) {
+}: TupleProps) {
   const onChange = useCallback(
     (index: number) =>
       (newValue: OrFalsy<unknown>): void => {

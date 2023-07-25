@@ -7,7 +7,7 @@ import { GithubLogo, StackExchangeLogo } from './Logos';
 import { ModalBase as Modal } from './ModalBase';
 import type { ModalProps } from './ModalBase';
 
-export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
+export function HelpModal({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Help">
       <ul className="text-sm text-gray-600 dark:text-gray-200">
@@ -110,4 +110,4 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
       </ul>
     </Modal>
   );
-};
+}

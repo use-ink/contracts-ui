@@ -9,7 +9,7 @@ import { useApi } from 'ui/contexts';
 import { getInitValue, NOOP } from 'helpers';
 import { useToggle } from 'ui/hooks/useToggle';
 
-interface Props extends ArgComponentProps<unknown> {
+interface OptionProps extends ArgComponentProps<unknown> {
   component: React.ComponentType<ArgComponentProps<unknown>>;
   registry: Registry;
   typeDef: TypeDef;
@@ -22,7 +22,7 @@ export function Option({
   registry,
   typeDef,
   value = null,
-}: Props) {
+}: OptionProps) {
   const { accounts } = useApi();
   const [isSupplied, toggleIsSupplied] = useToggle(value !== null);
   const isSuppliedRef = useRef(isSupplied);

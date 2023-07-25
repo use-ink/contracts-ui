@@ -6,8 +6,6 @@ import BN from 'bn.js';
 import { InputNumber } from './InputNumber';
 import { ArgComponentProps } from 'types';
 
-type Props = ArgComponentProps<BN>;
-
 function getMinMax(type: string): [bigint, bigint] {
   switch (type) {
     case 'i8':
@@ -35,7 +33,7 @@ function getMinMax(type: string): [bigint, bigint] {
   }
 }
 
-export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
+export function InputBn({ onChange, typeDef: { type } }: ArgComponentProps<BN>) {
   const [displayValue, setDisplayValue] = useState('0');
   const [min, max] = getMinMax(type);
 

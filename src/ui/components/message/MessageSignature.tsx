@@ -7,7 +7,7 @@ import { ArgSignature } from './ArgSignature';
 import type { AbiMessage, Registry } from 'types';
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface MessageSignatureProps extends React.HTMLAttributes<HTMLDivElement> {
   message: Partial<AbiMessage>;
   params?: unknown[];
   registry: Registry;
@@ -18,7 +18,7 @@ export function MessageSignature({
   message: { args, isConstructor, isMutating, method, returnType },
   params = [],
   registry,
-}: Props) {
+}: MessageSignatureProps) {
   return (
     <div className={classes('font-mono', isConstructor && 'constructor', className)}>
       <span

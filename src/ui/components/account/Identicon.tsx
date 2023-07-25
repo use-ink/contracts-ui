@@ -9,13 +9,13 @@ import { Tooltip } from 'react-tooltip';
 import { Button } from '../common';
 import { classes } from 'helpers';
 
-export interface Props extends React.HTMLAttributes<HTMLImageElement> {
+export interface IdenticonBaseProps extends React.HTMLAttributes<HTMLImageElement> {
   value?: string | null;
   isAlternative?: boolean;
   size: number;
 }
 
-function renderCircle({ cx, cy, fill, r }: Circle, key: number): React.ReactNode {
+function renderCircle({ cx, cy, fill, r }: Circle, key: number) {
   return <circle cx={cx} cy={cy} fill={fill} key={key} r={r} />;
 }
 
@@ -25,7 +25,7 @@ function IdenticonBase({
   isAlternative = false,
   size,
   style,
-}: Props): React.ReactElement<Props> | null {
+}: IdenticonBaseProps) {
   const onClick = useCallback(() => {
     if (value) {
       copy(value);

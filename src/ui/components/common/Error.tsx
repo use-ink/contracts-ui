@@ -4,9 +4,7 @@
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import { classes } from 'helpers';
 
-type Props = React.HTMLProps<HTMLDivElement>;
-
-export function Error({ children, className }: Props) {
+export function Error({ children, className }: React.HTMLProps<HTMLDivElement>) {
   return (
     <div className={classes('page-error', className)} data-cy="error-card">
       <div>

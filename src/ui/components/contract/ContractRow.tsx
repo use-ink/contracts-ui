@@ -8,11 +8,11 @@ import { ContractDocument } from 'types';
 import { useApi } from 'ui/contexts';
 import { getContractInfo, displayDate } from 'helpers';
 
-interface Props {
+interface ContractRowProps {
   contract: ContractDocument;
 }
 
-export function ContractRow({ contract: { address, name, date } }: Props) {
+export function ContractRow({ contract: { address, name, date } }: ContractRowProps) {
   const { api } = useApi();
   const [isOnChain, setIsOnChain] = useState(true);
 

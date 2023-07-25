@@ -8,7 +8,7 @@ import { useApi, useDatabase } from 'ui/contexts';
 import { checkOnChainCode, classes, truncate } from 'helpers';
 import { CopyButton } from 'ui/components/common/CopyButton';
 
-type Props = SimpleSpread<
+type CodeHashProps = SimpleSpread<
   React.HTMLAttributes<HTMLButtonElement>,
   {
     codeHash: string;
@@ -31,7 +31,7 @@ export function CodeHash({
   isSuccess,
   name,
   onClick,
-}: Props) {
+}: CodeHashProps) {
   const { api } = useApi();
   const { db } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);

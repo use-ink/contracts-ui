@@ -29,18 +29,18 @@ import { useWeight, useBalance, useArgValues } from 'ui/hooks';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
 
-interface Props {
+interface InteractTabProps {
   contract: UIContract;
 }
 
-export const InteractTab = ({
+export function InteractTab({
   contract: {
     abi,
     abi: { registry },
     tx,
     address,
   },
-}: Props) => {
+}: InteractTabProps) {
   const { accounts, api } = useApi();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
@@ -264,4 +264,4 @@ export const InteractTab = ({
       </div>
     </div>
   );
-};
+}

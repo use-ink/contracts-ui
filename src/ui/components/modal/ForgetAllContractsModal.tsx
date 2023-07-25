@@ -6,11 +6,15 @@ import { useCallback, useState } from 'react';
 import type { ModalProps } from './ModalBase';
 import { ModalBase as Modal } from './ModalBase';
 
-interface Props extends ModalProps {
+interface ForgetAllContractsModalProps extends ModalProps {
   confirm: () => Promise<void>;
 }
 
-export const ForgetAllContractsModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 'title'>) => {
+export function ForgetAllContractsModal({
+  isOpen,
+  setIsOpen,
+  confirm,
+}: Omit<ForgetAllContractsModalProps, 'title'>) {
   const [isBusy, setIsBusy] = useState(false);
   const onConfirm = useCallback(() => {
     setIsBusy(true);
@@ -42,4 +46,4 @@ export const ForgetAllContractsModal = ({ isOpen, setIsOpen, confirm }: Omit<Pro
       </div>
     </Modal>
   );
-};
+}

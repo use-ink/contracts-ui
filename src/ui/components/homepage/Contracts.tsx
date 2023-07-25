@@ -9,15 +9,13 @@ import { ForgetAllContractsModal } from 'ui/components/modal';
 import { useDatabase } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
 
-export function Contracts(): React.ReactElement | null {
+export function Contracts() {
   const { db } = useDatabase();
   const [isOpen, setIsOpen] = useState(false);
   const [contracts, isLoading] = useDbQuery(() => db.contracts.toArray(), [db]);
   const forgetAllContracts = useCallback(() => db.contracts.clear(), [db]);
 
-  if (isLoading || !contracts) {
-    return null;
-  }
+  if (isLoading || !contracts) return null;
 
   if (contracts.length === 0) {
     return (

@@ -10,7 +10,7 @@ import { TypeDef, ArgComponentProps, OrFalsy } from 'types';
 import { getInitValue } from 'helpers';
 import { useApi } from 'ui/contexts';
 
-interface Props extends ArgComponentProps<unknown[]> {
+interface VectorProps extends ArgComponentProps<unknown[]> {
   component: React.ComponentType<ArgComponentProps<unknown>>;
 }
 
@@ -21,7 +21,7 @@ export function Vector({
   registry,
   typeDef,
   value = [],
-}: Props) {
+}: VectorProps) {
   const { accounts } = useApi();
   const subType = typeDef.sub as TypeDef;
 

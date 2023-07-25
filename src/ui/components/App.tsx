@@ -10,7 +10,7 @@ import {
   ThemeContextProvider,
 } from 'ui/contexts';
 
-const App = (): JSX.Element => {
+function App() {
   return (
     <ThemeContextProvider>
       <ApiContextProvider>
@@ -27,6 +27,6 @@ const App = (): JSX.Element => {
       </ApiContextProvider>
     </ThemeContextProvider>
   );
-};
+}
 
 export default App;

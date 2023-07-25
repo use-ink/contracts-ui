@@ -5,11 +5,15 @@ import { TrashIcon } from '@heroicons/react/outline';
 import { ModalBase as Modal } from './ModalBase';
 import type { ModalProps } from './ModalBase';
 
-interface Props extends ModalProps {
+interface ForgetContractModalProps extends ModalProps {
   confirm: () => void;
 }
 
-export const ForgetContractModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 'title'>) => {
+export function ForgetContractModal({
+  isOpen,
+  setIsOpen,
+  confirm,
+}: Omit<ForgetContractModalProps, 'title'>) {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Confirm action">
       <div className="py-8 text-sm text-gray-400 dark:text-gray-500">
@@ -29,4 +33,4 @@ export const ForgetContractModal = ({ isOpen, setIsOpen, confirm }: Omit<Props, 
       </div>
     </Modal>
   );
-};
+}

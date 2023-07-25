@@ -10,14 +10,14 @@ interface Tab {
   label: React.ReactNode;
 }
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode[];
   index: number;
   setIndex: SetState<number>;
   tabs: Tab[];
 }
 
-export function Tabs({ children, index, setIndex, tabs }: Props) {
+export function Tabs({ children, index, setIndex, tabs }: TabsProps) {
   return (
     <>
       <div className="grid w-full grid-cols-12">

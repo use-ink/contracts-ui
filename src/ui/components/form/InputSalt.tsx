@@ -5,7 +5,7 @@ import { Switch } from '../common/Switch';
 import { Input } from './Input';
 import { SimpleSpread, ValidFormField } from 'types';
 
-type Props = SimpleSpread<
+type InputSaltProps = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
   ValidFormField<string> & {
     isActive?: boolean;
@@ -13,7 +13,13 @@ type Props = SimpleSpread<
   }
 >;
 
-export function InputSalt({ isError, onChange, value, isActive = false, toggleIsActive }: Props) {
+export function InputSalt({
+  isError,
+  onChange,
+  value,
+  isActive = false,
+  toggleIsActive,
+}: InputSaltProps) {
   return (
     <div className="flex items-center">
       <Input

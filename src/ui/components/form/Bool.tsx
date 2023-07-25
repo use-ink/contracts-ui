@@ -4,7 +4,7 @@
 import { SimpleSpread, ValidFormField } from 'types';
 import { Dropdown } from 'ui/components/common/Dropdown';
 
-type Props = SimpleSpread<React.HTMLAttributes<HTMLDivElement>, ValidFormField<boolean>>;
+type BoolProps = SimpleSpread<React.HTMLAttributes<HTMLDivElement>, ValidFormField<boolean>>;
 
 const options = [
   {
@@ -17,6 +17,6 @@ const options = [
   },
 ];
 
-export function Bool({ value, onChange, ...props }: Props) {
+export function Bool({ value, onChange, ...props }: BoolProps) {
   return <Dropdown {...props} onChange={onChange} options={options} value={value} />;
 }

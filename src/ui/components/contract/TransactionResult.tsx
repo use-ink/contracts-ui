@@ -6,11 +6,12 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { CallResult, EventRecord, Registry } from 'types';
 
-interface Props {
+interface TransactionResultProps {
   result: CallResult;
   date: string;
   registry: Registry;
 }
+
 function Events({ events }: { events: EventRecord[] }) {
   return (
     <div data-cy="generic-events">
@@ -45,10 +46,10 @@ function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) 
   );
 }
 
-export const TransactionResult = ({
+export function TransactionResult({
   result: { time, error, events, contractEvents, message },
   date,
-}: Props) => {
+}: TransactionResultProps) {
   return (
     <div
       className="break-all border-b border-gray-200 p-4 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-400"
@@ -80,4 +81,4 @@ export const TransactionResult = ({
       </div>
     </div>
   );
-};
+}

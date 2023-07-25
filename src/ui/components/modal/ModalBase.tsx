@@ -12,10 +12,8 @@ export type ModalProps = {
   children?: ReactNode | undefined;
 };
 
-export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) => {
-  function closeModal() {
-    setIsOpen(false);
-  }
+export function ModalBase({ isOpen, setIsOpen, title, children }: ModalProps) {
+  const closeModal = () => setIsOpen(false);
   return (
     <>
       <Transition appear as={Fragment} show={isOpen}>
@@ -67,4 +65,4 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
       </Transition>
     </>
   );
-};
+}

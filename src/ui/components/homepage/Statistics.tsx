@@ -13,7 +13,7 @@ function getChainType(systemChainType: ChainProperties['systemChainType']): stri
   return 'Unknown';
 }
 
-export function Statistics(): React.ReactElement | null {
+export function Statistics() {
   const { api, systemChain, systemName, systemChainType, tokenSymbol } = useApi();
 
   const [blockNumber, setBlockNumber] = useState<AnyJson>('');

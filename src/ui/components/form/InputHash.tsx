@@ -5,8 +5,6 @@ import { useCallback, useState } from 'react';
 import { InputHex } from './InputHex';
 import { ArgComponentProps, Hash } from 'types';
 
-type Props = ArgComponentProps<Hash>;
-
 type Validation = { isValid: boolean; message?: string };
 
 function validate(value: string): Validation {
@@ -22,7 +20,7 @@ function validate(value: string): Validation {
   };
 }
 
-export function InputHash({ registry, onChange, className }: Props) {
+export function InputHash({ registry, onChange, className }: ArgComponentProps<Hash>) {
   const [{ isValid, message }, setValidation] = useState<Validation>({ isValid: true });
   const handleChange = useCallback(
     (d: string) => {
@@ -41,10 +39,10 @@ export function InputHash({ registry, onChange, className }: Props) {
   );
   return (
     <InputHex
-      onChange={handleChange}
       className={className}
       defaultValue={registry.createType('H256').toString().slice(2)}
       error={!isValid ? message : undefined}
+      onChange={handleChange}
     />
   );
 }

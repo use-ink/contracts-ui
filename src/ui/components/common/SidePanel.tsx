@@ -3,12 +3,12 @@
 
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface SidePanelProps extends React.HTMLAttributes<HTMLDivElement> {
   header: React.ReactNode;
   emptyView?: React.ReactNode;
 }
 
-export const SidePanel = ({ children, className, header, emptyView = '' }: Props) => {
+export const SidePanel = ({ children, className, header, emptyView = '' }: SidePanelProps) => {
   return (
     <div
       className={classes('mb-8 rounded-md border border-gray-200 dark:border-gray-700', className)}

@@ -13,7 +13,7 @@ export function OutcomeItem({
   displayValue: string;
   copyValue?: string;
   id?: string;
-}): JSX.Element {
+}) {
   return (
     <div className="event-log mb-4">
       <div className="mb-1 leading-5">{title}</div>

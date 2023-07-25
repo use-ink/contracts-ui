@@ -3,11 +3,11 @@
 
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface SubFormProps extends React.HTMLAttributes<HTMLDivElement> {
   nestingNumber: number;
 }
 
-export function SubForm({ children, className, nestingNumber }: Props) {
+export function SubForm({ children, className, nestingNumber }: SubFormProps) {
   const isOddNesting = nestingNumber % 2 != 0;
 
   return (

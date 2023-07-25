@@ -5,7 +5,7 @@ import { encodeTypeDef } from '@polkadot/types/create';
 import { Registry, TypeDef } from 'types';
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface ArgSignatureProps extends React.HTMLAttributes<HTMLDivElement> {
   arg: { name?: string; type: TypeDef };
   registry: Registry;
   value?: string;
@@ -28,7 +28,7 @@ export function ArgSignature({
   registry,
   value,
   ...props
-}: Props) {
+}: ArgSignatureProps) {
   return (
     <span className={classes('font-mono', className)} {...props}>
       {name ? `${name}: ` : ''}

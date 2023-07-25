@@ -6,7 +6,7 @@ import { classes } from 'helpers';
 
 type Variant = 'default' | 'primary' | 'plain' | 'negative';
 
-interface Props extends React.HTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   isDisabled?: boolean;
   isLoading?: boolean;
   ref?: React.MutableRefObject<HTMLButtonElement | null>;
@@ -17,7 +17,7 @@ export function Buttons({ children, className }: React.HTMLAttributes<HTMLButton
   return <div className={classes('flex space-x-2', className)}>{children}</div>;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const { children, variant, className, isDisabled, isLoading, ...rest } = props;
 
   return (

@@ -3,7 +3,7 @@
 
 import { Button } from '../common/Button';
 
-export function HelpBox(): React.ReactElement | null {
+export function HelpBox() {
   return (
     <div className="mb-8 border-b border-gray-200 pb-8 dark:border-gray-800">
       <div className="relative w-auto rounded border border-gray-200 p-4 dark:border-gray-800 dark:bg-elevation-1">

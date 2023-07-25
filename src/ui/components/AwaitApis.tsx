@@ -9,7 +9,7 @@ import { useApi, useDatabase } from 'ui/contexts';
 import { Loader, ConnectionError } from 'ui/components/common';
 import { isKeyringLoaded } from 'helpers';
 
-export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
+export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>) {
   const { accounts, api, endpoint, status, systemChainType } = useApi();
   const { db } = useDatabase();
   const [message, setMessage] = useState('');

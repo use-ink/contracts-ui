@@ -8,13 +8,13 @@ import { Tooltip } from 'react-tooltip';
 import { Button } from './Button';
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<unknown> {
+interface CopyButtonProps extends React.HTMLAttributes<unknown> {
   iconClassName?: string;
   value: string;
   id: string;
 }
 
-export function CopyButton({ className, iconClassName, value, id }: Props) {
+export function CopyButton({ className, iconClassName, value, id }: CopyButtonProps) {
   const ref = useRef<HTMLButtonElement>(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const onClick: MouseEventHandler = useCallback(

@@ -9,7 +9,7 @@ import { getValidation } from './FormField';
 import type { SimpleSpread, UseStorageDepositLimit } from 'types';
 import { classes, isNull, isNumber } from 'helpers';
 
-type Props = SimpleSpread<
+type InputStorageDepositLimitProps = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
   UseStorageDepositLimit & {
     isActive?: boolean;
@@ -25,7 +25,7 @@ export function InputStorageDepositLimit({
   toggleIsActive,
   value,
   ...props
-}: Props) {
+}: InputStorageDepositLimitProps) {
   const percentage = useMemo((): number | null => {
     if (!maximum || maximum.eqn(0)) {
       return null;

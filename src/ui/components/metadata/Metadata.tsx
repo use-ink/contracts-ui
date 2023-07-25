@@ -4,15 +4,15 @@
 import { Abi } from 'types';
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface MetadataProps extends React.HTMLAttributes<HTMLDivElement> {
   metadata: Abi;
 }
 
-export function Metadata({ metadata, className = '', ...restOfProps }: Props) {
+export function Metadata({ metadata, className = '', ...restOfProps }: MetadataProps) {
   return (
     <div
       className={classes(
-        'inline-flex grid grid-cols-2 items-center gap-2 rounded border border-gray-200 p-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-elevation-1 dark:text-white',
+        'grid grid-cols-2 items-center gap-2 rounded border border-gray-200 p-3 text-sm text-gray-900 dark:border-gray-700 dark:bg-elevation-1 dark:text-white',
         className
       )}
       {...restOfProps}

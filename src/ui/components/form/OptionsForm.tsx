@@ -8,7 +8,7 @@ import { InputBalance } from 'ui/components/form/InputBalance';
 import { InputStorageDepositLimit } from 'ui/components/form/InputStorageDepositLimit';
 import { FormField } from 'ui/components/form/FormField';
 
-interface Props {
+interface OptionsFormProps {
   isPayable: boolean;
   refTime: UIGas;
   proofSize: UIGas;
@@ -22,7 +22,7 @@ export function OptionsForm({
   proofSize,
   storageDepositLimit,
   value: { value, onChange: setValue, ...valueValidation },
-}: Props) {
+}: OptionsFormProps) {
   return (
     <>
       <div className="flex justify-between">

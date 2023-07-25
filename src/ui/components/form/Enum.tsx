@@ -9,11 +9,11 @@ import { isNumber, getInitValue } from 'helpers';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
 
-interface Props extends ArgComponentProps<Record<string, unknown>> {
+interface EnumProps extends ArgComponentProps<Record<string, unknown>> {
   components: React.ComponentType<ArgComponentProps<unknown>>[];
 }
 
-export function Enum(props: Props) {
+export function Enum(props: EnumProps) {
   const { components, typeDef, nestingNumber, onChange: _onChange, registry, value } = props;
   const variants = typeDef.sub as TypeDef[];
   const { accounts } = useApi();

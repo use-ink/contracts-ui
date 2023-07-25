@@ -9,7 +9,7 @@ import { BN_ZERO, classes, fromBalance, fromSats, toBalance } from 'helpers';
 import { ApiPromise, OrFalsy, SimpleSpread } from 'types';
 import { useApi } from 'ui/contexts';
 
-type Props = SimpleSpread<
+type InputBalanceBaseProps = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,
   {
     value?: BN;
@@ -33,7 +33,7 @@ function InputBalanceBase({
   onChange,
   withUnits = true,
   ...inputProps
-}: Props) {
+}: InputBalanceBaseProps) {
   const { api, tokenSymbol } = useApi();
 
   const [stringValue, setStringValue] = useState(getStringValue(api, value));

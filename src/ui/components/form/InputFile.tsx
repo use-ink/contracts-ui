@@ -7,9 +7,9 @@ import { createRef, useCallback, useEffect, useState } from 'react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/solid';
 import { DocumentTextIcon } from '@heroicons/react/outline';
-import type { FileState, InputFileProps as Props, OrFalsy } from 'types';
+import type { FileState, InputFileProps, OrFalsy } from 'types';
 
-const NOOP = (): void => undefined;
+const NOOP = () => undefined;
 
 export function InputFile({
   className = '',
@@ -19,7 +19,7 @@ export function InputFile({
   onChange,
   placeholder,
   onRemove,
-}: Props) {
+}: InputFileProps) {
   const ref = createRef<DropzoneRef>();
   const [file, setFile] = useState<OrFalsy<FileState>>(propsFile);
 

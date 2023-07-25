@@ -13,7 +13,7 @@ import { classes } from 'helpers';
 
 type ValidationState = 'error' | 'success' | 'warning' | null;
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode;
   help?: React.ReactNode;
 }
@@ -38,7 +38,7 @@ export function FormField({
   isWarning,
   label,
   message,
-}: Props & Validation) {
+}: FormFieldProps & Validation) {
   const validationState = useMemo((): ValidationState => {
     if (!message) return null;
 

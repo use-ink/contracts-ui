@@ -3,7 +3,7 @@
 
 import { classes } from 'helpers';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
   strokeWidth?: number;
   width?: number;
   color?: string;
@@ -16,7 +16,7 @@ export function Spinner({
   darkColor = color,
   strokeWidth = 4,
   width = 16,
-}: Props) {
+}: SpinnerProps) {
   return (
     <div
       className={classes(

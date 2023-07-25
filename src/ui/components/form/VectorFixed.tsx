@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { FormField } from './FormField';
 import { ArgComponentProps, OrFalsy } from 'types';
 
-interface Props extends ArgComponentProps<unknown[]> {
+interface VectorFixedProps extends ArgComponentProps<unknown[]> {
   component: React.ComponentType<ArgComponentProps<unknown>>;
 }
 
@@ -16,7 +16,7 @@ export function VectorFixed({
   registry,
   typeDef,
   value,
-}: Props) {
+}: VectorFixedProps) {
   const length = typeDef.length;
 
   const onChange = useCallback(
