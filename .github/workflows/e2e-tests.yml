@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          # NOTE: this stopped working for some reason, maybe a change in github's url format.
+          # NOTE: this stopped working for some reason, it seems substrate-contracts-node-linux was not packed in v0.28.0
           # curl -L "https://github.com/paritytech/substrate-contracts-node/releases/latest/download/substrate-contracts-node-linux.tar.gz" -O
           curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.27.0/substrate-contracts-node-linux.tar.gz" -O
           ls -lash
