@@ -64,11 +64,11 @@
     "@tailwindcss/forms": "^0.5.4",
     "@types/bcryptjs": "^2.4.2",
     "@types/big.js": "^6.1.6",
-    "@types/node": "^20.4.2",
+    "@types/node": "^20.4.5",
     "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^6.1.0",
-    "@typescript-eslint/parser": "^6.1.0",
-    "@vitejs/plugin-react": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
     "cypress": "^12.14.0",
@@ -92,9 +92,9 @@
     "tailwindcss": "^3.3.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9",
+    "vite": "^4.4.6",
     "vite-plugin-istanbul": "^4.1.0",
-    "vite-tsconfig-paths": "^4.0.7"
+    "vite-tsconfig-paths": "^4.2.0"
   },
   "browserslist": [
     "last 2 Chrome versions"
