@@ -9,7 +9,7 @@ jobs:
       - run: |
           # NOTE: this stopped working for some reason, maybe a change in github's url format.
           # curl -L "https://github.com/paritytech/substrate-contracts-node/releases/latest/download/substrate-contracts-node-linux.tar.gz" -O
-          curl -L "https://github.com/paritytech/substrate-contracts-node/archive/refs/tags/v0.28.0.tar.gz" -O
+          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/download/v0.27.0/substrate-contracts-node-linux.tar.gz" -O
           ls -lash
       - name: Save node artifact
         uses: actions/upload-artifact@v3
