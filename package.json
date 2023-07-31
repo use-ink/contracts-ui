@@ -56,7 +56,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.10.7",
+    "@cypress/code-coverage": "^3.11.0",
     "@cypress/snapshot": "^2.1.7",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -71,7 +71,7 @@
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
-    "cypress": "^12.14.0",
+    "cypress": "^12.17.2",
     "cypress-file-upload": "^5.0.8",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
@@ -93,7 +93,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
     "vite": "^4.4.6",
-    "vite-plugin-istanbul": "^4.1.0",
+    "vite-plugin-istanbul": "^5.0.0",
     "vite-tsconfig-paths": "^4.2.0"
   },
   "browserslist": [

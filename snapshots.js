@@ -1,8 +1,5 @@
-// Copyright 2022 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: GPL-3.0-only
-
 module.exports = {
-  __version: '12.8.1',
+  __version: '12.17.2',
   'Storage Types Contract': {
     UnsignedIntegers: {
       1: "<code>{\n  i128ValueMax: '170,141,183,460,469,231,731,687,303,715,884,105,727',\n  i128ValueMin: '-170,141,183,460,469,231,731,687,303,715,884,105,728',\n  i16ValueMax: '-32,769',\n  i16ValueMin: '-32,768',\n  i32ValueMax: '2,147,483,647',\n  i32ValueMin: '-2,147,483,648',\n  i64ValueMax: '9,223,372,036,854,775,807',\n  i64ValueMin: '-9,223,372,036,854,775,808',\n  i8ValueMax: '-129',\n  i8ValueMin: '-128',\n  }</code>",
