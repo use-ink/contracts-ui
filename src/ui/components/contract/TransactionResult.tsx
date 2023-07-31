@@ -29,7 +29,7 @@ function ContractEvents({ contractEvents }: { contractEvents: DecodedEvent[] }) 
       <div className="mb-2 uppercase">Contract events</div>
       {contractEvents.map(({ event, args }) => {
         const a = args.map((a, i) => (
-          <div className="mb-1" key={`${event.identifier}-${event.args[i].name}`}>
+          <div className="mb-1" key={`${event.identifier}-${event.args[i].name}-${i}`}>
             <div className="text-gray-400 dark:text-gray-200">{event.args[i].name}</div>
             {JSON.stringify(a.toHuman(), null, 2)}
           </div>
