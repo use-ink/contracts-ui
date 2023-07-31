@@ -6,7 +6,7 @@ import { randomAsU8a } from './util';
 import { UIStorageDeposit, ContractCallOutcome, BN, WeightV2, AbiParam, Registry } from 'types';
 
 export function decodeStorageDeposit(
-  storageDeposit: ContractCallOutcome['storageDeposit']
+  storageDeposit: ContractCallOutcome['storageDeposit'],
 ): UIStorageDeposit {
   if (storageDeposit.isCharge) {
     return { value: storageDeposit.asCharge, type: 'charge' };
@@ -30,7 +30,7 @@ export function getStorageDepositLimit(
   switchOn: boolean,
   userInput: BN,
   registry: Registry,
-  dryRunValue?: UIStorageDeposit
+  dryRunValue?: UIStorageDeposit,
 ) {
   return switchOn
     ? registry.createType('Balance', userInput)
@@ -43,7 +43,7 @@ export function getGasLimit(
   switchOn: boolean,
   refTimeLimit: BN,
   proofSizeLimit: BN,
-  registry: Registry
+  registry: Registry,
 ): WeightV2 | null {
   return switchOn
     ? registry.createType('WeightV2', {
@@ -56,7 +56,7 @@ export function getGasLimit(
 export function transformUserInput(
   registry: Registry,
   messageArgs: AbiParam[],
-  values?: Record<string, unknown>
+  values?: Record<string, unknown>,
 ): unknown[] {
   return messageArgs.map(({ name, type: { type } }) => {
     const value = values ? values[name] : null;

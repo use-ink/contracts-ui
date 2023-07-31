@@ -21,7 +21,7 @@ describe('Instantiate dry run', () => {
       cy.contains('ContractTrapped').should('be.visible');
       cy.contains('Contract trapped during execution.').should('be.visible');
       cy.contains(
-        "panicked at 'assertion failed: 0 < requirement && requirement <= owners && owners <= MAX_OWNERS"
+        "panicked at 'assertion failed: 0 < requirement && requirement <= owners && owners <= MAX_OWNERS",
       ).should('be.visible');
     });
   });

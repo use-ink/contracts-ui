@@ -52,7 +52,7 @@ export function InputBytes({ onChange, className, length }: Props): React.ReactE
         // TODO shouldn't this unset the value in error and invalid case to prevent form submission?
       }
     },
-    [onChange, validate]
+    [onChange, validate],
   );
 
   return (

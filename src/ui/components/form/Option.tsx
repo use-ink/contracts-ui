@@ -37,7 +37,7 @@ export function Option({
 
       _onChange(value);
     },
-    [_onChange, isSupplied]
+    [_onChange, isSupplied],
   );
 
   useEffect((): void => {

@@ -5,7 +5,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
 import { useApi } from './ApiContext';
-import { TxOptions, TransactionsState, TxStatus as Status, TransactionsQueue } from 'types';
+import { TxOptions, TransactionsState, TransactionsQueue, TxStatusMap } from 'types';
 import { Transactions } from 'ui/components/Transactions';
 import { isEmptyObj } from 'helpers';
 
@@ -24,7 +24,7 @@ export function TransactionsContextProvider({
       ...txs,
       [nextId]: {
         ...options,
-        status: Status.Queued,
+        status: TxStatusMap.Queued,
         events: {},
       },
     });
@@ -36,7 +36,7 @@ export function TransactionsContextProvider({
     if (!tx) throw new Error(`No tx with id: ${id} is queued `);
 
     const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
-    setTxs({ ...txs, [id]: { ...tx, status: Status.Processing } });
+    setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Processing } });
     const injector = systemChainType.isDevelopment ? undefined : await web3FromAddress(accountId);
     const account = systemChainType.isDevelopment ? keyring.getPair(accountId) : accountId;
 
@@ -59,7 +59,7 @@ export function TransactionsContextProvider({
             });
 
             if (!isValid(result)) {
-              setTxs({ ...txs, [id]: { ...tx, status: Status.Error, events } });
+              setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error, events } });
 
               let message = 'Transaction failed';
 
@@ -75,16 +75,16 @@ export function TransactionsContextProvider({
 
             onSuccess && (await onSuccess(result));
 
-            setTxs({ ...txs, [id]: { ...tx, status: Status.Success, events } });
+            setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Success, events } });
 
             unsub();
 
             nextId++;
           }
-        }
+        },
       );
     } catch (error) {
-      setTxs({ ...txs, [id]: { ...tx, status: Status.Error } });
+      setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error } });
       console.error(error);
     }
   }

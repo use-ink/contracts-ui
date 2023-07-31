@@ -16,7 +16,7 @@ const MAX_PARAM_LENGTH = 20;
 function truncate(param: string): string {
   return param.length > MAX_PARAM_LENGTH
     ? `${param.substring(0, MAX_PARAM_LENGTH / 2)}…${param.substring(
-        param.length - MAX_PARAM_LENGTH / 2
+        param.length - MAX_PARAM_LENGTH / 2,
       )}`
     : param;
 }

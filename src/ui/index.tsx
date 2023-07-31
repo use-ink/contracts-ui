@@ -41,5 +41,5 @@ root.render(
         <Route element={<NotFound />} path="*" />
       </Route>
     </Routes>
-  </BrowserRouter>
+  </BrowserRouter>,
 );

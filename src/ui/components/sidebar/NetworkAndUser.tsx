@@ -41,7 +41,7 @@ export function NetworkAndUser() {
           'chain',
           status === 'connected' ? 'isConnected' : '',
           status === 'loading' ? 'isConnecting' : '',
-          status === 'error' ? 'isError' : ''
+          status === 'error' ? 'isError' : '',
         )}
         onChange={e => {
           navigate(`/?rpc=${e}`);

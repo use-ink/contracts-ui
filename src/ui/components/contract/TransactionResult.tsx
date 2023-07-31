@@ -18,7 +18,7 @@ function Events({ events }: { events: EventRecord[] }) {
       {events.map(({ event }) =>
         event.method === 'ContractEmitted' ? null : (
           <div key={event.method}>{`${event.section}::${event.method}`}</div>
-        )
+        ),
       )}
     </div>
   );

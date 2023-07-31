@@ -19,7 +19,7 @@ export function Footer() {
         setVisibleModal(undefined);
       }
     },
-    [setVisibleModal]
+    [setVisibleModal],
   );
 
   return (

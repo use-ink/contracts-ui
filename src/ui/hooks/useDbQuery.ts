@@ -7,7 +7,7 @@ import { OrFalsy } from 'types';
 
 export function useDbQuery<T>(
   querier: () => T | Promise<T>,
-  deps: unknown[] = []
+  deps: unknown[] = [],
 ): [OrFalsy<T>, boolean] {
   const liveQuery = useLiveQuery<T, null>(querier, deps, null);
   const isLoading = useMemo(() => liveQuery === null, [liveQuery]);

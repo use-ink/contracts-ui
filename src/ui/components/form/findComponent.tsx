@@ -20,14 +20,14 @@ import { ArgComponentProps, Registry, TypeDef, TypeDefInfo } from 'types';
 function subComponents(
   registry: Registry,
   typeDef: TypeDef,
-  nestingNumber: number
+  nestingNumber: number,
 ): React.ComponentType<ArgComponentProps<unknown>>[] {
   if (!typeDef.sub) {
     throw new Error('Cannot retrieve subComponent array for type definition');
   }
 
   return (Array.isArray(typeDef.sub) ? typeDef.sub : [typeDef.sub]).map(subTypeDef =>
-    findComponent(registry, subTypeDef, nestingNumber)
+    findComponent(registry, subTypeDef, nestingNumber),
   );
 }
 
@@ -35,7 +35,7 @@ function subComponents(
 export function findComponent(
   registry: Registry,
   type: TypeDef,
-  nestingNumber = 0
+  nestingNumber = 0,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): React.ComponentType<ArgComponentProps<any>> {
   if (type.info === TypeDefInfo.Compact) {
@@ -62,7 +62,7 @@ export function findComponent(
     return findComponent(
       registry,
       registry.lookup.getTypeDef(type.type as `Lookup${number}`),
-      nestingNumber
+      nestingNumber,
     );
   }
 

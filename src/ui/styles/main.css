@@ -52,7 +52,9 @@ body {
   background-color: #1a1d1f !important;
   border: 1px solid #3a424e !important;
   padding: 4px 12px !important;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-out !important;
+  transition:
+    opacity 0.3s ease-in-out,
+    visibility 0.3s ease-out !important;
   opacity: 0 !important;
   visibility: visible;
   z-index: 1001;

@@ -26,7 +26,7 @@ export function CopyButton({ className, iconClassName, value, id }: Props) {
         setShowTooltip(false);
       }, 1000);
     },
-    [value]
+    [value],
   );
 
   return (

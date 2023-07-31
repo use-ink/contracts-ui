@@ -23,7 +23,7 @@ export const useMetadataField = (): UseMetadataField => {
 
   const [codeBundle, isLoading] = useDbQuery(
     () => db.codeBundles.get({ codeHash: codeHashUrlParam || '' }),
-    [codeHashUrlParam, db]
+    [codeHashUrlParam, db],
   );
   const metadata = useMetadata(codeBundle?.abi, {
     isWasmRequired: !codeHashUrlParam && window.location.pathname.includes('instantiate'),

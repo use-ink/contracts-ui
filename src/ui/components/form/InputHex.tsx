@@ -23,21 +23,21 @@ export function InputHex({ onChange, className, defaultValue, error }: Props) {
         onChange(d);
       }
     },
-    [onChange]
+    [onChange],
   );
   return (
     <>
-      <div className="flex items-center relative w-full">
-        <span className="text-gray-400 absolute text-sm left-3">0x</span>
+      <div className="relative flex w-full items-center">
+        <span className="absolute left-3 text-sm text-gray-400">0x</span>
         <Input
-          className={classes('pl-8 flex-1', className)}
-          value={value}
+          className={classes('flex-1 pl-8', className)}
           onChange={handleChange}
           placeholder="hexadecimal text"
           type="text"
+          value={value}
         />
       </div>
-      <div className="text-xs text-red-600 basis-full mt-1">{error}</div>
+      <div className="mt-1 basis-full text-xs text-red-600">{error}</div>
     </>
   );
 }

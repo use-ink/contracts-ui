@@ -56,7 +56,7 @@ export function AvailableCodeBundles() {
   const { db } = useDatabase();
   const [data, isLoading] = useDbQuery(
     () => db.codeBundles.orderBy('date').reverse().toArray(),
-    [db]
+    [db],
   );
   const [codes, setCodes] = useState<CodeBundleDocument[]>([]);
 

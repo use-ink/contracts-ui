@@ -153,7 +153,7 @@ export const InteractTab = ({
         isActive,
         userInput,
         api.registry,
-        predictedStorageDeposit
+        predictedStorageDeposit,
       ),
       value: message.isPayable ? (params[2] as Balance) : undefined,
     };
@@ -162,7 +162,7 @@ export const InteractTab = ({
 
     const extrinsic = tx[message.method](
       options,
-      ...transformUserInput(registry, message.args, argValues)
+      ...transformUserInput(registry, message.args, argValues),
     );
 
     newId.current = queue({

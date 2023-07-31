@@ -55,7 +55,7 @@ export function Step2() {
   const salt = useFormField<string>(genRanHex(64), validateSalt);
   const [argValues, setArgValues, inputData] = useArgValues(
     deployConstructor,
-    metadata?.registry ?? api.registry
+    metadata?.registry ?? api.registry,
   );
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
@@ -127,7 +127,7 @@ export function Step2() {
         isActive,
         userInput,
         api.registry,
-        predictedStorageDeposit
+        predictedStorageDeposit,
       ),
       gasLimit: getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry) ?? gasRequired,
     });

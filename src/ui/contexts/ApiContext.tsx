@@ -29,7 +29,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
   const rpcUrl = searchParams.get('rpc');
   const [preferredEndpoint, setPreferredEndpoint] = useLocalStorage<string>(
     LOCAL_STORAGE_KEY.PREFERRED_ENDPOINT,
-    ROCOCO_CONTRACTS.rpc
+    ROCOCO_CONTRACTS.rpc,
   );
   const [api, setApi] = useState({} as ApiPromise);
   const [endpoint, setEndpoint] = useState(preferredEndpoint);
@@ -78,7 +78,7 @@ export const ApiContextProvider = ({ children }: React.PropsWithChildren<Partial
               isDevelopment: chainProps.systemChainType.isDevelopment,
               type: isEthereumChain ? 'ethereum' : 'ed25519',
             },
-            accounts as InjectedAccountWithMetaOverride[]
+            accounts as InjectedAccountWithMetaOverride[],
           );
         setAccounts(keyring.getAccounts());
       }

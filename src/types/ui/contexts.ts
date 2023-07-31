@@ -61,12 +61,17 @@ export interface InstantiateState {
 
 export type InstantiateProps = InstantiateState;
 
-export enum TxStatus {
-  Error = 'error',
-  Success = 'success',
-  Processing = 'processing',
-  Queued = 'queued',
-}
+// avoid enums https://www.youtube.com/watch?v=jjMbPt_H3RQ
+export const TxStatusMap = {
+  Error: 'error',
+  Success: 'success',
+  Processing: 'processing',
+  Queued: 'queued',
+} as const;
+
+type ObjectValues<T> = T[keyof T];
+
+export type TxStatus = ObjectValues<typeof TxStatusMap>;
 export interface TxOptions {
   extrinsic: SubmittableExtrinsic<'promise'>;
   accountId: string;

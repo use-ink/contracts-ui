@@ -8,7 +8,7 @@ import type { ValidFormField, ValidateFn, Validation } from 'types';
 
 export function useFormField<T>(
   defaultValue: T,
-  validate: ValidateFn<T> = value => ({ isValid: !isNull(value), message: null })
+  validate: ValidateFn<T> = value => ({ isValid: !isNull(value), message: null }),
 ): ValidFormField<T> {
   const [value, setValue] = useState<T>(defaultValue);
   const [validation, setValidation] = useState<Omit<Validation, 'isError'>>(validate(value));
@@ -30,7 +30,7 @@ export function useFormField<T>(
         isTouched.current = true;
       }
     },
-    [validate]
+    [validate],
   );
 
   return useMemo(
@@ -43,6 +43,6 @@ export function useFormField<T>(
       onChange,
       value,
     }),
-    [value, onChange, isError, validation.isValid, validation.isWarning, validation.message]
+    [value, onChange, isError, validation.isValid, validation.isWarning, validation.message],
   );
 }
