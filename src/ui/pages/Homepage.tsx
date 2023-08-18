@@ -2,14 +2,23 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Contracts, HelpBox, Statistics } from '../components/homepage';
-import { PageHome } from 'ui/templates';
+import { RootLayout } from 'ui/layout';
+
+// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
 export function Homepage() {
   return (
-    <PageHome header="Contracts">
+    <RootLayout
+      aside={
+        <>
+          <HelpBox />
+          <Statistics />
+        </>
+      }
+      heading="Contracts"
+    >
       <Contracts />
-      <HelpBox />
-      <Statistics />
-    </PageHome>
+    </RootLayout>
   );
 }

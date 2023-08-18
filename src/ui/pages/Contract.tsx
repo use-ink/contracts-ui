@@ -10,7 +10,7 @@ import { MetadataTab } from 'ui/components/contract/MetadataTab';
 import { Loader } from 'ui/components/common/Loader';
 import { Tabs } from 'ui/components/common/Tabs';
 import { HeaderButtons } from 'ui/components/common/HeaderButtons';
-import { PageFull } from 'ui/templates';
+import { RootLayout } from 'ui/layout';
 import { useStoredContract } from 'ui/hooks';
 
 const TABS = [
@@ -43,16 +43,16 @@ export function Contract() {
   return (
     <Loader isLoading={!contract} message="Loading contract...">
       {contract && (
-        <PageFull
+        <RootLayout
           accessory={<HeaderButtons contract={contract} />}
-          header={contract.displayName || contract.name}
+          heading={contract.displayName || contract.name}
           help={<ContractHeader document={contract} />}
         >
           <Tabs index={tabIndex} setIndex={setTabIndex} tabs={TABS}>
             <MetadataTab abi={contract.abi} id={contract.id} />
             <InteractTab contract={contract} />
           </Tabs>
-        </PageFull>
+        </RootLayout>
       )}
     </Loader>
   );
