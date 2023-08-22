@@ -7,8 +7,9 @@ import { classes } from 'helpers/util';
 
 export function RootLayout({ accessory, heading, help, children, aside }: PageProps) {
   return (
-    <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
-      <Sidebar />
+    <>
+      {/* <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
+       <Sidebar /> */}
       <section
         className={classes(
           'p-10 overflow-y-auto w-full',
@@ -26,7 +27,8 @@ export function RootLayout({ accessory, heading, help, children, aside }: PagePr
         </main>
         {aside && <aside className="flex flex-col">{aside}</aside>}
       </section>
-    </div>
+    </>
+    // </div>
   );
 }
 
