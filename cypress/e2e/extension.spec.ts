@@ -9,13 +9,17 @@ describe('Signer extension flow on live networks', () => {
   before(() => {
     cy.visit(`/instantiate/?rpc=wss://rococo-contracts-rpc.polkadot.io`);
   });
+
   it('connects to Rococo', () => {
     cy.contains('Connecting to wss://rococo-contracts-rpc.polkadot.io').should('not.exist', {
       timeout: 25000,
     });
   });
 
-  it('Rococo is selected in the network connection dropdown', () => {
+  it.only('Rococo is selected in the network connection dropdown', () => {
+    console.log('=======================================');
+    console.log(cy.get('.dropdown.chain').find('.dropdown__single-value'));
+    console.log('=======================================');
     cy.get('.dropdown.chain')
       .find('.dropdown__single-value')
       .should('contain', 'Contracts (Rococo)');

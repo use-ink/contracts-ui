@@ -17,13 +17,13 @@ export default function App() {
       <ApiContextProvider>
         <DatabaseContextProvider>
           <TransactionsContextProvider>
-            <AwaitApis>
-              {/* we want the sidebar outside the outlet to prevent flickering in quicklinks */}
-              <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
-                <Sidebar />
+            {/* we want the sidebar outside the outlet to prevent flickering in quicklinks */}
+            <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
+              <Sidebar />
+              <AwaitApis>
                 <Outlet />
-              </div>
-            </AwaitApis>
+              </AwaitApis>
+            </div>
           </TransactionsContextProvider>
         </DatabaseContextProvider>
       </ApiContextProvider>
