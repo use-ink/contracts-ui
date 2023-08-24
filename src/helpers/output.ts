@@ -7,6 +7,7 @@ import {
   AnyJson,
   Bytes,
   ContractExecResult,
+  ContractInstantiateResult,
   ContractReturnFlags,
   Registry,
   TypeDef,
@@ -91,6 +92,28 @@ export function getDecodedOutput(
   if (result.isOk) {
     isError = checkRevertFlag(result.asOk.flags);
     const r = decodeReturnValue(returnType, result.asOk.data, registry);
+    const o = extractOutcome(r);
+    decodedOutput = isError ? getErrorText(o) : getOkText(o, r) || '<empty>';
+  }
+  return {
+    decodedOutput,
+    isError,
+  };
+}
+
+export function getDecodedOutput2(
+  { result }: Pick<ContractInstantiateResult, 'result' | 'debugMessage'>,
+  { returnType }: AbiMessage,
+  registry: Registry,
+): {
+  decodedOutput: string;
+  isError: boolean;
+} {
+  let decodedOutput = '';
+  let isError = true;
+  if (result.isOk) {
+    isError = checkRevertFlag(result.asOk.result.flags);
+    const r = decodeReturnValue(returnType, result.asOk.result.data, registry);
     const o = extractOutcome(r);
     decodedOutput = isError ? getErrorText(o) : getOkText(o, r) || '<empty>';
   }

@@ -20,6 +20,8 @@ import {
   getGasLimit,
   getStorageDepositLimit,
   decodeStorageDeposit,
+  getDecodedOutput,
+  getDecodedOutput2,
 } from 'helpers';
 import { createConstructorOptions } from 'ui/util/dropdown';
 import { useApi, useInstantiate } from 'ui/contexts';
@@ -31,7 +33,7 @@ import {
   useStorageDepositLimit,
   useBalance,
 } from 'ui/hooks';
-import { AbiMessage, Balance, OrFalsy } from 'types';
+import { AbiMessage, Balance, ContractExecResult, OrFalsy } from 'types';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -100,6 +102,13 @@ export function Step2() {
     async function dryRun() {
       try {
         const result = await api.call.contractsApi.instantiate(...params);
+
+        console.log(
+          '😎',
+          result.toJSON(),
+          result,
+          getDecodedOutput2(result, deployConstructor!, result.registry),
+        );
 
         if (JSON.stringify(dryRunResult) !== JSON.stringify(result)) {
           setDryRunResult(result);
