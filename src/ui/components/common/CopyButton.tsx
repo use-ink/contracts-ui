@@ -6,7 +6,7 @@ import { MouseEventHandler, useCallback, useRef, useState } from 'react';
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { Tooltip } from 'react-tooltip';
 import { Button } from './Button';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 interface Props extends React.HTMLAttributes<unknown> {
   iconClassName?: string;

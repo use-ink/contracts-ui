@@ -4,8 +4,8 @@
 
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
+import { BN_HUNDRED } from 'lib/bn';
 import type { BN, UIGas, InputMode } from 'types';
-import { BN_HUNDRED } from 'helpers';
 
 const schema = Yup.number().positive('Value must be positive').min(2).required();
 

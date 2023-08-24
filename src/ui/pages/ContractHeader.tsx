@@ -3,7 +3,7 @@
 
 import { Link } from 'react-router-dom';
 import { CopyButton } from '../components/common/CopyButton';
-import { displayDate, truncate } from 'helpers';
+import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
 
 interface Props {

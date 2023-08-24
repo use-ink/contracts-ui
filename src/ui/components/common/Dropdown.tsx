@@ -15,7 +15,7 @@ import {
 import CreatableSelect from 'react-select/creatable';
 
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import { classes, isValidAddress } from 'helpers';
+import { classes, isValidAddress } from 'lib/util';
 import type { DropdownOption, DropdownProps } from 'types';
 
 function isGroupedOptions<T>(

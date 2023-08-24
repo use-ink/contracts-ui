@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { Dropdown } from '../common/Dropdown';
 import { MAINNETS, TESTNETS } from '../../../constants';
 import { useApi } from 'ui/contexts';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 const testnetOptions = TESTNETS.map(network => ({
   label: network.name,

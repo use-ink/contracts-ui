@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Database, CodeBundleDocument, ContractDocument } from 'db';
+import { Database, CodeBundleDocument, ContractDocument } from 'src/services/db';
 
 export type { CodeBundleDocument, ContractDocument, Database };
 

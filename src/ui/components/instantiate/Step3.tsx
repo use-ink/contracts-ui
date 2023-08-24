@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
 import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
-import { createInstantiateTx, truncate, printBN } from 'helpers';
+import { truncate } from 'lib/util';
 import { SubmittableResult } from 'types';
 import { useNewContract } from 'ui/hooks';
+import { createInstantiateTx } from 'src/services/chain/contract';
+import { printBN } from 'lib/bn';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();

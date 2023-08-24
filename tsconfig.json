@@ -21,9 +21,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "helpers": ["src/helpers"],
-      "helpers/*": ["src/helpers/*"],
-      "db": ["./src/db"],
+      "lib": ["src/lib"],
+      "lib/*": ["src/lib/*"],
+      "db": ["src/services/db"],
       "types": ["./src/types"],
       "types/*": ["./src/types/*"],
       "ui": ["./src/ui"],

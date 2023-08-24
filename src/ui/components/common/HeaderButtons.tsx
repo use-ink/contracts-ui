@@ -6,8 +6,9 @@ import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { ForgetContractModal } from 'ui/components/modal';
 import { useApi, useDatabase } from 'ui/contexts';
-import { getContractInfo, truncate } from 'helpers';
+import { truncate } from 'lib/util';
 import type { UIContract } from 'types';
+import { getContractInfo } from 'src/services/chain/contract';
 
 interface Props {
   contract: UIContract;

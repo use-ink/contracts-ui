@@ -4,9 +4,11 @@
 import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
-import { classes, decodeStorageDeposit, getDecodedOutput } from 'helpers';
+import { classes } from 'lib/util';
 import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
+import { getDecodedOutput } from 'lib/output';
+import { decodeStorageDeposit } from 'lib/callOptions';
 
 interface Props {
   outcome: ContractExecResult;

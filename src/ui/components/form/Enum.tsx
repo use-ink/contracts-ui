@@ -5,9 +5,10 @@ import { useCallback, useState } from 'react';
 import { Dropdown } from '../common/Dropdown';
 import { ArgSignature } from '../message/ArgSignature';
 import { FormField, getValidation } from './FormField';
-import { isNumber, getInitValue } from 'helpers';
+import { isNumber } from 'lib/util';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';
 import { useApi } from 'ui/contexts';
+import { getInitValue } from 'lib/initValue';
 
 interface Props extends ArgComponentProps<Record<string, unknown>> {
   components: React.ComponentType<ArgComponentProps<unknown>>[];
