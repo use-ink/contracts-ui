@@ -4,11 +4,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
-import { checkOnChainCode, filterOnChainCode } from 'services/chain';
 import { Input } from '../form/Input';
 import { FormField } from '../form/FormField';
 import { SearchResults } from '../common/SearchResults';
 import { CodeHash } from './CodeHash';
+import { checkOnChainCode, filterOnChainCode } from 'services/chain';
 import { classes, isValidCodeHash } from 'lib/util';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
