@@ -9,7 +9,7 @@ import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
 import { truncate } from 'lib/util';
 import { SubmittableResult } from 'types';
 import { useNewContract } from 'ui/hooks';
-import { createInstantiateTx } from 'src/services/chain/contract';
+import { createInstantiateTx } from 'services/chain';
 import { printBN } from 'lib/bn';
 
 export function Step3() {

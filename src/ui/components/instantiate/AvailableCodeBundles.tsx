@@ -9,7 +9,7 @@ import { CodeBundleDocument } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 
 import { useDbQuery } from 'ui/hooks';
-import { filterOnChainCode } from 'src/services/chain/contract';
+import { filterOnChainCode } from 'services/chain';
 
 const PAGE_SIZE = 5;
 

@@ -17,7 +17,7 @@ import {
 import { Page } from 'ui/templates';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
-import { getContractInfo } from 'src/services/chain/contract';
+import { getContractInfo } from 'services/chain';
 
 export function AddressLookup() {
   const [searchString, setSearchString] = useState('');

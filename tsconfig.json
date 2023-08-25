@@ -21,6 +21,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
+      "services": ["src/services"],
+      "services/*": ["src/services/*"],
       "lib": ["src/lib"],
       "lib/*": ["src/lib/*"],
       "db": ["src/services/db"],
