@@ -16,10 +16,7 @@ describe('Signer extension flow on live networks', () => {
     });
   });
 
-  it.only('Rococo is selected in the network connection dropdown', () => {
-    console.log('=======================================');
-    console.log(cy.get('.dropdown.chain').find('.dropdown__single-value'));
-    console.log('=======================================');
+  it('Rococo is selected in the network connection dropdown', () => {
     cy.get('.dropdown.chain')
       .find('.dropdown__single-value')
       .should('contain', 'Contracts (Rococo)');
