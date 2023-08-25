@@ -4,9 +4,6 @@
 import { Contracts, HelpBox, Statistics } from '../components/homepage';
 import { RootLayout } from 'ui/layout';
 
-// Copyright 2022 @paritytech/contracts-ui authors & contributors
-// SPDX-License-Identifier: GPL-3.0-only
-
 export function Homepage() {
   return (
     <RootLayout
