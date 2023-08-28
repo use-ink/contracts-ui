@@ -32,6 +32,7 @@ import {
   useBalance,
 } from 'ui/hooks';
 import { AbiMessage, Balance, OrFalsy } from 'types';
+import { checkInstantiateReversion } from 'helpers/checkInstantiateReversion';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -59,6 +60,8 @@ export function Step2() {
   );
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
+
+  const isReversion = checkInstantiateReversion(dryRunResult);
 
   useEffect(() => {
     setConstructorIndex(0);
@@ -205,7 +208,8 @@ export function Step2() {
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
             !!dryRunResult?.result.isErr ||
-            !dryRunResult
+            !dryRunResult ||
+            isReversion
           }
           onClick={onSubmit}
           variant="primary"
