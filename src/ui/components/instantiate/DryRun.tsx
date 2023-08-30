@@ -6,7 +6,7 @@ import { SidePanel } from '../common/SidePanel';
 import { Account } from '../account/Account';
 import { OutcomeItem } from '../contract/OutcomeItem';
 import { useApi, useInstantiate } from 'ui/contexts';
-import { checkInstantiateReversion } from 'helpers/checkInstantiateReversion';
+import { hasRevertFlag } from 'helpers/hasRevertFlag';
 
 export function DryRun() {
   const {
@@ -19,7 +19,7 @@ export function DryRun() {
       ? api.registry.findMetaError(dryRunResult?.result.asErr.asModule)
       : null;
 
-  const isReversion = checkInstantiateReversion(dryRunResult);
+  const isReverted = hasRevertFlag(dryRunResult);
 
   return (
     <SidePanel className="instantiate-outcome" header="Dry-run outcome">
@@ -99,13 +99,13 @@ export function DryRun() {
           </div>
         </div>
         <div>
-          {dryRunResult?.result.isOk && !isReversion && (
+          {dryRunResult?.result.isOk && !isReverted && (
             <div className="validation success font-bold">
               <CheckCircleIcon className="mr-3" />
               The instantiation will be successful.
             </div>
           )}
-          {isReversion && (
+          {isReverted && (
             <div className="validation error font-bold">
               <ExclamationCircleIcon className="mr-3" />
               Contract reverted! The instantiation will not be successful.
