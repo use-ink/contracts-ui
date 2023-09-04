@@ -3,12 +3,12 @@
 
 import { Link } from 'react-router-dom';
 import { LookUpCodeHash, AvailableCodeBundles } from 'ui/components/instantiate';
-import { Page } from 'ui/templates';
+import { RootLayout } from 'ui/layout';
 
 export function SelectCodeHash() {
   return (
-    <Page
-      header="Instantiate Contract from Code Hash"
+    <RootLayout
+      heading="Instantiate Contract from Code Hash"
       help={
         <>
           You can upload and instantate new contract code{' '}
@@ -21,6 +21,6 @@ export function SelectCodeHash() {
     >
       <LookUpCodeHash />
       <AvailableCodeBundles />
-    </Page>
+    </RootLayout>
   );
 }

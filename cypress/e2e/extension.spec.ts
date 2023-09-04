@@ -9,6 +9,7 @@ describe('Signer extension flow on live networks', () => {
   before(() => {
     cy.visit(`/instantiate/?rpc=wss://rococo-contracts-rpc.polkadot.io`);
   });
+
   it('connects to Rococo', () => {
     cy.contains('Connecting to wss://rococo-contracts-rpc.polkadot.io').should('not.exist', {
       timeout: 25000,

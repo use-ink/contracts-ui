@@ -2,21 +2,23 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Outlet } from 'react-router';
-import { Sidebar, AwaitApis } from 'ui/components';
+import { AwaitApis } from 'ui/components';
 import {
   ApiContextProvider,
   DatabaseContextProvider,
   TransactionsContextProvider,
   ThemeContextProvider,
 } from 'ui/contexts';
+import { Sidebar } from 'ui/layout/sidebar';
 
-const App = (): JSX.Element => {
+export default function App() {
   return (
     <ThemeContextProvider>
       <ApiContextProvider>
         <DatabaseContextProvider>
           <TransactionsContextProvider>
-            <div className="relative inset-0 flex min-h-screen flex-col overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
+            {/* we want the sidebar outside the outlet to prevent flickering in quicklinks */}
+            <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
               <Sidebar />
               <AwaitApis>
                 <Outlet />
@@ -27,6 +29,4 @@ const App = (): JSX.Element => {
       </ApiContextProvider>
     </ThemeContextProvider>
   );
-};
-
-export default App;
+}

@@ -14,7 +14,7 @@ import {
   InputFile,
   useMetadataField,
 } from 'ui/components';
-import { Page } from 'ui/templates';
+import { RootLayout } from 'ui/layout';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 
@@ -57,8 +57,8 @@ export function AddressLookup() {
     validate().catch(e => console.error(e));
   }, [api, address, searchString, db.contracts, navigate]);
   return (
-    <Page
-      header="Add contract from address"
+    <RootLayout
+      heading="Add contract from address"
       help={<>Add metadata to an existing contract instance in order to interact with it.</>}
     >
       <FormField
@@ -77,13 +77,13 @@ export function AddressLookup() {
           value={searchString}
         >
           {address ? (
-            <div className="absolute right-2 flex items-center  text-green-500">
-              <span className="w-22 mr-1 text-xs">on-chain</span>
-              <CheckCircleIcon aria-hidden="true" className="h-4 w-4" />
+            <div className="absolute flex items-center text-green-500 right-2">
+              <span className="mr-1 text-xs w-22">on-chain</span>
+              <CheckCircleIcon aria-hidden="true" className="w-4 h-4" />
             </div>
           ) : (
             searchString && (
-              <XCircleIcon aria-hidden="true" className="-ml-8 h-5 w-5 text-red-500" />
+              <XCircleIcon aria-hidden="true" className="w-5 h-5 -ml-8 text-red-500" />
             )
           )}
         </Input>
@@ -144,6 +144,6 @@ export function AddressLookup() {
           </Buttons>
         </>
       )}
-    </Page>
+    </RootLayout>
   );
 }
