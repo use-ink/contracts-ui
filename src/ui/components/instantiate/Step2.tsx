@@ -31,6 +31,7 @@ import {
   getStorageDepositLimit,
 } from 'lib/callOptions';
 import { BN_ZERO } from 'lib/bn';
+import { hasRevertFlag } from 'lib/hasRevertFlag';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -58,6 +59,8 @@ export function Step2() {
   );
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
+
+  const isReverted = hasRevertFlag(dryRunResult);
 
   useEffect(() => {
     setConstructorIndex(0);
@@ -204,7 +207,8 @@ export function Step2() {
             !storageDepositLimit.isValid ||
             !deployConstructor?.method ||
             !!dryRunResult?.result.isErr ||
-            !dryRunResult
+            !dryRunResult ||
+            isReverted
           }
           onClick={onSubmit}
           variant="primary"
