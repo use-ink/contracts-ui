@@ -4,7 +4,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useApi } from 'ui/contexts/ApiContext';
 import { AbiMessage, AbiParam, Account, Registry, SetState } from 'types';
-import { getInitValue, transformUserInput } from 'helpers';
+import { getInitValue } from 'lib/initValue';
+import { transformUserInput } from 'lib/callOptions';
 
 type ArgValues = Record<string, unknown>;
 

@@ -6,7 +6,7 @@ import { ArgSignature } from '../message/ArgSignature';
 import { Form, FormField } from './FormField';
 import { findComponent } from './findComponent';
 import { AbiParam, Registry, SetState } from 'types';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 interface Props extends React.HTMLAttributes<HTMLFormElement> {
   args: AbiParam[];

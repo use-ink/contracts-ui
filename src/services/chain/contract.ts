@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
-import { isValidAddress, isValidCodeHash, isNumber } from './util';
-import { transformUserInput } from './callOptions';
+import { isValidAddress, isValidCodeHash, isNumber } from 'lib/util';
+import { transformUserInput } from 'lib/callOptions';
 import {
   ApiPromise,
   CodeBundleDocument,

@@ -7,7 +7,7 @@ import { keyring } from '@polkadot/ui-keyring';
 import { useApi } from './ApiContext';
 import { TxOptions, TransactionsState, TransactionsQueue, TxStatusMap } from 'types';
 import { Transactions } from 'ui/components/Transactions';
-import { isEmptyObj } from 'helpers';
+import { isEmptyObj } from 'lib/util';
 
 let nextId = 1;
 

@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { MessageSignature } from './MessageSignature';
 import type { AbiMessage, Registry } from 'types';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 interface Props extends React.ComponentProps<typeof Disclosure> {
   message: AbiMessage;

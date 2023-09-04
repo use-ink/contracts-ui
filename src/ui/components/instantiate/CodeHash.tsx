@@ -3,9 +3,10 @@
 
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { useEffect, useMemo, useState } from 'react';
+import { checkOnChainCode } from 'services/chain';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
-import { checkOnChainCode, classes, truncate } from 'helpers';
+import { classes, truncate } from 'lib/util';
 import { CopyButton } from 'ui/components/common/CopyButton';
 
 type Props = SimpleSpread<

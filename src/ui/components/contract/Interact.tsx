@@ -16,18 +16,18 @@ import {
 import { AccountSelect } from 'ui/components/account';
 import { Dropdown, Button, Buttons } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
-import {
-  transformUserInput,
-  BN_ZERO,
-  getGasLimit,
-  getStorageDepositLimit,
-  decodeStorageDeposit,
-  getDecodedOutput,
-} from 'helpers';
+import { BN_ZERO } from 'lib/bn';
 import { useApi, useTransactions } from 'ui/contexts';
 import { useWeight, useBalance, useArgValues } from 'ui/hooks';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
 import { createMessageOptions } from 'ui/util/dropdown';
+import {
+  decodeStorageDeposit,
+  getGasLimit,
+  getStorageDepositLimit,
+  transformUserInput,
+} from 'lib/callOptions';
+import { getDecodedOutput } from 'lib/output';
 
 interface Props {
   contract: UIContract;

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { HTMLAttributes } from 'react';
-import { classes } from 'helpers/util';
+import { classes } from 'lib/util';
 
 export function RootLayout({ accessory, heading, help, children, aside }: PageProps) {
   return (

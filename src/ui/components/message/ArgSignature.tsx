@@ -3,7 +3,7 @@
 
 import { encodeTypeDef } from '@polkadot/types/create';
 import { Registry, TypeDef } from 'types';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   arg: { name?: string; type: TypeDef };

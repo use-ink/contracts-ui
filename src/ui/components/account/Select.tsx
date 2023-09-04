@@ -8,7 +8,7 @@ import { Account } from './Account';
 import { createAccountOptions } from 'ui/util/dropdown';
 import type { DropdownOption, DropdownProps, ValidFormField } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 import { useDbQuery } from 'ui/hooks';
 
 type Props = ValidFormField<string> & Omit<DropdownProps<string>, 'options'>;

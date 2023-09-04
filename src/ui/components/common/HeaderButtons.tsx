@@ -4,9 +4,10 @@
 import { useEffect, useState } from 'react';
 import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
+import { getContractInfo } from 'services/chain';
 import { ForgetContractModal } from 'ui/components/modal';
 import { useApi, useDatabase } from 'ui/contexts';
-import { getContractInfo, truncate } from 'helpers';
+import { truncate } from 'lib/util';
 import type { UIContract } from 'types';
 
 interface Props {
@@ -39,22 +40,22 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
       <div className="inline-flex h-8">
         {isOnChain ? (
           <Link to={`/instantiate/${codeHash}`}>
-            <button className="mr-2 flex h-full items-center rounded border px-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2">
+            <button className="flex items-center h-full px-3 mr-2 font-semibold text-gray-600 border rounded hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2">
               <ArrowCircleRightIcon
                 aria-hidden="true"
-                className="mr-1 w-4 justify-self-end dark:text-gray-500"
+                className="w-4 mr-1 justify-self-end dark:text-gray-500"
                 fontSize="1.5rem"
               />
               Reinstantiate
             </button>
           </Link>
         ) : (
-          <p className="mr-3 flex items-center font-semibold text-red-400">{`Not found at ${truncate(
+          <p className="flex items-center mr-3 font-semibold text-red-400">{`Not found at ${truncate(
             address,
           )}`}</p>
         )}
         <button
-          className="flex h-full items-center rounded border px-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
+          className="flex items-center h-full px-3 font-semibold text-gray-600 border rounded hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
           onClick={() => {
             setIsOpen(true);
           }}

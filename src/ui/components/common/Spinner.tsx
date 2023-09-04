@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   strokeWidth?: number;

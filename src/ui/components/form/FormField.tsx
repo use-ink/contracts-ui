@@ -9,7 +9,7 @@ import {
 import { useMemo } from 'react';
 import { Tooltip } from 'react-tooltip';
 import type { Validation } from 'types';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 type ValidationState = 'error' | 'success' | 'warning' | null;
 

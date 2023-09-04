@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
-import { classes, getContractInfo, isValidAddress } from 'helpers';
+import { classes, isValidAddress } from 'lib/util';
 import {
   Button,
   Buttons,
@@ -17,6 +17,7 @@ import {
 import { RootLayout } from 'ui/layout';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
+import { getContractInfo } from 'services/chain';
 
 export function AddressLookup() {
   const [searchString, setSearchString] = useState('');

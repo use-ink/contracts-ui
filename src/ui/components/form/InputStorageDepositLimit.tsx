@@ -7,7 +7,7 @@ import { Meter, Switch } from '../common';
 import { InputBalance } from './InputBalance';
 import { getValidation } from './FormField';
 import type { SimpleSpread, UseStorageDepositLimit } from 'types';
-import { classes, isNull, isNumber } from 'helpers';
+import { classes, isNull, isNumber } from 'lib/util';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,

@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
+import { isNumber, genRanHex } from 'lib/util';
 import { Button, Buttons, Dropdown } from 'ui/components/common';
 import {
   InputSalt,
@@ -12,15 +13,6 @@ import {
   getValidation,
   ArgumentForm,
 } from 'ui/components/form';
-import {
-  isNumber,
-  genRanHex,
-  encodeSalt,
-  BN_ZERO,
-  getGasLimit,
-  getStorageDepositLimit,
-  decodeStorageDeposit,
-} from 'helpers';
 import { createConstructorOptions } from 'ui/util/dropdown';
 import { useApi, useInstantiate } from 'ui/contexts';
 import {
@@ -32,7 +24,14 @@ import {
   useBalance,
 } from 'ui/hooks';
 import { AbiMessage, Balance, OrFalsy } from 'types';
-import { hasRevertFlag } from 'helpers/hasRevertFlag';
+import {
+  decodeStorageDeposit,
+  encodeSalt,
+  getGasLimit,
+  getStorageDepositLimit,
+} from 'lib/callOptions';
+import { BN_ZERO } from 'lib/bn';
+import { hasRevertFlag } from 'lib/hasRevertFlag';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {

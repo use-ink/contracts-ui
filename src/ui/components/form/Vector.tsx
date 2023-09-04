@@ -7,8 +7,9 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
 import { Button, Buttons } from '../common';
 import { FormField } from './FormField';
 import { TypeDef, ArgComponentProps, OrFalsy } from 'types';
-import { getInitValue } from 'helpers';
+
 import { useApi } from 'ui/contexts';
+import { getInitValue } from 'lib/initValue';
 
 interface Props extends ArgComponentProps<unknown[]> {
   component: React.ComponentType<ArgComponentProps<unknown>>;

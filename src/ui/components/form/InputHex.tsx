@@ -3,7 +3,7 @@
 
 import { useCallback, useState } from 'react';
 import { Input } from './Input';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 
 interface Props {
   onChange: (_: string) => void;

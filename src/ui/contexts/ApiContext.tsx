@@ -8,9 +8,10 @@ import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
 import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '../../constants';
 import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from 'types';
-import { isValidWsUrl, isKeyringLoaded, getChainProperties } from 'helpers';
+import { isValidWsUrl, isKeyringLoaded } from 'lib/util';
 import { useLocalStorage } from 'ui/hooks/useLocalStorage';
 import { NoticeBanner } from 'ui/components/common/NoticeBanner';
+import { getChainProperties } from 'src/services/chain/chainProps';
 
 // fixes internal pjs type mismatch `Type 'string' is not assignable to type '`0x${string}`'`
 export interface InjectedAccountWithMetaOverride {

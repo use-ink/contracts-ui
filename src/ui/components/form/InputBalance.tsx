@@ -5,9 +5,10 @@ import React, { useState } from 'react';
 import BN from 'bn.js';
 
 import { InputNumber } from './InputNumber';
-import { BN_ZERO, classes, fromBalance, fromSats, toBalance } from 'helpers';
+import { classes } from 'lib/util';
 import { ApiPromise, OrFalsy, SimpleSpread } from 'types';
 import { useApi } from 'ui/contexts';
+import { BN_ZERO, fromBalance, fromSats, toBalance } from 'lib/bn';
 
 type Props = SimpleSpread<
   React.InputHTMLAttributes<HTMLInputElement>,

@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useApi } from './ApiContext';
-import { Database } from 'db';
+import { Database } from 'src/services/db';
 import { DbState } from 'types';
 
 export const DbContext: React.Context<DbState> = createContext({} as unknown as DbState);

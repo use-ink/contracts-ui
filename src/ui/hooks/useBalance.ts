@@ -4,7 +4,7 @@
 import BN from 'bn.js';
 import { useCallback } from 'react';
 import { useFormField } from './useFormField';
-import { toBalance, toSats, BN_ONE, BN_TWO, BN_ZERO, isBn } from 'helpers';
+import { toBalance, toSats, BN_ONE, BN_TWO, BN_ZERO, isBn } from 'lib/bn';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { UseBalance, Validation } from 'types';
 

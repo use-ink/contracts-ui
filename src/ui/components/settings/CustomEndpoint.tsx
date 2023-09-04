@@ -8,7 +8,7 @@ import { LOCAL, LOCAL_STORAGE_KEY } from '../../../constants';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Button } from '../common/Button';
 import { Input } from '../form/Input';
-import { isValidWsUrl } from 'helpers';
+import { isValidWsUrl } from 'lib/util';
 
 export function CustomEndpoint() {
   const [customEndpoint, setCustomEndpoint] = useLocalStorage<string>(

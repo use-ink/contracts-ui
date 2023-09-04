@@ -1,8 +1,8 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { BN_ZERO } from './bn';
 import { randomAsU8a } from './util';
+import { BN_ZERO } from './bn';
 import { UIStorageDeposit, ContractCallOutcome, BN, WeightV2, AbiParam, Registry } from 'types';
 
 export function decodeStorageDeposit(

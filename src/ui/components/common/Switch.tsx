@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Switch as HUISwitch } from '@headlessui/react';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 import { SimpleSpread } from 'types';
 
 type Props = SimpleSpread<

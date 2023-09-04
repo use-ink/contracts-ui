@@ -4,7 +4,7 @@
 import { hexToU8a } from '@polkadot/util';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Input } from './Input';
-import { classes } from 'helpers';
+import { classes } from 'lib/util';
 import { ArgComponentProps } from 'types';
 
 type Props = ArgComponentProps<Uint8Array> & { length?: number };

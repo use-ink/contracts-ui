@@ -8,7 +8,7 @@ import { useBalance } from './useBalance';
 import { useToggle } from './useToggle';
 import { useApi } from 'ui/contexts/ApiContext';
 import type { OrFalsy, UseStorageDepositLimit } from 'types';
-import { BN_ZERO } from 'helpers';
+import { BN_ZERO } from 'lib/bn';
 
 export function useStorageDepositLimit(accountId: OrFalsy<string>): UseStorageDepositLimit {
   const { api } = useApi();
