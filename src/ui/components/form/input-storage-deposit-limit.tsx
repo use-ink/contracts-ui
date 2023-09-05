@@ -3,11 +3,12 @@
 
 import Big from 'big.js';
 import { useMemo } from 'react';
-import { Meter, Switch } from '../../shared';
-import { InputBalance } from './Input-balance';
+import { InputBalance } from './input-balance';
 import { getValidation } from './form-field';
 import type { SimpleSpread, UseStorageDepositLimit } from 'types';
 import { classes, isNull, isNumber } from 'lib/util';
+import { Switch } from 'ui/shared/primitives';
+import { Meter } from 'ui/shared/meter';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,
@@ -47,7 +48,7 @@ export function InputStorageDepositLimit({
           withUnits={isActive}
           {...getValidation(props)}
         />
-        <div className="flex w-11 items-center justify-end">
+        <div className="flex items-center justify-end w-11">
           <Switch onChange={toggleIsActive} value={isActive} />
         </div>
       </div>

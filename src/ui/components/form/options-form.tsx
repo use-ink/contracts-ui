@@ -4,7 +4,7 @@
 import { UIGas, UseBalance, UseStorageDepositLimit } from 'types';
 
 import { InputWeight } from 'ui/components/form/input-weight';
-import { InputBalance } from 'ui/components/form/Input-balance';
+import { InputBalance } from 'ui/components/form/input-balance';
 import { InputStorageDepositLimit } from 'ui/components/form/input-storage-deposit-limit';
 import { FormField } from 'ui/components/form/form-field';
 

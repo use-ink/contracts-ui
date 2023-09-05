@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Identicon } from '../../components/account/identicon';
+import { Identicon } from '../../shared/account/identicon';
 import { ContractDocument } from 'types';
 import { useApi } from 'ui/contexts';
 import { displayDate } from 'lib/util';

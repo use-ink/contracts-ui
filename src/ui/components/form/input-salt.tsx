@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Switch } from '../../shared/switch';
+import { Switch } from '../../shared/primitives/switch';
 import { Input } from './input';
 import { SimpleSpread, ValidFormField } from 'types';
 

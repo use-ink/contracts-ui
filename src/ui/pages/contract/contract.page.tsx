@@ -10,9 +10,10 @@ import { MetadataTab } from './metadata-tab';
 import { InteractTab } from './interact';
 import { Loader } from 'ui/shared/loader';
 import { Tabs } from 'ui/shared/tabs';
-import { HeaderButtons } from 'ui/shared/header-buttons';
+
 import { RootLayout } from 'ui/layout';
 import { useStoredContract } from 'ui/hooks';
+import { HeaderButtons } from './header-buttons';
 
 const TABS = [
   {

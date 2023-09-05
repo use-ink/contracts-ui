@@ -3,7 +3,7 @@
 
 import { Abi } from 'types';
 import { MessageDocs } from 'ui/components/message/message-docs';
-import { Button } from 'ui/shared';
+import { Button } from 'ui/shared/primitives';
 import { FormField, getValidation, InputFile, useMetadataField } from 'ui/components/form';
 import { useDatabase } from 'ui/contexts';
 
@@ -30,7 +30,7 @@ export const MetadataTab = ({ id, abi }: Props) => {
 
   return (
     <div className="grid w-full grid-cols-12">
-      <div className="col-span-6 w-full rounded-lg lg:col-span-7 2xl:col-span-8">
+      <div className="w-full col-span-6 rounded-lg lg:col-span-7 2xl:col-span-8">
         <div className="mb-10" data-cy="contract-docs">
           {abi.constructors.concat(abi.messages).map(message => (
             <MessageDocs
@@ -60,7 +60,7 @@ export const MetadataTab = ({ id, abi }: Props) => {
           />
         </FormField>
         <Button
-          className="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 text-gray-500 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:enabled:hover:bg-elevation-2"
+          className="flex items-center justify-between px-3 py-2 text-gray-500 border border-gray-200 rounded-md dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:enabled:hover:bg-elevation-2"
           isDisabled={!isSupplied || !isValid}
           onClick={async () => {
             if (!metadata || !id) throw new Error('Unable to update metadata.');

@@ -13,8 +13,8 @@ import {
   Balance,
   UIContract,
 } from 'types';
-import { AccountSelect } from 'ui/components/account';
-import { Dropdown, Button, Buttons } from 'ui/shared';
+import { AccountSelect } from 'ui/shared/account';
+import { Dropdown, Button, Buttons } from 'ui/shared/primitives';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
 import { BN_ZERO } from 'lib/bn';
 import { useApi, useTransactions } from 'ui/contexts';
@@ -187,10 +187,10 @@ export const InteractTab = ({
 
   return (
     <div className="grid w-full grid-cols-12">
-      <div className="col-span-6 w-full rounded-lg lg:col-span-6 2xl:col-span-7">
+      <div className="w-full col-span-6 rounded-lg lg:col-span-6 2xl:col-span-7">
         <Form key={`${address}`}>
           <FormField
-            className="caller mb-8"
+            className="mb-8 caller"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
             label="Caller"
@@ -208,7 +208,7 @@ export const InteractTab = ({
             label="Message to Send"
           >
             <Dropdown
-              className="constructorDropdown mb-4"
+              className="mb-4 constructorDropdown"
               id="message"
               onChange={(m?: AbiMessage) => {
                 m?.identifier !== message?.identifier && setOutcome(undefined);
@@ -252,7 +252,7 @@ export const InteractTab = ({
           )}
         </Buttons>
       </div>
-      <div className="col-span-6 w-full pl-10 lg:col-span-6 lg:pl-20 2xl:col-span-5">
+      <div className="w-full col-span-6 pl-10 lg:col-span-6 lg:pl-20 2xl:col-span-5">
         {message && (
           <ResultsOutput
             message={message}

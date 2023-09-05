@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Buttons } from '../../shared/button';
+import { Button, Buttons } from '../../shared/primitives/button';
 import { Loader } from '../../shared/loader';
 import { CodeHash } from '../../shared/code-hash';
 import {

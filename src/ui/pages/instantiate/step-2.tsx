@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { hasRevertFlag } from 'lib/has-revert-flag';
 import { isNumber, genRanHex } from 'lib/util';
-import { Button, Buttons, Dropdown } from 'ui/shared';
+import { Button, Buttons, Dropdown } from 'ui/shared/primitives';
 import {
   InputSalt,
   OptionsForm,

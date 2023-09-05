@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
 import { isWeb3Injected } from '@polkadot/extension-dapp';
 import { AccountsError, ExtensionError } from './accounts-error';
+import { ConnectionError } from './connection-error';
 import { useApi, useDatabase } from 'ui/contexts';
-import { Loader, ConnectionError } from 'ui/shared';
+
 import { isKeyringLoaded } from 'lib/util';
+import { Loader } from 'ui/shared/loader';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { accounts, api, endpoint, status, systemChainType } = useApi();

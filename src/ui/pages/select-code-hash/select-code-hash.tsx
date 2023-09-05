@@ -3,8 +3,8 @@
 
 import { Link } from 'react-router-dom';
 
-import { LookUpCodeHash } from '../../shared/look-up-code-hash';
-import { AvailableCodeBundles } from '../instantiate/available-code-bundles';
+import { AvailableCodeBundles } from 'ui/shared/available-code-bundles';
+import { LookUpCodeHash } from 'ui/shared/look-up-code-hash';
 import { RootLayout } from 'ui/layout';
 
 export function SelectCodeHash() {

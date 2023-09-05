@@ -10,7 +10,7 @@ import { RootLayout } from 'ui/layout';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/use-non-empty-string';
 import { getContractInfo } from 'services/chain';
-import { Button, Buttons } from 'ui/shared';
+import { Button, Buttons } from 'ui/shared/primitives';
 
 export function AddressLookup() {
   const [searchString, setSearchString] = useState('');
