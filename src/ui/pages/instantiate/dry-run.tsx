@@ -7,7 +7,7 @@ import { SidePanel } from 'ui/shared/side-panel';
 import { useApi, useInstantiate } from 'ui/contexts';
 import { hasRevertFlag } from 'lib/has-revert-flag';
 import { OutcomeItem } from 'ui/shared/outcome-item';
-import { Account } from 'ui/components';
+import { Account } from 'ui/shared/account';
 
 export function DryRun() {
   const {

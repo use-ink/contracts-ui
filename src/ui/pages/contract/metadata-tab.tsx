@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Abi } from 'types';
-import { MessageDocs } from 'ui/components/message';
+import { MessageDocs } from 'ui/shared/message';
 import { Button } from 'ui/shared/buttons';
 import { FormField, getValidation, InputFile, useMetadataField } from 'ui/shared/form';
 import { useDatabase } from 'ui/contexts';

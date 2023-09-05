@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { getContractInfo } from 'services/chain';
-import { ForgetContractModal } from 'ui/components/modal';
+import { ForgetContractModal } from 'ui/shared/modal';
 import { useApi, useDatabase } from 'ui/contexts';
 import { truncate } from 'lib/util';
 import type { UIContract } from 'types';

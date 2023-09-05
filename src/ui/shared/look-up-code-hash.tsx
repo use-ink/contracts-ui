@@ -11,7 +11,7 @@ import { checkOnChainCode, filterOnChainCode } from 'services/chain';
 import { classes, isValidCodeHash } from 'lib/util';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
-import { FormField, Input } from 'ui/components';
+import { FormField, Input } from 'ui/shared/form';
 
 export function LookUpCodeHash() {
   const navigate = useNavigate();

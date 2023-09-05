@@ -4,5 +4,5 @@
 export * from './api.context';
 export * from './database.context';
 export * from './instantiate.context';
-export * from './transactions.context';
+export * from './transactions/transactions.context';
 export * from './theme.context';

@@ -10,8 +10,9 @@ import { Input, InputFile, Form, FormField, useMetadataField, getValidation } fr
 import { useNonEmptyString } from 'ui/hooks/use-non-empty-string';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
-import { AccountSelect, MessageDocs } from 'ui/components';
-import { Metadata } from 'ui/components/metadata';
+import { MessageDocs } from 'ui/shared/message';
+import { Metadata } from 'ui/shared/metadata';
+import { AccountSelect } from 'ui/shared/account';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
