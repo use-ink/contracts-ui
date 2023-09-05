@@ -13,7 +13,7 @@ import {
   FormField,
   getValidation,
   ArgumentForm,
-} from 'ui/components/form';
+} from 'ui/shared/form';
 import { createConstructorOptions } from 'ui/shared/dropdown/dropdown-util';
 import { useApi, useInstantiate } from 'ui/contexts';
 import {

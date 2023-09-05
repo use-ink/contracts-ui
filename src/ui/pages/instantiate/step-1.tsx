@@ -6,14 +6,7 @@ import { useParams } from 'react-router';
 import { Button, Buttons } from 'ui/shared/buttons';
 import { Loader } from 'ui/shared/loader';
 import { CodeHash } from 'ui/shared/code-hash';
-import {
-  Input,
-  InputFile,
-  Form,
-  FormField,
-  useMetadataField,
-  getValidation,
-} from 'ui/components/form';
+import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from 'ui/shared/form';
 import { useNonEmptyString } from 'ui/hooks/use-non-empty-string';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';

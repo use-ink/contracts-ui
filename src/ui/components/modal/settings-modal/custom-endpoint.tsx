@@ -4,10 +4,10 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { LOCAL, LOCAL_STORAGE_KEY } from '../../../constants';
-import { useLocalStorage } from '../../hooks/use-local-storage';
-import { Button } from '../../shared/buttons/button';
-import { Input } from '../form/input';
+import { LOCAL, LOCAL_STORAGE_KEY } from '../../../../constants';
+import { useLocalStorage } from '../../../hooks/use-local-storage';
+import { Button } from '../../../shared/buttons/button';
+import { Input } from '../../../shared/form/input';
 import { isValidWsUrl } from 'lib/util';
 
 export function CustomEndpoint() {

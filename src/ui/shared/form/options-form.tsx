@@ -3,10 +3,10 @@
 
 import { UIGas, UseBalance, UseStorageDepositLimit } from 'types';
 
-import { InputWeight } from 'ui/components/form/input-weight';
-import { InputBalance } from 'ui/components/form/input-balance';
-import { InputStorageDepositLimit } from 'ui/components/form/input-storage-deposit-limit';
-import { FormField } from 'ui/components/form/form-field';
+import { InputWeight } from 'ui/shared/form/input-weight';
+import { InputBalance } from 'ui/shared/form/input-balance';
+import { InputStorageDepositLimit } from 'ui/shared/form/input-storage-deposit-limit';
+import { FormField } from 'ui/shared/form/form-field';
 
 interface Props {
   isPayable: boolean;

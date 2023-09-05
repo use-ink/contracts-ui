@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback, useState } from 'react';
-import { Dropdown } from '../../shared/dropdown/dropdown';
-import { ArgSignature } from '../message/arg-signature';
+import { Dropdown } from '../dropdown/dropdown';
+import { ArgSignature } from '../../components/message/arg-signature';
 import { FormField, getValidation } from './form-field';
 import { isNumber } from 'lib/util';
 import { ArgComponentProps, OrFalsy, TypeDef } from 'types';

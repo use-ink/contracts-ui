@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CodeHash } from './code-hash';
-import { FormField } from 'ui/components/form/form-field';
+import { FormField } from 'ui/shared/form/form-field';
 import { CodeBundleDocument } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 

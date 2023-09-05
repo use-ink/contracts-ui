@@ -15,7 +15,7 @@ import {
 } from 'types';
 import { AccountSelect } from 'ui/shared/account';
 import { Button, Buttons } from 'ui/shared/buttons';
-import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
+import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/shared/form';
 import { BN_ZERO } from 'lib/bn';
 import { useApi, useTransactions } from 'ui/contexts';
 import { useWeight, useBalance, useArgValues } from 'ui/hooks';

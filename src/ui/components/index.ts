@@ -2,5 +2,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 export * from '../shared/account';
-export * from './form';
+export * from '../shared/form';
 export * from './message';

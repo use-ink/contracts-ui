@@ -4,7 +4,7 @@
 import { Abi } from 'types';
 import { MessageDocs } from 'ui/components/message';
 import { Button } from 'ui/shared/buttons';
-import { FormField, getValidation, InputFile, useMetadataField } from 'ui/components/form';
+import { FormField, getValidation, InputFile, useMetadataField } from 'ui/shared/form';
 import { useDatabase } from 'ui/contexts';
 
 interface Props {

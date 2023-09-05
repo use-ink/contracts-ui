@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { AddressSelect } from '../../shared/account/select';
+import { AddressSelect } from '../account/select';
 import { Bool } from './bool';
 import { Enum } from './enum';
 import { Input } from './input';
