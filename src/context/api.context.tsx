@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
-import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '~/constants';
+import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '~/config';
 import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from '~/types';
 import { isValidWsUrl, isKeyringLoaded } from '~/lib/util';
 import { useLocalStorage } from '~/hooks/use-local-storage';

@@ -4,10 +4,10 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { LOCAL, LOCAL_STORAGE_KEY } from '~/constants';
-import { useLocalStorage } from '../../../hooks/use-local-storage';
-import { Button } from '../../../shared/buttons/button';
-import { Input } from '../../../shared/form/input';
+import { LOCAL, LOCAL_STORAGE_KEY } from '~/config';
+import { useLocalStorage } from '~/hooks/use-local-storage';
+import { Button } from '~/shared/buttons/button';
+import { Input } from '~/shared/form/input';
 import { isValidWsUrl } from '~/lib/util';
 
 export function CustomEndpoint() {
@@ -26,7 +26,7 @@ export function CustomEndpoint() {
   }, [value, setCustomEndpoint, navigate]);
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex flex-col w-full gap-2">
       <div className="flex flex-col text-sm">
         <span className="font-semibold">Custom Endpoint</span>
         <span className="text-gray-500 dark:text-gray-400">

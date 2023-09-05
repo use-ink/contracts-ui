@@ -4,7 +4,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Error } from '~/shared/error';
 import { useApi } from '~/context';
-import { ROCOCO_CONTRACTS, LOCAL } from 'src/constants';
+import { ROCOCO_CONTRACTS, LOCAL } from '~/config';
 
 function ContractsNodeHelp() {
   const navigate = useNavigate();

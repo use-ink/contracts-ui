@@ -5,7 +5,7 @@ import BN from 'bn.js';
 import { Meter } from '../meter';
 import { InputNumber } from './input-number';
 import { UIGas } from '~/types';
-import { MAX_CALL_WEIGHT } from 'src/constants';
+import { MAX_CALL_WEIGHT } from '~/config';
 
 export function InputWeight({
   setLimit,

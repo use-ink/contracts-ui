@@ -3,7 +3,7 @@
 
 import { useNavigate } from 'react-router';
 
-import { MAINNETS, TESTNETS } from '~/constants';
+import { MAINNETS, TESTNETS } from '~/config';
 import { useApi } from '~/context';
 import { classes } from '~/lib/util';
 import { Dropdown } from '~/shared/dropdown';

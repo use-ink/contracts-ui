@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { createContext, useContext, useEffect } from 'react';
-import { LOCAL_STORAGE_KEY } from '~/constants';
+import { LOCAL_STORAGE_KEY } from '~/config';
 import { useLocalStorage } from '~/hooks/use-local-storage';
 
 type Theme = 'light' | 'dark';
