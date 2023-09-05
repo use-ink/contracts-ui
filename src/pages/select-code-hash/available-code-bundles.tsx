@@ -3,8 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { CodeHash } from '../../shared/code-hash';
 import { filterOnChainCode } from '~/services/chain';
-import { CodeHash } from './code-hash';
 import { FormField } from '~/shared/form/form-field';
 import { CodeBundleDocument } from '~/types';
 import { useApi, useDatabase } from '~/context';

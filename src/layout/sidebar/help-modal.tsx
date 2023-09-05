@@ -4,8 +4,8 @@
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import { BookOpenIcon } from '@heroicons/react/solid';
 import { GithubLogo, StackExchangeLogo } from './logos';
-import { ModalBase as Modal } from './modal-base';
-import type { ModalProps } from './modal-base';
+import { ModalBase as Modal } from '~/shared/modal';
+import type { ModalProps } from '~/shared/modal';
 
 export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
   return (

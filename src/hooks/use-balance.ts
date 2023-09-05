@@ -3,8 +3,8 @@
 
 import BN from 'bn.js';
 import { useCallback } from 'react';
-import { useApi } from '~/context';
 import { useFormField } from './use-form-field';
+import { useApi } from '~/context';
 import { toBalance, toSats, BN_ONE, BN_TWO, BN_ZERO, isBn } from '~/lib/bn';
 import type { UseBalance, Validation } from '~/types';
 

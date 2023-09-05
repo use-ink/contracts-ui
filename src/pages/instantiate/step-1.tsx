@@ -7,7 +7,7 @@ import { useNonEmptyString } from '~/hooks/use-non-empty-string';
 import { useApi, useDatabase, useInstantiate } from '~/context';
 import { useDbQuery } from '~/hooks';
 import { Button, Buttons } from '~/shared/buttons';
-import { Loader } from '~/shared/loader';
+import { Loader } from '~/shared/loader/loader';
 import { CodeHash } from '~/shared/code-hash';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '~/shared/form';
 import { MessageDocs } from '~/shared/message';

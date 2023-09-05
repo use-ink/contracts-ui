@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useApi } from './api.context';
+import { useApi } from './api/api.context';
 import { Database } from 'src/services/db';
 import { DbState } from '~/types';
 

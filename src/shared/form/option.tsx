@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useCallback, useEffect, useRef } from 'react';
-import { Switch } from '../switch';
+import { Switch } from './switch';
 import { Input } from './input';
 import { ArgComponentProps, OrFalsy, Registry, TypeDef } from '~/types';
 import { useApi } from '~/context';

@@ -8,12 +8,12 @@ import { ContractHeader } from '../contract-header/contract-header.page';
 
 import { MetadataTab } from './metadata-tab';
 import { InteractTab } from './interact';
-import { Loader } from '~/shared/loader';
-import { Tabs } from '~/shared/tabs';
+import { HeaderButtons } from './header-buttons';
+import { Loader } from '~/shared/loader/loader';
+import { Tabs } from '~/pages/contract/tabs';
 
 import { RootLayout } from '~/layout';
 import { useStoredContract } from '~/hooks';
-import { HeaderButtons } from './header-buttons';
 
 const TABS = [
   {

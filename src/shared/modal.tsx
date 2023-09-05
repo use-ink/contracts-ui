@@ -19,7 +19,7 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
   return (
     <>
       <Transition appear as={Fragment} show={isOpen}>
-        <Dialog as="div" className="z-99 fixed inset-0 overflow-y-auto " onClose={closeModal}>
+        <Dialog as="div" className="fixed inset-0 overflow-y-auto z-99 " onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               enter="ease-out duration-300"
@@ -45,7 +45,7 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="my-8 inline-block w-full  max-w-lg transform overflow-hidden rounded-xl bg-white text-left align-middle opacity-100 shadow-xl transition-all dark:bg-gray-900">
+              <div className="inline-block w-full max-w-lg my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl opacity-100 rounded-xl dark:bg-gray-900">
                 <div className="flex justify-between border-b border-gray-200 dark:border-gray-800">
                   <Dialog.Title
                     as="h3"
@@ -55,7 +55,7 @@ export const ModalBase = ({ isOpen, setIsOpen, title, children }: ModalProps) =>
                   </Dialog.Title>
                   <XIcon
                     aria-hidden="true"
-                    className="mx-6 mt-7 h-4 w-4 cursor-pointer text-gray-500"
+                    className="w-4 h-4 mx-6 text-gray-500 cursor-pointer mt-7"
                     onClick={closeModal}
                   />
                 </div>

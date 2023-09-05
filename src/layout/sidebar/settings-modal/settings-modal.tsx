@@ -1,10 +1,10 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import type { ModalProps } from '../modal-base';
-import { ModalBase as Modal } from '../modal-base';
 import { CustomEndpoint } from './custom-endpoint';
 import { ThemeMode } from './theme-mode';
+import type { ModalProps } from '~/shared/modal';
+import { ModalBase as Modal } from '~/shared/modal';
 
 export const SettingsModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
   return (

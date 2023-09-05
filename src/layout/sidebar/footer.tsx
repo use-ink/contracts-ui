@@ -3,8 +3,8 @@
 
 import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
 import { useCallback, useState } from 'react';
-import { HelpModal } from '~/shared/modal';
-import { SettingsModal } from '~/shared/modal/settings-modal/settings-modal';
+import { HelpModal } from './help-modal';
+import { SettingsModal } from '~/layout/sidebar/settings-modal/settings-modal';
 
 type ModalName = 'help' | 'settings';
 

@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router';
 
 import { LOCAL, LOCAL_STORAGE_KEY } from '~/config';
 import { useLocalStorage } from '~/hooks/use-local-storage';
-import { Button } from '~/shared/buttons/button';
-import { Input } from '~/shared/form/input';
+import { Button } from '~/shared/buttons';
+import { Input } from '~/shared/form';
 import { isValidWsUrl } from '~/lib/util';
 
 export function CustomEndpoint() {

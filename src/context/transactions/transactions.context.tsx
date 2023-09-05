@@ -4,7 +4,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
-import { useApi } from '../api.context';
+import { useApi } from '../api/api.context';
 import { Transactions } from './transactions';
 import { TxOptions, TransactionsState, TransactionsQueue, TxStatusMap } from '~/types';
 import { isEmptyObj } from '~/lib/util';

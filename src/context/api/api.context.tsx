@@ -10,7 +10,7 @@ import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '~/config';
 import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from '~/types';
 import { isValidWsUrl, isKeyringLoaded } from '~/lib/util';
 import { useLocalStorage } from '~/hooks/use-local-storage';
-import { NoticeBanner } from '~/shared/notice-banner';
+import { NoticeBanner } from '~/context/api/notice-banner';
 import { getChainProperties } from '~/services/chain';
 
 // fixes internal pjs type mismatch `Type 'string' is not assignable to type '`0x${string}`'`
