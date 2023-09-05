@@ -10,7 +10,7 @@ import {
   ContractReturnFlags,
   Registry,
   TypeDef,
-} from 'types';
+} from '~/types';
 
 type ContractResultErr = {
   Err: AnyJson;

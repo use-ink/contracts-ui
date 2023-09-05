@@ -3,7 +3,7 @@
 
 import BN from 'bn.js';
 import { isNumber } from './util';
-import { ApiPromise } from 'types';
+import { ApiPromise } from '~/types';
 
 export const BN_ZERO = new BN(0);
 

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import type { ApiState } from 'types';
+import type { ApiState } from '~/types';
 
 export const LOCAL_STORAGE_KEY = {
   CUSTOM_ENDPOINT: 'contractsUiCustomEndpoint',

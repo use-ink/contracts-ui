@@ -7,7 +7,7 @@ import type { Registry, TypeDef } from '@polkadot/types/types';
 import { getTypeDef } from '@polkadot/types';
 import { TypeDefInfo } from '@polkadot/types/types';
 import { BN_ZERO, isBn } from './bn';
-import { Account } from 'types';
+import { Account } from '~/types';
 
 const warnList: string[] = [];
 

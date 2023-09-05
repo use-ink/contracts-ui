@@ -3,7 +3,7 @@
 
 import { BN } from 'bn.js';
 import { BN_TWO } from './bn';
-import { ApiPromise } from 'types';
+import { ApiPromise } from '~/types';
 
 const DEFAULT_TIME = new BN(6_000);
 

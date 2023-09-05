@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { TypeRegistry } from '@polkadot/types/create';
-import { DEFAULT_DECIMALS } from '../../constants';
-import { ChainProperties, ApiPromise } from 'types';
+import { DEFAULT_DECIMALS } from '~/constants';
+import { ChainProperties, ApiPromise } from '~/types';
 
 const registry = new TypeRegistry();
 

@@ -3,7 +3,7 @@
 
 import { randomAsU8a } from './util';
 import { BN_ZERO } from './bn';
-import { UIStorageDeposit, ContractCallOutcome, BN, WeightV2, AbiParam, Registry } from 'types';
+import { UIStorageDeposit, ContractCallOutcome, BN, WeightV2, AbiParam, Registry } from '~/types';
 
 export function decodeStorageDeposit(
   storageDeposit: ContractCallOutcome['storageDeposit'],

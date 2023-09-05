@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
-import { isValidAddress, isValidCodeHash, isNumber } from 'lib/util';
-import { transformUserInput } from 'lib/call-options';
+import { isValidAddress, isValidCodeHash, isNumber } from '~/lib/util';
+import { transformUserInput } from '~/lib/call-options';
 import {
   ApiPromise,
   CodeBundleDocument,
   BlueprintOptions,
   InstantiateData,
   SubmittableExtrinsic,
-} from 'types';
+} from '~/types';
 
 export function createInstantiateTx(
   api: ApiPromise,
