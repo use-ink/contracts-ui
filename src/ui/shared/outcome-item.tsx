@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { CopyButton } from 'ui/shared/primitives/copy-button';
+import { CopyButton } from 'ui/shared/buttons/copy-button';
 
 export function OutcomeItem({
   displayValue,

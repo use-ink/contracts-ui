@@ -3,7 +3,7 @@
 
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { Button, Buttons } from 'ui/shared/primitives/button';
+import { Button, Buttons } from 'ui/shared/buttons';
 import { Account } from 'ui/shared/account';
 import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
 import { truncate } from 'lib/util';

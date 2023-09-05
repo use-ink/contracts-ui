@@ -3,5 +3,3 @@
 
 export * from './button';
 export * from './copy-button';
-export * from './dropdown';
-export * from './switch';

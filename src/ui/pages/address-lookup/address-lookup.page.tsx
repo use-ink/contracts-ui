@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import { classes, isValidAddress } from 'lib/util';
-import { FormField, getValidation, Input, InputFile, useMetadataField } from 'ui/components';
+import { FormField, getValidation, Input, InputFile, useMetadataField } from 'ui/components/form';
 import { RootLayout } from 'ui/layout';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/use-non-empty-string';
 import { getContractInfo } from 'services/chain';
-import { Button, Buttons } from 'ui/shared/primitives';
+import { Button, Buttons } from 'ui/shared/buttons';
 
 export function AddressLookup() {
   const [searchString, setSearchString] = useState('');

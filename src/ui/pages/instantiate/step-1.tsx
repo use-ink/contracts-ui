@@ -3,9 +3,9 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Buttons } from '../../shared/primitives/button';
-import { Loader } from '../../shared/loader';
-import { CodeHash } from '../../shared/code-hash';
+import { Button, Buttons } from 'ui/shared/buttons';
+import { Loader } from 'ui/shared/loader';
+import { CodeHash } from 'ui/shared/code-hash';
 import {
   Input,
   InputFile,

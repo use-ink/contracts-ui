@@ -7,7 +7,7 @@ import { InputBalance } from './input-balance';
 import { getValidation } from './form-field';
 import type { SimpleSpread, UseStorageDepositLimit } from 'types';
 import { classes, isNull, isNumber } from 'lib/util';
-import { Switch } from 'ui/shared/primitives';
+import { Switch } from 'ui/shared/switch';
 import { Meter } from 'ui/shared/meter';
 
 type Props = SimpleSpread<

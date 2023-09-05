@@ -11,6 +11,7 @@ interface Props {
   date: string;
   registry: Registry;
 }
+
 function Events({ events }: { events: EventRecord[] }) {
   return (
     <div data-cy="generic-events">
@@ -51,16 +52,16 @@ export const TransactionResult = ({
 }: Props) => {
   return (
     <div
-      className="break-all border-b border-gray-200 p-4 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-400"
+      className="p-4 text-xs text-gray-600 break-all border-b border-gray-200 dark:border-gray-700 dark:text-gray-400"
       data-cy={`${message.method}-result}`}
       key={`${time}`}
     >
       <div className="flex-col">
         <div className="mb-2">{date}</div>
-        <div className="text-grey-600 text-mono rounded-sm bg-gray-200 p-2 text-xs dark:bg-elevation-1 dark:text-yellow-400">
+        <div className="p-2 text-xs bg-gray-200 rounded-sm text-grey-600 text-mono dark:bg-elevation-1 dark:text-yellow-400">
           {message.identifier}()
         </div>
-        <div className="mb-2 mt-4 flex-col items-start">
+        <div className="flex-col items-start mt-4 mb-2">
           <div className="event-log">
             {contractEvents && <ContractEvents contractEvents={contractEvents} />}
             <Events events={events} />
@@ -72,7 +73,7 @@ export const TransactionResult = ({
             <ReactMarkdown
               // eslint-disable-next-line react/no-children-prop
               children={error.docs.join('\r\n')}
-              className="markdown mt-2"
+              className="mt-2 markdown"
               remarkPlugins={[remarkGfm]}
             />
           </>

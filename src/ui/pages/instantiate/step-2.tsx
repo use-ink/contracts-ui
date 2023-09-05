@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { hasRevertFlag } from 'lib/has-revert-flag';
 import { isNumber, genRanHex } from 'lib/util';
-import { Button, Buttons, Dropdown } from 'ui/shared/primitives';
+import { Button, Buttons } from 'ui/shared/buttons';
 import {
   InputSalt,
   OptionsForm,
@@ -14,7 +14,7 @@ import {
   getValidation,
   ArgumentForm,
 } from 'ui/components/form';
-import { createConstructorOptions } from 'ui/util/dropdown';
+import { createConstructorOptions } from 'ui/shared/dropdown/dropdown-util';
 import { useApi, useInstantiate } from 'ui/contexts';
 import {
   useArgValues,
@@ -32,6 +32,7 @@ import {
   getStorageDepositLimit,
 } from 'lib/call-options';
 import { BN_ZERO } from 'lib/bn';
+import { Dropdown } from 'ui/shared/dropdown';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {

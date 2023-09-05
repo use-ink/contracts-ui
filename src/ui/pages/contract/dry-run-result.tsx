@@ -3,7 +3,7 @@
 
 import { AbiMessage } from '@polkadot/api-contract/types';
 import { DryRunError } from './dry-run-error';
-import { OutcomeItem } from './outcome-item';
+import { OutcomeItem } from 'ui/shared/outcome-item';
 import { classes } from 'lib/util';
 import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
@@ -78,7 +78,7 @@ export function DryRunResult({
           <div data-cy="dry-run-estimations">
             <span>GasConsumed</span>
             <div className="flex">
-              <div className="basis-1/2 pr-2">
+              <div className="pr-2 basis-1/2">
                 <OutcomeItem
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
                   id={`gcr-${message.method}`}
@@ -86,7 +86,7 @@ export function DryRunResult({
                   title=""
                 />
               </div>
-              <div className="basis-1/2 pl-2">
+              <div className="pl-2 basis-1/2">
                 <OutcomeItem
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
                   id={`gcp-${message.method}`}
@@ -100,7 +100,7 @@ export function DryRunResult({
               <>
                 <span>GasRequired</span>
                 <div className="flex">
-                  <div className="basis-1/2 pr-2">
+                  <div className="pr-2 basis-1/2">
                     <OutcomeItem
                       displayValue={`refTime: ${gasRequired.refTime.toString()}`}
                       id={`grr-${message.method}`}
@@ -108,7 +108,7 @@ export function DryRunResult({
                       title=""
                     />
                   </div>
-                  <div className="basis-1/2 pl-2">
+                  <div className="pl-2 basis-1/2">
                     <OutcomeItem
                       displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
                       id={`grp-${message.method}`}

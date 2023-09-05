@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
-import { SidePanel } from '../../shared/side-panel';
+import { SidePanel } from 'ui/shared/side-panel';
 
 import { useApi, useInstantiate } from 'ui/contexts';
 import { hasRevertFlag } from 'lib/has-revert-flag';
-import { OutcomeItem } from 'ui/pages/contract/outcome-item';
+import { OutcomeItem } from 'ui/shared/outcome-item';
 import { Account } from 'ui/components';
 
 export function DryRun() {

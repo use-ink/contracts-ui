@@ -8,7 +8,7 @@ import React, { useCallback } from 'react';
 import { Tooltip } from 'react-tooltip';
 
 import { classes } from 'lib/util';
-import { Button } from 'ui/shared/primitives/button';
+import { Button } from 'ui/shared/buttons/button';
 
 export interface Props extends React.HTMLAttributes<HTMLImageElement> {
   value?: string | null;

@@ -3,9 +3,9 @@
 
 import { useMemo, useState } from 'react';
 import { GroupBase } from 'react-select';
-import { Dropdown } from '../primitives/dropdown';
+import { Dropdown } from '../dropdown/dropdown';
 import { Account } from './account';
-import { createAccountOptions } from 'ui/util/dropdown';
+import { createAccountOptions } from 'ui/shared/dropdown/dropdown-util';
 import type { DropdownOption, DropdownProps, ValidFormField } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 import { classes } from 'lib/util';

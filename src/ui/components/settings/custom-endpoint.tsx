@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 
 import { LOCAL, LOCAL_STORAGE_KEY } from '../../../constants';
 import { useLocalStorage } from '../../hooks/use-local-storage';
-import { Button } from '../../shared/primitives/button';
+import { Button } from '../../shared/buttons/button';
 import { Input } from '../form/input';
 import { isValidWsUrl } from 'lib/util';
 
