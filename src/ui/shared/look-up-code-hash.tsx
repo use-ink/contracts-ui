@@ -4,14 +4,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
-import { Input } from '../form/input';
-import { FormField } from '../form/form-field';
-import { SearchResults } from '../../shared/search-results';
+
 import { CodeHash } from './code-hash';
+import { SearchResults } from './search-results';
 import { checkOnChainCode, filterOnChainCode } from 'services/chain';
 import { classes, isValidCodeHash } from 'lib/util';
 import { useApi, useDatabase } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
+import { FormField, Input } from 'ui/components';
 
 export function LookUpCodeHash() {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export function LookUpCodeHash() {
       >
         {codeBundle && (
           <button className="absolute right-2" onClick={() => setSearchString('')}>
-            <XCircleIcon aria-hidden="true" className="h-5 w-5 text-gray-500" />
+            <XCircleIcon aria-hidden="true" className="w-5 h-5 text-gray-500" />
           </button>
         )}
       </Input>

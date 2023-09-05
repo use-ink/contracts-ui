@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Link, useParams } from 'react-router-dom';
+import { Wizard } from './wizard';
 import { InstantiateContextProvider } from 'ui/contexts';
-import { Wizard } from 'ui/components/instantiate';
 
 export function Instantiate() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
 
   return (
-    <div className="m-2 w-full overflow-y-auto overflow-x-hidden px-5 py-3">
+    <div className="w-full px-5 py-3 m-2 overflow-x-hidden overflow-y-auto">
       <div className="grid gap-5 md:grid-cols-12">
         <div className="p-4 md:col-span-9">
-          <div className="space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
+          <div className="pb-6 space-y-1 border-b border-gray-200 dark:border-gray-800">
             <h1>
               {codeHashUrlParam
                 ? 'Instantiate Contract from Code Hash'

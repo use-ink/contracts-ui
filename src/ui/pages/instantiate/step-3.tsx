@@ -3,8 +3,8 @@
 
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { Account } from '../account/account';
-import { Button, Buttons } from '../../shared/button';
+import { Button, Buttons } from 'ui/shared/button';
+import { Account } from 'ui/components/account/account';
 import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
 import { truncate } from 'lib/util';
 import { SubmittableResult } from 'types';

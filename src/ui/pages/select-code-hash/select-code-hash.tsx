@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Link } from 'react-router-dom';
-import { LookUpCodeHash, AvailableCodeBundles } from 'ui/components/instantiate';
+
+import { LookUpCodeHash } from '../../shared/look-up-code-hash';
+import { AvailableCodeBundles } from '../instantiate/available-code-bundles';
 import { RootLayout } from 'ui/layout';
 
 export function SelectCodeHash() {

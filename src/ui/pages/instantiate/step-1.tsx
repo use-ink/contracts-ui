@@ -4,15 +4,21 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Buttons } from '../../shared/button';
-import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
 import { Loader } from '../../shared/loader';
-import { AccountSelect } from '../account';
-import { MessageDocs } from '../message';
-import { Metadata } from '../metadata';
-import { CodeHash } from './code-hash';
+import { CodeHash } from '../../shared/code-hash';
+import {
+  Input,
+  InputFile,
+  Form,
+  FormField,
+  useMetadataField,
+  getValidation,
+} from 'ui/components/form';
 import { useNonEmptyString } from 'ui/hooks/use-non-empty-string';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
+import { AccountSelect, MessageDocs } from 'ui/components';
+import { Metadata } from 'ui/components/metadata';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -131,7 +137,7 @@ export function Step1() {
             Metadata
           </label>
 
-          <div className="mb-4 grid gap-4">
+          <div className="grid gap-4 mb-4">
             <Metadata metadata={metadata} />
 
             {metadata.constructors.concat(metadata.messages).map(message => (

@@ -3,11 +3,11 @@
 
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
 import { SidePanel } from '../../shared/side-panel';
-import { Account } from '../account/account';
 
 import { useApi, useInstantiate } from 'ui/contexts';
 import { hasRevertFlag } from 'lib/has-revert-flag';
 import { OutcomeItem } from 'ui/pages/contract/outcome-item';
+import { Account } from 'ui/components';
 
 export function DryRun() {
   const {

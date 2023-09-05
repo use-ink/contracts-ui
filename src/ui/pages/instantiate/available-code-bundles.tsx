@@ -3,8 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FormField } from '../form/form-field';
-import { CodeHash } from './code-hash';
+import { CodeHash } from '../../shared/code-hash';
+import { FormField } from 'ui/components/form/form-field';
 import { CodeBundleDocument } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';
 
@@ -42,7 +42,7 @@ function List({ items, label }: ListProps) {
       })}
       {!isExpanded && items.length > PAGE_SIZE && (
         <a
-          className="cursor-pointer text-xs dark:text-gray-500 dark:hover:text-gray-300"
+          className="text-xs cursor-pointer dark:text-gray-500 dark:hover:text-gray-300"
           onClick={() => setIsExpanded(true)}
         >
           → Show More
@@ -75,7 +75,7 @@ export function AvailableCodeBundles() {
   return (
     <>
       {codes.length > 0 && (
-        <div className="py-4 text-center text-sm dark:text-gray-500">
+        <div className="py-4 text-sm text-center dark:text-gray-500">
           Or choose from a code hash below
         </div>
       )}
