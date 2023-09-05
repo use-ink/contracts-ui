@@ -4,7 +4,7 @@
 import { FolderOpenIcon, TrashIcon } from '@heroicons/react/outline';
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ContractRow } from '../../pages/contract/contract-row';
+import { ContractRow } from '../contract/contract-row';
 import { ForgetAllContractsModal } from 'ui/components/modal';
 import { useDatabase } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
@@ -21,8 +21,8 @@ export function Contracts(): React.ReactElement | null {
 
   if (contracts.length === 0) {
     return (
-      <div className="flex flex-col items-center space-y-2 rounded border px-5 py-7  text-sm dark:border-gray-700 dark:text-gray-500">
-        <FolderOpenIcon className="h-8 w-8" />
+      <div className="flex flex-col items-center px-5 space-y-2 text-sm border rounded py-7 dark:border-gray-700 dark:text-gray-500">
+        <FolderOpenIcon className="w-8 h-8" />
         <div>You haven&apos;t uploaded any contracts yet on this browser.</div>
         <Link className="text-green-500" to={`/instantiate`}>
           Upload a new contract
@@ -35,19 +35,19 @@ export function Contracts(): React.ReactElement | null {
     <>
       <ForgetAllContractsModal confirm={forgetAllContracts} isOpen={isOpen} setIsOpen={setIsOpen} />
       <div>
-        <div className="w-auto border-collapse overflow-hidden rounded border border-gray-200 dark:border-gray-700">
+        <div className="w-auto overflow-hidden border border-collapse border-gray-200 rounded dark:border-gray-700">
           {contracts?.map(contract => {
             return <ContractRow contract={contract} key={`contract-${contract.address}`} />;
           })}
         </div>
-        <div className="grid justify-items-end pt-4">
+        <div className="grid pt-4 justify-items-end">
           <button
-            className="flex h-full items-center rounded border p-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
+            className="flex items-center h-full p-3 font-semibold text-gray-600 border rounded hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
             onClick={() => setIsOpen(true)}
             title="Forget All Contracts"
           >
             <p className="mr-2 text-xs">Forget All Contracts</p>
-            <TrashIcon className="mr-1 w-4 justify-self-end dark:text-gray-500" />
+            <TrashIcon className="w-4 mr-1 justify-self-end dark:text-gray-500" />
           </button>
         </div>
       </div>

@@ -4,7 +4,6 @@
 export * from './account';
 export * from '../shared';
 export * from './form';
-export * from './homepage';
 export * from './instantiate';
 export * from './message';
 export * from './await-apis';
