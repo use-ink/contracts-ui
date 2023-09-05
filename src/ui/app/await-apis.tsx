@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
 import { isWeb3Injected } from '@polkadot/extension-dapp';
-import { AccountsError, ExtensionError } from '../shared/accounts-error';
+import { AccountsError, ExtensionError } from './accounts-error';
 import { useApi, useDatabase } from 'ui/contexts';
 import { Loader, ConnectionError } from 'ui/shared';
 import { isKeyringLoaded } from 'lib/util';

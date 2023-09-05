@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Outlet } from 'react-router';
-import { AwaitApis } from 'ui/components';
+
+import { AwaitApis } from './await-apis';
 import {
   ApiContextProvider,
   DatabaseContextProvider,

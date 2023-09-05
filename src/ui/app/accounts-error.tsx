@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Error } from './error';
+import { Error } from 'ui/shared/error';
 
 export function AccountsError() {
   return (

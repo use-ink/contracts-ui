@@ -10,5 +10,5 @@ export * from './spinner';
 export * from './switch';
 export * from './tabs';
 export * from './search-results';
-export * from './connection-error';
+export * from '../app/connection-error';
 export * from './notice-banner';
