@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useMemo } from 'react';
-import { ArgSignature } from '../message/arg-signature';
+import { ArgSignature } from '../arg-signature';
 import { Form, FormField } from './form-field';
 import { findComponent } from './find-component';
 import { AbiParam, Registry, SetState } from '~/types';

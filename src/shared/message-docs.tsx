@@ -5,7 +5,7 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/solid';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { MessageSignature } from './message-signature';
+import { MessageSignature } from './dropdown/message-signature';
 import type { AbiMessage, Registry } from '~/types';
 import { classes } from '~/lib/util';
 
@@ -27,7 +27,7 @@ export const MessageDocs = ({
       {({ open }) => (
         <div className={classes('collapsible-panel', className)}>
           <Disclosure.Button
-            className="panel-title text-mono flex w-full p-3 text-left text-xs leading-normal dark:bg-elevation-1"
+            className="flex w-full p-3 text-xs leading-normal text-left panel-title text-mono dark:bg-elevation-1"
             data-cy="message-docs"
           >
             <ChevronUpIcon
@@ -35,7 +35,7 @@ export const MessageDocs = ({
             />
             <MessageSignature message={message} registry={registry} />
           </Disclosure.Button>
-          <Disclosure.Panel className="panel-body markdown border-t border-gray-200 p-4 dark:border-gray-700">
+          <Disclosure.Panel className="p-4 border-t border-gray-200 panel-body markdown dark:border-gray-700">
             {/* eslint-disable-next-line react/no-children-prop */}
             {docs.length ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{docs.join('\r\n')}</ReactMarkdown>

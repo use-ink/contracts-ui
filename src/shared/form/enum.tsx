@@ -3,7 +3,7 @@
 
 import { useCallback, useState } from 'react';
 import { Dropdown } from '../dropdown/dropdown';
-import { ArgSignature } from '../message/arg-signature';
+import { ArgSignature } from '../arg-signature';
 import { FormField, getValidation } from './form-field';
 import { isNumber } from '~/lib/util';
 import { ArgComponentProps, OrFalsy, TypeDef } from '~/types';

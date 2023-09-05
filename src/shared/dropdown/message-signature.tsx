@@ -3,7 +3,7 @@
 
 import { encodeTypeDef } from '@polkadot/types/create';
 import { DatabaseIcon } from '@heroicons/react/outline';
-import { ArgSignature } from './arg-signature';
+import { ArgSignature } from '../arg-signature';
 import type { AbiMessage, Registry } from '~/types';
 import { classes } from '~/lib/util';
 
@@ -51,7 +51,7 @@ export function MessageSignature({
       )}
       {isMutating && (
         <>
-          <DatabaseIcon className="ml-2 inline-block h-4 w-4 text-yellow-400" />
+          <DatabaseIcon className="inline-block w-4 h-4 ml-2 text-yellow-400" />
         </>
       )}
     </div>
