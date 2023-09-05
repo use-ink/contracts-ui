@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { CheckIcon, ClockIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
-import { Spinner } from '~/shared/loader/spinner';
+import { Spinner } from '~/shared/loader';
 import { TxStatus } from '~/types';
 import { classes } from '~/lib/util';
 

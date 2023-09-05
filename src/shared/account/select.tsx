@@ -3,9 +3,8 @@
 
 import { useMemo, useState } from 'react';
 import { GroupBase } from 'react-select';
-import { Dropdown } from '../dropdown/dropdown';
 import { Account } from './account';
-import { createAccountOptions } from '~/shared/dropdown/dropdown-util';
+import { createAccountOptions, Dropdown } from '~/shared/dropdown';
 import type { DropdownOption, DropdownProps, ValidFormField } from '~/types';
 import { useApi, useDatabase } from '~/context';
 import { classes } from '~/lib/util';

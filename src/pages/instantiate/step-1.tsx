@@ -4,16 +4,15 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Metadata } from './metadata';
-import { useNonEmptyString } from '~/hooks/use-non-empty-string';
 import { useApi, useDatabase, useInstantiate } from '~/context';
-import { useDbQuery } from '~/hooks';
+import { useDbQuery, useNonEmptyString } from '~/hooks';
 import { Button, Buttons } from '~/shared/buttons';
-import { Loader } from '~/shared/loader/loader';
+import { Loader } from '~/shared/loader';
 import { CodeHash } from '~/shared/code-hash';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '~/shared/form';
 
 import { AccountSelect } from '~/shared/account';
-import { MessageDocs } from '~/shared/message-docs';
+import { MessageDocs } from '~/shared/message';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();

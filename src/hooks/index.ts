@@ -11,3 +11,4 @@ export * from './use-new-contract';
 export * from './use-storage-deposit-limit';
 export * from './use-toggle';
 export * from './use-stored-contract';
+export * from './use-non-empty-string';

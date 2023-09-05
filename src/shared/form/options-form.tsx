@@ -1,12 +1,11 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { InputWeight } from './input-weight';
+import { InputBalance } from './input-balance';
+import { FormField } from './form-field';
+import { InputStorageDepositLimit } from './input-storage-deposit-limit';
 import { UIGas, UseBalance, UseStorageDepositLimit } from '~/types';
-
-import { InputWeight } from '~/shared/form/input-weight';
-import { InputBalance } from '~/shared/form/input-balance';
-import { InputStorageDepositLimit } from '~/shared/form/input-storage-deposit-limit';
-import { FormField } from '~/shared/form/form-field';
 
 interface Props {
   isPayable: boolean;

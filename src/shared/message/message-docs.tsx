@@ -5,7 +5,7 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/solid';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { MessageSignature } from './dropdown/message-signature';
+import { MessageSignature } from './message-signature';
 import type { AbiMessage, Registry } from '~/types';
 import { classes } from '~/lib/util';
 

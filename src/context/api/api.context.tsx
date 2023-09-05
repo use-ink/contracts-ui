@@ -6,11 +6,11 @@ import { useSearchParams } from 'react-router-dom';
 import { web3Accounts, web3Enable, web3EnablePromise } from '@polkadot/extension-dapp';
 import { WsProvider } from '@polkadot/api';
 import { keyring } from '@polkadot/ui-keyring';
+import { NoticeBanner } from './notice-banner';
 import { LOCAL_STORAGE_KEY, ROCOCO_CONTRACTS } from '~/config';
 import { ApiPromise, ApiState, ChainProperties, Account, Status, WeightV2 } from '~/types';
 import { isValidWsUrl, isKeyringLoaded } from '~/lib/util';
-import { useLocalStorage } from '~/hooks/use-local-storage';
-import { NoticeBanner } from '~/context/api/notice-banner';
+import { useLocalStorage } from '~/hooks';
 import { getChainProperties } from '~/services/chain';
 
 // fixes internal pjs type mismatch `Type 'string' is not assignable to type '`0x${string}`'`

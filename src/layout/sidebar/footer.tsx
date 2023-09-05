@@ -4,7 +4,7 @@
 import { ChatAltIcon, CogIcon } from '@heroicons/react/outline';
 import { useCallback, useState } from 'react';
 import { HelpModal } from './help-modal';
-import { SettingsModal } from '~/layout/sidebar/settings-modal/settings-modal';
+import { SettingsModal } from './settings-modal';
 
 type ModalName = 'help' | 'settings';
 

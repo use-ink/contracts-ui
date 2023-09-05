@@ -3,7 +3,7 @@
 
 import { encodeTypeDef } from '@polkadot/types/create';
 import { DatabaseIcon } from '@heroicons/react/outline';
-import { ArgSignature } from '../arg-signature';
+import { ArgSignature } from './arg-signature';
 import type { AbiMessage, Registry } from '~/types';
 import { classes } from '~/lib/util';
 

@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useMemo } from 'react';
-import { ArgSignature } from '../arg-signature';
 import { Form, FormField } from './form-field';
 import { findComponent } from './find-component';
+import { ArgSignature } from '~/shared/message';
 import { AbiParam, Registry, SetState } from '~/types';
 import { classes } from '~/lib/util';
 
@@ -43,7 +43,7 @@ export function ArgumentForm({ args, argValues, registry, setArgValues, classNam
             }
           >
             <Component
-              className="w-full rounded border-gray-200 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+              className="w-full text-gray-600 bg-white border-gray-200 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
               id={arg.name}
               nestingNumber={0}
               onChange={onChange}

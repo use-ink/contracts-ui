@@ -9,8 +9,8 @@ import { ContractHeader } from '../contract-header/contract-header.page';
 import { MetadataTab } from './metadata-tab';
 import { InteractTab } from './interact';
 import { HeaderButtons } from './header-buttons';
-import { Loader } from '~/shared/loader/loader';
-import { Tabs } from '~/pages/contract/tabs';
+import { Tabs } from './tabs';
+import { Loader } from '~/shared/loader';
 
 import { RootLayout } from '~/layout';
 import { useStoredContract } from '~/hooks';

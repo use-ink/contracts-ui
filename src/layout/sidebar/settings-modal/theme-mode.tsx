@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Dropdown } from '~/shared/dropdown/dropdown';
+import { Dropdown } from '~/shared/dropdown';
 import { useTheme } from '~/context';
 
 const options = [
@@ -19,7 +19,7 @@ export function ThemeMode() {
   const { theme, setTheme } = useTheme();
   return (
     <div className="grid w-full grid-cols-12">
-      <div className="col-span-6 flex flex-col text-sm lg:col-span-7 2xl:col-span-8">
+      <div className="flex flex-col col-span-6 text-sm lg:col-span-7 2xl:col-span-8">
         <span className="font-semibold">Theme mode</span>
         <span className="text-gray-500 dark:text-gray-400">Select a display theme</span>
       </div>

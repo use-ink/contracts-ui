@@ -9,7 +9,7 @@ import { ConnectionError } from './connection-error';
 import { useApi, useDatabase } from '~/context';
 
 import { isKeyringLoaded } from '~/lib/util';
-import { Loader } from '~/shared/loader/loader';
+import { Loader } from '~/shared/loader';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { accounts, api, endpoint, status, systemChainType } = useApi();

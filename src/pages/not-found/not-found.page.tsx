@@ -3,7 +3,7 @@
 
 import { EmojiSadIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router';
-import { Button } from '~/shared/buttons/button';
+import { Button } from '~/shared/buttons';
 
 export function NotFound() {
   const navigate = useNavigate();

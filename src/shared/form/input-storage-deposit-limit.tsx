@@ -5,10 +5,10 @@ import Big from 'big.js';
 import { useMemo } from 'react';
 import { InputBalance } from './input-balance';
 import { getValidation } from './form-field';
+import { Switch } from './switch';
+import { Meter } from './meter';
 import type { SimpleSpread, UseStorageDepositLimit } from '~/types';
 import { classes, isNull, isNumber } from '~/lib/util';
-import { Switch } from '~/shared/form/switch';
-import { Meter } from '~/shared/form/meter';
 
 type Props = SimpleSpread<
   React.HTMLAttributes<HTMLDivElement>,

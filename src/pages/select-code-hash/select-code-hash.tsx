@@ -3,7 +3,7 @@
 
 import { Link } from 'react-router-dom';
 
-import { AvailableCodeBundles } from '~/pages/select-code-hash/available-code-bundles';
+import { AvailableCodeBundles } from '~/pages/select-code-hash';
 import { LookUpCodeHash } from '~/shared/lookup-code-hash';
 import { RootLayout } from '~/layout';
 
