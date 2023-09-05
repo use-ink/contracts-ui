@@ -3,7 +3,7 @@
 
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { useEffect, useMemo, useState } from 'react';
-import { CopyButton } from 'ui/components/common/copy-button';
+import { CopyButton } from 'ui/shared/copy-button';
 import { checkOnChainCode } from 'services/chain';
 import { SimpleSpread, VoidFn } from 'types';
 import { useApi, useDatabase } from 'ui/contexts';

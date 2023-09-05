@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Dropdown } from 'ui/components/common/dropdown';
+import { Dropdown } from 'ui/shared/dropdown';
 import { useTheme } from 'ui/contexts';
 
 const options = [

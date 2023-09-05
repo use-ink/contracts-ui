@@ -5,11 +5,12 @@ import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ContractHeader } from '../contract-header/contract-header.page';
-import { InteractTab } from 'ui/components/contract/Interact';
-import { MetadataTab } from 'ui/components/contract/metadata-tab';
-import { Loader } from 'ui/components/common/loader';
-import { Tabs } from 'ui/components/common/tabs';
-import { HeaderButtons } from 'ui/components/common/header-buttons';
+
+import { MetadataTab } from './metadata-tab';
+import { InteractTab } from './interact';
+import { Loader } from 'ui/shared/loader';
+import { Tabs } from 'ui/shared/tabs';
+import { HeaderButtons } from 'ui/shared/header-buttons';
 import { RootLayout } from 'ui/layout';
 import { useStoredContract } from 'ui/hooks';
 

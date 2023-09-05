@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { CopyButton } from 'ui/components/common/copy-button';
+import { CopyButton } from 'ui/shared/copy-button';
 
 export function OutcomeItem({
   displayValue,
@@ -15,10 +15,10 @@ export function OutcomeItem({
   id?: string;
 }): JSX.Element {
   return (
-    <div className="event-log mb-4">
+    <div className="mb-4 event-log">
       <div className="mb-1 leading-5">{title}</div>
       <div
-        className="return-value relative break-all rounded-sm bg-gray-200 p-2 text-xs text-gray-600  dark:bg-elevation-1 dark:text-gray-400"
+        className="relative p-2 text-xs text-gray-600 break-all bg-gray-200 rounded-sm return-value dark:bg-elevation-1 dark:text-gray-400"
         data-cy="output"
       >
         <pre className="whitespace-pre-wrap">

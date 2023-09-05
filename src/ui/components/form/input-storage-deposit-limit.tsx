@@ -3,7 +3,7 @@
 
 import Big from 'big.js';
 import { useMemo } from 'react';
-import { Meter, Switch } from '../common';
+import { Meter, Switch } from '../../shared';
 import { InputBalance } from './Input-balance';
 import { getValidation } from './form-field';
 import type { SimpleSpread, UseStorageDepositLimit } from 'types';

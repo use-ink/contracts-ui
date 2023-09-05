@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Link } from 'react-router-dom';
-import { CopyButton } from '../../components/common/copy-button';
+import { CopyButton } from '../../shared/copy-button';
 import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
 

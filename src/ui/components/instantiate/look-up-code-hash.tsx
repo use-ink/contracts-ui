@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { Input } from '../form/input';
 import { FormField } from '../form/form-field';
-import { SearchResults } from '../common/search-results';
+import { SearchResults } from '../../shared/search-results';
 import { CodeHash } from './code-hash';
 import { checkOnChainCode, filterOnChainCode } from 'services/chain';
 import { classes, isValidCodeHash } from 'lib/util';

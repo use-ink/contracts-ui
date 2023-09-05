@@ -6,7 +6,7 @@ import type { Circle } from '@polkadot/ui-shared/icons/types';
 import copy from 'copy-to-clipboard';
 import React, { useCallback } from 'react';
 import { Tooltip } from 'react-tooltip';
-import { Button } from '../common';
+import { Button } from '../../shared';
 import { classes } from 'lib/util';
 
 export interface Props extends React.HTMLAttributes<HTMLImageElement> {

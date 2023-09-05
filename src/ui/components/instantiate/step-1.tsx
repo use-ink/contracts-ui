@@ -3,9 +3,9 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Buttons } from '../common/button';
+import { Button, Buttons } from '../../shared/button';
 import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
-import { Loader } from '../common/loader';
+import { Loader } from '../../shared/loader';
 import { AccountSelect } from '../account';
 import { MessageDocs } from '../message';
 import { Metadata } from '../metadata';

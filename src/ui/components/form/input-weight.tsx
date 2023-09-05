@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import BN from 'bn.js';
-import { Meter } from '../common/meter';
+import { Meter } from '../../shared/meter';
 import { InputNumber } from './input-number';
 import { UIGas } from 'types';
 import { MAX_CALL_WEIGHT } from 'src/constants';

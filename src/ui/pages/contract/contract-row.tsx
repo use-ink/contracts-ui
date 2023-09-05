@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Identicon } from '../account/identicon';
+import { Identicon } from '../../components/account/identicon';
 import { ContractDocument } from 'types';
 import { useApi } from 'ui/contexts';
 import { displayDate } from 'lib/util';
@@ -38,9 +38,9 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
           {address.slice(0, 4)}...{address.slice(-4)}
         </div>
       ) : (
-        <div className="mr-3 flex-grow text-xs text-gray-500 dark:text-gray-400">not on-chain</div>
+        <div className="flex-grow mr-3 text-xs text-gray-500 dark:text-gray-400">not on-chain</div>
       )}
-      <div className="w-14 text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
+      <div className="text-gray-500 w-14 dark:text-gray-400">{displayDate(date)}</div>
     </Link>
   );
 }

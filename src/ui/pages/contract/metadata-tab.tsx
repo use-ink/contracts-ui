@@ -3,7 +3,7 @@
 
 import { Abi } from 'types';
 import { MessageDocs } from 'ui/components/message/message-docs';
-import { Button } from 'ui/components/common';
+import { Button } from 'ui/shared';
 import { FormField, getValidation, InputFile, useMetadataField } from 'ui/components/form';
 import { useDatabase } from 'ui/contexts';
 

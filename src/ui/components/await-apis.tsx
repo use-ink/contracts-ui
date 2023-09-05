@@ -4,9 +4,9 @@
 import { useEffect, useState } from 'react';
 import type { HTMLAttributes } from 'react';
 import { isWeb3Injected } from '@polkadot/extension-dapp';
-import { AccountsError, ExtensionError } from './common/accounts-error';
+import { AccountsError, ExtensionError } from '../shared/accounts-error';
 import { useApi, useDatabase } from 'ui/contexts';
-import { Loader, ConnectionError } from 'ui/components/common';
+import { Loader, ConnectionError } from 'ui/shared';
 import { isKeyringLoaded } from 'lib/util';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {

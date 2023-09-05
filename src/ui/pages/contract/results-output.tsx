@@ -1,10 +1,10 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { SidePanel } from '../common/side-panel';
 import { TransactionResult } from './transaction-result';
 import { DryRunResult } from './dry-run-result';
 import { CallResult, ContractExecResult, Registry, AbiMessage } from 'types';
+import { SidePanel } from 'ui/shared/side-panel';
 
 interface Props {
   results: CallResult[];
@@ -20,7 +20,7 @@ export const ResultsOutput = ({ registry, results, outcome, message }: Props) =>
         emptyView="No results yet."
         header={message.isMutating || message.isPayable ? 'Dry-run outcome' : 'Outcome'}
       >
-        <div className="whitespace-pre-wrap break-all p-4 text-xs">
+        <div className="p-4 text-xs break-all whitespace-pre-wrap">
           {outcome && <DryRunResult message={message} outcome={outcome} registry={registry} />}
         </div>
       </SidePanel>

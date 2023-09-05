@@ -1,7 +1,7 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { Button } from '../common/button';
+import { Button } from '../../shared/button';
 
 export function HelpBox(): React.ReactElement | null {
   return (

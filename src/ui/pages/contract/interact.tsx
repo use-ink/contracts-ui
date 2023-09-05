@@ -14,7 +14,7 @@ import {
   UIContract,
 } from 'types';
 import { AccountSelect } from 'ui/components/account';
-import { Dropdown, Button, Buttons } from 'ui/components/common';
+import { Dropdown, Button, Buttons } from 'ui/shared';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
 import { BN_ZERO } from 'lib/bn';
 import { useApi, useTransactions } from 'ui/contexts';

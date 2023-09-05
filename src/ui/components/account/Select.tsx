@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from 'react';
 import { GroupBase } from 'react-select';
-import { Dropdown } from '../common/dropdown';
+import { Dropdown } from '../../shared/dropdown';
 import { Account } from './account';
 import { createAccountOptions } from 'ui/util/dropdown';
 import type { DropdownOption, DropdownProps, ValidFormField } from 'types';

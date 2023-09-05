@@ -4,7 +4,7 @@
 import { encodeTypeDef } from '@polkadot/types';
 import React, { useCallback } from 'react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
-import { Button, Buttons } from '../common';
+import { Button, Buttons } from '../../shared';
 import { FormField } from './form-field';
 import { TypeDef, ArgComponentProps, OrFalsy } from 'types';
 

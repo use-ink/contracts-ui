@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { BellIcon, XIcon } from '@heroicons/react/outline';
-import { NotificationIcon } from './common/notification-icon';
+import { NotificationIcon } from '../shared/notification-icon';
 import { classes, isEmptyObj } from 'lib/util';
 import type { QueuedTxOptions, TransactionsState } from 'types';
 
