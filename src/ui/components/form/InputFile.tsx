@@ -3,11 +3,13 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { Buffer } from 'buffer';
 import { createRef, useCallback, useEffect, useState } from 'react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/solid';
 import { DocumentTextIcon } from '@heroicons/react/outline';
 import type { FileState, InputFileProps as Props, OrFalsy } from 'types';
+import { getPatronMetadata } from 'ui/components/metadata/GetPatronMetadata';
 
 const NOOP = (): void => undefined;
 
@@ -61,10 +63,40 @@ export function InputFile({
   }, [onRemove, propsFile]);
 
   useEffect((): void => {
+    const params = new URL(window.location.href).searchParams;
+    const patronCodeHash = params.get('patron');
+
+    if (patronCodeHash && file?.name !== 'patron-contract.json') {
+      const metadataPromise = getPatronMetadata('metadata', patronCodeHash);
+      const wasmPromise = getPatronMetadata('wasm', patronCodeHash);
+      metadataPromise
+        .then(metadataResponse => {
+          wasmPromise
+            .then((wasmResponse: ArrayBuffer) => {
+              const result = Buffer.from(wasmResponse).toString('hex');
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              metadataResponse.source.wasm = '0x' + result;
+              const metadataString = JSON.stringify(metadataResponse);
+              const blob = new Blob([metadataString], { type: 'application/json' });
+              const patronFile = new File([blob], 'patron-contract.json', {
+                lastModified: new Date(0).getTime(),
+                type: 'json',
+              });
+              onDrop([patronFile]);
+            })
+            .catch(e => {
+              console.error(e);
+            });
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
+
     if (file !== propsFile) {
       setFile(propsFile);
     }
-  }, [file, propsFile]);
+  }, [file, propsFile, onDrop]);
 
   return file ? (
     <div className={`${className} flex`} data-cy="upload-confirmation">
