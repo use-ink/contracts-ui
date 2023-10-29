@@ -85,6 +85,12 @@ const PENDULUM_TESTNET = {
   rpc: 'wss://rpc-foucoco.pendulumchain.tech',
 };
 
+const ZEITGEIST_BATTERY_STATION = {
+  relay: 'Rococo',
+  name: 'Zeitgeist Battery Station',
+  rpc: 'wss://bsr.zeitgeist.pm',
+};
+
 export const TESTNETS = [
   ...[
     ROCOCO_CONTRACTS,
@@ -94,6 +100,7 @@ export const TESTNETS = [
     ALEPH_ZERO_TESTNET,
     T3RN_T0RN,
     PENDULUM_TESTNET,
+    ZEITGEIST_BATTERY_STATION,
   ].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
 ];
