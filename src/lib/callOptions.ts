@@ -65,7 +65,7 @@ export function transformUserInput(
       return registry.createType('Balance', value);
     }
 
-    return value || null;
+    return value;
   });
 }
 const encoder = new TextEncoder();
