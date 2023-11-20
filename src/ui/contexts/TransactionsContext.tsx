@@ -1,13 +1,14 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { createContext, useState, useContext, useEffect } from 'react';
+import { AddressOrPair } from '@polkadot/api/types';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useApi } from './ApiContext';
-import { TxOptions, TransactionsState, TransactionsQueue, TxStatusMap } from 'types';
-import { Transactions } from 'ui/components/Transactions';
 import { isEmptyObj } from 'lib/util';
+import { TransactionsQueue, TransactionsState, TxOptions, TxStatusMap } from 'types';
+import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 1;
 
@@ -37,8 +38,14 @@ export function TransactionsContextProvider({
 
     const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
     setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Processing } });
-    const injector = systemChainType.isDevelopment ? undefined : await web3FromAddress(accountId);
-    const account = systemChainType.isDevelopment ? keyring.getPair(accountId) : accountId;
+    const keyPair = keyring.getPair(accountId);
+    let account: AddressOrPair = keyPair;
+    let injector = undefined;
+
+    if (!keyPair.meta.isTesting) {
+      injector = await web3FromAddress(accountId);
+      account = keyPair.address;
+    }
 
     try {
       const unsub = await extrinsic.signAndSend(
