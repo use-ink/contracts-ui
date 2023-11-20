@@ -38,58 +38,59 @@ export function TransactionsContextProvider({
 
     const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
     setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Processing } });
-    const keyPair = keyring.getPair(accountId);
-    let account: AddressOrPair = keyPair;
-    let injector = undefined;
 
+    const keyPair = keyring.getPair(accountId);
+    let addressOrPair: AddressOrPair = keyPair;
+    let signer = undefined;
+
+    // If the account is not a testing account (//Alice etc.),
+    // we need the `signer` from the extension
     if (!keyPair.meta.isTesting) {
-      injector = await web3FromAddress(accountId);
-      account = keyPair.address;
+      signer = (await web3FromAddress(accountId)).signer;
+      // Only use plain address, otherwise pjs api want to sign with given KeyPair
+      // instead of `signer`
+      addressOrPair = keyPair.address;
     }
 
     try {
-      const unsub = await extrinsic.signAndSend(
-        account,
-        { signer: injector?.signer || undefined },
-        async result => {
-          if (result.isInBlock || result.isFinalized) {
-            const events: Record<string, number> = {};
+      const unsub = await extrinsic.signAndSend(addressOrPair, { signer }, async result => {
+        if (result.isInBlock || result.isFinalized) {
+          const events: Record<string, number> = {};
 
-            result.events.forEach(record => {
-              const { event } = record;
-              const key = `${event.section}:${event.method}`;
-              if (!events[key]) {
-                events[key] = 1;
-              } else {
-                events[key]++;
-              }
-            });
+          result.events.forEach(record => {
+            const { event } = record;
+            const key = `${event.section}:${event.method}`;
+            if (!events[key]) {
+              events[key] = 1;
+            } else {
+              events[key]++;
+            }
+          });
 
-            if (!isValid(result)) {
-              setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error, events } });
+          if (!isValid(result)) {
+            setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error, events } });
 
-              let message = 'Transaction failed';
+            let message = 'Transaction failed';
 
-              if (result.dispatchError?.isModule) {
-                const decoded = api?.registry.findMetaError(result.dispatchError.asModule);
-                message = `${decoded?.section.toUpperCase()}.${decoded?.method}: ${decoded?.docs}`;
-              }
-
-              onError && onError(result);
-
-              throw new Error(message);
+            if (result.dispatchError?.isModule) {
+              const decoded = api?.registry.findMetaError(result.dispatchError.asModule);
+              message = `${decoded?.section.toUpperCase()}.${decoded?.method}: ${decoded?.docs}`;
             }
 
-            onSuccess && (await onSuccess(result));
+            onError && onError(result);
 
-            setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Success, events } });
-
-            unsub();
-
-            nextId++;
+            throw new Error(message);
           }
-        },
-      );
+
+          onSuccess && (await onSuccess(result));
+
+          setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Success, events } });
+
+          unsub();
+
+          nextId++;
+        }
+      });
     } catch (error) {
       setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error } });
       console.error(error);
