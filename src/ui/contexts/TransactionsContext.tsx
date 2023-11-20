@@ -17,7 +17,7 @@ export const TransactionsContext = createContext({} as unknown as TransactionsSt
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { api, systemChainType } = useApi();
+  const { api } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
