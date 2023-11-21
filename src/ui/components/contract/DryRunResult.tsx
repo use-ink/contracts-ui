@@ -77,8 +77,8 @@ export function DryRunResult({
         {isDispatchable && (
           <div data-cy="dry-run-estimations">
             <span>GasConsumed</span>
-            <div className="flex">
-              <div className="basis-1/2 pr-2">
+            <div className="flex flex-row gap-4">
+              <div className="flex-1">
                 <OutcomeItem
                   displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
                   id={`gcr-${message.method}`}
@@ -86,7 +86,7 @@ export function DryRunResult({
                   title=""
                 />
               </div>
-              <div className="basis-1/2 pl-2">
+              <div className="flex-1">
                 <OutcomeItem
                   displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
                   id={`gcp-${message.method}`}
