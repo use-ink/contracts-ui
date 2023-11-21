@@ -60,7 +60,7 @@ export async function getContractInfo(api: ApiPromise, address: string) {
 
 export async function checkOnChainCode(api: ApiPromise, codeHash: string): Promise<boolean> {
   return isValidCodeHash(codeHash)
-    ? (await api.query.contracts.codeStorage(codeHash)).isSome
+    ? (await api.query.contracts.pristineCode(codeHash)).isSome
     : false;
 }
 

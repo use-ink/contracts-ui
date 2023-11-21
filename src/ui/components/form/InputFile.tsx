@@ -35,6 +35,7 @@ export function InputFile({
     onRemove && onRemove();
   }, [onRemove]);
 
+
   return file ? (
     <div className={`${className} flex`} data-cy="upload-confirmation">
       <div className="inline-flex items-center rounded border border-gray-300 p-6 shadow dark:border-gray-700 dark:bg-elevation-1">
