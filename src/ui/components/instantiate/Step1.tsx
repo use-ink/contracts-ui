@@ -14,6 +14,9 @@ import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
 
+import { fileToFileState } from 'lib/fileToFileState';
+import { getContractFromPatron } from 'lib/getContractFromPatron';
+
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { db } = useDatabase();
@@ -21,6 +24,7 @@ export function Step1() {
     () => (codeHashUrlParam ? db.codeBundles.get({ codeHash: codeHashUrlParam }) : undefined),
     [codeHashUrlParam, db],
   );
+
   const { accounts } = useApi();
   const { setStep, setData, data, step } = useInstantiate();
 
@@ -36,6 +40,17 @@ export function Step1() {
     onRemove,
     ...metadataValidation
   } = useMetadataField();
+
+  useEffect(() => {
+    if (codeHashUrlParam && !codeBundle && !file && !isLoading) {
+      getContractFromPatron(codeHashUrlParam)
+        .then(fileToFileState)
+        .then(patronFileState => {
+          onChange(patronFileState);
+        })
+        .catch(e => console.error(`Failed fetching contract from Patron.works: ${e}`));
+    }
+  }, [codeHashUrlParam, codeBundle, onChange, file, isLoading]);
 
   useEffect(
     function updateNameFromMetadata(): void {
@@ -103,26 +118,25 @@ export function Step1() {
             <CodeHash codeHash={codeHashUrlParam} name={codeBundle.name} />
           </FormField>
         )}
-        {(!codeHashUrlParam || !isStored) && (
-          <FormField
-            help={
-              codeHashUrlParam && !isStored
-                ? 'The contract metadata JSON file to save for this contract. Constructor and message information will be derived from this file.'
-                : 'The contract bundle file containing the WASM blob and metadata.'
-            }
-            id="metadata"
-            label={codeHashUrlParam ? 'Upload Metadata' : 'Upload Contract Bundle'}
-            {...getValidation(metadataValidation)}
-          >
-            <InputFile
-              isError={metadataValidation.isError}
-              onChange={onChange}
-              onRemove={onRemove}
-              placeholder="Click to select or drag and drop to upload file."
-              value={file}
-            />
-          </FormField>
-        )}
+
+        <FormField
+          help={
+            codeHashUrlParam && !isStored
+              ? 'The contract metadata JSON file to save for this contract. Constructor and message information will be derived from this file.'
+              : 'The contract bundle file containing the WASM blob and metadata.'
+          }
+          id="metadata"
+          label={codeHashUrlParam ? 'Upload Metadata' : 'Upload Contract Bundle'}
+          {...getValidation(metadataValidation)}
+        >
+          <InputFile
+            isError={metadataValidation.isError}
+            onChange={onChange}
+            onRemove={onRemove}
+            placeholder="Click to select or drag and drop to upload file."
+            value={file}
+          />
+        </FormField>
       </Form>
 
       {metadata && (
