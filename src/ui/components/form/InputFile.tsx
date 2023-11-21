@@ -8,6 +8,7 @@ import Dropzone, { DropzoneRef } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/solid';
 import { DocumentTextIcon } from '@heroicons/react/outline';
 import type { FileState, InputFileProps as Props, OrFalsy } from 'types';
+import { onDropPatronFile } from 'ui/components/metadata/GetPatronMetadata';
 
 const NOOP = (): void => undefined;
 
@@ -61,10 +62,16 @@ export function InputFile({
   }, [onRemove, propsFile]);
 
   useEffect((): void => {
+    const params = new URL(window.location.href).searchParams;
+    const patronCodeHash = params.get('patron');
+    if (patronCodeHash && file?.name !== 'patron-contract.json') {
+      onDropPatronFile(patronCodeHash, onDrop);
+    }
+
     if (file !== propsFile) {
       setFile(propsFile);
     }
-  }, [file, propsFile]);
+  }, [file, propsFile, onDrop]);
 
   return file ? (
     <div className={`${className} flex`} data-cy="upload-confirmation">
