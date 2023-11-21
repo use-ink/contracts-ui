@@ -1,16 +1,15 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { Account } from '../account/Account';
 import { Button, Buttons } from '../common/Button';
-import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
-import { truncate } from 'lib/util';
-import { SubmittableResult } from 'types';
-import { useNewContract } from 'ui/hooks';
-import { createInstantiateTx } from 'services/chain';
 import { printBN } from 'lib/bn';
+import { createInstantiateTx } from 'services/chain';
+import { SubmittableResult } from 'types';
+import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
+import { useNewContract } from 'ui/hooks';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -21,7 +20,7 @@ export function Step3() {
   const [txId, setTxId] = useState<number>(0);
   const onSuccess = useNewContract();
 
-  const displayHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
+  const codeHash = codeHashUrlParam || metadata?.info.source.wasmHash.toHex();
 
   useEffect(() => {
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
@@ -54,42 +53,48 @@ export function Step3() {
     <>
       <div className="review">
         <div className="field full">
-          <p className="key">Account</p>
+          <p className="key">Deployer</p>
           <div className="value">
             <Account value={accountId} />
           </div>
         </div>
 
         <div className="field full">
-          <p className="key">Name</p>
+          <p className="key">Contract Name</p>
           <p className="value">{name}</p>
         </div>
         {metadata?.constructors[constructorIndex].isPayable && value && (
-          <div className="field">
+          <div className="field full">
             <p className="key">Value</p>
             <p className="value">{printBN(value)}</p>
           </div>
         )}
 
-        <div className="field">
+        <div className="field full">
           <p className="key">Weight</p>
           <p className="value">{gasLimit && printBN(gasLimit.refTime.toBn())}</p>
         </div>
 
-        {displayHash && (
-          <div className="field">
+        {codeHash && (
+          <div className="field full">
             <p className="key">Code Hash</p>
-            <p className="value">{truncate(displayHash)}</p>
+            <p className="value">{codeHash}</p>
           </div>
         )}
 
         {txs[txId]?.extrinsic.args[3] && (
-          <div className="field">
+          <div className="field full">
             <p className="key">Data</p>
-            <p className="value">{truncate(txs[txId]?.extrinsic.args[3].toHex())}</p>
+            <textarea
+              className="w-full bg-transparent text-sm value"
+              readOnly
+              rows={4}
+              value={txs[txId]?.extrinsic.args[3].toHex()}
+            />
           </div>
         )}
       </div>
+
       <Buttons>
         <Button
           isDisabled={txs[txId]?.status === 'processing'}
