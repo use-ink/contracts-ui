@@ -32,6 +32,7 @@ export function TransactionsContextProvider({
 
     return nextId;
   }
+
   async function process(id: number) {
     const tx = txs[id];
     if (!tx) throw new Error(`No tx with id: ${id} is queued `);
@@ -53,10 +54,11 @@ export function TransactionsContextProvider({
     }
 
     try {
-      const unsub = await extrinsic.signAndSend(addressOrPair, { signer }, async result => {
+      const unsubscribe = await extrinsic.signAndSend(addressOrPair, { signer }, async result => {
         if (result.isInBlock || result.isFinalized) {
           const events: Record<string, number> = {};
 
+          // Count events
           result.events.forEach(record => {
             const { event } = record;
             const key = `${event.section}:${event.method}`;
@@ -79,16 +81,17 @@ export function TransactionsContextProvider({
 
             onError && onError(result);
 
+            unsubscribe();
             throw new Error(message);
+          } else {
+            onSuccess && (await onSuccess(result));
+
+            setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Success, events } });
+
+            unsubscribe();
+
+            nextId++;
           }
-
-          onSuccess && (await onSuccess(result));
-
-          setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Success, events } });
-
-          unsub();
-
-          nextId++;
         }
       });
     } catch (error) {
