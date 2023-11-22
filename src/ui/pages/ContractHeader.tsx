@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { CopyButton } from '../components/common/CopyButton';
 import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
+import { ObservedBalance } from '../components/common/ObservedBalance';
 
 interface Props {
   document: UIContract;
@@ -16,13 +17,16 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
       return (
         <div>
           You added this contract from{' '}
-          <div className="inline-flex items-center">
-            <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
+          <div className="inline-flex items-center" title={address}>
+            <span className="px-1.5 py-1 relative inline-block rounded bg-blue-500 bg-opacity-20  font-mono text-xs text-blue-400">
               {truncate(address, 4)}
             </span>
             <CopyButton className="ml-1" id="header-address" value={address} />
           </div>{' '}
-          on {displayDate(date)}
+          on {displayDate(date)} and holds a value of{' '}
+          <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
+            <ObservedBalance address={address} />
+          </span>
         </div>
       );
     case 'instantiated':
@@ -30,7 +34,10 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
         <div>
           You instantiated this contract{' '}
           <div className="inline-flex items-center">
-            <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
+            <span
+              className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400"
+              title={address}
+            >
               {truncate(address, 4)}
             </span>
             <CopyButton className="ml-1" id="header-address" value={address} />
@@ -38,11 +45,15 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
           from{' '}
           <Link
             className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400"
+            title={codeHash}
             to={`/instantiate/${codeHash}`}
           >
             {name}
           </Link>{' '}
-          on {displayDate(date)}
+          on {displayDate(date)} and holds a value of{' '}
+          <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
+            <ObservedBalance address={address} />
+          </span>
         </div>
       );
   }

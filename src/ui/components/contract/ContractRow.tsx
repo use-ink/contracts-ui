@@ -4,9 +4,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Identicon } from '../account/Identicon';
+import { ObservedBalance } from '../common/ObservedBalance';
 import { ContractDocument } from 'types';
 import { useApi } from 'ui/contexts';
-import { displayDate } from 'lib/util';
+import { displayDate, truncate } from 'lib/util';
 import { getContractInfo } from 'services/chain';
 
 interface Props {
@@ -27,20 +28,26 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
 
   return (
     <Link
-      className={`inline-flex w-full cursor-pointer items-center border border-l-0 border-r-0 border-t-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
+      className={`grid grid-cols-4 w-full cursor-pointer items-center border border-l-0 border-r-0 border-t-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
       to={`/contract/${address}`}
     >
-      <Identicon className="pr-2" size={18} value={address} />
-      <div className="w-36">{name}</div>
+      <div className="gap-2 flex flex-row">
+        <Identicon size={18} value={address} />
+        <div>{name}</div>
+      </div>
 
       {isOnChain ? (
-        <div className="flex-grow text-gray-500 dark:text-gray-400">
-          {address.slice(0, 4)}...{address.slice(-4)}
+        <div className="font-mono text-gray-500 dark:text-gray-400" title={address}>
+          {truncate(address, 4)}
         </div>
       ) : (
-        <div className="mr-3 flex-grow text-xs text-gray-500 dark:text-gray-400">not on-chain</div>
+        <div className="text-gray-500 dark:text-gray-400">not on-chain</div>
       )}
-      <div className="w-14 text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
+      <div className="text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
+
+      <div className="font-mono text-gray-500 dark:text-gray-400 justify-self-end">
+        <ObservedBalance address={address} />
+      </div>
     </Link>
   );
 }
