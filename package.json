@@ -12,6 +12,8 @@
     "format": "yarn prettier --write .",
     "clean": "rm -rf dist",
     "test": "yarn cypress run",
+    "test:cypress": "yarn cypress run",
+    "test:vitest": "vitest",
     "deep-clean": "yarn clean && rm -rf node_modules",
     "regenerate": "yarn deep-clean && yarn && yarn start",
     "postinstall": "husky install"
@@ -94,7 +96,8 @@
     "typescript": "^5.1.6",
     "vite": "^4.4.6",
     "vite-plugin-istanbul": "^5.0.0",
-    "vite-tsconfig-paths": "^4.2.0"
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.34.6"
   },
   "browserslist": [
     "last 2 Chrome versions"
