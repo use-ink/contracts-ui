@@ -3323,7 +3323,7 @@ __metadata:
     json5: ^2.2.3
     lint-staged: ">=13.2.2"
     nyc: ^15.1.0
-    postcss: ^8.4.27
+    postcss: ^8.4.31
     postcss-import: ^15.1.0
     prettier: ^3.0.0
     prettier-plugin-tailwindcss: ^0.4.1
@@ -7775,7 +7775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.23, postcss@npm:^8.4.26, postcss@npm:^8.4.27":
+"postcss@npm:^8.4.23, postcss@npm:^8.4.26":
   version: 8.4.27
   resolution: "postcss@npm:8.4.27"
   dependencies:
