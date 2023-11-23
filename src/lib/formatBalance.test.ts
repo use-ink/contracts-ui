@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { ApiPromise } from '@polkadot/api';
-import { describe, it, expect, test, beforeAll } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { formatBalance } from './formatBalance';
 
 describe('formatBalance', () => {
