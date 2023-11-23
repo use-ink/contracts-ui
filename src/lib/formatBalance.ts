@@ -5,19 +5,23 @@ import { Balance } from 'types';
 
 type FormattingOptions = {
   decimals: number;
-  unit?: string;
-  digits: number;
+  symbol: string | undefined;
+  fractionDigits: number;
 };
 
 const DEFAULT_OPTIONS: FormattingOptions = {
   decimals: 12,
-  digits: 2,
+  fractionDigits: 2,
+  symbol: undefined,
 };
 
-export const formatBalance = (balance: Balance, options: FormattingOptions = DEFAULT_OPTIONS) => {
+export const formatBalance = (balance: Balance, partialOptions?: Partial<FormattingOptions>) => {
+  const options: FormattingOptions = { ...DEFAULT_OPTIONS, ...partialOptions };
+
   if (options.decimals < 0) throw new Error('Decimals must be positive');
-  if (options.digits < 0) throw new Error('Digits must be positive');
-  if (options.decimals < options.digits) throw new Error('Decimals must be greater than digits');
+  if (options.fractionDigits < 0) throw new Error('Fraction digits must be positive');
+  if (options.decimals < options.fractionDigits)
+    throw new Error('Decimals must be greater than fraction digits');
 
   const balanceString = balance.toString();
   const integerDigits = balanceString.split('');
@@ -29,7 +33,7 @@ export const formatBalance = (balance: Balance, options: FormattingOptions = DEF
   return (
     Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(BigInt(integerPart)) +
     '.' +
-    fractionalPart.toString().slice(0, options.digits).padEnd(options.digits, '0') +
-    (options.unit ? ` ${options.unit}` : '')
+    fractionalPart.toString().slice(0, options.fractionDigits).padEnd(options.fractionDigits, '0') +
+    (options.symbol ? ` ${options.symbol}` : '')
   );
 };

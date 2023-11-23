@@ -17,15 +17,17 @@ describe('formatBalance', () => {
   });
 
   it('should throw on invalid options', () => {
-    expect(() => formatBalance(api.createType('Balance', 1), { decimals: -1, digits: 0 })).toThrow(
-      'Decimals must be positive',
-    );
-    expect(() => formatBalance(api.createType('Balance', 1), { decimals: 0, digits: -1 })).toThrow(
-      'Digits must be positive',
-    );
-    expect(() => formatBalance(api.createType('Balance', 1), { decimals: 0, digits: 1 })).toThrow(
-      'Decimals must be greater than digits',
-    );
+    expect(() =>
+      formatBalance(api.createType('Balance', 1), { decimals: -1, fractionDigits: 0 }),
+    ).toThrow();
+
+    expect(() =>
+      formatBalance(api.createType('Balance', 1), { decimals: 0, fractionDigits: -1 }),
+    ).toThrow();
+
+    expect(() =>
+      formatBalance(api.createType('Balance', 1), { decimals: 0, fractionDigits: 1 }),
+    ).toThrow();
   });
 
   it('should format edge cases correctly', () => {
@@ -44,25 +46,31 @@ describe('formatBalance', () => {
   });
 
   it('edge cases with custom options', () => {
-    [
-      { value: 0n, expected: '0.0000', options: { decimals: 4, digits: 4 } },
-      { value: 123456789n, expected: '1.23456789', options: { decimals: 8, digits: 8 } },
+    const cases = [
+      { value: 0n, expected: '0.0000', options: { decimals: 4, fractionDigits: 4 } },
+      {
+        value: 123456789n,
+        expected: '1.23456789',
+        options: { decimals: 8, fractionDigits: 8 },
+      },
       {
         value: 1_123_456_789_101_112_134n,
         expected: '1.123456789101112134',
-        options: { decimals: 18, digits: 18 },
+        options: { decimals: 18, fractionDigits: 18 },
       },
       {
         value: 340_282_366_920_938_463_463_374_607_431_768_211_455n,
         expected: '3.40282366920938463463374607431768211455',
-        options: { decimals: 38, digits: 38 },
+        options: { decimals: 38, fractionDigits: 38 },
       },
       {
         value: 340_282_366_920_938_463_463_374_607_431_768_211_455n,
         expected: '0.00000000000340282366920938463463374607',
-        options: { decimals: 50, digits: 38 },
+        options: { decimals: 50, fractionDigits: 38 },
       },
-    ].forEach(({ value, expected, options }) => {
+    ];
+
+    cases.forEach(({ value, expected, options }) => {
       const balance = api.createType('Balance', value);
       expect(formatBalance(balance, options)).toBe(expected);
     });

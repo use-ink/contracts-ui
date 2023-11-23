@@ -25,5 +25,10 @@ export const ObservedBalance = ({ address }: { address: string }) => {
   }, [address, api]);
 
   if (!balance) return null;
-  return formatBalance(balance, tokenDecimals, tokenSymbol);
+
+  return formatBalance(balance, {
+    decimals: tokenDecimals,
+    symbol: tokenSymbol,
+    fractionDigits: 2,
+  });
 };
