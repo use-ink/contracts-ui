@@ -1,13 +1,14 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { createContext, useState, useContext, useEffect } from 'react';
+import { AddressOrPair } from '@polkadot/api/types';
 import { web3FromAddress } from '@polkadot/extension-dapp';
 import { keyring } from '@polkadot/ui-keyring';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useApi } from './ApiContext';
-import { TxOptions, TransactionsState, TransactionsQueue, TxStatusMap } from 'types';
-import { Transactions } from 'ui/components/Transactions';
 import { isEmptyObj } from 'lib/util';
+import { TransactionsQueue, TransactionsState, TxOptions, TxStatusMap } from 'types';
+import { Transactions } from 'ui/components/Transactions';
 
 let nextId = 1;
 
@@ -16,7 +17,7 @@ export const TransactionsContext = createContext({} as unknown as TransactionsSt
 export function TransactionsContextProvider({
   children,
 }: React.PropsWithChildren<Partial<TransactionsState>>) {
-  const { api, systemChainType } = useApi();
+  const { api } = useApi();
   const [txs, setTxs] = useState<TransactionsQueue>({});
 
   function queue(options: TxOptions): number {
@@ -31,58 +32,68 @@ export function TransactionsContextProvider({
 
     return nextId;
   }
+
   async function process(id: number) {
     const tx = txs[id];
     if (!tx) throw new Error(`No tx with id: ${id} is queued `);
 
     const { extrinsic, accountId, isValid, onSuccess, onError } = tx;
     setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Processing } });
-    const injector = systemChainType.isDevelopment ? undefined : await web3FromAddress(accountId);
-    const account = systemChainType.isDevelopment ? keyring.getPair(accountId) : accountId;
+
+    const keyPair = keyring.getPair(accountId);
+    let addressOrPair: AddressOrPair = keyPair;
+    let signer = undefined;
+
+    // If the account is not a testing account (//Alice etc.),
+    // we need the `signer` from the extension
+    if (!keyPair.meta.isTesting) {
+      signer = (await web3FromAddress(accountId)).signer;
+      // Only use plain address, otherwise pjs api want to sign with given KeyPair
+      // instead of `signer`
+      addressOrPair = keyPair.address;
+    }
 
     try {
-      const unsub = await extrinsic.signAndSend(
-        account,
-        { signer: injector?.signer || undefined },
-        async result => {
-          if (result.isInBlock || result.isFinalized) {
-            const events: Record<string, number> = {};
+      const unsubscribe = await extrinsic.signAndSend(addressOrPair, { signer }, async result => {
+        if (result.isInBlock || result.isFinalized) {
+          const events: Record<string, number> = {};
 
-            result.events.forEach(record => {
-              const { event } = record;
-              const key = `${event.section}:${event.method}`;
-              if (!events[key]) {
-                events[key] = 1;
-              } else {
-                events[key]++;
-              }
-            });
+          // Count events
+          result.events.forEach(record => {
+            const { event } = record;
+            const key = `${event.section}:${event.method}`;
+            if (!events[key]) {
+              events[key] = 1;
+            } else {
+              events[key]++;
+            }
+          });
 
-            if (!isValid(result)) {
-              setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error, events } });
+          if (!isValid(result)) {
+            setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error, events } });
 
-              let message = 'Transaction failed';
+            let message = 'Transaction failed';
 
-              if (result.dispatchError?.isModule) {
-                const decoded = api?.registry.findMetaError(result.dispatchError.asModule);
-                message = `${decoded?.section.toUpperCase()}.${decoded?.method}: ${decoded?.docs}`;
-              }
-
-              onError && onError(result);
-
-              throw new Error(message);
+            if (result.dispatchError?.isModule) {
+              const decoded = api?.registry.findMetaError(result.dispatchError.asModule);
+              message = `${decoded?.section.toUpperCase()}.${decoded?.method}: ${decoded?.docs}`;
             }
 
+            onError && onError(result);
+
+            unsubscribe();
+            throw new Error(message);
+          } else {
             onSuccess && (await onSuccess(result));
 
             setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Success, events } });
 
-            unsub();
+            unsubscribe();
 
             nextId++;
           }
-        },
-      );
+        }
+      });
     } catch (error) {
       setTxs({ ...txs, [id]: { ...tx, status: TxStatusMap.Error } });
       console.error(error);
