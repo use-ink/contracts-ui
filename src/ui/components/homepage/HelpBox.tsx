@@ -3,8 +3,8 @@
 
 export function HelpBox(): React.ReactElement | null {
   return (
-    <div className="mb-8 border-b pb-8 border-gray-200  dark:border-gray-800">
-      <div className="relative flex gap-2 flex-col w-auto rounded border border-gray-200 p-4 dark:border-gray-800 dark:bg-elevation-1">
+    <div className="mb-8 border-b border-gray-200 pb-8  dark:border-gray-800">
+      <div className="relative flex w-auto flex-col gap-2 rounded border border-gray-200 p-4 dark:border-gray-800 dark:bg-elevation-1">
         <div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
             New to ink!? Check out the documentation!

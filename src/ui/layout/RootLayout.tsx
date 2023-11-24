@@ -8,18 +8,18 @@ export function RootLayout({ accessory, heading, help, children, aside }: PagePr
   return (
     <section
       className={classes(
-        'p-10 overflow-y-auto w-full',
+        'w-full overflow-y-auto p-10',
         aside && 'grid grid-cols-[1fr_400px] gap-10',
       )}
     >
       <main>
-        <header className="pb-6 mb-10 space-y-1 border-b border-gray-200 dark:border-gray-800">
+        <header className="mb-10 space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
           {accessory && <div className="float-right">{accessory}</div>}
           <h1 className="capitalize">{heading}</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">{help}</p>
         </header>
 
-        <div className="flex flex-col h-full">{children}</div>
+        <div className="flex h-full flex-col">{children}</div>
       </main>
       {aside && <aside className="flex flex-col">{aside}</aside>}
     </section>

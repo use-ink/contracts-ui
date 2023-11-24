@@ -35,8 +35,8 @@ export function getStorageDepositLimit(
   return switchOn
     ? registry.createType('Balance', userInput)
     : dryRunValue
-    ? getPredictedCharge(dryRunValue)
-    : null;
+      ? getPredictedCharge(dryRunValue)
+      : null;
 }
 
 export function getGasLimit(
