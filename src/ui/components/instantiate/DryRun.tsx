@@ -30,14 +30,14 @@ export function DryRun() {
               <>
                 <span>GasConsumed</span>
                 <div className="flex">
-                  <div className="pr-2 basis-1/2">
+                  <div className="basis-1/2 pr-2">
                     <OutcomeItem
                       displayValue={`refTime: ${dryRunResult.gasConsumed.refTime.toString()}`}
                       key={`gcr-${constructorIndex}`}
                       title=""
                     />
                   </div>
-                  <div className="pl-2 basis-1/2">
+                  <div className="basis-1/2 pl-2">
                     <OutcomeItem
                       displayValue={`proofSize: ${dryRunResult.gasConsumed.proofSize.toString()}`}
                       key={`gcp-${constructorIndex}`}
@@ -51,14 +51,14 @@ export function DryRun() {
               <>
                 <span>GasRequired</span>
                 <div className="flex">
-                  <div className="pr-2 basis-1/2">
+                  <div className="basis-1/2 pr-2">
                     <OutcomeItem
                       displayValue={`refTime: ${dryRunResult.gasRequired.refTime.toString()}`}
                       key={`grr-${constructorIndex}`}
                       title=""
                     />
                   </div>
-                  <div className="pl-2 basis-1/2">
+                  <div className="basis-1/2 pl-2">
                     <OutcomeItem
                       displayValue={`proofSize: ${dryRunResult.gasRequired.proofSize.toString()}`}
                       key={`grp-${constructorIndex}`}
@@ -88,7 +88,7 @@ export function DryRun() {
               })()}
           </div>
         </div>
-        <div className="h-8 row">
+        <div className="row h-8">
           <div>Contract Address:</div>
           <div data-cy="dry-run-account">
             {dryRunResult?.result.isOk ? (
@@ -100,20 +100,20 @@ export function DryRun() {
         </div>
         <div>
           {dryRunResult?.result.isOk && !isReverted && (
-            <div className="font-bold validation success">
+            <div className="validation success font-bold">
               <CheckCircleIcon className="mr-3" />
               The instantiation will be successful.
             </div>
           )}
           {isReverted && (
-            <div className="font-bold validation error">
+            <div className="validation error font-bold">
               <ExclamationCircleIcon className="mr-3" />
               Contract reverted! The instantiation will not be successful.
             </div>
           )}
           {dryRunError && dryRunResult && (
             <>
-              <div className="items-start font-bold validation error text-mono">
+              <div className="validation error text-mono items-start font-bold">
                 <ExclamationCircleIcon className="mr-3" style={{ marginTop: 1 }} />
                 <div>
                   <p>{dryRunError.name}</p>
@@ -121,7 +121,7 @@ export function DryRun() {
                 </div>
               </div>
               {dryRunResult.debugMessage.length > 0 && (
-                <div className="block pl-4 mt-1 break-words validation error text-mono">
+                <div className="validation error text-mono mt-1 block break-words pl-4">
                   {dryRunResult.debugMessage.toString()}
                 </div>
               )}

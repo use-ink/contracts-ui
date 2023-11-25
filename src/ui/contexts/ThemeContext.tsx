@@ -18,8 +18,8 @@ const INIT_STATE: Props = {
         ? 'dark'
         : 'light'
       : window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light',
+        ? 'dark'
+        : 'light',
 };
 
 export const ThemeContext = createContext(INIT_STATE);

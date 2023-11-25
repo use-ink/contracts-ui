@@ -28,10 +28,10 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
 
   return (
     <Link
-      className={`grid grid-cols-4 w-full cursor-pointer items-center border border-l-0 border-r-0 border-t-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
+      className={`grid w-full cursor-pointer grid-cols-4 items-center border border-l-0 border-r-0 border-t-0 border-gray-200 p-3 text-sm last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-elevation-1`}
       to={`/contract/${address}`}
     >
-      <div className="gap-2 flex flex-row">
+      <div className="flex flex-row gap-2">
         <Identicon size={18} value={address} />
         <div>{name}</div>
       </div>
@@ -45,7 +45,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
       )}
       <div className="text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
 
-      <div className="font-mono text-gray-500 dark:text-gray-400 justify-self-end">
+      <div className="justify-self-end font-mono text-gray-500 dark:text-gray-400">
         <ObservedBalance address={address} />
       </div>
     </Link>
