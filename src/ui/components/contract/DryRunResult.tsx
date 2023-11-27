@@ -36,10 +36,10 @@ export function DryRunResult({
   const prediction = result.isErr
     ? 'Contract Reverted!'
     : isError
-    ? 'Contract Reverted!'
-    : isDispatchable
-    ? 'Contract call will be successful!'
-    : '';
+      ? 'Contract Reverted!'
+      : isDispatchable
+        ? 'Contract call will be successful!'
+        : '';
 
   return (
     <div

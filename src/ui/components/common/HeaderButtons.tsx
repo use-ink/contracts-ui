@@ -40,22 +40,22 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
       <div className="inline-flex h-8">
         {isOnChain ? (
           <Link to={`/instantiate/${codeHash}`}>
-            <button className="flex items-center h-full px-3 mr-2 font-semibold text-gray-600 border rounded hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2">
+            <button className="mr-2 flex h-full items-center rounded border px-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2">
               <ArrowCircleRightIcon
                 aria-hidden="true"
-                className="w-4 mr-1 justify-self-end dark:text-gray-500"
+                className="mr-1 w-4 justify-self-end dark:text-gray-500"
                 fontSize="1.5rem"
               />
               Reinstantiate
             </button>
           </Link>
         ) : (
-          <p className="flex items-center mr-3 font-semibold text-red-400">{`Not found at ${truncate(
+          <p className="mr-3 flex items-center font-semibold text-red-400">{`Not found at ${truncate(
             address,
           )}`}</p>
         )}
         <button
-          className="flex items-center h-full px-3 font-semibold text-gray-600 border rounded hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
+          className="flex h-full items-center rounded border px-3 font-semibold text-gray-600 hover:text-gray-400 dark:border-gray-700 dark:bg-elevation-1 dark:text-gray-300 dark:hover:bg-elevation-2"
           onClick={() => {
             setIsOpen(true);
           }}

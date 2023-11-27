@@ -18,7 +18,7 @@ export function ContractHeader({ document: { name, type, address, date, codeHash
         <div>
           You added this contract from{' '}
           <div className="inline-flex items-center" title={address}>
-            <span className="px-1.5 py-1 relative inline-block rounded bg-blue-500 bg-opacity-20  font-mono text-xs text-blue-400">
+            <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1  font-mono text-xs text-blue-400">
               {truncate(address, 4)}
             </span>
             <CopyButton className="ml-1" id="header-address" value={address} />

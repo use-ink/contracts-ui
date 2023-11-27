@@ -66,8 +66,8 @@ function getErrorText(outcome: AnyJson): string {
       ? stringify(outcome.Err)
       : outcome.Err?.toString() ?? 'Error'
     : outcome !== 'Ok'
-    ? outcome?.toString() || 'Error'
-    : 'Error';
+      ? outcome?.toString() || 'Error'
+      : 'Error';
 }
 
 function getOkText(outcome: AnyJson, returnValue: AnyJson) {

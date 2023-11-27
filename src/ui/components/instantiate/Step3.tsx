@@ -86,7 +86,7 @@ export function Step3() {
           <div className="field full">
             <p className="key">Data</p>
             <textarea
-              className="w-full bg-transparent text-sm value"
+              className="value w-full bg-transparent text-sm"
               readOnly
               rows={4}
               value={txs[txId]?.extrinsic.args[3].toHex()}
