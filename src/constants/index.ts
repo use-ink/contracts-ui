@@ -34,8 +34,8 @@ export const LOCAL = {
 
 const PHALA_TESTNET = {
   relay: undefined,
-  name: 'Phala PoC-5',
-  rpc: 'wss://poc5.phala.network/ws',
+  name: 'Phala PoC-6',
+  rpc: 'wss://poc6.phala.network/ws',
 };
 
 // https://docs.astar.network/docs/build/environment/endpoints
