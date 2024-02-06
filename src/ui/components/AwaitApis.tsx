@@ -1,4 +1,4 @@
-// Copyright 2022 @paritytech/contracts-ui authors & contributors
+// Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import { isKeyringLoaded } from 'lib/util';
 
 export function AwaitApis({ children }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { accounts, api, endpoint, status, systemChainType } = useApi();
+
   const { db } = useDatabase();
   const [message, setMessage] = useState('');
 
