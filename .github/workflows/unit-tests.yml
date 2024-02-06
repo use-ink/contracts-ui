@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Prepare test environment
+        uses: ./.github/actions/prepare
+
       - name: Install and test
         run: |
           yarn
