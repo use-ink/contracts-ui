@@ -907,19 +907,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nabla/vite-plugin-eslint@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@nabla/vite-plugin-eslint@npm:2.0.2"
-  dependencies:
-    "@types/eslint": "*"
-    chalk: ^4
-  peerDependencies:
-    eslint: "*"
-    vite: ^4 || ^5
-  checksum: 4570df28fceffce1e2e582167da73834de7765d7425b70906ac1210645333f483e7ab78fc34b4ed117250d58091c9d5b8ac46ec5940f3458a07093b70fe6cbea
-  languageName: node
-  linkType: hard
-
 "@noble/curves@npm:^1.3.0":
   version: 1.3.0
   resolution: "@noble/curves@npm:1.3.0"
@@ -1899,17 +1886,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*":
-  version: 8.56.2
-  resolution: "@types/eslint@npm:8.56.2"
-  dependencies:
-    "@types/estree": "*"
-    "@types/json-schema": "*"
-  checksum: 38e054971596f5c0413f66a62dc26b10e0a21ac46ceacb06fbf8cfb838d20820787209b17218b3916e4c23d990ff77cfdb482d655cac0e0d2b837d430fcc5db8
-  languageName: node
-  linkType: hard
-
-"@types/estree@npm:*, @types/estree@npm:1.0.5, @types/estree@npm:^1.0.0":
+"@types/estree@npm:1.0.5, @types/estree@npm:^1.0.0":
   version: 1.0.5
   resolution: "@types/estree@npm:1.0.5"
   checksum: dd8b5bed28e6213b7acd0fb665a84e693554d850b0df423ac8076cc3ad5823a6bc26b0251d080bdc545af83179ede51dd3f6fa78cad2c46ed1f29624ddf3e41a
@@ -1925,7 +1902,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.12":
+"@types/json-schema@npm:^7.0.12":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 97ed0cb44d4070aecea772b7b2e2ed971e10c81ec87dd4ecc160322ffa55ff330dace1793489540e3e318d90942064bb697cc0f8989391797792d919737b3b98
@@ -3003,7 +2980,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:4.1.2, chalk@npm:^4, chalk@npm:^4.0.0, chalk@npm:^4.1.0":
+"chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -3314,7 +3291,6 @@ __metadata:
     "@headlessui/react": ^1.7.18
     "@heroicons/react": ^1.0.6
     "@istanbuljs/nyc-config-typescript": ^1.0.2
-    "@nabla/vite-plugin-eslint": ^2.0.2
     "@polkadot/api": 10.11.2
     "@polkadot/api-contract": 10.11.2
     "@polkadot/extension-dapp": ^0.46.6
