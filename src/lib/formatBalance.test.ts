@@ -1,32 +1,27 @@
 // Copyright 2022 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { ApiPromise } from '@polkadot/api';
+import { TypeRegistry } from '@polkadot/types';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { formatBalance } from './formatBalance';
-
 describe('formatBalance', () => {
-  let api: ApiPromise;
+  let registry: TypeRegistry;
 
-  beforeAll(async () => {
-    api = await ApiPromise.create({
-      types: {
-        Balance: 'u128',
-      },
-    });
+  beforeAll(() => {
+    registry = new TypeRegistry();
   });
 
   it('should throw on invalid options', () => {
     expect(() =>
-      formatBalance(api.createType('Balance', 1), { decimals: -1, fractionDigits: 0 }),
+      formatBalance(registry.createType('Balance', 1), { decimals: -1, fractionDigits: 0 }),
     ).toThrow();
 
     expect(() =>
-      formatBalance(api.createType('Balance', 1), { decimals: 0, fractionDigits: -1 }),
+      formatBalance(registry.createType('Balance', 1), { decimals: 0, fractionDigits: -1 }),
     ).toThrow();
 
     expect(() =>
-      formatBalance(api.createType('Balance', 1), { decimals: 0, fractionDigits: 1 }),
+      formatBalance(registry.createType('Balance', 1), { decimals: 0, fractionDigits: 1 }),
     ).toThrow();
   });
 
@@ -40,7 +35,7 @@ describe('formatBalance', () => {
         expected: '340,282,366,920,938,463,463,374,607.43',
       },
     ].forEach(({ value, expected }) => {
-      const balance = api.createType('Balance', value);
+      const balance = registry.createType('Balance', value);
       expect(formatBalance(balance)).toBe(expected);
     });
   });
@@ -71,7 +66,7 @@ describe('formatBalance', () => {
     ];
 
     cases.forEach(({ value, expected, options }) => {
-      const balance = api.createType('Balance', value);
+      const balance = registry.createType('Balance', value);
       expect(formatBalance(balance, options)).toBe(expected);
     });
   });
