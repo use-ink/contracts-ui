@@ -10,7 +10,7 @@ export function HelpBox(): React.ReactElement | null {
             New to ink!? Check out the documentation!
           </div>
           <div className="text-sm font-semibold text-blue-500">
-            <a href="https://use.ink/" target="_blank" rel="noreferrer">
+            <a href="https://use.ink/" rel="noreferrer" target="_blank">
               use.ink
             </a>
           </div>
@@ -21,7 +21,7 @@ export function HelpBox(): React.ReactElement | null {
             Need some guidance? Find an example!
           </div>
           <div className="text-sm font-semibold text-blue-500">
-            <a href="https://github.com/paritytech/ink-examples" target="_blank" rel="noreferrer">
+            <a href="https://github.com/paritytech/ink-examples" rel="noreferrer" target="_blank">
               github.com/paritytech/ink-examples
             </a>
           </div>
