@@ -3,9 +3,9 @@
 
 import { Link } from 'react-router-dom';
 import { CopyButton } from '../components/common/CopyButton';
+import { ObservedBalance } from '../components/common/ObservedBalance';
 import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
-import { ObservedBalance } from '../components/common/ObservedBalance';
 
 interface Props {
   document: UIContract;
