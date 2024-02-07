@@ -13,11 +13,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
 
       - name: Install and test
         run: |
           yarn
-          yarn test:vitest
+          yarn vitest run
