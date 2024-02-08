@@ -78,6 +78,11 @@ const T3RN_T0RN = {
   rpc: 'wss://ws.t0rn.io',
 };
 
+const TERNOA_ALPHANET = {
+  relay: undefined,
+  name: 'Ternoa Alphanet',
+  rpc: 'wss://alphanet.ternoa.com',
+};
 // https://pendulum.gitbook.io/pendulum-docs/build/build-environment/foucoco-testnet
 const PENDULUM_TESTNET = {
   relay: 'Rococo',
@@ -99,6 +104,7 @@ export const TESTNETS = [
     ASTAR_SHIBUYA,
     ALEPH_ZERO_TESTNET,
     T3RN_T0RN,
+    TERNOA_ALPHANET,
     PENDULUM_TESTNET,
     ZEITGEIST_BATTERY_STATION,
   ].sort((a, b) => a.name.localeCompare(b.name)),
