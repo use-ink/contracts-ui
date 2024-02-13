@@ -4,6 +4,7 @@
 import { TypeRegistry } from '@polkadot/types';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { formatBalance } from './formatBalance';
+
 describe('formatBalance', () => {
   let registry: TypeRegistry;
 
