@@ -9,6 +9,7 @@ import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 import { getDecodedOutput } from 'lib/output';
 import { decodeStorageDeposit } from 'lib/callOptions';
+import { formatProofSize, formatRefTime } from '../../../lib/formatWeight';
 
 interface Props {
   outcome: ContractExecResult;
@@ -78,17 +79,17 @@ export function DryRunResult({
           <div data-cy="dry-run-estimations">
             <span>GasConsumed</span>
             <div className="flex flex-row gap-4">
-              <div className="flex-1">
+              <div className="flex-1" title={formatRefTime(gasConsumed.refTime)}>
                 <OutcomeItem
-                  displayValue={`refTime: ${gasConsumed.refTime.toString()}`}
+                  displayValue={`refTime: ${formatRefTime(gasConsumed.refTime, 'ms')}`}
                   id={`gcr-${message.method}`}
                   key={`gcr-${message.method}`}
                   title=""
                 />
               </div>
-              <div className="flex-1">
+              <div className="flex-1" title={formatProofSize(gasConsumed.proofSize)}>
                 <OutcomeItem
-                  displayValue={`proofSize: ${gasConsumed.proofSize.toString()}`}
+                  displayValue={`proofSize: ${formatProofSize(gasConsumed.proofSize, 'MB')}`}
                   id={`gcp-${message.method}`}
                   key={`gcp-${message.method}`}
                   title=""
@@ -100,17 +101,17 @@ export function DryRunResult({
               <>
                 <span>GasRequired</span>
                 <div className="flex">
-                  <div className="basis-1/2 pr-2">
+                  <div className="basis-1/2 pr-2" title={formatRefTime(gasRequired.refTime)}>
                     <OutcomeItem
-                      displayValue={`refTime: ${gasRequired.refTime.toString()}`}
+                      displayValue={`refTime: ${formatRefTime(gasRequired.refTime, 'ms')}`}
                       id={`grr-${message.method}`}
                       key={`grr-${message.method}`}
                       title=""
                     />
                   </div>
-                  <div className="basis-1/2 pl-2">
+                  <div className="basis-1/2 pl-2" title={formatProofSize(gasRequired.proofSize)}>
                     <OutcomeItem
-                      displayValue={`proofSize: ${gasRequired.proofSize.toString()}`}
+                      displayValue={`proofSize: ${formatProofSize(gasRequired.proofSize, 'MB')}`}
                       id={`grp-${message.method}`}
                       key={`grp-${message.method}`}
                       title=""

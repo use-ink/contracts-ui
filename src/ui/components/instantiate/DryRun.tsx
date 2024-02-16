@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
-import { SidePanel } from '../common/SidePanel';
+import { formatProofSize, formatRefTime } from '../../../lib/formatWeight';
 import { Account } from '../account/Account';
+import { SidePanel } from '../common/SidePanel';
 import { OutcomeItem } from '../contract/OutcomeItem';
-import { useApi, useInstantiate } from 'ui/contexts';
 import { hasRevertFlag } from 'lib/hasRevertFlag';
+import { useApi, useInstantiate } from 'ui/contexts';
 
 export function DryRun() {
   const {
@@ -30,16 +31,22 @@ export function DryRun() {
               <>
                 <span>GasConsumed</span>
                 <div className="flex">
-                  <div className="basis-1/2 pr-2">
+                  <div
+                    className="basis-1/2 pr-2"
+                    title={formatRefTime(dryRunResult.gasConsumed.refTime)}
+                  >
                     <OutcomeItem
-                      displayValue={`refTime: ${dryRunResult.gasConsumed.refTime.toString()}`}
+                      displayValue={`refTime: ${formatRefTime(dryRunResult.gasConsumed.refTime, 'ms')}`}
                       key={`gcr-${constructorIndex}`}
                       title=""
                     />
                   </div>
-                  <div className="basis-1/2 pl-2">
+                  <div
+                    className="basis-1/2 pl-2"
+                    title={formatProofSize(dryRunResult.gasConsumed.proofSize)}
+                  >
                     <OutcomeItem
-                      displayValue={`proofSize: ${dryRunResult.gasConsumed.proofSize.toString()}`}
+                      displayValue={`proofSize: ${formatProofSize(dryRunResult.gasConsumed.proofSize, 'MB')}`}
                       key={`gcp-${constructorIndex}`}
                       title=""
                     />
@@ -51,16 +58,22 @@ export function DryRun() {
               <>
                 <span>GasRequired</span>
                 <div className="flex">
-                  <div className="basis-1/2 pr-2">
+                  <div
+                    className="basis-1/2 pr-2"
+                    title={formatRefTime(dryRunResult.gasRequired.refTime)}
+                  >
                     <OutcomeItem
-                      displayValue={`refTime: ${dryRunResult.gasRequired.refTime.toString()}`}
+                      displayValue={`refTime: ${formatRefTime(dryRunResult.gasRequired.refTime, 'ms')}`}
                       key={`grr-${constructorIndex}`}
                       title=""
                     />
                   </div>
-                  <div className="basis-1/2 pl-2">
+                  <div
+                    className="basis-1/2 pl-2"
+                    title={formatProofSize(dryRunResult.gasRequired.proofSize)}
+                  >
                     <OutcomeItem
-                      displayValue={`proofSize: ${dryRunResult.gasRequired.proofSize.toString()}`}
+                      displayValue={`proofSize: ${formatProofSize(dryRunResult.gasRequired.proofSize, 'MB')}`}
                       key={`grp-${constructorIndex}`}
                       title=""
                     />
