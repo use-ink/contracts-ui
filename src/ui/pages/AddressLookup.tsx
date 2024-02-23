@@ -113,97 +113,99 @@ export function AddressLookup() {
         </Input>
       </FormField>
 
-      <>
-        <FormField
-          help="A name for the new contract to help users distinguish it. Only used for display purposes."
-          id="name"
-          label="Contract Name"
-          {...nameValidation}
-        >
-          <Input
-            id="contractName"
-            onChange={setName}
-            placeholder="Give your contract a descriptive name"
-            value={name}
-          />
-        </FormField>
-
-        {knownMetadata ? (
+      {address && (
+        <>
           <FormField
-            help={'Reuse metadata you used before.'}
-            id="known_metadata"
-            label={'Known Metadata'}
+            help="A name for the new contract to help users distinguish it. Only used for display purposes."
+            id="name"
+            label="Contract Name"
+            {...nameValidation}
           >
-            {!isLoadingStoredAbis && abis && abis.length > 0 && (
-              <Dropdown
-                className="mb-4"
-                id="known_metadata"
-                onChange={(abi: Abi | undefined) => {
-                  selectKnownMetadata(abi);
-                }}
-                options={abis.map(abi => ({
-                  label: `${abi.info.contract.name} - ${abi.info.source.wasmHash.toHex()}`,
-                  value: abi,
-                }))}
-                value={knownMetadata}
-              >
-                No Metadata found
-              </Dropdown>
-            )}
-            <p
-              className="mt-[-10px] cursor-pointer pl-1 text-sm text-green-500 underline hover:text-green-600"
-              onClick={() => selectKnownMetadata(undefined)}
-            >
-              × Use new metadata instead
-            </p>
-          </FormField>
-        ) : (
-          <FormField
-            help={
-              'The contract metadata JSON file to use in order to interact with this contract. Constructor and message information will be derived from this file.'
-            }
-            id="metadata"
-            label={'Upload Metadata'}
-            {...getValidation(metadataValidation)}
-          >
-            <InputFile
-              isError={metadataValidation.isError}
-              onChange={onChange}
-              onRemove={onRemove}
-              placeholder="Click to select or drag and drop to upload file."
-              value={file}
+            <Input
+              id="contractName"
+              onChange={setName}
+              placeholder="Give your contract a descriptive name"
+              value={name}
             />
           </FormField>
-        )}
 
-        <Buttons>
-          <Button
-            data-cy="next-btn"
-            isDisabled={
-              !metadata ||
-              !nameValidation.isValid ||
-              (!!fileMetadata && !metadataValidation.isValid) ||
-              !address
-            }
-            onClick={async () => {
-              if (!metadata) return;
-              const document = {
-                abi: metadata.json,
-                address,
-                codeHash: metadata.info.source.wasmHash.toHex(),
-                date: new Date().toISOString(),
-                name,
-                external: true,
-              };
-              await db.contracts.add(document);
-              navigate(`/contract/${address}`);
-            }}
-            variant="primary"
-          >
-            Add contract
-          </Button>
-        </Buttons>
-      </>
+          {knownMetadata ? (
+            <FormField
+              help={'Reuse metadata you used before.'}
+              id="known_metadata"
+              label={'Known Metadata'}
+            >
+              {!isLoadingStoredAbis && abis && abis.length > 0 && (
+                <Dropdown
+                  className="mb-4"
+                  id="known_metadata"
+                  onChange={(abi: Abi | undefined) => {
+                    selectKnownMetadata(abi);
+                  }}
+                  options={abis.map(abi => ({
+                    label: `${abi.info.contract.name} - ${abi.info.source.wasmHash.toHex()}`,
+                    value: abi,
+                  }))}
+                  value={knownMetadata}
+                >
+                  No Metadata found
+                </Dropdown>
+              )}
+              <p
+                className="mt-[-10px] cursor-pointer pl-1 text-sm text-green-500 underline hover:text-green-600"
+                onClick={() => selectKnownMetadata(undefined)}
+              >
+                Use new metadata instead
+              </p>
+            </FormField>
+          ) : (
+            <FormField
+              help={
+                'The contract metadata JSON file to use in order to interact with this contract. Constructor and message information will be derived from this file.'
+              }
+              id="metadata"
+              label={'Upload Metadata'}
+              {...getValidation(metadataValidation)}
+            >
+              <InputFile
+                isError={metadataValidation.isError}
+                onChange={onChange}
+                onRemove={onRemove}
+                placeholder="Click to select or drag and drop to upload file."
+                value={file}
+              />
+            </FormField>
+          )}
+
+          <Buttons>
+            <Button
+              data-cy="next-btn"
+              isDisabled={
+                !metadata ||
+                !nameValidation.isValid ||
+                (!!fileMetadata && !metadataValidation.isValid) ||
+                !address
+              }
+              onClick={async () => {
+                if (!metadata) return;
+                const document = {
+                  abi: metadata.json,
+                  address,
+                  codeHash: metadata.info.source.wasmHash.toHex(),
+                  date: new Date().toISOString(),
+                  name,
+                  external: true,
+                };
+                await db.contracts.add(document);
+                navigate(`/contract/${address}`);
+              }}
+              variant="primary"
+            >
+              Add contract
+            </Button>
+          </Buttons>
+        </>
+      )}
     </RootLayout>
   );
 }
