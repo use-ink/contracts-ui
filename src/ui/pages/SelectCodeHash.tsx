@@ -11,7 +11,7 @@ export function SelectCodeHash() {
       heading="Instantiate Contract from Code Hash"
       help={
         <>
-          You can upload and instantate new contract code{' '}
+          You can upload and instantiate new contract code{' '}
           <Link className="text-blue-500" to="/instantiate">
             here
           </Link>
