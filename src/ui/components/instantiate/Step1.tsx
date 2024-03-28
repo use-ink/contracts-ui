@@ -14,6 +14,9 @@ import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
 
+import { fileToFileState } from 'lib/fileToFileState';
+import { getContractFromPatron } from 'lib/getContractFromPatron';
+
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { db } = useDatabase();
@@ -21,6 +24,7 @@ export function Step1() {
     () => (codeHashUrlParam ? db.codeBundles.get({ codeHash: codeHashUrlParam }) : undefined),
     [codeHashUrlParam, db],
   );
+
   const { accounts } = useApi();
   const { setStep, setData, data, step } = useInstantiate();
 
@@ -36,6 +40,19 @@ export function Step1() {
     onRemove,
     ...metadataValidation
   } = useMetadataField();
+
+  useEffect(() => {
+    const patronCodeHash = new URL(window.location.href).searchParams.get('patron');
+
+    if (!codeHashUrlParam && patronCodeHash) {
+      getContractFromPatron(patronCodeHash)
+        .then(fileToFileState)
+        .then(patronFileState => {
+          onChange(patronFileState);
+        })
+        .catch(e => console.error(`Failed fetching contract from Patron.works: ${e}`));
+    }
+  }, [codeHashUrlParam]);
 
   useEffect(
     function updateNameFromMetadata(): void {
@@ -103,6 +120,7 @@ export function Step1() {
             <CodeHash codeHash={codeHashUrlParam} name={codeBundle.name} />
           </FormField>
         )}
+
         {(!codeHashUrlParam || !isStored) && (
           <FormField
             help={

@@ -1,77 +1,40 @@
-/* eslint-disable header/header */
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
-// Copyright 2017-2021 @polkadot/react-components authors & contributors
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2023 @paritytech/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
 
-import { createRef, useCallback, useEffect, useState } from 'react';
-import Dropzone, { DropzoneRef } from 'react-dropzone';
-import { XIcon } from '@heroicons/react/solid';
 import { DocumentTextIcon } from '@heroicons/react/outline';
-import type { FileState, InputFileProps as Props, OrFalsy } from 'types';
-import { onDropPatronFile } from 'ui/components/metadata/GetPatronMetadata';
-
-const NOOP = (): void => undefined;
+import { XIcon } from '@heroicons/react/solid';
+import { useCallback } from 'react';
+import Dropzone from 'react-dropzone';
+import { fileToFileState } from 'lib/fileToFileState';
+import type { InputFileProps as Props } from 'types';
 
 export function InputFile({
   className = '',
   errorMessage,
-  value: propsFile,
   isError,
   onChange,
-  placeholder,
   onRemove,
+  placeholder,
+  value: file,
 }: Props) {
-  const ref = createRef<DropzoneRef>();
-  const [file, setFile] = useState<OrFalsy<FileState>>(propsFile);
-
   const onDrop = useCallback(
-    (files: File[]): void => {
-      files.forEach((file): void => {
-        const reader = new FileReader();
-
-        reader.onabort = NOOP;
-        reader.onerror = NOOP;
-
-        reader.onload = ({ target }: ProgressEvent<FileReader>): void => {
-          if (target && target.result) {
-            const name = file.name;
-            const data = new Uint8Array(target.result as ArrayBuffer);
-            const size = data.length;
-
-            onChange && onChange({ data, name, size });
-            ref &&
-              !propsFile &&
-              setFile({
-                data,
-                name,
-                size: data.length,
-              });
-          }
-        };
-
-        reader.readAsArrayBuffer(file);
+    (droppedFiles: File[]): void => {
+      // should only be one files as we set multiple={false} on <Dropzone/>
+      droppedFiles.forEach((droppedFile): void => {
+        fileToFileState(droppedFile)
+          .then(fileState => {
+            onChange && onChange(fileState);
+          })
+          .catch(e => console.error(e));
       });
     },
-    [ref, onChange, propsFile],
+    [onChange],
   );
 
   const removeHandler = useCallback((): void => {
     onRemove && onRemove();
+  }, [onRemove]);
 
-    !propsFile && setFile(undefined);
-  }, [onRemove, propsFile]);
-
-  useEffect((): void => {
-    const params = new URL(window.location.href).searchParams;
-    const patronCodeHash = params.get('patron');
-    if (patronCodeHash && file?.name !== 'patron-contract.json') {
-      onDropPatronFile(patronCodeHash, onDrop);
-    }
-
-    if (file !== propsFile) {
-      setFile(propsFile);
-    }
-  }, [file, propsFile, onDrop]);
 
   return file ? (
     <div className={`${className} flex`} data-cy="upload-confirmation">
@@ -80,9 +43,11 @@ export function InputFile({
           aria-hidden="true"
           className="mr-2 h-7 w-7 justify-self-start text-gray-500"
         />
+
         <span className="min-w-600 mr-20 justify-self-start text-xs text-gray-500 dark:text-gray-300">
           {file.name} ({(file.size / 1000).toFixed(2)}kb)
         </span>
+
         {errorMessage && isError && (
           <span className="min-w-600 mr-20 justify-self-start text-xs text-gray-500 dark:text-gray-300">
             {errorMessage}
@@ -96,7 +61,7 @@ export function InputFile({
       </div>
     </div>
   ) : (
-    <Dropzone multiple={false} onDrop={onDrop} ref={ref}>
+    <Dropzone multiple={false} onDrop={onDrop}>
       {({ getInputProps, getRootProps }) => {
         return (
           <div className={className} {...getRootProps()}>
