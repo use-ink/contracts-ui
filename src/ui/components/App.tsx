@@ -6,8 +6,8 @@ import { AwaitApis, CheckBrowserSupport } from 'ui/components';
 import {
   ApiContextProvider,
   DatabaseContextProvider,
-  TransactionsContextProvider,
   ThemeContextProvider,
+  TransactionsContextProvider,
 } from 'ui/contexts';
 import { Sidebar } from 'ui/layout/sidebar';
 

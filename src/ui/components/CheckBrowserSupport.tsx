@@ -9,7 +9,7 @@ export function CheckBrowserSupport({
   children,
 }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const isSafari = useMemo(() => {
-    return navigator.userAgent.indexOf('Safari') > 0;
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   }, []);
 
   if (isSafari) {
