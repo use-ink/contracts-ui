@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { AbiMessage } from '@polkadot/api-contract/types';
+import { formatProofSize, formatRefTime } from '../../../lib/formatWeight';
 import { DryRunError } from './DryRunError';
 import { OutcomeItem } from './OutcomeItem';
 import { classes } from 'lib/util';
@@ -9,7 +10,6 @@ import { ContractExecResult, Registry } from 'types';
 import { useApi } from 'ui/contexts';
 import { getDecodedOutput } from 'lib/output';
 import { decodeStorageDeposit } from 'lib/callOptions';
-import { formatProofSize, formatRefTime } from '../../../lib/formatWeight';
 
 interface Props {
   outcome: ContractExecResult;
