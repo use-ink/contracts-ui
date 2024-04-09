@@ -1,9 +1,8 @@
 // Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { randomAsU8a } from './util';
 import { BN_ZERO } from './bn';
-import { UIStorageDeposit, ContractCallOutcome, BN, WeightV2, AbiParam, Registry } from 'types';
+import { AbiParam, BN, ContractCallOutcome, Registry, UIStorageDeposit, WeightV2 } from 'types';
 
 export function decodeStorageDeposit(
   storageDeposit: ContractCallOutcome['storageDeposit'],
@@ -68,4 +67,3 @@ export function transformUserInput(
     return value;
   });
 }
-const encoder = new TextEncoder();
