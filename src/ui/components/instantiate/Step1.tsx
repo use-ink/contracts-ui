@@ -92,12 +92,12 @@ export function Step1() {
           help="The account to use for this instantiation. The fees and storage deposit will be deducted from this account."
           id="accountId"
           label="Account"
+          isError={isAccountAvailable === false}
+          message="Selected Account is not available to sign extrinsics."
         >
           <AccountSelect
             className="mb-2"
             id="accountId"
-            isError={isAccountAvailable === false}
-            message="Selected Account is not available to sign extrinsics."
             onChange={setAccountId}
             value={accountId}
           />
