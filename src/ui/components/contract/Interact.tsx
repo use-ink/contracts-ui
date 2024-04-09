@@ -1,26 +1,9 @@
 // Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ResultsOutput } from './ResultsOutput';
-import {
-  AbiMessage,
-  ContractExecResult,
-  ContractSubmittableResult,
-  CallResult,
-  SubmittableResult,
-  ContractOptions,
-  Balance,
-  UIContract,
-} from 'types';
-import { AccountSelect } from 'ui/components/account';
-import { Dropdown, Button, Buttons } from 'ui/components/common';
-import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
 import { BN_ZERO } from 'lib/bn';
-import { useApi, useTransactions } from 'ui/contexts';
-import { useWeight, useBalance, useArgValues } from 'ui/hooks';
-import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
-import { createMessageOptions } from 'ui/util/dropdown';
 import {
   decodeStorageDeposit,
   getGasLimit,
@@ -28,6 +11,24 @@ import {
   transformUserInput,
 } from 'lib/callOptions';
 import { getDecodedOutput } from 'lib/output';
+import {
+  AbiMessage,
+  Balance,
+  CallResult,
+  ContractExecResult,
+  ContractOptions,
+  ContractSubmittableResult,
+  SubmittableResult,
+  UIContract,
+} from 'types';
+import { AccountSelect } from 'ui/components/account';
+import { Button, Buttons, Dropdown } from 'ui/components/common';
+import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
+import { useApi, useTransactions } from 'ui/contexts';
+import { useArgValues, useBalance, useWeight } from 'ui/hooks';
+import { useAccountAvailable } from 'ui/hooks/useAccountAvailable';
+import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
+import { createMessageOptions } from 'ui/util/dropdown';
 
 interface Props {
   contract: UIContract;
@@ -57,6 +58,7 @@ export const InteractTab = ({
   const proofSize = useWeight(outcome?.gasRequired.proofSize.toBn());
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
   const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
+  const isAccountAvailable = useAccountAvailable(accountId);
 
   useEffect((): void => {
     if (!accounts || accounts.length === 0) return;
@@ -181,7 +183,8 @@ export const InteractTab = ({
     !proofSize.isValid ||
     txs[txId]?.status === 'processing' ||
     !!outcome?.result.isErr ||
-    !!decodedOutput?.isError;
+    !!decodedOutput?.isError ||
+    isAccountAvailable === false;
 
   const isDispatchable = message?.isMutating || message?.isPayable;
 
@@ -193,7 +196,9 @@ export const InteractTab = ({
             className="caller mb-8"
             help="The sending account for this interaction. Any transaction fees will be deducted from this account."
             id="accountId"
+            isError={isAccountAvailable === false}
             label="Caller"
+            message="Selected Account is not available to sign extrinsics."
           >
             <AccountSelect
               className="mb-2"
