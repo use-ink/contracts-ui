@@ -69,8 +69,3 @@ export function transformUserInput(
   });
 }
 const encoder = new TextEncoder();
-
-export function encodeSalt(salt: Uint8Array | string = randomAsU8a()): Uint8Array {
-  if (typeof salt === 'string') return encoder.encode(salt);
-  return salt;
-}
