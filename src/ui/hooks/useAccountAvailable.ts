@@ -4,7 +4,7 @@
 import { keyring } from '@polkadot/ui-keyring';
 import { useMemo } from 'react';
 
-export const useAccountAvailable = (accountId: string): boolean | undefined =>
+export const useAccountAvailable = (accountId?: string): boolean | undefined =>
   useMemo(() => {
     if (accountId === '' || accountId === undefined) return undefined;
     try {
