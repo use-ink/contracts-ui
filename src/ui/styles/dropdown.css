@@ -61,12 +61,12 @@
 }
 
 .dropdown.chain .dropdown__single-value {
-  @apply flex flex-grow items-center text-sm font-medium;
+  @apply flex w-full flex-grow items-center text-sm font-medium;
 }
 
 .dropdown.chain .dropdown__single-value:before {
   content: '';
-  @apply ml-1 mr-2 block h-1.5 w-1.5 rounded-full;
+  @apply mr-2 block h-1.5 w-1.5 rounded-full;
 }
 
 .dropdown.chain.isConnected .dropdown__single-value:before {
