@@ -24,12 +24,7 @@ import {
   useBalance,
 } from 'ui/hooks';
 import { AbiMessage, Balance, OrFalsy } from 'types';
-import {
-  decodeStorageDeposit,
-  encodeSalt,
-  getGasLimit,
-  getStorageDepositLimit,
-} from 'lib/callOptions';
+import { decodeStorageDeposit, getGasLimit, getStorageDepositLimit } from 'lib/callOptions';
 import { BN_ZERO } from 'lib/bn';
 import { hasRevertFlag } from 'lib/hasRevertFlag';
 
@@ -79,7 +74,7 @@ export function Step2() {
       getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
       codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: metadata?.info.source.wasm },
       inputData ?? '',
-      isUsingSalt ? encodeSalt(salt.value) : '',
+      isUsingSalt ? salt.value : '',
     ];
   }, [
     accountId,
