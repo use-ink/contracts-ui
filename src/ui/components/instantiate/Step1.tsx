@@ -3,19 +3,20 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Buttons } from '../common/Button';
-import { Input, InputFile, Form, FormField, useMetadataField, getValidation } from '../form';
-import { Loader } from '../common/Loader';
 import { AccountSelect } from '../account';
+import { Button, Buttons } from '../common/Button';
+import { Loader } from '../common/Loader';
+import { Form, FormField, Input, InputFile, getValidation, useMetadataField } from '../form';
 import { MessageDocs } from '../message';
 import { Metadata } from '../metadata';
 import { CodeHash } from './CodeHash';
-import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
 import { useDbQuery } from 'ui/hooks';
+import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 
 import { fileToFileState } from 'lib/fileToFileState';
 import { getContractFromPatron } from 'lib/getContractFromPatron';
+import { useAccountAvailable } from 'ui/hooks/useAccountAvailable';
 
 export function Step1() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -29,6 +30,7 @@ export function Step1() {
   const { setStep, setData, data, step } = useInstantiate();
 
   const [accountId, setAccountId] = useState('');
+  const isAccountAvailable = useAccountAvailable(accountId);
   const { value: name, onChange: setName, ...nameValidation } = useNonEmptyString();
 
   const {
@@ -90,6 +92,8 @@ export function Step1() {
           help="The account to use for this instantiation. The fees and storage deposit will be deducted from this account."
           id="accountId"
           label="Account"
+          isError={isAccountAvailable === false}
+          message="Selected Account is not available to sign extrinsics."
         >
           <AccountSelect
             className="mb-2"
@@ -185,7 +189,12 @@ export function Step1() {
       <Buttons>
         <Button
           data-cy="next-btn"
-          isDisabled={!metadata || !nameValidation.isValid || !metadataValidation.isValid}
+          isDisabled={
+            !metadata ||
+            !nameValidation.isValid ||
+            !metadataValidation.isValid ||
+            isAccountAvailable === false
+          }
           onClick={submitStep1}
           variant="primary"
         >
