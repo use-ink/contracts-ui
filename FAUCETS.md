@@ -8,6 +8,10 @@ Rococo:
 
 - https://app.element.io/#/room/#rococo-faucet:matrix.org
 
+Paseo:
+
+- https://faucet.polkadot.io/paseo
+
 Aleph Zero Testnet:
 
 - https://faucet.test.azero.dev/
@@ -25,6 +29,10 @@ Shibuya:
 Phala PoC 5:
 
 - https://wiki.phala.network/en-us/build/getting-started/deploy-contract/#claim-test-tokens
+
+Pop Network:
+
+- https://onboard.popnetwork.xyz/
 
 T3RN t0rn:
 

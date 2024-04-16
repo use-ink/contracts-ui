@@ -32,6 +32,12 @@ export const LOCAL = {
 //   rpc: 'wss://wss.agung.peaq.network',
 // };
 
+const POP_NETWORK_TESTNET = {
+  relay: 'Paseo',
+  name: 'Pop Network Testnet',
+  rpc: 'wss://rpc2.paseo.popnetwork.xyz',
+};
+
 const PHALA_TESTNET = {
   relay: undefined,
   name: 'Phala PoC-6',
@@ -106,6 +112,7 @@ export const TESTNETS = [
     T3RN_T0RN,
     TERNOA_ALPHANET,
     PENDULUM_TESTNET,
+    POP_NETWORK_TESTNET,
     ZEITGEIST_BATTERY_STATION,
   ].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
