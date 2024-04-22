@@ -23,7 +23,7 @@ export function Footer() {
   );
 
   return (
-    <footer className="footer">
+    <footer className="footer flex flex-col gap-4">
       <div>
         <a
           className="text-md flex cursor-pointer content-center items-center py-2 font-medium text-gray-600 hover:text-gray-400 dark:text-gray-300 dark:hover:text-gray-300 md:py-0 md:text-xs md:dark:text-gray-400"
@@ -41,6 +41,16 @@ export function Footer() {
             className="mr-2 h-4 w-4 text-gray-600 hover:text-gray-400 dark:text-gray-500 dark:hover:text-gray-300"
           />
           <div className="text-md dark:text-gray-300 md:hidden">Settings</div>
+        </a>
+      </div>
+      <div>
+        <a
+          className="text-md flex cursor-pointer content-center items-center py-2 font-medium text-gray-600 hover:text-gray-400 dark:text-gray-300 dark:hover:text-gray-300 md:py-0 md:text-xs md:dark:text-gray-400"
+          href="https://www.netlify.com"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          This site is powered by Netlify
         </a>
       </div>
       <HelpModal isOpen={visibleModal === 'help'} setIsOpen={createSetVisibleModal('help')} />
