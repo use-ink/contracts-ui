@@ -6,13 +6,13 @@ Substrate Contracts UI is a web application for deploying and interacting with W
 
 Supported smart contracts:
 
-- [ink!](https://github.com/paritytech/ink)
+- [ink!](https://github.com/use-ink/ink)
 - [ask!](https://github.com/ask-lang/ask)
 - [solang](https://github.com/hyperledger-labs/solang)
 
 We recommend running a [Substrate Contracts Node](https://github.com/paritytech/substrate-contracts-node) for local development or using the Contracts parachain on the Rococo Testnet.
 
-See [`FAUCETS.md`](https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md) to learn about how to obtain free testnet tokens of supported chains.
+See [`FAUCETS.md`](https://github.com/use-ink/contracts-ui/blob/master/FAUCETS.md) to learn about how to obtain free testnet tokens of supported chains.
 
 ## Features
 
@@ -52,4 +52,4 @@ yarn start
 
 ## Contributing to the project
 
-Please see our [Contribution Guidelines](https://github.com/paritytech/contracts-ui/blob/master/CONTRIBUTING.md) before opening an issue or PR.
+Please see our [Contribution Guidelines](https://github.com/use-ink/contracts-ui/blob/master/CONTRIBUTING.md) before opening an issue or PR.

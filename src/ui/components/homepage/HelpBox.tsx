@@ -1,4 +1,4 @@
-// Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
+// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 export function HelpBox(): React.ReactElement | null {
@@ -21,8 +21,8 @@ export function HelpBox(): React.ReactElement | null {
             Need some guidance? Find an example!
           </div>
           <div className="text-sm font-semibold text-blue-500">
-            <a href="https://github.com/paritytech/ink-examples" rel="noreferrer" target="_blank">
-              github.com/paritytech/ink-examples
+            <a href="https://github.com/use-ink/ink-examples" rel="noreferrer" target="_blank">
+              github.com/use-ink/ink-examples
             </a>
           </div>
         </div>

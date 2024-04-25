@@ -1,4 +1,4 @@
-// Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
+// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Error } from './Error';
@@ -21,7 +21,7 @@ export function AccountsError() {
       <p className="mb-3">
         2. Drip some funds into your account via the faucets of our supported networks. You can find
         a faucets list{' '}
-        <a href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md">here</a>.
+        <a href="https://github.com/use-ink/contracts-ui/blob/master/FAUCETS.md">here</a>.
       </p>
     </Error>
   );

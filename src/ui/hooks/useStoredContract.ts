@@ -1,4 +1,4 @@
-// Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
+// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -16,7 +16,7 @@ export function useStoredContract(address: string): UIContract | undefined {
 
   useLiveQuery(async () => {
     // setting to undefined to prevent metadata "leak" on route change
-    // https://github.com/paritytech/contracts-ui/issues/359
+    // https://github.com/use-ink/contracts-ui/issues/359
     setContract(undefined);
     setDocument(undefined);
     const d = await db.contracts.get({ address });

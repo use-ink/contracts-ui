@@ -1,4 +1,4 @@
-// Copyright 2023 @paritytech/contracts-ui authors & contributors
+// Copyright 2023 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Buffer } from 'buffer';
