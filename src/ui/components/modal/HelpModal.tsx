@@ -1,4 +1,4 @@
-// Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
+// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { ChevronRightIcon } from '@heroicons/react/outline';
@@ -14,7 +14,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
         <li>
           <a
             className="group flex w-full items-center justify-between border-b border-gray-200 text-gray-600 dark:border-gray-800 dark:text-white"
-            href="https://paritytech.github.io/ink-docs/"
+            href="https://use.ink/"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -56,7 +56,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
         <li>
           <a
             className="group flex w-full items-center justify-between border-b border-gray-200 text-gray-600 dark:border-gray-800 dark:text-white"
-            href="https://github.com/paritytech/contracts-ui"
+            href="https://github.com/use-ink/contracts-ui"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -77,7 +77,7 @@ export const HelpModal = ({ isOpen, setIsOpen }: Omit<ModalProps, 'title'>) => {
         <li>
           <a
             className="group flex w-full items-center justify-between"
-            href="https://github.com/paritytech/contracts-ui/blob/master/FAUCETS.md"
+            href="https://github.com/use-ink/contracts-ui/blob/master/FAUCETS.md"
             rel="noopener noreferrer"
             target="_blank"
           >

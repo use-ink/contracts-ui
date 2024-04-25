@@ -14,8 +14,6 @@ We use a pull request flow, no direct pushes to main branch.
 
 :white_check_mark: &nbsp; Pass CI
 
-:white_check_mark: &nbsp; Contain only GPG signed commits - if you are a Parity employee, follow the [yubikey gpg setup guide](https://www.notion.so/paritytechnologies/Yubikey-Guide-787b2f4e340a40369bbf3159fa3643de)
-
 :white_check_mark: &nbsp; Have one approving review
 
 **Ideally, a good pull request should:**

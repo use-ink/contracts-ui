@@ -1,4 +1,4 @@
-// Copyright 2021 @paritytech/contracts-ui authors & contributors
+// Copyright 2021 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import {

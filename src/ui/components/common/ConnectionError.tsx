@@ -1,4 +1,4 @@
-// Copyright 2022-2024 @paritytech/contracts-ui authors & contributors
+// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ function ContractsNodeHelp() {
           Make sure you are running a local{' '}
           <a
             className="whitespace-nowrap"
-            href="https://github.com/paritytech/substrate-contracts-node"
+            href="https://github.com/use-ink/substrate-contracts-node"
             rel="noreferrer"
             target="_blank"
           >
