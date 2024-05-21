@@ -53,8 +53,8 @@
       "line",
       [
         {
-          "pattern": " Copyright \\d{4}(-\\d{4})? @paritytech/contracts-ui authors & contributors",
-          "template": " Copyright 2022-2024 @paritytech/contracts-ui authors & contributors"
+          "pattern": " Copyright \\(\\d{4})? @use-ink/contracts-ui authors & contributors",
+          "template": " Copyright 2024 @use-ink/contracts-ui authors & contributors"
         },
         " SPDX-License-Identifier: GPL-3.0-only"
       ],
