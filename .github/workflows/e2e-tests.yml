@@ -45,7 +45,7 @@ jobs:
         with:
           start: yarn start
           wait-on: 'http://localhost:8081'
-          wait-on-timeout: 120
+          wait-on-timeout: 300
           browser: chrome
           config-file: cypress.config.ts
           record: true
@@ -79,7 +79,7 @@ jobs:
         with:
           start: yarn start
           wait-on: 'http://localhost:8081'
-          wait-on-timeout: 120
+          wait-on-timeout: 300
           browser: firefox
           config-file: cypress.config.ts
           record: true
