@@ -8,7 +8,7 @@ export default defineConfig({
   projectId: 'eup7bh',
   e2e: {
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
-    baseUrl: 'http://localhost:8081/',
+    baseUrl: 'http://localhost:3000/',
     testIsolation: false,
     setupNodeEvents(on, config) {
       task(on, config);
