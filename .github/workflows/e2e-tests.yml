@@ -44,7 +44,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
-          wait-on: 'http://localhost:8081'
+          wait-on: 'http://127.0.0.1:8081'
           wait-on-timeout: 300
           browser: chrome
           config-file: cypress.config.ts
@@ -78,7 +78,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
-          wait-on: 'http://localhost:8081'
+          wait-on: 'http://127.0.0.1:8081'
           wait-on-timeout: 300
           browser: firefox
           config-file: cypress.config.ts
