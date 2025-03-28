@@ -13,6 +13,6 @@ runs:
       shell: bash
       run: |
         tar -xvzf substrate-contracts-node-linux.tar.gz
-        cd artifacts/substrate-contracts-node-linux/
+        cd substrate-contracts-node-linux/ 
         chmod +x ./substrate-contracts-node
         ./substrate-contracts-node --dev &
