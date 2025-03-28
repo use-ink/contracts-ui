@@ -21,6 +21,7 @@ import {
   SubmittableResult,
   UIContract,
 } from 'types';
+import { Text } from '@polkadot/types';
 import { AccountSelect } from 'ui/components/account';
 import { Button, Buttons, Dropdown } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
@@ -100,8 +101,30 @@ export const InteractTab = ({
   useEffect((): void => {
     async function dryRun() {
       if (!message) return;
-      const o = await api.call.contractsApi.call(...params);
-      setOutcome(o);
+      const newOutcome = await api.call.contractsApi.call(...params);
+
+      // auto-generated @polkadot/type-augment data uses a different flag representation: `{"ok":{"flags":{"bits":0},"data":"0x00"}}`
+      let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
+      if (newOutcome.result.isOk) {
+        const flags = newOutcome.result.asOk.flags;
+        const isRevert = flags.bits.toNumber();
+        convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+      }
+
+      const convertedOutcome: ContractExecResult = api.registry.createType('ContractExecResult', {
+        registry: api.registry,
+        gasConsumed: newOutcome.gasConsumed,
+        gasRequired: newOutcome.gasRequired,
+        storageDeposit: newOutcome.storageDeposit,
+        // debugMessage is Bytes, must convert to Text
+        debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
+        result: newOutcome.result.isOk
+          ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+          : { Err: newOutcome.result.asErr },
+      });
+
+      // Update the state with the adapted outcome
+      setOutcome(convertedOutcome);
     }
 
     function debouncedDryRun() {
