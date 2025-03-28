@@ -98,8 +98,39 @@ export function Step2() {
       try {
         const result = await api.call.contractsApi.instantiate(...params);
 
-        if (JSON.stringify(dryRunResult) !== JSON.stringify(result)) {
-          setDryRunResult(result);
+        // default is no revert
+        let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
+        let instantiateResult;
+
+        // auto-generated @polkadot/type-augment data uses slightly different types
+        if (result.result.isOk) {
+          const okResult = result.result.asOk;
+          const flags = okResult.result.flags;
+          const isRevert = flags.bits.toNumber();
+          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+          instantiateResult = {
+            Ok: {
+              result: { flags: convertedFlags, data: okResult.result.data },
+              accountId: okResult.accountId,
+            },
+          };
+        } else {
+          instantiateResult = { Err: result.result.asErr };
+        }
+
+        const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
+          gasConsumed: result.gasConsumed,
+          gasRequired: result.gasRequired,
+          storageDeposit: result.storageDeposit,
+          // debugMessage is Bytes, must convert to Text
+          debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
+          result: instantiateResult,
+        });
+
+        const resultJson = JSON.stringify(convertedOutcome.toJSON());
+        const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
+        if (dryRunResultJson !== resultJson) {
+          setDryRunResult(convertedOutcome);
         }
       } catch (e) {
         console.error(e);
