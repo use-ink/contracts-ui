@@ -64,6 +64,8 @@ export function Step2() {
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
 
+  const wasm = metadata?.info.source.wasm;
+
   const params: Parameters<typeof api.call.contractsApi.instantiate> = useMemo(() => {
     return [
       accountId,
@@ -72,7 +74,9 @@ export function Step2() {
         : api.registry.createType('Balance', BN_ZERO),
       getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry),
       getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
-      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: metadata?.info.source.wasm },
+      codeHashUrlParam
+        ? { Existing: codeHashUrlParam }
+        : { Upload: metadata?.json.source.contract_binary }, // TODO: update type
       inputData ?? '',
       isUsingSalt ? salt.value : '',
     ];
@@ -96,7 +100,7 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await api.call.contractsApi.instantiate(...params);
+        const result = await api.call.reviveApi.instantiate(...params);
 
         // default is no revert
         let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
@@ -123,7 +127,7 @@ export function Step2() {
           gasRequired: result.gasRequired,
           storageDeposit: result.storageDeposit,
           // debugMessage is Bytes, must convert to Text
-          debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
+          // debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
           result: instantiateResult,
         });
 

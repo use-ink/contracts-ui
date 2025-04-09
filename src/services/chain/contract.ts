@@ -11,6 +11,7 @@ import {
   InstantiateData,
   SubmittableExtrinsic,
 } from 'types';
+import { stringToU8a, compactAddLength, u8aToU8a } from '@polkadot/util';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -25,7 +26,7 @@ export function createInstantiateTx(
     storageDepositLimit,
   }: Omit<InstantiateData, 'name'>,
 ): SubmittableExtrinsic<'promise'> {
-  const wasm = metadata?.info.source.wasm;
+  const wasm = u8aToU8a(metadata?.json.source.contract_binary);
   const isValid = codeHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
@@ -38,15 +39,27 @@ export function createInstantiateTx(
       value,
     };
 
-    const codeOrBlueprint = codeHash
-      ? new BlueprintPromise(api, metadata, codeHash)
-      : new CodePromise(api, metadata, wasm && wasm.toU8a());
-
+    const parsed_wasm = compactAddLength(wasm.slice(0));
+    // const codeOrBlueprint = codeHash
+    //   ? new BlueprintPromise(api, metadata, codeHash)
+    //   : new CodePromise(api, metadata, wasm && wasm);
     const transformed = transformUserInput(api.registry, constructor.args, argValues);
 
-    return constructor.args.length > 0
-      ? codeOrBlueprint.tx[constructor.method](options, ...transformed)
-      : codeOrBlueprint.tx[constructor.method](options);
+    const data = constructor.toU8a(transformed);
+
+    const tx = api.tx.revive.instantiateWithCode(
+      value!,
+      gasLimit!,
+      storageDepositLimit!,
+      parsed_wasm,
+      data,
+      salt,
+    );
+
+    return tx;
+    // return constructor.args.length > 0
+    //   ? tx[constructor.method](options, ...transformed)
+    //   : tx[constructor.method](options);
   } else {
     throw new Error('Error creating instantiate tx');
   }
