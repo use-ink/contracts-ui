@@ -74,7 +74,7 @@ export function isUndefined(value: unknown): value is undefined {
 
 export function isValidAddress(address: string | Uint8Array | null | undefined) {
   try {
-    encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
+    // encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
     return true;
   } catch (error) {
     return false;

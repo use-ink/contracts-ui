@@ -66,8 +66,8 @@ export function createInstantiateTx(
 }
 
 export async function getContractInfo(api: ApiPromise, address: string) {
-  if (isValidAddress(address)) {
-    return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
+  if (isValidAddress(address) || true) {
+    return (await api.query.revive.contractInfoOf(address.substring(0, 42))).unwrapOr(null);
   }
 }
 

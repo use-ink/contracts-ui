@@ -59,9 +59,14 @@ export function AddressLookup() {
     async function validate() {
       if (address !== searchString) {
         if (isValidAddress(searchString)) {
+          console.log(db);
+          console.log(await db.contracts.count());
+          // const isOnChain = true;// await getContractInfo(api, searchString);
           const isOnChain = await getContractInfo(api, searchString);
-          if (isOnChain) {
-            const contract = await db.contracts.get({ address: searchString });
+          if (true) {
+            // const contract = await db.contracts.get({ address: searchString });
+            const contract = undefined;
+
             // Contract is already instantiated in current UI
             if (contract) {
               navigate(`/contract/${searchString}`);
