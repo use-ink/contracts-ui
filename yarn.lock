@@ -1176,7 +1176,7 @@ __metadata:
 
 "@polkadot/api-contract@file:/Users/peter/dev/dot-repos/api/packages/api-contract/build::locator=contracts-ui%40workspace%3A.":
   version: 15.8.1
-  resolution: "@polkadot/api-contract@file:/Users/peter/dev/dot-repos/api/packages/api-contract/build#/Users/peter/dev/dot-repos/api/packages/api-contract/build::hash=708da4&locator=contracts-ui%40workspace%3A."
+  resolution: "@polkadot/api-contract@file:/Users/peter/dev/dot-repos/api/packages/api-contract/build#/Users/peter/dev/dot-repos/api/packages/api-contract/build::hash=dc3fb3&locator=contracts-ui%40workspace%3A."
   dependencies:
     "@polkadot/api": 15.8.1
     "@polkadot/api-augment": 15.8.1
@@ -1187,7 +1187,7 @@ __metadata:
     "@polkadot/util-crypto": ^13.4.3
     rxjs: ^7.8.1
     tslib: ^2.8.1
-  checksum: 277ef5a1d6e48355457a4b46e371c409610bdd1b60b0d071678228c6809fbef8434c5d58a03566a44c2ab5967d8c8bc60ec846cb85c703672cde0ae6ef2a9ce4
+  checksum: 50ec11a1ba781b05bce38040923733eddf5e87af7466e74a0fca8cf834d6aaf77438b4de7b92d7fa88e6e7cd52fca53497fb059d2ddea6e54738def97a0f18f2
   languageName: node
   linkType: hard
 
@@ -1554,9 +1554,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/types@file:../../types/build::locator=%40polkadot%2Fapi-contract%40file%3A%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%23%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%3A%3Ahash%3D708da4%26locator%3Dcontracts-ui%2540workspace%253A.":
+"@polkadot/types@file:../../types/build::locator=%40polkadot%2Fapi-contract%40file%3A%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%23%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%3A%3Ahash%3Ddc3fb3%26locator%3Dcontracts-ui%2540workspace%253A.":
   version: 15.8.1
-  resolution: "@polkadot/types@file:../../types/build#../../types/build::hash=169299&locator=%40polkadot%2Fapi-contract%40file%3A%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%23%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%3A%3Ahash%3D708da4%26locator%3Dcontracts-ui%2540workspace%253A."
+  resolution: "@polkadot/types@file:../../types/build#../../types/build::hash=169299&locator=%40polkadot%2Fapi-contract%40file%3A%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%23%2FUsers%2Fpeter%2Fdev%2Fdot-repos%2Fapi%2Fpackages%2Fapi-contract%2Fbuild%3A%3Ahash%3Ddc3fb3%26locator%3Dcontracts-ui%2540workspace%253A."
   dependencies:
     "@polkadot/keyring": ^13.4.3
     "@polkadot/types-augment": 15.8.1
@@ -2822,9 +2822,9 @@ __metadata:
   linkType: hard
 
 "abbrev@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "abbrev@npm:3.0.0"
-  checksum: 2500075b5ef85e97c095ab6ab2ea640dcf90bb388f46398f4d347b296f53399f984ec9462c74bee81df6bba56ef5fd9dbc2fb29076b1feb0023e0f52d43eb984
+  version: 3.0.1
+  resolution: "abbrev@npm:3.0.1"
+  checksum: e70b209f5f408dd3a3bbd0eec4b10a2ffd64704a4a3821d0969d84928cc490a8eb60f85b78a95622c1841113edac10161c62e52f5e7d0027aa26786a8136e02e
   languageName: node
   linkType: hard
 
@@ -3521,9 +3521,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001688, caniuse-lite@npm:^1.0.30001702":
-  version: 1.0.30001712
-  resolution: "caniuse-lite@npm:1.0.30001712"
-  checksum: 83760e735d1d7ab9ff7270747d70b71da4341bdc1c90df9fe2008ada382653e13d7501bfd7068e1d835184b03b8ac598b127bfe3e7d53419b9d7827730b4ae1a
+  version: 1.0.30001713
+  resolution: "caniuse-lite@npm:1.0.30001713"
+  checksum: 45fd9ae77965a694818d495671ba3e9a87e4eed063824b2244c0b83b1ab0ba2d8e71dcd45441f638caadf8f0c99e154a4326bbef5c291327090cdc38feeda6fd
   languageName: node
   linkType: hard
 
@@ -4388,9 +4388,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.5.73":
-  version: 1.5.135
-  resolution: "electron-to-chromium@npm:1.5.135"
-  checksum: daba16981a21b37b99be3b5bfd60b0c93c59d53d8f9c5bf80e36a3e6a6c1d61c2b20d9ed610eb1ae57abe32bdc514e9c7fe63b2adce7814c1211f57357ed7349
+  version: 1.5.136
+  resolution: "electron-to-chromium@npm:1.5.136"
+  checksum: 848e40a5f5b1de9dfbd82f3c29a696afa9a3d5372e6a83aef14ee5779e05f5cc055f7381f4bea46be5a991626683543c28fa1844e10e6d313bbe5d4680deef76
   languageName: node
   linkType: hard
 
@@ -6772,8 +6772,8 @@ __metadata:
   linkType: hard
 
 "listr2@npm:^8.2.5":
-  version: 8.3.1
-  resolution: "listr2@npm:8.3.1"
+  version: 8.3.2
+  resolution: "listr2@npm:8.3.2"
   dependencies:
     cli-truncate: ^4.0.0
     colorette: ^2.0.20
@@ -6781,7 +6781,7 @@ __metadata:
     log-update: ^6.1.0
     rfdc: ^1.4.1
     wrap-ansi: ^9.0.0
-  checksum: fe6fa1d2282daca515a71be3d770cab42192189b32b8c4a2269442ba1063a32f7df87a3c98cf73b58dc21487e49408ec5006e870eb120fda95618a6cb6bb8967
+  checksum: f820250d081efd8ccc9f7751623650d184b82bea16c12e254815681f19c75836ee6494d0ea27088e250f49fd328fbc33120dadb8d55ee45fe5abca1de8e6da09
   languageName: node
   linkType: hard
 
@@ -10713,8 +10713,8 @@ __metadata:
   linkType: hard
 
 "vite@npm:^5.0.0, vite@npm:^5.4.2":
-  version: 5.4.17
-  resolution: "vite@npm:5.4.17"
+  version: 5.4.18
+  resolution: "vite@npm:5.4.18"
   dependencies:
     esbuild: ^0.21.3
     fsevents: ~2.3.3
@@ -10751,7 +10751,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: c3921629c49fc58a87678620f5537d88a002abb874254a1d8f9952808bb64669c353a2fe2723262f3af865f42042bc5e0e9ee4740190ad97263681f2c052c922
+  checksum: b61bab8c74b7a1a626e26ae2802734d666818b2a1856217b330ea7522e24a619f3d7f690f0466ea844d96549da44409075289cbc0fa8cb0245d40017c8455f74
   languageName: node
   linkType: hard
 
