@@ -41,6 +41,7 @@ export const InteractTab = ({
     abi: { registry },
     tx,
     address,
+    dotAddress,
   },
 }: Props) => {
   const { accounts, api } = useApi();
@@ -76,7 +77,7 @@ export const InteractTab = ({
   const params: Parameters<typeof api.call.reviveApi.call> = useMemo(() => {
     return [
       accountId,
-      address.substring(0, 42),
+      address,
       message?.isPayable
         ? api.registry.createType('Balance', value)
         : api.registry.createType('Balance', BN_ZERO),
@@ -87,6 +88,7 @@ export const InteractTab = ({
   }, [
     accountId,
     address,
+    dotAddress,
     api.registry,
     inputData,
     isCustom,
@@ -185,17 +187,10 @@ export const InteractTab = ({
 
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
-    console.log('message');
-    console.log(message);
-    console.log('tx');
-    console.log(tx);
-    console.log(message.method);
-    console.log(transformUserInput(registry, message.args, argValues));
     const extrinsic = tx[message.method](
       options,
       ...transformUserInput(registry, message.args, argValues),
     );
-    console.log(extrinsic);
 
     newId.current = queue({
       extrinsic,

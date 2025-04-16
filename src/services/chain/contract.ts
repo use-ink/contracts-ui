@@ -11,10 +11,11 @@ import {
   InstantiateData,
   SubmittableExtrinsic,
 } from 'types';
-import { stringToU8a, compactAddLength, u8aToU8a } from '@polkadot/util';
+import { stringToU8a, compactAddLength, u8aToU8a, hexToU8a } from '@polkadot/util';
 import { ISubmittableResult } from '@polkadot/types/types';
 import { BlueprintSubmittableResult, Contract } from '@polkadot/api-contract/base';
 import { contractsAbi } from '@polkadot/types/interfaces/definitions';
+import { fromEthAddress, isEthDerived, toEthAddress } from 'ui/hooks';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -42,28 +43,11 @@ export function createInstantiateTx(
       value,
     };
 
-    const parsed_wasm = compactAddLength(wasm.slice(0));
     const codeOrBlueprint = codeHash
       ? new BlueprintPromise(api, metadata, codeHash)
       : new CodePromise(api, metadata, wasm && wasm);
-    // const transformed = transformUserInput(api.registry, constructor.args, argValues);
 
     const transformed = transformUserInput(api.registry, constructor.args, argValues);
-
-    const tmp = constructor.toU8a(transformed);
-    console.log('constructor.toU8a', tmp);
-    console.log('constructor.', transformed);
-    //
-    // const tx = api.tx.revive.instantiateWithCode(
-    //   value!,
-    //   gasLimit!,
-    //   storageDepositLimit!,
-    //   parsed_wasm,
-    //   data,
-    //   salt,
-    // );
-
-    // return tx;
 
     return constructor.args.length > 0
       ? codeOrBlueprint.tx[constructor.method](options, ...transformed)
@@ -74,8 +58,9 @@ export function createInstantiateTx(
 }
 
 export async function getContractInfo(api: ApiPromise, address: string) {
+  // TODO: fix isValidAddress
   if (isValidAddress(address) || true) {
-    return (await api.query.revive.contractInfoOf(address.substring(0, 42))).unwrapOr(null);
+    return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
   }
 }
 

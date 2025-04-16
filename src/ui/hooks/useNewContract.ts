@@ -4,18 +4,18 @@
 import { useNavigate } from 'react-router';
 import type { BlueprintSubmittableResult } from 'types';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
-import { ethers } from 'ethers';
+import { BigNumberish, ethers, RlpStructuredDataish, toBeHex, toUtf8String } from 'ethers';
 import { ApiTypes } from '@polkadot/api/types';
-import { stringToU8a } from '@polkadot/util';
+import { hexToU8a, stringToU8a, u8aToHex } from '@polkadot/util';
 import { keccak256 } from 'ethers';
 import { decodeAddress, encodeAddress } from '@polkadot/keyring';
 
 interface ExtendedBlueprintSubmittableResult<T extends ApiTypes>
   extends BlueprintSubmittableResult<T> {
   contractData?: {
-    salt: Uint8Array;
-    data: string;
-    code: Uint8Array;
+    salt: string;
+    data: Uint8Array;
+    code: string;
     originIsCaller?: boolean;
   };
 }
@@ -31,12 +31,15 @@ type Address = string;
  * @param nonce The nonce value
  * @returns The contract address
  */
-export function create1(deployer: Address, nonce: bigint | number): Address {
-  // Normalize the deployer address
-  const deployerAddress = ethers.getAddress(deployer);
+export function create1(deployer: string, nonce: number): Address {
+  // Convert deployer to bytes (remove 0x prefix if present)
+  const deployerBytes = ethers.hexlify(deployer);
+  ethers.toBeHex(nonce as BigNumberish);
+  // Convert nonce to hex (minimal encoding)
+  const nonceBytes = ethers.toBeHex(nonce as BigNumberish);
 
-  // Create RLP encoding of the deployer address and nonce
-  const encodedData = ethers.encodeRlp([deployerAddress, ethers.toBeHex(nonce)]);
+  // RLP encode [deployer, nonce]
+  const encodedData = ethers.encodeRlp([deployerBytes, nonceBytes]);
 
   // Calculate keccak256 hash of the RLP encoded data
   const hash = ethers.keccak256(encodedData);
@@ -45,108 +48,24 @@ export function create1(deployer: Address, nonce: bigint | number): Address {
   return ethers.getAddress('0x' + hash.substring(26));
 }
 
-// /**
-//  * Determine the address of a contract using the CREATE2 semantics.
-//  * @param deployer The address of the deployer
-//  * @param code The initialization code
-//  * @param inputData Additional input data
-//  * @param salt A 32-byte salt value
-//  * @returns The contract address
-//  */
-// export function create2(
-//   deployer: Address,
-//   code: Uint8Array | string,
-//   inputData: Uint8Array | string,
-//   salt: string
-// ): Address {
-//   console.log("info");
-//   console.log(code);
-//   console.log("data");
-//   console.log(inputData);
-//   console.log("salt");
-//   console.log(salt);
-//
-//   // Normalize inputs to Uint8Array
-//   const codeBytes = typeof code === 'string'
-//     ? stringToU8a(code)
-//     : code;
-//
-//   const inputDataBytes = typeof inputData === 'string'
-//     ? stringToU8a(inputData)
-//     : inputData;
-//
-//   const normalizedSalt = stringToU8a(salt.substring(2));
-//
-//   // Concatenate code and input data
-//   const initCode = new Uint8Array(codeBytes.length + inputDataBytes.length);
-//   initCode.set(codeBytes);
-//   initCode.set(inputDataBytes, codeBytes.length);
-//
-//   // Calculate init code hash
-//   const initCodeHash = ethers.keccak256(initCode);
-//
-//   // Build the input buffer: 0xff + deployer + salt + initCodeHash
-//   const buffer = ethers.concat([
-//     new Uint8Array([0xff]),
-//     ethers.getBytes(deployer),
-//     ethers.getBytes(normalizedSalt),
-//     ethers.getBytes(initCodeHash)
-//   ]);
-//
-//   // Calculate keccak256 hash of the buffer
-//   const hash = ethers.keccak256(buffer);
-//
-//   // Take the last 20 bytes (40 hex chars + 0x prefix)
-//   return ethers.getAddress("0x" + hash.substring(26));
-// }
-
-// function create2(deployer: Address, code: Uint8Array, input_data: Uint8Array, salt: Uint8Array): Address {
-//   const init_code = Uint8Array.from([...code, ...input_data]);
-//   const init_code_hash = keccak256(init_code);
-//   const bytes = new Uint8Array(85);
-//   bytes[0] = 0xff;
-//   bytes.set(stringToU8a(deployer.toString()), 1);
-//   console.log(salt);
-//   console.log(salt.length);
-//   bytes.set(salt.slice(0, 32), 21);
-//   console.log(init_code_hash.length);
-//   bytes.set(stringToU8a(init_code_hash.substring(2)), 53);
-//   const hash = stringToU8a(keccak256(bytes).substring(2));
-//   const addressBytes = hash.slice(12);
-//   // const address = new (addressBytes);
-//   console.log("addressBytes");
-//   console.log(addressBytes);
-//   console.log(addressBytes.toString());
-//   return addressBytes.toString();
-// }
-
 export function create2(
   deployer: string,
   code: Uint8Array,
   inputData: Uint8Array,
-  salt: Uint8Array,
+  salt: string,
 ): string {
-  // if (salt.length !== 32) {
-  //   throw new Error('Salt must be 32 bytes');
-  // }
-
   const initCode = new Uint8Array([...code, ...inputData]);
-  const initCodeHash = stringToU8a(keccak256(initCode));
+  const initCodeHash = hexToU8a(keccak256(initCode));
 
-  const parts = new Uint8Array(1 + (20 + 32 + 32) * 2); // 0xff + deployer + salt + initCodeHash
+  const parts = new Uint8Array(1 + 20 + 32 + 32); // 0xff + deployer + salt + initCodeHash
   parts[0] = 0xff;
-  parts.set(stringToU8a(deployer.slice(2)), 1);
-  console.log('HERE');
-  console.log(initCodeHash);
-  parts.set(salt.slice(2), 21);
-  parts.set(initCodeHash.slice(2), 53);
+  parts.set(hexToU8a(deployer), 1);
+  parts.set(hexToU8a(salt), 21);
+  parts.set(initCodeHash, 53);
 
   const hash = keccak256(parts);
 
   // Return last 20 bytes as 0x-prefixed hex string
-  // return '0x' + Buffer.from(hash.slice(12, 42)).toString('hex');
-  console.log(hash);
-  console.log(hash.toString());
   return ethers.getAddress('0x' + hash.substring(26));
 }
 
@@ -175,12 +94,38 @@ export function toEthAddress(accountId: Uint8Array | string): string {
   }
 }
 
+export function fromEthAddress(ethAddress: string): string {
+  // Remove '0x' prefix if it exists
+  const cleanAddress = ethAddress.startsWith('0x') ? ethAddress.slice(2) : ethAddress;
+
+  // Convert the hex string to bytes
+  const addressBytes = Buffer.from(cleanAddress, 'hex');
+
+  // Check if the address is the expected length (20 bytes)
+  if (addressBytes.length !== 20) {
+    throw new Error('Invalid Ethereum address: must be 20 bytes');
+  }
+
+  // Create a 32-byte buffer
+  const result = new Uint8Array(32);
+
+  // Set the first 20 bytes to the Ethereum address
+  result.set(addressBytes, 0);
+
+  // Fill the remaining 12 bytes with 0xEE
+  for (let i = 20; i < 32; i++) {
+    result[i] = 0xee;
+  }
+
+  return u8aToHex(result);
+}
+
 /**
  * Determines if an account ID is derived from an Ethereum address
  * @param accountId The account ID bytes
  * @returns True if the account is derived from an Ethereum address
  */
-function isEthDerived(accountId: Uint8Array): boolean {
+export function isEthDerived(accountId: Uint8Array): boolean {
   if (accountId.length >= 32) {
     return accountId[20] === 0xee && accountId[21] === 0xee;
   }
@@ -192,8 +137,6 @@ export function useNewContract() {
   const navigate = useNavigate();
   const instantiate = useInstantiate();
   const { api } = useApi();
-
-  console.log('Instantiate', instantiate);
 
   const {
     data: { accountId, name },
@@ -213,11 +156,6 @@ export function useNewContract() {
     contract,
     contractData,
   }: ExtendedBlueprintSubmittableResult<'promise'>): Promise<void> {
-    console.log('Processing contract submission');
-    console.log(contract);
-    console.log(contractData);
-    console.log(contractData?.code.toString());
-
     if (accountId && contract?.abi.json) {
       // Calculate the expected contract address based on the Rust logic
       let calculatedAddress;
@@ -225,22 +163,17 @@ export function useNewContract() {
       if (contractData) {
         const { salt, code, data, originIsCaller = false } = contractData;
         const mappedAccount = toEthAddress(decodeAddress(accountId));
-        console.log('Mapped account address:', mappedAccount);
-        console.log(mappedAccount);
 
         if (salt) {
           // Use CREATE2 if salt is provided
-          calculatedAddress = create2(mappedAccount, code, data, salt);
-          console.log('CREATE2 calculated address:', calculatedAddress);
+          calculatedAddress = create2(mappedAccount, hexToU8a(code), data, salt);
         } else {
           // Use CREATE1 if no salt is provided
           const nonce = await getNonce();
 
           if (nonce !== null) {
             const adjustedNonce = originIsCaller ? Math.max(0, nonce - 1) : nonce;
-            calculatedAddress = create1(mappedAccount, BigInt(adjustedNonce));
-            console.log('CREATE1 calculated address with nonce:', adjustedNonce);
-            console.log('Calculated address:', calculatedAddress);
+            calculatedAddress = create1(mappedAccount, adjustedNonce - 2);
           }
         }
       }
@@ -249,12 +182,11 @@ export function useNewContract() {
 
       const document = {
         abi: contract.abi.json,
-        address: calculatedAddress,
+        address: calculatedAddress!,
+        dotAddress: fromEthAddress(calculatedAddress!),
         codeHash,
         date: new Date().toISOString(),
         name,
-        // Store the calculated address
-        calculatedAddress: calculatedAddress || undefined,
       };
 
       await Promise.all([
@@ -266,7 +198,7 @@ export function useNewContract() {
         }),
       ]);
 
-      navigate(`/contract/${contract.address}`);
+      navigate(`/contract/${document.address}`);
     }
   };
 }

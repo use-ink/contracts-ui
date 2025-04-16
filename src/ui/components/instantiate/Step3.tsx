@@ -9,9 +9,10 @@ import { printBN } from 'lib/bn';
 import { createInstantiateTx } from 'services/chain';
 import { SubmittableResult } from 'types';
 import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
-import { useNewContract } from 'ui/hooks';
-import { stringToU8a } from '@polkadot/util';
+import { create2, toEthAddress, useNewContract } from 'ui/hooks';
+import { hexToU8a, stringToU8a } from '@polkadot/util';
 import { transformUserInput } from 'lib/callOptions';
+import { decodeAddress } from '@polkadot/keyring';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
@@ -30,13 +31,13 @@ export function Step3() {
     const isValid = (result: SubmittableResult) => !result.isError && !result.dispatchError;
 
     if (data.accountId) {
+      const constructor = metadata.findConstructor(constructorIndex);
+      const transformed = transformUserInput(api.registry, constructor.args, data.argValues);
+      const inputData = constructor.toU8a(transformed).slice(1); // exclude the first byte (the length byte)
+
       const tx = createInstantiateTx(api, data);
 
       if (!txId) {
-        const constructor = metadata.findConstructor(constructorIndex);
-        const transformed = transformUserInput(api.registry, constructor.args, data.argValues);
-        const inputData = constructor.toU8a(transformed).slice(1); // exclude the first byte (the length byte)
-
         const newId = queue({
           extrinsic: tx,
           accountId: data.accountId,

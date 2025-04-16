@@ -22,11 +22,21 @@ import {
   useToggle,
   useStorageDepositLimit,
   useBalance,
+  create2,
+  toEthAddress,
+  create1,
 } from 'ui/hooks';
 import { AbiMessage, Balance, OrFalsy } from 'types';
-import { decodeStorageDeposit, getGasLimit, getStorageDepositLimit } from 'lib/callOptions';
+import {
+  decodeStorageDeposit,
+  getGasLimit,
+  getStorageDepositLimit,
+  transformUserInput,
+} from 'lib/callOptions';
 import { BN_ZERO } from 'lib/bn';
 import { hasRevertFlag } from 'lib/hasRevertFlag';
+import { hexToU8a, stringToU8a } from '@polkadot/util';
+import { decodeAddress } from '@polkadot/keyring';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -63,10 +73,9 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
+  const code = metadata?.json.source.contract_binary;
 
-  const wasm = metadata?.info.source.wasm;
-
-  const params: Parameters<typeof api.call.contractsApi.instantiate> = useMemo(() => {
+  const params: Parameters<typeof api.call.reviveApi.instantiate> = useMemo(() => {
     return [
       accountId,
       deployConstructor?.isPayable
@@ -74,9 +83,7 @@ export function Step2() {
         : api.registry.createType('Balance', BN_ZERO),
       getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry),
       getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
-      codeHashUrlParam
-        ? { Existing: codeHashUrlParam }
-        : { Upload: metadata?.json.source.contract_binary }, // TODO: update type
+      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: code }, // TODO: update type
       inputData ?? '',
       isUsingSalt ? salt.value : '',
     ];
@@ -91,7 +98,7 @@ export function Step2() {
     storageDepositLimit.isActive,
     storageDepositLimit.value,
     codeHashUrlParam,
-    metadata?.info.source.wasm,
+    metadata?.json.source.contract_binary,
     inputData,
     isUsingSalt,
     salt.value,

@@ -14,7 +14,7 @@ interface Props {
   contract: UIContract;
 }
 
-export function HeaderButtons({ contract: { address, codeHash } }: Props) {
+export function HeaderButtons({ contract: { address, dotAddress, codeHash } }: Props) {
   const { api } = useApi();
   const { db } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);
@@ -61,7 +61,7 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
           }}
           title="Forget contract"
         >
-          <TrashIcon className="w-4 dark:text-gray-500 " />
+          <TrashIcon className="w-4 dark:text-gray-500" />
         </button>
       </div>
       <ForgetContractModal confirm={forgetContract} isOpen={isOpen} setIsOpen={setIsOpen} />
