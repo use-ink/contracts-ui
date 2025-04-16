@@ -22,21 +22,11 @@ import {
   useToggle,
   useStorageDepositLimit,
   useBalance,
-  create2,
-  toEthAddress,
-  create1,
 } from 'ui/hooks';
 import { AbiMessage, Balance, OrFalsy } from 'types';
-import {
-  decodeStorageDeposit,
-  getGasLimit,
-  getStorageDepositLimit,
-  transformUserInput,
-} from 'lib/callOptions';
+import { decodeStorageDeposit, getGasLimit, getStorageDepositLimit } from 'lib/callOptions';
 import { BN_ZERO } from 'lib/bn';
 import { hasRevertFlag } from 'lib/hasRevertFlag';
-import { hexToU8a, stringToU8a } from '@polkadot/util';
-import { decodeAddress } from '@polkadot/keyring';
 
 function validateSalt(value: OrFalsy<string>) {
   if (!!value && value.length === 66) {
@@ -73,6 +63,7 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
+  //@ts-ignore TODO: need to update type in @polkadot/api-contracts
   const code = metadata?.json.source.contract_binary;
 
   const params: Parameters<typeof api.call.reviveApi.instantiate> = useMemo(() => {
@@ -98,6 +89,7 @@ export function Step2() {
     storageDepositLimit.isActive,
     storageDepositLimit.value,
     codeHashUrlParam,
+    //@ts-ignore TODO: need to update type in @polkadot/api-contracts
     metadata?.json.source.contract_binary,
     inputData,
     isUsingSalt,
@@ -122,7 +114,6 @@ export function Step2() {
           instantiateResult = {
             Ok: {
               result: { flags: convertedFlags, data: okResult.result.data },
-              accountId: okResult.accountId,
             },
           };
         } else {
@@ -159,7 +150,8 @@ export function Step2() {
     setData({
       ...data,
       constructorIndex,
-      salt: params[6] || null,
+      // salt: params[6] || null,
+      salt: (params[6] as string | Uint8Array | null) || null,
       value: deployConstructor?.isPayable ? (params[1] as Balance) : undefined,
       argValues,
       storageDepositLimit: getStorageDepositLimit(

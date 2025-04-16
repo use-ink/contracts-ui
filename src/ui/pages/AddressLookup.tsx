@@ -21,6 +21,7 @@ import { useApi, useDatabase } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useStoredMetadata } from 'ui/hooks/useStoredMetadata';
 import { RootLayout } from 'ui/layout';
+import { fromEthAddress } from 'ui/hooks';
 
 export function AddressLookup() {
   const [searchString, setSearchString] = useState('');
@@ -192,6 +193,7 @@ export function AddressLookup() {
                 const document = {
                   abi: metadata.json,
                   address,
+                  dotAddress: fromEthAddress(address),
                   codeHash: metadata.info.source.wasmHash.toHex(),
                   date: new Date().toISOString(),
                   name,

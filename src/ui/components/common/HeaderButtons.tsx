@@ -14,7 +14,7 @@ interface Props {
   contract: UIContract;
 }
 
-export function HeaderButtons({ contract: { address, dotAddress, codeHash } }: Props) {
+export function HeaderButtons({ contract: { address, codeHash } }: Props) {
   const { api } = useApi();
   const { db } = useDatabase();
   const [isOnChain, setIsOnChain] = useState(true);

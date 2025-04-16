@@ -1,7 +1,7 @@
 // Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { BlueprintPromise, CodePromise, ContractPromise } from '@polkadot/api-contract';
+import { BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { isValidAddress, isValidCodeHash, isNumber } from 'lib/util';
 import { transformUserInput } from 'lib/callOptions';
 import {
@@ -11,11 +11,7 @@ import {
   InstantiateData,
   SubmittableExtrinsic,
 } from 'types';
-import { stringToU8a, compactAddLength, u8aToU8a, hexToU8a } from '@polkadot/util';
-import { ISubmittableResult } from '@polkadot/types/types';
-import { BlueprintSubmittableResult, Contract } from '@polkadot/api-contract/base';
-import { contractsAbi } from '@polkadot/types/interfaces/definitions';
-import { fromEthAddress, isEthDerived, toEthAddress } from 'ui/hooks';
+import { u8aToU8a } from '@polkadot/util';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -30,6 +26,7 @@ export function createInstantiateTx(
     storageDepositLimit,
   }: Omit<InstantiateData, 'name'>,
 ): SubmittableExtrinsic<'promise'> {
+  //@ts-ignore TODO: need to update type in @polkadot/api-contracts
   const wasm = u8aToU8a(metadata?.json.source.contract_binary);
   const isValid = codeHash || !!wasm;
 

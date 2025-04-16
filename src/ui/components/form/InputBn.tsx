@@ -35,7 +35,7 @@ function getMinMax(type: string): [bigint, bigint] {
   }
 }
 
-export function InputBn({ onChange, typeDef: { type } }: Props): JSX.Element {
+export function InputBn({ onChange, typeDef: { type } }: Props): React.ReactElement {
   const [displayValue, setDisplayValue] = useState('0');
   const [min, max] = getMinMax(type);
 

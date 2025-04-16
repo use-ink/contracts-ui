@@ -4,11 +4,11 @@
 import { useNavigate } from 'react-router';
 import type { BlueprintSubmittableResult } from 'types';
 import { useApi, useDatabase, useInstantiate } from 'ui/contexts';
-import { BigNumberish, ethers, RlpStructuredDataish, toBeHex, toUtf8String } from 'ethers';
+import { BigNumberish, ethers } from 'ethers';
 import { ApiTypes } from '@polkadot/api/types';
 import { hexToU8a, stringToU8a, u8aToHex } from '@polkadot/util';
 import { keccak256 } from 'ethers';
-import { decodeAddress, encodeAddress } from '@polkadot/keyring';
+import { decodeAddress } from '@polkadot/keyring';
 
 interface ExtendedBlueprintSubmittableResult<T extends ApiTypes>
   extends BlueprintSubmittableResult<T> {

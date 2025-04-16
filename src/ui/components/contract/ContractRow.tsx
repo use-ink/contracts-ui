@@ -9,7 +9,6 @@ import { ContractDocument } from 'types';
 import { useApi } from 'ui/contexts';
 import { displayDate, truncate } from 'lib/util';
 import { getContractInfo } from 'services/chain';
-import { fromEthAddress, toEthAddress } from 'ui/hooks';
 
 interface Props {
   contract: ContractDocument;

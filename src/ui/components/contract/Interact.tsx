@@ -21,7 +21,6 @@ import {
   SubmittableResult,
   UIContract,
 } from 'types';
-import { Text } from '@polkadot/types';
 import { AccountSelect } from 'ui/components/account';
 import { Button, Buttons, Dropdown } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
@@ -166,7 +165,7 @@ export const InteractTab = ({
     setNextResultId(nextResultId + 1);
   };
 
-  const newId = useRef<number>();
+  const newId = useRef<number>(0);
 
   const call = () => {
     if (!outcome || !message || !accountId) throw new Error('Unable to call contract.');

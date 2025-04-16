@@ -16,7 +16,7 @@ export function QuickLinks() {
       <div className="section your-contracts">
         <div className="header text-gray-400">Your Contracts</div>
         {contracts && contracts.length > 0 ? (
-          contracts.map(({ name, address, dotAddress }) => {
+          contracts.map(({ name, address }) => {
             return (
               <NavLink icon={DocumentTextIcon} key={address} to={`/contract/${address}`}>
                 {name}
