@@ -1,0 +1,408 @@
+{
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "bugs": "https://github.com/polkadot-js/api/issues",
+  "description": "Interfaces for interacting with contracts and contract ABIs",
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://github.com/polkadot-js/api/tree/master/packages/api-contract#readme",
+  "license": "Apache-2.0",
+  "name": "@polkadot/api-contract",
+  "repository": {
+    "directory": "packages/api-contract",
+    "type": "git",
+    "url": "https://github.com/polkadot-js/api.git"
+  },
+  "sideEffects": [
+    "./packageDetect.js",
+    "./cjs/packageDetect.js"
+  ],
+  "type": "module",
+  "version": "15.8.1",
+  "main": "./cjs/index.js",
+  "module": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    "./cjs/package.json": "./cjs/package.json",
+    "./cjs/*": "./cjs/*.js",
+    ".": {
+      "module": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      },
+      "require": {
+        "types": "./cjs/index.d.ts",
+        "default": "./cjs/index.js"
+      },
+      "default": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      }
+    },
+    "./Abi": {
+      "module": {
+        "types": "./Abi/index.d.ts",
+        "default": "./Abi/index.js"
+      },
+      "require": {
+        "types": "./cjs/Abi/index.d.ts",
+        "default": "./cjs/Abi/index.js"
+      },
+      "default": {
+        "types": "./Abi/index.d.ts",
+        "default": "./Abi/index.js"
+      }
+    },
+    "./Abi/toLatestCompatible": {
+      "module": {
+        "types": "./Abi/toLatestCompatible.d.ts",
+        "default": "./Abi/toLatestCompatible.js"
+      },
+      "require": {
+        "types": "./cjs/Abi/toLatestCompatible.d.ts",
+        "default": "./cjs/Abi/toLatestCompatible.js"
+      },
+      "default": {
+        "types": "./Abi/toLatestCompatible.d.ts",
+        "default": "./Abi/toLatestCompatible.js"
+      }
+    },
+    "./Abi/toV1": {
+      "module": {
+        "types": "./Abi/toV1.d.ts",
+        "default": "./Abi/toV1.js"
+      },
+      "require": {
+        "types": "./cjs/Abi/toV1.d.ts",
+        "default": "./cjs/Abi/toV1.js"
+      },
+      "default": {
+        "types": "./Abi/toV1.d.ts",
+        "default": "./Abi/toV1.js"
+      }
+    },
+    "./Abi/toV2": {
+      "module": {
+        "types": "./Abi/toV2.d.ts",
+        "default": "./Abi/toV2.js"
+      },
+      "require": {
+        "types": "./cjs/Abi/toV2.d.ts",
+        "default": "./cjs/Abi/toV2.js"
+      },
+      "default": {
+        "types": "./Abi/toV2.d.ts",
+        "default": "./Abi/toV2.js"
+      }
+    },
+    "./Abi/toV3": {
+      "module": {
+        "types": "./Abi/toV3.d.ts",
+        "default": "./Abi/toV3.js"
+      },
+      "require": {
+        "types": "./cjs/Abi/toV3.d.ts",
+        "default": "./cjs/Abi/toV3.js"
+      },
+      "default": {
+        "types": "./Abi/toV3.d.ts",
+        "default": "./Abi/toV3.js"
+      }
+    },
+    "./Abi/toV4": {
+      "module": {
+        "types": "./Abi/toV4.d.ts",
+        "default": "./Abi/toV4.js"
+      },
+      "require": {
+        "types": "./cjs/Abi/toV4.d.ts",
+        "default": "./cjs/Abi/toV4.js"
+      },
+      "default": {
+        "types": "./Abi/toV4.d.ts",
+        "default": "./Abi/toV4.js"
+      }
+    },
+    "./augment": {
+      "module": {
+        "types": "./augment.d.ts",
+        "default": "./augment.js"
+      },
+      "require": {
+        "types": "./cjs/augment.d.ts",
+        "default": "./cjs/augment.js"
+      },
+      "default": {
+        "types": "./augment.d.ts",
+        "default": "./augment.js"
+      }
+    },
+    "./base": {
+      "module": {
+        "types": "./base/index.d.ts",
+        "default": "./base/index.js"
+      },
+      "require": {
+        "types": "./cjs/base/index.d.ts",
+        "default": "./cjs/base/index.js"
+      },
+      "default": {
+        "types": "./base/index.d.ts",
+        "default": "./base/index.js"
+      }
+    },
+    "./base/Base": {
+      "module": {
+        "types": "./base/Base.d.ts",
+        "default": "./base/Base.js"
+      },
+      "require": {
+        "types": "./cjs/base/Base.d.ts",
+        "default": "./cjs/base/Base.js"
+      },
+      "default": {
+        "types": "./base/Base.d.ts",
+        "default": "./base/Base.js"
+      }
+    },
+    "./base/Blueprint": {
+      "module": {
+        "types": "./base/Blueprint.d.ts",
+        "default": "./base/Blueprint.js"
+      },
+      "require": {
+        "types": "./cjs/base/Blueprint.d.ts",
+        "default": "./cjs/base/Blueprint.js"
+      },
+      "default": {
+        "types": "./base/Blueprint.d.ts",
+        "default": "./base/Blueprint.js"
+      }
+    },
+    "./base/Code": {
+      "module": {
+        "types": "./base/Code.d.ts",
+        "default": "./base/Code.js"
+      },
+      "require": {
+        "types": "./cjs/base/Code.d.ts",
+        "default": "./cjs/base/Code.js"
+      },
+      "default": {
+        "types": "./base/Code.d.ts",
+        "default": "./base/Code.js"
+      }
+    },
+    "./base/Contract": {
+      "module": {
+        "types": "./base/Contract.d.ts",
+        "default": "./base/Contract.js"
+      },
+      "require": {
+        "types": "./cjs/base/Contract.d.ts",
+        "default": "./cjs/base/Contract.js"
+      },
+      "default": {
+        "types": "./base/Contract.d.ts",
+        "default": "./base/Contract.js"
+      }
+    },
+    "./base/mock": {
+      "module": {
+        "types": "./base/mock.d.ts",
+        "default": "./base/mock.js"
+      },
+      "require": {
+        "types": "./cjs/base/mock.d.ts",
+        "default": "./cjs/base/mock.js"
+      },
+      "default": {
+        "types": "./base/mock.d.ts",
+        "default": "./base/mock.js"
+      }
+    },
+    "./base/types": {
+      "module": {
+        "types": "./base/types.d.ts",
+        "default": "./base/types.js"
+      },
+      "require": {
+        "types": "./cjs/base/types.d.ts",
+        "default": "./cjs/base/types.js"
+      },
+      "default": {
+        "types": "./base/types.d.ts",
+        "default": "./base/types.js"
+      }
+    },
+    "./base/util": {
+      "module": {
+        "types": "./base/util.d.ts",
+        "default": "./base/util.js"
+      },
+      "require": {
+        "types": "./cjs/base/util.d.ts",
+        "default": "./cjs/base/util.js"
+      },
+      "default": {
+        "types": "./base/util.d.ts",
+        "default": "./base/util.js"
+      }
+    },
+    "./bundle": {
+      "module": {
+        "types": "./bundle.d.ts",
+        "default": "./bundle.js"
+      },
+      "require": {
+        "types": "./cjs/bundle.d.ts",
+        "default": "./cjs/bundle.js"
+      },
+      "default": {
+        "types": "./bundle.d.ts",
+        "default": "./bundle.js"
+      }
+    },
+    "./package.json": {
+      "require": "./cjs/package.json",
+      "default": "./package.json"
+    },
+    "./packageDetect": {
+      "module": {
+        "types": "./packageDetect.d.ts",
+        "default": "./packageDetect.js"
+      },
+      "require": {
+        "types": "./cjs/packageDetect.d.ts",
+        "default": "./cjs/packageDetect.js"
+      },
+      "default": {
+        "types": "./packageDetect.d.ts",
+        "default": "./packageDetect.js"
+      }
+    },
+    "./packageInfo.js": {
+      "module": {
+        "types": "./packageInfo.d.ts",
+        "default": "./packageInfo.js"
+      },
+      "require": {
+        "types": "./cjs/packageInfo.d.ts",
+        "default": "./cjs/packageInfo.js"
+      },
+      "default": {
+        "types": "./packageInfo.d.ts",
+        "default": "./packageInfo.js"
+      }
+    },
+    "./packageInfo": {
+      "module": {
+        "types": "./packageInfo.d.ts",
+        "default": "./packageInfo.js"
+      },
+      "require": {
+        "types": "./cjs/packageInfo.d.ts",
+        "default": "./cjs/packageInfo.js"
+      },
+      "default": {
+        "types": "./packageInfo.d.ts",
+        "default": "./packageInfo.js"
+      }
+    },
+    "./promise": {
+      "module": {
+        "types": "./promise/index.d.ts",
+        "default": "./promise/index.js"
+      },
+      "require": {
+        "types": "./cjs/promise/index.d.ts",
+        "default": "./cjs/promise/index.js"
+      },
+      "default": {
+        "types": "./promise/index.d.ts",
+        "default": "./promise/index.js"
+      }
+    },
+    "./promise/types": {
+      "module": {
+        "types": "./promise/types.d.ts",
+        "default": "./promise/types.js"
+      },
+      "require": {
+        "types": "./cjs/promise/types.d.ts",
+        "default": "./cjs/promise/types.js"
+      },
+      "default": {
+        "types": "./promise/types.d.ts",
+        "default": "./promise/types.js"
+      }
+    },
+    "./rx": {
+      "module": {
+        "types": "./rx/index.d.ts",
+        "default": "./rx/index.js"
+      },
+      "require": {
+        "types": "./cjs/rx/index.d.ts",
+        "default": "./cjs/rx/index.js"
+      },
+      "default": {
+        "types": "./rx/index.d.ts",
+        "default": "./rx/index.js"
+      }
+    },
+    "./rx/types": {
+      "module": {
+        "types": "./rx/types.d.ts",
+        "default": "./rx/types.js"
+      },
+      "require": {
+        "types": "./cjs/rx/types.d.ts",
+        "default": "./cjs/rx/types.js"
+      },
+      "default": {
+        "types": "./rx/types.d.ts",
+        "default": "./rx/types.js"
+      }
+    },
+    "./types": {
+      "module": {
+        "types": "./types.d.ts",
+        "default": "./types.js"
+      },
+      "require": {
+        "types": "./cjs/types.d.ts",
+        "default": "./cjs/types.js"
+      },
+      "default": {
+        "types": "./types.d.ts",
+        "default": "./types.js"
+      }
+    },
+    "./util": {
+      "module": {
+        "types": "./util.d.ts",
+        "default": "./util.js"
+      },
+      "require": {
+        "types": "./cjs/util.d.ts",
+        "default": "./cjs/util.js"
+      },
+      "default": {
+        "types": "./util.d.ts",
+        "default": "./util.js"
+      }
+    }
+  },
+  "dependencies": {
+    "@polkadot/api": "15.8.1",
+    "@polkadot/api-augment": "15.8.1",
+    "@polkadot/types": "15.8.1",
+    "@polkadot/types-codec": "15.8.1",
+    "@polkadot/types-create": "15.8.1",
+    "@polkadot/util": "^13.4.3",
+    "@polkadot/util-crypto": "^13.4.3",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.8.1"
+  }
+}

@@ -1174,9 +1174,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/api-contract@file:./.polkadot-js-api/packages/api-contract/build::locator=contracts-ui%40workspace%3A.":
+"@polkadot/api-contract@file:./.api-contract/build::locator=contracts-ui%40workspace%3A.":
   version: 15.8.1
-  resolution: "@polkadot/api-contract@file:./.polkadot-js-api/packages/api-contract/build#./.polkadot-js-api/packages/api-contract/build::hash=fab177&locator=contracts-ui%40workspace%3A."
+  resolution: "@polkadot/api-contract@file:./.api-contract/build#./.api-contract/build::hash=fab177&locator=contracts-ui%40workspace%3A."
   dependencies:
     "@polkadot/api": 15.8.1
     "@polkadot/api-augment": 15.8.1
@@ -3842,7 +3842,7 @@ __metadata:
     "@heroicons/react": ^1.0.6
     "@istanbuljs/nyc-config-typescript": ^1.0.2
     "@polkadot/api": 15.8.1
-    "@polkadot/api-contract": "file:./.polkadot-js-api/packages/api-contract/build"
+    "@polkadot/api-contract": "file:./.api-contract/build"
     "@polkadot/extension-dapp": ^0.58.6
     "@polkadot/types": 15.8.1
     "@polkadot/ui-keyring": ^3.12.2
