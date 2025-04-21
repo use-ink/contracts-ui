@@ -3,7 +3,7 @@
 
 import { useNavigate } from 'react-router';
 
-import { MAINNETS, TESTNETS } from '../../../constants';
+import { TESTNETS } from '../../../constants';
 import { useApi } from 'ui/contexts';
 import { classes } from 'lib/util';
 import { Dropdown } from 'ui/components';
@@ -13,18 +13,18 @@ const testnetOptions = TESTNETS.map(network => ({
   value: network.rpc,
 }));
 
-const mainnetOptions = MAINNETS.map(network => ({
-  label: network.name,
-  value: network.rpc,
-}));
+// const mainnetOptions = MAINNETS.map(network => ({
+//   label: network.name,
+//   value: network.rpc,
+// }));
 
-const allOptions = [...testnetOptions, ...mainnetOptions];
+const allOptions = [...testnetOptions];
 
 const dropdownOptions = [
-  {
-    label: 'Live Networks',
-    options: mainnetOptions,
-  },
+  // {
+  //   label: 'Live Networks',
+  //   options: mainnetOptions,
+  // },
   {
     label: 'Test Networks',
     options: testnetOptions,
