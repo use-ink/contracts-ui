@@ -8,6 +8,7 @@ export const LOCAL_STORAGE_KEY = {
   CUSTOM_ENDPOINT: 'contractsUiCustomEndpoint',
   PREFERRED_ENDPOINT: 'contractsUiPreferredEndpoint',
   THEME: 'theme',
+  VERSION: 'inkVersion',
 } as const;
 
 export type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
