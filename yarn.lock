@@ -1174,9 +1174,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/api-contract@file:./.api-contract/build::locator=contracts-ui%40workspace%3A.":
+"@polkadot/api-contract@npm:15.8.1":
   version: 15.8.1
-  resolution: "@polkadot/api-contract@file:./.api-contract/build#./.api-contract/build::hash=ebb2da&locator=contracts-ui%40workspace%3A."
+  resolution: "@polkadot/api-contract@npm:15.8.1"
   dependencies:
     "@polkadot/api": "npm:15.8.1"
     "@polkadot/api-augment": "npm:15.8.1"
@@ -1187,7 +1187,7 @@ __metadata:
     "@polkadot/util-crypto": "npm:^13.4.3"
     rxjs: "npm:^7.8.1"
     tslib: "npm:^2.8.1"
-  checksum: 10/bed0a6e1b1bfe8dedae982536458b2882bb0ca5e3b54e88ef20687344991bcbf8daafd3a6da87109615e2dfbc5ab711bfc4a8783208bed5b768d670db553f3d7
+  checksum: 10/39faecc46621714b85efdaabe60a414decb82002ef928b42175cc652313a57682ce1cbcca50e54aff5cc910134b17ca524e9d5a18e063c8cd0950a9197176f01
   languageName: node
   linkType: hard
 
@@ -1224,6 +1224,23 @@ __metadata:
     rxjs: "npm:^7.8.1"
     tslib: "npm:^2.8.1"
   checksum: 10/2c86b4c4a00967d6071ff9705e6805e1d65c851fd3b82a7e27416ac5547f07cece7da36c955ecfce3f599484aef13309870398d1596c5d9e720c5160843af8f8
+  languageName: node
+  linkType: hard
+
+"@polkadot/api-revive@file:./.api-revive/build::locator=contracts-ui%40workspace%3A.":
+  version: 15.8.1
+  resolution: "@polkadot/api-revive@file:./.api-revive/build#./.api-revive/build::hash=16e0e4&locator=contracts-ui%40workspace%3A."
+  dependencies:
+    "@polkadot/api": "npm:15.8.1"
+    "@polkadot/api-augment": "npm:15.8.1"
+    "@polkadot/types": "npm:15.8.1"
+    "@polkadot/types-codec": "npm:15.8.1"
+    "@polkadot/types-create": "npm:15.8.1"
+    "@polkadot/util": "npm:^13.4.3"
+    "@polkadot/util-crypto": "npm:^13.4.3"
+    rxjs: "npm:^7.8.1"
+    tslib: "npm:^2.8.1"
+  checksum: 10/019eb69f965ef04b522a9825faa03c4e64985f209e7765fbdf787d51b2755c7dcecac2b739d5a55156d30490f6f68958102192fb2ab94536c2df9a6662930a3c
   languageName: node
   linkType: hard
 
@@ -3842,7 +3859,8 @@ __metadata:
     "@heroicons/react": "npm:^1.0.6"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.2"
     "@polkadot/api": "npm:15.8.1"
-    "@polkadot/api-contract": "file:./.api-contract/build"
+    "@polkadot/api-contract": "npm:15.8.1"
+    "@polkadot/api-revive": "file:./.api-revive/build"
     "@polkadot/extension-dapp": "npm:^0.58.6"
     "@polkadot/types": "npm:15.8.1"
     "@polkadot/ui-keyring": "npm:^3.12.2"

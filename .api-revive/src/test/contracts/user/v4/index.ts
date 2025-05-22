@@ -1,0 +1,4 @@
+// Copyright 2017-2025 @polkadot/api-revive authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
+export { default as events } from './events.contract.json' assert { type: 'json' };
