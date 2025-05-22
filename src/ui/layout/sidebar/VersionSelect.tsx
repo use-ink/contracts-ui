@@ -10,7 +10,7 @@ export function VersionSelect() {
     },
     {
       label: 'ink! v5',
-      value: 'v',
+      value: 'v5',
     },
   ];
   return (
