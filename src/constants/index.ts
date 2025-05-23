@@ -19,13 +19,22 @@ export const LOCAL = {
   rpc: CUSTOM_ENDPOINT ? (JSON.parse(CUSTOM_ENDPOINT) as string) : 'ws://127.0.0.1:9944',
 };
 
+export const POP_NETWORK_TESTNET = {
+  relay: 'Paseo',
+  name: 'Pop Network Testnet',
+  rpc: 'wss://rpc2.paseo.popnetwork.xyz',
+};
+
 export const ROCOCO_CONTRACTS = {
   relay: 'Westend',
   name: 'Westend Asset Hub',
   rpc: 'wss://westend-asset-hub-rpc.polkadot.io',
 };
 
-export const TESTNETS = [...[ROCOCO_CONTRACTS].sort((a, b) => a.name.localeCompare(b.name)), LOCAL];
+export const TESTNETS = [
+  ...[ROCOCO_CONTRACTS, POP_NETWORK_TESTNET].sort((a, b) => a.name.localeCompare(b.name)),
+  LOCAL,
+];
 
 // export const MAINNETS = [].sort((a, b) => a.name.localeCompare(b.name));
 
