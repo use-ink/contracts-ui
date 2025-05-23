@@ -14,7 +14,7 @@ interface Props {
   contract: ContractDocument;
 }
 
-export function ContractRow({ contract: { address, name, date } }: Props) {
+export function ContractRow({ contract: { address, dotAddress, name, date } }: Props) {
   const { api } = useApi();
   const [isOnChain, setIsOnChain] = useState(true);
 
@@ -46,7 +46,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
       <div className="text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
 
       <div className="justify-self-end font-mono text-gray-500 dark:text-gray-400">
-        <ObservedBalance address={address} />
+        <ObservedBalance address={dotAddress} />
       </div>
     </Link>
   );

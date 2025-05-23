@@ -38,6 +38,7 @@ export function useStoredContract(address: string): UIContract | undefined {
     tx: contract.tx,
     codeHash: document.codeHash,
     address: contract.address.toString(),
+    dotAddress: document.dotAddress,
     date: document.date,
     id: document.id,
     type: document.external ? 'added' : 'instantiated',

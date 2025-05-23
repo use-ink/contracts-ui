@@ -29,7 +29,7 @@ function getFromPatron(field: string, hash: string) {
 
 export function getContractFromPatron(codeHash: string): Promise<File> {
   const metadataPromise = getFromPatron('metadata', codeHash);
-  const wasmPromise = getFromPatron('wasm', codeHash);
+  const wasmPromise = getFromPatron('contract_binary', codeHash);
   return Promise.all([metadataPromise, wasmPromise]).then(([metadataResponse, wasmResponse]) => {
     const result = Buffer.from(wasmResponse as ArrayBuffer).toString('hex');
 

@@ -63,8 +63,10 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
+  //@ts-ignore TODO: need to update type in @polkadot/api-contracts
+  const code = metadata?.json.source.contract_binary;
 
-  const params: Parameters<typeof api.call.contractsApi.instantiate> = useMemo(() => {
+  const params: Parameters<typeof api.call.reviveApi.instantiate> = useMemo(() => {
     return [
       accountId,
       deployConstructor?.isPayable
@@ -72,7 +74,7 @@ export function Step2() {
         : api.registry.createType('Balance', BN_ZERO),
       getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry),
       getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
-      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: metadata?.info.source.wasm },
+      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: code }, // TODO: update type
       inputData ?? '',
       isUsingSalt ? salt.value : '',
     ];
@@ -87,7 +89,8 @@ export function Step2() {
     storageDepositLimit.isActive,
     storageDepositLimit.value,
     codeHashUrlParam,
-    metadata?.info.source.wasm,
+    //@ts-ignore TODO: need to update type in @polkadot/api-contracts
+    metadata?.json.source.contract_binary,
     inputData,
     isUsingSalt,
     salt.value,
@@ -96,7 +99,7 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await api.call.contractsApi.instantiate(...params);
+        const result = await api.call.reviveApi.instantiate(...params);
 
         // default is no revert
         let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
@@ -111,7 +114,6 @@ export function Step2() {
           instantiateResult = {
             Ok: {
               result: { flags: convertedFlags, data: okResult.result.data },
-              accountId: okResult.accountId,
             },
           };
         } else {
@@ -123,7 +125,7 @@ export function Step2() {
           gasRequired: result.gasRequired,
           storageDeposit: result.storageDeposit,
           // debugMessage is Bytes, must convert to Text
-          debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
+          // debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
           result: instantiateResult,
         });
 
@@ -148,7 +150,8 @@ export function Step2() {
     setData({
       ...data,
       constructorIndex,
-      salt: params[6] || null,
+      // salt: params[6] || null,
+      salt: (params[6] as string | Uint8Array | null) || null,
       value: deployConstructor?.isPayable ? (params[1] as Balance) : undefined,
       argValues,
       storageDepositLimit: getStorageDepositLimit(

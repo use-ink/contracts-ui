@@ -21,7 +21,6 @@ import {
   SubmittableResult,
   UIContract,
 } from 'types';
-import { Text } from '@polkadot/types';
 import { AccountSelect } from 'ui/components/account';
 import { Button, Buttons, Dropdown } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
@@ -41,6 +40,7 @@ export const InteractTab = ({
     abi: { registry },
     tx,
     address,
+    dotAddress,
   },
 }: Props) => {
   const { accounts, api } = useApi();
@@ -73,7 +73,7 @@ export const InteractTab = ({
     setCallResults([]);
   }, [abi.messages, setArgValues, address]);
 
-  const params: Parameters<typeof api.call.contractsApi.call> = useMemo(() => {
+  const params: Parameters<typeof api.call.reviveApi.call> = useMemo(() => {
     return [
       accountId,
       address,
@@ -87,6 +87,7 @@ export const InteractTab = ({
   }, [
     accountId,
     address,
+    dotAddress,
     api.registry,
     inputData,
     isCustom,
@@ -101,7 +102,7 @@ export const InteractTab = ({
   useEffect((): void => {
     async function dryRun() {
       if (!message) return;
-      const newOutcome = await api.call.contractsApi.call(...params);
+      const newOutcome = await api.call.reviveApi.call(...params);
 
       // auto-generated @polkadot/type-augment data uses a different flag representation: `{"ok":{"flags":{"bits":0},"data":"0x00"}}`
       let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
@@ -117,7 +118,7 @@ export const InteractTab = ({
         gasRequired: newOutcome.gasRequired,
         storageDeposit: newOutcome.storageDeposit,
         // debugMessage is Bytes, must convert to Text
-        debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
+        // debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
         result: newOutcome.result.isOk
           ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
           : { Err: newOutcome.result.asErr },
@@ -136,7 +137,7 @@ export const InteractTab = ({
     }
 
     debouncedDryRun();
-  }, [api.call.contractsApi, message, params, nextResultId]);
+  }, [api.call.reviveApi, message, params, nextResultId]);
 
   useEffect(() => {
     async function processTx() {
@@ -164,7 +165,7 @@ export const InteractTab = ({
     setNextResultId(nextResultId + 1);
   };
 
-  const newId = useRef<number>();
+  const newId = useRef<number>(0);
 
   const call = () => {
     if (!outcome || !message || !accountId) throw new Error('Unable to call contract.');
