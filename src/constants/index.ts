@@ -26,18 +26,96 @@ export const POP_NETWORK_TESTNET = {
   rpc: 'wss://rpc2.paseo.popnetwork.xyz',
 };
 
-export const ROCOCO_CONTRACTS = {
+export const ASSET_HUB_WESTEND = {
   relay: 'Westend',
   name: 'Westend Asset Hub',
   rpc: 'wss://westend-asset-hub-rpc.polkadot.io',
 };
 
-export const TESTNETS = [
-  ...[ROCOCO_CONTRACTS, POP_NETWORK_TESTNET].sort((a, b) => a.name.localeCompare(b.name)),
+const PHALA_TESTNET = {
+  relay: undefined,
+  name: 'Phala PoC-6',
+  rpc: 'wss://poc6.phala.network/ws',
+};
+
+// https://docs.astar.network/docs/build/environment/endpoints
+const SHIDEN = {
+  relay: 'Kusama',
+  name: 'Astar Shiden',
+  rpc: 'wss://rpc.shiden.astar.network',
+};
+
+// https://docs.astar.network/docs/build/environment/endpoints
+const ASTAR_SHIBUYA = {
+  relay: 'Tokyo',
+  name: 'Astar Shibuya',
+  rpc: 'wss://rpc.shibuya.astar.network',
+};
+
+// https://docs.astar.network/docs/build/environment/endpoints
+const ASTAR = {
+  relay: 'Polkadot',
+  name: 'Astar',
+  rpc: 'wss://rpc.astar.network',
+};
+
+const ALEPH_ZERO_TESTNET = {
+  relay: undefined,
+  name: 'Aleph Zero Testnet',
+  rpc: 'wss://ws.test.azero.dev',
+};
+
+const ALEPH_ZERO = {
+  relay: undefined,
+  name: 'Aleph Zero',
+  rpc: 'wss://ws.azero.dev',
+};
+
+// https://docs.t3rn.io/collator/testnet/testnet-collator
+const T3RN_T0RN = {
+  relay: undefined,
+  name: 'T3RN T0RN',
+  rpc: 'wss://ws.t0rn.io',
+};
+
+const TERNOA_ALPHANET = {
+  relay: undefined,
+  name: 'Ternoa Alphanet',
+  rpc: 'wss://alphanet.ternoa.com',
+};
+// https://pendulum.gitbook.io/pendulum-docs/build/build-environment/foucoco-testnet
+const PENDULUM_TESTNET = {
+  relay: 'Rococo',
+  name: 'Pendulum Testnet',
+  rpc: 'wss://rpc-foucoco.pendulumchain.tech',
+};
+
+const ZEITGEIST_BATTERY_STATION = {
+  relay: 'Rococo',
+  name: 'Zeitgeist Battery Station',
+  rpc: 'wss://bsr.zeitgeist.pm',
+};
+
+export const TESTNETS_V6 = [
+  ...[ASSET_HUB_WESTEND, POP_NETWORK_TESTNET].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
 ];
 
-// export const MAINNETS = [].sort((a, b) => a.name.localeCompare(b.name));
+export const TESTNETS_V5 = [
+  ...[
+    PHALA_TESTNET,
+    ASTAR_SHIBUYA,
+    ALEPH_ZERO_TESTNET,
+    T3RN_T0RN,
+    TERNOA_ALPHANET,
+    PENDULUM_TESTNET,
+    POP_NETWORK_TESTNET,
+    ZEITGEIST_BATTERY_STATION,
+  ].sort((a, b) => a.name.localeCompare(b.name)),
+  LOCAL,
+];
+
+export const MAINNETS_V5 = [ASTAR, SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
 
 export const DEFAULT_DECIMALS = 12;
 
