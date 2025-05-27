@@ -11,6 +11,7 @@ import type {
   ContractMetadata,
   ContractMetadataV4,
   ContractMetadataV5,
+  ContractMetadataV6,
   ContractProjectInfo,
   ContractTypeSpec,
   EventRecord,
@@ -54,12 +55,15 @@ interface AbiJson {
 }
 
 type EventOf<M> = M extends { spec: { events: Vec<infer E> } } ? E : never;
-export type ContractMetadataSupported = ContractMetadataV4 | ContractMetadataV5;
+export type ContractMetadataSupported =
+  | ContractMetadataV4
+  | ContractMetadataV5
+  | ContractMetadataV6;
 type ContractEventSupported = EventOf<ContractMetadataSupported>;
 
 const l = logger('Abi');
 
-const PRIMITIVE_ALWAYS = ['AccountId', 'AccountIndex', 'Address', 'Balance'];
+const PRIMITIVE_ALWAYS = ['AccountId', 'AccountId20', 'AccountIndex', 'Address', 'Balance'];
 
 function findMessage<T extends AbiMessage>(list: T[], messageOrId: T | string | number): T {
   const message = isNumber(messageOrId)
@@ -99,7 +103,6 @@ function getMetadata(registry: Registry, json: AbiJson): ContractMetadataSupport
   }
 
   const upgradedMetadata = converter[1](registry, metadata[`as${converter[0]}`]);
-
   return upgradedMetadata;
 }
 

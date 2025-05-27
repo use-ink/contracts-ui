@@ -13,6 +13,7 @@ import {
   v3ToLatestCompatible,
   v4ToLatestCompatible,
   v5ToLatestCompatible,
+  v6ToLatestCompatible,
 } from './toLatestCompatible.js';
 
 describe('v0ToLatestCompatible', (): void => {
@@ -206,5 +207,34 @@ describe('v5ToLatestCompatible', (): void => {
 
   it('has the latest compatible version number', (): void => {
     expect(latest.version.toString()).toEqual('5');
+  });
+});
+
+describe('v6ToLatestCompatible', (): void => {
+  const registry = new TypeRegistry();
+  const contract = registry.createType('ContractMetadata', { V6: abis['ink_v6_erc20Metadata'] });
+  const latest = v6ToLatestCompatible(registry, contract.asV6);
+
+  it('has the correct messages', (): void => {
+    expect(latest.spec.messages.map(({ label }) => label.toString())).toEqual([
+      'total_supply',
+      'balance_of',
+      'allowance',
+      'transfer',
+      'approve',
+      'transfer_from',
+    ]);
+  });
+
+  it('has H160 as the type of balance_of argument', (): void => {
+    const arg = latest.spec.messages.find(m => m.label.toString() === 'balance_of')?.args[0];
+
+    const name = arg?.type.displayName?.[0]?.toString();
+
+    expect(name).toBe('H160');
+  });
+
+  it('has the latest compatible version number', (): void => {
+    expect(latest.version.toString()).toEqual('6');
   });
 });

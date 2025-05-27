@@ -1,9 +1,17 @@
-import type { ContractMetadataV4, ContractMetadataV5 } from '@polkadot/types/interfaces';
+import type {
+  ContractMetadataV4,
+  ContractMetadataV5,
+  ContractMetadataV6,
+} from '@polkadot/types/interfaces';
 import type { Registry } from '@polkadot/types/types';
 import type { ContractMetadataSupported } from './index.js';
-export declare const enumVersions: readonly ['V5', 'V4', 'V3', 'V2', 'V1'];
+export declare const enumVersions: readonly ['V6', 'V5', 'V4', 'V3', 'V2', 'V1'];
 type Versions = (typeof enumVersions)[number] | 'V0';
 type Converter = (registry: Registry, vx: any) => ContractMetadataSupported;
+export declare function v6ToLatestCompatible(
+  _registry: Registry,
+  v6: ContractMetadataV6,
+): ContractMetadataV6;
 export declare function v5ToLatestCompatible(
   _registry: Registry,
   v5: ContractMetadataV5,

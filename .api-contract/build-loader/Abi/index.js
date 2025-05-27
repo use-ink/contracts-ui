@@ -1,0 +1,355 @@
+// Copyright 2017-2025 @polkadot/api-contract authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+import { Option, TypeRegistry } from '@polkadot/types';
+import { TypeDefInfo } from '@polkadot/types-create';
+import {
+  assertReturn,
+  compactAddLength,
+  compactStripLength,
+  isBn,
+  isNumber,
+  isObject,
+  isString,
+  isUndefined,
+  logger,
+  stringCamelCase,
+  stringify,
+  u8aConcat,
+  u8aToHex,
+} from '@polkadot/util';
+import { convertVersions, enumVersions } from './toLatestCompatible.js';
+const l = logger('Abi');
+const PRIMITIVE_ALWAYS = ['AccountId', 'AccountId20', 'AccountIndex', 'Address', 'Balance'];
+function findMessage(list, messageOrId) {
+  const message = isNumber(messageOrId)
+    ? list[messageOrId]
+    : isString(messageOrId)
+      ? list.find(({ identifier }) =>
+          [identifier, stringCamelCase(identifier)].includes(messageOrId.toString()),
+        )
+      : messageOrId;
+  return assertReturn(
+    message,
+    () => `Attempted to call an invalid contract interface, ${stringify(messageOrId)}`,
+  );
+}
+function getMetadata(registry, json) {
+  // this is for V1, V2, V3
+  const vx = enumVersions.find(v => isObject(json[v]));
+  // this was added in V4
+  const jsonVersion = json.version;
+  if (!vx && jsonVersion && !enumVersions.find(v => v === `V${jsonVersion}`)) {
+    throw new Error(`Unable to handle version ${jsonVersion}`);
+  }
+  const metadata = registry.createType(
+    'ContractMetadata',
+    vx ? { [vx]: json[vx] } : jsonVersion ? { [`V${jsonVersion}`]: json } : { V0: json },
+  );
+  const converter = convertVersions.find(([v]) => metadata[`is${v}`]);
+  if (!converter) {
+    throw new Error(`Unable to convert ABI with version ${metadata.type} to a supported version`);
+  }
+  const upgradedMetadata = converter[1](registry, metadata[`as${converter[0]}`]);
+  return upgradedMetadata;
+}
+function parseJson(json, chainProperties) {
+  const registry = new TypeRegistry();
+  const info = registry.createType('ContractProjectInfo', json);
+  const metadata = getMetadata(registry, json);
+  const lookup = registry.createType('PortableRegistry', { types: metadata.types }, true);
+  // attach the lookup to the registry - now the types are known
+  registry.setLookup(lookup);
+  if (chainProperties) {
+    registry.setChainProperties(chainProperties);
+  }
+  // warm-up the actual type, pre-use
+  lookup.types.forEach(({ id }) => lookup.getTypeDef(id));
+  return [json, registry, metadata, info];
+}
+/**
+ * @internal
+ * Determines if the given input value is a ContractTypeSpec
+ */
+function isTypeSpec(value) {
+  return (
+    !!value && value instanceof Map && !isUndefined(value.type) && !isUndefined(value.displayName)
+  );
+}
+/**
+ * @internal
+ * Determines if the given input value is an Option
+ */
+function isOption(value) {
+  return !!value && value instanceof Option;
+}
+export class Abi {
+  events;
+  constructors;
+  info;
+  json;
+  messages;
+  metadata;
+  registry;
+  environment = new Map();
+  constructor(abiJson, chainProperties) {
+    [this.json, this.registry, this.metadata, this.info] = parseJson(
+      isString(abiJson) ? JSON.parse(abiJson) : abiJson,
+      chainProperties,
+    );
+    this.constructors = this.metadata.spec.constructors.map((spec, index) =>
+      this.#createMessage(spec, index, {
+        isConstructor: true,
+        isDefault: spec.default.isTrue,
+        isPayable: spec.payable.isTrue,
+        returnType: spec.returnType.isSome
+          ? this.registry.lookup.getTypeDef(spec.returnType.unwrap().type)
+          : null,
+      }),
+    );
+    this.events = this.metadata.spec.events.map((_, index) => this.#createEvent(index));
+    this.messages = this.metadata.spec.messages.map((spec, index) =>
+      this.#createMessage(spec, index, {
+        isDefault: spec.default.isTrue,
+        isMutating: spec.mutates.isTrue,
+        isPayable: spec.payable.isTrue,
+        returnType: spec.returnType.isSome
+          ? this.registry.lookup.getTypeDef(spec.returnType.unwrap().type)
+          : null,
+      }),
+    );
+    // NOTE See the rationale for having Option<...> values in the actual
+    // ContractEnvironmentV4 structure definition in interfaces/contractsAbi
+    // (Due to conversions, the fields may not exist)
+    for (const [key, opt] of this.metadata.spec.environment.entries()) {
+      if (isOption(opt)) {
+        if (opt.isSome) {
+          const value = opt.unwrap();
+          if (isBn(value)) {
+            this.environment.set(key, value);
+          } else if (isTypeSpec(value)) {
+            this.environment.set(key, this.registry.lookup.getTypeDef(value.type));
+          } else {
+            throw new Error(
+              `Invalid environment definition for ${key}:: Expected either Number or ContractTypeSpec`,
+            );
+          }
+        }
+      } else {
+        throw new Error(`Expected Option<*> definition for ${key} in ContractEnvironment`);
+      }
+    }
+  }
+  /**
+   * Warning: Unstable API, bound to change
+   */
+  decodeEvent(record) {
+    switch (this.metadata.version.toString()) {
+      // earlier version are hoisted to v4
+      case '4':
+        return this.#decodeEventV4(record);
+      // Latest
+      default:
+        return this.#decodeEventV5(record);
+    }
+  }
+  #decodeEventV5 = record => {
+    // Find event by first topic, which potentially is the signature_topic
+    const signatureTopic = record.topics[0];
+    const data = record.event.data[1];
+    if (signatureTopic) {
+      const event = this.events.find(
+        e =>
+          e.signatureTopic !== undefined &&
+          e.signatureTopic !== null &&
+          e.signatureTopic === signatureTopic.toHex(),
+      );
+      // Early return if event found by signature topic
+      if (event) {
+        return event.fromU8a(data);
+      }
+    }
+    // If no event returned yet, it might be anonymous
+    const amountOfTopics = record.topics.length;
+    const potentialEvents = this.events.filter(e => {
+      // event can't have a signature topic
+      if (e.signatureTopic !== null && e.signatureTopic !== undefined) {
+        return false;
+      }
+      // event should have same amount of indexed fields as emitted topics
+      const amountIndexed = e.args.filter(a => a.indexed).length;
+      if (amountIndexed !== amountOfTopics) {
+        return false;
+      }
+      // If all conditions met, it's a potential event
+      return true;
+    });
+    if (potentialEvents.length === 1) {
+      return potentialEvents[0].fromU8a(data);
+    }
+    throw new Error('Unable to determine event');
+  };
+  #decodeEventV4 = record => {
+    const data = record.event.data[1];
+    const index = data[0];
+    const event = this.events[index];
+    if (!event) {
+      throw new Error(`Unable to find event with index ${index}`);
+    }
+    return event.fromU8a(data.subarray(1));
+  };
+  /**
+   * Warning: Unstable API, bound to change
+   */
+  decodeConstructor(data) {
+    return this.#decodeMessage('message', this.constructors, data);
+  }
+  /**
+   * Warning: Unstable API, bound to change
+   */
+  decodeMessage(data) {
+    return this.#decodeMessage('message', this.messages, data);
+  }
+  findConstructor(constructorOrId) {
+    return findMessage(this.constructors, constructorOrId);
+  }
+  findMessage(messageOrId) {
+    return findMessage(this.messages, messageOrId);
+  }
+  #createArgs = (args, spec) => {
+    return args.map(({ label, type }, index) => {
+      try {
+        if (!isObject(type)) {
+          throw new Error('Invalid type definition found');
+        }
+        const displayName = type.displayName.length
+          ? type.displayName[type.displayName.length - 1].toString()
+          : undefined;
+        const camelName = stringCamelCase(label);
+        if (displayName && PRIMITIVE_ALWAYS.includes(displayName)) {
+          return {
+            name: camelName,
+            type: {
+              info: TypeDefInfo.Plain,
+              type: displayName,
+            },
+          };
+        }
+        const typeDef = this.registry.lookup.getTypeDef(type.type);
+        return {
+          name: camelName,
+          type:
+            displayName && !typeDef.type.startsWith(displayName)
+              ? { displayName, ...typeDef }
+              : typeDef,
+        };
+      } catch (error) {
+        l.error(`Error expanding argument ${index} in ${stringify(spec)}`);
+        throw error;
+      }
+    });
+  };
+  #createMessageParams = (args, spec) => {
+    return this.#createArgs(args, spec);
+  };
+  #createEventParams = (args, spec) => {
+    const params = this.#createArgs(args, spec);
+    return params.map((p, index) => ({ ...p, indexed: args[index].indexed.toPrimitive() }));
+  };
+  #createEvent = index => {
+    // TODO TypeScript would narrow this type to the correct version,
+    // but version is `Text` so I need to call `toString()` here,
+    // which breaks the type inference.
+    switch (this.metadata.version.toString()) {
+      case '4':
+        return this.#createEventV4(this.metadata.spec.events[index], index);
+      default:
+        return this.#createEventV5(this.metadata.spec.events[index], index);
+    }
+  };
+  #createEventV5 = (spec, index) => {
+    const args = this.#createEventParams(spec.args, spec);
+    const event = {
+      args,
+      docs: spec.docs.map(d => d.toString()),
+      fromU8a: data => ({
+        args: this.#decodeArgs(args, data),
+        event,
+      }),
+      identifier: [spec.module_path, spec.label].join('::'),
+      index,
+      signatureTopic: spec.signature_topic.isSome ? spec.signature_topic.unwrap().toHex() : null,
+    };
+    return event;
+  };
+  #createEventV4 = (spec, index) => {
+    const args = this.#createEventParams(spec.args, spec);
+    const event = {
+      args,
+      docs: spec.docs.map(d => d.toString()),
+      fromU8a: data => ({
+        args: this.#decodeArgs(args, data),
+        event,
+      }),
+      identifier: spec.label.toString(),
+      index,
+    };
+    return event;
+  };
+  #createMessage = (spec, index, add = {}) => {
+    const args = this.#createMessageParams(spec.args, spec);
+    const identifier = spec.label.toString();
+    const message = {
+      ...add,
+      args,
+      docs: spec.docs.map(d => d.toString()),
+      fromU8a: data => ({
+        args: this.#decodeArgs(args, data),
+        message,
+      }),
+      identifier,
+      index,
+      isDefault: spec.default.isTrue,
+      method: stringCamelCase(identifier),
+      path: identifier.split('::').map(s => stringCamelCase(s)),
+      selector: spec.selector,
+      toU8a: params => this.#encodeMessageArgs(spec, args, params),
+    };
+    return message;
+  };
+  #decodeArgs = (args, data) => {
+    // for decoding we expect the input to be just the arg data, no selectors
+    // no length added (this allows use with events as well)
+    let offset = 0;
+    return args.map(({ type: { lookupName, type } }) => {
+      const value = this.registry.createType(lookupName || type, data.subarray(offset));
+      offset += value.encodedLength;
+      return value;
+    });
+  };
+  #decodeMessage = (type, list, data) => {
+    const [, trimmed] = compactStripLength(data);
+    const selector = trimmed.subarray(0, 4);
+    const message = list.find(m => m.selector.eq(selector));
+    if (!message) {
+      throw new Error(`Unable to find ${type} with selector ${u8aToHex(selector)}`);
+    }
+    return message.fromU8a(trimmed.subarray(4));
+  };
+  #encodeMessageArgs = ({ label, selector }, args, data) => {
+    if (data.length !== args.length) {
+      throw new Error(
+        `Expected ${args.length} arguments to contract message '${label.toString()}', found ${data.length}`,
+      );
+    }
+    return compactAddLength(
+      u8aConcat(
+        this.registry.createType('ContractSelector', selector).toU8a(),
+        ...args.map(({ type: { lookupName, type } }, index) =>
+          this.registry.createType(lookupName || type, data[index]).toU8a(),
+        ),
+      ),
+    );
+  };
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxvRUFBb0U7QUFDcEUsc0NBQXNDO0FBT3RDLE9BQU8sRUFBRSxNQUFNLEVBQUUsWUFBWSxFQUFFLE1BQU0saUJBQWlCLENBQUM7QUFDdkQsT0FBTyxFQUFFLFdBQVcsRUFBRSxNQUFNLHdCQUF3QixDQUFDO0FBQ3JELE9BQU8sRUFBRSxZQUFZLEVBQUUsZ0JBQWdCLEVBQUUsa0JBQWtCLEVBQUUsSUFBSSxFQUFFLFFBQVEsRUFBRSxRQUFRLEVBQUUsUUFBUSxFQUFFLFdBQVcsRUFBRSxNQUFNLEVBQUUsZUFBZSxFQUFFLFNBQVMsRUFBRSxTQUFTLEVBQUUsUUFBUSxFQUFFLE1BQU0sZ0JBQWdCLENBQUM7QUFFOUwsT0FBTyxFQUFFLGVBQWUsRUFBRSxZQUFZLEVBQUUsTUFBTSx5QkFBeUIsQ0FBQztBQVl4RSxNQUFNLENBQUMsR0FBRyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUM7QUFFeEIsTUFBTSxnQkFBZ0IsR0FBRyxDQUFDLFdBQVcsRUFBRSxhQUFhLEVBQUUsY0FBYyxFQUFFLFNBQVMsRUFBRSxTQUFTLENBQUMsQ0FBQztBQUU1RixTQUFTLFdBQVcsQ0FBeUIsSUFBUyxFQUFFLFdBQWdDO0lBQ3RGLE1BQU0sT0FBTyxHQUFHLFFBQVEsQ0FBQyxXQUFXLENBQUM7UUFDbkMsQ0FBQyxDQUFDLElBQUksQ0FBQyxXQUFXLENBQUM7UUFDbkIsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUM7WUFDckIsQ0FBQyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQyxFQUFFLFVBQVUsRUFBRSxFQUFFLEVBQUUsQ0FBQyxDQUFDLFVBQVUsRUFBRSxlQUFlLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQyxRQUFRLENBQUMsV0FBVyxDQUFDLFFBQVEsRUFBRSxDQUFDLENBQUM7WUFDM0csQ0FBQyxDQUFDLFdBQVcsQ0FBQztJQUVs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
+//# sourceHash=4ab60a32998dace807d57241dfe7c506089ce789675e90ad11bafe763ae95d23

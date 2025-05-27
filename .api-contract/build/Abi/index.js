@@ -17,7 +17,7 @@ import {
 } from '@polkadot/util';
 import { convertVersions, enumVersions } from './toLatestCompatible.js';
 const l = logger('Abi');
-const PRIMITIVE_ALWAYS = ['AccountId', 'AccountIndex', 'Address', 'Balance'];
+const PRIMITIVE_ALWAYS = ['AccountId', 'AccountId20', 'AccountIndex', 'Address', 'Balance'];
 function findMessage(list, messageOrId) {
   const message = isNumber(messageOrId)
     ? list[messageOrId]
@@ -36,21 +36,30 @@ function getMetadata(registry, json) {
   const vx = enumVersions.find(v => isObject(json[v]));
   // this was added in V4
   const jsonVersion = json.version;
+  console.log('parsing metadata');
+  console.log(jsonVersion);
+  console.log(enumVersions);
   if (!vx && jsonVersion && !enumVersions.find(v => v === `V${jsonVersion}`)) {
     throw new Error(`Unable to handle version ${jsonVersion}`);
   }
+  console.log('parsed');
+  console.log(vx);
   const metadata = registry.createType(
     'ContractMetadata',
     vx ? { [vx]: json[vx] } : jsonVersion ? { [`V${jsonVersion}`]: json } : { V0: json },
   );
+  console.log('m');
   const converter = convertVersions.find(([v]) => metadata[`is${v}`]);
   if (!converter) {
     throw new Error(`Unable to convert ABI with version ${metadata.type} to a supported version`);
   }
+  console.log('converter');
   const upgradedMetadata = converter[1](registry, metadata[`as${converter[0]}`]);
+  console.log('up');
   return upgradedMetadata;
 }
 function parseJson(json, chainProperties) {
+  console.log('parsing json');
   const registry = new TypeRegistry();
   const info = registry.createType('ContractProjectInfo', json);
   const metadata = getMetadata(registry, json);
@@ -62,6 +71,7 @@ function parseJson(json, chainProperties) {
   }
   // warm-up the actual type, pre-use
   lookup.types.forEach(({ id }) => lookup.getTypeDef(id));
+  console.log('warmed up');
   return [json, registry, metadata, info];
 }
 /**
@@ -90,10 +100,12 @@ export class Abi {
   registry;
   environment = new Map();
   constructor(abiJson, chainProperties) {
+    console.log('constructor');
     [this.json, this.registry, this.metadata, this.info] = parseJson(
       isString(abiJson) ? JSON.parse(abiJson) : abiJson,
       chainProperties,
     );
+    console.log('parsed json');
     this.constructors = this.metadata.spec.constructors.map((spec, index) =>
       this.__internal__createMessage(spec, index, {
         isConstructor: true,
@@ -104,7 +116,9 @@ export class Abi {
           : null,
       }),
     );
+    console.log('created constructors');
     this.events = this.metadata.spec.events.map((_, index) => this.__internal__createEvent(index));
+    console.log('created events');
     this.messages = this.metadata.spec.messages.map((spec, index) =>
       this.__internal__createMessage(spec, index, {
         isDefault: spec.default.isTrue,
@@ -115,6 +129,7 @@ export class Abi {
           : null,
       }),
     );
+    console.log('created messages');
     // NOTE See the rationale for having Option<...> values in the actual
     // ContractEnvironmentV4 structure definition in interfaces/contractsAbi
     // (Due to conversions, the fields may not exist)
@@ -136,6 +151,7 @@ export class Abi {
         throw new Error(`Expected Option<*> definition for ${key} in ContractEnvironment`);
       }
     }
+    console.log('created environment');
   }
   /**
    * Warning: Unstable API, bound to change

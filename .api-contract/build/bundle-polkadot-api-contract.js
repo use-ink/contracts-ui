@@ -149,9 +149,12 @@
     );
   }
 
-  const enumVersions = ['V5', 'V4', 'V3', 'V2', 'V1'];
+  const enumVersions = ['V6', 'V5', 'V4', 'V3', 'V2', 'V1'];
   function createConverter(next, step) {
     return (registry, input) => next(registry, step(registry, input));
+  }
+  function v6ToLatestCompatible(_registry, v6) {
+    return v6;
   }
   function v5ToLatestCompatible(_registry, v5) {
     return v5;
@@ -164,6 +167,7 @@
   const v1ToLatestCompatible = createConverter(v2ToLatestCompatible, v1ToV2);
   const v0ToLatestCompatible = createConverter(v1ToLatestCompatible, v0ToV1);
   const convertVersions = [
+    ['V6', v6ToLatestCompatible],
     ['V5', v5ToLatestCompatible],
     ['V4', v4ToLatestCompatible],
     ['V3', v3ToLatestCompatible],
@@ -173,7 +177,7 @@
   ];
 
   const l$2 = util.logger('Abi');
-  const PRIMITIVE_ALWAYS = ['AccountId', 'AccountIndex', 'Address', 'Balance'];
+  const PRIMITIVE_ALWAYS = ['AccountId', 'AccountId20', 'AccountIndex', 'Address', 'Balance'];
   function findMessage(list, messageOrId) {
     const message = util.isNumber(messageOrId)
       ? list[messageOrId]
@@ -190,21 +194,30 @@
   function getMetadata(registry, json) {
     const vx = enumVersions.find(v => util.isObject(json[v]));
     const jsonVersion = json.version;
+    console.log('parsing metadata');
+    console.log(jsonVersion);
+    console.log(enumVersions);
     if (!vx && jsonVersion && !enumVersions.find(v => v === `V${jsonVersion}`)) {
       throw new Error(`Unable to handle version ${jsonVersion}`);
     }
+    console.log('parsed');
+    console.log(vx);
     const metadata = registry.createType(
       'ContractMetadata',
       vx ? { [vx]: json[vx] } : jsonVersion ? { [`V${jsonVersion}`]: json } : { V0: json },
     );
+    console.log('m');
     const converter = convertVersions.find(([v]) => metadata[`is${v}`]);
     if (!converter) {
       throw new Error(`Unable to convert ABI with version ${metadata.type} to a supported version`);
     }
+    console.log('converter');
     const upgradedMetadata = converter[1](registry, metadata[`as${converter[0]}`]);
+    console.log('up');
     return upgradedMetadata;
   }
   function parseJson(json, chainProperties) {
+    console.log('parsing json');
     const registry = new types.TypeRegistry();
     const info = registry.createType('ContractProjectInfo', json);
     const metadata = getMetadata(registry, json);
@@ -214,6 +227,7 @@
       registry.setChainProperties(chainProperties);
     }
     lookup.types.forEach(({ id }) => lookup.getTypeDef(id));
+    console.log('warmed up');
     return [json, registry, metadata, info];
   }
   function isTypeSpec(value) {
@@ -237,10 +251,12 @@
     registry;
     environment = new Map();
     constructor(abiJson, chainProperties) {
+      console.log('constructor');
       [this.json, this.registry, this.metadata, this.info] = parseJson(
         util.isString(abiJson) ? JSON.parse(abiJson) : abiJson,
         chainProperties,
       );
+      console.log('parsed json');
       this.constructors = this.metadata.spec.constructors.map((spec, index) =>
         this.__internal__createMessage(spec, index, {
           isConstructor: true,
@@ -251,9 +267,11 @@
             : null,
         }),
       );
+      console.log('created constructors');
       this.events = this.metadata.spec.events.map((_, index) =>
         this.__internal__createEvent(index),
       );
+      console.log('created events');
       this.messages = this.metadata.spec.messages.map((spec, index) =>
         this.__internal__createMessage(spec, index, {
           isDefault: spec.default.isTrue,
@@ -264,6 +282,7 @@
             : null,
         }),
       );
+      console.log('created messages');
       for (const [key, opt] of this.metadata.spec.environment.entries()) {
         if (isOption(opt)) {
           if (opt.isSome) {
@@ -282,6 +301,7 @@
           throw new Error(`Expected Option<*> definition for ${key} in ContractEnvironment`);
         }
       }
+      console.log('created environment');
     }
     decodeEvent(record) {
       switch (this.metadata.version.toString()) {

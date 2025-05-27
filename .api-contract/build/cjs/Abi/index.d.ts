@@ -2,6 +2,7 @@ import type {
   ChainProperties,
   ContractMetadataV4,
   ContractMetadataV5,
+  ContractMetadataV6,
   ContractProjectInfo,
   EventRecord,
 } from '@polkadot/types/interfaces';
@@ -13,7 +14,10 @@ import type {
   DecodedEvent,
   DecodedMessage,
 } from '../types.js';
-export type ContractMetadataSupported = ContractMetadataV4 | ContractMetadataV5;
+export type ContractMetadataSupported =
+  | ContractMetadataV4
+  | ContractMetadataV5
+  | ContractMetadataV6;
 export declare class Abi {
   #private;
   readonly events: AbiEvent[];
