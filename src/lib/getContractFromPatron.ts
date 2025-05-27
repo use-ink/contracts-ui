@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { Buffer } from 'buffer';
+import { getVersion } from 'ui/contexts';
 
 function getFromPatron(field: string, hash: string) {
   const options = {
@@ -29,7 +30,8 @@ function getFromPatron(field: string, hash: string) {
 
 export function getContractFromPatron(codeHash: string): Promise<File> {
   const metadataPromise = getFromPatron('metadata', codeHash);
-  const wasmPromise = getFromPatron('contract_binary', codeHash);
+  const field = getVersion() === 'v6' ? 'contract_binary' : 'wasm';
+  const wasmPromise = getFromPatron(field, codeHash);
   return Promise.all([metadataPromise, wasmPromise]).then(([metadataResponse, wasmResponse]) => {
     const result = Buffer.from(wasmResponse as ArrayBuffer).toString('hex');
 

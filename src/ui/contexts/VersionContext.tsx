@@ -31,3 +31,6 @@ export const useVersion = () => {
   }
   return context;
 };
+
+export const getVersion = () =>
+  (localStorage.getItem(LOCAL_STORAGE_KEY.VERSION) as InkVersion | null) || 'v6';

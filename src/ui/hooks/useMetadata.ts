@@ -34,9 +34,7 @@ function deriveFromJson(
   let value: Abi | undefined = undefined;
 
   try {
-    console.log('to validate');
     value = new Abi(source, api?.registry.getChainProperties());
-    console.log(value);
     const name = options.name || value.info.contract.name.toString();
 
     return {
@@ -68,7 +66,6 @@ const EMPTY: MetadataState = {
 };
 
 function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Validation {
-  console.log('Validating metadata', metadata);
   if (!metadata) {
     return {
       isValid: false,
@@ -77,7 +74,6 @@ function validate(metadata: Abi | undefined, { isWasmRequired }: Options): Valid
         'Invalid contract file format. Please upload the generated .contract bundle for your smart contract.',
     };
   }
-  console.log('Metadata value');
 
   return {
     isValid: true,
@@ -94,7 +90,6 @@ export function useMetadata(
   options: Options & Callbacks = {},
 ): UseMetadata {
   const { api } = useApi();
-  console.log(' use metadaata aqui');
   const { isWasmRequired = false, revertOnFileRemove = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
     deriveFromJson({ isWasmRequired }, initialValue, api),
@@ -102,7 +97,6 @@ export function useMetadata(
 
   function onChange(file: FileState): void {
     try {
-      console.log(' on change');
       const json = JSON.parse(utf8decoder.decode(file.data)) as Record<string, unknown>;
       const name = file.name.replace('.contract', '').replace('.json', '').replace('_', ' ');
 
@@ -112,7 +106,6 @@ export function useMetadata(
 
       callbacks.onChange && callbacks.onChange(file, json);
     } catch (error) {
-      console.log('aqui');
       console.error(error);
 
       setState({
