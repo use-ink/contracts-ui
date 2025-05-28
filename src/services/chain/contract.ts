@@ -11,7 +11,8 @@ import {
   InstantiateData,
   SubmittableExtrinsic,
 } from 'types';
-import { u8aToU8a } from '@polkadot/util';
+//import { u8aToU8a } from '@polkadot/util';
+import { useVersion } from 'ui/contexts';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -27,7 +28,10 @@ export function createInstantiateTx(
   }: Omit<InstantiateData, 'name'>,
 ): SubmittableExtrinsic<'promise'> {
   //@ts-ignore TODO: need to update type in @polkadot/api-contracts
-  const wasm = u8aToU8a(metadata?.json.source.contract_binary);
+  const { version } = useVersion();
+  const binaryKey = version === 'v6' ? 'contract_binary' : 'wasm';
+  const wasm = metadata?.info.source.wasm;
+  //const wasm = u8aToU8a(metadata?.json.source.contract_binary);
   const isValid = codeHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
@@ -55,9 +59,13 @@ export function createInstantiateTx(
 }
 
 export async function getContractInfo(api: ApiPromise, address: string) {
-  // TODO: fix isValidAddress
-  if (isValidAddress(address) || true) {
-    return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
+  const { version } = useVersion();
+  if (isValidAddress(address, version)) {
+    if (version === 'v6') {
+      return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
+    } else {
+      return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
+    }
   }
 }
 
