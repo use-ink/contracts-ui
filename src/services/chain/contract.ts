@@ -11,7 +11,6 @@ import {
   InstantiateData,
   SubmittableExtrinsic,
 } from 'types';
-//import { u8aToU8a } from '@polkadot/util';
 import { useVersion } from 'ui/contexts';
 
 export function createInstantiateTx(
@@ -27,11 +26,7 @@ export function createInstantiateTx(
     storageDepositLimit,
   }: Omit<InstantiateData, 'name'>,
 ): SubmittableExtrinsic<'promise'> {
-  //@ts-ignore TODO: need to update type in @polkadot/api-contracts
-  const { version } = useVersion();
-  const binaryKey = version === 'v6' ? 'contract_binary' : 'wasm';
   const wasm = metadata?.info.source.wasm;
-  //const wasm = u8aToU8a(metadata?.json.source.contract_binary);
   const isValid = codeHash || !!wasm;
 
   if (isValid && metadata && isNumber(constructorIndex) && metadata && argValues) {
@@ -46,7 +41,7 @@ export function createInstantiateTx(
 
     const codeOrBlueprint = codeHash
       ? new BlueprintPromise(api, metadata, codeHash)
-      : new CodePromise(api, metadata, wasm && wasm);
+      : new CodePromise(api, metadata, wasm && wasm.toU8a());
 
     const transformed = transformUserInput(api.registry, constructor.args, argValues);
 

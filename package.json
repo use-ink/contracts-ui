@@ -33,10 +33,10 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^1.0.6",
-    "@polkadot/api": "15.8.1",
-    "@polkadot/api-contract": "file:./.api-contract/build",
+    "@polkadot/api": "file:../polkadot-js-api/packages/api/build",
+    "@polkadot/api-contract": "file:../polkadot-js-api/packages/api-contract/build",
     "@polkadot/extension-dapp": "^0.58.6",
-    "@polkadot/types": "15.8.1",
+    "@polkadot/types": "file:../polkadot-js-api/packages/types/build",
     "@polkadot/ui-keyring": "^3.12.2",
     "@polkadot/ui-shared": "^3.12.2",
     "big.js": "^6.2.1",
