@@ -74,7 +74,7 @@ export const InteractTab = ({
     setCallResults([]);
   }, [abi.messages, setArgValues, address]);
 
-  const params: Parameters<typeof api.call.reviveApi.call> = useMemo(() => {
+  const params: Parameters<typeof api.call.contractsApi.call> = useMemo(() => {
     return [
       accountId,
       address,
@@ -115,27 +115,28 @@ export const InteractTab = ({
         convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
       }
 
-      const convertedOutcome: ContractExecResult = await (version === 'v6'
-        ? api.registry.createType('ContractExecResult', {
-            registry: api.registry,
-            gasConsumed: newOutcome.gasConsumed,
-            gasRequired: newOutcome.gasRequired,
-            storageDeposit: newOutcome.storageDeposit,
-            result: newOutcome.result.isOk
-              ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
-              : { Err: newOutcome.result.asErr },
-          })
-        : api.registry.createType('ContractExecResult', {
-            registry: api.registry,
-            gasConsumed: newOutcome.gasConsumed,
-            gasRequired: newOutcome.gasRequired,
-            storageDeposit: newOutcome.storageDeposit,
-            // debugMessage is Bytes, must convert to Text
-            debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
-            result: newOutcome.result.isOk
-              ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
-              : { Err: newOutcome.result.asErr },
-          }));
+      const convertedOutcome: ContractExecResult =
+        version === 'v6'
+          ? api.registry.createType('ContractExecResult', {
+              registry: api.registry,
+              gasConsumed: newOutcome.gasConsumed,
+              gasRequired: newOutcome.gasRequired,
+              storageDeposit: newOutcome.storageDeposit,
+              result: newOutcome.result.isOk
+                ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+                : { Err: newOutcome.result.asErr },
+            })
+          : api.registry.createType('ContractExecResult', {
+              registry: api.registry,
+              gasConsumed: newOutcome.gasConsumed,
+              gasRequired: newOutcome.gasRequired,
+              storageDeposit: newOutcome.storageDeposit,
+              // debugMessage is Bytes, must convert to Text
+              debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
+              result: newOutcome.result.isOk
+                ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+                : { Err: newOutcome.result.asErr },
+            });
 
       // Update the state with the adapted outcome
       setOutcome(convertedOutcome);

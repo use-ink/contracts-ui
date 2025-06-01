@@ -14,7 +14,7 @@ import {
   ArgumentForm,
 } from 'ui/components/form';
 import { createConstructorOptions } from 'ui/util/dropdown';
-import { useApi, useInstantiate } from 'ui/contexts';
+import { useApi, useInstantiate, useVersion } from 'ui/contexts';
 import {
   useArgValues,
   useFormField,
@@ -39,6 +39,7 @@ function validateSalt(value: OrFalsy<string>) {
 export function Step2() {
   const { api } = useApi();
   const { data, setStep, step, setData, dryRunResult, setDryRunResult } = useInstantiate();
+  const { version } = useVersion();
   const { accountId, metadata } = data;
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
@@ -63,10 +64,8 @@ export function Step2() {
   }, [metadata, setConstructorIndex]);
 
   const [isUsingSalt, toggleIsUsingSalt] = useToggle(true);
-  //@ts-ignore TODO: need to update type in @polkadot/api-contracts
-  const code = metadata?.json.source.contract_binary;
 
-  const params: Parameters<typeof api.call.reviveApi.instantiate> = useMemo(() => {
+  const params: Parameters<typeof api.call.contractsApi.instantiate> = useMemo(() => {
     return [
       accountId,
       deployConstructor?.isPayable
@@ -74,7 +73,7 @@ export function Step2() {
         : api.registry.createType('Balance', BN_ZERO),
       getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry),
       getStorageDepositLimit(storageDepositLimit.isActive, storageDepositLimit.value, api.registry),
-      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: code }, // TODO: update type
+      codeHashUrlParam ? { Existing: codeHashUrlParam } : { Upload: metadata?.info.source.wasm },
       inputData ?? '',
       isUsingSalt ? salt.value : '',
     ];
@@ -89,8 +88,7 @@ export function Step2() {
     storageDepositLimit.isActive,
     storageDepositLimit.value,
     codeHashUrlParam,
-    //@ts-ignore TODO: need to update type in @polkadot/api-contracts
-    metadata?.json.source.contract_binary,
+    metadata?.info.source.wasm,
     inputData,
     isUsingSalt,
     salt.value,
@@ -99,7 +97,9 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await api.call.reviveApi.instantiate(...params);
+        const result = await (version === 'v6'
+          ? api.call.reviveApi.instantiate(...params)
+          : api.call.contractsApi.instantiate(...params));
 
         // default is no revert
         let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
@@ -120,14 +120,22 @@ export function Step2() {
           instantiateResult = { Err: result.result.asErr };
         }
 
-        const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
-          gasConsumed: result.gasConsumed,
-          gasRequired: result.gasRequired,
-          storageDeposit: result.storageDeposit,
-          // debugMessage is Bytes, must convert to Text
-          // debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
-          result: instantiateResult,
-        });
+        const convertedOutcome =
+          version === 'v6'
+            ? api.registry.createType('ContractInstantiateResult', {
+                gasConsumed: result.gasConsumed,
+                gasRequired: result.gasRequired,
+                storageDeposit: result.storageDeposit,
+                result: instantiateResult,
+              })
+            : api.registry.createType('ContractInstantiateResult', {
+                gasConsumed: result.gasConsumed,
+                gasRequired: result.gasRequired,
+                storageDeposit: result.storageDeposit,
+                // debugMessage is Bytes, must convert to Text
+                debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
+                result: instantiateResult,
+              });
 
         const resultJson = JSON.stringify(convertedOutcome.toJSON());
         const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
