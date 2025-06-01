@@ -21,10 +21,11 @@ import {
   SubmittableResult,
   UIContract,
 } from 'types';
+import { Text } from '@polkadot/types';
 import { AccountSelect } from 'ui/components/account';
 import { Button, Buttons, Dropdown } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
-import { useApi, useTransactions } from 'ui/contexts';
+import { useApi, useTransactions, useVersion } from 'ui/contexts';
 import { useArgValues, useBalance, useWeight } from 'ui/hooks';
 import { useAccountAvailable } from 'ui/hooks/useAccountAvailable';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -40,10 +41,10 @@ export const InteractTab = ({
     abi: { registry },
     tx,
     address,
-    dotAddress,
   },
 }: Props) => {
   const { accounts, api } = useApi();
+  const { version } = useVersion();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues, inputData] = useArgValues(message, registry);
@@ -87,7 +88,6 @@ export const InteractTab = ({
   }, [
     accountId,
     address,
-    dotAddress,
     api.registry,
     inputData,
     isCustom,
@@ -102,7 +102,10 @@ export const InteractTab = ({
   useEffect((): void => {
     async function dryRun() {
       if (!message) return;
-      const newOutcome = await api.call.reviveApi.call(...params);
+
+      const newOutcome = await (version === 'v6'
+        ? api.call.reviveApi.call(...params)
+        : api.call.contractsApi.call(...params));
 
       // auto-generated @polkadot/type-augment data uses a different flag representation: `{"ok":{"flags":{"bits":0},"data":"0x00"}}`
       let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
@@ -112,17 +115,27 @@ export const InteractTab = ({
         convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
       }
 
-      const convertedOutcome: ContractExecResult = api.registry.createType('ContractExecResult', {
-        registry: api.registry,
-        gasConsumed: newOutcome.gasConsumed,
-        gasRequired: newOutcome.gasRequired,
-        storageDeposit: newOutcome.storageDeposit,
-        // debugMessage is Bytes, must convert to Text
-        // debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
-        result: newOutcome.result.isOk
-          ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
-          : { Err: newOutcome.result.asErr },
-      });
+      const convertedOutcome: ContractExecResult = await (version === 'v6'
+        ? api.registry.createType('ContractExecResult', {
+            registry: api.registry,
+            gasConsumed: newOutcome.gasConsumed,
+            gasRequired: newOutcome.gasRequired,
+            storageDeposit: newOutcome.storageDeposit,
+            result: newOutcome.result.isOk
+              ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+              : { Err: newOutcome.result.asErr },
+          })
+        : api.registry.createType('ContractExecResult', {
+            registry: api.registry,
+            gasConsumed: newOutcome.gasConsumed,
+            gasRequired: newOutcome.gasRequired,
+            storageDeposit: newOutcome.storageDeposit,
+            // debugMessage is Bytes, must convert to Text
+            debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
+            result: newOutcome.result.isOk
+              ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+              : { Err: newOutcome.result.asErr },
+          }));
 
       // Update the state with the adapted outcome
       setOutcome(convertedOutcome);
@@ -137,7 +150,7 @@ export const InteractTab = ({
     }
 
     debouncedDryRun();
-  }, [api.call.reviveApi, message, params, nextResultId]);
+  }, [api.call.reviveApi, api.call.contractsApi, message, params, nextResultId]);
 
   useEffect(() => {
     async function processTx() {

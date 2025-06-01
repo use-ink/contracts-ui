@@ -49,5 +49,4 @@ export interface UIContract extends Pick<ContractPromise, 'abi' | 'tx'> {
   type: 'added' | 'instantiated';
   codeHash: string;
   address: string;
-  dotAddress: string;
 }

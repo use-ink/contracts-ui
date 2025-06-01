@@ -179,11 +179,9 @@ export function useNewContract() {
       }
 
       const codeHash = contract.abi.info.source.wasmHash.toHex();
-
       const document = {
         abi: contract.abi.json,
         address: calculatedAddress!,
-        dotAddress: fromEthAddress(calculatedAddress!),
         codeHash,
         date: new Date().toISOString(),
         name,

@@ -14,7 +14,6 @@ export interface CodeBundleDocument {
 export interface ContractDocument extends CodeBundleDocument {
   abi: Record<string, unknown>;
   address: string;
-  dotAddress: string;
   external?: boolean;
 }
 

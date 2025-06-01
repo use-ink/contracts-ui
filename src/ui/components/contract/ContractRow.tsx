@@ -6,16 +6,18 @@ import { Link } from 'react-router-dom';
 import { Identicon } from '../account/Identicon';
 import { ObservedBalance } from '../common/ObservedBalance';
 import { ContractDocument } from 'types';
-import { useApi } from 'ui/contexts';
+import { useApi, useVersion } from 'ui/contexts';
 import { displayDate, truncate } from 'lib/util';
 import { getContractInfo } from 'services/chain';
+import { fromEthAddress } from 'ui/hooks/useNewContract';
 
 interface Props {
   contract: ContractDocument;
 }
 
-export function ContractRow({ contract: { address, dotAddress, name, date } }: Props) {
+export function ContractRow({ contract: { address, name, date } }: Props) {
   const { api } = useApi();
+  const { version } = useVersion();
   const [isOnChain, setIsOnChain] = useState(true);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export function ContractRow({ contract: { address, dotAddress, name, date } }: P
       <div className="text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
 
       <div className="justify-self-end font-mono text-gray-500 dark:text-gray-400">
-        <ObservedBalance address={dotAddress} />
+        <ObservedBalance address={version === 'v6' ? fromEthAddress(address) : address} />
       </div>
     </Link>
   );

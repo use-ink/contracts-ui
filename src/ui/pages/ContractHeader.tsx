@@ -6,14 +6,15 @@ import { CopyButton } from '../components/common/CopyButton';
 import { ObservedBalance } from '../components/common/ObservedBalance';
 import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
+import { useVersion } from 'ui/contexts';
+import { fromEthAddress } from 'ui/hooks/useNewContract';
 
 interface Props {
   document: UIContract;
 }
 
-export function ContractHeader({
-  document: { name, type, address, dotAddress, date, codeHash },
-}: Props) {
+export function ContractHeader({ document: { name, type, address, date, codeHash } }: Props) {
+  const { version } = useVersion();
   switch (type) {
     case 'added':
       return (
@@ -27,7 +28,7 @@ export function ContractHeader({
           </div>{' '}
           on {displayDate(date)} and holds a value of{' '}
           <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
-            <ObservedBalance address={dotAddress} />
+            <ObservedBalance address={version === 'v6' ? fromEthAddress(address) : address} />
           </span>
         </div>
       );
@@ -54,7 +55,7 @@ export function ContractHeader({
           </Link>{' '}
           on {displayDate(date)} and holds a value of{' '}
           <span className="relative inline-block rounded bg-blue-500 bg-opacity-20 px-1.5 py-1 font-mono text-xs text-blue-400">
-            <ObservedBalance address={dotAddress} />
+            <ObservedBalance address={version === 'v6' ? fromEthAddress(address) : address} />
           </span>
         </div>
       );
