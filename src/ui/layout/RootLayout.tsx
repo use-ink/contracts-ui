@@ -3,8 +3,10 @@
 
 import { HTMLAttributes } from 'react';
 import { classes } from 'lib/util';
+import { useVersion } from 'ui/contexts';
 
 export function RootLayout({ accessory, heading, help, children, aside }: PageProps) {
+  const { version } = useVersion();
   return (
     <section
       className={classes(
@@ -12,13 +14,15 @@ export function RootLayout({ accessory, heading, help, children, aside }: PagePr
         aside && 'grid grid-cols-[1fr_400px] gap-10',
       )}
     >
-      <div className="col-span-2 mb-6 max-h-[100px] bg-yellow-400 p-4 text-center text-lg font-semibold text-black">
-        NOTE: This is an ALPHA version for the ink! v6 Alpha release. If you run into issues, please
-        open an issue at{' '}
-        <a className="text-purple-700" href="https://github.com/use-ink/contracts-ui">
-          https://github.com/use-ink/contracts-ui
-        </a>
-      </div>
+      {version === 'v6' && (
+        <div className="col-span-2 mb-6 max-h-[100px] bg-yellow-400 p-4 text-center text-lg font-semibold text-black">
+          NOTE: This is an ALPHA version for the ink! v6 Alpha release. If you run into issues,
+          please open an issue at{' '}
+          <a className="text-purple-700" href="https://github.com/use-ink/contracts-ui">
+            https://github.com/use-ink/contracts-ui
+          </a>
+        </div>
+      )}
       <main>
         <header className="mb-10 space-y-1 border-b border-gray-200 pb-6 dark:border-gray-800">
           {accessory && <div className="float-right">{accessory}</div>}
