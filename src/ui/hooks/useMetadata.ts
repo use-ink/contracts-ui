@@ -35,6 +35,7 @@ function deriveFromJson(
 
   try {
     value = new Abi(source, api?.registry.getChainProperties());
+
     const name = options.name || value.info.contract.name.toString();
 
     return {
@@ -90,6 +91,7 @@ export function useMetadata(
   options: Options & Callbacks = {},
 ): UseMetadata {
   const { api } = useApi();
+
   const { isWasmRequired = false, revertOnFileRemove = false, ...callbacks } = options;
   const [state, setState] = useState<MetadataState>(() =>
     deriveFromJson({ isWasmRequired }, initialValue, api),

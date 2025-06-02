@@ -9,7 +9,6 @@ import { ForgetContractModal } from 'ui/components/modal';
 import { useApi, useDatabase, useVersion } from 'ui/contexts';
 import { truncate } from 'lib/util';
 import type { UIContract } from 'types';
-import { a } from 'vitest/dist/chunks/suite.B2jumIFP.js';
 
 interface Props {
   contract: UIContract;

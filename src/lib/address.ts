@@ -87,11 +87,6 @@ export function toEthAddress(accountId: Uint8Array | string): string {
   }
 }
 
-export function isEthAddress(addr: string): boolean {
-  const hex = addr.startsWith('0x') ? addr.slice(2) : addr;
-  return hex.length === 40;
-}
-
 export function fromEthAddress(ethAddress: string): string {
   // Remove '0x' prefix if it exists
   const cleanAddress = ethAddress.startsWith('0x') ? ethAddress.slice(2) : ethAddress;
