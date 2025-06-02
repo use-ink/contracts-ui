@@ -7,7 +7,7 @@ import { ObservedBalance } from '../components/common/ObservedBalance';
 import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
 import { useVersion } from 'ui/contexts';
-import { fromEthAddress } from 'lib/address';
+import { fromEthAddress, isEthAddress } from 'lib/address';
 
 interface Props {
   document: UIContract;
@@ -15,6 +15,16 @@ interface Props {
 
 export function ContractHeader({ document: { name, type, address, date, codeHash } }: Props) {
   const { version } = useVersion();
+  const isMismatch = version === 'v6' && !isEthAddress(address);
+  if (isMismatch) {
+    return (
+      <div className="rounded-md border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800 dark:border-yellow-600 dark:bg-yellow-900 dark:text-yellow-200">
+        ⚠️ This contract is not compatible with the selected <strong>ink! v6</strong> mode.
+        <br />
+        Please remove the contract or switch to a compatible version using the dropdown.
+      </div>
+    );
+  }
   switch (type) {
     case 'added':
       return (

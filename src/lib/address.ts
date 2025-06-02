@@ -1,3 +1,6 @@
+// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
+// SPDX-License-Identifier: GPL-3.0-only
+
 import { BigNumberish, ethers } from 'ethers';
 import { hexToU8a, stringToU8a, u8aToHex } from '@polkadot/util';
 import { keccak256 } from 'ethers';
@@ -76,6 +79,11 @@ export function toEthAddress(accountId: Uint8Array | string): string {
   }
 }
 
+export function isEthAddress(addr: string): boolean {
+  const hex = addr.startsWith('0x') ? addr.slice(2) : addr;
+  return hex.length === 40;
+}
+
 export function fromEthAddress(ethAddress: string): string {
   // Remove '0x' prefix if it exists
   const cleanAddress = ethAddress.startsWith('0x') ? ethAddress.slice(2) : ethAddress;
@@ -89,15 +97,10 @@ export function fromEthAddress(ethAddress: string): string {
   }
 
   // Create a 32-byte buffer
-  const result = new Uint8Array(32);
+  const result = new Uint8Array(32).fill(0xee);
 
   // Set the first 20 bytes to the Ethereum address
   result.set(addressBytes, 0);
-
-  // Fill the remaining 12 bytes with 0xEE
-  for (let i = 20; i < 32; i++) {
-    result[i] = 0xee;
-  }
 
   return u8aToHex(result);
 }

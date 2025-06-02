@@ -9,7 +9,7 @@ import { ContractDocument } from 'types';
 import { useApi, useVersion } from 'ui/contexts';
 import { displayDate, truncate } from 'lib/util';
 import { getContractInfo } from 'services/chain';
-import { fromEthAddress } from 'lib/address';
+import { fromEthAddress, isEthAddress } from 'lib/address';
 
 interface Props {
   contract: ContractDocument;
@@ -19,6 +19,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
   const { api } = useApi();
   const { version } = useVersion();
   const [isOnChain, setIsOnChain] = useState(true);
+  const isMismatch = version === 'v6' && !isEthAddress(address);
 
   useEffect(() => {
     getContractInfo(api, address, version)
@@ -48,7 +49,11 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
       <div className="text-gray-500 dark:text-gray-400">{displayDate(date)}</div>
 
       <div className="justify-self-end font-mono text-gray-500 dark:text-gray-400">
-        <ObservedBalance address={version === 'v6' ? fromEthAddress(address) : address} />
+        {isMismatch ? (
+          <span className="text-xs text-red-500">Not compatible with ink! v6</span>
+        ) : (
+          <ObservedBalance address={version === 'v6' ? fromEthAddress(address) : address} />
+        )}
       </div>
     </Link>
   );
