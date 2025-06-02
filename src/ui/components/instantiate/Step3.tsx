@@ -46,14 +46,14 @@ export function Step3() {
             );
             const inputData = constructor?.toU8a(transformed).slice(1); // exclude the first byte (the length byte)
             // Pass the contract data and extrinsic to onSuccess
-            // @ts-ignore: TODO: solve type issue
+            // @ts-ignore
             return onSuccess({
               ...result,
               contractData: {
-                salt: salt?.toString() || '', // Using codeHash as salt for demonstration
+                salt: salt?.toString() || '',
                 data: inputData || new Uint8Array(),
-                // @ts-ignore TODO
-                code: metadata?.json.source.wasm,
+                // @ts-ignore
+                code: metadata?.json.source.contract_binary,
               },
             });
           },
