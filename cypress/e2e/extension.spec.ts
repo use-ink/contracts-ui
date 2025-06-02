@@ -7,11 +7,11 @@ interface Window {
 
 describe('Signer extension flow on live networks', () => {
   before(() => {
-    cy.visit(`/instantiate/?rpc=wss://rococo-contracts-rpc.polkadot.io`);
+    cy.visit(`/instantiate/?rpc=wss://rpc2.paseo.popnetwork.xyz`);
   });
 
   it('connects to Rococo', () => {
-    cy.contains('Connecting to wss://rococo-contracts-rpc.polkadot.io').should('not.exist', {
+    cy.contains('Connecting to wss://rpc2.paseo.popnetwork.xyz').should('not.exist', {
       timeout: 25000,
     });
   });
@@ -19,7 +19,7 @@ describe('Signer extension flow on live networks', () => {
   it('Rococo is selected in the network connection dropdown', () => {
     cy.get('.dropdown.chain')
       .find('.dropdown__single-value')
-      .should('contain', 'Contracts (Rococo)');
+      .should('contain', 'Pop Network Testnet');
   });
 
   it('Displays help text for no extension installed', () => {
