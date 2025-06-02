@@ -1,13 +1,11 @@
 // Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { useNavigate } from 'react-router-dom';
 import { Error } from './Error';
 import { useApi } from 'ui/contexts';
 import { LOCAL } from 'src/constants';
 
 function ContractsNodeHelp() {
-  const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col items-center">
