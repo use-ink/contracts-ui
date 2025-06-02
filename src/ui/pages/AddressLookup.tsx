@@ -60,7 +60,7 @@ export function AddressLookup() {
     async function validate() {
       if (address !== searchString) {
         if (isValidAddress(searchString, version)) {
-          const isOnChain = await getContractInfo(api, searchString);
+          const isOnChain = await getContractInfo(api, searchString, version);
           if (isOnChain) {
             const contract = await db.contracts.get({ address: searchString });
             // Contract is already instantiated in current UI

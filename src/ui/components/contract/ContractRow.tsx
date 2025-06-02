@@ -9,7 +9,7 @@ import { ContractDocument } from 'types';
 import { useApi, useVersion } from 'ui/contexts';
 import { displayDate, truncate } from 'lib/util';
 import { getContractInfo } from 'services/chain';
-import { fromEthAddress } from 'ui/hooks/useNewContract';
+import { fromEthAddress } from 'lib/address';
 
 interface Props {
   contract: ContractDocument;
@@ -21,7 +21,7 @@ export function ContractRow({ contract: { address, name, date } }: Props) {
   const [isOnChain, setIsOnChain] = useState(true);
 
   useEffect(() => {
-    getContractInfo(api, address)
+    getContractInfo(api, address, version)
       .then(info => {
         setIsOnChain(info ? true : false);
       })

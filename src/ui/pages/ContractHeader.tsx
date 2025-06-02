@@ -7,7 +7,7 @@ import { ObservedBalance } from '../components/common/ObservedBalance';
 import { displayDate, truncate } from 'lib/util';
 import { UIContract } from 'types';
 import { useVersion } from 'ui/contexts';
-import { fromEthAddress } from 'ui/hooks/useNewContract';
+import { fromEthAddress } from 'lib/address';
 
 interface Props {
   document: UIContract;

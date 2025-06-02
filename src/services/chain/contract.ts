@@ -11,7 +11,7 @@ import {
   InstantiateData,
   SubmittableExtrinsic,
 } from 'types';
-import { useVersion } from 'ui/contexts';
+import { InkVersion } from 'ui/contexts';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -53,13 +53,12 @@ export function createInstantiateTx(
   }
 }
 
-export async function getContractInfo(api: ApiPromise, address: string) {
-  const { version } = useVersion();
+export async function getContractInfo(api: ApiPromise, address: string, version: InkVersion) {
   if (isValidAddress(address, version)) {
     if (version === 'v6') {
       return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
     } else {
-      return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
+      return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
     }
   }
 }

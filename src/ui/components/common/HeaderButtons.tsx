@@ -6,9 +6,10 @@ import { ArrowCircleRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { getContractInfo } from 'services/chain';
 import { ForgetContractModal } from 'ui/components/modal';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useApi, useDatabase, useVersion } from 'ui/contexts';
 import { truncate } from 'lib/util';
 import type { UIContract } from 'types';
+import { a } from 'vitest/dist/chunks/suite.B2jumIFP.js';
 
 interface Props {
   contract: UIContract;
@@ -17,6 +18,7 @@ interface Props {
 export function HeaderButtons({ contract: { address, codeHash } }: Props) {
   const { api } = useApi();
   const { db } = useDatabase();
+  const { version } = useVersion();
   const [isOnChain, setIsOnChain] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ export function HeaderButtons({ contract: { address, codeHash } }: Props) {
   };
 
   useEffect(() => {
-    getContractInfo(api, address)
+    getContractInfo(api, address, version)
       .then(info => {
         setIsOnChain(info ? true : false);
       })
