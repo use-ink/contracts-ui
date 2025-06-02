@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { FormField } from '../form/FormField';
 import { CodeHash } from './CodeHash';
 import { CodeBundleDocument } from 'types';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useApi, useDatabase, useVersion } from 'ui/contexts';
 
 import { useDbQuery } from 'ui/hooks';
 import { filterOnChainCode } from 'services/chain';
@@ -55,6 +55,7 @@ function List({ items, label }: ListProps) {
 export function AvailableCodeBundles() {
   const { api } = useApi();
   const { db } = useDatabase();
+  const { version } = useVersion();
   const [data, isLoading] = useDbQuery(
     () => db.codeBundles.orderBy('date').reverse().toArray(),
     [db],
@@ -63,7 +64,7 @@ export function AvailableCodeBundles() {
 
   useEffect(() => {
     data &&
-      filterOnChainCode(api, data)
+      filterOnChainCode(api, data, version)
         .then(codes => setCodes(codes))
         .catch(console.error);
   }, [api, data]);

@@ -17,7 +17,7 @@ import {
   getValidation,
   useMetadataField,
 } from 'ui/components';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useApi, useDatabase, useVersion } from 'ui/contexts';
 import { useNonEmptyString } from 'ui/hooks/useNonEmptyString';
 import { useStoredMetadata } from 'ui/hooks/useStoredMetadata';
 import { RootLayout } from 'ui/layout';
@@ -27,6 +27,7 @@ export function AddressLookup() {
   const [address, setAddress] = useState('');
   const { api } = useApi();
   const navigate = useNavigate();
+  const { version } = useVersion();
 
   const {
     file,
@@ -58,8 +59,8 @@ export function AddressLookup() {
   useEffect((): void => {
     async function validate() {
       if (address !== searchString) {
-        if (isValidAddress(searchString)) {
-          const isOnChain = await getContractInfo(api, searchString);
+        if (isValidAddress(searchString, version)) {
+          const isOnChain = await getContractInfo(api, searchString, version);
           if (isOnChain) {
             const contract = await db.contracts.get({ address: searchString });
             // Contract is already instantiated in current UI
@@ -96,7 +97,11 @@ export function AddressLookup() {
         id="address"
         isError={!!searchString && !address}
         label="Contract Address"
-        message={isValidAddress(searchString) ? 'Address is not on-chain ' : 'Address is not valid'}
+        message={
+          isValidAddress(searchString, version)
+            ? 'Address is not on-chain '
+            : 'Address is not valid'
+        }
       >
         <Input
           className={classes('relative mb-4 flex items-center')}

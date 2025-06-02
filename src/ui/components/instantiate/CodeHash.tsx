@@ -5,7 +5,7 @@ import { ChevronRightIcon, TrashIcon } from '@heroicons/react/outline';
 import { useEffect, useMemo, useState } from 'react';
 import { checkOnChainCode } from 'services/chain';
 import { SimpleSpread, VoidFn } from 'types';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useApi, useDatabase, useVersion } from 'ui/contexts';
 import { classes, truncate } from 'lib/util';
 import { CopyButton } from 'ui/components/common/CopyButton';
 
@@ -35,11 +35,12 @@ export function CodeHash({
 }: Props) {
   const { api } = useApi();
   const { db } = useDatabase();
+  const { version } = useVersion();
   const [isOnChain, setIsOnChain] = useState(true);
   const parsedDate = useMemo(() => (date ? new Date(date) : undefined), [date]);
 
   useEffect(() => {
-    checkOnChainCode(api, codeHash)
+    checkOnChainCode(api, codeHash, version)
       .then(codeStorageExists => {
         setIsOnChain(codeStorageExists ? true : false);
       })
