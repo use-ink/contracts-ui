@@ -7,7 +7,7 @@ import { getAddress } from 'ethers';
 import { decodeAddress } from '@polkadot/keyring';
 import { create1, create2, toEthAddress, isEthAddress } from './address';
 
-// https://github.com/paritytech/polkadot-sdk/blob/65ade498b63bf2216d1c444f28c1b48085417f13/substrate/frame/revive/src/address.rs#L257
+// Similar to pallet_revive tests: https://github.com/paritytech/polkadot-sdk/blob/65ade498b63bf2216d1c444f28c1b48085417f13/substrate/frame/revive/src/address.rs#L257
 describe('address utilities', () => {
   const deployer = '0x' + '01'.repeat(20);
   const code = Uint8Array.from([0x60, 0x00, 0x60, 0x00, 0x55, 0x60, 0x01, 0x60, 0x00]);

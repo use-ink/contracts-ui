@@ -63,16 +63,28 @@ export async function getContractInfo(api: ApiPromise, address: string, version:
   }
 }
 
-export async function checkOnChainCode(api: ApiPromise, codeHash: string): Promise<boolean> {
-  return isValidCodeHash(codeHash)
-    ? (await api.query.contracts.pristineCode(codeHash)).isSome
-    : false;
+export async function checkOnChainCode(
+  api: ApiPromise,
+  codeHash: string,
+  version: InkVersion,
+): Promise<boolean> {
+  if (!isValidCodeHash(codeHash)) return false;
+
+  if (version === 'v6') {
+    return (await api.query.revive.pristineCode(codeHash)).isSome;
+  } else {
+    return (await api.query.contracts.pristineCode(codeHash)).isSome;
+  }
 }
 
-export async function filterOnChainCode(api: ApiPromise, items: CodeBundleDocument[]) {
+export async function filterOnChainCode(
+  api: ApiPromise,
+  items: CodeBundleDocument[],
+  version: InkVersion,
+) {
   const codes: CodeBundleDocument[] = [];
   for (const item of items) {
-    const isOnChain = await checkOnChainCode(api, item.codeHash);
+    const isOnChain = await checkOnChainCode(api, item.codeHash, version);
     isOnChain && codes.push(item);
   }
   return codes;

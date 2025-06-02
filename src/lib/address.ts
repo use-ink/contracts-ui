@@ -33,12 +33,20 @@ export function create1(deployer: string, nonce: number): Address {
   return ethers.getAddress('0x' + hash.substring(26));
 }
 
+/**
+ * Determine the address of a contract using CREATE2 semantics.
+ * @param deployer The address of the deployer
+ * @param code The contract code (WASM or EVM bytecode)
+ * @param inputData The constructor arguments or init input
+ * @param salt A 32-byte salt value (as hex string)
+ * @returns The deterministic contract address
+ */
 export function create2(
   deployer: string,
   code: Uint8Array,
   inputData: Uint8Array,
   salt: string,
-): string {
+): Address {
   const initCode = new Uint8Array([...code, ...inputData]);
   const initCodeHash = hexToU8a(keccak256(initCode));
 
