@@ -12,12 +12,6 @@ export const LOCAL_STORAGE_KEY = {
 
 export type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
 
-export const ROCOCO_CONTRACTS = {
-  relay: 'Rococo',
-  name: 'Contracts (Rococo)',
-  rpc: 'wss://rococo-contracts-rpc.polkadot.io',
-};
-
 const CUSTOM_ENDPOINT = localStorage.getItem(LOCAL_STORAGE_KEY.CUSTOM_ENDPOINT);
 export const LOCAL = {
   relay: undefined,
@@ -32,7 +26,7 @@ export const LOCAL = {
 //   rpc: 'wss://wss.agung.peaq.network',
 // };
 
-const POP_NETWORK_TESTNET = {
+export const POP_NETWORK_TESTNET = {
   relay: 'Paseo',
   name: 'Pop Network Testnet',
   rpc: 'wss://rpc2.paseo.popnetwork.xyz',
@@ -104,7 +98,6 @@ const ZEITGEIST_BATTERY_STATION = {
 
 export const TESTNETS = [
   ...[
-    ROCOCO_CONTRACTS,
     // PEAQ_AGUNG,
     PHALA_TESTNET,
     ASTAR_SHIBUYA,
