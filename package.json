@@ -60,7 +60,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.12.20",
+    "@cypress/code-coverage": "^3.14.4",
     "@cypress/snapshot": "^2.1.7",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
