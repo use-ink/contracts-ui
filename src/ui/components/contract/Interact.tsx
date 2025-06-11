@@ -25,7 +25,7 @@ import { Text } from '@polkadot/types';
 import { AccountSelect } from 'ui/components/account';
 import { Button, Buttons, Dropdown } from 'ui/components/common';
 import { ArgumentForm, Form, FormField, OptionsForm } from 'ui/components/form';
-import { useApi, useTransactions } from 'ui/contexts';
+import { useApi, useTransactions, useVersion } from 'ui/contexts';
 import { useArgValues, useBalance, useWeight } from 'ui/hooks';
 import { useAccountAvailable } from 'ui/hooks/useAccountAvailable';
 import { useStorageDepositLimit } from 'ui/hooks/useStorageDepositLimit';
@@ -44,6 +44,7 @@ export const InteractTab = ({
   },
 }: Props) => {
   const { accounts, api } = useApi();
+  const { version } = useVersion();
   const { queue, process, txs } = useTransactions();
   const [message, setMessage] = useState<AbiMessage>();
   const [argValues, setArgValues, inputData] = useArgValues(message, registry);
@@ -101,30 +102,49 @@ export const InteractTab = ({
   useEffect((): void => {
     async function dryRun() {
       if (!message) return;
-      const newOutcome = await api.call.contractsApi.call(...params);
 
       // auto-generated @polkadot/type-augment data uses a different flag representation: `{"ok":{"flags":{"bits":0},"data":"0x00"}}`
       let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
-      if (newOutcome.result.isOk) {
-        const flags = newOutcome.result.asOk.flags;
-        const isRevert = flags.bits.toNumber();
-        convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+
+      if (version === 'v6') {
+        const newOutcome = await api.call.reviveApi.call(...params);
+        if (newOutcome.result.isOk) {
+          const flags = newOutcome.result.asOk.flags;
+          const isRevert = flags.bits.toNumber();
+          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+        }
+
+        const convertedOutcome = api.registry.createType('ContractExecResult', {
+          gasConsumed: newOutcome.gasConsumed,
+          gasRequired: newOutcome.gasRequired,
+          storageDeposit: newOutcome.storageDeposit,
+          result: newOutcome.result.isOk
+            ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+            : { Err: newOutcome.result.asErr },
+        });
+        // Update the state with the adapted outcome
+        setOutcome(convertedOutcome);
+      } else {
+        const newOutcome = await api.call.contractsApi.call(...params);
+        if (newOutcome.result.isOk) {
+          const flags = newOutcome.result.asOk.flags;
+          const isRevert = flags.bits.toNumber();
+          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+        }
+
+        const convertedOutcome = api.registry.createType('ContractExecResult', {
+          gasConsumed: newOutcome.gasConsumed,
+          gasRequired: newOutcome.gasRequired,
+          storageDeposit: newOutcome.storageDeposit,
+          // debugMessage is Bytes, must convert to Text
+          debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
+          result: newOutcome.result.isOk
+            ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+            : { Err: newOutcome.result.asErr },
+        });
+        // Update the state with the adapted outcome
+        setOutcome(convertedOutcome);
       }
-
-      const convertedOutcome: ContractExecResult = api.registry.createType('ContractExecResult', {
-        registry: api.registry,
-        gasConsumed: newOutcome.gasConsumed,
-        gasRequired: newOutcome.gasRequired,
-        storageDeposit: newOutcome.storageDeposit,
-        // debugMessage is Bytes, must convert to Text
-        debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
-        result: newOutcome.result.isOk
-          ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
-          : { Err: newOutcome.result.asErr },
-      });
-
-      // Update the state with the adapted outcome
-      setOutcome(convertedOutcome);
     }
 
     function debouncedDryRun() {
@@ -136,7 +156,7 @@ export const InteractTab = ({
     }
 
     debouncedDryRun();
-  }, [api.call.contractsApi, message, params, nextResultId]);
+  }, [api.call.reviveApi, api.call.contractsApi, message, params, nextResultId]);
 
   useEffect(() => {
     async function processTx() {
@@ -164,7 +184,7 @@ export const InteractTab = ({
     setNextResultId(nextResultId + 1);
   };
 
-  const newId = useRef<number>();
+  const newId = useRef<number>(0);
 
   const call = () => {
     if (!outcome || !message || !accountId) throw new Error('Unable to call contract.');

@@ -17,6 +17,7 @@ import CreatableSelect from 'react-select/creatable';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import { classes, isValidAddress } from 'lib/util';
 import type { DropdownOption, DropdownProps } from 'types';
+import { useVersion } from 'ui/contexts';
 
 function isGroupedOptions<T>(
   options: ReactSelectProps<DropdownOption<T>, false>['options'],
@@ -83,13 +84,13 @@ export function Dropdown<T>({
   value: _value,
   onCreate,
 }: DropdownProps<T>) {
+  const { version } = useVersion();
   const onChange = useCallback(
     (option: DropdownOption<T> | null): void => {
       option && _onChange(option.value);
     },
     [_onChange],
   );
-
   const value = useMemo(() => getOption(options, _value), [options, _value]);
 
   return (
@@ -102,7 +103,7 @@ export function Dropdown<T>({
       isDisabled={isDisabled}
       isSearchable={isSearchable}
       isValidNewOption={inputValue =>
-        isValidAddress(inputValue) && !getOption(options, inputValue as T)
+        isValidAddress(inputValue, version) && !getOption(options, inputValue as T)
       }
       onChange={onChange}
       onCreateOption={onCreate}

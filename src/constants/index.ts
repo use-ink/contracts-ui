@@ -8,6 +8,7 @@ export const LOCAL_STORAGE_KEY = {
   CUSTOM_ENDPOINT: 'contractsUiCustomEndpoint',
   PREFERRED_ENDPOINT: 'contractsUiPreferredEndpoint',
   THEME: 'theme',
+  VERSION: 'inkVersion',
 } as const;
 
 export type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
@@ -19,17 +20,16 @@ export const LOCAL = {
   rpc: CUSTOM_ENDPOINT ? (JSON.parse(CUSTOM_ENDPOINT) as string) : 'ws://127.0.0.1:9944',
 };
 
-// https://docs.peaq.network/networks-overview
-// const PEAQ_AGUNG = {
-//   relay: 'Rococo',
-//   name: 'Peaq Agung',
-//   rpc: 'wss://wss.agung.peaq.network',
-// };
-
 export const POP_NETWORK_TESTNET = {
   relay: 'Paseo',
   name: 'Pop Network Testnet',
   rpc: 'wss://rpc2.paseo.popnetwork.xyz',
+};
+
+export const ASSET_HUB_WESTEND = {
+  relay: 'Westend',
+  name: 'Westend Asset Hub',
+  rpc: 'wss://westend-asset-hub-rpc.polkadot.io',
 };
 
 const PHALA_TESTNET = {
@@ -96,9 +96,13 @@ const ZEITGEIST_BATTERY_STATION = {
   rpc: 'wss://bsr.zeitgeist.pm',
 };
 
-export const TESTNETS = [
+export const TESTNETS_V6 = [
+  ...[ASSET_HUB_WESTEND, POP_NETWORK_TESTNET].sort((a, b) => a.name.localeCompare(b.name)),
+  LOCAL,
+];
+
+export const TESTNETS_V5 = [
   ...[
-    // PEAQ_AGUNG,
     PHALA_TESTNET,
     ASTAR_SHIBUYA,
     ALEPH_ZERO_TESTNET,
@@ -111,7 +115,7 @@ export const TESTNETS = [
   LOCAL,
 ];
 
-export const MAINNETS = [ASTAR, SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
+export const MAINNETS_V5 = [ASTAR, SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
 
 export const DEFAULT_DECIMALS = 12;
 

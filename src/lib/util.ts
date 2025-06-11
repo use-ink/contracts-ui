@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { decodeAddress, encodeAddress } from '@polkadot/keyring';
-import { hexToU8a, isHex } from '@polkadot/util';
+import { hexToU8a, u8aToHex, isHex } from '@polkadot/util';
 import { keyring } from '@polkadot/ui-keyring';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { twMerge } from 'tailwind-merge';
+import { isAddress as isEthAddress } from 'ethers';
+import { InkVersion } from 'ui/contexts';
 
 export const classes = twMerge;
 
@@ -72,7 +74,16 @@ export function isUndefined(value: unknown): value is undefined {
   return value === undefined;
 }
 
-export function isValidAddress(address: string | Uint8Array | null | undefined) {
+export function isValidAddress(
+  address: string | Uint8Array | null | undefined,
+  version: InkVersion,
+) {
+  if (!address) return false;
+  if (version === 'v6') {
+    const hex = typeof address === 'string' ? address : u8aToHex(address);
+    return isEthAddress(hex);
+  }
+  // Check for v5 address format
   try {
     encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
     return true;

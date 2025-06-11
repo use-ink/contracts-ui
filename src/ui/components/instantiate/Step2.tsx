@@ -14,7 +14,7 @@ import {
   ArgumentForm,
 } from 'ui/components/form';
 import { createConstructorOptions } from 'ui/util/dropdown';
-import { useApi, useInstantiate } from 'ui/contexts';
+import { useApi, useInstantiate, useVersion } from 'ui/contexts';
 import {
   useArgValues,
   useFormField,
@@ -39,6 +39,7 @@ function validateSalt(value: OrFalsy<string>) {
 export function Step2() {
   const { api } = useApi();
   const { data, setStep, step, setData, dryRunResult, setDryRunResult } = useInstantiate();
+  const { version } = useVersion();
   const { accountId, metadata } = data;
   const [constructorIndex, setConstructorIndex] = useState<number>(0);
   const [deployConstructor, setDeployConstructor] = useState<AbiMessage>();
@@ -96,48 +97,81 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await api.call.contractsApi.instantiate(...params);
-
         // default is no revert
         let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
-        let instantiateResult;
 
-        // auto-generated @polkadot/type-augment data uses slightly different types
-        if (result.result.isOk) {
-          const okResult = result.result.asOk;
-          const flags = okResult.result.flags;
-          const isRevert = flags.bits.toNumber();
-          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
-          instantiateResult = {
-            Ok: {
-              result: { flags: convertedFlags, data: okResult.result.data },
-              accountId: okResult.accountId,
-            },
-          };
+        if (version === 'v6') {
+          const result = await api.call.reviveApi.instantiate(...params);
+          let instantiateResult;
+
+          // auto-generated @polkadot/type-augment data uses slightly different types
+          if (result.result.isOk) {
+            const okResult = result.result.asOk;
+            const flags = okResult.result.flags;
+            const isRevert = flags.bits.toNumber();
+            convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+            instantiateResult = {
+              Ok: {
+                result: { flags: convertedFlags, data: okResult.result.data },
+              },
+            };
+          } else {
+            instantiateResult = { Err: result.result.asErr };
+          }
+
+          const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
+            gasConsumed: result.gasConsumed,
+            gasRequired: result.gasRequired,
+            storageDeposit: result.storageDeposit,
+            result: instantiateResult,
+          });
+
+          const resultJson = JSON.stringify(convertedOutcome.toJSON());
+          const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
+          if (dryRunResultJson !== resultJson) {
+            setDryRunResult(convertedOutcome);
+          }
         } else {
-          instantiateResult = { Err: result.result.asErr };
-        }
+          const result = await api.call.contractsApi.instantiate(...params);
 
-        const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
-          gasConsumed: result.gasConsumed,
-          gasRequired: result.gasRequired,
-          storageDeposit: result.storageDeposit,
-          // debugMessage is Bytes, must convert to Text
-          debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
-          result: instantiateResult,
-        });
+          let instantiateResult;
 
-        const resultJson = JSON.stringify(convertedOutcome.toJSON());
-        const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
-        if (dryRunResultJson !== resultJson) {
-          setDryRunResult(convertedOutcome);
+          // auto-generated @polkadot/type-augment data uses slightly different types
+          if (result.result.isOk) {
+            const okResult = result.result.asOk;
+            const flags = okResult.result.flags;
+            const isRevert = flags.bits.toNumber();
+            convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+            instantiateResult = {
+              Ok: {
+                result: { flags: convertedFlags, data: okResult.result.data },
+              },
+            };
+          } else {
+            instantiateResult = { Err: result.result.asErr };
+          }
+          const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
+            gasConsumed: result.gasConsumed,
+            gasRequired: result.gasRequired,
+            storageDeposit: result.storageDeposit,
+            // debugMessage is Bytes, must convert to Text
+            debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
+            result: instantiateResult,
+          });
+
+          const resultJson = JSON.stringify(convertedOutcome.toJSON());
+          const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
+
+          if (dryRunResultJson !== resultJson) {
+            setDryRunResult(convertedOutcome);
+          }
         }
       } catch (e) {
         console.error(e);
       }
     }
     dryRun().catch(e => console.error(e));
-  }, [api.call.contractsApi, dryRunResult, params, setDryRunResult]);
+  }, [api, dryRunResult, params, setDryRunResult]);
 
   const onSubmit = () => {
     if (!dryRunResult) return;
@@ -148,7 +182,8 @@ export function Step2() {
     setData({
       ...data,
       constructorIndex,
-      salt: params[6] || null,
+      // salt: params[6] || null,
+      salt: (params[6] as string | Uint8Array | null) || null,
       value: deployConstructor?.isPayable ? (params[1] as Balance) : undefined,
       argValues,
       storageDepositLimit: getStorageDepositLimit(
