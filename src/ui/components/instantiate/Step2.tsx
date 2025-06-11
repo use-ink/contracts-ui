@@ -97,57 +97,82 @@ export function Step2() {
   useEffect((): void => {
     async function dryRun() {
       try {
-        const result = await (version === 'v6'
-          ? api.call.reviveApi.instantiate(...params)
-          : api.call.contractsApi.instantiate(...params));
-
         // default is no revert
         let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
-        let instantiateResult;
 
-        // auto-generated @polkadot/type-augment data uses slightly different types
-        if (result.result.isOk) {
-          const okResult = result.result.asOk;
-          const flags = okResult.result.flags;
-          const isRevert = flags.bits.toNumber();
-          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
-          instantiateResult = {
-            Ok: {
-              result: { flags: convertedFlags, data: okResult.result.data },
-            },
-          };
+        if (version === 'v6') {
+          const result = await api.call.reviveApi.instantiate(...params);
+          let instantiateResult;
+
+          // auto-generated @polkadot/type-augment data uses slightly different types
+          if (result.result.isOk) {
+            const okResult = result.result.asOk;
+            const flags = okResult.result.flags;
+            const isRevert = flags.bits.toNumber();
+            convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+            instantiateResult = {
+              Ok: {
+                result: { flags: convertedFlags, data: okResult.result.data },
+              },
+            };
+          } else {
+            instantiateResult = { Err: result.result.asErr };
+          }
+
+          const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
+            gasConsumed: result.gasConsumed,
+            gasRequired: result.gasRequired,
+            storageDeposit: result.storageDeposit,
+            result: instantiateResult,
+          });
+
+          const resultJson = JSON.stringify(convertedOutcome.toJSON());
+          const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
+          if (dryRunResultJson !== resultJson) {
+            setDryRunResult(convertedOutcome);
+          }
         } else {
-          instantiateResult = { Err: result.result.asErr };
-        }
+          console.log('Using v5 contractsApi');
+          const result = await api.call.contractsApi.instantiate(...params);
+          console.log(result);
+          let instantiateResult;
 
-        const convertedOutcome =
-          version === 'v6'
-            ? api.registry.createType('ContractInstantiateResult', {
-                gasConsumed: result.gasConsumed,
-                gasRequired: result.gasRequired,
-                storageDeposit: result.storageDeposit,
-                result: instantiateResult,
-              })
-            : api.registry.createType('ContractInstantiateResult', {
-                gasConsumed: result.gasConsumed,
-                gasRequired: result.gasRequired,
-                storageDeposit: result.storageDeposit,
-                // debugMessage is Bytes, must convert to Text
-                debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
-                result: instantiateResult,
-              });
+          // auto-generated @polkadot/type-augment data uses slightly different types
+          if (result.result.isOk) {
+            const okResult = result.result.asOk;
+            const flags = okResult.result.flags;
+            const isRevert = flags.bits.toNumber();
+            convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+            instantiateResult = {
+              Ok: {
+                result: { flags: convertedFlags, data: okResult.result.data },
+              },
+            };
+          } else {
+            instantiateResult = { Err: result.result.asErr };
+          }
+          const convertedOutcome = api.registry.createType('ContractInstantiateResult', {
+            gasConsumed: result.gasConsumed,
+            gasRequired: result.gasRequired,
+            storageDeposit: result.storageDeposit,
+            // debugMessage is Bytes, must convert to Text
+            debugMessage: api.registry.createType('Text', result.debugMessage.toU8a()),
+            result: instantiateResult,
+          });
 
-        const resultJson = JSON.stringify(convertedOutcome.toJSON());
-        const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
-        if (dryRunResultJson !== resultJson) {
-          setDryRunResult(convertedOutcome);
+          const resultJson = JSON.stringify(convertedOutcome.toJSON());
+          const dryRunResultJson = JSON.stringify(dryRunResult?.toJSON());
+
+          if (dryRunResultJson !== resultJson) {
+            setDryRunResult(convertedOutcome);
+          }
         }
       } catch (e) {
         console.error(e);
       }
     }
     dryRun().catch(e => console.error(e));
-  }, [api.call.contractsApi, dryRunResult, params, setDryRunResult]);
+  }, [api, dryRunResult, params, setDryRunResult]);
 
   const onSubmit = () => {
     if (!dryRunResult) return;

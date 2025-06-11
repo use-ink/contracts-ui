@@ -103,43 +103,48 @@ export const InteractTab = ({
     async function dryRun() {
       if (!message) return;
 
-      const newOutcome = await (version === 'v6'
-        ? api.call.reviveApi.call(...params)
-        : api.call.contractsApi.call(...params));
-
       // auto-generated @polkadot/type-augment data uses a different flag representation: `{"ok":{"flags":{"bits":0},"data":"0x00"}}`
       let convertedFlags = api.registry.createType('ContractReturnFlags', 0);
-      if (newOutcome.result.isOk) {
-        const flags = newOutcome.result.asOk.flags;
-        const isRevert = flags.bits.toNumber();
-        convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+
+      if (version === 'v6') {
+        const newOutcome = await api.call.reviveApi.call(...params);
+        if (newOutcome.result.isOk) {
+          const flags = newOutcome.result.asOk.flags;
+          const isRevert = flags.bits.toNumber();
+          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+        }
+
+        const convertedOutcome = api.registry.createType('ContractExecResult', {
+          gasConsumed: newOutcome.gasConsumed,
+          gasRequired: newOutcome.gasRequired,
+          storageDeposit: newOutcome.storageDeposit,
+          result: newOutcome.result.isOk
+            ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+            : { Err: newOutcome.result.asErr },
+        });
+        // Update the state with the adapted outcome
+        setOutcome(convertedOutcome);
+      } else {
+        const newOutcome = await api.call.contractsApi.call(...params);
+        if (newOutcome.result.isOk) {
+          const flags = newOutcome.result.asOk.flags;
+          const isRevert = flags.bits.toNumber();
+          convertedFlags = api.registry.createType('ContractReturnFlags', isRevert);
+        }
+
+        const convertedOutcome = api.registry.createType('ContractExecResult', {
+          gasConsumed: newOutcome.gasConsumed,
+          gasRequired: newOutcome.gasRequired,
+          storageDeposit: newOutcome.storageDeposit,
+          // debugMessage is Bytes, must convert to Text
+          debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
+          result: newOutcome.result.isOk
+            ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
+            : { Err: newOutcome.result.asErr },
+        });
+        // Update the state with the adapted outcome
+        setOutcome(convertedOutcome);
       }
-
-      const convertedOutcome: ContractExecResult =
-        version === 'v6'
-          ? api.registry.createType('ContractExecResult', {
-              registry: api.registry,
-              gasConsumed: newOutcome.gasConsumed,
-              gasRequired: newOutcome.gasRequired,
-              storageDeposit: newOutcome.storageDeposit,
-              result: newOutcome.result.isOk
-                ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
-                : { Err: newOutcome.result.asErr },
-            })
-          : api.registry.createType('ContractExecResult', {
-              registry: api.registry,
-              gasConsumed: newOutcome.gasConsumed,
-              gasRequired: newOutcome.gasRequired,
-              storageDeposit: newOutcome.storageDeposit,
-              // debugMessage is Bytes, must convert to Text
-              debugMessage: new Text(api.registry, newOutcome.debugMessage.toUtf8()),
-              result: newOutcome.result.isOk
-                ? { Ok: { flags: convertedFlags, data: newOutcome.result.asOk.data } }
-                : { Err: newOutcome.result.asErr },
-            });
-
-      // Update the state with the adapted outcome
-      setOutcome(convertedOutcome);
     }
 
     function debouncedDryRun() {
