@@ -132,9 +132,8 @@ export function Step2() {
             setDryRunResult(convertedOutcome);
           }
         } else {
-          console.log('Using v5 contractsApi');
           const result = await api.call.contractsApi.instantiate(...params);
-          console.log(result);
+
           let instantiateResult;
 
           // auto-generated @polkadot/type-augment data uses slightly different types
