@@ -8,27 +8,30 @@ import {
   DatabaseContextProvider,
   ThemeContextProvider,
   TransactionsContextProvider,
+  VersionContextProvider,
 } from 'ui/contexts';
 import { Sidebar } from 'ui/layout/sidebar';
 
 export default function App() {
   return (
     <ThemeContextProvider>
-      <ApiContextProvider>
-        <DatabaseContextProvider>
-          <TransactionsContextProvider>
-            {/* we want the sidebar outside the outlet to prevent flickering in quicklinks */}
-            <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
-              <Sidebar />
-              <CheckBrowserSupport>
-                <AwaitApis>
-                  <Outlet />
-                </AwaitApis>
-              </CheckBrowserSupport>
-            </div>
-          </TransactionsContextProvider>
-        </DatabaseContextProvider>
-      </ApiContextProvider>
+      <VersionContextProvider>
+        <ApiContextProvider>
+          <DatabaseContextProvider>
+            <TransactionsContextProvider>
+              {/* we want the sidebar outside the outlet to prevent flickering in quicklinks */}
+              <div className="relative inset-0 flex min-h-screen overflow-hidden text-black dark:bg-gray-900 dark:text-white md:fixed md:flex-row">
+                <Sidebar />
+                <CheckBrowserSupport>
+                  <AwaitApis>
+                    <Outlet />
+                  </AwaitApis>
+                </CheckBrowserSupport>
+              </div>
+            </TransactionsContextProvider>
+          </DatabaseContextProvider>
+        </ApiContextProvider>
+      </VersionContextProvider>
     </ThemeContextProvider>
   );
 }

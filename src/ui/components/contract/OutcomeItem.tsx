@@ -13,12 +13,12 @@ export function OutcomeItem({
   displayValue: string;
   copyValue?: string;
   id?: string;
-}): JSX.Element {
+}): React.ReactElement {
   return (
     <div className="event-log mb-4">
       <div className="mb-1 leading-5">{title}</div>
       <div
-        className="return-value relative break-all rounded-sm bg-gray-200 p-2 text-xs text-gray-600  dark:bg-elevation-1 dark:text-gray-400"
+        className="return-value relative break-all rounded-sm bg-gray-200 p-2 text-xs text-gray-600 dark:bg-elevation-1 dark:text-gray-400"
         data-cy="output"
       >
         <pre className="whitespace-pre-wrap">
@@ -26,7 +26,7 @@ export function OutcomeItem({
         </pre>
         <CopyButton
           className="absolute bottom-2 right-2"
-          id={title ? title.toLowerCase().replace(/\s+/g, '-') : id ?? ''}
+          id={title ? title.toLowerCase().replace(/\s+/g, '-') : (id ?? '')}
           value={copyValue}
         />
       </div>

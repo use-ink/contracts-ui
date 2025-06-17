@@ -7,6 +7,7 @@ import { Footer } from './Footer';
 import { Navigation } from './Navigation';
 import { NetworkAndUser } from './NetworkAndUser';
 import { QuickLinks } from './QuickLinks';
+import { VersionSelect } from './VersionSelect';
 
 export function MobileMenu() {
   const [networkMenuOpen, setNetworkMenuOpen] = useState(false);
@@ -42,6 +43,7 @@ export function MobileMenu() {
         <>
           <hr className="mx-4 border border-gray-700" />
           <div className="space-y-4 px-4 py-3">
+            <VersionSelect />
             <Navigation />
             <QuickLinks />
             <hr className="border border-gray-700" />

@@ -8,14 +8,16 @@ import { Button, Buttons } from '../common/Button';
 import { printBN } from 'lib/bn';
 import { createInstantiateTx } from 'services/chain';
 import { SubmittableResult } from 'types';
-import { useApi, useInstantiate, useTransactions } from 'ui/contexts';
+import { useApi, useInstantiate, useTransactions, useVersion } from 'ui/contexts';
 import { useNewContract } from 'ui/hooks';
+import { transformUserInput } from 'lib/callOptions';
 
 export function Step3() {
   const { codeHash: codeHashUrlParam } = useParams<{ codeHash: string }>();
   const { data, step, setStep } = useInstantiate();
   const { api } = useApi();
-  const { accountId, value, metadata, gasLimit, name, constructorIndex } = data;
+  const { version } = useVersion();
+  const { accountId, value, metadata, gasLimit, name, constructorIndex, salt } = data;
   const { queue, process, txs, dismiss } = useTransactions();
   const [txId, setTxId] = useState<number>(0);
   const onSuccess = useNewContract();
@@ -32,7 +34,29 @@ export function Step3() {
         const newId = queue({
           extrinsic: tx,
           accountId: data.accountId,
-          onSuccess,
+          onSuccess: result => {
+            if (version !== 'v6') {
+              return onSuccess(result);
+            }
+            const constructor = metadata?.findConstructor(constructorIndex);
+            const transformed = transformUserInput(
+              api.registry,
+              constructor?.args || [],
+              data.argValues,
+            );
+            const inputData = constructor?.toU8a(transformed).slice(1); // exclude the first byte (the length byte)
+            // Pass the contract data and extrinsic to onSuccess
+            // @ts-ignore
+            return onSuccess({
+              ...result,
+              contractData: {
+                salt: salt?.toString() || '',
+                data: inputData || new Uint8Array(),
+                // @ts-ignore
+                code: metadata?.json.source.contract_binary,
+              },
+            });
+          },
           isValid,
         });
         setTxId(newId);

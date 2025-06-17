@@ -14,7 +14,7 @@ const INITIAL = {} as unknown as DbState;
 
 export function DatabaseContextProvider({
   children,
-}: React.HTMLAttributes<HTMLDivElement>): JSX.Element | null {
+}: React.HTMLAttributes<HTMLDivElement>): React.ReactElement | null {
   const { genesisHash } = useApi();
   const [state, setState] = useState<DbState>(INITIAL);
 
