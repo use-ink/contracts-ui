@@ -23,10 +23,16 @@ export const LOCAL = {
 export const POP_NETWORK_TESTNET = {
   relay: 'Paseo',
   name: 'Pop Network Testnet',
-  rpc: 'wss://rpc2.paseo.popnetwork.xyz',
+  rpc: 'wss://rpc1.paseo.popnetwork.xyz',
 };
 
-export const ASSET_HUB_WESTEND = {
+export const PASSET_HUB_TESTNET = {
+  relay: 'Paseo',
+  name: 'Passet Hub',
+  rpc: 'wss://testnet-passet-hub.polkadot.io',
+};
+
+export const WESTEND_ASSET_HUB = {
   relay: 'Westend',
   name: 'Westend Asset Hub',
   rpc: 'wss://westend-asset-hub-rpc.polkadot.io',
@@ -71,18 +77,12 @@ const ALEPH_ZERO = {
   rpc: 'wss://ws.azero.dev',
 };
 
-// https://docs.t3rn.io/collator/testnet/testnet-collator
-const T3RN_T0RN = {
-  relay: undefined,
-  name: 'T3RN T0RN',
-  rpc: 'wss://ws.t0rn.io',
+const KREIVO = {
+  relay: 'Kusama',
+  name: 'Kreivo',
+  rpc: 'wss://kreivo.kippu.rocks',
 };
 
-const TERNOA_ALPHANET = {
-  relay: undefined,
-  name: 'Ternoa Alphanet',
-  rpc: 'wss://alphanet.ternoa.com',
-};
 // https://pendulum.gitbook.io/pendulum-docs/build/build-environment/foucoco-testnet
 const PENDULUM_TESTNET = {
   relay: 'Rococo',
@@ -97,7 +97,9 @@ const ZEITGEIST_BATTERY_STATION = {
 };
 
 export const TESTNETS_V6 = [
-  ...[ASSET_HUB_WESTEND, POP_NETWORK_TESTNET].sort((a, b) => a.name.localeCompare(b.name)),
+  ...[PASSET_HUB_TESTNET, POP_NETWORK_TESTNET, WESTEND_ASSET_HUB].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  ),
   LOCAL,
 ];
 
@@ -106,8 +108,6 @@ export const TESTNETS_V5 = [
     PHALA_TESTNET,
     ASTAR_SHIBUYA,
     ALEPH_ZERO_TESTNET,
-    T3RN_T0RN,
-    TERNOA_ALPHANET,
     PENDULUM_TESTNET,
     POP_NETWORK_TESTNET,
     ZEITGEIST_BATTERY_STATION,
@@ -115,7 +115,9 @@ export const TESTNETS_V5 = [
   LOCAL,
 ];
 
-export const MAINNETS_V5 = [ASTAR, SHIDEN, ALEPH_ZERO].sort((a, b) => a.name.localeCompare(b.name));
+export const MAINNETS_V5 = [ASTAR, SHIDEN, ALEPH_ZERO, KREIVO].sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
 
 export const DEFAULT_DECIMALS = 12;
 
