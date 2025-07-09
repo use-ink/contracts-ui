@@ -33,10 +33,10 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^1.0.6",
-    "@polkadot/api": "^16.2.1",
-    "@polkadot/api-contract": "^16.2.1",
+    "@polkadot/api": "^16.4.1",
+    "@polkadot/api-contract": "^16.4.1",
     "@polkadot/extension-dapp": "^0.58.6",
-    "@polkadot/types": "^16.2.1",
+    "@polkadot/types": "^16.4.1",
     "@polkadot/ui-keyring": "^3.12.2",
     "@polkadot/ui-shared": "^3.12.2",
     "big.js": "^6.2.1",
