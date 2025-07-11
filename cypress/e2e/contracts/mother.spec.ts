@@ -42,8 +42,8 @@ describe('Mother Contract ', () => {
 
   it('displays `bids: Auction` input correctly ', () => {
     cy.get('.form-field.bids').within(() => {
-      cy.contains('Vec<Vec<Option<(AccountId,u128)>>>').should('be.visible');
-      cy.contains('Vec<Option<(AccountId,u128)>>').should('be.visible');
+      cy.contains('Vec<Vec<Option<(H160,u128)>>>').should('be.visible');
+      cy.contains('Vec<Option<(H160,u128)>>').should('be.visible');
       cy.get('.vector-field-1').should('have.lengthOf', 1);
       cy.get('.vector-field-2')
         .should('have.lengthOf', 1)
@@ -68,7 +68,7 @@ describe('Mother Contract ', () => {
         cy.get('.vector-field-2').should('have.lengthOf', 3);
       });
   });
-  it('displays inputs for `Option<(AccountId,u128)` and sets values', () => {
+  it('displays inputs for `Option<(H160,u128)` and sets values', () => {
     cy.get('.form-field.bids .vector-field-2')
       .first()
       .each($el => {
@@ -76,11 +76,10 @@ describe('Mother Contract ', () => {
           .scrollIntoView()
           .within(() => {
             cy.get('[data-cy="switch-button"]').click();
-            cy.contains('0: AccountId').should('be.visible');
-            cy.get('.dropdown').should('have.lengthOf', 1);
+            cy.contains('0: H160').should('be.visible');
+            cy.get("input[type='text']").eq(0).type('0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01');
             cy.contains('1: u128').should('be.visible');
             cy.get("input[type='number']").should('have.lengthOf', 1).type('99999');
-            selectAccount('bob', 2);
           });
       });
   });

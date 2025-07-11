@@ -4,7 +4,14 @@
 import { beforeAllContracts, deploy } from '../support/util';
 
 describe('Update contract metadata', () => {
-  const messages1 = ['new', 'newDefault', 'failedNew', 'echoAuction', 'revertOrTrap', 'debugLog'];
+  const messages1 = [
+    'new',
+    'newDefault',
+    'failedNew',
+    'echoAuction',
+    'revertOrTrap',
+    'mutHelloWorld',
+  ];
   const messages2 = ['new', 'newDefault', 'flip', 'get'];
 
   before(() => {

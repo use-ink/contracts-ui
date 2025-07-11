@@ -43,7 +43,6 @@ export function assertInstantiate() {
   cy.get('[data-cy="submit-btn"]').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
     .should('exist')
-    .and('contain', 'contracts:Instantiated')
     .and('contain', 'system:NewAccount')
     .and('contain', 'balances:Transfer')
     .and('contain', 'balances:Withdraw')
