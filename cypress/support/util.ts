@@ -1,6 +1,20 @@
+import { WsProvider, ApiPromise, Keyring } from '@polkadot/api';
+
 const timeout = 25000;
 
-export function beforeAllContracts() {
+export async function beforeAllContracts() {
+  const wsProvider = new WsProvider('ws://127.0.0.1:9944');
+  const api = new ApiPromise({ provider: wsProvider });
+  api.on('connected', async () => {
+    await api.isReady;
+
+    const keyring = new Keyring({ type: 'sr25519' });
+    const alice = keyring.addFromUri('//Alice', { name: 'Alice' });
+    const bob = keyring.addFromUri('//Bob', { name: 'Bob' });
+    await api.tx.revive.mapAccount().signAndSend(alice);
+    await api.tx.revive.mapAccount().signAndSend(bob);
+  });
+
   cy.visit(`/instantiate/?rpc=ws://127.0.0.1:9944`);
   cy.get('[data-cy="spinner"]').should('not.exist', {
     timeout,

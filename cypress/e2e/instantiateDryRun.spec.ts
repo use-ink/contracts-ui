@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import { beforeAllContracts, assertUpload, assertMoveToStep2 } from '../support/util';
 
-describe('Instantiate dry run', () => {
-  before(() => {
-    beforeAllContracts();
+describe('Instantiate dry run', async () => {
+  before(async () => {
+    await beforeAllContracts();
   });
 
   it('multisig contract uploads', () => {
