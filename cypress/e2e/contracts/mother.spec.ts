@@ -8,7 +8,6 @@ import {
   assertMoveToStep3,
   assertContractRedirect,
   assertInstantiate,
-  selectAccount,
 } from '../../support/util';
 
 describe('Mother Contract ', () => {
@@ -77,7 +76,10 @@ describe('Mother Contract ', () => {
           .within(() => {
             cy.get('[data-cy="switch-button"]').click();
             cy.contains('0: H160').should('be.visible');
-            cy.get("input[type='text']").eq(0).type('0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01');
+            cy.get("input[type='text']")
+              .clear()
+              .type('0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01')
+              .should('have.value', '0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01');
             cy.contains('1: u128').should('be.visible');
             cy.get("input[type='number']").should('have.lengthOf', 1).type('99999');
           });
