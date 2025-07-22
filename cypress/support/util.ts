@@ -57,6 +57,7 @@ export function assertInstantiate() {
   cy.get('[data-cy="submit-btn"]').click();
   cy.get('[data-cy="transaction-complete"]', { timeout })
     .should('exist')
+    .and('contain', 'revive:Instantiated')
     .and('contain', 'system:NewAccount')
     .and('contain', 'balances:Transfer')
     .and('contain', 'balances:Withdraw')
@@ -70,7 +71,7 @@ export function assertCall() {
   cy.get('[data-cy="transaction-complete"]', { timeout })
     .should('exist')
     .and('contain', 'system:ExtrinsicSuccess')
-    .and('contain', 'contracts:ContractEmitted');
+    .and('contain', 'revive:ContractEmitted');
   cy.get('[data-cy="dismiss-notification"]').click();
 }
 
