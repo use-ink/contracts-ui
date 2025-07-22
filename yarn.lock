@@ -4008,7 +4008,6 @@ __metadata:
     "@polkadot/types": "npm:^16.4.1"
     "@polkadot/ui-keyring": "npm:^3.12.2"
     "@polkadot/ui-shared": "npm:^3.12.2"
-    "@polkadot/util-crypto": "npm:^13.5.3"
     "@tailwindcss/forms": "npm:^0.5.7"
     "@types/bcryptjs": "npm:^2.4.6"
     "@types/big.js": "npm:^6.2.2"
