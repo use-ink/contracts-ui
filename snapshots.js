@@ -1,6 +1,3 @@
-// Copyright 2022-2024 use-ink/contracts-ui authors & contributors
-// SPDX-License-Identifier: GPL-3.0-only
-
 module.exports = {
   __version: '13.13.3',
   'Storage Types Contract': {
@@ -17,13 +14,13 @@ module.exports = {
       1: "<code>{\n  accountIdValue: '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM',\n  balanceValueMax: '340,282,366,920,938,463,463,374,607,431,768,211,455',\n  balanceValueMin: '0',\n  hashValue:\n  '0x0000000000000000000000000000000000000000000000000000000000000000',\n  }</code>",
     },
     'DryRun getPrimitiveTypes': {
-      1: "<code>{\n  boolValue: true,\n  enumWithoutValues: 'A',\n  enumWithValues: {\n  ThreeValues: [\n  '1',\n  '2',\n  '3',\n  ],\n  },\n  arrayValue: [\n  '3',\n  '2',\n  '1',\n  ],\n  tupleValue: [\n  '7',\n  '8',\n  ],\n  }</code>",
+      1: "<code>{\n  boolValue: true,\n  enumWithoutValues: 'A',\n  enumWithValues: {\n  ThreeValues: [\n  '1',\n  '2',\n  '3',\n  ],\n  },\n  arrayValue: [\n  '3',\n  '2',\n  '1',\n  ],\n  tupleValue: [\n  '7',\n  '8',\n  ],\n  tupleTripletValue: [\n  '-123',\n  '0',\n  '123',\n  ],\n  }</code>",
     },
     'DryRun getOptionNone': {
       1: '<code>null</code>',
     },
     'DryRun getResultError': {
-      1: "<code>{\n  ErrorWithMessage: 'This is the Error Message.',\n  }</code>",
+      1: '<code>EmptyError</code>',
     },
     'DryRun getPanic': {
       1: '<code>ContractTrapped</code>',

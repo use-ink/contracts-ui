@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -L "https://github.com/paritytech/substrate-contracts-node/releases/latest/download/substrate-contracts-node-linux.tar.gz" -O
+          curl -L "https://github.com/use-ink/ink-node/releases/latest/download/ink-node-linux.tar.gz" -O
           ls -lash
       - name: Save node artifact
         uses: actions/upload-artifact@v4
         with:
-          name: substrate-contracts-node
+          name: ink-node
           if-no-files-found: error
-          path: substrate-contracts-node-linux.tar.gz
+          path: ink-node-linux.tar.gz
 
   ui-chrome-tests:
     timeout-minutes: 15

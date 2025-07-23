@@ -5,12 +5,12 @@ export function VersionSelect() {
   const { version, setVersion } = useVersion();
   const dropdownOptions = [
     {
-      label: 'ink! v5 (default)',
-      value: 'v5',
+      label: 'ink! v6 (default)',
+      value: 'v6',
     },
     {
-      label: 'ink! v6',
-      value: 'v6',
+      label: 'ink! v5',
+      value: 'v5',
     },
   ];
   return (

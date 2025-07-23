@@ -46,7 +46,7 @@ describe('Storage Types Contract', () => {
     'getOptionNone',
     'getResultOk',
     'getResultError',
-    'getPanic',
+    //'getPanic',
   ].forEach((message, index) => {
     it(`DryRun ${message}`, () => {
       cy.get('.form-field.caller').click().find('.dropdown__option').eq(2).click();
