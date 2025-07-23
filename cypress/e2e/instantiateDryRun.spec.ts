@@ -18,9 +18,12 @@ describe('Instantiate dry run', async () => {
   it('displays dry run error and debug message', () => {
     // initial multisig dry run is expected to return an error because requirement input value = 0
     cy.get('[data-cy="dry-run-result"]').within(() => {
-      cy.contains('ContractTrapped').should('be.visible');
-      cy.contains('Contract trapped during execution.').should('be.visible');
-      // TODO: Not appearing in v6
+      cy.contains('Contract reverted! The instantiation will not be successful.').should(
+        'be.visible',
+      );
+      // TODO: Not appearing in v6 for a contract built in debug mode.
+      //cy.contains('ContractTrapped').should('be.visible');
+      //cy.contains('Contract trapped during execution.').should('be.visible');
       // cy.contains(
       //   "panicked at 'assertion failed: 0 < requirement && requirement <= owners && owners <= MAX_OWNERS",
       // ).should('be.visible');
