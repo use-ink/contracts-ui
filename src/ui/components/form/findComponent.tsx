@@ -134,6 +134,7 @@ export function findComponent(
       return AddressSelect;
 
     case 'Balance':
+    case 'U256':
       return InputBalance;
 
     case 'Hash':

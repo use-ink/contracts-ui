@@ -15,7 +15,7 @@ export interface VersionSupported {
 const VersionContext = createContext<VersionSupported | undefined>(undefined);
 
 export const VersionContextProvider = ({ children }: React.PropsWithChildren) => {
-  const [version, setVersion] = useLocalStorage<InkVersion>(LOCAL_STORAGE_KEY.VERSION, 'v5');
+  const [version, setVersion] = useLocalStorage<InkVersion>(LOCAL_STORAGE_KEY.VERSION, 'v6');
 
   useEffect(() => setVersion(version), [version]);
 
@@ -33,4 +33,4 @@ export const useVersion = () => {
 };
 
 export const getVersion = () =>
-  (localStorage.getItem(LOCAL_STORAGE_KEY.VERSION) as InkVersion | null) || 'v5';
+  (localStorage.getItem(LOCAL_STORAGE_KEY.VERSION) as InkVersion | null) || 'v6';

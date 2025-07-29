@@ -20,7 +20,7 @@ export function decodeStorageDeposit(
 export function getPredictedCharge(dryRun: UIStorageDeposit) {
   return dryRun.type === 'charge'
     ? !dryRun.value?.eq(BN_ZERO)
-      ? dryRun.value ?? null
+      ? (dryRun.value ?? null)
       : null
     : null;
 }
@@ -62,6 +62,9 @@ export function transformUserInput(
 
     if (type === 'Balance') {
       return registry.createType('Balance', value);
+    }
+    if (type === 'U256') {
+      return registry.createType('U256', value);
     }
 
     return value;

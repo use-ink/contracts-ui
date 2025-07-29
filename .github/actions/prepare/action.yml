@@ -6,13 +6,13 @@ runs:
     - name: Download node artifact
       uses: actions/download-artifact@v4
       with:
-        name: substrate-contracts-node
+        name: ink-node
         path: ./
 
     - name: Start local node
       shell: bash
       run: |
-        tar -xvzf substrate-contracts-node-linux.tar.gz
-        cd substrate-contracts-node-linux/ 
-        chmod +x ./substrate-contracts-node
-        ./substrate-contracts-node --dev &
+        tar -xvzf ink-node-linux.tar.gz
+        cd ink-node-linux/ 
+        chmod +x ./ink-node
+        ./ink-node --dev &
