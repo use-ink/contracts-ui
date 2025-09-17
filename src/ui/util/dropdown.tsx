@@ -1,6 +1,7 @@
 // Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { InkVersion } from 'ui/contexts';
 import { MessageSignature } from '../components/message/MessageSignature';
 import {
   AbiConstructor,
@@ -10,6 +11,7 @@ import {
   Registry,
   Account,
 } from 'types';
+import { toEthAddress } from 'lib/address';
 
 export function createConstructorOptions(
   registry: Registry,
@@ -31,10 +33,13 @@ export function createMessageOptions(
   }));
 }
 
-export function createAccountOptions(data: Account[]): DropdownOption<string>[] {
+export function createAccountOptions(
+  data: Account[],
+  version: InkVersion,
+): DropdownOption<string>[] {
   return data.map(pair => ({
     label: pair.meta?.name as string,
-    value: pair.address || '',
+    value: (version === 'v6' ? toEthAddress(pair.address) : pair.address) || '',
   }));
 }
 
