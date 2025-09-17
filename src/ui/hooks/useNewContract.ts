@@ -4,17 +4,6 @@
 import { useNavigate } from 'react-router';
 import type { BlueprintSubmittableResult } from 'types';
 import { useDatabase, useInstantiate } from 'ui/contexts';
-import { ApiTypes } from '@polkadot/api/types';
-
-interface ExtendedBlueprintSubmittableResult<T extends ApiTypes>
-  extends BlueprintSubmittableResult<T> {
-  contractData?: {
-    salt: string;
-    data: Uint8Array;
-    code: string;
-    originIsCaller?: boolean;
-  };
-}
 
 export function useNewContract() {
   const { db } = useDatabase();
@@ -25,9 +14,7 @@ export function useNewContract() {
     data: { accountId, name },
   } = instantiate;
 
-  return async function ({
-    contract,
-  }: ExtendedBlueprintSubmittableResult<'promise'>): Promise<void> {
+  return async function ({ contract }: BlueprintSubmittableResult<'promise'>): Promise<void> {
     if (accountId && contract?.abi.json) {
       const codeHash = contract.abi.info.source.wasmHash.toHex();
       const document = {

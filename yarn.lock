@@ -1165,7 +1165,7 @@ __metadata:
 
 "@polkadot/api-contract@file:../polkadot-js-api/packages/api-contract/build::locator=contracts-ui%40workspace%3A.":
   version: 16.4.7
-  resolution: "@polkadot/api-contract@file:../polkadot-js-api/packages/api-contract/build#../polkadot-js-api/packages/api-contract/build::hash=7cb58a&locator=contracts-ui%40workspace%3A."
+  resolution: "@polkadot/api-contract@file:../polkadot-js-api/packages/api-contract/build#../polkadot-js-api/packages/api-contract/build::hash=89b7bc&locator=contracts-ui%40workspace%3A."
   dependencies:
     "@polkadot/api": "npm:16.4.7"
     "@polkadot/api-augment": "npm:16.4.7"
@@ -1176,7 +1176,7 @@ __metadata:
     "@polkadot/util-crypto": "npm:^13.5.6"
     rxjs: "npm:^7.8.1"
     tslib: "npm:^2.8.1"
-  checksum: 10/aca2fc833aa67ff36ff17f6d00d9d0e2466b3f8e729563b969484f46e8a8fc076bc056be7968f1177ef1239c2647ed9cda3669b921b715bcc1469dac9c6034e0
+  checksum: 10/a6d6feef600a42badeb90383840333d129c66a7f5659ec0a29daee00fa7310612d19e76efa2ae35a01c48352c695690a4acc1c98a49616438c4d5281ea696fb6
   languageName: node
   linkType: hard
 
