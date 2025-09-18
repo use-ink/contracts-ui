@@ -66,6 +66,10 @@ export function transformUserInput(
     if (type === 'U256') {
       return registry.createType('U256', value);
     }
+    // TODO: CHeck this, not getting value for Address.
+    // if (type === 'Address') {
+    //   return registry.createType('H160', value);
+    // }
 
     return value;
   });

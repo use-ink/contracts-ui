@@ -43,14 +43,9 @@ function Select({
 
 export function AccountSelect({ placeholder = 'Select account', ...props }: Props) {
   const { accounts } = useApi();
-  const { version } = useVersion();
 
   return (
-    <Select
-      options={createAccountOptions(accounts || [], version)}
-      placeholder={placeholder}
-      {...props}
-    />
+    <Select options={createAccountOptions(accounts || [])} placeholder={placeholder} {...props} />
   );
 }
 
@@ -79,7 +74,7 @@ export function AddressSelect({ placeholder = 'Select account', onChange, ...pro
         })),
       },
     ];
-  }, [accounts, contracts, recent]);
+  }, [accounts, contracts, recent, version]);
 
   const handleCreate = (inputValue: string) => {
     setRecent([...recent, { label: inputValue, value: inputValue }]);

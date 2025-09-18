@@ -1,6 +1,7 @@
 // Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { decodeAddress } from '@polkadot/keyring';
 import { InkVersion } from 'ui/contexts';
 import { MessageSignature } from '../components/message/MessageSignature';
 import {
@@ -35,12 +36,16 @@ export function createMessageOptions(
 
 export function createAccountOptions(
   data: Account[],
-  version: InkVersion,
+  version?: InkVersion,
 ): DropdownOption<string>[] {
-  return data.map(pair => ({
-    label: pair.meta?.name as string,
-    value: (version === 'v6' ? toEthAddress(pair.address) : pair.address) || '',
-  }));
+  return data.map(pair => {
+    const address = version === 'v6' ? toEthAddress(decodeAddress(pair.address)) : pair.address;
+
+    return {
+      label: pair.meta?.name as string,
+      value: address || '',
+    };
+  });
 }
 
 export function createContractOptions(data: ContractDocument[]): DropdownOption<string>[] {
