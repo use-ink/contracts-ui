@@ -76,7 +76,7 @@
     "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.20",
     "cross-env": "^7.0.3",
-    "cypress": "13.13.3",
+    "cypress": "15.2.0",
     "cypress-file-upload": "^5.0.8",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",

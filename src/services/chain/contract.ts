@@ -12,6 +12,7 @@ import {
   SubmittableExtrinsic,
 } from 'types';
 import { InkVersion } from 'ui/contexts';
+import { PalletReviveStorageContractInfo } from '@polkadot/types/lookup';
 
 export function createInstantiateTx(
   api: ApiPromise,
@@ -56,7 +57,15 @@ export function createInstantiateTx(
 export async function getContractInfo(api: ApiPromise, address: string, version: InkVersion) {
   if (isValidAddress(address, version)) {
     if (version === 'v6') {
-      return (await api.query.revive.contractInfoOf(address)).unwrapOr(null);
+      // TODO: Temporary workaround:
+      // accountInfoOf is a breaking change until it’s released and included in contracts-api.
+      const accountInfoOption: any = await api.query.revive.accountInfoOf(address);
+      if (accountInfoOption.isNone) return null;
+
+      const { accountType } = accountInfoOption.unwrap();
+      return accountType.isContract
+        ? (accountType.asContract as PalletReviveStorageContractInfo)
+        : null;
     } else {
       return (await api.query.contracts.contractInfoOf(address)).unwrapOr(null);
     }

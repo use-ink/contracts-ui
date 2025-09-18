@@ -23,6 +23,7 @@ describe('ERC20 Contract ', () => {
   });
 
   it('contract file uploads', () => {
+    // TODO: In the contract, replaced Address with H160. Fix https://github.com/use-ink/contracts-ui/issues/582
     assertUpload('erc20.contract');
   });
 

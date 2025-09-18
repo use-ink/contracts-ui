@@ -12,7 +12,7 @@ describe('Update contract metadata', () => {
     'revertOrTrap',
     'mutHelloWorld',
   ];
-  const messages2 = ['new', 'newDefault', 'flip', 'get'];
+  const messages2 = ['new', 'flip', 'get'];
 
   before(() => {
     beforeAllContracts();
@@ -37,7 +37,7 @@ describe('Update contract metadata', () => {
   });
   it('displays the docs for the new metadata', () => {
     cy.get('[data-cy="message-docs"]').each((item, i, list) => {
-      expect(list).to.have.length(4);
+      expect(list).to.have.length(3);
       expect(Cypress.$(item).text()).to.contain(messages2[i]);
     });
   });
