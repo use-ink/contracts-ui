@@ -1,5 +1,5 @@
 module.exports = {
-  __version: '13.13.3',
+  __version: '15.2.0',
   'Storage Types Contract': {
     'DryRun getUnsignedIntegers': {
       1: "<code>{\n  u128ValueMax: '340,282,366,920,938,463,463,374,607,431,768,211,455',\n  u128ValueMin: '0',\n  u16ValueMax: '65,535',\n  u16ValueMin: '0',\n  u32ValueMax: '4,294,967,295',\n  u32ValueMin: '0',\n  u64ValueMax: '18,446,744,073,709,551,615',\n  u64ValueMin: '0',\n  u8ValueMax: '255',\n  u8ValueMin: '0',\n  }</code>",
