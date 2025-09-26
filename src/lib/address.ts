@@ -1,66 +1,8 @@
 // Copyright 2022-2024 use-ink/contracts-ui authors & contributors
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { BigNumberish, ethers } from 'ethers';
-import { hexToU8a, stringToU8a, u8aToHex } from '@polkadot/util';
-import { keccak256 } from 'ethers';
-
-/**
- * TypeScript equivalent of H160 (20-byte Ethereum address)
- */
-type Address = string;
-
-/**
- * Determine the address of a contract using CREATE semantics.
- * @param deployer The address of the deployer
- * @param nonce The nonce value
- * @returns The contract address
- */
-export function create1(deployer: string, nonce: number): Address {
-  // Convert deployer to bytes (remove 0x prefix if present)
-  const deployerBytes = ethers.hexlify(deployer);
-  ethers.toBeHex(nonce as BigNumberish);
-  // Convert nonce to hex (minimal encoding)
-  const nonceBytes = ethers.toBeHex(nonce as BigNumberish);
-
-  // RLP encode [deployer, nonce]
-  const encodedData = ethers.encodeRlp([deployerBytes, nonceBytes]);
-
-  // Calculate keccak256 hash of the RLP encoded data
-  const hash = ethers.keccak256(encodedData);
-
-  // Take the last 20 bytes (40 hex chars + 0x prefix)
-  return ethers.getAddress('0x' + hash.substring(26));
-}
-
-/**
- * Determine the address of a contract using CREATE2 semantics.
- * @param deployer The address of the deployer
- * @param code The contract code (WASM or EVM bytecode)
- * @param inputData The constructor arguments or init input
- * @param salt A 32-byte salt value (as hex string)
- * @returns The deterministic contract address
- */
-export function create2(
-  deployer: string,
-  code: Uint8Array,
-  inputData: Uint8Array,
-  salt: string,
-): Address {
-  const initCode = new Uint8Array([...code, ...inputData]);
-  const initCodeHash = hexToU8a(keccak256(initCode));
-
-  const parts = new Uint8Array(1 + 20 + 32 + 32); // 0xff + deployer + salt + initCodeHash
-  parts[0] = 0xff;
-  parts.set(hexToU8a(deployer), 1);
-  parts.set(hexToU8a(salt), 21);
-  parts.set(initCodeHash, 53);
-
-  const hash = keccak256(parts);
-
-  // Return last 20 bytes as 0x-prefixed hex string
-  return ethers.getAddress('0x' + hash.substring(26));
-}
+import { ethers } from 'ethers';
+import { stringToU8a, u8aToHex } from '@polkadot/util';
 
 /**
  * Converts an account ID to an Ethereum address (H160)
