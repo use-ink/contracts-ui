@@ -30,10 +30,6 @@ Phala PoC 5:
 
 - https://wiki.phala.network/en-us/build/getting-started/deploy-contract/#claim-test-tokens
 
-Pop Network:
-
-- https://onboard.popnetwork.xyz/
-
 T3RN t0rn:
 
 - https://faucet.t0rn.io/

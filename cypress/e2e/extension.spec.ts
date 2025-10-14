@@ -7,19 +7,17 @@ interface Window {
 
 describe('Signer extension flow on live networks', () => {
   before(() => {
-    cy.visit(`/instantiate/?rpc=wss://rpc1.paseo.popnetwork.xyz`);
+    cy.visit(`/instantiate/?rpc=wss://testnet-passet-hub.polkadot.io`);
   });
 
-  it('connects to Rococo', () => {
-    cy.contains('Connecting to wss://rpc1.paseo.popnetwork.xyz').should('not.exist', {
+  it('connects to PassetHub', () => {
+    cy.contains('Connecting to wss://testnet-passet-hub.polkadot.io').should('not.exist', {
       timeout: 25000,
     });
   });
 
-  it('Rococo is selected in the network connection dropdown', () => {
-    cy.get('.dropdown.chain')
-      .find('.dropdown__single-value')
-      .should('contain', 'Pop Network Testnet');
+  it('PassetHub is selected in the network connection dropdown', () => {
+    cy.get('.dropdown.chain').find('.dropdown__single-value').should('contain', 'Passet Hub');
   });
 
   it('Displays help text for no extension installed', () => {
