@@ -20,12 +20,6 @@ export const LOCAL = {
   rpc: CUSTOM_ENDPOINT ? (JSON.parse(CUSTOM_ENDPOINT) as string) : 'ws://127.0.0.1:9944',
 };
 
-export const POP_NETWORK_TESTNET = {
-  relay: 'Paseo',
-  name: 'Pop Network Testnet',
-  rpc: 'wss://rpc1.paseo.popnetwork.xyz',
-};
-
 export const PASSET_HUB_TESTNET = {
   relay: 'Paseo',
   name: 'Passet Hub',
@@ -97,9 +91,7 @@ const ZEITGEIST_BATTERY_STATION = {
 };
 
 export const TESTNETS_V6 = [
-  ...[PASSET_HUB_TESTNET, POP_NETWORK_TESTNET, WESTEND_ASSET_HUB].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  ),
+  ...[PASSET_HUB_TESTNET, WESTEND_ASSET_HUB].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
 ];
 
@@ -109,7 +101,6 @@ export const TESTNETS_V5 = [
     ASTAR_SHIBUYA,
     ALEPH_ZERO_TESTNET,
     PENDULUM_TESTNET,
-    POP_NETWORK_TESTNET,
     ZEITGEIST_BATTERY_STATION,
   ].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
