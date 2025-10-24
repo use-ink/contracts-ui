@@ -20,6 +20,18 @@ export const LOCAL = {
   rpc: CUSTOM_ENDPOINT ? (JSON.parse(CUSTOM_ENDPOINT) as string) : 'ws://127.0.0.1:9944',
 };
 
+export const ASSET_HUB_TESTNET = {
+  relay: 'Paseo',
+  name: 'Asset Hub',
+  rpc: 'wss://asset-hub-paseo-rpc.n.dwellir.com',
+};
+
+export const KUSAMA_ASSET_HUB = {
+  relay: 'Kusama',
+  name: 'Kusama Asset Hub',
+  rpc: 'wss://kusama-asset-hub-rpc.polkadot.io',
+};
+
 export const PASSET_HUB_TESTNET = {
   relay: 'Paseo',
   name: 'Passet Hub',
@@ -91,7 +103,9 @@ const ZEITGEIST_BATTERY_STATION = {
 };
 
 export const TESTNETS_V6 = [
-  ...[PASSET_HUB_TESTNET, WESTEND_ASSET_HUB].sort((a, b) => a.name.localeCompare(b.name)),
+  ...[PASSET_HUB_TESTNET, ASSET_HUB_TESTNET, WESTEND_ASSET_HUB].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  ),
   LOCAL,
 ];
 
@@ -105,6 +119,8 @@ export const TESTNETS_V5 = [
   ].sort((a, b) => a.name.localeCompare(b.name)),
   LOCAL,
 ];
+
+export const MAINNETS_V6 = [KUSAMA_ASSET_HUB].sort((a, b) => a.name.localeCompare(b.name));
 
 export const MAINNETS_V5 = [ASTAR, SHIDEN, ALEPH_ZERO, KREIVO].sort((a, b) =>
   a.name.localeCompare(b.name),

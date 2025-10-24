@@ -3,7 +3,7 @@
 
 import { useNavigate } from 'react-router';
 
-import { TESTNETS_V5, TESTNETS_V6, MAINNETS_V5 } from '../../../constants';
+import { TESTNETS_V5, TESTNETS_V6, MAINNETS_V5, MAINNETS_V6 } from '../../../constants';
 import { useApi, useVersion } from 'ui/contexts';
 import { classes } from 'lib/util';
 import { Dropdown } from 'ui/components';
@@ -15,7 +15,7 @@ export function NetworkAndUser() {
 
   const testnets = version === 'v6' ? TESTNETS_V6 : TESTNETS_V5;
   const testnetOptions = testnets.map(network => ({ label: network.name, value: network.rpc }));
-  const mainnets = version === 'v5' ? MAINNETS_V5 : [];
+  const mainnets = version === 'v6' ? MAINNETS_V6 : MAINNETS_V5;
   const mainnetOptions = mainnets.map(network => ({ label: network.name, value: network.rpc }));
   const allOptions = [...testnetOptions, ...mainnetOptions];
 
