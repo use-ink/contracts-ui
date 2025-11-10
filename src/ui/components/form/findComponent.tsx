@@ -131,6 +131,7 @@ export function findComponent(
   switch (type.type) {
     case 'AccountId':
     case 'Address':
+    case 'H160':
       return AddressSelect;
 
     case 'Balance':
