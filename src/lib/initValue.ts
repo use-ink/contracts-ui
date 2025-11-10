@@ -6,42 +6,52 @@ import type { Registry, TypeDef } from '@polkadot/types/types';
 
 import { getTypeDef } from '@polkadot/types';
 import { TypeDefInfo } from '@polkadot/types/types';
+import { decodeAddress } from '@polkadot/keyring';
 import { BN_ZERO, isBn } from './bn';
 import { Account } from 'types';
+import { toEthAddress } from './address';
+import type { InkVersion } from 'ui/contexts/VersionContext';
 
 const warnList: string[] = [];
 
-export function getInitValue(registry: Registry, accounts: Account[], def: TypeDef): unknown {
+export function getInitValue(
+  registry: Registry,
+  accounts: Account[],
+  def: TypeDef,
+  version?: InkVersion,
+): unknown {
   if (def.info === TypeDefInfo.Si) {
     const lookupTypeDef = registry.lookup.getTypeDef(def.lookupIndex as number);
 
-    return getInitValue(registry, accounts, lookupTypeDef);
+    return getInitValue(registry, accounts, lookupTypeDef, version);
   } else if (def.info === TypeDefInfo.Option) {
     return null;
   } else if (def.info === TypeDefInfo.Vec) {
-    return [getInitValue(registry, accounts, def.sub as TypeDef)];
+    return [getInitValue(registry, accounts, def.sub as TypeDef, version)];
   } else if (def.info === TypeDefInfo.VecFixed) {
     const value = [];
     const length = def.length as number;
 
     for (let i = 0; i < length; i++) {
-      value.push(getInitValue(registry, accounts, def.sub as TypeDef));
+      value.push(getInitValue(registry, accounts, def.sub as TypeDef, version));
     }
 
     return value;
   } else if (def.info === TypeDefInfo.Tuple) {
-    return Array.isArray(def.sub) ? def.sub.map(def => getInitValue(registry, accounts, def)) : [];
+    return Array.isArray(def.sub)
+      ? def.sub.map(def => getInitValue(registry, accounts, def, version))
+      : [];
   } else if (def.info === TypeDefInfo.Struct) {
     return Array.isArray(def.sub)
       ? def.sub.reduce((result: Record<string, unknown>, def): Record<string, unknown> => {
-          result[def.name as string] = getInitValue(registry, accounts, def);
+          result[def.name as string] = getInitValue(registry, accounts, def, version);
 
           return result;
         }, {})
       : {};
   } else if (def.info === TypeDefInfo.Enum) {
     return Array.isArray(def.sub)
-      ? { [def.sub[0].name as string]: getInitValue(registry, accounts, def.sub[0]) }
+      ? { [def.sub[0].name as string]: getInitValue(registry, accounts, def.sub[0], version) }
       : {};
   }
 
@@ -117,8 +127,16 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
         return '';
       }
 
-    case 'AccountIdOf':
     case 'Address':
+      try {
+        const address = accounts[0].address;
+        // ink v6 uses H160 (Ethereum-style) addresses
+        return version === 'v6' ? toEthAddress(decodeAddress(address)) : address;
+      } catch (e) {
+        return '';
+      }
+
+    case 'AccountIdOf':
     case 'Call':
     case 'CandidateReceipt':
     case 'Digest':
@@ -151,7 +169,7 @@ export function getInitValue(registry: Registry, accounts: Account[], def: TypeD
         } else if ([TypeDefInfo.Struct].includes(raw.info)) {
           return undefined;
         } else if ([TypeDefInfo.Enum, TypeDefInfo.Tuple].includes(raw.info)) {
-          return getInitValue(registry, accounts, raw);
+          return getInitValue(registry, accounts, raw, version);
         }
       } catch (e) {
         error = (e as Error).message;

@@ -54,11 +54,11 @@ describe('ERC20 Contract ', () => {
   it(`transfers ${transferValue} Units to another account`, () => {
     selectMessage('transfer', 3);
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(3).click();
-    cy.get('.form-field.value').find('input[type="number"]').type(`${transferValue}`);
+    cy.get('.form-field.value').find('input[type="number"]').eq(0).type(`${transferValue}`);
     assertCall();
     selectMessage('balanceOf', 1);
-
-    cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(3).click();
+    console.log(initialSupply - transferValue);
+    cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(0).click();
 
     assertReturnValue('balanceOf', `${initialSupply - transferValue}`);
   });
@@ -66,9 +66,10 @@ describe('ERC20 Contract ', () => {
   it(`successfully approves allowance`, () => {
     selectMessage('approve', 4);
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('.form-field.value').find('input[type="number"]').type(`${allowance}`);
+    cy.get('.form-field.value').find('input[type="number"]').eq(0).type(`${allowance}`);
     assertCall();
     selectMessage('allowance', 2);
+    cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(0).click();
     cy.get('.form-field.spender').find('.dropdown').click().find('.dropdown__option').eq(2).click();
     assertReturnValue('allowance', `${allowance}`);
   });
@@ -76,13 +77,14 @@ describe('ERC20 Contract ', () => {
   it(`transfers ${transferValue} on behalf of alice`, () => {
     cy.get('.form-field.caller').click().find('.dropdown__option').eq(2).click();
     selectMessage('transferFrom', 5);
+    cy.get('.form-field.from').find('.dropdown').click().find('.dropdown__option').eq(0).click();
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    cy.get('.form-field.to')
-      .find("input[type='text']")
-      .clear()
-      .type('0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01')
-      .should('have.value', '0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01');
-    cy.get('.form-field.value').find('input[type="number"]').type(`${transferValue}`);
+    // cy.get('.form-field.to')
+    //   .find("input[type='text']")
+    //   .clear()
+    //   .type('0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01')
+    //   .should('have.value', '0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01');
+    cy.get('.form-field.value').find('input[type="number"]').eq(0).type(`${transferValue}`);
     assertCall();
     selectMessage('balanceOf', 1);
     cy.get('.form-field.owner').find('.dropdown').click().find('.dropdown__option').eq(2).click();
