@@ -57,7 +57,7 @@ export function transformUserInput(
   messageArgs: AbiParam[],
   values?: Record<string, unknown>,
 ): unknown[] {
-  return messageArgs.map(({ name, type: { type } }) => {
+  return messageArgs.map(({ name, type: { type, displayName } }) => {
     const value = values ? values[name] : null;
 
     if (type === 'Balance') {
@@ -65,6 +65,11 @@ export function transformUserInput(
     }
     if (type === 'U256') {
       return registry.createType('U256', value);
+    }
+
+    // H160 and Address types need explicit type creation
+    if (type === 'H160' || type === 'Address' || displayName?.includes('Address')) {
+      return registry.createType('H160', value);
     }
 
     return value;

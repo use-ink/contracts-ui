@@ -7,7 +7,7 @@ import { Dropdown } from '../common/Dropdown';
 import { Account } from './Account';
 import { createAccountOptions } from 'ui/util/dropdown';
 import type { DropdownOption, DropdownProps, ValidFormField } from 'types';
-import { useApi, useDatabase } from 'ui/contexts';
+import { useApi, useDatabase, useVersion } from 'ui/contexts';
 import { classes } from 'lib/util';
 import { useDbQuery } from 'ui/hooks';
 
@@ -52,6 +52,7 @@ export function AccountSelect({ placeholder = 'Select account', ...props }: Prop
 export function AddressSelect({ placeholder = 'Select account', onChange, ...props }: Props) {
   const { accounts } = useApi();
   const { db } = useDatabase();
+  const { version } = useVersion();
   const [contracts] = useDbQuery(() => db.contracts.toArray(), [db]);
   const [recent, setRecent] = useState<DropdownOption<string>[]>([]);
 
@@ -63,7 +64,7 @@ export function AddressSelect({ placeholder = 'Select account', onChange, ...pro
       },
       {
         label: 'My Accounts',
-        options: createAccountOptions(accounts || []),
+        options: createAccountOptions(accounts || [], version),
       },
       {
         label: 'Uploaded Contracts',
@@ -73,7 +74,7 @@ export function AddressSelect({ placeholder = 'Select account', onChange, ...pro
         })),
       },
     ];
-  }, [accounts, contracts, recent]);
+  }, [accounts, contracts, recent, version]);
 
   const handleCreate = (inputValue: string) => {
     setRecent([...recent, { label: inputValue, value: inputValue }]);
