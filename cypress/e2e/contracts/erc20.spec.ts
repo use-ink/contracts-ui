@@ -79,11 +79,6 @@ describe('ERC20 Contract ', () => {
     selectMessage('transferFrom', 5);
     cy.get('.form-field.from').find('.dropdown').click().find('.dropdown__option').eq(0).click();
     cy.get('.form-field.to').find('.dropdown').click().find('.dropdown__option').eq(2).click();
-    // cy.get('.form-field.to')
-    //   .find("input[type='text']")
-    //   .clear()
-    //   .type('0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01')
-    //   .should('have.value', '0x41dccbd49b26c50d34355ed86ff0fa9e489d1e01');
     cy.get('.form-field.value').find('input[type="number"]').eq(0).type(`${transferValue}`);
     assertCall();
     selectMessage('balanceOf', 1);

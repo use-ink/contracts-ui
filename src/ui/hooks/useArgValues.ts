@@ -39,7 +39,6 @@ export function useArgValues(
   const inputData = useMemo(() => {
     let data: Uint8Array | undefined;
     try {
-      // WORKAROUND: ink v6 Address/H160 encoding - patch args for dry run calls
       if (version === 'v6' && message) {
         const patchedArgs = message.args.map(arg => {
           if (arg.type.type === 'Address') {

@@ -26,7 +26,7 @@ export function useStoredContract(address: string): UIContract | undefined {
     } else {
       const c = new ContractPromise(api, d.abi, address);
 
-      // WORKAROUND: ink v6 uses Address as a type alias for H160, but polkadot.js
+      // TODO: Temporary workaround: ink v6 uses Address as a type alias for H160, but polkadot.js
       // encodes them differently. Patch the ABI to use H160 for consistent encoding.
       if (version === 'v6') {
         c.abi.messages.forEach(message => {
