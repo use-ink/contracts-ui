@@ -97,7 +97,7 @@
     "tailwindcss": "^3.4.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
-    "vite": "^5.4.2",
+    "vite": "^6.4.2",
     "vite-plugin-istanbul": "^6.0.2",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.0.5"
